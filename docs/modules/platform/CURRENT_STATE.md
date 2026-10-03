@@ -82,3 +82,7 @@ Limitations: foundation and previews only; no real authentication, persisted ten
 ### FND-01 owner acceptance — 3 October 2026
 
 Owner feedback: “Pass. Please go ahead and implement with the next task”. Human review PASSED for tested source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff and evidence checkpoint 6fa8158. Permission covers DS-01 next; pause again at its review checkpoint.
+
+### IAM-01 shared schema observation — 4 October 2026
+
+Access IAM-01 adds the forward access-bootstrap migration plus Platform-owned audit/outbox/receipt envelopes. Both dedicated databases preserve the prior foundation marker IDs/timestamps and all four migration records. The enlisted Platform writer appends provisioning audit/outbox in the Access transaction; real-DB tests prove rollback after append and immutable history guards. See [Access verification](../access/CURRENT_STATE.md) and [safe evidence](../../evidence/iam-01-local/verification.json). This does not implement FND-02 or external event delivery.

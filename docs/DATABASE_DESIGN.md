@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. Only the platform setup table is installed. The other 46 tables below are planned Phase 1 designs, not a claim that school business features work.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the access bootstrap and shared envelopes alongside the setup marker. The remaining tables below are planned Phase 1 designs, not a claim that school business features work.
 
 ## Naming decision — DB-ADR-001
 
@@ -8,13 +8,13 @@ Use **`vs_`**, the user-selected abbreviation of VSchool, as a stable storage na
 
 | Object | Convention | Example |
 |---|---|---|
-| Table | vora + owner + singular entity | `vs_attendance_session` |
+| Table | vs + owner + singular entity | `vs_attendance_session` |
 | Column / foreign reference | snake_case / referenced concept + _id | `organization_id`, `school_id`, `student_id` |
 | Primary key | table + _pkey | `vs_platform_setup_check_pkey` |
 | Unique / FK / index | table + short purpose + _key / _fkey / _idx | `vs_students_student_admission_key` |
 | CHECK / exclusion constraint | table + purpose + _check / _excl | `vs_attendance_session_time_check` |
 | Trigger / policy | table + purpose + _trg / _policy | `vs_platform_audit_entry_append_only_trg` |
-| Native enum, if explicitly chosen | vora + owner + concept + _enum | `vs_attendance_status_enum` |
+| Native enum, if explicitly chosen | vs + owner + concept + _enum | `vs_attendance_status_enum` |
 | Migration directory | UTC timestamp + reviewed intent | `20261003000300_vs_prefix` |
 
 Identifiers must fit PostgreSQL's 63-byte default limit, use ASCII `[a-z][a-z0-9_]*`, and stay unique after shortening. Use a reviewed concise purpose; for unavoidable collisions, preserve the suffix and append eight hex characters of SHA-256 of the full proposed name. Store the final explicit constraint/index name in Prisma `map` or migration SQL. Do not rely on silent truncation. No plural/singular mixture, customer-name tables, per-tenant suffixes or abbreviations invented by a module author. Keep `school_id` for branch scope to match the existing domain; do not add a competing branch_id pointing to the same concept.
@@ -54,14 +54,14 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | AccountPersonBinding | `vs_access_account_person_binding` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
-| AuthSecurityEvent | `vs_access_auth_security_event` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
+| AuthSecurityEvent | `vs_access_auth_security_event` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | Campus | `vs_access_campus` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | InstitutionGrant | `vs_access_institution_grant` | access | PLANNED | [access LLD](modules/tenancy/DESIGN.md) |
-| Organization | `vs_access_organization` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
-| RoleGrant | `vs_access_role_grant` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
-| School | `vs_access_school` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
-| SchoolMembership | `vs_access_school_membership` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
-| UserAccount | `vs_access_user_account` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
+| Organization | `vs_access_organization` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| RoleGrant | `vs_access_role_grant` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| School | `vs_access_school` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| SchoolMembership | `vs_access_school_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| UserAccount | `vs_access_user_account` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AttendanceRecord | `vs_attendance_record` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceRevision | `vs_attendance_revision` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceSession | `vs_attendance_session` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
@@ -75,9 +75,9 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SourceStudentMap | `vs_imports_source_student_map` | imports | PLANNED | [imports LLD](modules/imports/DESIGN.md) |
 | Employee | `vs_people_employee` | people | PLANNED | [people LLD](modules/people/DESIGN.md) |
 | Person | `vs_people_person` | people | PLANNED | [people LLD](modules/people/DESIGN.md) |
-| AuditEntry | `vs_platform_audit_entry` | platform | PLANNED | [platform LLD](modules/platform/DESIGN.md) |
-| CommandReceipt | `vs_platform_command_receipt` | platform | PLANNED | [platform LLD](modules/platform/DESIGN.md) |
-| OutboxEvent | `vs_platform_outbox_event` | platform | PLANNED | [platform LLD](modules/platform/DESIGN.md) |
+| AuditEntry | `vs_platform_audit_entry` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
+| CommandReceipt | `vs_platform_command_receipt` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
+| OutboxEvent | `vs_platform_outbox_event` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | SetupCheck | `vs_platform_setup_check` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | ExportRun | `vs_reporting_export_run` | reporting | PLANNED | [reporting LLD](modules/reporting/DESIGN.md) |
 | Enrollment | `vs_students_enrollment` | students | PLANNED | [students LLD](modules/students/DESIGN.md) |
@@ -167,10 +167,10 @@ Commands lock actor account rows → Organization guard → School guard in the 
 
 The current rename migration transaction renames the previously released vora_platform_setup_check and its PK to vs_ names without DROP/CREATE or copying/deleting rows. Stop the previous local server before migrating, regenerate Prisma, then restart the matching code. Health API behavior stays unchanged. A stopped older starter would otherwise look for the old physical table. No business-table schema is migrated by this change.
 
-## Current physical schema — executable truth
+## Foundation physical schema — preserved by IAM-01
 
 ```sql
--- State after all three migrations, for documentation only; not another seed/migration.
+-- Foundation state after the first three migrations, for documentation only; not another seed/migration.
 CREATE TABLE public.vs_platform_setup_check (
   id text NOT NULL,
   created_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -178,6 +178,6 @@ CREATE TABLE public.vs_platform_setup_check (
 );
 ```
 
-Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt.
+Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. IAM-01 adds `20261003000400_access_bootstrap` with the nine MIGRATED access/platform contracts above, all scoped foreign keys, state/version checks and immutable audit/receipt/security-event guards. See the reviewed SQL and access CURRENT_STATE for actual PostgreSQL migration and rehearsal evidence. Prisma models also map each FK/index to prevent later migration drift.
 
 References: [Prisma database mapping](https://www.prisma.io/docs/orm/prisma-schema/data-model/database-mapping), [PostgreSQL identifier rules](https://www.postgresql.org/docs/16/sql-syntax-lexical.html). These explain tool behavior; VS names and scope are VSchool architectural decisions.

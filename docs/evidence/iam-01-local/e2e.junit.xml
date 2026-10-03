@@ -1,0 +1,98 @@
+<testsuites id="" name="" tests="40" failures="0" skipped="0" errors="0" time="115.52346100000001">
+<testsuite name="access.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="chromium" tests="6" failures="0" skipped="0" time="23.752" errors="0">
+<testcase name="logged-out home and setup redirect; API returns private 401" classname="access.spec.ts" time="5.365">
+</testcase>
+<testcase name="administrator signs in, sees current scope and setup, rejects foreign school, signs out" classname="access.spec.ts" time="4.635">
+</testcase>
+<testcase name="wrong, unknown, locked and disabled credentials share feedback and clear password" classname="access.spec.ts" time="7.139">
+</testcase>
+<testcase name="same-origin and provider CSRF checks reject forged auth posts" classname="access.spec.ts" time="0.118">
+</testcase>
+<testcase name="existing session loses access immediately after tokenVersion revocation" classname="access.spec.ts" time="3.36">
+</testcase>
+<testcase name="current membership suspension rejects an existing session without exposing school data" classname="access.spec.ts" time="3.135">
+</testcase>
+</testsuite>
+<testsuite name="branding.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="chromium" tests="4" failures="0" skipped="0" time="12.305" errors="0">
+<testcase name="all three brand previews resolve exact institution, branch, palette and help identity" classname="branding.spec.ts" time="5.728">
+</testcase>
+<testcase name="preview blocks invalid samples then clears both fields, hides password and focuses feedback without sending or storing them" classname="branding.spec.ts" time="1.297">
+</testcase>
+<testcase name="branded sign-in controls fit 360px and remain keyboard operable with reduced motion" classname="branding.spec.ts" time="3.162">
+</testcase>
+<testcase name="long public labels reflow without clipping at 360px and simulated 200 percent layout zoom" classname="branding.spec.ts" time="2.118">
+</testcase>
+</testsuite>
+<testsuite name="design-system.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="chromium" tests="4" failures="0" skipped="0" time="7.155" errors="0">
+<testcase name="file selection rejects unsupported and oversized files and recovers without uploading" classname="design-system.spec.ts" time="1.878">
+</testcase>
+<testcase name="modal and drawer contain keyboard focus and return it to the trigger" classname="design-system.spec.ts" time="1.177">
+</testcase>
+<testcase name="gallery supports all palettes and negative states at 360px" classname="design-system.spec.ts" time="1.509">
+</testcase>
+<testcase name="form examples and disclosure respond to keyboard without losing entered text" classname="design-system.spec.ts" time="2.591">
+</testcase>
+</testsuite>
+<testsuite name="starter.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="chromium" tests="6" failures="0" skipped="0" time="11.879" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="1.805">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.019">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="2.992">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="1.841">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="1.76">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="3.462">
+</testcase>
+</testsuite>
+<testsuite name="access.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="mobile" tests="6" failures="0" skipped="0" time="19.302" errors="0">
+<testcase name="logged-out home and setup redirect; API returns private 401" classname="access.spec.ts" time="2.39">
+</testcase>
+<testcase name="administrator signs in, sees current scope and setup, rejects foreign school, signs out" classname="access.spec.ts" time="3.311">
+</testcase>
+<testcase name="wrong, unknown, locked and disabled credentials share feedback and clear password" classname="access.spec.ts" time="7.282">
+</testcase>
+<testcase name="same-origin and provider CSRF checks reject forged auth posts" classname="access.spec.ts" time="0.11">
+</testcase>
+<testcase name="existing session loses access immediately after tokenVersion revocation" classname="access.spec.ts" time="3.189">
+</testcase>
+<testcase name="current membership suspension rejects an existing session without exposing school data" classname="access.spec.ts" time="3.02">
+</testcase>
+</testsuite>
+<testsuite name="branding.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="mobile" tests="4" failures="0" skipped="0" time="12.16" errors="0">
+<testcase name="all three brand previews resolve exact institution, branch, palette and help identity" classname="branding.spec.ts" time="5.468">
+</testcase>
+<testcase name="preview blocks invalid samples then clears both fields, hides password and focuses feedback without sending or storing them" classname="branding.spec.ts" time="1.447">
+</testcase>
+<testcase name="branded sign-in controls fit 360px and remain keyboard operable with reduced motion" classname="branding.spec.ts" time="3.045">
+</testcase>
+<testcase name="long public labels reflow without clipping at 360px and simulated 200 percent layout zoom" classname="branding.spec.ts" time="2.2">
+</testcase>
+</testsuite>
+<testsuite name="design-system.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="mobile" tests="4" failures="0" skipped="0" time="6.393" errors="0">
+<testcase name="file selection rejects unsupported and oversized files and recovers without uploading" classname="design-system.spec.ts" time="1.353">
+</testcase>
+<testcase name="modal and drawer contain keyboard focus and return it to the trigger" classname="design-system.spec.ts" time="1.137">
+</testcase>
+<testcase name="gallery supports all palettes and negative states at 360px" classname="design-system.spec.ts" time="1.437">
+</testcase>
+<testcase name="form examples and disclosure respond to keyboard without losing entered text" classname="design-system.spec.ts" time="2.466">
+</testcase>
+</testsuite>
+<testsuite name="starter.spec.ts" timestamp="2026-10-03T18:21:33.155Z" hostname="mobile" tests="6" failures="0" skipped="0" time="12.231" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="1.093">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.009">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="2.914">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="2.608">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="1.692">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="3.915">
+</testcase>
+</testsuite>
+</testsuites>

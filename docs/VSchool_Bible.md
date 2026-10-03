@@ -2,7 +2,7 @@
 
 Version 4.4 · Configurable multi-institution platform baseline · 3 October 2026
 
-Status: comprehensive product blueprint with Phase 1 implementation contracts. The repository implements the local foundation, shared UI primitives, public synthetic branding/configuration previews and pure entitlement reference rules. Persistent tenant administration, authentication and school business modules remain planned until module evidence says otherwise. There is no active 24-hour run, no inherited completion claim and no production deployment.
+Status: comprehensive product blueprint with Phase 1 implementation contracts. The repository implements the local foundation, shared UI primitives, public synthetic branding/configuration previews and pure entitlement reference rules. IAM-01 adds local operator bootstrap, real administrator authentication and current school authorization; editable tenant administration and school business modules remain planned until module evidence says otherwise. There is no active 24-hour run, no inherited completion claim and no production deployment.
 
 ## 1. Product purpose
 
@@ -206,6 +206,8 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 - [Reporting](modules/reporting/DESIGN.md) · [Tasks](modules/reporting/TASKS.md) · [State](modules/reporting/CURRENT_STATE.md)
 
 ## 13. Change log
+
+2026-10-03 / IAM-01: reconciled task table scope with first-use ownership; documented bootstrap duplicate-name guard, operator provenance, credential/lockout policy, pinned provider integration, current authorization and local runtime configuration in Access IAM-ADR-004/005. Real /sign-in is separate from branded previews until BRD-02.
 
 2026-10-03 / BRD-01: aligned public-preview validator limits with branding LLD (3–80 slug, 160-character names, 254-character support email); malformed runtime inputs fail safely. Synthetic branch previews cover all approved palettes, wrap long public labels, clear/hide sample credentials and focus informational feedback. No authentication or publication scope is added.
 

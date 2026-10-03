@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="15" failures="0" errors="0" time="8.111788083">
+    <testsuite name="test/functional/access-migrations.test.ts" timestamp="2026-10-03T18:26:36.359Z" hostname="Venkateshs-MacBook-Air.local" tests="2" failures="0" errors="0" skipped="0" time="0.342549917">
+        <testcase classname="test/functional/access-migrations.test.ts" name="rehearses clean installation in an isolated rolled-back schema" time="0.307713375">
+        </testcase>
+        <testcase classname="test/functional/access-migrations.test.ts" name="rehearses previous-checkpoint upgrade with preserved marker in an isolated rolled-back schema" time="0.034130208">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/access.test.ts" timestamp="2026-10-03T18:26:36.360Z" hostname="Venkateshs-MacBook-Air.local" tests="9" failures="0" errors="0" skipped="0" time="7.662052458">
+        <testcase classname="test/functional/access.test.ts" name="provisions all aggregates and safe operator evidence atomically" time="0.55665075">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="rolls the entire provision back when enlisted evidence fails" time="0.549322333">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="serializes duplicate institution bootstrap and handles unique email races without partial schools" time="1.090829417">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="rejects invalid zone before writes" time="0.000902292">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="serializes concurrent failures, locks valid credentials, and recovers after expiry" time="2.423861667">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="checks disabled, token revocation, current membership and foreign scope on every read" time="1.360627083">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="rechecks organization, branch and administrator grant on each read" time="0.557079">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="scoped composite foreign keys reject a forged grant and history guards reject mutation" time="0.577344959">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="login evidence is append-only and contains no submitted identifiers or credentials" time="0.542864292">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/setup.test.ts" timestamp="2026-10-03T18:26:36.361Z" hostname="Venkateshs-MacBook-Air.local" tests="4" failures="0" errors="0" skipped="0" time="0.107185708">
+        <testcase classname="test/functional/setup.test.ts" name="persists one marker across repeated commands" time="0.084126959">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="rolls back an interrupted real transaction" time="0.003043875">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="has a database-backed readiness marker" time="0.000876417">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="maps ORM fields to the VS physical schema" time="0.017361458">
+        </testcase>
+    </testsuite>
+</testsuites>

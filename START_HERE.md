@@ -36,3 +36,5 @@ The VS naming update uses a forward migration. If updating an earlier fresh star
 Backend portability: read docs/BACKEND_EXTRACTION.md. Business code is physically separated under backend/, with browser-safe shared/contracts and thin Next hosting adapters in lib/server. The current app is still hosted by Next; Nest extraction is a documented future migration.
 
 Project identity: npm package and extracted folder are named vyapti_vschool. The portal product remains VSchool. Development uses vyapti_vschool and tests use vyapti_vschool_test. An existing older database must be renamed explicitly and its private connection URL updated; setup never silently replaces it.
+
+Local progress: FND-01, DS-01 and BRD-01 have passed owner review. IAM-01 adds restricted operator bootstrap and real administrator sign-in at `/sign-in`; its review/evidence is recorded in [access CURRENT_STATE](docs/modules/access/CURRENT_STATE.md). The branded `/sign-in/<slug>` screens remain synthetic previews until BRD-02. Use the README for local authentication configuration.

@@ -19,7 +19,11 @@
     "test:e2e": "node scripts/database.mjs e2e",
     "next-task": "node scripts/next-task.mjs",
     "check:db-design": "node scripts/check-db-design.mjs",
-    "check:backend": "tsc -p backend/tsconfig.json"
+    "check:backend": "tsc -p backend/tsconfig.json",
+    "setup:auth": "node scripts/setup-auth.mjs",
+    "provision-school": "node --import tsx scripts/provision-school.ts",
+    "demo:access": "node --import tsx scripts/demo-access.ts",
+    "verify:access-local": "node scripts/verify-access-local.mjs"
   },
   "dependencies": {
     "next": "16.3.8",
@@ -30,7 +34,9 @@
     "pg": "^8",
     "dotenv": "^17",
     "zod": "^4",
-    "server-only": "0.0.1"
+    "server-only": "0.0.1",
+    "next-auth": "4.24.15",
+    "bcryptjs": "3.0.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

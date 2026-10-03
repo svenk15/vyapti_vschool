@@ -1,0 +1,182 @@
+{
+  "observedAt": "2026-10-03T18:53:27.127Z",
+  "checks": [
+    {
+      "name": "CLI duplicate refuses without implicit recovery",
+      "passed": true
+    },
+    {
+      "name": "CLI invalid zone, operator and database guards",
+      "passed": true
+    },
+    {
+      "name": "Restricted CLI provisions a synthetic school with atomic evidence",
+      "passed": true
+    },
+    {
+      "name": "Both databases preserve foundation marker timestamps and all migration history",
+      "passed": true
+    },
+    {
+      "name": "Production health ready",
+      "passed": true
+    },
+    {
+      "name": "Logged-out production routes deny access",
+      "passed": true
+    },
+    {
+      "name": "Production login, own scope, foreign denial and setup",
+      "passed": true
+    },
+    {
+      "name": "Isolated DB outage returns safe 503/page and redacted auth failure; POST limiter returns 429",
+      "passed": true
+    },
+    {
+      "name": "Missing auth secret fails closed without changing private configuration",
+      "passed": true
+    },
+    {
+      "name": "Production sign-out clears access",
+      "passed": true
+    },
+    {
+      "name": "Private .env unchanged",
+      "passed": true
+    }
+  ],
+  "foreignSchoolId": "3491dc36-ffc4-4f09-baab-6be61bdadd70",
+  "databases": [
+    {
+      "database": "vyapti_vschool",
+      "migrations": [
+        {
+          "migration_name": "20261003000100_foundation",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000200_vora_naming",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000300_vs_prefix",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000400_access_bootstrap",
+          "applied": true,
+          "rolled_back": false
+        }
+      ],
+      "marker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T12:56:01.303Z"
+        }
+      ],
+      "tables": [
+        "vs_access_auth_security_event",
+        "vs_access_organization",
+        "vs_access_role_grant",
+        "vs_access_school",
+        "vs_access_school_membership",
+        "vs_access_user_account",
+        "vs_platform_audit_entry",
+        "vs_platform_command_receipt",
+        "vs_platform_outbox_event",
+        "vs_platform_setup_check"
+      ]
+    },
+    {
+      "database": "vyapti_vschool_test",
+      "migrations": [
+        {
+          "migration_name": "20261003000100_foundation",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000200_vora_naming",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000300_vs_prefix",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000400_access_bootstrap",
+          "applied": true,
+          "rolled_back": false
+        }
+      ],
+      "marker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T13:00:16.941Z"
+        }
+      ],
+      "tables": [
+        "vs_access_auth_security_event",
+        "vs_access_organization",
+        "vs_access_role_grant",
+        "vs_access_school",
+        "vs_access_school_membership",
+        "vs_access_user_account",
+        "vs_platform_audit_entry",
+        "vs_platform_command_receipt",
+        "vs_platform_outbox_event",
+        "vs_platform_setup_check"
+      ]
+    }
+  ],
+  "executableFingerprintSha256": "c584aa5f6ee62ca5a34c5f0935b391d05b25e3a1338143f219094709d4c47bb2",
+  "initialCommit": "e95ee2d4a982e971b310e950916f11a3eec00737",
+  "sourceCommit": "To be recorded in the following documentation checkpoint",
+  "automated": {
+    "check": {
+      "exit": 0,
+      "unitPassed": 46
+    },
+    "functional": {
+      "exit": 0,
+      "passed": 15,
+      "database": "vyapti_vschool_test"
+    },
+    "e2e": {
+      "exit": 0,
+      "passed": 40,
+      "projects": [
+        "chromium",
+        "mobile"
+      ]
+    },
+    "build": {
+      "exit": 0
+    },
+    "schemaDrift": {
+      "exit": 0,
+      "result": "empty migration"
+    }
+  },
+  "demo": {
+    "url": "http://127.0.0.1:3400/sign-in",
+    "session": 77200,
+    "privateCredentials": "artifacts/iam-01/private-demo.json",
+    "healthReady": true
+  },
+  "bcryptBenchmark": {
+    "cost": 12,
+    "samplesMs": [
+      261,
+      248,
+      250
+    ],
+    "medianMs": 250
+  }
+}

@@ -10,7 +10,7 @@ Design: [flow IAM-01](DESIGN.md). Scope and API: Restricted operator CLI provisi
 
 ### Implementation instructions
 
-1. Add planned access tables except Person binding until PER-01; add shared audit/outbox/receipt migrations and immutable guards.
+1. Add Organization, School, UserAccount, SchoolMembership, RoleGrant and AuthSecurityEvent; add shared audit/outbox/receipt migrations and immutable guards. Campus belongs to IAM-02, AccountActivation to IAM-03, Person binding to PER-01 and InstitutionGrant to TEN-01; do not install speculative tables.
 2. Provision transaction creates organization/school/account/membership/admin grant and audit/outbox; CLI refuses duplicate school/email without explicit recovery. Operator is a distinct audited provisioning principal.
 3. Pin auth dependencies; validate input, check account lockout and bcrypt credential, issue secure session through provider.
 4. Resolve current account tokenVersion and school membership on each admin request.

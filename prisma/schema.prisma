@@ -1,14 +1,182 @@
 generator client {
   provider = "prisma-client"
-  output = "../generated/prisma"
+  output   = "../generated/prisma"
 }
+
 datasource db {
   provider = "postgresql"
 }
-// Starter readiness only. Phase 1 business tables are designed, not implemented.
+
+// IAM-01 physical contracts. Checks and immutable guards are in the forward SQL migration.
 model SetupCheck {
-  id String @id(map: "vs_platform_setup_check_pkey")
-  createdAt DateTime @default(now()) @db.Timestamptz(3) @map("created_at")
+  id        String   @id(map: "vs_platform_setup_check_pkey")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
 
   @@map("vs_platform_setup_check")
+}
+
+model Organization {
+  id                   String   @id(map: "vs_access_organization_pkey") @db.Uuid
+  name                 String   @db.VarChar(160)
+  status               String   @db.VarChar(20)
+  version              Int
+  createdAt            DateTime @map("created_at") @db.Timestamptz(3)
+  configurationVersion Int      @default(1) @map("configuration_version")
+  schools              School[]
+
+  @@map("vs_access_organization")
+}
+
+model School {
+  id                   String             @id(map: "vs_access_school_pkey") @db.Uuid
+  organizationId       String             @map("organization_id") @db.Uuid
+  code                 String             @db.VarChar(40)
+  name                 String             @db.VarChar(160)
+  timezone             String             @db.VarChar(64)
+  status               String             @db.VarChar(20)
+  version              Int
+  createdAt            DateTime           @map("created_at") @db.Timestamptz(3)
+  configurationVersion Int                @default(1) @map("configuration_version")
+  organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_r0_fkey")
+  memberships          SchoolMembership[]
+  auditEntries         AuditEntry[]
+  outboxEvents         OutboxEvent[]
+  commandReceipts      CommandReceipt[]
+
+  @@unique([organizationId, id], map: "vs_access_school_u0_key")
+  @@unique([organizationId, code], map: "vs_access_school_u1_key")
+  @@index([organizationId], map: "vs_access_school_r0_idx")
+  @@map("vs_access_school")
+}
+
+model UserAccount {
+  id                  String              @id(map: "vs_access_user_account_pkey") @db.Uuid
+  normalizedEmail     String              @map("normalized_email") @db.VarChar(254)
+  passwordHash        String?             @map("password_hash")
+  status              String              @db.VarChar(20)
+  tokenVersion        Int                 @map("token_version")
+  failedAttempts      Int                 @map("failed_attempts")
+  lockedUntil         DateTime?           @map("locked_until") @db.Timestamptz(3)
+  version             Int
+  createdAt           DateTime            @map("created_at") @db.Timestamptz(3)
+  memberships         SchoolMembership[]
+  securityEvents      AuthSecurityEvent[] @relation("SecuritySubject")
+  actorSecurityEvents AuthSecurityEvent[] @relation("SecurityActor")
+  auditEntries        AuditEntry[]
+  commandReceipts     CommandReceipt[]
+
+  @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
+  @@index([status, id], map: "vs_access_user_account_q0_idx")
+  @@map("vs_access_user_account")
+}
+
+model SchoolMembership {
+  id             String      @id(map: "vs_access_school_membership_pkey") @db.Uuid
+  organizationId String      @map("organization_id") @db.Uuid
+  schoolId       String      @map("school_id") @db.Uuid
+  accountId      String      @map("account_id") @db.Uuid
+  status         String      @db.VarChar(20)
+  version        Int
+  school         School      @relation(fields: [organizationId, schoolId], references: [organizationId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_membership_r1_fkey")
+  account        UserAccount @relation(fields: [accountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_membership_r2_fkey")
+  grants         RoleGrant[]
+
+  @@unique([organizationId, schoolId, id], map: "vs_access_school_membership_u0_key")
+  @@unique([organizationId, schoolId, accountId], map: "vs_access_school_membership_u1_key")
+  @@index([organizationId, schoolId], map: "vs_access_school_membership_r1_idx")
+  @@index([accountId], map: "vs_access_school_membership_r2_idx")
+  @@map("vs_access_school_membership")
+}
+
+model RoleGrant {
+  id             String           @id(map: "vs_access_role_grant_pkey") @db.Uuid
+  organizationId String           @map("organization_id") @db.Uuid
+  schoolId       String           @map("school_id") @db.Uuid
+  membershipId   String           @map("membership_id") @db.Uuid
+  code           String           @db.VarChar(40)
+  membership     SchoolMembership @relation(fields: [organizationId, schoolId, membershipId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_role_grant_r3_fkey")
+
+  @@unique([organizationId, schoolId, membershipId, code], map: "vs_access_role_grant_u0_key")
+  @@index([organizationId, schoolId, membershipId], map: "vs_access_role_grant_r3_idx")
+  @@map("vs_access_role_grant")
+}
+
+model AuthSecurityEvent {
+  id             String       @id(map: "vs_access_auth_security_event_pkey") @db.Uuid
+  accountId      String?      @map("account_id") @db.Uuid
+  kind           String       @db.VarChar(40)
+  occurredAt     DateTime     @map("occurred_at") @db.Timestamptz(3)
+  requestId      String       @map("request_id") @db.Uuid
+  actorAccountId String?      @map("actor_account_id") @db.Uuid
+  account        UserAccount? @relation("SecuritySubject", fields: [accountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_auth_security_event_r4_fkey")
+  actorAccount   UserAccount? @relation("SecurityActor", fields: [actorAccountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_auth_security_event_r5_fkey")
+
+  @@index([accountId], map: "vs_access_auth_security_event_r4_idx")
+  @@index([actorAccountId], map: "vs_access_auth_security_event_r5_idx")
+  @@index([accountId, occurredAt, id], map: "vs_access_auth_security_event_q0_idx")
+  @@map("vs_access_auth_security_event")
+}
+
+model AuditEntry {
+  id             String      @id(map: "vs_platform_audit_entry_pkey") @db.Uuid
+  organizationId String      @map("organization_id") @db.Uuid
+  schoolId       String      @map("school_id") @db.Uuid
+  actorAccountId String      @map("actor_account_id") @db.Uuid
+  module         String      @db.VarChar(40)
+  command        String      @db.VarChar(80)
+  resourceType   String      @map("resource_type") @db.VarChar(80)
+  resourceId     String      @map("resource_id") @db.Uuid
+  before         Json
+  after          Json
+  reason         String?     @db.VarChar(500)
+  requestId      String      @map("request_id") @db.Uuid
+  occurredAt     DateTime    @map("occurred_at") @db.Timestamptz(3)
+  school         School      @relation(fields: [organizationId, schoolId], references: [organizationId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_platform_audit_entry_r6_fkey")
+  actorAccount   UserAccount @relation(fields: [actorAccountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_platform_audit_entry_r7_fkey")
+
+  @@index([organizationId, schoolId], map: "vs_platform_audit_entry_r6_idx")
+  @@index([actorAccountId], map: "vs_platform_audit_entry_r7_idx")
+  @@index([organizationId, schoolId, module, resourceId, occurredAt, id], map: "vs_platform_audit_entry_q0_idx")
+  @@map("vs_platform_audit_entry")
+}
+
+model OutboxEvent {
+  id               String    @id(map: "vs_platform_outbox_event_pkey") @db.Uuid
+  organizationId   String    @map("organization_id") @db.Uuid
+  schoolId         String    @map("school_id") @db.Uuid
+  module           String    @db.VarChar(40)
+  type             String    @db.VarChar(100)
+  schemaVersion    Int       @map("schema_version")
+  aggregateId      String    @map("aggregate_id") @db.Uuid
+  aggregateVersion Int       @map("aggregate_version")
+  occurredAt       DateTime  @map("occurred_at") @db.Timestamptz(3)
+  payload          Json
+  state            String    @default("PENDING") @db.VarChar(20)
+  attempts         Int       @default(0)
+  availableAt      DateTime  @map("available_at") @db.Timestamptz(3)
+  deliveredAt      DateTime? @map("delivered_at") @db.Timestamptz(3)
+  school           School    @relation(fields: [organizationId, schoolId], references: [organizationId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_platform_outbox_event_r8_fkey")
+
+  @@index([organizationId, schoolId], map: "vs_platform_outbox_event_r8_idx")
+  @@index([state, availableAt, id], map: "vs_platform_outbox_event_q0_idx")
+  @@map("vs_platform_outbox_event")
+}
+
+model CommandReceipt {
+  id             String      @id(map: "vs_platform_command_receipt_pkey") @db.Uuid
+  organizationId String      @map("organization_id") @db.Uuid
+  schoolId       String      @map("school_id") @db.Uuid
+  actorAccountId String      @map("actor_account_id") @db.Uuid
+  command        String      @db.VarChar(80)
+  key            String      @db.VarChar(100)
+  inputHash      String      @map("input_hash") @db.Char(64)
+  response       Json
+  createdAt      DateTime    @map("created_at") @db.Timestamptz(3)
+  school         School      @relation(fields: [organizationId, schoolId], references: [organizationId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_platform_command_receipt_r9_fkey")
+  actorAccount   UserAccount @relation(fields: [actorAccountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_platform_command_receipt_r10_fkey")
+
+  @@unique([organizationId, schoolId, actorAccountId, command, key], map: "vs_platform_command_receipt_u0_key")
+  @@index([organizationId, schoolId], map: "vs_platform_command_receipt_r9_idx")
+  @@index([actorAccountId], map: "vs_platform_command_receipt_r10_idx")
+  @@map("vs_platform_command_receipt")
 }

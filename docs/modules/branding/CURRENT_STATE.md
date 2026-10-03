@@ -1,10 +1,10 @@
 # School branding and sign-in identity — current state
 
-BRD-01 locally verified on 3 October 2026; owner review pending. No active timer. Public previews do not imply authentication or tenant access.
+BRD-01 locally verified and accepted on 3 October 2026. No active timer. Public previews do not imply authentication or tenant access.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| BRD-01 | VERIFIED | PENDING | [Local evidence](../../evidence/brd-01-local/verification.json); 38 unit, 4 PostgreSQL and 28 browser tests passed |
+| BRD-01 | VERIFIED | PASSED | [Local evidence](../../evidence/brd-01-local/verification.json); 38 unit, 4 PostgreSQL and 28 browser tests passed |
 | BRD-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Implemented now
@@ -13,7 +13,7 @@ Validated palette/brand primitives and exact synthetic profile resolution; Fores
 
 ## Next action
 
-Pause for explicit BRD-01 demo feedback. Repair failed feedback first. After acceptance and permission to continue, run pnpm next-task (expected IAM-01). Do not start another task while this review is pending.
+Owner accepted BRD-01 and authorized the next task. IAM-01 selected using pnpm next-task. See access CURRENT_STATE for the current demo.
 
 ## Evidence and feedback
 
@@ -54,3 +54,7 @@ Manual review:
 5. Open /sign-in/not-a-school. Expect 404 and no fallback school. Narrow to 360px or try native browser 200% zoom; inspect labels, controls and keyboard navigation.
 
 Limitations: no real authentication/session, account recovery, tenant provisioning, entitlement permission, persistent branding, logo upload, custom host, CSP asset pipeline or publish/cache workflow is implemented by BRD-01. Only synthetic profiles and local code-drawn illustration are used. Native browser zoom, VoiceOver/NVDA, Safari/Firefox and full accessibility certification remain release checks; CSS zoom is not a native browser zoom certification. Human acceptance remains PENDING for this source. Next action: keep the demo stable and await owner feedback before IAM-01 or any other task.
+
+### BRD-01 owner acceptance — 3 October 2026
+
+Owner feedback: “Pass, please go-ahead and implement the next task”. Human review PASSED for source e95ee2d4a982e971b310e950916f11a3eec00737. IAM-01 authorized; pause again at its demo review.
