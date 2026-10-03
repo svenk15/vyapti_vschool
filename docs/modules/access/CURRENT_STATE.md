@@ -99,3 +99,7 @@ Manual review:
 5. Manage the sole active administrator and try Revoke or Suspend with a reason. Expect LAST_ADMIN feedback and continued access. Sign out and revisit /admin/users: expect sign-in.
 
 Limitations: operator activation/recovery and person binding are IAM-03/PER tasks; no email/message was sent. AttendanceSession is not yet migrated, so the real owner adapter's absence path is verified; existing-session and owner-failure policy are verified through the scoped port under real PostgreSQL transactions. ATT-01 must verify the installed relation path and retain shared School locking. No operational module/license/branch switching is enabled, no attendance workflow is claimed. Current reads and commands fail closed; broad production distributed rate controls, TLS, runtime DB privilege separation, accessibility certification and release/recovery remain later gates. No deployment or timer started. Human acceptance stays PENDING. Next action: pause for this demo's owner feedback; do not start IAM-03 yet.
+
+### IAM-02 source identity handoff — 4 October 2026
+
+Tested source `2a9418f9ae2265532aae946c4c540be39c28a79f`; production build `e547Ry6XTIfZxZ69mv-uO`, live health ready at http://127.0.0.1:3400. Executable fingerprint matches the frozen tested source after commit. This following checkpoint changes documentation/evidence only. Human review PENDING; pause before IAM-03.

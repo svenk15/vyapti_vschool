@@ -109,5 +109,26 @@
     }
   ],
   "demoUrl": "http://127.0.0.1:3400",
-  "buildId": "e547Ry6XTIfZxZ69mv-uO"
+  "buildId": "e547Ry6XTIfZxZ69mv-uO",
+  "testedSourceCommit": "2a9418f9ae2265532aae946c4c540be39c28a79f",
+  "executableFingerprint": "867d062699aadb22eea2ba737fd8777aa9a62ca9ac5a1be7f1da8b67002f9cd7",
+  "humanReview": "PENDING",
+  "finalGates": {
+    "check": {
+      "exit": 0,
+      "unitTests": 50
+    },
+    "functional": {
+      "exit": 0,
+      "tests": 22
+    },
+    "e2e": {
+      "exit": 0,
+      "tests": 44
+    },
+    "build": {
+      "exit": 0
+    },
+    "schemaDiff": "empty migration"
+  }
 }
