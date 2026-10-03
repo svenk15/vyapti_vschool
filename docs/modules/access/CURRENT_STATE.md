@@ -1,11 +1,11 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally verified; owner review pending. No imported task completion or active execution timer.
+Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted. No imported task completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | IAM-01 | VERIFIED | PASSED | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
-| IAM-02 | VERIFIED | PENDING | [Local verification](../../evidence/iam-02-local/verification.json), JUnit and source handoff below |
+| IAM-02 | VERIFIED | PASSED | [Local verification](../../evidence/iam-02-local/verification.json), JUnit and source handoff below |
 | IAM-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Current checkpoint
@@ -14,7 +14,7 @@ IAM-01 implements restricted operator bootstrap, bcrypt credentials/lockout, pro
 
 ## Next action
 
-Keep IAM-02 production demo stable and pause for owner review. IAM-03 is next only after explicit acceptance and permission to continue; address failed feedback first.
+Implement IAM-03 under the revised owner policy: verify, commit and hand off with review PENDING, then continue to the next eligible task. Explicit acceptance dependencies and reported defects take priority.
 
 ## Pending decisions / limitations
 
@@ -103,3 +103,7 @@ Limitations: operator activation/recovery and person binding are IAM-03/PER task
 ### IAM-02 source identity handoff — 4 October 2026
 
 Tested source `2a9418f9ae2265532aae946c4c540be39c28a79f`; production build `e547Ry6XTIfZxZ69mv-uO`, live health ready at http://127.0.0.1:3400. Executable fingerprint matches the frozen tested source after commit. This following checkpoint changes documentation/evidence only. Human review PENDING; pause before IAM-03.
+
+### IAM-02 acceptance and execution policy — 4 October 2026
+
+Owner: “IAM-02 looks good - Pass”. PASSED applies to tested source 2a9418f9ae2265532aae946c4c540be39c28a79f and documentation handoff 7f72d13. Owner now authorizes continuing after each verified demo with human review PENDING; never infer human acceptance. Defects take priority and explicit acceptance dependencies remain gates. No timer, deployment or external messaging authorized. Clean main at 7f72d13; pnpm next-task selects IAM-03.

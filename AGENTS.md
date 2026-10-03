@@ -12,7 +12,7 @@ Enforce current membership/resource authorization in application use cases and t
 
 Before implementing a task, make sure its design resolves the database, reads, writes, errors, permissions and acceptance tests. Update design and Bible changelog if you find a contradiction; do not silently invent a new rule. State must reflect actual evidence and user acceptance separately.
 
-After each completed task, start/check a demo, report its URL and tested commit, give concrete manual steps and request user review. Only update human acceptance after explicit feedback. Follow the user's current permission to continue or pause; never claim an always-running autonomous loop exists. Do not reset/reseed a database merely to make a test pass.
+After each task, run required checks, update CURRENT_STATE.md, create a focused commit and provide a running demo with manual steps and tested commit. Record human review PENDING and continue to the next eligible task without waiting, unless a documented dependency explicitly requires human acceptance. Only mark PASSED after explicit feedback. Prioritize reported defects before dependent work. Pause only for a blocking decision, missing access, destructive action or failed verification that cannot be resolved safely. Work on one complete vertical slice at a time; batch independent reads/searches and avoid repeating unchanged checks unless a release gate requires them. Keep pending demos tied to stable builds. Never claim an always-running autonomous loop exists; no timer/deployment/external messaging is authorized. Do not reset/reseed a database merely to make a test pass.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

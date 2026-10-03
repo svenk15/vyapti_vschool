@@ -15,7 +15,7 @@ At resume, read module CURRENT_STATE tables and the latest evidence. `pnpm next-
 5. Review the diff; checkpoint intended source/docs only. Record the source commit under test. If a subsequent docs-only commit records evidence, identify both commits; don't invent a self-referential SHA.
 6. Start a local demo on port 3400 (`pnpm dev`, or build then `pnpm start`). Inspect health and the served route. Keep a separate terminal/session alive; never claim the user's Mac server was started from a remote session.
 7. Give URL, task ID, source commit, setup/credentials procedure, 3–5 manual steps and expected results. Mark review PENDING. Keep the demo stable while review is pending; use a new port/checkout if continuing would change the build under review.
-8. Update the module CURRENT_STATE evidence and next task. Human FAILED blocks dependent work until repair; PASSED applies only to the reviewed source. Changes invalidating accepted behavior need another review.
+8. Update the module CURRENT_STATE evidence and next task. Per the owner policy of 4 October 2026, continue immediately with the next eligible complete slice while review is PENDING; wait only for an explicit acceptance dependency or a blocking decision/access/destructive action/unresolvable verification failure. Human FAILED blocks dependent work until repair; PASSED applies only to explicit feedback on the reviewed source. Changes invalidating accepted behavior need another review. Batch independent reads/searches; do not repeat unchanged checks unless a release gate requires them.
 
 ## Evidence record to append to module CURRENT_STATE.md
 
