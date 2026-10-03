@@ -4,7 +4,7 @@ Last updated: 2026-10-04. IAM-01 locally verified; owner acceptance PENDING. No 
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| IAM-01 | VERIFIED | PENDING | [Local verification](../../evidence/iam-01-local/verification.json); source identity recorded below |
+| IAM-01 | VERIFIED | PENDING | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
 | IAM-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 | IAM-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
@@ -30,7 +30,7 @@ Initial Git clean at e95ee2d; branch main. Prior reviews PASSED and pnpm next-ta
 
 ### IAM-01 local verification and running demo — 4 October 2026
 
-Implementation VERIFIED; human review PENDING. Initial main checkout was clean at `e95ee2d4a982e971b310e950916f11a3eec00737`. Tested executable fingerprint (sorted runtime/config/test paths plus contents): `c584aa5f6ee62ca5a34c5f0935b391d05b25e3a1338143f219094709d4c47bb2`. The source commit will be recorded in the following documentation-only checkpoint; no self-referential SHA is invented. [Safe observed evidence](../../evidence/iam-01-local/verification.json).
+Implementation VERIFIED; human review PENDING. Initial main checkout was clean at `e95ee2d4a982e971b310e950916f11a3eec00737`. Tested executable fingerprint (sorted runtime/config/test paths plus contents): `c584aa5f6ee62ca5a34c5f0935b391d05b25e3a1338143f219094709d4c47bb2`. Tested source commit: `56ba5f7551fe06ff28b14ff40d11c57065e53f38`. The following checkpoint records documentation/evidence only; executable fingerprint matches the running production build source. [Safe observed evidence](../../evidence/iam-01-local/verification.json).
 
 Implementation: portable Access domain/application/contracts/storage plus framework-free factory; Platform-enlisted evidence writer; browser DTOs; thin Next provider/session/page/API adapters and frontend gateway; shared UI administrator sign-in, home, setup summary and sign-out. `/api/v1/school` resolves exact current server membership for an optional school candidate. Active account/tokenVersion, role grant, institution and school status are rechecked on protected reads. Bootstrap creates one new institution/first branch/admin atomically and refuses implicit tenant/account reuse. No operational module is enabled.
 
@@ -60,3 +60,7 @@ Manual review:
 5. Sign out, then revisit `/admin` and `/admin/setup`. Expect sign-in; `/api/v1/school` returns UNAUTHENTICATED/401. Optionally submit one wrong password: expect generic feedback and a cleared password, then use the correct credential.
 
 Limitations: settings/staff/activation/recovery, multi-branch switching, licensed module configuration, branded real sign-in and operational school workflows remain their later tasks. Operator trust is local file/terminal access with configured UUID; production operator procedures, TLS, distributed rate control, RLS/runtime role separation and recovery/release are future gates. JWT lifetime is eight hours; local HTTP cookies are HttpOnly/SameSite=Lax, HTTPS Secure behavior is configured but no TLS deployment was tested. No Safari/Firefox, screen-reader certification, load/MFA/SSO or external outbox delivery is claimed. Synthetic append-only test/probe evidence is retained; no destructive cleanup occurred. Human acceptance stays PENDING until explicit owner feedback for the tested source. Next action: pause; do not begin IAM-02 yet.
+
+### Source identity handoff — 4 October 2026
+
+Tested source `56ba5f7551fe06ff28b14ff40d11c57065e53f38`; production Next build ID `rC-4vzc5Or9U9lY2cvy2A`. No executable changes after final check/build/browser/persistence verification. Human review PENDING. pnpm next-task suggests IAM-02, but work is paused until explicit owner feedback and permission.

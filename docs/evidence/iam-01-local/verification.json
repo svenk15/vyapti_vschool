@@ -137,7 +137,7 @@
   ],
   "executableFingerprintSha256": "c584aa5f6ee62ca5a34c5f0935b391d05b25e3a1338143f219094709d4c47bb2",
   "initialCommit": "e95ee2d4a982e971b310e950916f11a3eec00737",
-  "sourceCommit": "To be recorded in the following documentation checkpoint",
+  "sourceCommit": "56ba5f7551fe06ff28b14ff40d11c57065e53f38",
   "automated": {
     "check": {
       "exit": 0,
@@ -168,7 +168,9 @@
     "url": "http://127.0.0.1:3400/sign-in",
     "session": 77200,
     "privateCredentials": "artifacts/iam-01/private-demo.json",
-    "healthReady": true
+    "healthReady": true,
+    "nextBuildId": "rC-4vzc5Or9U9lY2cvy2A",
+    "sourceFingerprintMatches": true
   },
   "bcryptBenchmark": {
     "cost": 12,
