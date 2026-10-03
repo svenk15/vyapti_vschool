@@ -1,0 +1,30 @@
+<testsuites id="" name="" tests="12" failures="0" skipped="0" errors="0" time="42.366458">
+<testsuite name="starter.spec.ts" timestamp="2026-10-03T11:41:24.471Z" hostname="chromium" tests="6" failures="0" skipped="0" time="17.83" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="4.299">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.024">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="5.307">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="1.856">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="2.347">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="3.997">
+</testcase>
+</testsuite>
+<testsuite name="starter.spec.ts" timestamp="2026-10-03T11:41:24.471Z" hostname="mobile" tests="6" failures="0" skipped="0" time="15.722" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="1.491">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.018">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="3.903">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="3.083">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="2.679">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="4.548">
+</testcase>
+</testsuite>
+</testsuites>

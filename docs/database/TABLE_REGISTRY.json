@@ -1,0 +1,476 @@
+{
+  "revision": "4.3",
+  "prefix": "vs_",
+  "tables": [
+    {
+      "model": "AcademicTerm",
+      "owner": "academics",
+      "table": "vs_academics_academic_term",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date",
+      "responsibility": "Owned by year; no overlapping intervals; all within year.",
+      "constraints": "FK(scope,year_id); UNIQUE(scope,year_id,code); CHECK starts_on<ends_on; index(scope,year_id,starts_on)"
+    },
+    {
+      "model": "AcademicYear",
+      "owner": "academics",
+      "table": "vs_academics_academic_year",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date; status DRAFT/OPEN/CLOSED; version int",
+      "responsibility": "Half-open year; terms are editable only while DRAFT. Multiple open years permitted if dates/business selection are explicit.",
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code); CHECK starts_on<ends_on"
+    },
+    {
+      "model": "CalendarException",
+      "owner": "academics",
+      "table": "vs_academics_calendar_exception",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; campus_id uuid nullable; on_date date; is_teaching_day boolean; label varchar(160)",
+      "responsibility": "Date exception; campus beats school beats weekly rule. Dates inside year.",
+      "constraints": "Scoped revision/campus FKs; two NULL/non-NULL partial unique indexes(scope,revision_id,on_date[,campus_id]); immutable"
+    },
+    {
+      "model": "CalendarRevision",
+      "owner": "academics",
+      "table": "vs_academics_calendar_revision",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; calendar_id uuid; number int; teaching_weekdays int[]; published_at timestamptz(3); published_by uuid",
+      "responsibility": "Immutable full policy snapshot. No generic mutable JSON calendar.",
+      "constraints": "UNIQUE(scope,calendar_id,number); UNIQUE(scope,calendar_id,id); FK calendar; published_by account; append-only guard"
+    },
+    {
+      "model": "CourseOffering",
+      "owner": "academics",
+      "table": "vs_academics_course_offering",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; section_id uuid; subject_id uuid; code varchar(40); version int; active boolean",
+      "responsibility": "One section subject offering in year.",
+      "constraints": "UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped section/year composite FK and subject FK; UNIQUE(scope,id)"
+    },
+    {
+      "model": "GradeLevel",
+      "owner": "academics",
+      "table": "vs_academics_grade_level",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); sort_order int; active boolean; version int",
+      "responsibility": "School-wide grade catalog. No cross-school shared write.",
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code)"
+    },
+    {
+      "model": "SchoolCalendar",
+      "owner": "academics",
+      "table": "vs_academics_school_calendar",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; current_revision_id uuid nullable; version int",
+      "responsibility": "One calendar root per school year; no current pointer until publication.",
+      "constraints": "UNIQUE(scope,year_id); UNIQUE(scope,id); FK year; deferred current_revision scoped FK added in SQL"
+    },
+    {
+      "model": "Section",
+      "owner": "academics",
+      "table": "vs_academics_section",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; grade_id uuid; campus_id uuid nullable; code varchar(40); name varchar(160); active boolean; version int",
+      "responsibility": "Section in one year/grade/campus, including school-wide no-campus scope.",
+      "constraints": "Scoped FKs year/grade/campus; UNIQUE(scope,id,year_id); two partial UNIQUE indexes (scope,year_id,grade_id,code) WHERE campus_id IS NULL and (scope,year_id,grade_id,campus_id,code) WHERE NOT NULL"
+    },
+    {
+      "model": "Subject",
+      "owner": "academics",
+      "table": "vs_academics_subject",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); active boolean; version int",
+      "responsibility": "School-wide subject catalog.",
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code)"
+    },
+    {
+      "model": "Teacher",
+      "owner": "academics",
+      "table": "vs_academics_teacher",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int",
+      "responsibility": "Academic teacher profile, not a login identity.",
+      "constraints": "UNIQUE(scope,employee_id); UNIQUE(scope,id); scoped Employee FK"
+    },
+    {
+      "model": "TeacherAssignment",
+      "owner": "academics",
+      "table": "vs_academics_teacher_assignment",
+      "status": "PLANNED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int",
+      "responsibility": "Primary attendance duty only in Phase 1; one eligible teacher per offering/date.",
+      "constraints": "Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; index(scope,offering_id,valid_from,valid_to)"
+    },
+    {
+      "model": "AccountActivation",
+      "owner": "access",
+      "table": "vs_access_account_activation",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; account_id uuid; token_hash char(64); expires_at timestamptz(3); consumed_at timestamptz(3) nullable; revoked_at timestamptz(3) nullable; created_by uuid",
+      "responsibility": "One-time 256-bit random opaque activation, hash stored; 24h expiry. Raw token shown once to authorized local operator, never audit/log/URL query.",
+      "constraints": "UNIQUE(token_hash); FK account and created_by; index(account_id,expires_at)"
+    },
+    {
+      "model": "AccountPersonBinding",
+      "owner": "access",
+      "table": "vs_access_account_person_binding",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid",
+      "responsibility": "Deliberate verified account-to-person link; People supplies scoped Person reference.",
+      "constraints": "FK account; FK(organization_id,person_id)\u2192Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
+    },
+    {
+      "model": "AuthSecurityEvent",
+      "owner": "access",
+      "table": "vs_access_auth_security_event",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; account_id uuid nullable; kind varchar(40); occurred_at timestamptz(3); request_id uuid; actor_account_id uuid nullable",
+      "responsibility": "Redacted auth/recovery evidence where a school transaction is not available. No password, raw token or raw identifier for unknown-account attempts.",
+      "constraints": "FK accounts when present; index(account_id,occurred_at,id); append-only"
+    },
+    {
+      "model": "Campus",
+      "owner": "access",
+      "table": "vs_access_campus",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int",
+      "responsibility": "Optional subordinate site; no campus-level grants in first release.",
+      "constraints": "FK(scope)\u2192School; UNIQUE(scope,id); UNIQUE(scope,code)"
+    },
+    {
+      "model": "InstitutionGrant",
+      "owner": "access",
+      "table": "vs_access_institution_grant",
+      "status": "PLANNED",
+      "design": "docs/modules/tenancy/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; account_id uuid; role varchar(40) INSTITUTION_ADMIN; status varchar(20) ACTIVE/REVOKED; version int; granted_at timestamptz(3); granted_by uuid",
+      "responsibility": "Institution configuration grant; no implicit pupil access.",
+      "constraints": "FK institution/account; UNIQUE(organization_id,account_id,role); institution status lookup index"
+    },
+    {
+      "model": "Organization",
+      "owner": "access",
+      "table": "vs_access_organization",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; name varchar(160); status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
+      "responsibility": "Contractual tenant; no implicit access to all schools.",
+      "constraints": "CHECK version>0; UNIQUE(id); CHECK configuration_version>0"
+    },
+    {
+      "model": "RoleGrant",
+      "owner": "access",
+      "table": "vs_access_role_grant",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER",
+      "responsibility": "Fixed permission mapping in code; no arbitrary permission JSON.",
+      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code)"
+    },
+    {
+      "model": "School",
+      "owner": "access",
+      "table": "vs_access_school",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
+      "responsibility": "Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1.",
+      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); CHECK configuration_version>0"
+    },
+    {
+      "model": "SchoolMembership",
+      "owner": "access",
+      "table": "vs_access_school_membership",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; account_id uuid; status PENDING/ACTIVE/SUSPENDED/REVOKED; version int",
+      "responsibility": "School access root; granting role does not prove teacher eligibility.",
+      "constraints": "FK school; FK account; UNIQUE(scope,id); UNIQUE(scope,account_id)"
+    },
+    {
+      "model": "UserAccount",
+      "owner": "access",
+      "table": "vs_access_user_account",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; normalized_email varchar(254); password_hash text nullable; status PENDING/ACTIVE/DISABLED; token_version int; failed_attempts int; locked_until timestamptz(3) nullable; version int; created_at timestamptz(3)",
+      "responsibility": "Globally unique login; no school access without membership. Never return hash or failed-attempt details.",
+      "constraints": "UNIQUE(normalized_email); counters>=0; index(status,id)"
+    },
+    {
+      "model": "AttendanceRecord",
+      "owner": "attendance",
+      "table": "vs_attendance_record",
+      "status": "PLANNED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; status PRESENT/ABSENT/LATE/EXCUSED; late_minutes int nullable; current_revision int",
+      "responsibility": "Current submitted status; one per roster pupil. No blank record stored before submit.",
+      "constraints": "FK(scope,session_id,student_id)\u2192roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)"
+    },
+    {
+      "model": "AttendanceRevision",
+      "owner": "attendance",
+      "table": "vs_attendance_revision",
+      "status": "PLANNED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; number int; kind SUBMIT/CORRECT/CANCEL; actor_account_id uuid; occurred_at timestamptz(3); reason varchar(500) nullable; changes jsonb",
+      "responsibility": "Immutable status diff with old/new values and affected student IDs; submit includes complete initial set, cancel includes state transition. No raw private notes field in pilot.",
+      "constraints": "Scoped session FK; actor FK; UNIQUE(scope,session_id,number); reason required for CORRECT/CANCEL; append-only guard"
+    },
+    {
+      "model": "AttendanceSession",
+      "owner": "attendance",
+      "table": "vs_attendance_session",
+      "status": "PLANNED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; school_date date; starts_at timestamptz(3); ends_at timestamptz(3); occurrence_key varchar(80); calendar_revision_id uuid; status SCHEDULED/OPEN/SUBMITTED/CANCELLED; version int; roster_revision char(64) nullable; opened_at timestamptz(3) nullable; submitted_at timestamptz(3) nullable; submitted_by uuid nullable; cancelled_at timestamptz(3) nullable",
+      "responsibility": "One actual offering occurrence; retains calendar version and scope. School timezone used to validate local date.",
+      "constraints": "Scoped Offering/CalendarRevision FKs; UNIQUE(scope,offering_id,occurrence_key); UNIQUE(scope,id); CHECK starts<ends; index(scope,school_date,status,starts_at,id)"
+    },
+    {
+      "model": "SessionRosterEntry",
+      "owner": "attendance",
+      "table": "vs_attendance_session_roster_entry",
+      "status": "PLANNED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; enrollment_id uuid; placement_id uuid; display_name_snapshot varchar(210); roll_number_snapshot varchar(30) nullable",
+      "responsibility": "Frozen at OPEN. Minimal name/roll historical display; access remains current. No mutable roster after OPEN in Phase 1.",
+      "constraints": "Scoped session/student/enrollment/placement FKs; UNIQUE(scope,session_id,student_id); append-only; session cancellation retains rows"
+    },
+    {
+      "model": "BrandAsset",
+      "owner": "branding",
+      "table": "vs_branding_brand_asset",
+      "status": "PLANNED",
+      "design": "docs/modules/branding/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; object_key varchar(512); sha256 char(64); mime varchar(100); bytes int; width int; height int; state varchar(20) UPLOADED/SCANNING/APPROVED/REJECTED; created_at timestamptz(3)",
+      "responsibility": "Published identity, safe asset or verified public host.",
+      "constraints": "private source; approved derivative reference; size<=2MiB and dims<=2048; scoped retrieval; object_key server assigned"
+    },
+    {
+      "model": "BrandProfile",
+      "owner": "branding",
+      "table": "vs_branding_brand_profile",
+      "status": "PLANNED",
+      "design": "docs/modules/branding/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; version int; current_revision_id uuid nullable; public_slug varchar(80)",
+      "responsibility": "Published identity, safe asset or verified public host.",
+      "constraints": "one institution default WHERE school_id IS NULL; one per branch WHERE school_id IS NOT NULL; separate partial unique indexes; scoped School FK; UNIQUE(public_slug); lowercase slug format check"
+    },
+    {
+      "model": "BrandRevision",
+      "owner": "branding",
+      "table": "vs_branding_brand_revision",
+      "status": "PLANNED",
+      "design": "docs/modules/branding/DESIGN.md",
+      "fields": "id uuid PK; profile_id uuid; organization_id uuid; school_id uuid nullable; revision int; state varchar(20) DRAFT/PUBLISHED; display_name varchar(160); branch_label varchar(160) nullable; logo_asset_id uuid nullable; palette varchar(20) forest/indigo/clay; welcome varchar(180); support_email varchar(254); locale varchar(35); published_at timestamptz(3) nullable; published_by uuid nullable",
+      "responsibility": "Published identity, safe asset or verified public host.",
+      "constraints": "UNIQUE(profile_id,revision); composite owner FK; published rows immutable; pointer references same profile revision"
+    },
+    {
+      "model": "VerifiedBrandHost",
+      "owner": "branding",
+      "table": "vs_branding_verified_brand_host",
+      "status": "PLANNED",
+      "design": "docs/modules/branding/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; hostname varchar(253); verification_token_hash char(64); state varchar(20) PENDING/VERIFIED/REVOKED; verified_at timestamptz(3) nullable; brand_profile_id uuid",
+      "responsibility": "Published identity, safe asset or verified public host.",
+      "constraints": "UNIQUE(lowercase canonical hostname); ownership challenge; exact verified lookup, no wildcard arbitrary Host trust"
+    },
+    {
+      "model": "ImportJob",
+      "owner": "imports",
+      "table": "vs_imports_import_job",
+      "status": "PLANNED",
+      "design": "docs/modules/imports/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3)",
+      "responsibility": "Pilot bounded CSV is private DB bytea (max 2 MiB), not public filesystem upload. Context pins dates/reference versions. Raw source expires after 7 days; row outcomes retain minimal identifiers for 30 days, then purge payload by explicit operator retention job.",
+      "constraints": "Scoped year/campus FKs; account FK; index(scope,state,created_at,id); CHECK octet_length(source_bytes)<=2097152 when nonnull"
+    },
+    {
+      "model": "ImportRow",
+      "owner": "imports",
+      "table": "vs_imports_import_row",
+      "status": "PLANNED",
+      "design": "docs/modules/imports/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable",
+      "responsibility": "Normalized bounded row, explicit preview outcome and durable safe result. No plaintext credentials. Status changes within one School-guard transaction, so process crash rolls back current row.",
+      "constraints": "FK(scope,job_id)\u2192ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number)"
+    },
+    {
+      "model": "SourceStudentMap",
+      "owner": "imports",
+      "table": "vs_imports_source_student_map",
+      "status": "PLANNED",
+      "design": "docs/modules/imports/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; namespace varchar(40); external_student_id varchar(100); student_id uuid; created_at timestamptz(3)",
+      "responsibility": "Stable cross-job source key; no name/email matching.",
+      "constraints": "UNIQUE(scope,namespace,external_student_id); scoped Student FK; UNIQUE(scope,namespace,student_id) to refuse accidental second source identity"
+    },
+    {
+      "model": "Employee",
+      "owner": "people",
+      "table": "vs_people_employee",
+      "status": "PLANNED",
+      "design": "docs/modules/people/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int",
+      "responsibility": "School institutional profile; links rather than duplicates identity.",
+      "constraints": "Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end"
+    },
+    {
+      "model": "Person",
+      "owner": "people",
+      "table": "vs_people_person",
+      "status": "PLANNED",
+      "design": "docs/modules/people/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; first_name varchar(100); last_name varchar(100) default empty; contact_email varchar(254) nullable; version int; created_at timestamptz(3)",
+      "responsibility": "Canonical name/contact; email contact is not verified login ownership. Minimal pilot PII, no health/document fields.",
+      "constraints": "FK organization; UNIQUE(organization_id,id); index(organization_id,last_name,id); no email/name uniqueness"
+    },
+    {
+      "model": "AuditEntry",
+      "owner": "platform",
+      "table": "vs_platform_audit_entry",
+      "status": "PLANNED",
+      "design": "docs/modules/platform/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; module varchar(40); command varchar(80); resource_type varchar(80); resource_id uuid; before jsonb; after jsonb; reason varchar(500) nullable; request_id uuid; occurred_at timestamptz(3)",
+      "responsibility": "Redacted business changes only; immutable. before/after are small allowlisted diffs, never password/token/CSV bodies.",
+      "constraints": "FK school scope; actor account FK; index(scope,module,resource_id,occurred_at,id); DB trigger denies UPDATE/DELETE to app role"
+    },
+    {
+      "model": "CommandReceipt",
+      "owner": "platform",
+      "table": "vs_platform_command_receipt",
+      "status": "PLANNED",
+      "design": "docs/modules/platform/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; command varchar(80); key varchar(100); input_hash char(64); response jsonb; created_at timestamptz(3)",
+      "responsibility": "Only committed safe success response; all fields immutable. Unsuccessful transaction writes no receipt.",
+      "constraints": "UNIQUE(scope,actor_account_id,command,key); FK school and account; hash/key format checks; immutable trigger"
+    },
+    {
+      "model": "OutboxEvent",
+      "owner": "platform",
+      "table": "vs_platform_outbox_event",
+      "status": "PLANNED",
+      "design": "docs/modules/platform/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; module varchar(40); type varchar(100); schema_version int; aggregate_id uuid; aggregate_version int; occurred_at timestamptz(3); payload jsonb; state varchar(20) default PENDING; attempts int default 0; available_at timestamptz(3); delivered_at timestamptz(3) nullable",
+      "responsibility": "Internal domain fact. Phase 1 only persists; no external delivery is claimed. Future dispatcher uses an explicit lease and receipt migration.",
+      "constraints": "FK school scope; CHECK schema_version>0, aggregate_version>0, attempts>=0, state in PENDING/DELIVERED/EXHAUSTED; index(state,available_at,id)"
+    },
+    {
+      "model": "SetupCheck",
+      "owner": "platform",
+      "table": "vs_platform_setup_check",
+      "status": "MIGRATED",
+      "design": "docs/modules/platform/DESIGN.md",
+      "fields": "id text PK; created_at timestamptz(3) default now",
+      "responsibility": "id=starter is the idempotently seeded readiness marker. No school data.",
+      "constraints": "PK(id)"
+    },
+    {
+      "model": "ExportRun",
+      "owner": "reporting",
+      "table": "vs_reporting_export_run",
+      "status": "PLANNED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; filters jsonb; requested_at timestamptz(3); state GENERATED/FAILED; row_count int; content_hash char(64) nullable; request_id uuid",
+      "responsibility": "Synchronous bounded export metadata, no public stored CSV. GENERATED means the bytes were prepared, not that browser received them.",
+      "constraints": "Scoped school/account FKs; index(scope,requested_at,id); no raw exported CSV or credentials"
+    },
+    {
+      "model": "Enrollment",
+      "owner": "students",
+      "table": "vs_students_enrollment",
+      "status": "PLANNED",
+      "design": "docs/modules/students/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; year_id uuid; valid_from date; valid_to date; version int",
+      "responsibility": "Yearly enrollment root; retained historical ranges.",
+      "constraints": "UNIQUE(scope,student_id,year_id); UNIQUE(scope,id,year_id); scoped Student/Year FKs; CHECK from<to"
+    },
+    {
+      "model": "SectionPlacement",
+      "owner": "students",
+      "table": "vs_students_section_placement",
+      "status": "PLANNED",
+      "design": "docs/modules/students/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; enrollment_id uuid; year_id uuid; section_id uuid; valid_from date; valid_to date; roll_number varchar(30) nullable",
+      "responsibility": "Section membership intervals; no duplicated year/student rows per transfer. Roll is display identifier, not a globally unique identity.",
+      "constraints": "Scoped FK(enrollment_id,year_id) and FK(section_id,year_id); CHECK from<to; index(scope,section_id,valid_from,valid_to,enrollment_id); nonoverlap under School guard, verified concurrency tests"
+    },
+    {
+      "model": "Student",
+      "owner": "students",
+      "table": "vs_students_student",
+      "status": "PLANNED",
+      "design": "docs/modules/students/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); status ACTIVE/ARCHIVED; version int; created_at timestamptz(3)",
+      "responsibility": "Institutional student identity; admission number never recycled after archive.",
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); scoped school and organization Person FKs"
+    },
+    {
+      "model": "BranchActivation",
+      "owner": "tenancy",
+      "table": "vs_tenancy_branch_activation",
+      "status": "PLANNED",
+      "design": "docs/modules/tenancy/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; module_id varchar(40); state varchar(20) DISABLED/PROVISIONING/ACTIVE/READ_ONLY/SUSPENDED/RETIRED; version int; enabled_at timestamptz(3) nullable",
+      "responsibility": "Module contract, activation or configuration evidence.",
+      "constraints": "UNIQUE(scope,module_id); scoped School FK; index(scope,state,module_id); active requires entitlement via locked transaction"
+    },
+    {
+      "model": "ConfigurationChange",
+      "owner": "tenancy",
+      "table": "vs_tenancy_configuration_change",
+      "status": "PLANNED",
+      "design": "docs/modules/tenancy/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; actor_account_id uuid; expected_revision int; new_revision int; changes jsonb; reason varchar(500); occurred_at timestamptz(3); request_id uuid",
+      "responsibility": "Module contract, activation or configuration evidence.",
+      "constraints": "Append-only; reason 5\u2013500; index(organization_id,occurred_at,id); branch nullable for institution change"
+    },
+    {
+      "model": "OrganizationEntitlement",
+      "owner": "tenancy",
+      "table": "vs_tenancy_organization_entitlement",
+      "status": "PLANNED",
+      "design": "docs/modules/tenancy/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; module_id varchar(40); state varchar(20) ACTIVE/READ_ONLY/SUSPENDED/RETIRED; starts_at timestamptz(3); ends_at timestamptz(3) nullable; limits jsonb; manifest_version int; version int",
+      "responsibility": "Module contract, activation or configuration evidence.",
+      "constraints": "UNIQUE(organization_id,module_id); module_id in deployed catalog; dates valid; contracted operator write only"
+    },
+    {
+      "model": "TenantCommandReceipt",
+      "owner": "tenancy",
+      "table": "vs_tenancy_tenant_command_receipt",
+      "status": "PLANNED",
+      "design": "docs/modules/tenancy/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; actor_account_id uuid; command varchar(80); key varchar(100); input_hash char(64); response jsonb; created_at timestamptz(3)",
+      "responsibility": "Module contract, activation or configuration evidence.",
+      "constraints": "UNIQUE(organization_id,actor_account_id,command,key); immutable; for institution commands without a branch; branch commands use shared CommandReceipt"
+    },
+    {
+      "model": "TenantOutbox",
+      "owner": "tenancy",
+      "table": "vs_tenancy_tenant_outbox",
+      "status": "PLANNED",
+      "design": "docs/modules/tenancy/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; type varchar(100); schema_version int; payload jsonb; occurred_at timestamptz(3); state varchar(20) PENDING/PROCESSING/DELIVERED/FAILED; attempts int default 0; available_at timestamptz(3)",
+      "responsibility": "Module contract, activation or configuration evidence.",
+      "constraints": "FK organization; index(organization_id,state,available_at,id); attempts>=0; schema_version>0; immutable envelope except delivery state"
+    }
+  ]
+}

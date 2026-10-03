@@ -1,0 +1,24 @@
+{
+  "existingBaseline": {
+    "passed": true,
+    "markerIdPreserved": true,
+    "createdAtPreserved": true
+  },
+  "migrations": [
+    {
+      "migration_name": "20261003000100_foundation",
+      "finished": true
+    },
+    {
+      "migration_name": "20261003000200_vora_naming",
+      "finished": true
+    }
+  ],
+  "cleanInstall": {
+    "passed": true,
+    "migrationsApplied": 2,
+    "repeatDeployNoChanges": true,
+    "physicalReadWrite": true
+  },
+  "originalAppliedMigrationUnchanged": true
+}

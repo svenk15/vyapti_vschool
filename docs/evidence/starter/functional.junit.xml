@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="4" failures="0" errors="0" time="0.120614445">
+    <testsuite name="test/functional/setup.test.ts" timestamp="2026-10-03T11:40:02.713Z" hostname="1020262e963d" tests="4" failures="0" errors="0" skipped="0" time="0.120614445">
+        <testcase classname="test/functional/setup.test.ts" name="persists one marker across repeated commands" time="0.09945617">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="rolls back an interrupted real transaction" time="0.005421006">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="has a database-backed readiness marker" time="0.001379078">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="maps ORM fields to the Vora physical schema" time="0.011269358">
+        </testcase>
+    </testsuite>
+</testsuites>

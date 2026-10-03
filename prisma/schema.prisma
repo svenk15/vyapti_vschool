@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client"
+  output = "../generated/prisma"
+}
+datasource db {
+  provider = "postgresql"
+}
+// Starter readiness only. Phase 1 business tables are designed, not implemented.
+model SetupCheck {
+  id String @id(map: "vs_platform_setup_check_pkey")
+  createdAt DateTime @default(now()) @db.Timestamptz(3) @map("created_at")
+
+  @@map("vs_platform_setup_check")
+}

@@ -1,0 +1,55 @@
+{
+  "name": "vyapti_vschool",
+  "version": "0.3.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack --hostname 127.0.0.1 --port 3400",
+    "build": "prisma generate && next build --webpack",
+    "start": "next start --hostname 127.0.0.1 --port 3400",
+    "lint": "eslint app components lib backend shared test scripts *.ts *.mjs --no-warn-ignored",
+    "typecheck": "prisma generate && next typegen && tsc --noEmit",
+    "check": "pnpm lint && pnpm typecheck && pnpm check:docs && pnpm check:db-design && pnpm check:boundaries && pnpm check:backend && pnpm test:unit",
+    "check:docs": "node scripts/check-docs.mjs",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "setup:local": "node scripts/setup-local.mjs",
+    "db:setup": "node scripts/database.mjs dev",
+    "db:generate": "prisma generate",
+    "test:unit": "vitest run --config vitest.config.ts",
+    "test:functional": "node scripts/database.mjs functional",
+    "test:e2e": "node scripts/database.mjs e2e",
+    "next-task": "node scripts/next-task.mjs",
+    "check:db-design": "node scripts/check-db-design.mjs",
+    "check:backend": "tsc -p backend/tsconfig.json"
+  },
+  "dependencies": {
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "@prisma/client": "7.10.0",
+    "@prisma/adapter-pg": "7.10.0",
+    "pg": "^8",
+    "dotenv": "^17",
+    "zod": "^4",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.8",
+    "tailwindcss": "^4",
+    "typescript": "5.9.3",
+    "prisma": "7.10.0",
+    "tsx": "^4",
+    "@types/pg": "^8",
+    "vitest": "5.0.3",
+    "@playwright/test": "1.63.0"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
+  "type": "module"
+}

@@ -1,0 +1,217 @@
+# School scope, authentication and permissions — design
+
+Phase 1 · Design revision 1 · 3 October 2026. Status: specified for implementation; only the platform readiness path is implemented in this starter. Review unresolved deployment choices in FND-02 before real-data use.
+
+## Database naming and physical mapping
+
+All physical objects follow [the VS database contract](../../DATABASE_DESIGN.md). Table names and columns below are physical SQL names; workflow prose uses logical domain names. `organizationId` maps to `organization_id`, `schoolId` to `school_id`, and `scope` expands to both columns. Models retain PascalCase through Prisma `@@map`; camelCase fields use `@map`. Planned schemas are implemented only through their named tasks and reviewed migrations.
+
+## Ownership, aggregates and values
+
+Organization is the contractual tenant. School aggregate owns operational status, timezone and campuses. UserAccount is an authentication root with status/tokenVersion. SchoolMembership owns fixed role grants and active/suspended/revoked lifecycle. AccountPersonBinding associates one account to an organization-local Person only after an explicit verified operation; identity and institutional profiles remain separate. Values: NormalizedEmail (trim/lowercase for login only), SchoolScope, RoleCode, IanaTimezone, ActivationTokenHash, ExpectedVersion. Events: SchoolProvisioned.v1, MembershipChanged.v1, AccountRevoked.v1. No public organization/account registration.
+
+## Module decisions
+
+IAM-ADR-001: credentials via NextAuth adapter behind Identity ports; first task installs a compatible pinned next-auth/bcryptjs version and proves cookie/CSRF behavior. Starter intentionally has no empty authentication stub that grants access.
+
+IAM-ADR-002: operator-assisted, identity-verified staff activation for the pilot. Online activation accepts a token pasted into a form POST; token alone is never permission to choose a different Person. Alternative public self-registration rejected. Delivering a token outside the synthetic local demo requires the school's approved secure identity-verification procedure. A production pilot cannot proceed until that procedure and recovery are rehearsed.
+
+IAM-ADR-003: no selected-campus grant editing in Phase 1. Admin is school-wide; teacher scope comes from assignments. Campus remains a data/reference constraint. Configurable RBAC is Phase 2.
+
+## Physical data contract
+
+All tables are planned except SetupCheck. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+
+| Table | Fields and data stored | Meaning | Keys / constraints / query support |
+|---|---|---|---|
+| `vs_access_organization` (Organization) | id uuid PK; name varchar(160); status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1 | Contractual tenant; no implicit access to all schools. | CHECK version>0; UNIQUE(id); CHECK configuration_version>0 |
+| `vs_access_school` (School) | id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1 | Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1. | FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); CHECK configuration_version>0 |
+| `vs_access_campus` (Campus) | id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int | Optional subordinate site; no campus-level grants in first release. | FK(scope)→School; UNIQUE(scope,id); UNIQUE(scope,code) |
+| `vs_access_user_account` (UserAccount) | id uuid PK; normalized_email varchar(254); password_hash text nullable; status PENDING/ACTIVE/DISABLED; token_version int; failed_attempts int; locked_until timestamptz(3) nullable; version int; created_at timestamptz(3) | Globally unique login; no school access without membership. Never return hash or failed-attempt details. | UNIQUE(normalized_email); counters>=0; index(status,id) |
+| `vs_access_school_membership` (SchoolMembership) | id uuid PK; organization_id uuid; school_id uuid; account_id uuid; status PENDING/ACTIVE/SUSPENDED/REVOKED; version int | School access root; granting role does not prove teacher eligibility. | FK school; FK account; UNIQUE(scope,id); UNIQUE(scope,account_id) |
+| `vs_access_role_grant` (RoleGrant) | id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER | Fixed permission mapping in code; no arbitrary permission JSON. | FK(scope,membership_id)→membership; UNIQUE(scope,membership_id,code) |
+| `vs_access_account_person_binding` (AccountPersonBinding) | id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid | Deliberate verified account-to-person link; People supplies scoped Person reference. | FK account; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id) |
+| `vs_access_account_activation` (AccountActivation) | id uuid PK; account_id uuid; token_hash char(64); expires_at timestamptz(3); consumed_at timestamptz(3) nullable; revoked_at timestamptz(3) nullable; created_by uuid | One-time 256-bit random opaque activation, hash stored; 24h expiry. Raw token shown once to authorized local operator, never audit/log/URL query. | UNIQUE(token_hash); FK account and created_by; index(account_id,expires_at) |
+| `vs_access_auth_security_event` (AuthSecurityEvent) | id uuid PK; account_id uuid nullable; kind varchar(40); occurred_at timestamptz(3); request_id uuid; actor_account_id uuid nullable | Redacted auth/recovery evidence where a school transaction is not available. No password, raw token or raw identifier for unknown-account attempts. | FK accounts when present; index(account_id,occurred_at,id); append-only |
+
+## Read workflows and joins
+
+Sign-in account lookup by normalizedEmail unique index, followed by password check and atomic attempt/lockout update; constant generic public failure. Successful JWT carries accountId/tokenVersion only, not trusted permanent grants. ResolveActor loads account + exact active membership + RoleGrant + active School/Organization. Effective permissions are server-side fixed map. People linkage is only needed for teacher/profile use cases, avoiding a bootstrap cycle.
+
+User list joins scoped Membership → Account (safe email/status) → RoleGrant; account Person binding joins organization then school Employee, never an unrestricted Person directory. List is 50 items by accountId cursor. School settings query joins scoped School with Campus; other organization schools never appear automatically.
+
+## Screen contract
+
+Routes /sign-in, /activate, /admin/school, /admin/users. Sign-in has labeled email/password and generic invalid/locked feedback. Activation uses pasted token + password/confirmation; clears token on failure/navigation and never stores it in localStorage. School settings edits show version conflicts. User list exposes role/status, grant/suspend/revoke and reason; protects last active administrator. Empty teachers need profile/assignment guidance, not implicit access. Use private operator output for activation tokens, no downloadable public token list.
+
+All screens additionally follow Bible §8: loading, empty, validation, permission, stale/conflict, temporary failure and acknowledged success; semantic labels, focus and mobile layout. No future-module navigation.
+
+## Application ports and transaction boundary
+
+Each named flow below is an application use case. Inputs/outputs are plain DTOs; adapters implement owned repositories and public cross-module facades. Use SchoolCommand, ActorResolver, Clock, IdGenerator and transactional envelope writers from the shared contract. Do not pass Prisma.TransactionClient into application/domain code. Generic `save(any)` is not a replacement for named commands. Domain factories create new roots/events; rehydration restores without events.
+
+Mutations use the account → Organization → School guard protocol in Bible §7. Read-only flows do not take write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
+
+## IAM-01 — Provision a school and sign in as its administrator
+
+**Success response contract:** Auth provider session exposes accountId/tokenVersion and safe identity only; application ResolveActor returns `{accountId,scope,membershipId,capabilities,requestId}`. Provision CLI returns IDs, not credentials in logs.
+
+**Transport:** Restricted operator CLI provision-school; POST /api/auth/*; GET /admin
+
+**Input:** CLI: organizationName, schoolCode, schoolName, timezone, adminEmail; password through hidden prompt. Login email/password handled by maintained auth adapter.
+
+**Workflow:**
+
+1. Add planned access tables except Person binding until PER-01; add shared audit/outbox/receipt migrations and immutable guards.
+2. Provision transaction creates organization/school/account/membership/admin grant and audit/outbox; CLI refuses duplicate school/email without explicit recovery. Operator is a distinct audited provisioning principal.
+3. Pin auth dependencies; validate input, check account lockout and bcrypt credential, issue secure session through provider.
+4. Resolve current account tokenVersion and school membership on each admin request.
+5. Render a minimal authenticated school home with sign-out and setup link; no feature statistics yet.
+
+**Database writes / atomicity:** Organization, School, UserAccount, SchoolMembership, RoleGrant; AuditEntry and OutboxEvent for provisioning; AuthSecurityEvent for login/security facts. Bootstrap audit uses created admin account + explicit operator provenance field in safe payload; never impersonates an interactive login.
+
+**Errors and recovery:** Duplicate email/school → explicit conflict with no partial school; invalid zone → validation; wrong password/lockout/disabled → same generic public error.
+
+```mermaid
+sequenceDiagram
+  actor U as User
+  participant W as Delivery adapter
+  participant A as IAM-01 use case
+  participant P as Owner ports
+  participant D as PostgreSQL
+  U->>W: Request named flow
+  W->>A: Validated input and applicable session or activation proof
+  A->>P: Provision transaction creates organization/school/account/membership/admin grant and audit/outbox
+  P->>D: Scoped reads and transaction guards
+  D-->>P: Current authorized facts
+  A->>P: Pin auth dependencies
+  alt Preconditions hold
+    P->>D: Apply documented writes atomically
+    D-->>P: Committed result
+    P-->>A: Safe result DTO
+    A-->>W: Acknowledged outcome
+    W-->>U: Updated view and next action
+  else Conflict or denied access
+    P-->>A: Typed failure, no partial business writes
+    A-->>W: Safe error with request ID
+    W-->>U: Explain recovery, keep permitted inputs
+  end
+```
+
+**Verification:** Unit — Capability map; input normalization; disabled/stale-token actor. Functional PostgreSQL — Provision rollback; unique email race; concurrent lockout; session revoked after tokenVersion bump. E2E — Sign in/out; denied admin route when logged out; other-school resource denied.
+
+## IAM-02 — Manage school settings and staff access
+
+**Success response contract:** `{resourceId,version,status,roles?,schoolCode?,name?,timezone?}`. All list responses use `{items,nextCursor}` and never include password/token/activation hashes.
+
+**Transport:** PATCH /api/v1/school; POST /api/v1/campuses; POST /api/v1/memberships; PATCH /api/v1/memberships/:id
+
+**Input:** Settings name/timezone/version; campus code/name; membership targetAccountId or new email, roles array, action, expectedVersion, reason; command key. Only SCHOOL_ADMIN/TEACHER role values.
+
+**Workflow:**
+
+1. Resolve actor; pre-read target account IDs, lock account rows sorted then current School guard.
+2. Re-read membership, target and organization/school status; require user.manage or school.manage.
+3. Authorize receipt replay; enforce assignable roles, scope and last-active-admin invariant.
+4. Persist versioned settings/campus/membership/grants; pending new accounts receive a separate single-use activation record via operator action.
+5. Return safe updated DTO and append audit/outbox/receipt atomically.
+
+**Database writes / atomicity:** School/Campus or SchoolMembership/RoleGrant/UserAccount(PENDING); audit/outbox/receipt; activation only through explicit operator command, never automatic message send.
+
+**Errors and recovery:** Last admin removal → 409 LAST_ADMIN; stale update → 409; changing timezone after any session → 409 TIMEZONE_IN_USE; foreign target → 404.
+
+```mermaid
+sequenceDiagram
+  actor U as User
+  participant W as Delivery adapter
+  participant A as IAM-02 use case
+  participant P as Owner ports
+  participant D as PostgreSQL
+  U->>W: Request named flow
+  W->>A: Validated input and applicable session or activation proof
+  A->>P: Re-read membership, target and organization/school status
+  P->>D: Scoped reads and transaction guards
+  D-->>P: Current authorized facts
+  A->>P: Authorize receipt replay
+  alt Preconditions hold
+    P->>D: Apply documented writes atomically
+    D-->>P: Committed result
+    P-->>A: Safe result DTO
+    A-->>W: Acknowledged outcome
+    W-->>U: Updated view and next action
+  else Conflict or denied access
+    P-->>A: Typed failure, no partial business writes
+    A-->>W: Safe error with request ID
+    W-->>U: Explain recovery, keep permitted inputs
+  end
+```
+
+**Verification:** Unit — Last admin transition; fixed roles; timezone policy. Functional PostgreSQL — Two admin revocations serialize; forged cross-school grants fail constraints; failed audit rolls settings back. E2E — Create staff access, suspend/reinstate; verify protected request denied immediately.
+
+## IAM-03 — Activate and recover staff accounts safely
+
+**Success response contract:** `{activated:true}` or generic activation failure. Recovery CLI returns activation instructions privately; public response never discloses another account/person. No receipt containing a raw token.
+
+**Transport:** POST /api/v1/activate; restricted operator recover-account CLI
+
+**Input:** Activation: opaque token, new password; recovery: target account + verified operator case/reference and reason. Password minimum 12, maximum 72 UTF-8 bytes for selected bcrypt adapter; no truncation.
+
+**Workflow:**
+
+1. Operator verifies intended person outside the software and records a non-sensitive case reference; create/revoke activation under account lock.
+2. Activation endpoint hashes token, checks expiry/consumption and account under lock; rate-limit both account/IP attempts without exposing token existence.
+3. Hash password outside long school transactions; recheck token validity before commit.
+4. Consume token atomically, activate intended pending memberships and bump tokenVersion; lock affected schools sorted when changing membership.
+5. Recovery revokes old activation tokens/sessions; user sets password through a fresh one-time activation; append security evidence.
+
+**Database writes / atomicity:** AccountActivation, UserAccount, intended pending SchoolMembership rows, AuthSecurityEvent; per-school audit/outbox for membership activation.
+
+**Errors and recovery:** Expired/reused/revoked token → generic invalid activation; existing bound account mismatch → denied; replay cannot reset password twice.
+
+```mermaid
+sequenceDiagram
+  actor U as User
+  participant W as Delivery adapter
+  participant A as IAM-03 use case
+  participant P as Owner ports
+  participant D as PostgreSQL
+  U->>W: Request named flow
+  W->>A: Validated input and applicable session or activation proof
+  A->>P: Activation endpoint hashes token, checks expiry/consumption and account under lock
+  P->>D: Scoped reads and transaction guards
+  D-->>P: Current authorized facts
+  A->>P: Hash password outside long school transactions
+  alt Preconditions hold
+    P->>D: Apply documented writes atomically
+    D-->>P: Committed result
+    P-->>A: Safe result DTO
+    A-->>W: Acknowledged outcome
+    W-->>U: Updated view and next action
+  else Conflict or denied access
+    P-->>A: Typed failure, no partial business writes
+    A-->>W: Safe error with request ID
+    W-->>U: Explain recovery, keep permitted inputs
+  end
+```
+
+**Verification:** Unit — Token expiry boundary; password byte limits; verification case required. Functional PostgreSQL — Concurrent redemption only once; token never plaintext; recovery revokes old sessions in every affected school. E2E — Paste activation token, set password, sign in; replay fails; recovery invalidates old session.
+
+## Migration, retention and handoff
+
+Implement tables only in the task that first uses them; migrate from empty database and the previous task checkpoint. Add scoped unique indexes before composite FKs; detect existing duplicates before adding constraints. SQL append-only/null-campus/range safeguards must appear in reviewed migrations and real-DB tests. No seed may erase prior data. Use synthetic fixtures and clean only owned test records. Preserve schema-compatible app rollback; use a reviewed forward migration when incompatible. Retention changes must preserve required immutable evidence and legal holds under the school-approved policy, not an ad hoc DELETE.
+
+Exercise invalid credentials, concurrent failed attempts, lockout, disabled account, stale tokenVersion, revoked membership, two school isolation, last-admin race, activation expiry/reuse, token hash storage and recovery. No credential fixtures in source; generate local synthetic secrets. School settings commits cannot race with suspension using a stale actor.
+
+See [tasks](TASKS.md), [current state](CURRENT_STATE.md), [Bible](../../VSchool_Bible.md) and [agent runbook](../../AGENT_RUNBOOK.md).
+
+## v4.1 integration requirements
+
+School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.
+
+## Institution configuration grant schema ownership
+
+InstitutionGrant is Access-owned; its VS physical column/constraint contract is listed in the tenancy LLD and database catalog because TEN-01 implements its control-plane flow. It is distinct from branch SchoolMembership and never confers implicit pupil access. Organization/School.configuration_version is configuration metadata, separate from aggregate version and positive from 1.
+
+## Portable backend integration
+
+Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.

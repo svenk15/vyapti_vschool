@@ -1,0 +1,3 @@
+external_student_id,student_first_name,student_last_name,admission_number,grade,section,roll_number
+DEMO-001,Asha,Example,0001,G8,A,01
+DEMO-001,Ravi,Example,0002,UNKNOWN,A,02

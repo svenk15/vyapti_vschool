@@ -1,0 +1,19 @@
+{
+  "negativeBoundaryChecks": [
+    {
+      "case": "Next dependency in domain",
+      "rejected": true
+    },
+    {
+      "case": "React dependency in shared contract",
+      "rejected": true
+    },
+    {
+      "case": "Backend import in browser",
+      "rejected": true
+    }
+  ],
+  "portableBackendTypecheck": true,
+  "portableFactorySmokeWithoutNextHost": true,
+  "nestRuntimeInstalledOrValidated": false
+}
