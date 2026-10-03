@@ -207,6 +207,8 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 
 ## 13. Change log
 
+2026-10-03 / FND-01 local reconciliation: aligned platform readiness liveness release with fresh-0.3.0 and clarified that explicitly labeled synthetic sign-in previews are permitted before real authentication. No product scope or schema change.
+
 4.4 / 2026-10-03: physically separated portable backend, Next hosting adapters and browser-safe shared contracts. Added independent backend compilation, stronger dependency gates and the documented future NestJS extraction contract. No Nest runtime is installed.
 
 4.3 / 2026-10-03: replaced the physical table namespace with the requested vs_ prefix; aligned the 47-table catalog, LLDs, Prisma mappings and naming checks. Previously shipped migrations remain unchanged; a new forward migration preserves setup data.

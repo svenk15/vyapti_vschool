@@ -33,7 +33,7 @@ GET /api/health/live returns a fixed starter release identifier and liveness onl
 
 ## Screen contract
 
-Route / is an intentionally public local developer landing page, not an administrator dashboard. It shows readiness and planned journeys; no personal data. Keyboard-operable plan link and refresh; mobile cards stack. The UI must still render with DB down. No login link until access is implemented.
+Route / is an intentionally public local developer landing page, not an administrator dashboard. It shows readiness and planned journeys; no personal data. Keyboard-operable plan link and refresh; mobile cards stack. The UI must still render with DB down. Synthetic sign-in preview links are allowed when they clearly state that no authentication occurs; real login remains access-module work.
 
 All screens additionally follow Bible §8: loading, empty, validation, permission, stale/conflict, temporary failure and acknowledged success; semantic labels, focus and mobile layout. No future-module navigation.
 
@@ -45,7 +45,7 @@ Mutations use the account → Organization → School guard protocol in Bible §
 
 ## FND-01 — Run and checkpoint the fresh local foundation
 
-**Success response contract:** GET health `{service:"vschool",ready:boolean,state}`; live `{service:"vschool",release:"fresh-0.2.2",alive:true}`. No DB URL. Setup scripts return exit codes and sanitized guidance.
+**Success response contract:** GET health `{service:"vschool",ready:boolean,state}`; live `{service:"vschool",release:"fresh-0.3.0",alive:true}`. No DB URL. Setup scripts return exit codes and sanitized guidance.
 
 **Transport:** GET /; GET /api/health; GET /api/health/live
 
