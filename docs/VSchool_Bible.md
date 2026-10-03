@@ -207,6 +207,8 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 
 ## 13. Change log
 
+2026-10-03 / BRD-01: aligned public-preview validator limits with branding LLD (3–80 slug, 160-character names, 254-character support email); malformed runtime inputs fail safely. Synthetic branch previews cover all approved palettes, wrap long public labels, clear/hide sample credentials and focus informational feedback. No authentication or publication scope is added.
+
 2026-10-03 / DS-01: added explicit shared dialog boundary focus wrapping and clarified the shared local file-selection contract: CSV extension and 2 MiB limit with associated rejection/recovery feedback. Import content validation and server enforcement remain imports-module work.
 
 2026-10-03 / FND-01 local reconciliation: aligned platform readiness liveness release with fresh-0.3.0 and clarified that explicitly labeled synthetic sign-in previews are permitted before real authentication. No product scope or schema change.

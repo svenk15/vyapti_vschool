@@ -1,10 +1,10 @@
 # Shared VSchool experience system — current state
 
-DS-01 locally verified on 3 October 2026; owner review pending. No active timer. Gallery previews do not imply operational school features.
+DS-01 locally verified and accepted on 3 October 2026. No active timer. Gallery previews do not imply operational school features.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| DS-01 | VERIFIED | PENDING | [Local evidence](../../evidence/ds-01-local/verification.json); 26 unit, 4 PostgreSQL and 20 browser tests passed |
+| DS-01 | VERIFIED | PASSED | [Local evidence](../../evidence/ds-01-local/verification.json); 26 unit, 4 PostgreSQL and 20 browser tests passed |
 | DS-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Implemented now
@@ -13,7 +13,7 @@ Shared component primitives and interactive gallery, including CSV/2 MiB rejecti
 
 ## Next action
 
-Pause for explicit DS-01 review of the running demo. Repair failed feedback first. After acceptance and permission to continue, run pnpm next-task (expected BRD-01). Do not start another task while this review is pending.
+Owner accepted DS-01 and authorized the next task. BRD-01 selected using pnpm next-task. See branding CURRENT_STATE for the current demo.
 
 ## Evidence and feedback
 
@@ -53,3 +53,7 @@ Manual review at http://127.0.0.1:3400/design-system:
 5. Use arrow/Home/End keys on feedback tabs; inspect loading/error states and toggle native form controls. Expect selected tab/focus to agree and entered sample text to remain.
 
 Limitations: synthetic UI only. File extension/size checks are local selection feedback, not CSV content validation or server-side security. No new protected flow or business data is implemented. Manual native 200% zoom, VoiceOver/NVDA, Safari/Firefox, full contrast-state/high-contrast and production accessibility certification remain pending DS-02/release work. Human acceptance remains PENDING for this DS-01 source. Next action: keep the demo stable and await owner feedback before BRD-01 or any other task.
+
+### DS-01 owner acceptance — 3 October 2026
+
+Owner feedback: “Pass, please go-ahead and implement next task”. Human review PASSED for source 08aeb86cec7aaa89f565b0cc58fbdf647fe06976 and its recorded production build. The accepted demo is stopped for the authorized BRD-01 update; pause again at the next review checkpoint.

@@ -23,12 +23,17 @@ export function contrastRatio(a: string, b: string): number {
   return (values[0]+.05)/(values[1]+.05);
 }
 
-export function validatePublicBrand(brand: PublicBrand): boolean {
-  return /^[a-z0-9-]{1,60}$/.test(brand.slug)
-    && brand.institutionName.length>0 && brand.institutionName.length<=120
-    && brand.branchName.length>0 && brand.branchName.length<=120
-    && brand.monogram.length>0 && brand.monogram.length<=3
-    && brand.welcome.length<=180
+export function validatePublicBrand(value: unknown): value is PublicBrand {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const brand = value as Record<string, unknown>;
+  const nonblank = (text: unknown, maximum: number): text is string =>
+    typeof text === "string" && text.trim().length > 0 && text.length <= maximum;
+  return typeof brand.slug === "string" && /^[a-z0-9-]{3,80}$/.test(brand.slug)
+    && nonblank(brand.institutionName, 160)
+    && nonblank(brand.branchName, 160)
+    && nonblank(brand.monogram, 3)
+    && typeof brand.welcome === "string" && brand.welcome.length <= 180
+    && typeof brand.supportEmail === "string" && brand.supportEmail.length <= 254
     && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(brand.supportEmail)
-    && Object.prototype.hasOwnProperty.call(palettes,brand.palette);
+    && typeof brand.palette === "string" && Object.prototype.hasOwnProperty.call(palettes, brand.palette);
 }

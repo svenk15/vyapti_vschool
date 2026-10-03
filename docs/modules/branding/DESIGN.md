@@ -29,7 +29,7 @@ Draft read requires branding.manage or delegated branding.manage_branch; institu
 
 GET /sign-in/:slug: resolve exact public published identity, unknown→404. POST /api/v1/branding/:profileId/preview: validate editable fields and return safe preview without publishing. POST .../publish: `{draftId,expectedVersion,reason,key}`; response `{profileId,revisionId,version,publishedAt}`. POST .../rollback creates a new published revision from approved historical fields rather than mutating history. Logo upload through signed private destination with final server validation; never trust file extension alone. Custom-domain setup is a reviewed deployment substep with TLS and trusted-proxy rules.
 
-Login uses shared TextField/Button/error components. Error feedback focuses summary; forgot access follows the real identity procedure rather than fake success. School selector never lists private memberships anonymously. The current form explicitly labels preview, resets entered sample fields, and makes no auth/network request.
+Login uses shared TextField/Button/error components. Error feedback focuses summary; forgot access follows the real identity procedure rather than fake success. School selector never lists private memberships anonymously. The current form explicitly labels preview, resets both entered sample fields and password reveal after submission, focuses its informational summary, and makes no auth request or credential storage. Help feedback is informational and focuses the same summary without claiming recovery or activation. Native required/email/minimum-password validation prevents an invalid sample submission.
 
 ```mermaid
 sequenceDiagram
@@ -51,6 +51,10 @@ sequenceDiagram
     App-->>UI: Field error or conflict, no publish
   end
 ```
+
+## BRD-01 public preview validation
+
+PublicBrand validation fails safely for malformed runtime values: slug is lowercase 3–80 characters, institution/branch names are nonblank and at most 160 characters, monogram is nonblank and at most 3 characters, welcome is at most 180 characters, support email has a valid basic email shape and at most 254 characters, and palette must be an own approved catalog key. These limits align with the planned public identity columns; malformed/missing fields return false rather than throwing. The fixtures use Forest for Greenwood North, Clay for Greenwood South and Indigo for Aster Central to demonstrate all approved palettes without arbitrary CSS. These are public synthetic profiles, not persisted or authorized branch overrides. Institution/branch/welcome/support labels wrap within the shared login layout, including unbroken text at the supported length bounds; the monogram retains its size.
 
 ## Tests and release gate
 

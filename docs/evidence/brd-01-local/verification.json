@@ -1,0 +1,51 @@
+{
+  "task": "BRD-01",
+  "baselineCommit": "08aeb86cec7aaa89f565b0cc58fbdf647fe06976",
+  "changedExecutablePaths": [
+    "app/globals.css",
+    "components/login-preview.tsx",
+    "lib/demo-schools.ts",
+    "shared/contracts/branding.ts",
+    "test/unit/branding.test.ts",
+    "test/e2e/branding.spec.ts"
+  ],
+  "changedSourceSha256": "b0be9e6a6bac267e74a05df0c3f61cf79765ee7597ca2ca84d0fd473fd4ded28",
+  "fingerprintMethod": "sorted path + NUL + contents + NUL for changed executable paths, combined with baseline commit",
+  "buildId": "ZrAz93SyJMMnXfkZ3Z_ZF",
+  "demoUrl": "http://127.0.0.1:3400/sign-in/greenwood-north",
+  "health": {
+    "service": "vschool",
+    "ready": true,
+    "state": "ready"
+  },
+  "routes": [
+    {
+      "path": "/sign-in/greenwood-north",
+      "status": 200,
+      "institution": "Greenwood Schools",
+      "branch": "North Campus",
+      "primary": "#245c49"
+    },
+    {
+      "path": "/sign-in/greenwood-south",
+      "status": 200,
+      "institution": "Greenwood Schools",
+      "branch": "South Campus",
+      "primary": "#854e3c"
+    },
+    {
+      "path": "/sign-in/aster-central",
+      "status": 200,
+      "institution": "Aster Learning Trust",
+      "branch": "Central School",
+      "primary": "#464985"
+    }
+  ],
+  "tests": {
+    "unit": 38,
+    "postgresqlFunctional": 4,
+    "playwright": 28
+  },
+  "newMigrations": [],
+  "humanReview": "PENDING"
+}
