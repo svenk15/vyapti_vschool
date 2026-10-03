@@ -1,19 +1,19 @@
 # Development foundation and delivery — current state
 
-Last updated: 2026-10-03. FND-01 locally verified on the owner’s Mac; human review pending. No active execution timer.
+Last updated: 2026-10-03. FND-01 locally verified and accepted on the owner’s Mac. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| FND-01 | VERIFIED | PENDING | [Local verification](../../evidence/fnd-01-local/verification.json); source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff |
+| FND-01 | VERIFIED | PASSED | [Local verification](../../evidence/fnd-01-local/verification.json); source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff |
 | FND-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Current checkpoint
 
-Foundation source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff passed local checks, real PostgreSQL functional tests, desktop/mobile browser journeys, failure-state probes and production build. The production demo is running at http://127.0.0.1:3400. Human acceptance is pending.
+Foundation source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff passed local checks, real PostgreSQL functional tests, desktop/mobile browser journeys, failure-state probes and production build. The FND-01 demo at http://127.0.0.1:3400 was accepted and stopped for the authorized DS-01 build. See design-system CURRENT_STATE for the current demo. Human acceptance PASSED after explicit owner feedback.
 
 ## Next action
 
-Pause for explicit FND-01 demo feedback. Repair failed feedback first. After acceptance and permission to continue, use pnpm next-task (expected DS-01). No next task or timer is started.
+Owner accepted FND-01 and authorized the next task. DS-01 selected using pnpm next-task. No timer is started.
 
 ## Pending decisions / limitations
 
@@ -78,3 +78,7 @@ Manual review script:
 5. Open /sign-in/greenwood-north. Try synthetic values only. Expect Greenwood identity and a notice that no credentials were sent/stored; password clears and no authentication occurs. Narrow the browser to inspect mobile layout.
 
 Limitations: foundation and previews only; no real authentication, persisted tenant configuration, operational authorization or attendance. No production deployment, migration upgrade rehearsal from an older schema in this run, VoiceOver/NVDA certification, Safari/Firefox or load testing is claimed. Existing migration history is verified applied; historical upgrade proofs remain separate. Human acceptance stays PENDING until explicit feedback for this source. Next action: keep this demo stable and pause before DS-01 or any other task.
+
+### FND-01 owner acceptance — 3 October 2026
+
+Owner feedback: “Pass. Please go ahead and implement with the next task”. Human review PASSED for tested source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff and evidence checkpoint 6fa8158. Permission covers DS-01 next; pause again at its review checkpoint.

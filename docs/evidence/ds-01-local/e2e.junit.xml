@@ -1,0 +1,50 @@
+<testsuites id="" name="" tests="20" failures="0" skipped="0" errors="0" time="40.55563000000001">
+<testsuite name="design-system.spec.ts" timestamp="2026-10-03T16:41:04.450Z" hostname="chromium" tests="4" failures="0" skipped="0" time="8.526" errors="0">
+<testcase name="file selection rejects unsupported and oversized files and recovers without uploading" classname="design-system.spec.ts" time="2.851">
+</testcase>
+<testcase name="modal and drawer contain keyboard focus and return it to the trigger" classname="design-system.spec.ts" time="1.562">
+</testcase>
+<testcase name="gallery supports all palettes and negative states at 360px" classname="design-system.spec.ts" time="1.574">
+</testcase>
+<testcase name="form examples and disclosure respond to keyboard without losing entered text" classname="design-system.spec.ts" time="2.539">
+</testcase>
+</testsuite>
+<testsuite name="starter.spec.ts" timestamp="2026-10-03T16:41:04.450Z" hostname="chromium" tests="6" failures="0" skipped="0" time="12.164" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="1.901">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.013">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="3.617">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="1.514">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="1.725">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="3.394">
+</testcase>
+</testsuite>
+<testsuite name="design-system.spec.ts" timestamp="2026-10-03T16:41:04.450Z" hostname="mobile" tests="4" failures="0" skipped="0" time="6.481" errors="0">
+<testcase name="file selection rejects unsupported and oversized files and recovers without uploading" classname="design-system.spec.ts" time="1.517">
+</testcase>
+<testcase name="modal and drawer contain keyboard focus and return it to the trigger" classname="design-system.spec.ts" time="1.115">
+</testcase>
+<testcase name="gallery supports all palettes and negative states at 360px" classname="design-system.spec.ts" time="1.45">
+</testcase>
+<testcase name="form examples and disclosure respond to keyboard without losing entered text" classname="design-system.spec.ts" time="2.399">
+</testcase>
+</testsuite>
+<testsuite name="starter.spec.ts" timestamp="2026-10-03T16:41:04.450Z" hostname="mobile" tests="6" failures="0" skipped="0" time="9.789" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="1.138">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.01">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="2.885">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="2.563">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="1.773">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="1.42">
+</testcase>
+</testsuite>
+</testsuites>

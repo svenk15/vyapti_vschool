@@ -6,7 +6,7 @@ Phase 1 · Revision 1 · 3 October 2026. Runtime implementation limits are expli
 
 The design system owns shared presentation primitives, tokens and interaction contracts. It owns no pupil, institution permission or database business state. Module screens import components/ui and compose them; they cannot introduce a competing button/table/form system. BrandSurface receives a validated public palette; no ad hoc CSS injection. System fonts avoid remote font tracking and render without an extra network dependency.
 
-DS-ADR-001: native HTML semantics first, small typed React wrappers, no unnecessary UI library dependency. Native dialog handles modal focus containment/Escape; native input/select/date/file controls retain browser behavior. Tests and manual assistive-tech review remain required. Advanced async combobox/grid/chart widgets will use a evaluated accessible implementation when their first concrete module requires them, with a design-system task before feature use.
+DS-ADR-001: native HTML semantics first, small typed React wrappers, no unnecessary UI library dependency. Native dialog provides modal/inert behavior and Escape; shared boundary Tab/Shift+Tab wrapping keeps keyboard focus on visible enabled dialog controls. Native input/select/date/file controls retain browser behavior. Tests and manual assistive-tech review remain required. Advanced async combobox/grid/chart widgets will use a evaluated accessible implementation when their first concrete module requires them, with a design-system task before feature use.
 
 DS-ADR-002: one calm neutral surface system with constrained brand tokens. Default Forest, alternate Indigo/Clay. Semantic feedback and keyboard focus remain consistent. Dark mode is a future contrast-reviewed token variant, not a global invert filter.
 
@@ -17,9 +17,9 @@ See components/ui/primitives.tsx (Button, ButtonLink, Badge, Card, PageHeader, A
 | Pattern | Implemented contract | Extension boundary |
 |---|---|---|
 | Button | 4 variants; default type=button; loading disables; aria-busy; visible focus | Server action pending/error supplied by module |
-| Field | Label/id, required input, error/hint association and aria-invalid | Business validation remains application-owned; server errors map to fields |
+| Field | Label/id, required input, error/hint association, aria-invalid and live field error | Business validation remains application-owned; server errors map to fields |
 | Table | Caption, headers, aria-sort, keyboard sort, local sample pagination, bounded scroll | Production list must use authorized server filtering/cursor; no fetch-all |
-| Dialog/Drawer | Native modal, Escape, close button and focus restoration | Form dirty-state confirmation and mutation result remain owning screen |
+| Dialog/Drawer | Native modal, boundary Tab/Shift+Tab wrapping, Escape, close button and focus restoration | Form dirty-state confirmation and mutation result remain owning screen |
 | Tabs | Tablist/tab/tabpanel IDs; arrow/Home/End; roving tabIndex | Use links instead for navigation between routes |
 | Alerts/Toast | Text status and persistent dismissible notice | No auto-hiding important errors; only acknowledged writes show success |
 | Tooltip | Hover/focus; Escape dismiss; description relationship | Essential instructions stay visible, not tooltip-only |
@@ -35,9 +35,13 @@ All module screens use PageHeader → context/actions → filter/form/content �
 
 Before first consuming module, implement these as separate tested additions: (a) asynchronous Combobox with cancellable/debounced authorized query, loading/no-results and ARIA keyboard model; (b) CommandPalette scoped to current allowed routes/actions, with no pupil data cached across context; (c) timetable/calendar with keyboard-operable list alternative and explicit timezone/DST; (d) charts with equivalent numeric table and non-color series encoding; (e) rich editor with sanitized content and attachment policy; (f) advanced bulk-selection table binding selection to scope/filter snapshot; (g) reusable file upload manager with resumable private storage and scan states. They are specified now but not claimed implemented. Do not block Attendance on speculative rich-text or chart infrastructure.
 
+## File selection preview contract
+
+FileUpload accepts a local file with a .csv extension (case-insensitive) and size at most 2 MiB. Browser accept filtering is advisory: unsupported extensions or larger files display an associated field error, clear the rejected native selection, and notify the consumer with null so a previous selection cannot remain active. A valid replacement clears the error. This is a local selection check only; it reads/uploads no file contents. Imports owns future server-side content/schema validation and persistence.
+
 ## Test strategy
 
-Unit tests verify palette contrast and primitive policy where nontrivial. Playwright exercises sorting/filter/pagination, labels, invalid state semantics, tabs by keyboard, modal Escape and returned focus, toast dismissal, palette switching, 390px overflow and login/configuration scenarios. Record manual 200% zoom, 360px view, VoiceOver/NVDA and high-contrast review before production. Test reports do not prove all WCAG criteria. There are no module database writes; UI fixtures are synthetic and scoped to local component state.
+Unit tests verify palette contrast and primitive policy where nontrivial. Playwright exercises sorting/filter/pagination, labels, invalid state semantics, tabs by keyboard, modal Escape and returned focus, toast dismissal, palette switching, 360px/390px overflow, local file rejection/recovery, focus wrapping, reduced-motion/forced-color emulation and login/configuration scenarios. Record manual 200% zoom, 360px view, VoiceOver/NVDA and high-contrast review before production. Test reports do not prove all WCAG criteria. There are no module database writes; UI fixtures are synthetic and scoped to local component state.
 
 ```mermaid
 sequenceDiagram

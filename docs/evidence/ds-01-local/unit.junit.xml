@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="26" failures="0" errors="0" time="0.009261958">
+    <testsuite name="test/unit/branding.test.ts" timestamp="2026-10-03T16:39:14.935Z" hostname="Venkateshs-MacBook-Air.local" tests="8" failures="0" errors="0" skipped="0" time="0.002862416">
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; forest primary/on-primary passes normal-text contrast" time="0.000996709">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; indigo primary/on-primary passes normal-text contrast" time="0.000107375">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; clay primary/on-primary passes normal-text contrast" time="0.0000875">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; neutral body and secondary text pairs remain readable" time="0.000084958">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; validates synthetic public brand" time="0.000169625">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; rejects unapproved palette and oversized copy" time="0.000140125">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; rejects unsafe slug and invalid contact" time="0.000075084">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; rejects invalid color input" time="0.000401792">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/entitlements.test.ts" timestamp="2026-10-03T16:39:14.936Z" hostname="Venkateshs-MacBook-Air.local" tests="15" failures="0" errors="0" skipped="0" time="0.004383875">
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; attendance includes its internal foundations without fees" time="0.001132625">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; fees operates without attendance or academic enrollment" time="0.00010925">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; deduplicates shared foundations" time="0.000447416">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; rejects unlicensed activation" time="0.00039075">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; rejects mismatched institution and branch ownership" time="0.000310417">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; suspension disables every module" time="0.000090667">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; allows only when release, entitlement, activation, membership and resource permission agree" time="0.000148791">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies missing hasCapability even with licensed module" time="0.000075791">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies missing releaseAvailable even with licensed module" time="0.000069542">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies missing resourceAllowed even with licensed module" time="0.000095416">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies another branch in the same institution" time="0.000063875">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies another institution even with the same branch label" time="0.000049542">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies an ungranted actor" time="0.000042083">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies licensed but disabled capability" time="0.000046292">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; rejects prototype names and unknown registry entries" time="0.000358833">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/readiness.test.ts" timestamp="2026-10-03T16:39:14.937Z" hostname="Venkateshs-MacBook-Air.local" tests="3" failures="0" errors="0" skipped="0" time="0.002015667">
+        <testcase classname="test/unit/readiness.test.ts" name="truthful setup status &gt; does not report ready before database and seed verification" time="0.000938292">
+        </testcase>
+        <testcase classname="test/unit/readiness.test.ts" name="truthful setup status &gt; reports ready only after the adapter confirms the marker" time="0.000116666">
+        </testcase>
+        <testcase classname="test/unit/readiness.test.ts" name="truthful setup status &gt; never exposes connection secrets from provider errors" time="0.000203833">
+        </testcase>
+    </testsuite>
+</testsuites>

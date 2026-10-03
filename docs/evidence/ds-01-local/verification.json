@@ -1,0 +1,27 @@
+{
+  "task": "DS-01",
+  "baselineCommit": "6fa8158",
+  "changedExecutablePaths": [
+    "components/component-gallery.tsx",
+    "components/ui/forms.tsx",
+    "components/ui/interactive.tsx",
+    "test/e2e/design-system.spec.ts"
+  ],
+  "changedSourceSha256": "e0b1f633f6dcbb15f91303188192f82a69a9b62d64640a91ef0580bc345e6520",
+  "fingerprintMethod": "sorted path + NUL + file contents + NUL for changed executable paths, combined with baseline commit",
+  "buildId": "vX1DSkp8YlmBhlUPTGAY6",
+  "demoUrl": "http://127.0.0.1:3400/design-system",
+  "health": {
+    "service": "vschool",
+    "ready": true,
+    "state": "ready"
+  },
+  "servedGalleryStatus": 200,
+  "tests": {
+    "unit": 26,
+    "postgresqlFunctional": 4,
+    "playwright": 20
+  },
+  "newMigrations": [],
+  "humanReview": "PENDING"
+}

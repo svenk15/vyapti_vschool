@@ -207,6 +207,8 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 
 ## 13. Change log
 
+2026-10-03 / DS-01: added explicit shared dialog boundary focus wrapping and clarified the shared local file-selection contract: CSV extension and 2 MiB limit with associated rejection/recovery feedback. Import content validation and server enforcement remain imports-module work.
+
 2026-10-03 / FND-01 local reconciliation: aligned platform readiness liveness release with fresh-0.3.0 and clarified that explicitly labeled synthetic sign-in previews are permitted before real authentication. No product scope or schema change.
 
 4.4 / 2026-10-03: physically separated portable backend, Next hosting adapters and browser-safe shared contracts. Added independent backend compilation, stronger dependency gates and the documented future NestJS extraction contract. No Nest runtime is installed.
