@@ -146,7 +146,7 @@
       "model": "Campus",
       "owner": "access",
       "table": "vs_access_campus",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int",
       "responsibility": "Optional subordinate site; no campus-level grants in first release.",

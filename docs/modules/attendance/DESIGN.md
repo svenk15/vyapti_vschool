@@ -254,3 +254,7 @@ School means operational Branch and Organization means client Institution. Every
 ## Portable backend integration
 
 Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.
+
+## IAM-02 owner read seam
+
+`ScheduledSessionQuery.hasAny(organizationId, schoolId)` is an enlisted, scope-bound read used by Access timezone changes under the shared School guard. It returns true for any session regardless of lifecycle. Before ATT-01 installs the session relation, the owner adapter verifies its absence and returns false; any database failure propagates and blocks the settings transaction. ATT-01 scheduling retains the same School guard so scheduling and timezone changes serialize. This read seam does not implement an attendance workflow or install speculative tables.

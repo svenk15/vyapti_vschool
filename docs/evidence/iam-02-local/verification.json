@@ -1,0 +1,113 @@
+{
+  "observedAt": "2026-10-03T19:53:25.773Z",
+  "checks": [
+    {
+      "name": "Production health ready",
+      "passed": true
+    },
+    {
+      "name": "Existing accepted administrator signs in and both management screens render",
+      "passed": true
+    },
+    {
+      "name": "Production settings commit, exact replay and stale-version rejection",
+      "passed": true
+    },
+    {
+      "name": "Campus persists and duplicate is rejected",
+      "passed": true
+    },
+    {
+      "name": "Pending staff persists, suspension and reinstatement never manufacture credentials",
+      "passed": true
+    },
+    {
+      "name": "Last active administrator remains protected",
+      "passed": true
+    },
+    {
+      "name": "Five forward migrations in both databases; original foundation markers preserved",
+      "passed": true
+    },
+    {
+      "name": "Private environment preserved",
+      "passed": true
+    }
+  ],
+  "databases": [
+    {
+      "database": "vyapti_vschool",
+      "migrations": [
+        {
+          "migration_name": "20261003000100_foundation",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000200_vora_naming",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000300_vs_prefix",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000400_access_bootstrap",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261004000100_staff_management",
+          "applied": true,
+          "rolled_back": false
+        }
+      ],
+      "marker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T12:56:01.303Z"
+        }
+      ]
+    },
+    {
+      "database": "vyapti_vschool_test",
+      "migrations": [
+        {
+          "migration_name": "20261003000100_foundation",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000200_vora_naming",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000300_vs_prefix",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000400_access_bootstrap",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261004000100_staff_management",
+          "applied": true,
+          "rolled_back": false
+        }
+      ],
+      "marker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T13:00:16.941Z"
+        }
+      ]
+    }
+  ],
+  "demoUrl": "http://127.0.0.1:3400",
+  "buildId": "e547Ry6XTIfZxZ69mv-uO"
+}

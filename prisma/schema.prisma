@@ -38,6 +38,7 @@ model School {
   createdAt            DateTime           @map("created_at") @db.Timestamptz(3)
   configurationVersion Int                @default(1) @map("configuration_version")
   organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_r0_fkey")
+  campuses             Campus[]
   memberships          SchoolMembership[]
   auditEntries         AuditEntry[]
   outboxEvents         OutboxEvent[]
@@ -179,4 +180,18 @@ model CommandReceipt {
   @@index([organizationId, schoolId], map: "vs_platform_command_receipt_r9_idx")
   @@index([actorAccountId], map: "vs_platform_command_receipt_r10_idx")
   @@map("vs_platform_command_receipt")
+}
+
+model Campus {
+ id String @id(map: "vs_access_campus_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ code String @db.VarChar(40)
+ name String @db.VarChar(160)
+ status String @db.VarChar(20)
+ version Int
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_campus_school_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_access_campus_scope_id_key")
+ @@unique([organizationId,schoolId,code],map:"vs_access_campus_scope_code_key")
+ @@map("vs_access_campus")
 }

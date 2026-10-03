@@ -7,6 +7,7 @@ export interface AccessRepository {
  finishLogin(record:LoginRecord|null,verified:boolean,requestId:string):Promise<Identity|null>;
  account(identity:Identity):Promise<{status:string;tokenVersion:number}|null>;
  adminContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:("SCHOOL_ADMIN"|"TEACHER")[]})|null>;
+ memberContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:("SCHOOL_ADMIN"|"TEACHER")[]})|null>;
 }
 export interface Passwords { hash(value:string):Promise<string>; verify(value:string,hash:string|null):Promise<boolean> }
 export interface AccessFacade {
@@ -14,9 +15,16 @@ export interface AccessFacade {
  provisionSchool(input:ProvisionInput,operator:OperatorPrincipal):Promise<ProvisionResult>;
  authenticate(email:unknown,password:unknown):Promise<Identity|null>;
  getAdminHome(identity:Identity|null,schoolId?:string):Promise<AdminHome>;
+ getAccountHome(identity:Identity|null,schoolId?:string):Promise<AdminHome>;
 }
 export function createAccessUseCases(repository:AccessRepository,passwords:Passwords,newId:()=>string):AccessFacade {
  return {
+  async getAccountHome(identity:Identity|null,schoolId?:string){
+   if(!identity||!uuidPattern.test(identity.accountId)||!Number.isInteger(identity.tokenVersion)||!currentIdentity(await repository.account(identity),identity.tokenVersion))throw new AccessError("UNAUTHENTICATED");
+   if(schoolId&&!uuidPattern.test(schoolId))throw new AccessError("NOT_FOUND");
+   const context=await repository.memberContext(identity,schoolId);if(!context)throw new AccessError("NOT_FOUND");
+   const {roles,...safe}=context;return {...safe,capabilities:capabilitiesFor(roles)};
+  },
   async isCurrentIdentity(identity:Identity):Promise<boolean> {
    return uuidPattern.test(identity.accountId)&&Number.isInteger(identity.tokenVersion)&&currentIdentity(await repository.account(identity),identity.tokenVersion);
   },

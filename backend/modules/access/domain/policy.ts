@@ -1,6 +1,6 @@
 import type { ProvisionInput, RoleCode } from "../../../../shared/contracts/access";
 export class AccessError extends Error {
-  constructor(public readonly code: "VALIDATION" | "PROVISION_CONFLICT" | "UNAUTHENTICATED" | "NOT_FOUND" | "UNAVAILABLE") { super(code); }
+  constructor(public readonly code: "VALIDATION" | "PROVISION_CONFLICT" | "UNAUTHENTICATED" | "NOT_FOUND" | "UNAVAILABLE" | "FORBIDDEN" | "CONFLICT" | "STALE_VERSION" | "LAST_ADMIN" | "TIMEZONE_IN_USE" | "IDEMPOTENCY_CONFLICT" | "INVALID_CURSOR") { super(code); }
 }
 export const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function normalizeEmail(value: string): string { return value.trim().toLowerCase(); }

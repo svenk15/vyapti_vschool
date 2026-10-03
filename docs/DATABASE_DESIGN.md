@@ -55,7 +55,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AccountActivation | `vs_access_account_activation` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | AccountPersonBinding | `vs_access_account_person_binding` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | AuthSecurityEvent | `vs_access_auth_security_event` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
-| Campus | `vs_access_campus` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
+| Campus | `vs_access_campus` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | InstitutionGrant | `vs_access_institution_grant` | access | PLANNED | [access LLD](modules/tenancy/DESIGN.md) |
 | Organization | `vs_access_organization` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | RoleGrant | `vs_access_role_grant` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |

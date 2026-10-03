@@ -45,7 +45,7 @@ Design: [flow IAM-02](DESIGN.md). Scope and API: PATCH /api/v1/school; POST /api
 1. Resolve actor; pre-read target account IDs, lock account rows sorted then current School guard.
 2. Re-read membership, target and organization/school status; require user.manage or school.manage.
 3. Authorize receipt replay; enforce assignable roles, scope and last-active-admin invariant.
-4. Persist versioned settings/campus/membership/grants; pending new accounts receive a separate single-use activation record via operator action.
+4. Persist versioned settings/campus/membership/grants; new accounts remain PENDING without credentials; IAM-03 provides the separate verified operator activation action.
 5. Return safe updated DTO and append audit/outbox/receipt atomically.
 
 Files: extend `backend/modules/access/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/access`, `test/functional/access` and `test/e2e/access` as the suite grows.
@@ -56,13 +56,13 @@ Files: extend `backend/modules/access/domain`, `application`, `contracts` and `i
 - Real PostgreSQL: Two admin revocations serialize; forged cross-school grants fail constraints; failed audit rolls settings back.
 - Browser: Create staff access, suspend/reinstate; verify protected request denied immediately.
 - Failure contract: Last admin removal → 409 LAST_ADMIN; stale update → 409; changing timezone after any session → 409 TIMEZONE_IN_USE; foreign target → 404.
-- Required DB effect: School/Campus or SchoolMembership/RoleGrant/UserAccount(PENDING); audit/outbox/receipt; activation only through explicit operator command, never automatic message send.
+- Required DB effect: School/Campus or SchoolMembership/RoleGrant/UserAccount(PENDING); audit/outbox/receipt; activation belongs to IAM-03 through an explicit operator command, never automatic message send.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
 ### Demo and checkpoint
 
-Create a synthetic teacher membership; inspect Pending; activate through approved local operator flow; suspend it and confirm the next request is denied; attempt removal of the last admin.
+Create a synthetic teacher membership and inspect Pending. Change its roles/status and inspect persisted results; attempt removal of the last admin. PostgreSQL/Playwright fixtures additionally provide existing active staff to prove immediate suspension/reinstatement enforcement. Owner activation review occurs in IAM-03, which depends on this task.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 

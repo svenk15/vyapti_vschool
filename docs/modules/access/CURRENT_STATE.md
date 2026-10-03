@@ -1,20 +1,20 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-04. IAM-01 locally verified; owner acceptance PENDING. No imported task completion or active execution timer.
+Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally verified; owner review pending. No imported task completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| IAM-01 | VERIFIED | PENDING | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
-| IAM-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| IAM-01 | VERIFIED | PASSED | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
+| IAM-02 | VERIFIED | PENDING | [Local verification](../../evidence/iam-02-local/verification.json), JUnit and source handoff below |
 | IAM-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Current checkpoint
 
-IAM-01 implements restricted operator bootstrap, bcrypt credentials/lockout, provider JWT sessions, current account/membership/school/institution authorization and a protected administrator home/setup summary. Nine access/shared-envelope tables are installed alongside the foundation marker. IAM-02/03 are specifications only.
+IAM-01 implements restricted operator bootstrap, bcrypt credentials/lockout, provider JWT sessions, current account/membership/school/institution authorization and a protected administrator home/setup summary. IAM-02 now implements guarded settings, Campus and staff administration with atomic audit/outbox/receipt writes, pending account creation, fixed roles and last-active-admin protection. Eleven tables are installed through five forward migrations; IAM-03 activation/recovery is still a specification.
 
 ## Next action
 
-Keep the production demo stable and pause for IAM-01 owner review. Address failed feedback first. IAM-02 is next after explicit acceptance and permission to continue.
+Keep IAM-02 production demo stable and pause for owner review. IAM-03 is next only after explicit acceptance and permission to continue; address failed feedback first.
 
 ## Pending decisions / limitations
 
@@ -64,3 +64,38 @@ Limitations: settings/staff/activation/recovery, multi-branch switching, license
 ### Source identity handoff — 4 October 2026
 
 Tested source `56ba5f7551fe06ff28b14ff40d11c57065e53f38`; production Next build ID `rC-4vzc5Or9U9lY2cvy2A`. No executable changes after final check/build/browser/persistence verification. Human review PENDING. pnpm next-task suggests IAM-02, but work is paused until explicit owner feedback and permission.
+
+### IAM-01 owner acceptance and IAM-02 start — 4 October 2026
+
+Owner: “Pass, please go-ahead with implementing the next task”. PASSED applies to tested source 56ba5f7551fe06ff28b14ff40d11c57065e53f38 and handoff c5337de. Initial main tree clean at c5337de; pnpm next-task selects IAM-02. Intended demo: persisted school settings/campuses, pending staff, fixed role/status management and last-admin protection. Activation belongs to IAM-03; the inconsistent IAM-02 activation demo reference is reconciled before implementation. No timer/deployment authorized.
+
+### IAM-02 local verification and running demo — 4 October 2026
+
+Implementation VERIFIED; human review PENDING. Started on clean main at c5337de after explicit IAM-01 acceptance. Tested executable fingerprint: `867d062699aadb22eea2ba737fd8777aa9a62ca9ac5a1be7f1da8b67002f9cd7`; [method](../../evidence/iam-02-local/source-fingerprint.json). Exact tested source commit is recorded in the following documentation-only handoff.
+
+Implemented portable management facade, normalized commands, current scoped reads, account/Organization/School transaction guards, fixed roles/status transitions and last-active-admin protection; Platform-enlisted atomic audit/outbox/receipt writer; Attendance-owned timezone query seam; browser contracts, thin HTTP adapters and shared-UI school/staff screens. Replays reauthorize the actor/target and preserve the original response; conflicting keys and stale versions fail safely. Staff cursors are signed, actor/scope-bound and limited to 50 records. Campus count is bounded at 100. Current teacher membership controls self-only /account and /api/v1/me without enabling operational modules. New accounts have no password and remain PENDING; activation/recovery belongs to IAM-03, reconciled in DESIGN/TASKS/Bible before implementation.
+
+Schema: forward `20261004000100_staff_management` applied to development `vyapti_vschool` and dedicated test `vyapti_vschool_test`. Five migrations, eleven physical tables, twelve foreign keys; Campus uses the scoped composite school FK, unique scoped code/id, positive version and status checks. Previous migrations remain unchanged. Clean installation and previous-checkpoint upgrade were rehearsed in isolated transaction-local schemas and rolled back; previous organization name/version/timestamp and the foundation marker survived. Both public foundation markers retain their prior timestamps. No database reset/reseed/delete or private .env overwrite occurred. Read-only Prisma comparison reports an empty migration. Campus registry/LLD status is MIGRATED.
+
+Executed final checks:
+
+- `pnpm check`: exit 0; lint, TypeScript, documentation, database design, extraction boundaries, independent backend compile and 50 unit tests. [JUnit](../../evidence/iam-02-local/unit.junit.xml).
+- `pnpm test:functional`: exit 0, 22 real PostgreSQL tests. New coverage: actual settings/envelope commits and rollback after actual audit/outbox/receipt append, exact replay and changed-key/stale rejection, pending credentials, duplicate campus/email, scoped Campus FK rejection, pending administrators excluded from last-admin count, concurrent self-revocations leaving one active administrator, current staff suspension/reinstatement and forbidden foreign targets/account attachment, replay after actor suspension, scoped owner timezone decision and failure rollback, bounded signed cursor pagination. Existing auth/bootstrap/immutable evidence/foundation invariants and five-migration rehearsals pass. [JUnit](../../evidence/iam-02-local/functional.junit.xml).
+- `pnpm test:e2e`: final frozen-source exit 0, 44 Chromium desktop/mobile journeys. New journeys cover persisted school edits, invalid timezone, campus duplicates, lost committed response followed by same-key replay, pending staff creation/persistence, last-admin rejection, active teacher suspension immediately denying /api/v1/me, reinstatement restoring the same session, teacher and foreign-origin mutation denial, mobile layout. All 40 prior foundation/design/branding/access regressions pass. [JUnit](../../evidence/iam-02-local/e2e.junit.xml). Local mobile screenshots inspected; the staff table scrolls horizontally within its shared table container.
+- `pnpm build`: exit 0; production compile/types pass. `pnpm start`: production server on http://127.0.0.1:3400, session 43374, build `e547Ry6XTIfZxZ69mv-uO`.
+- `node scripts/verify-management-local.mjs`: approved local retry exit 0, eight production checks: health, original accepted administrator and both screens, actual settings commit/replay/stale rejection, campus persistence/duplicate denial, pending staff suspension/reinstatement without credentials, last-admin rejection, both migration histories and preserved markers, private environment hash unchanged. [Observed safe report](../../evidence/iam-02-local/verification.json). Synthetic probe campuses/staff are retained; credentials remain in ignored mode-0600 artifacts/iam-01/private-demo.json.
+- `pnpm exec prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script`: exit 0, empty migration.
+
+Iteration evidence: initial TypeScript rejected a missing shared Dialog description; supplied it. Initial check rejected JSX construction inside try/catch; pages now catch only asynchronous gateway reads and render outside the catch. Initial browser exact label selectors included the shared required marker; switched to accessible role/name selectors. A cold dev-server auth compile exceeded the five-second expectation; the multi-step management journeys use a 15-second navigation expectation and a 60-second journey limit. Interrupted/failed runs are not counted as passed. Final unchanged source passes all gates. Initial local production probe was blocked by sandbox sockets; approved retry passed. No dependency or lockfile change.
+
+Changed areas: Access domain/application/public contracts/Prisma repository/factory, Platform command evidence contract/adapter, Attendance read contract/adapter, browser-safe DTOs, Next gateway/auth/pages/routes, shared UI management composition, one forward Campus migration/schema, tests/fixtures/local probe, affected design/database/Bible/state documents and safe evidence. No secrets, generated ORM/build/cache artifacts or unrelated files are checkpointed.
+
+Manual review:
+
+1. Open http://127.0.0.1:3400/sign-in and use the existing private artifacts/iam-01/private-demo.json credentials. Expect the school home with School settings and Staff access links.
+2. Open School settings, change the school name and save. Reload: expect the saved name and a higher version. Try Invalid/Zone: expect validation with no persisted change; restore Asia/Kolkata. Add a campus with a unique code; repeat it: expect a conflict and one campus row.
+3. Open Staff access, create a unique synthetic teacher email under vschool.example. Expect a persisted PENDING membership after reload; no password or activation is created.
+4. Manage that pending staff record: give a non-sensitive reason, change fixed roles, suspend, then reinstate. Expect persisted roles/status and reinstatement to PENDING because the account is not activated.
+5. Manage the sole active administrator and try Revoke or Suspend with a reason. Expect LAST_ADMIN feedback and continued access. Sign out and revisit /admin/users: expect sign-in.
+
+Limitations: operator activation/recovery and person binding are IAM-03/PER tasks; no email/message was sent. AttendanceSession is not yet migrated, so the real owner adapter's absence path is verified; existing-session and owner-failure policy are verified through the scoped port under real PostgreSQL transactions. ATT-01 must verify the installed relation path and retain shared School locking. No operational module/license/branch switching is enabled, no attendance workflow is claimed. Current reads and commands fail closed; broad production distributed rate controls, TLS, runtime DB privilege separation, accessibility certification and release/recovery remain later gates. No deployment or timer started. Human acceptance stays PENDING. Next action: pause for this demo's owner feedback; do not start IAM-03 yet.

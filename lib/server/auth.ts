@@ -27,7 +27,7 @@ export const authOptions:NextAuthOptions = {
    return session;
   },
   async redirect({url,baseUrl}){
-   try {const target=new URL(url,baseUrl);if(target.origin===new URL(baseUrl).origin&&["/admin","/sign-in"].includes(target.pathname))return target.href;}catch{}
+   try {const target=new URL(url,baseUrl);if(target.origin===new URL(baseUrl).origin&&["/admin","/account","/sign-in"].includes(target.pathname))return target.href;}catch{}
    return new URL("/admin",baseUrl).href;
   },
  },

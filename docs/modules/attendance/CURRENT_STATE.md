@@ -11,7 +11,7 @@ Last updated: 2026-10-03. Fresh baseline; no imported task completion. Design re
 
 ## Current checkpoint
 
-No module business code or tables are implemented. DESIGN.md and TASKS.md are specifications only.
+No attendance workflow or tables are implemented. IAM-02 adds the owner-scoped ScheduledSessionQuery read contract and Prisma adapter for timezone protection. Absence of the not-yet-migrated session table yields false; database errors fail closed. ATT tasks remain NOT_STARTED.
 
 ## Next action
 
