@@ -34,7 +34,8 @@
     "tenancy-operator": "node --import tsx scripts/tenancy-operator.ts",
     "demo:tenancy-modules": "node --import tsx scripts/demo-tenancy-modules.ts",
     "demo:branding": "node --import tsx scripts/demo-branding.ts",
-    "demo:academics": "node --import tsx scripts/demo-academics.ts"
+    "demo:academics": "node --import tsx scripts/demo-academics.ts",
+    "demo:seed": "node --import tsx scripts/demo-seed.ts"
   },
   "dependencies": {
     "next": "16.3.8",
