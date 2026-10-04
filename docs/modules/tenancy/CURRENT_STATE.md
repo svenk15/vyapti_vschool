@@ -6,7 +6,7 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 |---|---|---|---|
 | TEN-01 | VERIFIED | PENDING | Source `c09519ca10bddd6286aba242d21aa9a5000ff0ae`; production build `fGxMmBd-8b7ScLU7mVhug`; local verification report and JUnit evidence below |
 | TEN-02 | VERIFIED | PENDING | Source/build/test evidence: `docs/evidence/tenancy-02-local/`; owner review remains pending |
-| TEN-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| TEN-03 | NOT_STARTED | NOT_REQUESTED | Design checkpoint only: [TEN-ADR-006 / RLS compatibility and verification plan](DESIGN.md#rls-and-release-verification); no policies or runtime-role enforcement implemented |
 
 ## Implemented now
 
@@ -14,11 +14,23 @@ TEN-01 delivers persisted institution/branch setup, operator-issued institution 
 
 ## Next action
 
-Continue with the next task selected by `pnpm next-task`; TEN-01, IAM-03, and TEN-02 human reviews remain PENDING. TEN-03 remains gated on ATT-04 acceptance as recorded in the execution index.
+Continue with the next task selected by `pnpm next-task`; TEN-01, IAM-03, and TEN-02 human reviews remain PENDING. TEN-03 remains gated on ATT-04 acceptance as recorded in the execution index. RLS compatibility has been designed early; enforcement stays consolidated in TEN-03.
 
 ## Evidence and feedback
 
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.
+
+### TEN-03 RLS compatibility design checkpoint — 4 October 2026
+
+Owner requested an early RLS design while keeping TEN-03 the consolidated enforcement/verification gate. This checkpoint changes design only; no schema, roles, policies, runtime connections, data, or earlier migrations were modified. Existing design already required PostgreSQL RLS in broad terms; the TEN-03 task lacked role separation, table classes, exception behavior, performance targets and restricted-role pool tests. TEN-ADR-006 now defines those contracts and future-migration requirements.
+
+Role evidence: repository setup creates a per-database LOGIN role with NOSUPERUSER/NOCREATEDB/NOCREATEROLE and makes it database owner; that owner is not suitable as restricted runtime because ownership normally bypasses RLS. No RLS policy, ENABLE/FORCE, or transaction-local `set_config` implementation was found in checked-in code/migrations. Configured `.env` targets `vyapti_vschool` and `vyapti_vschool_test`; actual role attributes/ownership/catalog state are uninspected because connections to the configured service returned EPERM/unavailable in this session. The table contract includes 36 migrated tables; tenant enforcement is currently by application authorization, scoped repositories and composite constraints where documented, not database RLS. This is not evidence that every query path is isolated against raw SQL.
+
+Already enforced: current server-side membership/resource authorization in delivered use cases; scoped foreign keys and indexes documented per table; IAM-04 account-wide recovery and trust-transition application guards/token invalidation; separate trusted local operator command paths. Planned only: restricted migration/runtime role split, RLS policies and FORCE decisions, transaction-local DB context, current-membership RLS helper, deny-by-default behavior for absent context, table registry with classes/exceptions, global identity/recovery/operator/audit/public-brand narrow paths, complete job/export/cache scope, additional policy indexes, role-level SQL tests, pool leak proof, performance/load evidence and deployment-specific grants. TEN-03 will inventory existing tables and present a compatibility/retrofit matrix for review before the consolidated changes; this design checkpoint is not permission to retrofit now.
+
+Proposed reproducible synthetic load profile: 100 institutions/500 branches, 100,000 accounts, 150,000 memberships, 1M students, 5M sessions, 50M attendance rows and 1M audit/outbox records, with tenant skew. 200 concurrent clients for 15 minutes use a 70/20/5/3/2 read/write/config/audit/auth mix, 10% alternating tenant-pool reuse, and 1% denial probes. Target zero leakage in 100,000 probes, zero rows/writes denied without context, zero leakage over 100,000 alternating pooled transactions, indexed plans, p95 ≤100ms reads/≤200ms writes, p99 ≤500ms, RLS overhead ≤20%, <0.1% non-denial errors and no unexplained deadlocks/serialization failures. These are proposed acceptance thresholds, not measured results; TEN-03 must run them or document an evidence-backed adjustment before the gate passes.
+
+Verification plan requires direct connections as restricted runtime; role/grant/ownership assertions; absent, empty, malformed, wrong-account, cross-institution, same-institution other-branch and forged-scope SELECT/INSERT/UPDATE/DELETE tests; `WITH CHECK` and FORCE tests; narrow recovery/operator/audit/public-brand exceptions; pool-size-one commit/rollback/error/cancel alternating A/no-context/B checks; empty and upgrade migration paths; restore/reconciliation; EXPLAIN/ANALYZE and RLS-on/off isolated benchmark. No mocks substitute for database-policy, grants, transaction-local or pooling evidence. Human review: NOT_REQUESTED; this is not a demoable implementation checkpoint. Next action: retain TEN-03 as gated consolidated task and apply the future-table migration rule in subsequent module designs/migrations.
 
 
 ### TEN-01 inspection and blocking design decision — 4 October 2026

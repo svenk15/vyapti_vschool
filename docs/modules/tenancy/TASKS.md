@@ -44,11 +44,13 @@ Depends on: TEN-02, ATT-04
 
 ### Implementation instructions
 
-Add reviewed PostgreSQL RLS policies/restricted roles, transaction-local scope, scoped export/job/cache enforcement and configuration revision invalidation. Test raw runtime SQL cross-branch/institution reads/writes, pooled connection reuse, disabled module racing submit and jobs, restore/reconciliation and operational quotas. Record deployment role permissions and benchmark contention before production; no bypass by owner/runtime role.
+TEN-ADR-006 is the compatibility contract; TEN-03 remains the one consolidated enforcement and verification gate. Inspect actual database roles/catalogs and every migrated table, then produce/review the retrofit matrix before changing existing schema, grants, or runtime connections. Create separate migration-owner and restricted runtime roles; classify every table; implement RLS/ENABLE+FORCE, transaction-local verified context, scoped reads/writes, minimal indexes and explicitly audited global/operator/public exceptions. Integrate all database paths (including exports/jobs/cache boundaries), configuration revision invalidation, disabled-module command/job races, restore/reconciliation and operational quotas. No future tenant-owned table migration may omit its class, policy, forced-RLS decision, grants, indexes and restricted-role tests. Prove no bypass by ordinary owner/runtime roles. Record provider deployment role permissions before release.
+
+Use the synthetic TEN-ADR-006 benchmark profile and acceptance thresholds (or document an evidence-backed reviewed adjustment before execution). Test SQL directly as the restricted runtime role with missing/malformed context, cross-institution and cross-branch reads/writes, forged composite scope, owner behavior, and pooled connection reuse/leakage. Test named recovery/operator/audit/public-brand exceptions through their narrow paths. Run empty/upgrade migrations and compare RLS-on performance to indexed isolated baseline; do not use mocks as evidence for SQL policies, role grants, transaction-local scope, or pooling.
 
 ### Acceptance and test strategy
 
-Run pnpm check, applicable PostgreSQL functional and Playwright suites, and production build. Capture source fingerprint/commit and actual test commands/exits. Validate the documented negative cases, not only the happy path. Update module state and affected Bible/ADRs in the same checkpoint.
+Run pnpm check, restricted-role real-PostgreSQL functional tests, the measurable load/plan profile, applicable Playwright journeys and production build. Capture source fingerprint/commit and actual test commands/exits. Validate the documented negative cases, not only the happy path. Update module state, policy registry, compatibility matrix and affected Bible/ADRs in the same checkpoint. Keep implementation VERIFIED only after provider role evidence, restore/reconciliation and all release acceptance criteria pass; human review remains separate.
 
 ### Demo and checkpoint
 
