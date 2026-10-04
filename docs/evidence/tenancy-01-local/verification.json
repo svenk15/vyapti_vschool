@@ -1,0 +1,85 @@
+{
+  "observedAt": "2026-10-04T04:33:24.249Z",
+  "task": "TEN-01",
+  "sourceCommit": "c09519ca10bddd6286aba242d21aa9a5000ff0ae",
+  "buildId": "fGxMmBd-8b7ScLU7mVhug",
+  "demoUrl": "http://127.0.0.1:3404",
+  "checks": [
+    {
+      "name": "Health",
+      "passed": true
+    },
+    {
+      "name": "Credentials and protected page",
+      "passed": true
+    },
+    {
+      "name": "Granted context directory",
+      "passed": true
+    },
+    {
+      "name": "Branch write, exact replay and metadata-only persistence",
+      "passed": true
+    },
+    {
+      "name": "Same/foreign scope denial and forged-origin rejection",
+      "passed": true
+    },
+    {
+      "name": "Authorized branch switch is enforced by protected reads",
+      "passed": true
+    },
+    {
+      "name": "Verified local operator CLI creates an institution without impersonation",
+      "passed": true
+    },
+    {
+      "name": "Eight forward migrations, 17 tables, 24 foreign keys and both foundation markers preserved",
+      "passed": true
+    },
+    {
+      "name": "Private .env unchanged",
+      "passed": true
+    }
+  ],
+  "databases": [
+    {
+      "database": "vyapti_vschool",
+      "appliedMigrations": [
+        "20261003000100_foundation",
+        "20261003000200_vora_naming",
+        "20261003000300_vs_prefix",
+        "20261003000400_access_bootstrap",
+        "20261004000100_staff_management",
+        "20261004000200_account_activation",
+        "20261004000300_institution_context",
+        "20261004000400_institution_history_indexes"
+      ],
+      "foundationMarker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T12:56:01.303Z"
+        }
+      ]
+    },
+    {
+      "database": "vyapti_vschool_test",
+      "appliedMigrations": [
+        "20261003000100_foundation",
+        "20261003000200_vora_naming",
+        "20261003000300_vs_prefix",
+        "20261003000400_access_bootstrap",
+        "20261004000100_staff_management",
+        "20261004000200_account_activation",
+        "20261004000300_institution_context",
+        "20261004000400_institution_history_indexes"
+      ],
+      "foundationMarker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T13:00:16.941Z"
+        }
+      ]
+    }
+  ]
+}

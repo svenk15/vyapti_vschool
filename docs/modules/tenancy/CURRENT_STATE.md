@@ -4,17 +4,17 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| TEN-01 | IN_PROGRESS | NOT_REQUESTED | Owner authorized recommended policy; implementation in progress |
+| TEN-01 | VERIFIED | PENDING | Source `c09519ca10bddd6286aba242d21aa9a5000ff0ae`; production build `fGxMmBd-8b7ScLU7mVhug`; local verification report and JUnit evidence below |
 | TEN-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 | TEN-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Implemented now
 
-Pure dependency/entitlement reference rules and a synthetic in-memory configuration preview. No tenant database tables, protected APIs or persistent activation yet.
+TEN-01 delivers persisted institution/branch setup, operator-issued institution and membership grants, institution-admin metadata-only branch creation, bounded authorized context listing and switching, protected request reauthorization, context-change cache/draft clearing, and immutable transactional receipts/audit/outbox evidence. Entitlement and activation persistence are still TEN-02.
 
 ## Next action
 
-Implement and verify TEN-01 under TEN-ADR-004. IAM-02 is accepted; IAM-03 is VERIFIED with review PENDING under the owner continuation policy. Do not bypass this decision by implementing dependent grant writes.
+Implement TEN-02 under its documented contract. TEN-01 human review remains PENDING until explicit owner feedback. IAM-03 review also remains PENDING; the owner's continuation policy permits this dependency because implementation is VERIFIED. TEN-03 remains dependent on TEN-02 and ATT-04.
 
 ## Evidence and feedback
 
@@ -37,3 +37,17 @@ Only documentation checks apply to this inspection checkpoint; implementation fu
 ### TEN-01 resumed — 4 October 2026
 
 Owner: “Please go-ahead and implement the next task”. Proceed with the presented recommended operator-only authority policy; IAM-03 human review remains PENDING, not inferred PASSED. Clean main at cac1625. TEN-ADR-004 resolves command boundaries, evidence-table installation timing, error/replay policy and request-local context before coding. Demo outcome remains two institutions/multiple branches, explicit current authorized switching, persisted branch creation and ungranted-branch denial. Required checks are pending.
+
+### TEN-01 implemented and verified — 4 October 2026
+
+Implemented and committed as `c09519ca10bddd6286aba242d21aa9a5000ff0ae` (`Implement TEN-01 institution and branch context`). Human review is PENDING; no human acceptance is inferred. Production build ID is `fGxMmBd-8b7ScLU7mVhug`, frozen snapshot is serving at http://127.0.0.1:3404. Local probe results are in [verification.json](../../evidence/tenancy-01-local/verification.json); unit, functional and E2E JUnit reports are committed beside it.
+
+Completed checks: `pnpm check` (including lint, TypeScript, docs, database design, boundaries, backend compile and 53 unit tests), `pnpm test:functional` (35 passed against PostgreSQL), `pnpm test:e2e` (52 passed desktop/mobile), `pnpm build`, and `pnpm verify:tenancy-local` (9 production-snapshot probes passed). Both `vyapti_vschool` and `vyapti_vschool_test` retain the original foundation marker and have eight forward migrations, 17 registered `vs_` tables and 24 foreign keys. Schema-to-database diff is empty. `.env` hash is unchanged. Test and demo records are synthetic and retained; no database reset/reseed was used. There are no new dependencies. No pupil data is logged or included.
+
+Migration note: the first TEN-01 migration is preserved unchanged after application. Its later actor-history index correction is the separate forward migration `20261004000400_institution_history_indexes`. A first test-database attempt of that follow-up encountered an already-present index and rolled back; it was resolved with a migration-history rollback record on the dedicated test database only, then the corrected forward migration applied successfully. No table/data/migration was deleted or database reset.
+
+Limitations: Tenancy does not yet persist or enforce module entitlement/branch activation (TEN-02). No production RLS, Person binding, deployment or production database readiness is claimed. Module management remains within the documented UI/API scope; trusted operator commands run only via the local CLI.
+
+Manual review steps: sign in at http://127.0.0.1:3404/admin using the existing local IAM-01 synthetic demo account; switch to the second pre-attached branch and confirm the warning before discarding a protected draft; check another open tab reloads into the new scope; create a unique branch under the institution administration surface and confirm the success message says it grants no staff membership or module access; then use `/api/v1/context` to inspect its `selectable:false` entry and request `/api/v1/school?schoolId=<new-branch-id>` to confirm 404. A foreign/ungranted branch switch should also return 404. Credentials and private demo identifiers remain in ignored local artifacts.
+
+Next action: continue to TEN-02 as authorized by the owner continuation policy; keep TEN-01 owner review PENDING and address any reported defect before work that depends on it.
