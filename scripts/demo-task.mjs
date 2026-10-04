@@ -13,7 +13,7 @@ if(!existsSync(join(path,'demo.json'))){
  if(commit!==head)throw new Error("An older commit needs an existing immutable snapshot");
  if(!existsSync('.next/standalone/server.js'))throw new Error('Build first');
  mkdirSync(path,{recursive:true,mode:0o700});
- cpSync('.next/standalone',path,{recursive:true,dereference:true,filter:source=>!basename(source).startsWith('.env')});
+ cpSync('.next/standalone',path,{recursive:true,verbatimSymlinks:true,filter:source=>!basename(source).startsWith('.env')});
  cpSync('.next/static',join(path,'.next/static'),{recursive:true});if(existsSync('public'))cpSync('public',join(path,'public'),{recursive:true});
  writeFileSync(join(path,'demo.json'),JSON.stringify({task,testedCommit:commit,url,buildId:readFileSync('.next/BUILD_ID','utf8').trim()},null,2)+'\n');
 }
