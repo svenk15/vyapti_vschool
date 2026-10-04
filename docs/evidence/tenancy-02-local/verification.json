@@ -1,0 +1,32 @@
+{
+  "observedAt": "2026-10-04T05:35:23Z",
+  "task": "TEN-02",
+  "sourceCommit": "9134357618f9016c7b221c6f19e0a279d9ebb6ba",
+  "buildId": "RcBxf_F69gbU4tNYEfu5d",
+  "demoUrl": "http://127.0.0.1:3405",
+  "humanReview": "PENDING",
+  "checks": [
+    { "command": "pnpm check", "exitCode": 0, "result": "55 unit tests passed; lint, typecheck, docs, db design, boundaries and standalone backend checks passed" },
+    { "command": "pnpm test:functional", "exitCode": 0, "result": "42 PostgreSQL tests passed across 7 files, including migration rehearsal" },
+    { "command": "pnpm test:e2e", "exitCode": 0, "result": "54 Playwright desktop/mobile journeys passed" },
+    { "command": "pnpm build", "exitCode": 0, "result": "Production build completed" },
+    { "command": "pnpm prisma validate", "exitCode": 0, "result": "Prisma schema valid" },
+    { "command": "pnpm prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script", "exitCode": 0, "result": "Empty migration; development PostgreSQL schema matches Prisma" },
+    { "command": "git diff --check", "exitCode": 0, "result": "No whitespace errors" },
+    { "command": "GET /api/health", "exitCode": 0, "result": "ready" }
+  ],
+  "database": {
+    "development": "vyapti_vschool",
+    "test": "vyapti_vschool_test",
+    "appliedMigration": "20261004000500_module_entitlements",
+    "migrationsApplied": 9,
+    "schemaDiff": "empty",
+    "syntheticDemoWrite": "Attendance entitlement recorded at organization revision 6; no branch activation written"
+  },
+  "reports": ["unit.junit.xml", "functional.junit.xml", "e2e.junit.xml"],
+  "limitations": [
+    "No product module workflow is released in this checkout; production module activation fails closed.",
+    "Resource-specific permission checks fail closed until consumer-module owner ports are available.",
+    "No production RLS, deployment, or production data readiness is claimed."
+  ]
+}
