@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the access bootstrap and shared envelopes alongside the setup marker. The remaining tables below are planned Phase 1 designs, not a claim that school business features work.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; the connected checkpoint has 17 migrated tables through TEN-01. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
 
 ## Naming decision — DB-ADR-001
 
@@ -37,7 +37,7 @@ JSONB is limited to typed versioned envelopes, configuration limits, safe audit 
 
 ## Table catalog and schema responsibilities
 
-Each link below opens the module LLD containing its complete fields, storage purpose, scoped keys, indexes, read joins, writes and failure behavior. Status is physical migration status, separate from human acceptance. This list includes all current Phase 1 table contracts.
+Each link below opens the module LLD containing its complete fields, storage purpose, scoped keys, indexes, read joins, writes and failure behavior. Status is physical migration status, separate from human acceptance. This list includes all current Phase 1 table contracts, with MIGRATED marking only contracts installed in local PostgreSQL.
 
 | Domain model | Physical table | Owner | Status | Column schema / workflow authority |
 |---|---|---|---|---|
@@ -57,7 +57,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AccountPersonBinding | `vs_access_account_person_binding` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | AuthSecurityEvent | `vs_access_auth_security_event` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | Campus | `vs_access_campus` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
-| InstitutionGrant | `vs_access_institution_grant` | access | PLANNED | [access LLD](modules/tenancy/DESIGN.md) |
+| InstitutionGrant | `vs_access_institution_grant` | access | MIGRATED | [access LLD](modules/tenancy/DESIGN.md) |
 | Organization | `vs_access_organization` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | RoleGrant | `vs_access_role_grant` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | School | `vs_access_school` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
@@ -85,10 +85,10 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SectionPlacement | `vs_students_section_placement` | students | PLANNED | [students LLD](modules/students/DESIGN.md) |
 | Student | `vs_students_student` | students | PLANNED | [students LLD](modules/students/DESIGN.md) |
 | BranchActivation | `vs_tenancy_branch_activation` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
-| ConfigurationChange | `vs_tenancy_configuration_change` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
+| ConfigurationChange | `vs_tenancy_configuration_change` | tenancy | MIGRATED | [tenancy LLD](modules/tenancy/DESIGN.md) |
 | OrganizationEntitlement | `vs_tenancy_organization_entitlement` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
-| TenantCommandReceipt | `vs_tenancy_tenant_command_receipt` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
-| TenantOutbox | `vs_tenancy_tenant_outbox` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
+| TenantCommandReceipt | `vs_tenancy_tenant_command_receipt` | tenancy | MIGRATED | [tenancy LLD](modules/tenancy/DESIGN.md) |
+| TenantOutbox | `vs_tenancy_tenant_outbox` | tenancy | MIGRATED | [tenancy LLD](modules/tenancy/DESIGN.md) |
 
 No business table is migrated simply because it is listed here. Fees, admissions, exams, learning, transport, HR/payroll, library, inventory, health, documents, analytics and AI retain Bible blueprints. Each gets a physical schema and its own DESIGN/TASKS/CURRENT_STATE pack before implementation. Reserve matching owner names such as `fees` and `admissions`; do not install speculative empty tables now. Fees can consume Student core through its owner contract without enabling Attendance.
 
@@ -179,6 +179,6 @@ CREATE TABLE public.vs_platform_setup_check (
 );
 ```
 
-Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. IAM-01 adds `20261003000400_access_bootstrap` with the nine MIGRATED access/platform contracts above, all scoped foreign keys, state/version checks and immutable audit/receipt/security-event guards. See the reviewed SQL and access CURRENT_STATE for actual PostgreSQL migration and rehearsal evidence. Prisma models also map each FK/index to prevent later migration drift.
+Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. IAM-01 through TEN-01 add seven forward migrations. `20261004000300_institution_context` introduces InstitutionGrant and genuine institution-scoped configuration history, command receipts and outbox with scoped FKs and immutable guards. Module CURRENT_STATE records actual application/rehearsal evidence. Prisma models map explicit FK/index contracts.
 
 References: [Prisma database mapping](https://www.prisma.io/docs/orm/prisma-schema/data-model/database-mapping), [PostgreSQL identifier rules](https://www.postgresql.org/docs/16/sql-syntax-lexical.html). These explain tool behavior; VS names and scope are VSchool architectural decisions.

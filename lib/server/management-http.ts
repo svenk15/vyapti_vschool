@@ -1,6 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { adminGateway,access } from "./access";
+import { adminGateway,accountGateway } from "./access";
 import { getIdentity } from "./auth";
 import { AccessError } from "../../backend/modules/access/contracts";
 import type { ManagementCommand } from "../../shared/contracts/access-management";
@@ -22,4 +22,4 @@ export async function mutation(request:Request,kind:ManagementCommand["kind"],ta
  }catch(error){return managementError(error);}
 }
 export async function staffList(request:Request){try{const url=new URL(request.url);return Response.json(await adminGateway.listMembers(await getIdentity(),url.searchParams.get("schoolId")??undefined,url.searchParams.get("cursor")??undefined),{headers});}catch(error){return managementError(error);}}
-export async function self(request:Request){try{return Response.json(await access.getAccountHome(await getIdentity(),new URL(request.url).searchParams.get("schoolId")??undefined),{headers});}catch(error){return managementError(error);}}
+export async function self(request:Request){try{return Response.json(await accountGateway.getHome(await getIdentity(),new URL(request.url).searchParams.get("schoolId")??undefined),{headers});}catch(error){return managementError(error);}}

@@ -23,6 +23,10 @@ model Organization {
   createdAt            DateTime @map("created_at") @db.Timestamptz(3)
   configurationVersion Int      @default(1) @map("configuration_version")
   schools              School[]
+  institutionGrants InstitutionGrant[]
+  configurationChanges ConfigurationChange[]
+  tenantReceipts TenantCommandReceipt[]
+  tenantOutbox TenantOutbox[]
 
   @@map("vs_access_organization")
 }
@@ -38,6 +42,7 @@ model School {
   createdAt            DateTime           @map("created_at") @db.Timestamptz(3)
   configurationVersion Int                @default(1) @map("configuration_version")
   organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_r0_fkey")
+  configurationChanges ConfigurationChange[]
   campuses             Campus[]
   memberships          SchoolMembership[]
   auditEntries         AuditEntry[]
@@ -60,6 +65,9 @@ model UserAccount {
   lockedUntil         DateTime?           @map("locked_until") @db.Timestamptz(3)
   version             Int
   createdAt           DateTime            @map("created_at") @db.Timestamptz(3)
+  institutionGrants InstitutionGrant[]
+  configurationChanges ConfigurationChange[]
+  tenantReceipts TenantCommandReceipt[]
   memberships         SchoolMembership[]
   securityEvents      AuthSecurityEvent[] @relation("SecuritySubject")
   actorSecurityEvents AuthSecurityEvent[] @relation("SecurityActor")
@@ -235,4 +243,68 @@ model AccountActivationMembership {
  @@index([accountId,activationId],map:"vs_access_account_activation_membership_r0_idx")
  @@index([organizationId,schoolId,membershipId,accountId],map:"vs_access_account_activation_membership_r1_idx")
  @@map("vs_access_account_activation_membership")
+}
+
+model InstitutionGrant {
+ id String @id(map:"vs_access_institution_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ role String @db.VarChar(40)
+ status String @db.VarChar(20)
+ version Int
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ grantedBy String @map("granted_by") @db.Uuid
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_institution_grant_organization_fkey")
+ account UserAccount @relation(fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_institution_grant_account_fkey")
+ @@unique([organizationId,accountId,role],map:"vs_access_institution_grant_scope_role_key")
+ @@index([accountId,status,organizationId],map:"vs_access_institution_grant_account_idx")
+ @@map("vs_access_institution_grant")
+}
+model ConfigurationChange {
+ id String @id(map:"vs_tenancy_configuration_change_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String? @map("school_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ expectedRevision Int @map("expected_revision")
+ newRevision Int @map("new_revision")
+ changes Json
+ reason String @db.VarChar(500)
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ requestId String @map("request_id") @db.Uuid
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_configuration_change_org_fkey")
+ school School? @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_configuration_change_school_fkey")
+ actor UserAccount @relation(fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_configuration_change_actor_fkey")
+ @@index([organizationId,occurredAt,id],map:"vs_tenancy_configuration_change_history_idx")
+ @@index([organizationId,schoolId,occurredAt,id],map:"vs_tenancy_configuration_change_branch_idx")
+ @@index([actorAccountId],map:"vs_tenancy_configuration_change_actor_idx")
+ @@map("vs_tenancy_configuration_change")
+}
+model TenantCommandReceipt {
+ id String @id(map:"vs_tenancy_tenant_command_receipt_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ command String @db.VarChar(80)
+ key String @db.VarChar(100)
+ inputHash String @map("input_hash") @db.Char(64)
+ response Json
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_tenant_command_receipt_org_fkey")
+ actor UserAccount @relation(fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_tenant_command_receipt_actor_fkey")
+ @@unique([organizationId,actorAccountId,command,key],map:"vs_tenancy_tenant_command_receipt_intent_key")
+ @@index([actorAccountId],map:"vs_tenancy_tenant_command_receipt_actor_idx")
+ @@map("vs_tenancy_tenant_command_receipt")
+}
+model TenantOutbox {
+ id String @id(map:"vs_tenancy_tenant_outbox_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ type String @db.VarChar(100)
+ schemaVersion Int @map("schema_version")
+ payload Json
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ state String @db.VarChar(20)
+ attempts Int @default(0)
+ availableAt DateTime @map("available_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_tenant_outbox_org_fkey")
+ @@index([organizationId,state,availableAt,id],map:"vs_tenancy_tenant_outbox_delivery_idx")
+ @@map("vs_tenancy_tenant_outbox")
 }

@@ -38,3 +38,5 @@ PostgreSQL backup/restore commands for the chosen deployment belong in the FND-0
 ## Portable backend gate
 
 Before every module task, read BACKEND_EXTRACTION.md and enforce the backend/shared/Next adapter boundaries. pnpm check includes independent backend compilation. Domain/use-case tests must run without a Next server; API contract tests remain transport-specific. Future Nest host work requires preserved core/storage tests and separate controller/auth/HTTP/cutover verification, not a copied business implementation.
+
+TEN-01 reconciles the former pause-oriented starter paragraphs: the 4 October owner policy continues between verified tasks while human review remains PENDING, except for a documented acceptance dependency or a real blocking decision/access/safety/unresolved verification failure. Never use `pnpm next-task` to bypass a blocker in the owning CURRENT_STATE.

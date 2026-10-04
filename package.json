@@ -27,7 +27,10 @@
     "issue-activation": "node --import tsx scripts/issue-activation.ts",
     "recover-account": "node --import tsx scripts/recover-account.ts",
     "demo:activation": "node --import tsx scripts/demo-activation.ts",
-    "demo:task": "node scripts/demo-task.mjs"
+    "demo:task": "node scripts/demo-task.mjs",
+    "institution-operator": "node --import tsx scripts/institution-operator.ts",
+    "demo:tenancy": "node --import tsx scripts/demo-tenancy.ts",
+    "verify:tenancy-local": "node scripts/verify-tenancy-local.mjs"
   },
   "dependencies": {
     "next": "16.3.8",

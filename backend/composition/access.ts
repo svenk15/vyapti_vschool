@@ -1,3 +1,6 @@
+import { createInstitutionUseCases } from "../modules/access/application/institutions";
+import { PrismaInstitutionRepository } from "../modules/access/infrastructure/institutions";
+import { PrismaInstitutionEvidence } from "../modules/tenancy/infrastructure/evidence";
 import { createActivationUseCases } from "../modules/access/application/activation";
 import { PrismaActivationRepository } from "../modules/access/infrastructure/activation";
 import { OpaqueActivationTokens } from "../modules/access/infrastructure/activation-tokens";
@@ -18,5 +21,7 @@ export function createAccessServices(config:{databaseUrl:string;now?:()=>Date;cu
  const repository=new PrismaAccessRepository(db,tx=>new PrismaProvisionEvidence(tx),config.now);
  const management=createManagementUseCases(new PrismaManagementRepository(db,tx=>new PrismaCommandEvidence(tx),tx=>new PrismaScheduledSessions(tx),config.cursorSecret??randomUUID(),config.now));
  const activation=createActivationUseCases(new PrismaActivationRepository(db,tx=>new PrismaAccessSecurityEvidence(tx),config.now??(()=>new Date())),new BcryptPasswords(),new OpaqueActivationTokens(),config.now??(()=>new Date()));
- return {...activation,...management,...createAccessUseCases(repository,new BcryptPasswords(),randomUUID),disconnect:()=>db.$disconnect()};
+ const core=createAccessUseCases(repository,new BcryptPasswords(),randomUUID);
+ const institutions=createInstitutionUseCases(new PrismaInstitutionRepository(db,tx=>new PrismaInstitutionEvidence(tx),(identity,schoolId)=>core.getAccountHome(identity,schoolId),config.now));
+ return {...institutions,...activation,...management,...core,disconnect:()=>db.$disconnect()};
 }

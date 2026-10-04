@@ -156,11 +156,11 @@
       "model": "InstitutionGrant",
       "owner": "access",
       "table": "vs_access_institution_grant",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; role varchar(40) INSTITUTION_ADMIN; status varchar(20) ACTIVE/REVOKED; version int; granted_at timestamptz(3); granted_by uuid",
       "responsibility": "Institution configuration grant; no implicit pupil access.",
-      "constraints": "FK institution/account; UNIQUE(organization_id,account_id,role); institution status lookup index"
+      "constraints": "FKs organization/account; UNIQUE(organization_id,account_id,role); INDEX(account_id,status,organization_id); role/status/version checks"
     },
     {
       "model": "Organization",
@@ -436,11 +436,11 @@
       "model": "ConfigurationChange",
       "owner": "tenancy",
       "table": "vs_tenancy_configuration_change",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; actor_account_id uuid; expected_revision int; new_revision int; changes jsonb; reason varchar(500); occurred_at timestamptz(3); request_id uuid",
-      "responsibility": "Module contract, activation or configuration evidence.",
-      "constraints": "Append-only; reason 5\u2013500; index(organization_id,occurred_at,id); branch nullable for institution change"
+      "responsibility": "Append-only institution or branch configuration history with an atomically enlisted revision.",
+      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5\u2013500; append-only"
     },
     {
       "model": "OrganizationEntitlement",
@@ -456,20 +456,20 @@
       "model": "TenantCommandReceipt",
       "owner": "tenancy",
       "table": "vs_tenancy_tenant_command_receipt",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; actor_account_id uuid; command varchar(80); key varchar(100); input_hash char(64); response jsonb; created_at timestamptz(3)",
-      "responsibility": "Module contract, activation or configuration evidence.",
-      "constraints": "UNIQUE(organization_id,actor_account_id,command,key); immutable; for institution commands without a branch; branch commands use shared CommandReceipt"
+      "responsibility": "Idempotent institution command outcomes, scoped to the verified account and tenant.",
+      "constraints": "FKs organization/actor; UNIQUE(organization_id,actor_account_id,command,key); INDEX(actor_account_id); input_hash SHA-256; immutable"
     },
     {
       "model": "TenantOutbox",
       "owner": "tenancy",
       "table": "vs_tenancy_tenant_outbox",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; type varchar(100); schema_version int; payload jsonb; occurred_at timestamptz(3); state varchar(20) PENDING/PROCESSING/DELIVERED/FAILED; attempts int default 0; available_at timestamptz(3)",
-      "responsibility": "Module contract, activation or configuration evidence.",
+      "responsibility": "Institution-scoped integration events with immutable payload and mutable delivery state.",
       "constraints": "FK organization; index(organization_id,state,available_at,id); attempts>=0; schema_version>0; immutable envelope except delivery state"
     },
     {

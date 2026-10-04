@@ -4,7 +4,7 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| TEN-01 | BLOCKED | NOT_REQUESTED | Delegated authority decision pending; inspection recorded below |
+| TEN-01 | IN_PROGRESS | NOT_REQUESTED | Owner authorized recommended policy; implementation in progress |
 | TEN-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 | TEN-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
@@ -14,7 +14,7 @@ Pure dependency/entitlement reference rules and a synthetic in-memory configurat
 
 ## Next action
 
-Resolve the TEN-01 delegated grant policy question, reconcile the Access/Tenancy design, then implement this complete slice. IAM-02 is accepted; IAM-03 is VERIFIED with review PENDING under the owner continuation policy. Do not bypass this decision by implementing dependent grant writes.
+Implement and verify TEN-01 under TEN-ADR-004. IAM-02 is accepted; IAM-03 is VERIFIED with review PENDING under the owner continuation policy. Do not bypass this decision by implementing dependent grant writes.
 
 ## Evidence and feedback
 
@@ -32,3 +32,8 @@ Blocking decision: DESIGN's Read joins and authorization says “Granting self o
 Independent preparation identifies reuse of current UserAccount/Organization/School storage and account → Organization → School guards; Access owner facade for grants/branch writes; sanitized context DTOs; shared UI; request-local candidate context reauthorized on every read/write; forward migration and PostgreSQL concurrency/isolation/rollback evidence plus Playwright desktop/mobile context clearing/denial journeys. Institution-level evidence must retain genuine institution scope rather than invent a branch. Complete the detailed write/error/evidence design after the authority decision, before migration/code.
 
 Only documentation checks apply to this inspection checkpoint; implementation functional/browser/build gates have not been executed for TEN-01 and are not claimed passed. Human review NOT_REQUESTED. IAM-03 demo remains http://127.0.0.1:3403, tested source e0f262a78d7e020919cd36be80d508c9032d1e07, review PENDING. Next action: resolve the pending authority decision and resume TEN-01; no deployment, timer or external messaging.
+
+
+### TEN-01 resumed — 4 October 2026
+
+Owner: “Please go-ahead and implement the next task”. Proceed with the presented recommended operator-only authority policy; IAM-03 human review remains PENDING, not inferred PASSED. Clean main at cac1625. TEN-ADR-004 resolves command boundaries, evidence-table installation timing, error/replay policy and request-local context before coding. Demo outcome remains two institutions/multiple branches, explicit current authorized switching, persisted branch creation and ungranted-branch denial. Required checks are pending.

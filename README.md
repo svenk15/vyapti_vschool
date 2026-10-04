@@ -51,3 +51,16 @@ this starts a localhost server and performs no deployment. To restart an older s
 `VSCHOOL_DEMO_URL` for operator instructions when reviewing on another port.
 Functional/E2E commands accept test filenames after the command to run the
 applicable slice; the guarded dedicated test database setup remains mandatory.
+
+
+## TEN-01 institution and branch context
+
+`pnpm demo:tenancy` uses the already provisioned synthetic IAM-01 administrator, verifies local configuration, creates a second branch and a second institution, and writes only IDs and a local URL to ignored mode-0600 `artifacts/tenancy-01/private-demo.json`. It never copies the account credentials. Sign in with the existing private IAM-01 file. Institution grant/membership changes use the trusted local terminal CLI; branch administrators cannot grant operational membership or enable modules:
+
+```sh
+pnpm institution-operator create-institution --organizationId <new UUID> --accountId <existing account UUID> --name '<institution>' --key <UUID> --reason '<non-sensitive reason>'
+pnpm institution-operator set-institution-grant --organizationId <UUID> --accountId <existing account UUID> --status REVOKED --expectedVersion 1 --key <UUID> --reason '<non-sensitive reason>'
+pnpm institution-operator set-branch-membership --organizationId <UUID> --schoolId <UUID> --accountId <existing account UUID> --status ACTIVE --roles '["SCHOOL_ADMIN"]' --expectedVersion 0 --key <UUID> --reason '<non-sensitive reason>'
+```
+
+`pnpm demo:task TEN-01 3404` snapshots a committed build for review. The institution/branch selector is request-authorized on every read and write; changing context requires confirmation and reloads the page. New branch metadata grants neither staff membership nor module access. The operator is local file/terminal trust; authenticated production operator controls and database RLS remain release gates.

@@ -1,12 +1,23 @@
 import "server-only";
 import { createAccessServices } from "../../backend/composition/access";
+import { cookies } from "next/headers";
+import { AccessError } from "../../backend/modules/access/contracts";
+import type { ManagementFacade } from "../../backend/modules/access/contracts";
 import type { Identity } from "../../shared/contracts/access";
 
 export const access = createAccessServices({databaseUrl:process.env.DATABASE_URL??"",cursorSecret:process.env.NEXTAUTH_SECRET});
-// Frontend gateway: screens consume DTOs through this host seam.
+// Candidate cookies never carry permission; the portable facade reauthorizes.
+export async function selectedSchoolId(identity:Identity|null):Promise<string|undefined>{
+ const raw=(await cookies()).get('vschool-context')?.value;if(!raw)return undefined;
+ let candidate;try{candidate=JSON.parse(raw);}catch{throw new AccessError('NOT_FOUND');}
+ if(!identity||candidate.accountId!==identity.accountId)return undefined;
+ const home=await access.switchContext(identity,candidate.organizationId,candidate.schoolId);return home.scope.schoolId;
+}
+export const contextGateway={getContexts:access.getContexts,switchContext:access.switchContext,createBranch:access.createBranch};
+export const accountGateway={getHome:async(identity:Identity|null,schoolId?:string)=>access.getAccountHome(identity,schoolId??await selectedSchoolId(identity))};
 export const adminGateway = {
- getSettings:access.getSettings,
- listMembers:access.listMembers,
- command:access.command,
- getHome:(identity:Identity|null,schoolId?:string)=>access.getAdminHome(identity,schoolId),
+ getSettings:async(identity:Identity|null,schoolId?:string)=>access.getSettings(identity,schoolId??await selectedSchoolId(identity)),
+ listMembers:async(identity:Identity|null,schoolId?:string,cursor?:string)=>access.listMembers(identity,schoolId??await selectedSchoolId(identity),cursor),
+ command:async(...args:Parameters<ManagementFacade['command']>)=>{args[4]??=await selectedSchoolId(args[0]);return access.command(...args);},
+ getHome:async(identity:Identity|null,schoolId?:string)=>access.getAdminHome(identity,schoolId??await selectedSchoolId(identity)),
 };
