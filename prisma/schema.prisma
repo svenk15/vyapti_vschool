@@ -27,6 +27,8 @@ model Organization {
   configurationChanges ConfigurationChange[]
   tenantReceipts TenantCommandReceipt[]
   tenantOutbox TenantOutbox[]
+  entitlements OrganizationEntitlement[]
+  branchActivations BranchActivation[]
 
   @@map("vs_access_organization")
 }
@@ -48,6 +50,7 @@ model School {
   auditEntries         AuditEntry[]
   outboxEvents         OutboxEvent[]
   commandReceipts      CommandReceipt[]
+  moduleActivations BranchActivation[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -307,4 +310,33 @@ model TenantOutbox {
  organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_tenant_outbox_org_fkey")
  @@index([organizationId,state,availableAt,id],map:"vs_tenancy_tenant_outbox_delivery_idx")
  @@map("vs_tenancy_tenant_outbox")
+}
+model OrganizationEntitlement {
+ id String @id(map:"vs_tenancy_organization_entitlement_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ moduleId String @map("module_id") @db.VarChar(40)
+ state String @db.VarChar(20)
+ startsAt DateTime @map("starts_at") @db.Timestamptz(3)
+ endsAt DateTime? @map("ends_at") @db.Timestamptz(3)
+ limits Json @default("{}")
+ manifestVersion Int @map("manifest_version")
+ version Int
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_organization_entitlement_org_fkey")
+ @@unique([organizationId,moduleId],map:"vs_tenancy_organization_entitlement_scope_module_key")
+ @@index([organizationId,state,moduleId],map:"vs_tenancy_organization_entitlement_status_idx")
+ @@map("vs_tenancy_organization_entitlement")
+}
+model BranchActivation {
+ id String @id(map:"vs_tenancy_branch_activation_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ moduleId String @map("module_id") @db.VarChar(40)
+ state String @db.VarChar(20)
+ version Int
+ enabledAt DateTime? @map("enabled_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_branch_activation_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_branch_activation_school_fkey")
+ @@unique([organizationId,schoolId,moduleId],map:"vs_tenancy_branch_activation_scope_module_key")
+ @@index([organizationId,schoolId,state,moduleId],map:"vs_tenancy_branch_activation_status_idx")
+ @@map("vs_tenancy_branch_activation")
 }

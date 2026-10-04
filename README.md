@@ -13,7 +13,7 @@ Start with [START_HERE.md](START_HERE.md). This independent Next.js / TypeScript
 
 Preview data is synthetic. Branded `/sign-in/<slug>` screens remain non-authenticating previews; `/sign-in` provides real IAM-01 administrator authentication and `/admin` checks current school access. Module activation and other school business workflows remain planned. IAM-01 installs access bootstrap and shared evidence tables alongside SetupCheck. Reference entitlement policies do not yet provide production module enforcement. See [verification](docs/VERIFICATION.md).
 
-Database design uses VS-branded physical names with explicit Prisma mappings. [Database design](docs/DATABASE_DESIGN.md) indexes 47 table contracts and links their complete module LLDs; 10 tables are migrated for foundation and IAM-01. pnpm check includes a naming/catalog consistency gate.
+Database design uses VS-branded physical names with explicit Prisma mappings. [Database design](docs/DATABASE_DESIGN.md) indexes 48 table contracts and links their complete module LLDs; the current TEN-02 checkpoint migrates 19 tables. pnpm check includes a naming/catalog consistency gate.
 
 Portable backend lives in backend/modules and backend/composition. Next hosting adapters live in lib/server and browser-safe contracts in shared/contracts. [NestJS extraction contract](docs/BACKEND_EXTRACTION.md) explains what is reused, which adapters change and the cutover tests. pnpm check includes independent backend compilation and dependency gates.
 

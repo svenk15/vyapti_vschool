@@ -1,0 +1,138 @@
+<testsuites id="" name="" tests="54" failures="0" skipped="0" errors="0" time="274.39831">
+<testsuite name="access-activation.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="chromium" tests="2" failures="0" skipped="0" time="21.968" errors="0">
+<testcase name="one-time activation, sign-in and recovery revoke the original session and password" classname="access-activation.spec.ts" time="19.643">
+</testcase>
+<testcase name="confirmation and generic invalid token clear credentials, reject origin/body abuse, and cannot bypass host limits" classname="access-activation.spec.ts" time="2.325">
+</testcase>
+</testsuite>
+<testsuite name="access-management.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="chromium" tests="2" failures="0" skipped="0" time="26.651" errors="0">
+<testcase name="settings persist, invalid timezone fails, campuses conflict and uncertain saves replay safely" classname="access-management.spec.ts" time="12.647">
+</testcase>
+<testcase name="pending staff persists, last admin is protected, active teacher suspension is immediate and reinstatement restores access" classname="access-management.spec.ts" time="14.004">
+</testcase>
+</testsuite>
+<testsuite name="access.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="chromium" tests="6" failures="0" skipped="0" time="22.521" errors="0">
+<testcase name="logged-out home and setup redirect; API returns private 401" classname="access.spec.ts" time="3.565">
+</testcase>
+<testcase name="administrator signs in, sees current scope and setup, rejects foreign school, signs out" classname="access.spec.ts" time="4.278">
+</testcase>
+<testcase name="wrong, unknown, locked and disabled credentials share feedback and clear password" classname="access.spec.ts" time="7.631">
+</testcase>
+<testcase name="same-origin and provider CSRF checks reject forged auth posts" classname="access.spec.ts" time="0.222">
+</testcase>
+<testcase name="existing session loses access immediately after tokenVersion revocation" classname="access.spec.ts" time="3.699">
+</testcase>
+<testcase name="current membership suspension rejects an existing session without exposing school data" classname="access.spec.ts" time="3.126">
+</testcase>
+</testsuite>
+<testsuite name="branding.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="chromium" tests="4" failures="0" skipped="0" time="14.41" errors="0">
+<testcase name="all three brand previews resolve exact institution, branch, palette and help identity" classname="branding.spec.ts" time="6.963">
+</testcase>
+<testcase name="preview blocks invalid samples then clears both fields, hides password and focuses feedback without sending or storing them" classname="branding.spec.ts" time="1.842">
+</testcase>
+<testcase name="branded sign-in controls fit 360px and remain keyboard operable with reduced motion" classname="branding.spec.ts" time="3.357">
+</testcase>
+<testcase name="long public labels reflow without clipping at 360px and simulated 200 percent layout zoom" classname="branding.spec.ts" time="2.248">
+</testcase>
+</testsuite>
+<testsuite name="design-system.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="chromium" tests="4" failures="0" skipped="0" time="7.994" errors="0">
+<testcase name="file selection rejects unsupported and oversized files and recovers without uploading" classname="design-system.spec.ts" time="2.362">
+</testcase>
+<testcase name="modal and drawer contain keyboard focus and return it to the trigger" classname="design-system.spec.ts" time="1.275">
+</testcase>
+<testcase name="gallery supports all palettes and negative states at 360px" classname="design-system.spec.ts" time="1.635">
+</testcase>
+<testcase name="form examples and disclosure respond to keyboard without losing entered text" classname="design-system.spec.ts" time="2.722">
+</testcase>
+</testsuite>
+<testsuite name="starter.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="chromium" tests="6" failures="0" skipped="0" time="13.325" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="2.659">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.026">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="3.484">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="1.688">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="1.973">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="3.495">
+</testcase>
+</testsuite>
+<testsuite name="tenancy.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="chromium" tests="3" failures="0" skipped="0" time="30.883" errors="0">
+<testcase name="context lists grants, switches with a reload, clears selected identity scope, and rejects foreign/ungranted branches" classname="tenancy.spec.ts" time="8.794">
+</testcase>
+<testcase name="institution administrator creates branch metadata without granting membership" classname="tenancy.spec.ts" time="10.348">
+</testcase>
+<testcase name="module configuration keeps purchased unreleased products disabled and explains failed confirmation" classname="tenancy.spec.ts" time="11.741">
+</testcase>
+</testsuite>
+<testsuite name="access-activation.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="mobile" tests="2" failures="0" skipped="0" time="16.929" errors="0">
+<testcase name="one-time activation, sign-in and recovery revoke the original session and password" classname="access-activation.spec.ts" time="14.207">
+</testcase>
+<testcase name="confirmation and generic invalid token clear credentials, reject origin/body abuse, and cannot bypass host limits" classname="access-activation.spec.ts" time="2.722">
+</testcase>
+</testsuite>
+<testsuite name="access-management.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="mobile" tests="2" failures="0" skipped="0" time="19.72" errors="0">
+<testcase name="settings persist, invalid timezone fails, campuses conflict and uncertain saves replay safely" classname="access-management.spec.ts" time="8.373">
+</testcase>
+<testcase name="pending staff persists, last admin is protected, active teacher suspension is immediate and reinstatement restores access" classname="access-management.spec.ts" time="11.347">
+</testcase>
+</testsuite>
+<testsuite name="access.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="mobile" tests="6" failures="0" skipped="0" time="19.719" errors="0">
+<testcase name="logged-out home and setup redirect; API returns private 401" classname="access.spec.ts" time="2.976">
+</testcase>
+<testcase name="administrator signs in, sees current scope and setup, rejects foreign school, signs out" classname="access.spec.ts" time="3.181">
+</testcase>
+<testcase name="wrong, unknown, locked and disabled credentials share feedback and clear password" classname="access.spec.ts" time="7.211">
+</testcase>
+<testcase name="same-origin and provider CSRF checks reject forged auth posts" classname="access.spec.ts" time="0.097">
+</testcase>
+<testcase name="existing session loses access immediately after tokenVersion revocation" classname="access.spec.ts" time="3.252">
+</testcase>
+<testcase name="current membership suspension rejects an existing session without exposing school data" classname="access.spec.ts" time="3.002">
+</testcase>
+</testsuite>
+<testsuite name="branding.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="mobile" tests="4" failures="0" skipped="0" time="13.135" errors="0">
+<testcase name="all three brand previews resolve exact institution, branch, palette and help identity" classname="branding.spec.ts" time="6.215">
+</testcase>
+<testcase name="preview blocks invalid samples then clears both fields, hides password and focuses feedback without sending or storing them" classname="branding.spec.ts" time="1.463">
+</testcase>
+<testcase name="branded sign-in controls fit 360px and remain keyboard operable with reduced motion" classname="branding.spec.ts" time="3.235">
+</testcase>
+<testcase name="long public labels reflow without clipping at 360px and simulated 200 percent layout zoom" classname="branding.spec.ts" time="2.222">
+</testcase>
+</testsuite>
+<testsuite name="design-system.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="mobile" tests="4" failures="0" skipped="0" time="7.509" errors="0">
+<testcase name="file selection rejects unsupported and oversized files and recovers without uploading" classname="design-system.spec.ts" time="2.079">
+</testcase>
+<testcase name="modal and drawer contain keyboard focus and return it to the trigger" classname="design-system.spec.ts" time="1.36">
+</testcase>
+<testcase name="gallery supports all palettes and negative states at 360px" classname="design-system.spec.ts" time="1.606">
+</testcase>
+<testcase name="form examples and disclosure respond to keyboard without losing entered text" classname="design-system.spec.ts" time="2.464">
+</testcase>
+</testsuite>
+<testsuite name="starter.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="mobile" tests="6" failures="0" skipped="0" time="14.978" errors="0">
+<testcase name="landing shows real readiness and honest preview scope" classname="starter.spec.ts" time="2.474">
+</testcase>
+<testcase name="health responses reveal no connection credentials" classname="starter.spec.ts" time="0.019">
+</testcase>
+<testcase name="school sign-in branding is scoped and preview never authenticates" classname="starter.spec.ts" time="3.437">
+</testcase>
+<testcase name="configuration keeps branch selections separate and supports fees-only" classname="starter.spec.ts" time="3.405">
+</testcase>
+<testcase name="table searches sorts and paginates accessible sample records" classname="starter.spec.ts" time="1.731">
+</testcase>
+<testcase name="dialog tabs notifications and palettes support keyboard interaction" classname="starter.spec.ts" time="3.912">
+</testcase>
+</testsuite>
+<testsuite name="tenancy.spec.ts" timestamp="2026-10-04T05:23:48.772Z" hostname="mobile" tests="3" failures="0" skipped="0" time="23.741" errors="0">
+<testcase name="context lists grants, switches with a reload, clears selected identity scope, and rejects foreign/ungranted branches" classname="tenancy.spec.ts" time="9.144">
+</testcase>
+<testcase name="institution administrator creates branch metadata without granting membership" classname="tenancy.spec.ts" time="7.543">
+</testcase>
+<testcase name="module configuration keeps purchased unreleased products disabled and explains failed confirmation" classname="tenancy.spec.ts" time="7.054">
+</testcase>
+</testsuite>
+</testsuites>

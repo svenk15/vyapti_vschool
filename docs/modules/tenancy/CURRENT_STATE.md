@@ -5,16 +5,16 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | TEN-01 | VERIFIED | PENDING | Source `c09519ca10bddd6286aba242d21aa9a5000ff0ae`; production build `fGxMmBd-8b7ScLU7mVhug`; local verification report and JUnit evidence below |
-| TEN-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| TEN-02 | VERIFIED | PENDING | Source/build/test evidence: `docs/evidence/tenancy-02-local/`; owner review remains pending |
 | TEN-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Implemented now
 
-TEN-01 delivers persisted institution/branch setup, operator-issued institution and membership grants, institution-admin metadata-only branch creation, bounded authorized context listing and switching, protected request reauthorization, context-change cache/draft clearing, and immutable transactional receipts/audit/outbox evidence. Entitlement and activation persistence are still TEN-02.
+TEN-01 delivers persisted institution/branch setup, operator-issued institution and membership grants, institution-admin metadata-only branch creation, bounded authorized context listing and switching, protected request reauthorization, context-change cache/draft clearing, and immutable transactional receipts/audit/outbox evidence. TEN-02 adds organization entitlements, branch activations, transactional configuration and evidence, current permission and release gates, module configuration API/screen, and local operator tooling. There are no released product modules in this checkout, so runtime activation correctly fails closed.
 
 ## Next action
 
-Implement TEN-02 under its documented contract. TEN-01 human review remains PENDING until explicit owner feedback. IAM-03 review also remains PENDING; the owner's continuation policy permits this dependency because implementation is VERIFIED. TEN-03 remains dependent on TEN-02 and ATT-04.
+Continue with the next task selected by `pnpm next-task`; TEN-01, IAM-03, and TEN-02 human reviews remain PENDING. TEN-03 remains gated on ATT-04 acceptance as recorded in the execution index.
 
 ## Evidence and feedback
 
@@ -51,3 +51,19 @@ Limitations: Tenancy does not yet persist or enforce module entitlement/branch a
 Manual review steps: sign in at http://127.0.0.1:3404/admin using the existing local IAM-01 synthetic demo account; switch to the second pre-attached branch and confirm the warning before discarding a protected draft; check another open tab reloads into the new scope; create a unique branch under the institution administration surface and confirm the success message says it grants no staff membership or module access; then use `/api/v1/context` to inspect its `selectable:false` entry and request `/api/v1/school?schoolId=<new-branch-id>` to confirm 404. A foreign/ungranted branch switch should also return 404. Credentials and private demo identifiers remain in ignored local artifacts.
 
 Next action: continue to TEN-02 as authorized by the owner continuation policy; keep TEN-01 owner review PENDING and address any reported defect before work that depends on it.
+
+### TEN-02 selected and design reconciled — 4 October 2026
+
+`pnpm next-task` selected TEN-02 after TEN-01 was recorded VERIFIED/PENDING; TEN-01 acceptance remains pending. Before coding, the tenancy LLD/task and Bible changelog were reconciled: evidence tables were already installed by TEN-01, and no product module is released in this checkout. TEN-02 will add only OrganizationEntitlement and BranchActivation; production activation of Attendance/Fees must fail closed. Controlled test manifests prove positive configuration matrices without exposing a runtime override. Current release evidence is not yet complete.
+
+### TEN-02 implemented and verified — 4 October 2026
+
+Implemented with `vs_organization_entitlement` and `vs_branch_activation`, scoped API/application use cases, transactional concurrency/idempotency/evidence writes, branch and entitlement checks, a token-authenticated module configuration screen, and a local operator CLI. Design, task acceptance, Bible changelog, table registry and database contract were reconciled before implementation. There is no Attendance, Fees, Student, Academic or Staff business workflow released in this checkout. The production release manifest therefore has every module disabled. The live demo shows the Attendance contract and Fees dependencies, preview blockers, and rejects confirmation without activating the branch. Test-only immutable manifests exercise positive combinations.
+
+Implementation is VERIFIED; human review is PENDING. Source implementation commit is recorded in `docs/evidence/tenancy-02-local/verification.json`. Production build ID is `RcBxf_F69gbU4tNYEfu5dd`; frozen demo URL is http://127.0.0.1:3405. The forward migration `20261004000500_module_entitlements` is applied to `vyapti_vschool` and `vyapti_vschool_test` (nine migrations each); migration diff from the development database to `prisma/schema.prisma` is empty. The existing synthetic demo entitlement was recorded at organization revision 6. No branch activation was written. No reset/reseed occurred and no dependency was added.
+
+Checks: `pnpm check` passed (lint, typecheck, docs, database design, boundaries, standalone backend compile and 55 unit tests); `pnpm test:functional` passed (42 PostgreSQL tests across 7 files, including migration rehearsal and tenancy isolation, concurrency and rollback cases); `pnpm test:e2e` passed (54 desktop/mobile Playwright journeys); `pnpm build` passed; `pnpm prisma validate` passed; `pnpm prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --script` returned `-- This is an empty migration.`; `git diff --check` passed. JUnit XML reports are committed alongside the verification record.
+
+Manual review: sign in at http://127.0.0.1:3405/admin using the existing local IAM-01 synthetic demo account. Open Module access. Confirm Attendance is marked unavailable in the current release and the branch is disabled. Select Attendance and preview; expect `RELEASE_UNAVAILABLE` with the prerequisite modules shown. Confirm with a reason of at least five characters; expect an unavailable response and a message that activation was not applied. Reopen the screen and confirm the branch remains disabled. Select Fees and preview; expect its release/dependency blockers. Do not expect Attendance or Fees business screens in this checkout.
+
+Limitations: no product module is released, production activation remains denied, resource-specific permissions fail closed until consumer-module owner ports exist, and no production RLS/deployment claim is made. These are design-aligned boundaries, not passing production entitlements. The private demo identifiers, command idempotency key and credentials remain in ignored local artifacts. The `.puku-cli/` untracked directory is unrelated and excluded from this task commit.

@@ -26,7 +26,7 @@ Depends on: TEN-01
 
 ### Implementation instructions
 
-Implement OrganizationEntitlement, BranchActivation, TenantCommandReceipt, TenantOutbox and ConfigurationChange as designed. Operator grants contract; authorized institution admin previews/confirms activation. Require release availability and dependency closure; apply guards at business use-case commit and job boundaries, not only navigation. Reference policy in starter is a starting point, not completed enforcement. Add duplicate/stale/unlicensed/dependency-disabled tests and Attendance-only/Fees-only/combined policy matrix. Fees release remains unavailable until implemented; use synthetic policy tests for its independence.
+Implement OrganizationEntitlement and BranchActivation only; TEN-01 already installed TenantCommandReceipt, TenantOutbox and ConfigurationChange. A verified platform operator records institution entitlements. An active institution admin with `module.configure` previews/confirms branch activation only inside an explicitly operationally granted branch. Resolve release availability and dependency closure from a server-owned immutable manifest; reject client-supplied release flags. No product module release is available in this checkout because Attendance and its Student/Academic/Staff dependencies are not implemented. The real demo must show a persisted Attendance contract, release blocker and denied confirmation/authorization. Use a controlled immutable test manifest in PostgreSQL/unit tests for positive Attendance-only, Fees-only and combined policy, branch isolation, disabled guard, concurrent-disable serialization, idempotent replay and evidence rollback. Reuse TEN-01 receipt/audit/outbox. No Attendance business command exists to integrate; its later owning task must call the Tenancy authorization facade at commit/job boundaries.
 
 ### Acceptance and test strategy
 
@@ -34,7 +34,7 @@ Run pnpm check, applicable PostgreSQL functional and Playwright suites, and prod
 
 ### Demo and checkpoint
 
-Show contracted Attendance, enable in one branch, verify another remains disabled; direct protected command fails when disabled. Show Fees dependency preview without pretending Finance is implemented.
+Record an Attendance contract with the verified local operator CLI, inspect current branches and see the `RELEASE_UNAVAILABLE` blocker; attempt confirmation and a protected module authorization and verify they fail without partial evidence. Preview Fees and inspect its dependency/release blockers. Do not claim an Attendance workflow or Finance feature is released.
 
 Start/check the server, give URL and steps, request user review, and mark review PENDING. Do not mark human acceptance until actual feedback.
 

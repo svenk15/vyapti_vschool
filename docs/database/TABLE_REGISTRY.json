@@ -426,11 +426,11 @@
       "model": "BranchActivation",
       "owner": "tenancy",
       "table": "vs_tenancy_branch_activation",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; module_id varchar(40); state varchar(20) DISABLED/PROVISIONING/ACTIVE/READ_ONLY/SUSPENDED/RETIRED; version int; enabled_at timestamptz(3) nullable",
       "responsibility": "Module contract, activation or configuration evidence.",
-      "constraints": "UNIQUE(scope,module_id); scoped School FK; index(scope,state,module_id); active requires entitlement via locked transaction"
+      "constraints": "UNIQUE(organization_id,school_id,module_id); composite scoped School FK plus Organization FK; index(scope,state,module_id); state/version/enabled_at consistency; active requires entitlement via locked transaction"
     },
     {
       "model": "ConfigurationChange",
@@ -446,11 +446,11 @@
       "model": "OrganizationEntitlement",
       "owner": "tenancy",
       "table": "vs_tenancy_organization_entitlement",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/tenancy/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; module_id varchar(40); state varchar(20) ACTIVE/READ_ONLY/SUSPENDED/RETIRED; starts_at timestamptz(3); ends_at timestamptz(3) nullable; limits jsonb; manifest_version int; version int",
+      "fields": "id uuid PK; organization_id uuid; module_id varchar(40); state varchar(20) ACTIVE/READ_ONLY/SUSPENDED/RETIRED; starts_at timestamptz(3); ends_at timestamptz(3) nullable; limits jsonb empty object; manifest_version int; version int",
       "responsibility": "Module contract, activation or configuration evidence.",
-      "constraints": "UNIQUE(organization_id,module_id); module_id in deployed catalog; dates valid; contracted operator write only"
+      "constraints": "UNIQUE(organization_id,module_id); FK organization; module_id in static catalog; state/date/version checks; limits restricted to empty object until typed quotas ship; contracted operator write only"
     },
     {
       "model": "TenantCommandReceipt",
