@@ -1,7 +1,7 @@
 import { createHash,createHmac,randomUUID,timingSafeEqual } from "node:crypto";
 import type { Prisma,PrismaClient } from "../../../../generated/prisma/client";
 import type { Identity } from "../../../../shared/contracts/access";
-import type { ManagementCommand,ManagementResult,MemberStatus,StaffMember } from "../../../../shared/contracts/access-management";
+import type { ManagementCommand,ManagementResult,MemberStatus,StaffMember,FailedStaffInvite } from "../../../../shared/contracts/access-management";
 import type { ManagementRepository } from "../application/management";
 import { AccessError,uuidPattern } from "../domain/policy";
 import { guardLastAdmin,nextMembershipStatus } from "../domain/management";
@@ -22,11 +22,13 @@ export class PrismaManagementRepository implements ManagementRepository {
  async settings(identity:Identity,schoolId?:string){try{return await this.db.$transaction(async tx=>{const scope=await this.scope(tx,identity,schoolId),school=await tx.school.findUniqueOrThrow({where:{id:scope.schoolId}}),campuses=await tx.campus.findMany({where:scope,orderBy:{code:"asc"},take:100});return {resourceId:school.id,organizationId:school.organizationId,schoolCode:school.code,name:school.name,timezone:school.timezone,status:school.status,version:school.version,campuses:campuses.map(c=>({resourceId:c.id,code:c.code,name:c.name,status:c.status,version:c.version}))};},{isolationLevel:"RepeatableRead"});}catch(error){return this.fail(error);}}
  private sign(value:string){return createHmac("sha256",this.cursorSecret).update(value).digest("base64url");}
  async members(identity:Identity,schoolId?:string,cursor?:string){try{return await this.db.$transaction(async tx=>{
-  const scope=await this.scope(tx,identity,schoolId),binding=canonical({actor:identity.accountId,...scope,filter:"all",schemaVersion:1});let after:string|undefined;
+  const scope=await this.scope(tx,identity,schoolId),organization=await tx.organization.findUnique({where:{id:scope.organizationId},select:{trustMode:true}});if(!organization)throw new AccessError("NOT_FOUND");const binding=canonical({actor:identity.accountId,...scope,filter:"all",schemaVersion:1});let after:string|undefined;
   if(cursor){try{const [payload,signature,...extra]=cursor.split(".");const expected=this.sign(payload);if(extra.length||!signature||signature.length!==expected.length||!timingSafeEqual(Buffer.from(signature),Buffer.from(expected)))throw new Error();const decoded=JSON.parse(Buffer.from(payload,"base64url").toString());if(decoded.binding!==binding||typeof decoded.after!=="string"||!uuidPattern.test(decoded.after))throw new Error();after=decoded.after;}catch{throw new AccessError("INVALID_CURSOR");}}
   const rows=await tx.schoolMembership.findMany({where:{...scope,...(after?{accountId:{gt:after}}:{})},orderBy:{accountId:"asc"},take:51,include:{account:{select:{id:true,normalizedEmail:true,status:true}},grants:{select:{code:true}}}});
   const items:StaffMember[]=rows.slice(0,50).map(m=>({resourceId:m.id,accountId:m.accountId,email:m.account.normalizedEmail,accountStatus:m.account.status,status:m.status as MemberStatus,version:m.version,roles:m.grants.map(g=>g.code as "SCHOOL_ADMIN"|"TEACHER")}));
-  const payload=Buffer.from(JSON.stringify({binding,after:items.at(-1)?.accountId})).toString("base64url");return {items,nextCursor:rows.length>50?payload+"."+this.sign(payload):null};
+  const failures=await tx.accessInvite.findMany({where:{...scope,deliveryStatus:"FAILED",acceptedAt:null,revokedAt:null},orderBy:{deliveryFailedAt:"desc"},take:100,include:{account:{select:{id:true,normalizedEmail:true}}}});
+  const failedInvitations:FailedStaffInvite[]=failures.flatMap(invite=>invite.deliveryFailedAt&&invite.deliveryFailureReason?[{invitationId:invite.id,accountId:invite.accountId,email:invite.account.normalizedEmail,roles:invite.proposedRoles as ("SCHOOL_ADMIN"|"TEACHER")[],deliveryFailedAt:invite.deliveryFailedAt.toISOString(),deliveryFailureReason:invite.deliveryFailureReason}]:[]);
+  const payload=Buffer.from(JSON.stringify({binding,after:items.at(-1)?.accountId})).toString("base64url");return {trustMode:organization.trustMode as "OPERATOR_CLI"|"HYBRID"|"EMAIL",items,failedInvitations,nextCursor:rows.length>50?payload+"."+this.sign(payload):null};
  },{isolationLevel:"RepeatableRead"});}catch(error){return this.fail(error);}}
  async execute(identity:Identity,command:ManagementCommand,key:string,schoolId?:string):Promise<ManagementResult>{
   for(let attempt=0;attempt<3;attempt++)try{
@@ -36,6 +38,7 @@ export class PrismaManagementRepository implements ManagementRepository {
    const targetAccountId=candidate?.accountId??(command.kind==="CreateMembership"?command.payload.targetAccountId:undefined);
    const ids=[...new Set([identity.accountId,...(targetAccountId?[targetAccountId]:[])])].sort();
    return await this.db.$transaction(async tx=>{
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(1448302674,1)`;
     for(const id of ids)await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${id}::uuid FOR UPDATE`;
     await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${scope.organizationId}::uuid FOR SHARE`;
     await tx.$queryRaw`SELECT id FROM vs_access_school WHERE organization_id=${scope.organizationId}::uuid AND id=${scope.schoolId}::uuid FOR UPDATE`;

@@ -9,7 +9,7 @@ import { liveActivation } from "../domain/activation";
 export class PrismaActivationRepository implements ActivationRepository {
  constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>AccessSecurityEvidenceWriter,private readonly now:()=>Date){}
  private async transaction<T>(work:(tx:Prisma.TransactionClient)=>Promise<T>):Promise<T>{
-  for(let attempt=0;attempt<3;attempt++)try{return await this.db.$transaction(work,{timeout:10000,maxWait:10000});}catch(error){
+  for(let attempt=0;attempt<3;attempt++)try{return await this.db.$transaction(async tx=>{await tx.$executeRaw`SELECT pg_advisory_xact_lock(1448302674,1)`;return work(tx);},{timeout:10000,maxWait:10000});}catch(error){
    const record=error&&typeof error==="object"?error as {code?:string;meta?:{code?:string;driverAdapterError?:{cause?:{originalCode?:string}}}}:{};
    const retryable=[record.code,record.meta?.code,record.meta?.driverAdapterError?.cause?.originalCode].some(code=>["P2034","40001","40P01"].includes(code??""));
    if(!retryable||attempt===2)throw error;

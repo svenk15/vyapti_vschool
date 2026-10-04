@@ -237,8 +237,8 @@ model AccessInvite {
  organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_invite_organization_fkey")
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_invite_school_fkey")
  inviter UserAccount @relation("InviteIssuer",fields:[inviterAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_invite_inviter_fkey")
- @@index([organizationId,schoolId,deliveryStatus,createdAt])
- @@index([accountId,expiresAt])
+ @@index([organizationId,schoolId,deliveryStatus,createdAt],map:"vs_access_invite_scope_delivery_idx")
+ @@index([accountId,expiresAt],map:"vs_access_invite_account_expiry_idx")
  @@map("vs_access_invite")
 }
 
@@ -258,8 +258,8 @@ model PasswordResetToken {
  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
  account UserAccount @relation("ResetAccount",fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_password_reset_token_account_fkey")
  organization Organization? @relation(fields:[issuingOrganizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_password_reset_token_organization_fkey")
- @@index([accountId,createdAt])
- @@index([issuingOrganizationId,createdAt])
+ @@index([accountId,createdAt],map:"vs_access_password_reset_token_account_created_idx")
+ @@index([issuingOrganizationId,createdAt],map:"vs_access_password_reset_token_issuer_created_idx")
  @@map("vs_access_password_reset_token")
 }
 

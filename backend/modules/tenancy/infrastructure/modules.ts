@@ -4,6 +4,8 @@ import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/acce
 import type {BranchModuleConfiguration,BranchModulePreview,ConfirmBranchModules,SetOrganizationEntitlement,ModuleId,TenantModulePermission} from '../../../../shared/contracts/tenancy-modules';
 import type {InstitutionEvidenceWriter} from '../contracts/evidence';
 import type {CurrentModulePermission,TenancyModuleRepository} from '../application/modules';
+import type {SetOrganizationTrustMode} from '../../../../shared/contracts/tenancy-modules';
+import type {AccessTrustModeInvalidator} from '../../access/contracts/trust-mode-invalidation';
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import {dependencyClosure,moduleCatalog,type EntitlementRecord,type ActivationRecord,type ReleaseManifest,configurationItems} from '../domain/entitlements';
 
@@ -24,7 +26,7 @@ export class PrismaCurrentModulePermission implements CurrentModulePermission{
 }
 
 export class PrismaTenancyModuleRepository implements TenancyModuleRepository{
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date()){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly trustInvalidator?:AccessTrustModeInvalidator<Prisma.TransactionClient>){}
  private async identity(tx:Prisma.TransactionClient,actor:Identity){const a=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!a||a.status!=='ACTIVE'||a.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');}
  private async branch(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string){
   await this.identity(tx,actor);const school=await tx.school.findFirst({where:{id:schoolId,organizationId,status:'ACTIVE',organization:{status:'ACTIVE',institutionGrants:{some:{accountId:actor.accountId,status:'ACTIVE',role:'INSTITUTION_ADMIN'}}},memberships:{some:{accountId:actor.accountId,status:'ACTIVE',grants:{some:{code:'SCHOOL_ADMIN'}}}}},select:{configurationVersion:true,organization:{select:{configurationVersion:true}}}});
@@ -59,5 +61,26 @@ export class PrismaTenancyModuleRepository implements TenancyModuleRepository{
   const row=old?await tx.organizationEntitlement.update({where:{id:old.id},data:{state:input.state,startsAt,endsAt,limits:{},manifestVersion:input.manifestVersion,version}}):await tx.organizationEntitlement.create({data:{id:randomUUID(),organizationId,moduleId,state:input.state,startsAt,endsAt,limits:{},manifestVersion:input.manifestVersion,version}});
   await tx.organization.update({where:{id:organizationId},data:{configurationVersion:revision,version:{increment:1}}});const result={organizationId,moduleId,version:row.version,revision,replayed:false};await this.evidence(tx).append({organizationId,actorAccountId,command,key:input.key,inputHash,response:result,expectedRevision:org.configurationVersion,newRevision:revision,reason:input.reason,requestId:randomUUID(),occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'OPERATOR',operatorId:operator.operatorId,resourceId:row.id,version:row.version,status:input.state,moduleId,limits:{}}});return result;
  },{timeout:10000,maxWait:10000});}catch(e){fail(e);}}
+ async setTrustMode(operator:OperatorPrincipal,input:SetOrganizationTrustMode){try{return await this.db.$transaction(async tx=>{
+  await tx.$executeRaw`SELECT pg_advisory_xact_lock(1448302674,1)`;
+  await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${operator.operatorId}::uuid FOR UPDATE`;
+  await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${input.organizationId}::uuid FOR UPDATE`;
+  const actor=await tx.userAccount.findFirst({where:{id:input.actorAccountId,status:'ACTIVE'}}),org=await tx.organization.findFirst({where:{id:input.organizationId,status:'ACTIVE'}});
+  if(!actor||actor.id!==operator.operatorId||!org)throw new AccessError('NOT_FOUND');
+  const command='SetOrganizationTrustMode',inputHash=digest({schemaVersion:1,operatorId:operator.operatorId,...input}),prior=await tx.tenantCommandReceipt.findUnique({where:{organizationId_actorAccountId_command_key:{organizationId:input.organizationId,actorAccountId:actor.id,command,key:input.key}}});
+  if(prior){if(prior.inputHash!==inputHash)throw new AccessError('IDEMPOTENCY_CONFLICT');return {...prior.response as {organizationId:string;trustMode:SetOrganizationTrustMode['trustMode'];revision:number;revokedInvites:number;revokedResetTokens:number;replayed:boolean},replayed:true};}
+  if(org.configurationVersion!==input.expectedRevision)throw new AccessError('STALE_VERSION');
+  const now=this.now(),requestId=randomUUID();
+  if(org.trustMode===input.trustMode){const result={organizationId:org.id,trustMode:input.trustMode,revision:org.configurationVersion,revokedInvites:0,revokedResetTokens:0,replayed:false};await tx.tenantCommandReceipt.create({data:{id:randomUUID(),organizationId:org.id,actorAccountId:actor.id,command,key:input.key,inputHash,response:result,createdAt:now}});return result;}
+  const revision=org.configurationVersion+1;await tx.organization.update({where:{id:org.id},data:{trustMode:input.trustMode,configurationVersion:revision,version:{increment:1}}});
+  let invalidated={revokedInvites:0,revokedResetTokens:0,affectedAccounts:0};
+  if(input.trustMode==='OPERATOR_CLI'){
+   if(!this.trustInvalidator)throw new AccessError('UNAVAILABLE');
+   invalidated=await this.trustInvalidator.invalidateForOperatorOnly({transaction:tx,organizationId:org.id,configurationVersion:revision,requestId,occurredAt:now});
+  }
+  const result={organizationId:org.id,trustMode:input.trustMode,revision,revokedInvites:invalidated.revokedInvites,revokedResetTokens:invalidated.revokedResetTokens,replayed:false};
+  await this.evidence(tx).append({organizationId:org.id,actorAccountId:actor.id,command,key:input.key,inputHash,response:result,expectedRevision:org.configurationVersion,newRevision:revision,reason:input.reason,requestId,occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'OPERATOR',operatorId:operator.operatorId,resourceId:org.id,version:revision,trustMode:input.trustMode}});
+  return result;
+ },{timeout:15000,maxWait:10000});}catch(e){fail(e);}}
  async moduleState(organizationId:string,schoolId:string,moduleId:ModuleId){try{const now=this.now(),[e,a]=await Promise.all([this.db.organizationEntitlement.findUnique({where:{organizationId_moduleId:{organizationId,moduleId}}}),this.db.branchActivation.findUnique({where:{organizationId_schoolId_moduleId:{organizationId,schoolId,moduleId}}})]);return {releaseAvailable:this.manifest[moduleId],enabled:!!e&&e.state==='ACTIVE'&&e.startsAt<=now&&(!e.endsAt||e.endsAt>now)&&a?.state==='ACTIVE'};}catch(e){fail(e);}}
 }

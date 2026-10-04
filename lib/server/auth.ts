@@ -17,7 +17,11 @@ export const authOptions:NextAuthOptions = {
  }})],
  callbacks:{
   async jwt({token,user}){
-   if(user){token.accountId=user.accountId;token.tokenVersion=user.tokenVersion;}
+   if(user){token.accountId=user.accountId;token.tokenVersion=user.tokenVersion;return token;}
+   if(typeof token.accountId==="string"&&typeof token.tokenVersion==="number"){
+    try{if(!await access.isCurrentIdentity({accountId:token.accountId,tokenVersion:token.tokenVersion}))throw new Error("STALE_IDENTITY");}
+    catch{throw new Error("STALE_IDENTITY");}
+   }
    return token;
   },
   async session({session,token}){

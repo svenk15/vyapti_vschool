@@ -1,0 +1,26 @@
+<testsuites id="" name="" tests="8" failures="0" skipped="0" errors="0" time="90.43533599999999">
+<testsuite name="access-management.spec.ts" timestamp="2026-10-04T12:05:41.244Z" hostname="chromium" tests="2" failures="0" skipped="0" time="29.707" errors="0">
+<testcase name="settings persist, invalid timezone fails, campuses conflict and uncertain saves replay safely" classname="access-management.spec.ts" time="16.769">
+</testcase>
+<testcase name="pending staff persists, last admin is protected, active teacher suspension is immediate and reinstatement restores access" classname="access-management.spec.ts" time="12.938">
+</testcase>
+</testsuite>
+<testsuite name="iam04.spec.ts" timestamp="2026-10-04T12:05:41.244Z" hostname="chromium" tests="2" failures="0" skipped="0" time="21.913" errors="0">
+<testcase name="public reset stays generic, uses a fragment mail link, revokes the old session and lets the user sign in again" classname="iam04.spec.ts" time="10.99">
+</testcase>
+<testcase name="school administrator invite uses the mail sink and acceptance activates only the scoped account membership" classname="iam04.spec.ts" time="10.923">
+</testcase>
+</testsuite>
+<testsuite name="access-management.spec.ts" timestamp="2026-10-04T12:05:41.244Z" hostname="mobile" tests="2" failures="0" skipped="0" time="14.747" errors="0">
+<testcase name="settings persist, invalid timezone fails, campuses conflict and uncertain saves replay safely" classname="access-management.spec.ts" time="5.87">
+</testcase>
+<testcase name="pending staff persists, last admin is protected, active teacher suspension is immediate and reinstatement restores access" classname="access-management.spec.ts" time="8.877">
+</testcase>
+</testsuite>
+<testsuite name="iam04.spec.ts" timestamp="2026-10-04T12:05:41.244Z" hostname="mobile" tests="2" failures="0" skipped="0" time="14.622" errors="0">
+<testcase name="public reset stays generic, uses a fragment mail link, revokes the old session and lets the user sign in again" classname="iam04.spec.ts" time="6.936">
+</testcase>
+<testcase name="school administrator invite uses the mail sink and acceptance activates only the scoped account membership" classname="iam04.spec.ts" time="7.686">
+</testcase>
+</testsuite>
+</testsuites>

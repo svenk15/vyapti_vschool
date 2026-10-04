@@ -4,8 +4,9 @@ import { cookies } from "next/headers";
 import { AccessError } from "../../backend/modules/access/contracts";
 import type { ManagementFacade } from "../../backend/modules/access/contracts";
 import type { Identity } from "../../shared/contracts/access";
+import {emailSender} from "./email";
 
-export const access = createAccessServices({databaseUrl:process.env.DATABASE_URL??"",cursorSecret:process.env.NEXTAUTH_SECRET});
+export const access = createAccessServices({databaseUrl:process.env.DATABASE_URL??"",cursorSecret:process.env.NEXTAUTH_SECRET,emailSender});
 // Candidate cookies never carry permission; the portable facade reauthorizes.
 export async function selectedSchoolId(identity:Identity|null):Promise<string|undefined>{
  const raw=(await cookies()).get('vschool-context')?.value;if(!raw)return undefined;

@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; ACA-02 adds two academic calendar tables and PER-01 adds three People/Access tables, bringing the local checkpoint to 34 migrated tables. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; ACA-02 adds two academic calendar tables, PER-01 adds three People/Access tables, and IAM-04 adds two Access tables, bringing the test database checkpoint to 36 migrated tables. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work. The configured development database remains unavailable and has not received IAM-04 migration.
 
 ## Naming decision — DB-ADR-001
 
@@ -52,7 +52,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | Subject | `vs_academics_subject` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Teacher | `vs_academics_teacher` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| AccessInvite | `vs_access_invite` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
+| AccessInvite | `vs_access_invite` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivationMembership | `vs_access_account_activation_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountPersonBinding | `vs_access_account_person_binding` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
@@ -60,6 +60,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | Campus | `vs_access_campus` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | InstitutionGrant | `vs_access_institution_grant` | access | MIGRATED | [access LLD](modules/tenancy/DESIGN.md) |
 | Organization | `vs_access_organization` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| PasswordResetToken | `vs_access_password_reset_token` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | RoleGrant | `vs_access_role_grant` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | School | `vs_access_school` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | SchoolMembership | `vs_access_school_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |

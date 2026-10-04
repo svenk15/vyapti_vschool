@@ -9,11 +9,12 @@ export class PrismaAccessRepository implements AccessRepository {
  constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>ProvisionEvidenceWriter,private readonly now:()=>Date=()=>new Date()) {}
  async provision(input:Omit<ProvisionInput,"password">,passwordHash:string,operator:OperatorPrincipal,requestId:string) {
   try {return await this.db.$transaction(async tx=>{
+   await tx.$executeRaw`SELECT pg_advisory_xact_lock(1448302674,1)`;
    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${"bootstrap:"+input.organizationName},0))`;
    if(await tx.organization.findFirst({where:{name:input.organizationName},select:{id:true}})||await tx.userAccount.findUnique({where:{normalizedEmail:input.adminEmail},select:{id:true}}))throw new AccessError("PROVISION_CONFLICT");
    const ids={organizationId:randomUUID(),schoolId:randomUUID(),accountId:randomUUID(),membershipId:randomUUID()},createdAt=this.now();
    await tx.userAccount.create({data:{id:ids.accountId,normalizedEmail:input.adminEmail,passwordHash,status:"ACTIVE",tokenVersion:1,failedAttempts:0,version:1,createdAt}});
-   await tx.organization.create({data:{id:ids.organizationId,name:input.organizationName,status:"ACTIVE",version:1,createdAt}});
+   await tx.organization.create({data:{id:ids.organizationId,name:input.organizationName,status:"ACTIVE",trustMode:"HYBRID",version:1,createdAt}});
    await tx.school.create({data:{id:ids.schoolId,organizationId:ids.organizationId,code:input.schoolCode,name:input.schoolName,timezone:input.timezone,status:"ACTIVE",version:1,createdAt}});
    await tx.schoolMembership.create({data:{id:ids.membershipId,organizationId:ids.organizationId,schoolId:ids.schoolId,accountId:ids.accountId,status:"ACTIVE",version:1}});
    await tx.roleGrant.create({data:{id:randomUUID(),organizationId:ids.organizationId,schoolId:ids.schoolId,membershipId:ids.membershipId,code:"SCHOOL_ADMIN"}});

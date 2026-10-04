@@ -148,9 +148,9 @@
       "table": "vs_access_auth_security_event",
       "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; account_id uuid nullable; kind varchar(40); occurred_at timestamptz(3); request_id uuid; actor_account_id uuid nullable; decision varchar(10) nullable; safe_reason varchar(80) nullable; policy_snapshot jsonb nullable",
+      "fields": "id uuid PK; account_id uuid nullable; kind varchar(40); occurred_at timestamptz(3); request_id uuid; actor_account_id uuid nullable; decision varchar(12) nullable; safe_reason varchar(80) nullable; policy_snapshot jsonb nullable",
       "responsibility": "Redacted auth/recovery evidence including internal cross-institution policy decisions. request_id is the correlation ID; no password, raw token or raw unknown identifier.",
-      "constraints": "FK accounts when present; index(account_id,occurred_at,id); constrained decision/reason; append-only; cross-institution details only via operator/security authorization"
+      "constraints": "FK accounts when present; index(account_id,occurred_at,id); immutable except one guarded NULL\u2192account_id association for an initially unknown reset attempt resolved in the same locked transaction; cross-institution details only via operator/security authorization"
     },
     {
       "model": "Campus",
@@ -176,11 +176,11 @@
       "model": "AccessInvite",
       "owner": "access",
       "table": "vs_access_invite",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; account_id uuid; recipient_email varchar(254); organization_id uuid; school_id uuid; membership_id uuid; issuer_account_id uuid; issuer_membership_id uuid; token_hash char(64); purpose STAFF_INVITATION; issuance_channel EMAIL; trust_mode_at_issue varchar(20); organization_configuration_version int; school_configuration_version int; issuer_membership_version int; account_version_at_issue int; proposed_grants jsonb; created_at/expires_at timestamptz(3); accepted_at/revoked_at/sent_at/delivery_failed_at timestamptz(3) nullable; delivery_status PENDING_DELIVERY/SENT/FAILED; delivery_failure_reason varchar(40) nullable",
-      "responsibility": "Email invitation for one pending branch membership; acceptance never creates person or teaching bindings.",
-      "constraints": "FK account/org; FK(scope,membership_id,account_id) and FK(scope,issuer_membership_id,issuer_account_id); UNIQUE(token_hash); one unaccepted/unrevoked row per membership; status/time/reason checks; indexes(account_id,expires_at), (organization_id,school_id,membership_id,created_at), (delivery_status,created_at)"
+      "fields": "id uuid PK; account_id uuid; organization_id uuid; school_id uuid; inviter_account_id uuid; token_hash char(64); proposed_roles text[]; membership_version int; organization_configuration_version int; school_configuration_version int; delivery_status varchar(24); delivery_failed_at timestamptz(3) nullable; delivery_failure_reason varchar(120) nullable; created_at/expires_at/accepted_at/revoked_at timestamptz(3)",
+      "responsibility": "Email invitation bound to the target global account and scoped pending membership; acceptance never creates Person or Employee bindings.",
+      "constraints": "FK account, organization, scoped school and inviter; UNIQUE(token_hash); CHECK delivery status, roles and expiry/failure relation; indexes(scope,delivery_status,created_at),(account_id,expires_at)"
     },
     {
       "model": "Organization",
@@ -196,11 +196,11 @@
       "model": "PasswordResetToken",
       "owner": "access",
       "table": "vs_access_password_reset_token",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; account_id uuid; issuing_organization_id uuid nullable; issued_by_account_id uuid nullable; token_hash char(64); purpose PASSWORD_RESET; issuance_channel EMAIL; policy_snapshot jsonb; created_at/expires_at timestamptz(3); consumed_at/revoked_at/sent_at/delivery_failed_at timestamptz(3) nullable; delivery_status PENDING_DELIVERY/SENT/FAILED; delivery_failure_reason varchar(40) nullable",
-      "responsibility": "Short-lived account-global recovery token; snapshot covers all active branch and institution-level access.",
-      "constraints": "FK account/issuer and optional org; UNIQUE(token_hash); one outstanding token per account; status/time/reason checks; indexes(account_id,expires_at), (issuing_organization_id,created_at), (delivery_status,created_at)"
+      "fields": "id uuid PK; account_id uuid; issuing_organization_id uuid nullable; token_hash char(64); delivery_status varchar(24); policy_snapshot jsonb; organization_configuration_versions jsonb; delivery_failed_at timestamptz(3) nullable; delivery_failure_reason varchar(120) nullable; created_at/expires_at/consumed_at/revoked_at timestamptz(3) nullable",
+      "responsibility": "Account-global password recovery token; issue and consume snapshots include every active school membership and institution grant trust mode/version.",
+      "constraints": "FK account and optional issuer; UNIQUE(token_hash); CHECK delivery status and expiry/failure relation; indexes(account_id,created_at),(issuing_organization_id,created_at)"
     },
     {
       "model": "RoleGrant",

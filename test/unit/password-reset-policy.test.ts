@@ -34,10 +34,10 @@ describe("password reset application flow",()=>{
 describe("staff invitation application flow",()=>{
  it("creates delivery evidence outside the issue transaction and returns its visible failure state",async()=>{
   const delivered:{state:string;reason?:string}[]=[];
-  const repository:StaffInviteRepository={issue:async input=>({id:"invite-1",recipient:input.email}),finishDelivery:async input=>{delivered.push({state:input.status,...(input.failureReason?{reason:input.failureReason}:{})});},accept:async()=>false};
+  const repository:StaffInviteRepository={issue:async input=>({id:"invite-1",recipient:input.email,organizationId:input.organizationId,schoolId:input.schoolId}),finishDelivery:async input=>{delivered.push({state:input.status,...(input.failureReason?{reason:input.failureReason}:{})});},accept:async()=>false};
   const sender={sendPasswordReset:async()=>({ok:true as const}),sendStaffInvite:async()=>({ok:false as const,reason:"Mailbox rejected message"})};
   const facade=createStaffInviteUseCases(repository,sender,{generate:()=>"z".repeat(48),hash:value=>`digest:${value}`},{hash:async()=>"credential-hash"},()=>new Date("2026-01-01T00:00:00Z"));
-  await expect(facade.inviteStaff({email:" Staff@Example.test ",organizationId:"org",schoolId:"school",roles:["TEACHER"],inviterAccountId:"admin",requestId:"req"})).resolves.toMatchObject({deliveryStatus:"FAILED"});
+  await expect(facade.inviteStaff({email:" Staff@Example.test ",organizationId:"org",schoolId:"school",roles:["TEACHER"],inviterAccountId:"admin",inviterTokenVersion:1,requestId:"req"})).resolves.toMatchObject({deliveryStatus:"FAILED",deliveryFailureReason:"Mail provider rejected the message"});
   expect(delivered).toEqual([{state:"FAILED",reason:"Mailbox rejected message"}]);
  });
  it("rejects missing initial-password confirmation before persistence",async()=>{

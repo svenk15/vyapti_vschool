@@ -24,4 +24,6 @@ export type SetOrganizationEntitlement = {
   state:EntitlementState; startsAt:string; endsAt:string|null; expectedVersion:number;
   manifestVersion:number; limits:Record<string,never>; key:string; reason:string;
 };
+export type OrganizationTrustMode='OPERATOR_CLI'|'HYBRID'|'EMAIL';
+export type SetOrganizationTrustMode={kind:'SetOrganizationTrustMode';organizationId:string;actorAccountId:string;trustMode:OrganizationTrustMode;expectedRevision:number;key:string;reason:string};
 export type TenantModulePermission = {accountId:string;organizationId:string;schoolId:string;moduleId:ModuleId;permission:string;resourceId?:string};

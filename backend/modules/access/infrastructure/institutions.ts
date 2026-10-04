@@ -34,7 +34,8 @@ export class PrismaInstitutionRepository implements InstitutionRepository {
   await this.writer(tx).append({organizationId,schoolId:s.id,actorAccountId:identity.accountId,command:'CreateBranch',key:input.key,inputHash:hash,response:result,expectedRevision:org.configurationVersion,newRevision:revision,reason:input.reason,requestId:randomUUID(),occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'ACCOUNT',resourceId:s.id,version:1}});return result;
  });}
  async operate(command:InstitutionCommand,operator:OperatorPrincipal){const {organizationId,accountId,key,reason}=command,hash=createHash('sha256').update(canonical({schemaVersion:1,operatorId:operator.operatorId,command})).digest('hex');return this.retry(async tx=>{
-  await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${accountId}::uuid FOR UPDATE`;
+  await tx.$executeRaw`SELECT pg_advisory_xact_lock(1448302674,1)`;
+   await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${accountId}::uuid FOR UPDATE`;
   // Explicit new institution ID gives a stable lock/replay address before the row exists.
   await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${organizationId},1))`;
   await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${organizationId}::uuid FOR UPDATE`;
@@ -44,7 +45,7 @@ export class PrismaInstitutionRepository implements InstitutionRepository {
   const replay=org?await this.receipt(tx,organizationId,accountId,command.kind,key,hash):null;if(replay)return replay;
   const now=this.now(),expectedRevision=org?.configurationVersion??0;let resourceId:string,version:number;
   if(command.kind==='CreateInstitution'){
-   if(org)throw new AccessError('CONFLICT');org=await tx.organization.create({data:{id:organizationId,name:command.name,status:'ACTIVE',version:1,createdAt:now}});
+   if(org)throw new AccessError('CONFLICT');org=await tx.organization.create({data:{id:organizationId,name:command.name,status:'ACTIVE',trustMode:'HYBRID',version:1,createdAt:now}});
    const grant=await tx.institutionGrant.create({data:{id:randomUUID(),organizationId,accountId,role:'INSTITUTION_ADMIN',status:'ACTIVE',version:1,grantedAt:now,grantedBy:operator.operatorId}});resourceId=grant.id;version=1;
   }else if(command.kind==='SetInstitutionGrant'){
    const old=await tx.institutionGrant.findUnique({where:{organizationId_accountId_role:{organizationId,accountId,role:'INSTITUTION_ADMIN'}}});if((old?.version??0)!==command.expectedVersion)throw new AccessError('STALE_VERSION');if(!old&&command.status==='REVOKED')throw new AccessError('NOT_FOUND');
