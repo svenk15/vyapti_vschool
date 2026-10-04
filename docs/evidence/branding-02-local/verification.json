@@ -2,7 +2,7 @@
   "task": "BRD-02",
   "implementation": "VERIFIED",
   "humanReview": "PENDING",
-  "testedCommit": null,
+  "testedCommit": "188ef9df74617a80f65a5ae7cd4e92c0cbe336b2",
   "buildId": "SWGrRA6qlltLdUKZFeR-q",
   "demoUrl": "http://127.0.0.1:3406/sign-in/vschool-demo-69a6f7fe",
   "databases": {
@@ -22,7 +22,8 @@
     {"command": "pnpm test:e2e", "exit": 0, "desktopAndMobileTests": 56},
     {"command": "pnpm build", "exit": 0, "buildId": "SWGrRA6qlltLdUKZFeR-q"},
     {"command": "pnpm db:setup", "exit": 0, "database": "vyapti_vschool", "operation": "forward migrations only"},
-    {"command": "pnpm demo:branding", "exit": 0, "database": "vyapti_vschool", "operation": "synthetic profile via application use cases"}
+    {"command": "pnpm demo:branding", "exit": 0, "database": "vyapti_vschool", "operation": "synthetic profile via application use cases"},
+    {"command": "production-mode local demo smoke", "exit": 0, "checks": 9, "passed": 9, "cases": ["health", "public no-store identity", "immutable PNG", "unknown slug", "wrong Host", "canonical sign-in", "unknown sign-in"]}
   ],
   "limitations": [
     "Custom-host serving remains gated on deployment TLS and trusted host forwarding.",
