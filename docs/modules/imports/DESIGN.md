@@ -104,7 +104,7 @@ sequenceDiagram
 
 **Success response contract:** Confirm `{jobId,version,state,approvedCount,skippedCount}`; process `{jobId,state,counts:{pending,succeeded,failed,skipped},hasMore}`; row success `{studentId,enrollmentId,outcome}`.
 
-**Transport:** POST /api/v1/imports/:id/confirm; POST /api/v1/imports/:id/process
+**Transport:** POST /api/v1/imports/:id/confirm; POST /api/v1/imports/:id/process; GET /api/v1/imports/:id (authorized durable status read so a page refresh can restore approved/progress counts)
 
 **Input:** Confirm expectedVersion,previewRevision,fileHash,skipInvalid boolean,key; Process command key and jobId; requests handle <=25 rows.
 
@@ -118,7 +118,13 @@ sequenceDiagram
 
 **Database writes / atomicity:** Per row: Person + Student + Enrollment + Placement + SourceStudentMap + row SUCCEEDED result + envelopes, or no business writes for NO_CHANGE. Job state transitions separately, never claim all-file rollback.
 
+**Enlisted owner boundary (IMP-02 readiness, 4 October 2026):** Imports owns ImportJob/ImportRow/SourceStudentMap and the orchestration transaction. People continues to own Person identity creation; Students owns Student, Enrollment, Placement, school configuration version and student command evidence. The composition layer supplies a narrow transaction-enlisted Students facade backed by the same PostgreSQL transaction client; Imports cannot issue Prisma writes to People or Students tables. The enlisted command repeats current actor, membership, resource permission, release, entitlement, branch activation and reference checks inside that transaction, and does not open/commit a nested transaction. People identity creation is likewise enlisted on this transaction. The row result, source map and Imports-owned evidence commit with those owner commands. A thrown conflict rolls the entire row transaction back; the caller records the FAILED row separately after reauthorization. The import actor remains the initiating actor and is reauthorized for every process request.
+
+Confirmation is an idempotent mutation keyed by actor/job/key. It locks account → Organization → School, then the job and rows in stable row-number order; requires REVIEW, expected job version, preview revision and file hash; compares the stored year/grade/section versions with current scoped records; and rejects unresolved ERROR/CONFLICT rows unless `skipInvalid` is explicitly true. It pins valid CREATE/NO_CHANGE rows as approved and marks excluded invalid rows SKIPPED, then commits job CONFIRMED, confirmation time, receipt and safe audit together. A stale value returns 409 without changing the job. Processing handles at most 25 rows, choosing the lowest approved PENDING row under the job/row locks. It rejects REVIEW jobs, commits immutable started and finished command receipts, and exact retries return the finished response/current durable progress without beginning another batch; a new key resumes remaining rows. Permanent row conflicts roll back business writes, record FAILED and safe row evidence in a separate authorized transaction, then processing advances; permission loss and transient failures leave unstarted rows PENDING. Concurrent callers serialize on the job lock. No schema change is needed for this task; `result` and existing state/reference JSON columns carry the specified receipts and pinning.
+
 **Errors and recovery:** Stale confirmation→409; changed references during process→row CONFLICT; current permission lost→403 and stop; crash leaves current row pending; exact retry returns committed result.
+
+The status read repeats current scope/permission/module checks, acquires no write lock, and derives status/counts from ImportJob/ImportRow in a consistent snapshot. The browser may remember the opaque job ID in session storage for navigation convenience only; all returned progress is fetched from PostgreSQL and no client-held value authorizes processing.
 
 ```mermaid
 sequenceDiagram

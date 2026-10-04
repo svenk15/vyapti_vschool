@@ -10,4 +10,7 @@ export const importsGateway={
  async options(identity:Identity|null){const current=await scope(identity);return imports.options(identity,current.organizationId,current.schoolId);},
  async preview(identity:Identity|null,input:Parameters<ImportsFacade['preview']>[3]){const current=await scope(identity);return imports.preview(identity,current.organizationId,current.schoolId,input);},
  async rows(identity:Identity|null,jobId:unknown,cursor:unknown){const current=await scope(identity);return imports.rows(identity,current.organizationId,current.schoolId,jobId,cursor);},
+ async confirm(identity:Identity|null,input:Parameters<ImportsFacade['confirm']>[3]){const current=await scope(identity);return imports.confirm(identity,current.organizationId,current.schoolId,input);},
+ async process(identity:Identity|null,input:Parameters<ImportsFacade['process']>[3]){const current=await scope(identity);return imports.process(identity,current.organizationId,current.schoolId,input);},
+ async status(identity:Identity|null,jobId:unknown){const current=await scope(identity);return imports.status(identity,current.organizationId,current.schoolId,jobId);},
 };

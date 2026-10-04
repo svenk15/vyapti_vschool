@@ -39,7 +39,7 @@ Start and verify the server, give the user the URL and this script, record human
 
 Depends on: IMP-01
 
-Design: [flow IMP-02](DESIGN.md). Scope and API: POST /api/v1/imports/:id/confirm; POST /api/v1/imports/:id/process.
+Design: [flow IMP-02](DESIGN.md). Scope and API: POST /api/v1/imports/:id/confirm; POST /api/v1/imports/:id/process; GET /api/v1/imports/:id for authorized durable status after refresh.
 
 ### Implementation instructions
 
@@ -54,9 +54,9 @@ Files: extend `backend/modules/imports/domain`, `application`, `contracts` and `
 ### Acceptance and test strategy
 
 - Unit / application: Preview binding and permitted row transitions.
-- Real PostgreSQL: Failure after Person creation rolls full row back; concurrent jobs same external/admission yield one identity; two process calls never apply a row twice.
-- Browser: Confirm, process, refresh result; retry process without duplicates.
-- Failure contract: Stale confirmation→409; changed references during process→row CONFLICT; current permission lost→403 and stop; crash leaves current row pending; exact retry returns committed result.
+- Real PostgreSQL: Failure after Person creation rolls full row back; concurrent jobs/process calls serialize and same external/admission yield one identity; exact process-key replay is safe and changed-key context conflicts; permission loss leaves unstarted rows pending.
+- Browser: Confirm, process, reload and restore durable results from PostgreSQL; retry process without duplicates. Direct processing before confirmation is rejected.
+- Failure contract: Stale confirmation→409; changed references during process→row FAILED after rollback and continue; current permission lost→403 and stop with unstarted rows pending; crash leaves current row pending; exact retry returns the immutable committed result/progress and a new key resumes.
 - Required DB effect: Per row: Person + Student + Enrollment + Placement + SourceStudentMap + row SUCCEEDED result + envelopes, or no business writes for NO_CHANGE. Job state transitions separately, never claim all-file rollback.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.

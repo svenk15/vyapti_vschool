@@ -1,6 +1,7 @@
 import type { Identity } from "../../../../shared/contracts/access";
 import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentDetail, StudentProfile, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, uuidPattern } from "../../access/contracts/index";
+import type { EnlistedStudentRegistrationPort } from "../contracts/enlisted-student-registration";
 import { enrollmentInput, exactSelectionName, studentInput, studentListQuery } from "../domain/student";
 
 export interface StudentRepository {
@@ -11,6 +12,8 @@ export interface StudentRepository {
   enrollmentOptions(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<EnrollmentOptions>;
   enroll(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof enrollmentInput>&{key:string}):Promise<EnrollmentResult>;
 }
+
+export type EnlistedStudentRegistrationRepository = EnlistedStudentRegistrationPort;
 
 function actor(value: Identity | null): Identity { if (!value || !uuidPattern.test(value.accountId) || !Number.isSafeInteger(value.tokenVersion)) throw new AccessError("UNAUTHENTICATED"); return value; }
 function id(value: unknown): string { if (typeof value !== "string" || !uuidPattern.test(value)) throw new AccessError("VALIDATION"); return value.toLowerCase(); }
@@ -32,6 +35,18 @@ export function createStudentUseCases(repository: StudentRepository) {
     },
     enrollmentOptions(identity:Identity|null,organizationId:unknown,schoolId:unknown,studentId:unknown){return repository.enrollmentOptions(actor(identity),id(organizationId),id(schoolId),id(studentId));},
     enroll(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{studentId:unknown;yearId:unknown;sectionId:unknown;startsOn:unknown;lastDay:unknown;rollNumber?:unknown;key:unknown}){return repository.enroll(actor(identity),id(organizationId),id(schoolId),{...enrollmentInput(input),key:key(input.key)});},
+  };
+}
+
+export function createEnlistedStudentRegistrationUseCases(repository: EnlistedStudentRegistrationRepository) {
+  return {
+    registerAndEnroll(transaction: object, identity: Identity | null, input: Parameters<EnlistedStudentRegistrationPort["registerAndEnroll"]>[2]) {
+      const checkedActor = actor(identity);
+      if (!transaction || typeof transaction !== "object") throw new AccessError("UNAVAILABLE");
+      for (const value of [input.organizationId, input.schoolId, input.yearId, input.sectionId]) id(value);
+      if (!/^[A-Za-z0-9_-]{16,100}$/.test(input.key)) throw new AccessError("VALIDATION");
+      return repository.registerAndEnroll(transaction, checkedActor, input);
+    },
   };
 }
 

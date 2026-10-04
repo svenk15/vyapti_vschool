@@ -1,5 +1,5 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {ImportOptions,ImportPreview,ImportRowPage} from '../../../../shared/contracts/imports';
+import type {ImportConfirmation,ImportJobStatus,ImportOptions,ImportPreview,ImportProcessResult,ImportRowPage} from '../../../../shared/contracts/imports';
 import {AccessError,uuidPattern} from '../../access/contracts/index';
 import {parseRosterCsv,validCivilDate,type ParsedRosterRow} from '../domain/csv';
 export type PreviewCommand=Readonly<{yearId:string;campusId:string|null;namespace:string;validFrom:string;schemaVersion:'STUDENT_ROSTER_V1';fileName:string;idempotencyKey:string;sourceBytes:Uint8Array;rows:readonly ParsedRosterRow[]}>;
@@ -8,6 +8,9 @@ export interface ImportsRepository{
  options(identity:Identity,organizationId:string,schoolId:string):Promise<ImportOptions>;
  preview(identity:Identity,organizationId:string,schoolId:string,command:PreviewCommand):Promise<ImportPreview>;
  rows(identity:Identity,organizationId:string,schoolId:string,jobId:string,cursor:string|null):Promise<ImportRowPage>;
+ confirm(identity:Identity,organizationId:string,schoolId:string,input:{jobId:string;expectedVersion:number;previewRevision:number;fileHash:string;skipInvalid:boolean;key:string}):Promise<ImportConfirmation>;
+ process(identity:Identity,organizationId:string,schoolId:string,input:{jobId:string;key:string}):Promise<ImportProcessResult>;
+ status(identity:Identity,organizationId:string,schoolId:string,jobId:string):Promise<ImportJobStatus>;
 }
 function actor(identity:Identity|null):Identity{if(!identity||!uuidPattern.test(identity.accountId)||!Number.isSafeInteger(identity.tokenVersion))throw new AccessError('UNAUTHENTICATED');return identity;}
 function id(value:unknown){if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value.toLowerCase();}
@@ -24,5 +27,8 @@ export function createImportsUseCases(repository:ImportsRepository){return {
  options(identity:Identity|null,organizationId:unknown,schoolId:unknown){return repository.options(actor(identity),id(organizationId),id(schoolId));},
  async preview(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:Parameters<typeof command>[0]){const a=actor(identity),org=id(organizationId),school=id(schoolId),checked=command(input),rows=parseRosterCsv(checked.sourceBytes);return repository.preview(a,org,school,{...checked,rows});},
  rows(identity:Identity|null,organizationId:unknown,schoolId:unknown,jobId:unknown,cursor:unknown){if(cursor!==undefined&&cursor!==null&&typeof cursor!=='string')throw new AccessError('INVALID_CURSOR');return repository.rows(actor(identity),id(organizationId),id(schoolId),id(jobId),cursor as string|null??null);},
+ confirm(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{jobId:unknown;expectedVersion:unknown;previewRevision:unknown;fileHash:unknown;skipInvalid:unknown;key:unknown}){if(!Number.isSafeInteger(input.expectedVersion)||!Number.isSafeInteger(input.previewRevision)||typeof input.fileHash!=='string'||!/^[0-9a-f]{64}$/.test(input.fileHash)||typeof input.skipInvalid!=='boolean'||typeof input.key!=='string'||!/^[A-Za-z0-9_-]{16,100}$/.test(input.key))throw new AccessError('VALIDATION');return repository.confirm(actor(identity),id(organizationId),id(schoolId),{jobId:id(input.jobId),expectedVersion:input.expectedVersion as number,previewRevision:input.previewRevision as number,fileHash:input.fileHash,skipInvalid:input.skipInvalid,key:input.key});},
+ process(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{jobId:unknown;key:unknown}){if(typeof input.key!=='string'||!/^[A-Za-z0-9_-]{16,100}$/.test(input.key))throw new AccessError('VALIDATION');return repository.process(actor(identity),id(organizationId),id(schoolId),{jobId:id(input.jobId),key:input.key});},
+ status(identity:Identity|null,organizationId:unknown,schoolId:unknown,jobId:unknown){return repository.status(actor(identity),id(organizationId),id(schoolId),id(jobId));},
 };}
 export type ImportsFacade=ReturnType<typeof createImportsUseCases>;

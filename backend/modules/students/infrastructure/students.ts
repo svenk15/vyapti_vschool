@@ -9,6 +9,7 @@ import type { ReleaseManifest } from "../../tenancy/contracts/index";
 import type { StudentRepository } from "../application/students";
 import type { StudentInput } from "../domain/student";
 import { displayStudentName } from "../domain/student";
+import type { EnlistedRegistrationInput, EnlistedRegistrationResult, StudentRegistrationTransaction } from "../contracts/enlisted-student-registration";
 
 type Guard = { configurationVersion: number; timezone:string };
 const NO_RELEASE: ReleaseManifest = { student_core:false,academic_core:false,staff_core:false,attendance:false,fees:false,admissions:false,assessments:false,family:false,communication:false,timetable:false,homework:false,transport:false,hr:false,library:false,inventory:false,health:false,analytics:false,ai:false };
@@ -141,4 +142,28 @@ export class PrismaStudentRepository implements StudentRepository {
     await this.evidence(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response:{...safeReceipt,resourceId:id},before:{},after:{version:1,status:"ACTIVE"},reason:"Student registration",requestId,occurredAt:occurredAt,resourceType:"Student",module:"students"});
     return {...result,replayed:false};
   },{isolationLevel:"Serializable",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
+
+  async registerAndEnroll(transaction:StudentRegistrationTransaction,actor:Identity,input:EnlistedRegistrationInput):Promise<EnlistedRegistrationResult>{
+    const tx=transaction as Prisma.TransactionClient;
+    try {
+      const guard=await this.guard(tx,actor,input.organizationId,input.schoolId,"student.manage",false,["student_core","academic_core"]);
+      const command="ImportedStudentRegistered",hash=inputHash({schemaVersion:1,actorAccountId:actor.accountId,...input});
+      const prior=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:{organizationId:input.organizationId,schoolId:input.schoolId,actorAccountId:actor.accountId,command,key:input.key}}});
+      if(prior){if(prior.inputHash!==hash)throw new AccessError("IDEMPOTENCY_CONFLICT");const value=prior.response as {studentId?:unknown;enrollmentId?:unknown};if(typeof value.studentId!=="string"||typeof value.enrollmentId!=="string")throw new AccessError("UNAVAILABLE");return {studentId:value.studentId,enrollmentId:value.enrollmentId,replayed:true};}
+      const year=await tx.academicYear.findFirst({where:{id:input.yearId,organizationId:input.organizationId,schoolId:input.schoolId,status:"OPEN"},select:{id:true,startsOn:true,endsOn:true}});if(!year)throw new AccessError("CONFLICT");
+      const section=await tx.section.findFirst({where:{id:input.sectionId,organizationId:input.organizationId,schoolId:input.schoolId,yearId:year.id,active:true},select:{id:true,gradeId:true,campusId:true}});if(!section)throw new AccessError("CONFLICT");
+      const validFrom=new Date(`${input.validFrom}T00:00:00.000Z`),validTo=new Date(`${input.validTo}T00:00:00.000Z`);if(validFrom>=validTo||validFrom<year.startsOn||validTo>year.endsOn)throw new AccessError("CONFLICT");
+      if(await tx.student.findFirst({where:{organizationId:input.organizationId,schoolId:input.schoolId,admissionNumber:input.admissionNumber},select:{id:true}}))throw new AccessError("CONFLICT");
+      const person=input.existingPersonId?await this.people.findById(tx,input.organizationId,input.existingPersonId):await this.people.create(tx,{organizationId:input.organizationId,firstName:input.firstName,lastName:input.lastName});if(!person)throw new AccessError("NOT_FOUND");
+      if(await tx.student.findFirst({where:{organizationId:input.organizationId,schoolId:input.schoolId,personId:person.id},select:{id:true}}))throw new AccessError("CONFLICT");
+      const now=this.now(),studentId=randomUUID(),enrollmentId=randomUUID(),placementId=randomUUID();
+      await tx.student.create({data:{id:studentId,organizationId:input.organizationId,schoolId:input.schoolId,personId:person.id,admissionNumber:input.admissionNumber,status:"ACTIVE",version:1,createdAt:now}});
+      await tx.enrollment.create({data:{id:enrollmentId,organizationId:input.organizationId,schoolId:input.schoolId,studentId,yearId:year.id,validFrom,validTo,version:1}});
+      await tx.sectionPlacement.create({data:{id:placementId,organizationId:input.organizationId,schoolId:input.schoolId,enrollmentId,yearId:year.id,sectionId:section.id,validFrom,validTo,rollNumber:input.rollNumber}});
+      const changed=await tx.school.updateMany({where:{organizationId:input.organizationId,id:input.schoolId,configurationVersion:guard.configurationVersion},data:{configurationVersion:{increment:1},version:{increment:1}}});if(changed.count!==1)throw new AccessError("STALE_VERSION");
+      const occurredAt=now.toISOString(),response={studentId,enrollmentId,placementId,resourceId:studentId,version:1,status:"ENROLLED"};
+      await this.evidence(tx).append({organizationId:input.organizationId,schoolId:input.schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response,before:{},after:{status:"ACTIVE",enrollment:"ENROLLED"},reason:"Imported student registration",requestId:randomUUID(),occurredAt,resourceType:"Student",module:"students"});
+      return {studentId,enrollmentId,replayed:false};
+    } catch(error) { return fail(error); }
+  }
 }
