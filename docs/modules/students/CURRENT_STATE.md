@@ -5,7 +5,7 @@ Last updated: 2026-10-04. This is an independent project checkpoint; no completi
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | STU-01 | VERIFIED | PENDING | Real PostgreSQL, desktop/mobile Playwright, repository checks and build passed; local demo available |
-| STU-02 | NOT_STARTED | NOT_REQUESTED | Depends on STU-01 and ACA-02 implementation; STU-01 review is not an explicit dependency acceptance gate |
+| STU-02 | VERIFIED | PENDING | Depends on STU-01 and ACA-02 implementation; both are VERIFIED/PENDING and neither declares human PASSED as a dependency gate |
 | STU-03 | NOT_STARTED | NOT_REQUESTED | Depends on STU-02 and ATT-01 |
 
 ## Current checkpoint
@@ -28,13 +28,22 @@ Mutations serialize through account → Organization → School guards and commi
 - Local demo: `http://127.0.0.1:3412/admin/students`; task-specific standalone snapshot `artifacts/demos/STU-01/3e5f825542656b2fb17ad784c4a57e1c29f0d991/`, build ID `3_eAy6yTjxJ5FnFuZv4Vf`, with `student_core` release enabled. Health endpoint returned `alive:true`; `/sign-in` and `/admin/students` both returned HTTP 200. Demo account is the existing synthetic account in ignored `artifacts/iam-01/private-demo.json`; it has a local `student_core` entitlement and active branch configuration applied through Tenancy use cases. No credential is copied into this document.
 - Human review: PENDING. Automated evidence is not owner acceptance.
 
+## Evidence — STU-02 (4 October 2026)
+
+- Implementation commit: `2cf3c9da357e24f0e10d09b4df2324618b35c3ef` on `work/stu-01-after-per02-wip`. The branch preserves the earlier PER-02 WIP ancestry; `wip/per-02-before-iam03-acceptance` remains unchanged and PER-02 stays BLOCKED until explicit IAM-03 human acceptance.
+- Added Students-owned `Enrollment` and `SectionPlacement`, with `vs_` physical names, snake_case columns, scoped Student/AcademicYear/Section composite FKs, one Student/year unique key, date/version/roll checks, and timeline/roster indexes. Migration `20261004001600_student_enrollment` was applied forward to local `vyapti_vschool` and `vyapti_vschool_test`; both reported 20 migrations found/applied and no pending migration. No database reset or migration rewrite occurred.
+- BRANCH classification, organization/school scope columns, policy intent, owner, and TEN-03 closure are in `TABLE_REGISTRY.json` under TEN-ADR-006 Path A. Runtime RLS remains unimplemented and deferred to TEN-03; application tenant/resource authorization remains active on every read/write. Academic labels/history are hidden if `academic_core` is inactive while Student access remains available.
+- Verification passed: `pnpm check` (lint/typecheck/docs 30 tasks/DB design 50 contracts/boundaries/backend/unit 81/81); `pnpm test:functional` against real PostgreSQL (75/75 across 13 files, including enrollment races, rollback, scope/permissions, module suspension and history); focused Playwright enrollment journey desktop/mobile (2/2); `pnpm build` on Next.js 16.3.8. After adding list-summary presentation, lint/typecheck and the same desktop/mobile E2E passed again. A direct smoke test against the immutable demo snapshot passed (1/1); DB migration status was current. Reports are in `artifacts/unit.junit.xml`, `artifacts/functional.junit.xml` and `artifacts/e2e.junit.xml` (ignored local artifacts).
+- Demo snapshot: `http://127.0.0.1:3413/admin/students`, tested commit `2cf3c9da357e24f0e10d09b4df2324618b35c3ef`, build `XEByftuaHQmRxBtt1p15b`, release manifest `academic_core,student_core`. Health returned `alive:true`; Playwright signed into the snapshot, opened the synthetic Student, verified the active Academic year choice and confirmed the student was still unenrolled. Private synthetic demo file `artifacts/students-02/private-demo.json` has mode 0600. Use it locally for the sign-in and student/year/section identifiers; no credentials are included here.
+- Manual review: sign in at `http://127.0.0.1:3413/sign-in` using the private fixture; open Students and the fixture's admission number; choose its listed Academic year and Section A; set First included day and Last included day from the fixture, enter roll `0007`, and enroll. Expect saved feedback, history with the same inclusive dates and roll text, and active roster count 1. Refresh and verify history/list summary persist. Submit the same year again and expect a conflict; automated checks also confirm wrong-year section and duplicate requests fail without extra writes. Human review remains PENDING.
+
 ## Next action
 
-Keep the port 3412 demo snapshot stable for STU-01 review. Continue with the next eligible task only if it is independent of pending feedback and documented acceptance gates; address any reported defect first. PER-02 remains blocked until explicit IAM-03 acceptance.
+Keep ports 3412 (STU-01) and 3413 (STU-02) available for review. Select the next task only when its implementation does not depend on pending feedback and its documented acceptance gates are met. PER-02 remains blocked until explicit IAM-03 acceptance.
 
 ## Pending decisions / limitations
 
-TEN-03 must implement and verify RLS before multi-client production release. Enrollment and placement history remain unavailable until STU-02. Pilot provider, real-data privacy/retention and backup decisions remain release gates in FND-02.
+TEN-03 must implement and verify RLS before multi-client production release. Migration 016 is installed locally but its tables are not RLS-enforced. Pilot provider, real-data privacy/retention and backup decisions remain release gates in FND-02.
 
 ## Evidence history
 
