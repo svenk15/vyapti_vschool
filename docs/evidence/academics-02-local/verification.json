@@ -1,0 +1,37 @@
+{
+  "task": "ACA-02",
+  "implementation": "VERIFIED",
+  "humanReview": "PENDING",
+  "sourceCommit": "69fb440a4427249c73fc45d2b06b33682adf2466",
+  "buildId": "4vhyqb3lnk32X0VH1Itfk",
+  "migration": {
+    "name": "20261004001000_academic_calendar",
+    "databases": ["vyapti_vschool", "vyapti_vschool_test"],
+    "addedBusinessTables": ["vs_academics_calendar_revision", "vs_academics_calendar_exception"],
+    "totalMigratedBusinessTables": 31
+  },
+  "checks": {
+    "pnpm check": "passed: 65 unit tests; lint, typecheck, docs, DB design, boundaries and backend compile",
+    "pnpm test:functional": "passed: 50 tests against real PostgreSQL vyapti_vschool_test",
+    "pnpm test:e2e": "passed: 58 desktop/mobile Playwright tests",
+    "pnpm build": "passed: Next.js 16.3.8 production build",
+    "git diff --check": "passed"
+  },
+  "demo": {
+    "url": "http://127.0.0.1:3408",
+    "releasedModules": ["academic_core"],
+    "health": 200,
+    "unauthenticatedWorkspaceApi": 401,
+    "protectedWorkspacePage": 307,
+    "syntheticSignInAndWorkspace": "passed"
+  },
+  "limitations": [
+    "NO_ATTENDANCE_SESSIONS is valid only until Attendance session storage or creation exists; ATT-01 must replace it and add close-versus-schedule concurrency coverage.",
+    "Human acceptance remains pending explicit owner feedback."
+  ],
+  "reports": {
+    "unit": "unit.junit.xml",
+    "functional": "functional.junit.xml",
+    "playwright": "e2e.junit.xml"
+  }
+}

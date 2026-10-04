@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="65" failures="0" errors="0" time="0.099391582">
+    <testsuite name="test/unit/academics-setup.test.ts" timestamp="2026-10-04T08:58:11.974Z" hostname="Venkateshs-MacBook-Air.local" tests="6" failures="0" errors="0" skipped="0" time="0.013286958">
+        <testcase classname="test/unit/academics-setup.test.ts" name="academic setup domain &gt; validates real Gregorian civil dates without local timezone conversion" time="0.001568458">
+        </testcase>
+        <testcase classname="test/unit/academics-setup.test.ts" name="academic setup domain &gt; normalizes bounded codes and names at the API boundary" time="0.000328667">
+        </testcase>
+        <testcase classname="test/unit/academics-setup.test.ts" name="academic setup domain &gt; accepts adjacent half-open terms, rejects overlap and limits terms to 24" time="0.008831584">
+        </testcase>
+        <testcase classname="test/unit/academics-setup.test.ts" name="academic calendar policy &gt; applies campus, school and weekly precedence and keeps civil date boundaries" time="0.000949042">
+        </testcase>
+        <testcase classname="test/unit/academics-setup.test.ts" name="academic calendar policy &gt; requires unique weekdays and unique in-year exception scope" time="0.00036925">
+        </testcase>
+        <testcase classname="test/unit/academics-setup.test.ts" name="trusted module release configuration &gt; defaults deny-all and accepts only explicit server module IDs" time="0.000248375">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/access-management.test.ts" timestamp="2026-10-04T08:58:11.974Z" hostname="Venkateshs-MacBook-Air.local" tests="4" failures="0" errors="0" skipped="0" time="0.032457916">
+        <testcase classname="test/unit/access-management.test.ts" name="normalizes fixed role sets and rejects invented permissions" time="0.001873458">
+        </testcase>
+        <testcase classname="test/unit/access-management.test.ts" name="rejects malformed versions, ambiguous account selection and invalid timezone" time="0.029376292">
+        </testcase>
+        <testcase classname="test/unit/access-management.test.ts" name="last active administrator cannot be removed while pending reinstatement stays pending" time="0.000298958">
+        </testcase>
+        <testcase classname="test/unit/access-management.test.ts" name="validates stable intent keys and mandatory reasons" time="0.000234917">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/access.test.ts" timestamp="2026-10-04T08:58:11.976Z" hostname="Venkateshs-MacBook-Air.local" tests="8" failures="0" errors="0" skipped="0" time="0.02954575">
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; normalizes operator fields and rejects invalid timezones" time="0.025486834">
+        </testcase>
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; enforces bcrypt UTF-8 byte limits" time="0.000369042">
+        </testcase>
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; unions roles independently of order without granting admin attendance marking" time="0.000483416">
+        </testcase>
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; rejects disabled and stale identities" time="0.000121583">
+        </testcase>
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; locks on fifth failure and starts a new cycle after expiry" time="0.000172792">
+        </testcase>
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; checks operator and current account before persistence or scope reads" time="0.001128833">
+        </testcase>
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; hashes outside provision and passes no plaintext password into repository" time="0.00060125">
+        </testcase>
+        <testcase classname="test/unit/access.test.ts" name="IAM-01 policies &gt; redacts storage errors before the credential provider can expose them" time="0.000292333">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/activation.test.ts" timestamp="2026-10-04T08:58:11.976Z" hostname="Venkateshs-MacBook-Air.local" tests="3" failures="0" errors="0" skipped="0" time="0.002822667">
+        <testcase classname="test/unit/activation.test.ts" name="requires explicit case, target and bounded intended membership identities" time="0.001755292">
+        </testcase>
+        <testcase classname="test/unit/activation.test.ts" name="expires at the exact boundary and rejects consumed or revoked tokens" time="0.000179125">
+        </testcase>
+        <testcase classname="test/unit/activation.test.ts" name="validates opaque token, confirmation and UTF-8 password byte bound without truncation" time="0.000260792">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/branding-pipeline.test.ts" timestamp="2026-10-04T08:58:11.976Z" hostname="Venkateshs-MacBook-Air.local" tests="4" failures="0" errors="0" skipped="0" time="0.006182708">
+        <testcase classname="test/unit/branding-pipeline.test.ts" name="accepts bounded RGB/RGBA PNG and stores only a reconstructed file without ancillary metadata" time="0.003038125">
+        </testcase>
+        <testcase classname="test/unit/branding-pipeline.test.ts" name="rejects malformed structure, corrupt CRC, interlace, unsupported dimensions and oversized payloads" time="0.000451833">
+        </testcase>
+        <testcase classname="test/unit/branding-pipeline.test.ts" name="normalizes public slugs and hostnames without accepting paths, schemes or wildcard hosts" time="0.0004325">
+        </testcase>
+        <testcase classname="test/unit/branding-pipeline.test.ts" name="normalizes bounded brand fields and rejects unsupported palettes and unsafe text" time="0.000877375">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/branding.test.ts" timestamp="2026-10-04T08:58:11.976Z" hostname="Venkateshs-MacBook-Air.local" tests="20" failures="0" errors="0" skipped="0" time="0.0043045">
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; forest primary/on-primary passes normal-text contrast" time="0.000962333">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; indigo primary/on-primary passes normal-text contrast" time="0.000102125">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; clay primary/on-primary passes normal-text contrast" time="0.0000895">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; neutral body and secondary text pairs remain readable" time="0.000086625">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; validates synthetic public brand" time="0.0001815">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; rejects unapproved palette and oversized copy" time="0.000132541">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; rejects unsafe slug and invalid contact" time="0.000077458">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="safe branding reference rules &gt; rejects invalid color input" time="0.000428792">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection undefined without throwing" time="0.000293417">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection null without throwing" time="0.000133292">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection false without throwing" time="0.000053917">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection 42 without throwing" time="0.00004225">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection &quot;brand&quot; without throwing" time="0.000035709">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection undefined without throwing" time="0.000031291">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection {} without throwing" time="0.000030125">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection {&quot;slug&quot;:&quot;school-north&quot;,&quot;institutionName&quot;:null,&quot;branchName&quot;:&quot;North&quot;,&quot;monogram&quot;:&quot;E&quot;,&quot;palette&quot;:&quot;forest&quot;,&quot;welcome&quot;:&quot;Welcome&quot;,&quot;supportEmail&quot;:&quot;help@school.example&quot;} without throwing" time="0.00002725">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection {&quot;slug&quot;:&quot;school-north&quot;,&quot;institutionName&quot;:&quot;Example institution&quot;,&quot;branchName&quot;:&quot;North&quot;,&quot;monogram&quot;:&quot;E&quot;,&quot;palette&quot;:&quot;forest&quot;,&quot;welcome&quot;:&quot;Welcome&quot;,&quot;supportEmail&quot;:42} without throwing" time="0.000044042">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; rejects malformed runtime projection {&quot;slug&quot;:&quot;school-north&quot;,&quot;institutionName&quot;:&quot;Example institution&quot;,&quot;branchName&quot;:&quot;North&quot;,&quot;monogram&quot;:&quot;E&quot;,&quot;palette&quot;:&quot;forest&quot;,&quot;supportEmail&quot;:&quot;help@school.example&quot;} without throwing" time="0.0000595">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; enforces documented slug and display-name boundaries" time="0.000239375">
+        </testcase>
+        <testcase classname="test/unit/branding.test.ts" name="public preview runtime and storage-contract bounds &gt; bounds support email and rejects every inherited palette key" time="0.000166333">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/entitlements.test.ts" timestamp="2026-10-04T08:58:11.977Z" hostname="Venkateshs-MacBook-Air.local" tests="17" failures="0" errors="0" skipped="0" time="0.009024625">
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; attendance includes its internal foundations without fees" time="0.002286541">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; fees operates without attendance or academic enrollment" time="0.000210667">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; deduplicates shared foundations" time="0.000520166">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; rejects unlicensed activation" time="0.000634375">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; rejects mismatched institution and branch ownership" time="0.000210208">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; suspension disables every module" time="0.000151792">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; allows only when release, entitlement, activation, membership and resource permission agree" time="0.000186125">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies missing hasCapability even with licensed module" time="0.000088375">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies missing releaseAvailable even with licensed module" time="0.000076208">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies missing resourceAllowed even with licensed module" time="0.000326958">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies another branch in the same institution" time="0.00015725">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies another institution even with the same branch label" time="0.000127666">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies an ungranted actor" time="0.000107125">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; denies licensed but disabled capability" time="0.000126209">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; rejects prototype names and unknown registry entries" time="0.000513792">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; requires an available release, live institution contract and active branch for effective capability" time="0.001395375">
+        </testcase>
+        <testcase classname="test/unit/entitlements.test.ts" name="module packaging and scope reference policy &gt; previews Fees without Attendance and keeps unreleased modules blocked" time="0.000247667">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/unit/readiness.test.ts" timestamp="2026-10-04T08:58:11.978Z" hostname="Venkateshs-MacBook-Air.local" tests="3" failures="0" errors="0" skipped="0" time="0.001766458">
+        <testcase classname="test/unit/readiness.test.ts" name="truthful setup status &gt; does not report ready before database and seed verification" time="0.000824792">
+        </testcase>
+        <testcase classname="test/unit/readiness.test.ts" name="truthful setup status &gt; reports ready only after the adapter confirms the marker" time="0.000101375">
+        </testcase>
+        <testcase classname="test/unit/readiness.test.ts" name="truthful setup status &gt; never exposes connection secrets from provider errors" time="0.000171166">
+        </testcase>
+    </testsuite>
+</testsuites>

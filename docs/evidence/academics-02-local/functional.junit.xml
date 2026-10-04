@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="50" failures="0" errors="0" time="31.613725586">
+    <testsuite name="test/functional/academics-setup.test.ts" timestamp="2026-10-04T08:28:22.135Z" hostname="Venkateshs-MacBook-Air.local" tests="6" failures="0" errors="0" skipped="0" time="1.498454584">
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; creates a scoped draft year and calendar atomically, replaces adjacent terms, and persists school setup" time="0.151930292">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; serializes duplicate school-wide sections and maps a duplicate to CONFLICT" time="0.070616459">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; denies foreign branches, inactive academic contracts, and revoked current permission" time="0.048118458">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; rolls back year, calendar, configuration revision and evidence when the enlisted writer fails" time="0.011795375">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-02 PostgreSQL calendar publication and year state &gt; publishes immutable revisions, evaluates precedence, and opens while rejecting terms edits" time="0.055876">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-02 PostgreSQL calendar publication and year state &gt; requires a calendar to open and atomically rejects impacted publication and close" time="0.059285667">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/access-management.test.ts" timestamp="2026-10-04T08:28:22.136Z" hostname="Venkateshs-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="4.72459975">
+        <testcase classname="test/functional/access-management.test.ts" name="settings persist with atomic envelopes, identical replay and stale/changed-key conflicts" time="0.812775667">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="rolls settings and all actual envelopes back after an enlisted evidence failure" time="0.323466917">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="creates pending staff, campuses and duplicate-safe retries without hashes in DTO/evidence" time="0.669823792">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="two concurrent self-revocations leave exactly one active administrator" time="0.827804416">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="current teacher membership/roles revoke immediately, replay reauthorizes and foreign attachment is denied" time="1.156446459">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="timezone decision calls the scoped owner port and fails closed" time="0.300593334">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="opaque staff cursors are scoped, signed and bounded at 50 records" time="0.631271">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/access-migrations.test.ts" timestamp="2026-10-04T08:28:22.137Z" hostname="Venkateshs-MacBook-Air.local" tests="2" failures="0" errors="0" skipped="0" time="0.170513292">
+        <testcase classname="test/functional/access-migrations.test.ts" name="rehearses clean installation in an isolated rolled-back schema" time="0.110981041">
+        </testcase>
+        <testcase classname="test/functional/access-migrations.test.ts" name="rehearses previous-checkpoint upgrade with preserved marker in an isolated rolled-back schema" time="0.058784666">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/access.test.ts" timestamp="2026-10-04T08:28:22.137Z" hostname="Venkateshs-MacBook-Air.local" tests="9" failures="0" errors="0" skipped="0" time="7.917685542">
+        <testcase classname="test/functional/access.test.ts" name="provisions all aggregates and safe operator evidence atomically" time="0.732863917">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="rolls the entire provision back when enlisted evidence fails" time="0.538773917">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="serializes duplicate institution bootstrap and handles unique email races without partial schools" time="1.077868125">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="rejects invalid zone before writes" time="0.001443042">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="serializes concurrent failures, locks valid credentials, and recovers after expiry" time="2.443323667">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="checks disabled, token revocation, current membership and foreign scope on every read" time="1.3511785">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="rechecks organization, branch and administrator grant on each read" time="0.607942917">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="scoped composite foreign keys reject a forged grant and history guards reject mutation" time="0.617174875">
+        </testcase>
+        <testcase classname="test/functional/access.test.ts" name="login evidence is append-only and contains no submitted identifiers or credentials" time="0.544356375">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/activation.test.ts" timestamp="2026-10-04T08:28:22.138Z" hostname="Venkateshs-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="9.628782541">
+        <testcase classname="test/functional/activation.test.ts" name="stores only token hashes, binds exact membership intent, and concurrent redemption wins once" time="1.706091291">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="rejects foreign scope, changed intent, disabled subject and token replacement without partial activation" time="0.909645292">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="rolls consumption, credentials, membership and actual evidence back on enlisted writer failure" time="0.843998208">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="recovery immediately invalidates old credentials/sessions in every branch and preserves suspended memberships" time="2.209616875">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="expiry boundary and five-account-attempt budget persist across new tokens, then recover after the window" time="1.140043458">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="rechecks expiry after waiting on the real School guard" time="1.142663458">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="serialization retries preserve one consumption and stop after three rolled-back attempts" time="1.67449325">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/branding-publication.test.ts" timestamp="2026-10-04T08:28:22.139Z" hostname="Venkateshs-MacBook-Air.local" tests="2" failures="0" errors="0" skipped="0" time="1.568197959">
+        <testcase classname="test/functional/branding-publication.test.ts" name="persists scoped drafts, sanitized logo, immutable publish, DNS-bound identity and rollback-as-new-revision" time="1.262087875">
+        </testcase>
+        <testcase classname="test/functional/branding-publication.test.ts" name="serializes competing publishers and leaves one immutable current revision" time="0.303839083">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/institution-context.test.ts" timestamp="2026-10-04T08:28:22.139Z" hostname="Venkateshs-MacBook-Air.local" tests="6" failures="0" errors="0" skipped="0" time="2.787164709">
+        <testcase classname="test/functional/institution-context.test.ts" name="institution authority lists metadata without operational access; operator attachment enables only the explicit branch" time="0.998199958">
+        </testcase>
+        <testcase classname="test/functional/institution-context.test.ts" name="branch provisioning replays one scoped write, rejects foreign authority and stale revision" time="0.581117667">
+        </testcase>
+        <testcase classname="test/functional/institution-context.test.ts" name="institution operator creation has no membership side effect and altered replay keys fail" time="0.28516225">
+        </testcase>
+        <testcase classname="test/functional/institution-context.test.ts" name="enlisted institution audit, receipt and outbox all roll back with the branch write" time="0.293132917">
+        </testcase>
+        <testcase classname="test/functional/institution-context.test.ts" name="composite school references and immutable institution history reject forged writes" time="0.317754541">
+        </testcase>
+        <testcase classname="test/functional/institution-context.test.ts" name="operator branch revocation obeys the last-active-school-administrator guard" time="0.309363792">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/setup.test.ts" timestamp="2026-10-04T08:28:22.139Z" hostname="Venkateshs-MacBook-Air.local" tests="4" failures="0" errors="0" skipped="0" time="0.110355">
+        <testcase classname="test/functional/setup.test.ts" name="persists one marker across repeated commands" time="0.092577583">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="rolls back an interrupted real transaction" time="0.003202792">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="has a database-backed readiness marker" time="0.000872792">
+        </testcase>
+        <testcase classname="test/functional/setup.test.ts" name="maps ORM fields to the VS physical schema" time="0.011767291">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/tenancy-modules.test.ts" timestamp="2026-10-04T08:28:22.139Z" hostname="Venkateshs-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="3.207972209">
+        <testcase classname="test/functional/tenancy-modules.test.ts" name="production release manifest persists an Attendance contract but fails branch activation closed without partial evidence" time="0.802038583">
+        </testcase>
+        <testcase classname="test/functional/tenancy-modules.test.ts" name="controlled test release enforces Attendance only dependency closure without cross-activating branches" time="0.42645675">
+        </testcase>
+        <testcase classname="test/functional/tenancy-modules.test.ts" name="controlled test release enforces Fees only dependency closure without cross-activating branches" time="0.354022167">
+        </testcase>
+        <testcase classname="test/functional/tenancy-modules.test.ts" name="controlled test release enforces combined dependency closure without cross-activating branches" time="0.363042167">
+        </testcase>
+        <testcase classname="test/functional/tenancy-modules.test.ts" name="rechecks configuration revisions after preview and rejects ungranted branch administration" time="0.609312959">
+        </testcase>
+        <testcase classname="test/functional/tenancy-modules.test.ts" name="serializes contract suspension with branch activation and current module authorization" time="0.324017667">
+        </testcase>
+        <testcase classname="test/functional/tenancy-modules.test.ts" name="rolls branch activations, version and all evidence back when the enlisted writer fails" time="0.326459958">
+        </testcase>
+    </testsuite>
+</testsuites>
