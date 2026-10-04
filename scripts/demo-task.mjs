@@ -15,7 +15,7 @@ if(!existsSync(join(path,'demo.json'))){
  if(!existsSync(join(buildDir,'standalone/server.js')))throw new Error('Build first');
  mkdirSync(path,{recursive:true,mode:0o700});
  cpSync(join(buildDir,'standalone'),path,{recursive:true,verbatimSymlinks:true,filter:source=>!basename(source).startsWith('.env')});
- cpSync(join(buildDir,'static'),join(path,'.next/static'),{recursive:true});if(existsSync('public'))cpSync('public',join(path,'public'),{recursive:true});
+ cpSync(join(buildDir,'static'),join(path,buildDir,'static'),{recursive:true});if(existsSync('public'))cpSync('public',join(path,'public'),{recursive:true});
  writeFileSync(join(path,'demo.json'),JSON.stringify({task,testedCommit:commit,url,buildId:readFileSync(join(buildDir,'BUILD_ID'),'utf8').trim(),releasedModules},null,2)+'\n');
 }
 const metadata=JSON.parse(readFileSync(join(path,'demo.json'),'utf8'));if(metadata.task!==task||metadata.testedCommit!==commit||metadata.url!==url||(metadata.releasedModules??[]).join(',')!==releasedModules.join(','))throw new Error('Snapshot configuration mismatch');
