@@ -871,11 +871,11 @@
       "model": "Enrollment",
       "owner": "students",
       "table": "vs_students_enrollment",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; year_id uuid; valid_from date; valid_to date; version int",
-      "responsibility": "Yearly enrollment root; retained historical ranges.",
-      "constraints": "UNIQUE(scope,student_id,year_id); UNIQUE(scope,id,year_id); scoped Student/Year FKs; CHECK from<to",
+      "responsibility": "One Students-owned yearly root per Student and Academics-owned AcademicYear; retained half-open historical range.",
+      "constraints": "UNIQUE(scope,student_id,year_id); UNIQUE(scope,id,year_id); scoped Student/Year FKs; CHECK from<to and version>=1; index(scope,student_id,year_id) via unique key",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -892,11 +892,11 @@
       "model": "SectionPlacement",
       "owner": "students",
       "table": "vs_students_section_placement",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; enrollment_id uuid; year_id uuid; section_id uuid; valid_from date; valid_to date; roll_number varchar(30) nullable",
-      "responsibility": "Section membership intervals; no duplicated year/student rows per transfer. Roll is display identifier, not a globally unique identity.",
-      "constraints": "Scoped FK(enrollment_id,year_id) and FK(section_id,year_id); CHECK from<to; index(scope,section_id,valid_from,valid_to,enrollment_id); nonoverlap under School guard, verified concurrency tests",
+      "responsibility": "Students-owned section membership intervals referencing Academics Section; no duplicated year/student roots on enrollment. Roll is display text, not a globally unique identity.",
+      "constraints": "Scoped FK(enrollment_id,year_id) and FK(section_id,year_id); CHECK from<to; index(scope,section_id,valid_from,valid_to,enrollment_id) for roster; index(scope,enrollment_id,valid_from) for timeline; interval nonoverlap guarded by School serialization and verified PostgreSQL concurrency tests",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

@@ -39,15 +39,15 @@ Start and verify the server, give the user the URL and this script, record human
 
 Depends on: STU-01, ACA-02
 
-Design: [flow STU-02](DESIGN.md). Scope and API: POST /api/v1/enrollments.
+Design: [flow STU-02](DESIGN.md). Scope and API: GET /api/v1/enrollments/options; POST /api/v1/enrollments.
 
 ### Implementation instructions
 
-1. Authorize student.manage; lock actor/School then scoped references.
-2. Require active student, OPEN year, active same-year section and dates within year.
-3. Check unique yearly enrollment; reject overlap or a second root instead of silently moving.
-4. Create Enrollment and first Placement with envelope in one transaction.
-5. Return joined student/year/section DTO and refresh roster count.
+1. Require released/licensed/active student_core and academic_core, current student.manage and verified active membership for options and writes.
+2. For mutation lock account → Organization → School, then reload active Student, OPEN AcademicYear and active same-year Section in the transaction.
+3. Validate civil dates and year bounds, store the inclusive UI last day as exclusive valid_to, and preserve optional roll text.
+4. Enforce one Student/year root; create Enrollment, first SectionPlacement, School revision and safe evidence atomically. Identical key replay returns the scoped current result; changed replay conflicts.
+5. Return joined student/year/section labels and refresh detail/list history.
 
 Files: extend `backend/modules/students/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/students`, `test/functional/students` and `test/e2e/students` as the suite grows.
 
@@ -55,9 +55,9 @@ Files: extend `backend/modules/students/domain`, `application`, `contracts` and 
 
 - Unit / application: Bounds and half-open membership; roll remains text.
 - Real PostgreSQL: Two enrollments racing yield one root; scoped FKs and complete rollback.
-- Browser: Enroll, refresh class roster, reject wrong-year section.
-- Failure contract: Already enrolled→409 ENROLLMENT_EXISTS; cross-year/dates→422; closed year→409.
-- Required DB effect: Enrollment, SectionPlacement; audit/outbox/receipt.
+- Browser: Enroll, refresh list/detail history and class roster count, reject wrong-year section.
+- Failure contract: Already enrolled→409; foreign Student/year/section→404; archived Student or draft/closed year/inactive Section→409; Section from a different year or invalid/out-of-year dates→422; revoked permission→403.
+- Required DB effect: Students-owned Enrollment and SectionPlacement; read-only Academics-owned year/section references; audit/outbox/receipt.
 - Persistence/security gate: preserve one enrollment per scoped student/year, half-open dates, scoped section/year FK and School-guarded placement nonoverlap. Under TEN-ADR-006 Path A, register classification/scope/constraints/indexes/policy intent and TEN-03 closure; database enforcement is deferred to TEN-03.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.

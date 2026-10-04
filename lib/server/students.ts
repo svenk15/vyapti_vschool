@@ -11,4 +11,6 @@ export const studentsGateway={
   async get(identity:Identity|null,studentId:string){const current=await scope(identity);return students.get(identity,current.organizationId,current.schoolId,studentId);},
   async create(identity:Identity|null,input:Parameters<StudentsFacade["create"]>[3]){const current=await scope(identity);return students.create(identity,current.organizationId,current.schoolId,input);},
   async findExistingPeople(identity:Identity|null,exactName:unknown){const current=await scope(identity);return students.findExistingPeople(identity,current.organizationId,current.schoolId,exactName);},
+  async enrollmentOptions(identity:Identity|null,studentId:unknown){const current=await scope(identity);return students.enrollmentOptions(identity,current.organizationId,current.schoolId,studentId);},
+  async enroll(identity:Identity|null,input:Parameters<StudentsFacade["enroll"]>[3]){const current=await scope(identity);return students.enroll(identity,current.organizationId,current.schoolId,input);},
 };

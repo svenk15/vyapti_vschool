@@ -1,13 +1,15 @@
 import type { Identity } from "../../../../shared/contracts/access";
-import type { ExistingPersonChoice, StudentProfile, StudentWorkspace } from "../../../../shared/contracts/students";
+import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentDetail, StudentProfile, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, uuidPattern } from "../../access/contracts/index";
-import { exactSelectionName, studentInput, studentListQuery } from "../domain/student";
+import { enrollmentInput, exactSelectionName, studentInput, studentListQuery } from "../domain/student";
 
 export interface StudentRepository {
   list(actor: Identity, organizationId: string, schoolId: string, query: { search: string; cursor: string | null; limit: number; status: "ACTIVE"|"ARCHIVED"|"ALL" }): Promise<StudentWorkspace>;
-  get(actor: Identity, organizationId: string, schoolId: string, studentId: string): Promise<StudentProfile>;
+  get(actor: Identity, organizationId: string, schoolId: string, studentId: string): Promise<StudentDetail>;
   create(actor: Identity, organizationId: string, schoolId: string, input: ReturnType<typeof studentInput> & { key: string }): Promise<StudentProfile & { replayed: boolean }>;
   findExistingPeople(actor: Identity, organizationId: string, schoolId: string, exactName: string): Promise<readonly ExistingPersonChoice[]>;
+  enrollmentOptions(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<EnrollmentOptions>;
+  enroll(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof enrollmentInput>&{key:string}):Promise<EnrollmentResult>;
 }
 
 function actor(value: Identity | null): Identity { if (!value || !uuidPattern.test(value.accountId) || !Number.isSafeInteger(value.tokenVersion)) throw new AccessError("UNAUTHENTICATED"); return value; }
@@ -28,6 +30,8 @@ export function createStudentUseCases(repository: StudentRepository) {
     findExistingPeople(identity: Identity | null, organizationId: unknown, schoolId: unknown, exactName: unknown) {
       return repository.findExistingPeople(actor(identity), id(organizationId), id(schoolId), exactSelectionName(exactName));
     },
+    enrollmentOptions(identity:Identity|null,organizationId:unknown,schoolId:unknown,studentId:unknown){return repository.enrollmentOptions(actor(identity),id(organizationId),id(schoolId),id(studentId));},
+    enroll(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{studentId:unknown;yearId:unknown;sectionId:unknown;startsOn:unknown;lastDay:unknown;rollNumber?:unknown;key:unknown}){return repository.enroll(actor(identity),id(organizationId),id(schoolId),{...enrollmentInput(input),key:key(input.key)});},
   };
 }
 
