@@ -1,11 +1,11 @@
 # Previewed, resumable student roster import — current state
 
-Last updated: 2026-10-04. Existing task progress preserved; local owner acceptance is pending. No active execution timer.
+Last updated: 2026-10-05. Existing task progress preserved; local owner acceptance is pending. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | IMP-01 | VERIFIED | PENDING | Focused PostgreSQL, desktop/mobile Playwright, checks and current-source local demo verified below |
-| IMP-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| IMP-02 | VERIFIED | PENDING | Focused PostgreSQL, desktop/mobile Playwright, repository checks, build and local browser demo verified below |
 | IMP-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
 ## Current checkpoint
@@ -14,9 +14,13 @@ Last updated: 2026-10-04. Existing task progress preserved; local owner acceptan
 
 IMP-01 implements preview-only student roster uploads with no Person, Student or Enrollment writes. The forward migration `20261004001700_import_preview` is applied to `vyapti_vschool` and `vyapti_vschool_test`; both currently report 21 migrations, with no pending migration. No earlier migration or database was reset. Path A RLS metadata remains planned for TEN-03; current application membership/resource authorization and student/academic module checks stay active.
 
+IMP-02 adds explicit confirmation, bounded/resumable per-row processing, server reauthorization, same-transaction People/Students writes and durable status after refresh. Current application authorization is active for all protected reads/writes; database RLS remains deferred under TEN-ADR-006 Path A. No schema/migration change was needed; development and test databases remain at 21 migrations. `pnpm demo:seed` preserves the synthetic upload and does not create student records; the manual processing journey creates only its expected fictional Person, Student, Enrollment, Placement, SourceStudentMap and import evidence.
+
 ## Next action
 
-Human review is PENDING for the current-source demo. Address any reported defect before dependent work. `pnpm next-task` selects the next implementation task; dependency acceptance requirements in its LLD/task remain controlling. Do not mark human acceptance PASSED without owner feedback.
+Human review is PENDING for the IMP-02 demo. Address reported defects before dependent work. `pnpm next-task` selects the next implementation task; dependency acceptance requirements in its LLD/task remain controlling. Do not mark human acceptance PASSED without owner feedback.
+
+**IMP-02 design-readiness note (4 October 2026):** Resolved the People/Students/Imports ownership seam: ImportJob, ImportRow and SourceStudentMap remain Imports-owned; People owns Person identity creation; Students owns Student/Enrollment/Placement, configuration version and student evidence. The narrow enlisted Students command uses the row’s PostgreSQL transaction, repeats current scope/permission/module/reference checks and creates no nested transaction or direct cross-owner write. Confirmation pins eligible rows after hash/revision/reference checks; invalid rows require explicit skip. Each process request is bounded to 25; immutable command receipts, job/row locks, row-level rollback and separately authorized FAILED outcomes support safe replay/resume. Existing schema has the required fields; no migration was needed. Dependency snapshot: IMP-01 VERIFIED/PENDING; its implementation dependency is satisfied and no explicit human-PASS gate applies. No product blocker remains.
 
 ## Pending decisions / limitations
 
@@ -39,3 +43,17 @@ Append dated task records here using docs/AGENT_RUNBOOK.md. Include source commi
 - **Private files:** credentials remain in ignored mode-0600 `artifacts/imports-01/private-demo.json` (same existing synthetic IAM-01 account); fictional upload input is ignored mode-0600 `artifacts/imports-01/sample-roster.csv`. Neither file is tracked.
 - **Manual review (human acceptance PENDING):** (1) Open `http://127.0.0.1:3414/sign-in` and use the existing private synthetic demo credential. (2) Open `/admin/imports`, select the open academic year, enter namespace `SEED-DEMO`, choose an included date and upload `artifacts/imports-01/sample-roster.csv`. (3) Preview; expect one CREATE candidate, one invalid-section ERROR and explicit no-student-write feedback. (4) Upload a file larger than 2 MiB; expect a safe size error and no student changes. Automated checks do not mark owner acceptance.
 - **Next action:** keep port 3414 available for review and continue only to the next task selected by `pnpm next-task` when its explicit acceptance gates are met. PER-02 remains blocked on explicit IAM-03 acceptance.
+
+### 5 October 2026 — IMP-02 implementation checkpoint (VERIFIED / human PENDING)
+
+- **Source:** `b5e2307b349d914bc7470e7033dc6671c38ac229`; IMP-02 design/task criteria were reconciled with implementation. Unrelated `.puku-cli/` and `readiness-review.diff` remain untouched and unstaged.
+- **Implemented:** confirm pins valid preview decisions and only skips invalid rows with explicit consent; process handles at most 25 rows/request; authorized GET status restores durable counts after page refresh. REVIEW cannot be processed. Current `student.manage`, account/membership, module release, institution entitlement and branch activation checks remain active. People and Students writes, school configuration version, source mapping, row result and evidence enlist in one transaction per row. Immutable started/finished receipts, job/row locking and separate safe FAILED results after row rollback support replay/resume. Permission loss/transient DB failures leave pending rows pending.
+- **Schema:** no schema changes/migration. `vyapti_vschool` and `vyapti_vschool_test` remain at 21 migrations. Existing Imports BRANCH tables retain Path A metadata; database RLS remains a TEN-03 gate. No reset or reseed.
+- **Real PostgreSQL:** `node scripts/database.mjs functional test/functional/import-preview.test.ts` passed 9/9 on `vyapti_vschool_test`. Evidence covers preview non-writes, scoped access, stale confirmation/explicit skip, concurrent process/replay without duplicates, SQL-trigger failure proving Person/Student/Enrollment/Placement rollback, admission collision marked FAILED while next row succeeds, lost permission, pending recovery and no processing before confirmation. Test-created trigger/function were dropped in `finally`.
+- **Repository checks:** `pnpm check` passed: lint, typecheck, documentation (30 tasks), database design (50 contracts), backend boundaries, portable backend compile and unit tests (84/84).
+- **Playwright:** `node scripts/database.mjs e2e --config playwright.import.config.ts test/e2e/import-preview.spec.ts` passed 2/2 (desktop Chromium and mobile) against `vyapti_vschool_test`; it previews one CREATE and one invalid-section row, confirms with explicit skip, processes, reloads status from PostgreSQL and checks the student count remains stable on retry. JUnit: `artifacts/e2e-import.junit.xml`.
+- **Build:** `VSCHOOL_E2E=1 pnpm build` passed on Next.js 16.3.8 into isolated `.next-e2e`.
+- **Local demo:** `http://127.0.0.1:3418/admin/imports`; source `b5e2307b349d914bc7470e7033dc6671c38ac229`, build `RLQjUCd1unkZieMGI-_nE`, release manifest `academic_core,student_core`, guarded local DB `vyapti_vschool`. Health and sign-in returned 200; protected imports redirects when signed out. Local browser smoke signed in with the existing synthetic user, previewed the ignored roster fixture, confirmed, processed and refreshed to restored progress. The valid fictional row was processed once; the invalid row was skipped. IMP-01 at 3414 was left alone.
+- **Seed/private files:** `pnpm demo:seed` remains the one guarded idempotent seed command. Use ignored mode-0600 `artifacts/imports-01/private-demo.json` for synthetic credentials/reference IDs and `artifacts/imports-01/sample-roster.csv` for the fictional roster. Paths are printed without passwords/tokens. No real messages are sent.
+- **Manual review (PENDING):** (1) Open `http://127.0.0.1:3418/sign-in`; get the synthetic login from `artifacts/imports-01/private-demo.json`. (2) Open `/admin/imports`, use namespace `SEED-DEMO`, choose the open academic year and upload `artifacts/imports-01/sample-roster.csv`. (3) Expect one CREATE (or NO_CHANGE after first import) plus one invalid-section ERROR; select “Import valid rows only” and confirm one row skipped. (4) Process approved rows; expect one succeeded, one skipped and `COMPLETED_WITH_ERRORS`. (5) Reload; expect saved progress restored and no duplicate Student on “Check saved results.”
+- **Limitations/next:** Path A database RLS is still planned for TEN-03, and real-data deployment gates remain in FND-02. IMP-01 and IMP-02 owner reviews are PENDING. Continue with the next eligible task; PER-02 remains blocked on explicit IAM-03 acceptance.
