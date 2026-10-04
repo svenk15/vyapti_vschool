@@ -1,6 +1,6 @@
 # Academic setup and teaching context — design
 
-Phase 1 · Design revision 2 · 4 October 2026. ACA-01 implementation is in progress; later task schemas remain planned. Review unresolved deployment choices in FND-02 before real-data use.
+Phase 1 · Design revision 3 · 4 October 2026. ACA-01 is verified and ACA-02 is in progress; later task schemas remain planned. Review unresolved deployment choices in FND-02 before real-data use.
 
 ## Database naming and physical mapping
 
@@ -20,7 +20,7 @@ ACA-ADR-003: academic setup is available only when the trusted server release ma
 
 ## Physical data contract
 
-ACA-01 first installs the six setup tables listed here; the remaining academic tables are installed only by their named tasks. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+ACA-01 installs the six setup tables; ACA-02 adds the immutable calendar revision and exception tables listed here. The remaining academic tables are installed only by their named tasks. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
@@ -112,15 +112,17 @@ sequenceDiagram
 
 **Workflow:**
 
-1. Authorize school.manage and acquire guards.
-2. Validate complete policy, dates/campuses and expected calendar/year version.
-3. Compare affected existing sessions through attendance CalendarImpact port; no-op adapter allowed only before attendance tables exist, then replace it in ATT-01.
-4. Append immutable revision and exceptions, then change current pointer/version in one transaction.
-5. Open year requires published calendar; close requires no noncancelled scheduled/open session on or after school-local today. Persist events/audit/receipt.
+1. Require the trusted `academic_core` release, active institution entitlement, active branch activation, and current `school.manage`; lock account → Organization → School and recheck authorization before receipt replay and commit.
+2. Publish only for a DRAFT or OPEN year. Validate expected calendar version, unique weekdays 1..7, at most 500 unique (date,campus) exceptions inside the year, active campus scope and normalized labels.
+3. Evaluate an in-year civil date against the immutable current revision: exact campus exception first, school-wide exception second, weekday policy last. No current revision or a date outside the year is a typed failure.
+4. Ask Attendance's CalendarImpact port whether publication changes any existing noncancelled future session. Append a new immutable revision and exceptions, then update the current pointer/version atomically. Existing submissions are never reinterpreted.
+5. Open only DRAFT→OPEN after a calendar is published. Close only OPEN→CLOSED and only when the CalendarImpact port reports no noncancelled SCHEDULED/OPEN session on or after the school-local current date. Every mutation checks expected year/calendar version and writes audit/outbox/receipt atomically.
+
+**Attendance integration boundary:** No AttendanceSession table or session-creation use case exists in ACA-02. Until those owned tables exist, composition supplies an explicit zero-impact adapter. This adapter is safe only while no sessions can be created; ATT-01 must replace it before session workflows are released and must add the real close-versus-schedule shared-School-guard concurrency test. ACA-02 tests the nonzero-impact rejection branch using the port and does not claim the absent session race was exercised.
 
 **Database writes / atomicity:** CalendarRevision, CalendarException, SchoolCalendar pointer/version; AcademicYear state/version; envelopes. No editing old revisions.
 
-**Errors and recovery:** Affected existing future session→409 CALENDAR_IN_USE; no calendar on open→409; pending future sessions on close→409; stale revision→409.
+**Errors and recovery:** Affected existing future session→409 CALENDAR_IN_USE; no current revision on evaluate or no published calendar on open→409; pending future sessions on close→409; CLOSED-year publication or invalid state transition→409; foreign/inactive campus→404; date/weekday/exception validation→422; stale revision→409. Reapply against a refreshed version; never edit or delete a published revision.
 
 ```mermaid
 sequenceDiagram
@@ -148,7 +150,7 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Campus-over-school precedence; all weekdays validation; state transitions. Functional PostgreSQL — Publication failure leaves pointer unchanged; deferred pointer FK; immutable records; close-vs-schedule serialization. E2E — Publish holiday/campus exception and evaluate dates; open year; term edit denied; close empty disposable year.
+**Verification:** Unit — Campus-over-school precedence; all weekdays validation; date boundaries; state transitions. Functional PostgreSQL — Publication failure leaves pointer unchanged; deferred scoped pointer FK; immutable records; nonzero CalendarImpact rejects publication/close without partial writes. E2E — Publish holiday/campus exception and evaluate dates; open year; term edit denied; close empty disposable year. The session-creation race is explicitly deferred to ATT-01 because Attendance owns no session table yet.
 
 ## ACA-03 — Create offerings and assign teachers
 

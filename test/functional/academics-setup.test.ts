@@ -6,7 +6,9 @@ import {createAccessServices} from '../../backend/composition/access';
 import {createAcademicServices} from '../../backend/composition/academics';
 import {createTenancyServices} from '../../backend/composition/tenancy';
 import {createAcademicSetupUseCases} from '../../backend/modules/academics/application/setup';
+import type {CalendarImpactPort} from '../../backend/modules/academics/application/setup';
 import {PrismaAcademicSetupRepository} from '../../backend/modules/academics/infrastructure/setup';
+import {PrismaInstitutionEvidence} from '../../backend/modules/tenancy/infrastructure/evidence';
 import {capabilityReleaseManifest} from '../../backend/modules/tenancy/domain/entitlements';
 import {schoolInput} from '../fixtures/access-management';
 
@@ -63,5 +65,29 @@ describe('ACA-01 PostgreSQL setup',()=>{
   const code='AYROLLBACK',input=yearInput(code),before=await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}}),yearCount=await db.academicYear.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}}),calendarCount=await db.schoolCalendar.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}}),receiptCount=await db.tenantCommandReceipt.count({where:{organizationId:primary.organizationId,actorAccountId:primary.accountId,command:'AcademicYearCreated'}});
   await expect(failure.createYear(identity,primary.organizationId,primary.schoolId,input)).rejects.toMatchObject({code:'UNAVAILABLE'});
   expect(await db.academicYear.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,code}})).toBe(0);expect(await db.academicYear.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}})).toBe(yearCount);expect(await db.schoolCalendar.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}})).toBe(calendarCount);expect((await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}})).configurationVersion).toBe(before.configurationVersion);expect(await db.tenantCommandReceipt.count({where:{organizationId:primary.organizationId,actorAccountId:primary.accountId,command:'AcademicYearCreated'}})).toBe(receiptCount);
+ });
+});
+
+describe('ACA-02 PostgreSQL calendar publication and year state',()=>{
+ it('publishes immutable revisions, evaluates precedence, and opens while rejecting terms edits',async()=>{
+  const created=await createYear('CALENDAR'),calendarId=created.calendarId,calendar=await db.schoolCalendar.findUniqueOrThrow({where:{id:calendarId}}),exceptions=[{date:'2026-10-02',campusId:null,isTeachingDay:false,label:'School holiday'}];
+  const published=await academics.publishCalendar(identity,primary.organizationId,primary.schoolId,calendarId,{expectedVersion:calendar.version,teachingWeekdays:[1,2,3,4,5],exceptions,key:randomUUID(),reason});expect(published).toMatchObject({version:2,revisionNumber:1});
+  expect(await db.schoolCalendar.findUniqueOrThrow({where:{id:calendarId}})).toMatchObject({currentRevisionId:published.revisionId,version:2});
+  const noWeekend=await academics.evaluateCalendar(identity,primary.organizationId,primary.schoolId,calendarId,{date:'2026-10-03'});expect(noWeekend).toMatchObject({isTeachingDay:false,source:'WEEKLY_RULE'});
+  expect(await academics.evaluateCalendar(identity,primary.organizationId,primary.schoolId,calendarId,{date:'2026-10-02'})).toMatchObject({isTeachingDay:false,source:'SCHOOL_EXCEPTION'});
+  const opened=await academics.transitionYear(identity,primary.organizationId,primary.schoolId,created.id,{expectedVersion:1,target:'OPEN',key:randomUUID(),reason});expect(opened).toMatchObject({version:2,status:'OPEN'});
+  await expect(academics.replaceTerms(identity,primary.organizationId,primary.schoolId,created.id,{expectedVersion:2,terms:terms(),key:randomUUID(),reason})).rejects.toMatchObject({code:'CONFLICT'});
+  const updated=await academics.publishCalendar(identity,primary.organizationId,primary.schoolId,calendarId,{expectedVersion:2,teachingWeekdays:[1,2,3,4,5,6],exceptions,key:randomUUID(),reason});expect(updated.revisionNumber).toBe(2);expect(await db.calendarRevision.count({where:{calendarId}})).toBe(2);expect(await db.calendarException.count({where:{revisionId:published.revisionId}})).toBe(1);
+  await expect(db.calendarRevision.update({where:{id:published.revisionId},data:{number:99}})).rejects.toThrow();
+ });
+
+ it('requires a calendar to open and atomically rejects impacted publication and close',async()=>{
+  const unpub=await createYear('CALREQUIRED');await expect(academics.transitionYear(identity,primary.organizationId,primary.schoolId,unpub.id,{expectedVersion:1,target:'OPEN',key:randomUUID(),reason})).rejects.toMatchObject({code:'CALENDAR_REQUIRED'});
+  const publishAffecting:CalendarImpactPort={async publicationAffectsSessions(){return true;},async hasPendingSessions(){return false;}},writer=createAcademicSetupUseCases(new PrismaAcademicSetupRepository(db,tx=>new PrismaInstitutionEvidence(tx),capabilityReleaseManifest(['academic_core']),undefined,publishAffecting)),cal=await db.schoolCalendar.findFirstOrThrow({where:{yearId:unpub.id}});
+  await expect(writer.publishCalendar(identity,primary.organizationId,primary.schoolId,cal.id,{expectedVersion:1,teachingWeekdays:[1,2,3,4,5],exceptions:[],key:randomUUID(),reason})).rejects.toMatchObject({code:'CALENDAR_IN_USE'});expect(await db.schoolCalendar.findUniqueOrThrow({where:{id:cal.id}})).toMatchObject({version:1,currentRevisionId:null});
+  const regular=await academics.publishCalendar(identity,primary.organizationId,primary.schoolId,cal.id,{expectedVersion:1,teachingWeekdays:[1,2,3,4,5],exceptions:[],key:randomUUID(),reason}),opened=await academics.transitionYear(identity,primary.organizationId,primary.schoolId,unpub.id,{expectedVersion:1,target:'OPEN',key:randomUUID(),reason});
+  const pending:CalendarImpactPort={async publicationAffectsSessions(){return false;},async hasPendingSessions(){return true;}},guarded=createAcademicSetupUseCases(new PrismaAcademicSetupRepository(db,tx=>new PrismaInstitutionEvidence(tx),capabilityReleaseManifest(['academic_core']),()=>new Date('2026-10-04T10:00:00Z'),pending));
+  await expect(guarded.transitionYear(identity,primary.organizationId,primary.schoolId,unpub.id,{expectedVersion:opened.version,target:'CLOSED',key:randomUUID(),reason})).rejects.toMatchObject({code:'CALENDAR_IN_USE'});
+  expect(await db.academicYear.findUniqueOrThrow({where:{id:unpub.id}})).toMatchObject({status:'OPEN',version:2});expect(regular.revisionNumber).toBe(1);
  });
 });

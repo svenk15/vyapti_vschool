@@ -1,9 +1,12 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {AcademicCommandResult,AcademicsWorkspace} from '../../../../shared/contracts/academics';
+import type {AcademicCalendarEvaluation,AcademicCalendarPublication,AcademicCommandResult,AcademicYearTransition,AcademicsWorkspace} from '../../../../shared/contracts/academics';
 import {AccessError,uuidPattern} from '../../access/contracts/index';
 import {code,identifier,name,positiveVersion,validateRange} from '../domain/setup';
+import {calendarExceptions,evaluateCalendar,weekdays,type CalendarExceptionInput} from '../domain/calendar';
 
 export type AcademicCapability='school.manage'|'class.manage';
+export type CalendarImpactPort={publicationAffectsSessions(input:{organizationId:string;schoolId:string;yearId:string;startsOn:string;endsOn:string;exceptions:readonly CalendarExceptionInput[]}):Promise<boolean>;hasPendingSessions(input:{organizationId:string;schoolId:string;yearId:string;onOrAfter:string}):Promise<boolean>};
+export const NO_ATTENDANCE_SESSIONS:CalendarImpactPort={async publicationAffectsSessions(){return false;},async hasPendingSessions(){return false;}};
 export interface AcademicSetupRepository{
  workspace(actor:Identity,organizationId:string,schoolId:string):Promise<AcademicsWorkspace>;
  createYear(actor:Identity,organizationId:string,schoolId:string,input:{code:string;name:string;startsOn:string;endsOn:string;key:string;reason:string}):Promise<AcademicCommandResult & {calendarId:string;status:'DRAFT'}>;
@@ -11,6 +14,10 @@ export interface AcademicSetupRepository{
  createGrade(actor:Identity,organizationId:string,schoolId:string,input:{code:string;name:string;key:string;reason:string}):Promise<AcademicCommandResult>;
  createSubject(actor:Identity,organizationId:string,schoolId:string,input:{code:string;name:string;key:string;reason:string}):Promise<AcademicCommandResult>;
  createSection(actor:Identity,organizationId:string,schoolId:string,input:{yearId:string;gradeId:string;campusId:string|null;code:string;name:string;key:string;reason:string}):Promise<AcademicCommandResult & {yearId:string;gradeId:string;campusId:string|null}>;
+ calendarBounds(actor:Identity,organizationId:string,schoolId:string,calendarId:string):Promise<{startsOn:string;endsOn:string}>;
+ publishCalendar(actor:Identity,organizationId:string,schoolId:string,calendarId:string,input:{expectedVersion:number;teachingWeekdays:number[];exceptions:CalendarExceptionInput[];key:string;reason:string}):Promise<AcademicCalendarPublication>;
+ calendarForEvaluation(actor:Identity,organizationId:string,schoolId:string,calendarId:string,campusId:string|null):Promise<{year:{startsOn:string;endsOn:string};revision:{id:string;number:number;teachingWeekdays:number[];exceptions:CalendarExceptionInput[]}|null}>;
+ transitionYear(actor:Identity,organizationId:string,schoolId:string,yearId:string,input:{expectedVersion:number;target:'OPEN'|'CLOSED';key:string;reason:string}):Promise<AcademicYearTransition>;
 }
 export type AcademicSetupFacade=ReturnType<typeof createAcademicSetupUseCases>;
 function actor(value:Identity|null):Identity{if(!value||!uuidPattern.test(value.accountId)||!Number.isSafeInteger(value.tokenVersion))throw new AccessError('UNAUTHENTICATED');return value;}
@@ -25,5 +32,8 @@ export function createAcademicSetupUseCases(repo:AcademicSetupRepository){
   createGrade(raw:Identity|null,organization:unknown,school:unknown,input:{code:unknown;name:unknown;key:unknown;reason:unknown}){const s=scope(raw,organization,school);return repo.createGrade(s.actor,s.organizationId,s.schoolId,{code:code(input.code),name:name(input.name),key:key(input.key),reason:reason(input.reason)});},
   createSubject(raw:Identity|null,organization:unknown,school:unknown,input:{code:unknown;name:unknown;key:unknown;reason:unknown}){const s=scope(raw,organization,school);return repo.createSubject(s.actor,s.organizationId,s.schoolId,{code:code(input.code),name:name(input.name),key:key(input.key),reason:reason(input.reason)});},
   createSection(raw:Identity|null,organization:unknown,school:unknown,input:{yearId:unknown;gradeId:unknown;campusId?:unknown;code:unknown;name:unknown;key:unknown;reason:unknown}){const s=scope(raw,organization,school);return repo.createSection(s.actor,s.organizationId,s.schoolId,{yearId:identifier(input.yearId),gradeId:identifier(input.gradeId),campusId:input.campusId==null?null:identifier(input.campusId),code:code(input.code),name:name(input.name),key:key(input.key),reason:reason(input.reason)});},
+  async publishCalendar(raw:Identity|null,organization:unknown,school:unknown,calendar:unknown,input:{expectedVersion:unknown;teachingWeekdays:unknown;exceptions:unknown;key:unknown;reason:unknown}){const s=scope(raw,organization,school),calendarId=identifier(calendar),bounds=await repo.calendarBounds(s.actor,s.organizationId,s.schoolId,calendarId),teachingWeekdays=weekdays(input.teachingWeekdays),exceptions=calendarExceptions(input.exceptions,bounds);return repo.publishCalendar(s.actor,s.organizationId,s.schoolId,calendarId,{expectedVersion:positiveVersion(input.expectedVersion),teachingWeekdays,exceptions,key:key(input.key),reason:reason(input.reason)});},
+  async evaluateCalendar(raw:Identity|null,organization:unknown,school:unknown,calendar:unknown,query:{date:unknown;campusId?:unknown}):Promise<AcademicCalendarEvaluation>{const s=scope(raw,organization,school),calendarId=identifier(calendar),campusId=query.campusId==null?null:identifier(query.campusId),context=await repo.calendarForEvaluation(s.actor,s.organizationId,s.schoolId,calendarId,campusId);if(!context.revision)throw new AccessError('CALENDAR_REQUIRED');return evaluateCalendar({date:query.date,campusId,year:context.year,revisionId:context.revision.id,revisionNumber:context.revision.number,teachingWeekdays:context.revision.teachingWeekdays,exceptions:context.revision.exceptions});},
+  transitionYear(raw:Identity|null,organization:unknown,school:unknown,year:unknown,input:{expectedVersion:unknown;target:unknown;key:unknown;reason:unknown}){const s=scope(raw,organization,school);if(input.target!=='OPEN'&&input.target!=='CLOSED')throw new AccessError('VALIDATION');return repo.transitionYear(s.actor,s.organizationId,s.schoolId,identifier(year),{expectedVersion:positiveVersion(input.expectedVersion),target:input.target,key:key(input.key),reason:reason(input.reason)});},
  };
 }

@@ -1,6 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {civilDate,code,name,validateRange,validateTerms} from '../../backend/modules/academics/domain/setup';
 import {capabilityReleaseManifest,releasedModuleIds} from '../../backend/modules/tenancy/domain/entitlements';
+import {calendarExceptions,evaluateCalendar,weekdays} from '../../backend/modules/academics/domain/calendar';
 
 describe('academic setup domain',()=>{
  it('validates real Gregorian civil dates without local timezone conversion',()=>{
@@ -12,6 +13,22 @@ describe('academic setup domain',()=>{
  it('accepts adjacent half-open terms, rejects overlap and limits terms to 24',()=>{
   const year={startsOn:'2026-04-01',endsOn:'2027-04-01'},adjacent=[{code:'T1',name:'Term 1',startsOn:'2026-04-01',endsOn:'2026-10-01'},{code:'T2',name:'Term 2',startsOn:'2026-10-01',endsOn:'2027-04-01'}];
   expect(validateTerms(adjacent,year)).toHaveLength(2);expect(()=>validateTerms([{...adjacent[0]!,endsOn:'2026-10-02'},adjacent[1]!],year)).toThrow();expect(()=>validateTerms(Array.from({length:25},(_,i)=>({code:`T${i}`,name:`Term ${i}`,startsOn:'2026-04-01',endsOn:'2026-05-01'})),year)).toThrow();
+ });
+});
+
+describe('academic calendar policy',()=>{
+ const year={startsOn:'2026-04-01',endsOn:'2027-04-01'},campus='00000000-0000-4000-8000-000000000001';
+ it('applies campus, school and weekly precedence and keeps civil date boundaries',()=>{
+  const exceptions=calendarExceptions([{date:'2026-10-02',campusId:null,isTeachingDay:false,label:'School holiday'},{date:'2026-10-02',campusId:campus,isTeachingDay:true,label:'Campus event'}],year),base={year,revisionId:'rev',revisionNumber:1,teachingWeekdays:[1,2,3,4,5],exceptions};
+  expect(evaluateCalendar({...base,date:'2026-10-02',campusId:campus})).toMatchObject({isTeachingDay:true,source:'CAMPUS_EXCEPTION',label:'Campus event'});
+  expect(evaluateCalendar({...base,date:'2026-10-02',campusId:null})).toMatchObject({isTeachingDay:false,source:'SCHOOL_EXCEPTION'});
+  expect(evaluateCalendar({...base,date:'2026-10-05',campusId:null})).toMatchObject({isTeachingDay:true,source:'WEEKLY_RULE'});
+  expect(()=>evaluateCalendar({...base,date:'2027-04-01',campusId:null})).toThrow();
+ });
+ it('requires unique weekdays and unique in-year exception scope',()=>{
+  expect(weekdays([5,1,2])).toEqual([1,2,5]);expect(()=>weekdays([])).toThrow();expect(()=>weekdays([1,1])).toThrow();
+  expect(()=>calendarExceptions([{date:'2026-10-02',campusId:null,isTeachingDay:false,label:'One'},{date:'2026-10-02',campusId:null,isTeachingDay:false,label:'Two'}],year)).toThrow();
+  expect(()=>calendarExceptions([{date:'2027-04-01',campusId:null,isTeachingDay:false,label:'Out of year'}],year)).toThrow();
  });
 });
 

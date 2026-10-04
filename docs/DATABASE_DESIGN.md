@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; the local checkpoint has 29 migrated tables through ACA-01. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; ACA-02 adds two academic calendar tables, bringing the local checkpoint to 31 migrated tables. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
 
 ## Naming decision — DB-ADR-001
 
@@ -43,8 +43,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 |---|---|---|---|---|
 | AcademicTerm | `vs_academics_academic_term` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | AcademicYear | `vs_academics_academic_year` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
-| CalendarException | `vs_academics_calendar_exception` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| CalendarRevision | `vs_academics_calendar_revision` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
+| CalendarException | `vs_academics_calendar_exception` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
+| CalendarRevision | `vs_academics_calendar_revision` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | CourseOffering | `vs_academics_course_offering` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | GradeLevel | `vs_academics_grade_level` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | SchoolCalendar | `vs_academics_school_calendar` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |

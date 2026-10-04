@@ -12,4 +12,7 @@ export const academicsGateway={
  async createGrade(identity:Identity|null,input:Parameters<AcademicSetupFacade['createGrade']>[3]){const s=await scope(identity);return academics.createGrade(identity,s.organizationId,s.schoolId,input);},
  async createSubject(identity:Identity|null,input:Parameters<AcademicSetupFacade['createSubject']>[3]){const s=await scope(identity);return academics.createSubject(identity,s.organizationId,s.schoolId,input);},
  async createSection(identity:Identity|null,input:Parameters<AcademicSetupFacade['createSection']>[3]){const s=await scope(identity);return academics.createSection(identity,s.organizationId,s.schoolId,input);},
+ async publishCalendar(identity:Identity|null,calendarId:string,input:Parameters<AcademicSetupFacade['publishCalendar']>[4]){const s=await scope(identity);return academics.publishCalendar(identity,s.organizationId,s.schoolId,calendarId,input);},
+ async evaluateCalendar(identity:Identity|null,calendarId:string,query:Parameters<AcademicSetupFacade['evaluateCalendar']>[4]){const s=await scope(identity);return academics.evaluateCalendar(identity,s.organizationId,s.schoolId,calendarId,query);},
+ async transitionYear(identity:Identity|null,yearId:string,input:Parameters<AcademicSetupFacade['transitionYear']>[4]){const s=await scope(identity);return academics.transitionYear(identity,s.organizationId,s.schoolId,yearId,input);},
 };

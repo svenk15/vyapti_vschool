@@ -93,6 +93,7 @@ model UserAccount {
   auditEntries        AuditEntry[]
   commandReceipts     CommandReceipt[]
   publishedBrandRevisions BrandRevision[]
+  publishedAcademicCalendarRevisions CalendarRevision[] @relation("AcademicRevisionPublisher")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -222,6 +223,7 @@ model Campus {
  version Int
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_campus_school_fkey")
  academicSections Section[]
+ academicExceptions CalendarException[]
  @@unique([organizationId,schoolId,id],map:"vs_access_campus_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_access_campus_scope_code_key")
  @@map("vs_access_campus")
@@ -530,7 +532,44 @@ model SchoolCalendar {
  version Int
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_school_calendar_school_fkey")
  year AcademicYear @relation(fields:[organizationId,schoolId,yearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_school_calendar_year_fkey")
+ revisions CalendarRevision[] @relation("AcademicCalendarHistory")
+ currentRevision CalendarRevision? @relation("AcademicCalendarCurrent",fields:[organizationId,schoolId,id,currentRevisionId],references:[organizationId,schoolId,calendarId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_school_calendar_current_fkey")
  @@unique([organizationId,schoolId,yearId],map:"vs_academics_school_calendar_year_key")
  @@unique([organizationId,schoolId,id],map:"vs_academics_school_calendar_scope_id_key")
  @@map("vs_academics_school_calendar")
+}
+
+model CalendarRevision {
+ id String @id(map:"vs_academics_calendar_revision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ calendarId String @map("calendar_id") @db.Uuid
+ number Int
+ teachingWeekdays Int[] @map("teaching_weekdays")
+ publishedAt DateTime @map("published_at") @db.Timestamptz(3)
+ publishedBy String @map("published_by") @db.Uuid
+ calendar SchoolCalendar @relation("AcademicCalendarHistory",fields:[organizationId,schoolId,calendarId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_calendar_revision_calendar_fkey")
+ publisher UserAccount @relation("AcademicRevisionPublisher",fields:[publishedBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_calendar_revision_publisher_fkey")
+ exceptions CalendarException[]
+ currentForCalendars SchoolCalendar[] @relation("AcademicCalendarCurrent")
+ @@unique([organizationId,schoolId,calendarId,number],map:"vs_academics_calendar_revision_number_key")
+ @@unique([organizationId,schoolId,calendarId,id],map:"vs_academics_calendar_revision_scope_calendar_id_key")
+ @@unique([organizationId,schoolId,id],map:"vs_academics_calendar_revision_scope_id_key")
+ @@index([organizationId,schoolId,calendarId,number],map:"vs_academics_calendar_revision_history_idx")
+ @@map("vs_academics_calendar_revision")
+}
+
+model CalendarException {
+ id String @id(map:"vs_academics_calendar_exception_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ revisionId String @map("revision_id") @db.Uuid
+ campusId String? @map("campus_id") @db.Uuid
+ onDate DateTime @map("on_date") @db.Date
+ isTeachingDay Boolean @map("is_teaching_day")
+ label String @db.VarChar(160)
+ revision CalendarRevision @relation(fields:[organizationId,schoolId,revisionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_calendar_exception_revision_fkey")
+ campus Campus? @relation(fields:[organizationId,schoolId,campusId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_calendar_exception_campus_fkey")
+ @@index([organizationId,schoolId,revisionId,onDate],map:"vs_academics_calendar_exception_date_idx")
+ @@map("vs_academics_calendar_exception")
 }
