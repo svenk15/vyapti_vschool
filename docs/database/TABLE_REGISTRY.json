@@ -126,11 +126,11 @@
       "model": "AccountPersonBinding",
       "owner": "access",
       "table": "vs_access_account_person_binding",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid",
       "responsibility": "Deliberate verified account-to-person link; People supplies scoped Person reference.",
-      "constraints": "FK account; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
+      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
     },
     {
       "model": "AuthSecurityEvent",
@@ -326,7 +326,7 @@
       "model": "Employee",
       "owner": "people",
       "table": "vs_people_employee",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/people/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int",
       "responsibility": "School institutional profile; links rather than duplicates identity.",
@@ -336,7 +336,7 @@
       "model": "Person",
       "owner": "people",
       "table": "vs_people_person",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/people/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; first_name varchar(100); last_name varchar(100) default empty; contact_email varchar(254) nullable; version int; created_at timestamptz(3)",
       "responsibility": "Canonical name/contact; email contact is not verified login ownership. Minimal pilot PII, no health/document fields.",

@@ -1,6 +1,6 @@
 # People and staff identity — design
 
-Phase 1 · Design revision 1 · 3 October 2026. Status: specified for implementation; only the platform readiness path is implemented in this starter. Review unresolved deployment choices in FND-02 before real-data use.
+Phase 1 · Design revision 2 · 4 October 2026. PER-01 is in progress; PER-02 and later schemas remain planned. Review unresolved deployment choices in FND-02 before real-data use.
 
 ## Database naming and physical mapping
 
@@ -18,7 +18,7 @@ PER-ADR-002: organization-wide person corrections are restricted operator mainte
 
 ## Physical data contract
 
-All tables are planned except SetupCheck. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+PER-01 installs Person, Employee and the Access-owned AccountPersonBinding table; binding rows remain empty until PER-02. Later People tables are planned. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
@@ -31,7 +31,7 @@ Staff list: Employee filtered by selected school → Person on organization/id �
 
 ## Screen contract
 
-/admin/teachers: search/paginate staff; Create teacher captures name, staff number and employment dates, optionally links an explicitly verified existing Person via operator-approved identifier. Checkbox "Create teaching profile" is explicit and calls Academics owner. Link account is a separate reviewed action with identity verification reference. Pending portal access and no assignments are distinct states. Ending employment shows affected assignments/sessions first.
+/admin/teachers: search/paginate staff; PER-01 captures first/last name, optional contact email, staff number and employment start date, then shows employment and portal-access status. It always creates a new Person and never links an account or enables teaching. PER-02 adds only the separately reviewed verified-account and teacher-eligibility actions. Pending portal access and no assignments remain distinct states; ending employment shows affected assignments/sessions first.
 
 All screens additionally follow Bible §8: loading, empty, validation, permission, stale/conflict, temporary failure and acknowledged success; semantic labels, focus and mobile layout. No future-module navigation.
 
@@ -47,17 +47,17 @@ Mutations use the account → Organization → School guard protocol in Bible §
 
 **Transport:** POST /api/v1/employees; GET /api/v1/employees
 
-**Input:** firstName,lastName?,contactEmail?,staffNumber,employedFrom; optional existingPersonId only with verified operator mapping; key. class.manage required.
+**Input:** firstName,lastName?,contactEmail?,staffNumber,employedFrom; key. class.manage required. PER-01 always creates a new Person; it has no existing-person resolution path because this task has no operator-verification port. Names and contact data never merge identities. A later verified resolution command must be explicit and reviewed.
 
 **Workflow:**
 
 1. Authorize school staff management through class.manage; acquire guards.
 2. Validate identity fields and staff number; do not infer Person equality from contact.
-3. Create Person through People factory (or resolve explicitly approved scoped existing Person), then Employee in one transaction.
+3. Create a new Person through the People factory, then Employee in one transaction. Never search or merge by name/contact.
 4. Persist event/audit/receipt; add AccountPersonBinding table now Person exists, but do not bind automatically.
 5. Read staff list via scoped Employee/Person join; display profile and portal status separately.
 
-**Database writes / atomicity:** Person, Employee and shared envelopes; migration for AccountPersonBinding scoped foreign key.
+**Database writes / atomicity:** Person, Employee, the Access-owned AccountPersonBinding table (empty until the verified PER-02 binding use case), and shared envelopes; one forward migration with the scoped Person FK.
 
 **Errors and recovery:** Staff number duplicate→409; foreign Person→404; invalid dates/contact→422.
 
@@ -144,6 +144,10 @@ Implement tables only in the task that first uses them; migrate from empty datab
 Duplicate staff-number race; same name allowed; no auto binding by email; wrong-organization Person denied; teacher profile creation rollback; ending employment immediately prevents submission through eligibility checks while retaining history.
 
 See [tasks](TASKS.md), [current state](CURRENT_STATE.md), [Bible](../../VSchool_Bible.md) and [agent runbook](../../AGENT_RUNBOOK.md).
+
+## Change log
+
+2026-10-04 / PER-01 clarification: creation always makes a new Person because no operator-verified Person-resolution port exists in this task. This preserves the no-similarity-merge rule and reserves existing-person linking for an explicit reviewed workflow.
 
 ## v4.1 integration requirements
 

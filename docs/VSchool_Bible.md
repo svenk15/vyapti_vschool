@@ -209,6 +209,7 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 
 2026-10-04 / ACA-01: added trusted academic release gating and the draft-year, terms, grade, subject and section setup slice with scoped PostgreSQL contracts, forward migration, screen behavior and test boundaries. ACA-02 reconciles its session-impact port: use an explicit empty adapter only before Attendance sessions exist; ATT-01 replaces it and owns the real close-versus-schedule race verification.
 2026-10-04 / ACA-02: added immutable calendar revisions and scoped campus/school exceptions, date evaluation precedence, guarded year open/close, and the documented zero-session adapter boundary pending ATT-01.
+2026-10-04 / PER-01: added organization-local Person and branch-scoped Employee profile creation with no similarity-based merging, plus the Access-owned empty verified account-binding table for the future explicit PER-02 workflow.
 
 2026-10-04 / IAM-03: IAM-ADR-007 resolves outside-account operator provenance, relational intended-membership binding, account-wide recovery quarantine/session revocation and bounded activation attempts.
 

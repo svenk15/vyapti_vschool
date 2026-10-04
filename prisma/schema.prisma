@@ -35,6 +35,8 @@ model Organization {
   academicYears AcademicYear[]
   academicGrades GradeLevel[]
   academicSubjects Subject[]
+  people Person[]
+  accountPersonBindings AccountPersonBinding[]
 
   @@map("vs_access_organization")
 }
@@ -65,6 +67,7 @@ model School {
   academicSubjects Subject[]
   academicSections Section[]
   academicCalendars SchoolCalendar[]
+  employees Employee[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -94,10 +97,62 @@ model UserAccount {
   commandReceipts     CommandReceipt[]
   publishedBrandRevisions BrandRevision[]
   publishedAcademicCalendarRevisions CalendarRevision[] @relation("AcademicRevisionPublisher")
+ personBindings AccountPersonBinding[] @relation("PersonAccountBinding")
+  verifiedPersonBindings AccountPersonBinding[] @relation("PersonBindingVerifier")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
   @@map("vs_access_user_account")
+}
+
+model AccountPersonBinding {
+ id String @id(map:"vs_access_account_person_binding_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ personId String @map("person_id") @db.Uuid
+ verifiedAt DateTime @map("verified_at") @db.Timestamptz(3)
+ verifiedBy String @map("verified_by") @db.Uuid
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_person_binding_organization_fkey")
+ account UserAccount @relation("PersonAccountBinding",fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_person_binding_account_fkey")
+ person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_person_binding_person_fkey")
+ verifier UserAccount @relation("PersonBindingVerifier",fields:[verifiedBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_person_binding_verifier_fkey")
+ @@unique([organizationId,accountId],map:"vs_access_account_person_binding_org_account_key")
+ @@unique([organizationId,personId],map:"vs_access_account_person_binding_org_person_key")
+ @@map("vs_access_account_person_binding")
+}
+
+model Person {
+ id String @id(map:"vs_people_person_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ firstName String @map("first_name") @db.VarChar(100)
+ lastName String @default("") @map("last_name") @db.VarChar(100)
+ contactEmail String? @map("contact_email") @db.VarChar(254)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_person_organization_fkey")
+ employees Employee[]
+ accountBinding AccountPersonBinding?
+ @@unique([organizationId,id],map:"vs_people_person_organization_id_key")
+ @@index([organizationId,lastName,id],map:"vs_people_person_name_idx")
+ @@map("vs_people_person")
+}
+
+model Employee {
+ id String @id(map:"vs_people_employee_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ personId String @map("person_id") @db.Uuid
+ staffNumber String @map("staff_number") @db.VarChar(40)
+ employedFrom DateTime @map("employed_from") @db.Date
+ employedTo DateTime? @map("employed_to") @db.Date
+ status String @db.VarChar(20)
+ version Int
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_employee_school_fkey")
+ person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_employee_person_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_people_employee_scope_id_key")
+ @@unique([organizationId,schoolId,staffNumber],map:"vs_people_employee_staff_number_key")
+ @@unique([organizationId,schoolId,personId],map:"vs_people_employee_person_key")
+ @@map("vs_people_employee")
 }
 
 model SchoolMembership {

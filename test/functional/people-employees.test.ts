@@ -1,0 +1,41 @@
+import {afterAll,beforeAll,describe,expect,it} from 'vitest';
+import {randomUUID} from 'node:crypto';
+import {PrismaClient} from '../../generated/prisma/client';
+import {PrismaPg} from '@prisma/adapter-pg';
+import {createAccessServices} from '../../backend/composition/access';
+import {createPeopleServices} from '../../backend/composition/people';
+import {createPeopleUseCases} from '../../backend/modules/people/application/employees';
+import {PrismaPeopleRepository} from '../../backend/modules/people/infrastructure/employees';
+import {schoolInput} from '../fixtures/access-management';
+
+const url=process.env.TEST_DATABASE_URL??'';if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated People PostgreSQL test DB required');
+const access=createAccessServices({databaseUrl:url}),people=createPeopleServices({databaseUrl:url,cursorSecret:'people-test-cursor-secret-32-bytes-minimum'}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]});
+let primary:Awaited<ReturnType<typeof access.provisionSchool>>,foreign:Awaited<ReturnType<typeof access.provisionSchool>>,identity:{accountId:string;tokenVersion:number};
+beforeAll(async()=>{primary=await access.provisionSchool(schoolInput(),{operatorId:randomUUID(),verified:true});foreign=await access.provisionSchool(schoolInput(),{operatorId:randomUUID(),verified:true});identity={accountId:primary.accountId,tokenVersion:1};});
+afterAll(async()=>{await people.disconnect();await access.disconnect();await db.$disconnect();});
+function input(staffNumber:string,firstName='Synthetic',lastName='Teacher'){return {firstName,lastName,contactEmail:null,staffNumber,employedFrom:'2026-04-01',key:randomUUID()};}
+
+describe('PER-01 PostgreSQL employee profiles',()=>{
+ it('creates distinct same-name People profiles, pages scoped staff, and leaves accounts unlinked',async()=>{
+  const firstIntent=input('STAFF-001','Alex','Morgan'),one=await people.createEmployee(identity,primary.organizationId,primary.schoolId,firstIntent),replayed=await people.createEmployee(identity,primary.organizationId,primary.schoolId,firstIntent),two=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('STAFF-002','Alex','Morgan'));expect(replayed).toMatchObject({employeeId:one.employeeId,replayed:true});
+  expect(one).toMatchObject({staffNumber:'STAFF-001',person:{displayName:'Alex Morgan'},portalAccess:'UNLINKED'});expect(two.person.id).not.toBe(one.person.id);
+  const first=await people.workspace(identity,primary.organizationId,primary.schoolId,{limit:1});expect(first.employees).toHaveLength(1);expect(first.nextCursor).toBeTruthy();
+  const second=await people.workspace(identity,primary.organizationId,primary.schoolId,{limit:1,cursor:first.nextCursor});expect(second.employees).toHaveLength(1);expect(second.employees[0]?.employeeId).not.toBe(first.employees[0]?.employeeId);expect(second.nextCursor).toBeNull();
+  const searched=await people.workspace(identity,primary.organizationId,primary.schoolId,{search:'Alex'});expect(searched.employees).toHaveLength(2);expect(searched.employees.every(employee=>employee.portalAccess==='UNLINKED')).toBe(true);
+  await db.accountPersonBinding.create({data:{id:randomUUID(),organizationId:primary.organizationId,accountId:primary.accountId,personId:one.person.id,verifiedAt:new Date(),verifiedBy:primary.accountId}});const linked=await people.workspace(identity,primary.organizationId,primary.schoolId,{search:'STAFF-001'});expect(linked.employees[0]?.portalAccess).toBe('ACTIVE');
+  await expect(people.workspace(identity,foreign.organizationId,foreign.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
+ });
+
+ it('serializes duplicate staff numbers and enforces the organization-scoped Person FK',async()=>{
+  const attempts=await Promise.allSettled([people.createEmployee(identity,primary.organizationId,primary.schoolId,input('RACE-01')),people.createEmployee(identity,primary.organizationId,primary.schoolId,input('RACE-01'))]);expect(attempts.filter(value=>value.status==='fulfilled')).toHaveLength(1);expect(attempts.filter(value=>value.status==='rejected')).toHaveLength(1);expect(await db.employee.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,staffNumber:'RACE-01'}})).toBe(1);
+  const foreignPerson=await db.person.create({data:{id:randomUUID(),organizationId:foreign.organizationId,firstName:'Foreign',lastName:'Person',contactEmail:null,version:1,createdAt:new Date()}});
+  await expect(db.employee.create({data:{id:randomUUID(),organizationId:primary.organizationId,schoolId:primary.schoolId,personId:foreignPerson.id,staffNumber:'FORGED',employedFrom:new Date('2026-01-01T00:00:00Z'),employedTo:null,status:'ACTIVE',version:1}})).rejects.toMatchObject({code:'P2003'});
+ });
+
+ it('rolls back both Person and Employee with school revision, receipt and events if evidence fails',async()=>{
+  const failing=createPeopleUseCases(new PrismaPeopleRepository(db,()=>({async append(){throw new Error('synthetic evidence writer failure');}}),()=>new Date('2026-05-01T00:00:00Z'),'people-test-cursor-secret-32-bytes-minimum'));
+  const before=await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}}),persons=await db.person.count({where:{organizationId:primary.organizationId}}),employees=await db.employee.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}}),receipts=await db.tenantCommandReceipt.count({where:{organizationId:primary.organizationId,actorAccountId:primary.accountId,command:'EmployeeCreated'}}),events=await db.tenantOutbox.count({where:{organizationId:primary.organizationId,type:'PersonRegistered.v1'}});
+  await expect(failing.createEmployee(identity,primary.organizationId,primary.schoolId,{...input('ROLLBACK'),key:randomUUID()})).rejects.toMatchObject({code:'UNAVAILABLE'});
+  expect(await db.person.count({where:{organizationId:primary.organizationId}})).toBe(persons);expect(await db.employee.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}})).toBe(employees);expect((await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}})).configurationVersion).toBe(before.configurationVersion);expect(await db.tenantCommandReceipt.count({where:{organizationId:primary.organizationId,actorAccountId:primary.accountId,command:'EmployeeCreated'}})).toBe(receipts);expect(await db.tenantOutbox.count({where:{organizationId:primary.organizationId,type:'PersonRegistered.v1'}})).toBe(events);
+ });
+});

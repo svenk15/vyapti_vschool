@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; ACA-02 adds two academic calendar tables, bringing the local checkpoint to 31 migrated tables. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; ACA-02 adds two academic calendar tables and PER-01 adds three People/Access tables, bringing the local checkpoint to 34 migrated tables. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
 
 ## Naming decision — DB-ADR-001
 
@@ -54,7 +54,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivationMembership | `vs_access_account_activation_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
-| AccountPersonBinding | `vs_access_account_person_binding` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
+| AccountPersonBinding | `vs_access_account_person_binding` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AuthSecurityEvent | `vs_access_auth_security_event` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | Campus | `vs_access_campus` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | InstitutionGrant | `vs_access_institution_grant` | access | MIGRATED | [access LLD](modules/tenancy/DESIGN.md) |
@@ -74,8 +74,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | ImportJob | `vs_imports_import_job` | imports | PLANNED | [imports LLD](modules/imports/DESIGN.md) |
 | ImportRow | `vs_imports_import_row` | imports | PLANNED | [imports LLD](modules/imports/DESIGN.md) |
 | SourceStudentMap | `vs_imports_source_student_map` | imports | PLANNED | [imports LLD](modules/imports/DESIGN.md) |
-| Employee | `vs_people_employee` | people | PLANNED | [people LLD](modules/people/DESIGN.md) |
-| Person | `vs_people_person` | people | PLANNED | [people LLD](modules/people/DESIGN.md) |
+| Employee | `vs_people_employee` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
+| Person | `vs_people_person` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | AuditEntry | `vs_platform_audit_entry` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | CommandReceipt | `vs_platform_command_receipt` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | OutboxEvent | `vs_platform_outbox_event` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
