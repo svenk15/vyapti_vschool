@@ -18,7 +18,7 @@ IMP-02 adds explicit confirmation, bounded/resumable per-row processing, server 
 
 ## Next action
 
-Human review is PENDING for the IMP-02 demo. Address reported defects before dependent work. `pnpm next-task` selects the next implementation task; dependency acceptance requirements in its LLD/task remain controlling. Do not mark human acceptance PASSED without owner feedback.
+IMP-01, IMP-02 and IMP-03 human reviews remain PENDING. Address reported defects before dependent work. After IMP-03, `pnpm next-task` reported no automatically eligible task: PER-02 remains explicitly BLOCKED on owner acceptance of IAM-03, and its dependent offerings/teacher work cannot proceed. No acceptance is inferred from the restored IAM-03 demo or these automated checks.
 
 **IMP-03 design-readiness note (5 October 2026):** Resolved retention as source bytes through 7 days, terminal row-level PII through 30 days from job creation, and no deletion of SourceStudentMap or immutable command receipts. Cancel serializes on existing account→Organization→School→job→rows locks and skips only remaining PENDING rows. Error export contains row number/column/code/fixed message only and formula-neutralizes every cell. `ImportRow.normalized` becomes nullable; the job enum includes CANCELLED. Source expiry refuses further processing while rows remain pending. Production/legal-hold durations remain FND-02 school-policy work; local implementation can proceed. Existing `AuditEntry` cannot truthfully attribute a local operator because it requires a UserAccount FK, so a minimal global append-only `OperatorAuditEntry` contract is added for aggregate purge counts without pupil/source details. Dependency snapshot: IMP-02 VERIFIED/PENDING; no explicit owner-PASS dependency gate.
 
