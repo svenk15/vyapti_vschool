@@ -1,0 +1,66 @@
+{
+  "task": "PER-01",
+  "implementation": "VERIFIED",
+  "humanReview": "PENDING",
+  "sourceCommit": "45ca6d6cf19ba321c814099d405b7581f9bd77e2",
+  "demo": {
+    "url": "http://127.0.0.1:3409",
+    "mode": "frozen production build",
+    "buildId": "b13AmUy8w1SEA5TLimWdc",
+    "liveHealthStatus": 200,
+    "unauthenticatedEmployeesApiStatus": 401,
+    "unauthenticatedStaffPageStatus": 307,
+    "authenticatedSmoke": {
+      "signIn": "PASS",
+      "twoDistinctSameNameProfiles": "PASS",
+      "recordsPersistAfterRefresh": "PASS",
+      "portalStatusShowsUnlinked": "PASS"
+    },
+    "syntheticRecordsRetainedInDevelopmentDatabase": true
+  },
+  "schema": {
+    "migration": "20261004001100_people_staff_profiles",
+    "developmentDatabase": "vyapti_vschool",
+    "testDatabase": "vyapti_vschool_test",
+    "successfulForwardMigrationsEach": 15,
+    "pendingMigrations": 0,
+    "testMigrationLedgerRolledBackAttempts": 2,
+    "schemaDiff": "empty",
+    "migratedTableCheckpoint": 34,
+    "resetOrReseed": false
+  },
+  "checks": [
+    {
+      "command": "pnpm check",
+      "result": "PASS",
+      "unitTests": 67,
+      "report": "unit.junit.xml"
+    },
+    {
+      "command": "pnpm test:functional",
+      "result": "PASS",
+      "tests": 53,
+      "files": 10,
+      "database": "vyapti_vschool_test",
+      "report": "functional.junit.xml"
+    },
+    {
+      "command": "node scripts/database.mjs e2e",
+      "result": "PASS",
+      "tests": 60,
+      "projects": ["chromium", "mobile"],
+      "report": "e2e.junit.xml"
+    },
+    {
+      "command": "pnpm build",
+      "result": "PASS",
+      "buildId": "b13AmUy8w1SEA5TLimWdc"
+    }
+  ],
+  "limitations": [
+    "No account binding, login creation, or teaching eligibility is part of PER-01.",
+    "AccountPersonBinding is installed with no rows; PER-02 owns explicit verified bindings.",
+    "Human review remains pending until explicit owner feedback."
+  ],
+  "secretsOrPersonalDataCommitted": false
+}
