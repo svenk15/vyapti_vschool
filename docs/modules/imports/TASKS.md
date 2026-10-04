@@ -10,21 +10,21 @@ Design: [flow IMP-01](DESIGN.md). Scope and API: POST /api/v1/imports/preview; G
 
 ### Implementation instructions
 
-1. Authenticate and require student.manage before reading the bounded body; enforce size/rate limits.
-2. Parse strict CSV and validate complete schema, count/cell limits, duplicate keys.
-3. Resolve exact configured references and stable source mappings inside a consistent read snapshot.
-4. Store immutable source, preview revision, canonical rows/reference versions and errors; create no Person/Student/Enrollment.
-5. Return safe preview summary and paginated row decisions.
+1. Resolve current branch and require student.manage plus active student_core and academic_core release/entitlement/activation before body consumption; bound request and rate-limit by account.
+2. Require Idempotency-Key; enforce separately 2 MiB CSV, 8 KiB metadata and 16 KiB multipart framing, then parse strict UTF-8 CSV with exact supported headers, 1,000-row and 4 KiB-cell limits.
+3. Resolve exact OPEN year/date/campus/grade/section, branch source maps and admission ownership in a consistent snapshot; exact mapped Student/enrollment match is NO_CHANGE, mismatch is CONFLICT, and unmapped admission collision requires mapping.
+4. Under account → Organization → School lock, store immutable source/hash, preview revision, canonical rows/reference versions, decisions and safe audit/outbox/receipt atomically; create no Person/Student/Enrollment.
+5. Same-key/same-source/context replay returns the original job; changed source/context conflicts. Return safe preview summary and paginated row decisions.
 
 Files: extend `backend/modules/imports/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/imports`, `test/functional/imports` and `test/e2e/imports` as the suite grows.
 
 ### Acceptance and test strategy
 
-- Unit / application: CSV parser cases, explicit blank semantics, hash canonicalization.
-- Real PostgreSQL: Preview leaves business row counts unchanged; scope constraints; consistent source-key resolution.
-- Browser: Upload sample and inspect errors; count students unchanged before confirm.
+- Unit / application: strict UTF-8/CSV syntax, headers, blank semantics, file/metadata/framing/row/cell limits, duplicate keys, exact NO_CHANGE projection and hash canonicalization.
+- Real PostgreSQL: Preview leaves Person/Student/Enrollment counts unchanged; scoped references/source maps; authorization/module checks; replay and concurrent same-key conflict; audit/outbox/source-hash exclusion.
+- Browser: Upload matching/invalid samples and inspect row-specific errors; exercise bounds/replay; verify students remain unchanged before confirm.
 - Failure contract: Malformed file→422 with row/column; oversize→413; wrong references→preview ERROR; existing unmapped admission→CONFLICT.
-- Required DB effect: ImportJob, ImportRow only; preview does not emit student-created events. Access/audit metadata records upload without raw row bodies.
+- Required DB effect: ImportJob and ImportRow writes; install SourceStudentMap for read-only preview resolution but do not write it until IMP-02. Preview does not emit student-created events. Platform evidence contains only opaque job ID and aggregate counts.
 - Persistence/security gate: authorize and bound request before body parsing, scope every job/row/source map, keep raw rows/tokens out of audit logs, and preserve immutable preview/source hashes. Under TEN-ADR-006 Path A, register class/scope/constraints/indexes/policy intent and TEN-03 closure; defer database enforcement while keeping application authorization active.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.

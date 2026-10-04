@@ -20,12 +20,12 @@ IMP-ADR-003: create-only + exact NO_CHANGE reimport in v1. Updates, guardians an
 
 ## Physical data contract
 
-All tables are planned except SetupCheck. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+IMP-01 installs ImportJob, ImportRow and SourceStudentMap so preview can resolve existing source identity; only IMP-02 writes SourceStudentMap. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
-| `vs_imports_import_job` (ImportJob) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3) | Imports-owned job stores immutable source and SHA-256; audit excludes source hash/content and row data. CSV max 2 MiB; source expires after 7 days; row outcomes retain minimal identifiers for 30 days. | Scoped year/campus FKs; account FK; index(scope,state,created_at,id); CHECK octet_length(source_bytes)<=2097152 when nonnull; metadata/envelope <=8 KiB and multipart framing <=16 KiB |
-| `vs_imports_import_row` (ImportRow) | id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable | Normalized bounded row, explicit preview outcome and durable safe result. No plaintext credentials. Status changes within one School-guard transaction, so process crash rolls back current row. | FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number) |
+| `vs_imports_import_job` (ImportJob) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3) | Imports-owned job stores immutable source and SHA-256; context contains sanitized display name and selected reference versions. Audit excludes source hash/content and row data. CSV max 2 MiB; source expires after 7 days; row outcomes retain minimal identifiers for 30 days. | Scoped School/year/nullable Campus FKs; global actor FK; UNIQUE(scope,id); index(scope,state,created_at,id); CHECK state/schema/hash/revision/version and octet_length(source_bytes)<=2097152 when nonnull |
+| `vs_imports_import_row` (ImportRow) | id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable; errors jsonb | Normalized bounded row, explicit preview outcome and column-safe row errors. Contains pupil data only in owned ImportRow storage. No credentials. | FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); CHECK row 2–1001, decision/status values and JSON shapes; index(scope,job_id,status,row_number) |
 | `vs_imports_source_student_map` (SourceStudentMap) | id uuid PK; organization_id uuid; school_id uuid; namespace varchar(40); external_student_id varchar(100); student_id uuid; created_at timestamptz(3) | Stable cross-job source key; no name/email matching. | UNIQUE(scope,namespace,external_student_id); scoped Student FK; UNIQUE(scope,namespace,student_id) to refuse accidental second source identity |
 
 ## Read workflows and joins
@@ -54,47 +54,51 @@ Mutations use the account → Organization → School guard protocol in Bible §
 
 **Input:** Multipart file + schemaVersion=STUDENT_ROSTER_V1,yearId,campusId?,namespace,validFrom. Strict template in Bible; hash calculated server-side. CSV file limit is 2 MiB. Non-file metadata/envelope is separately limited to 8 KiB; multipart framing is limited to 16 KiB, making the maximum request body 2 MiB + 24 KiB. Neither bound applies the metadata limit to file bytes.
 
+The `Idempotency-Key` header is required (16–100 URL-safe characters), counted as request metadata. Metadata accounting includes multipart text field names and UTF-8 values; framing is the remaining multipart delimiter/header/CRLF bytes after file and metadata bytes. Reject a declared or streamed total over the maximum before parsing; after parsing, enforce each separate limit. Unknown/duplicate multipart fields are invalid.
+
 **Workflow:**
 
-1. Authenticate and require `student.manage` before reading the bounded multipart body; enforce the distinct file, metadata and framing limits plus rate limits. Keep this existing capability; do not introduce `import.upload` in IMP-01.
-2. Parse strict CSV and validate complete schema, count/cell limits, duplicate keys.
-3. Resolve exact configured references and stable source mappings inside a consistent read snapshot.
-4. Store immutable source bytes, server-calculated source hash in ImportJob, preview revision, canonical rows/reference versions and errors; create no Person/Student/Enrollment.
-5. Return safe preview summary and paginated row decisions.
+1. Resolve the verified actor and active branch, then require current `student.manage`, released/entitled/activated `student_core` and `academic_core` before consuming the body. Keep this existing capability; do not introduce `import.upload`. Apply a bounded account upload rate limit.
+2. Read at most 2 MiB + 24 KiB, validate the three independent size budgets and multipart field contract, then parse strict UTF-8 CSV (optional BOM, valid quoted fields, CRLF/LF). Require exact known headers (required columns may be in any order; optional columns may be absent); reject unknown, missing, duplicate headers, malformed quoting/UTF-8, more than 1,000 data rows or a cell over 4 KiB UTF-8. Duplicate external IDs or admission numbers in one file receive row-level errors.
+3. In a consistent read snapshot, resolve the selected year (must be OPEN and validFrom within `[startsOn,endsOn)`), exact active grade/section codes for that year and selected campus, source mapping and Student/Person facts. A missing section/grade yields a row ERROR. Resolve admission collision only in this branch. No name/email matching.
+4. Classify an unmapped, noncolliding row as CREATE. A branch admission collision without a source mapping is CONFLICT_REQUIRES_MAPPING. For a mapped student, NO_CHANGE is allowed only when normalized first/last name and admission number match exactly and the target-year enrollment/placement exactly match the selected section, `[validFrom,year.endsOn)`, and optional roll; any mismatch is CONFLICT and never an update. Persist reference IDs/versions used for each decision.
+5. Under the shared account → Organization → School mutation guard, create one immutable ImportJob and its ImportRows; compute `file_hash` from source bytes server-side and retain source bytes in ImportJob. Require an idempotency key: same key/context/source returns the original job; a changed context or source under that key conflicts. A receipt stores only the opaque job ID and summary; on replay compare submitted bytes with the hash in the scoped ImportJob row. Create no Person/Student/Enrollment and emit no student-created event.
+6. Return safe preview summary and paginated row decisions. Every later job/row read reauthorizes current membership, `student.manage`, both module states and branch scope; reads do not acquire write locks.
 
-**Database writes / atomicity:** ImportJob, ImportRow only; preview does not emit student-created events. Audit records actor, scope, job ID, schema/state transition, decision counts and request ID only. Exclude file name/path, source bytes/hash, raw/normalized row values, student/admission identifiers, contact data and row-level errors. `file_hash` remains only in its owned ImportJob storage and authorized job DTO; it is not copied to AuditEntry, outbox, logs, analytics or receipts beyond an opaque job reference.
+**Database writes / atomicity:** ImportJob, ImportRow, Platform-owned audit/outbox and an idempotency receipt share one PostgreSQL transaction; SourceStudentMap is read-only in IMP-01. There are no writes to People, Students or Academics. Audit/outbox records actor, scope, opaque job ID, schema/state transition, aggregate decision counts and request ID only. Exclude file name/path, source bytes/hash, raw/normalized row values, student/admission identifiers, contact data and row-level errors. `file_hash` remains in its owned ImportJob storage and authorized job DTO; it is not copied into audit, outbox, logs, analytics or the receipt's stored response/input fingerprint.
 
-**Errors and recovery:** Malformed file→422 with row/column; file/metadata/framing bound exceeded→413 with the relevant field limit; wrong references→preview ERROR; existing branch-scoped unmapped admission→CONFLICT.
+**Errors and recovery:** Unauthenticated→401; missing permission→403; missing/foreign job→404; unavailable release→503; inactive entitlement/branch or closed/out-of-scope year→409; missing/invalid multipart fields, malformed UTF-8/CSV/header or invalid idempotency key→422; same key with changed context/source→409; file/metadata/framing bound exceeded→413 with only the exceeded category/limit; rate limit→429 with Retry-After; unknown grade/section→row ERROR; existing branch-scoped unmapped admission or mapped-row mismatch→row CONFLICT. Errors never echo source contents or identifiers.
 
 ```mermaid
 sequenceDiagram
   actor U as User
   participant W as Delivery adapter
   participant A as IMP-01 use case
-  participant P as Owner ports
+  participant P as Imports repository
+  participant R as Student/Academic read owners
   participant D as PostgreSQL
   U->>W: Request named flow
-  W->>A: Validated input and verified session
-  A->>P: Parse strict CSV and validate complete schema, count/cell limits, duplicate keys
-  P->>D: Scoped reads and transaction guards
-  D-->>P: Current authorized facts
-  A->>P: Resolve exact configured references and stable source mappings inside a consistent read snapshot
-  alt Preconditions hold
-    P->>D: Apply documented writes atomically
-    D-->>P: Committed result
-    P-->>A: Safe result DTO
-    A-->>W: Acknowledged outcome
-    W-->>U: Updated view and next action
-  else Conflict or denied access
-    P-->>A: Typed failure, no partial business writes
-    A-->>W: Safe error with request ID
-    W-->>U: Explain recovery, keep permitted inputs
-  end
+  W->>A: Verified identity and resolved current branch
+  A->>D: Read authorization: student.manage + both active modules
+  D-->>A: Authorized or deny before body read
+  W->>W: Bound multipart bytes and parse strict CSV
+  W->>A: Validated context, source bytes and rows
+  A->>P: Begin guarded preview command
+  P->>D: Recheck authorization and lock account → Organization → School
+  P->>R: Resolve year/grade/section, source map and Student enrollment
+  R->>D: Scoped consistent reads
+  D-->>R: Exact references and existing identities
+  R-->>P: CREATE / NO_CHANGE / ERROR / CONFLICT decisions
+  P->>D: Store ImportJob, ImportRows, audit/outbox/receipt atomically
+  D-->>P: Committed job and safe summary
+  P-->>A: Preview result
+  A-->>W: Authorized DTO
+  W-->>U: Preview rows, errors and unchanged student count
 ```
 
-**Verification:** Unit — CSV parser cases, explicit blank semantics, hash canonicalization. Functional PostgreSQL — Preview leaves business row counts unchanged; scope constraints; consistent source-key resolution. E2E — Upload sample and inspect errors; count students unchanged before confirm.
+**Verification:** Unit — Strict UTF-8/CSV quoting, headers, BOM, blank optional fields, limits, duplicate keys, canonical normalized hash and exact NO_CHANGE projection. Functional PostgreSQL — Preview leaves Person/Student/Enrollment counts unchanged; scoped references/source map; module/permission revocation; same-key replay/change conflict; audit/outbox/source-hash exclusions; concurrent duplicate keys. E2E — Upload matching and invalid samples, inspect paged decisions/errors, test body limits/replay and verify student counts remain unchanged before confirm.
 
-**Design-readiness note (4 October 2026):** Imports owns ImportJob/ImportRow/SourceStudentMap; Students/People own all pupil identity and enrollment writes. The physical contracts scope rows by institution/branch, pin source bytes/hash/revision, retain source for seven days and index job-state pagination, row status and source-key resolution. The 2 MiB limit is for CSV bytes; metadata/envelope is separately capped at 8 KiB and multipart framing at 16 KiB. Preview retains the existing `student.manage` capability; `import.upload` is not adopted. It authorizes before body read and on every protected read, writes import-only rows, and takes no write lock for reads; it never creates Persons, Students or Enrollments. Hash remains in ImportJob storage; sensitive upload/row data is excluded from audit. Admission collision is resolved by branch-scoped Student ownership while normal student-list name/admission search remains. Path A records policy intent and TEN-03 closure metadata now; enforcement is deferred without weakening application authorization. No product blocker remains for preview-only IMP-01.
+**Design-readiness note (4 October 2026):** Imports owns ImportJob/ImportRow/SourceStudentMap; Students/People own all pupil identity and enrollment writes. Require current `student.manage` and active release, entitlement and activation for both student_core and academic_core. A required idempotency key binds immutable context; receipt data stores only opaque job ID/summary and replay compares source bytes with the owned ImportJob hash. The NO_CHANGE projection and mismatch conflict behavior are explicit. The 2 MiB limit applies only to CSV bytes; text metadata (including field names and idempotency key) is separately capped at 8 KiB and multipart framing at 16 KiB. Preview authorizes before body consumption and on every protected read; it writes import-only rows, reads without write locks, and never creates Persons, Students or Enrollments. Hash remains in ImportJob storage; sensitive upload/row data is excluded from audit. Admission collision uses branch-scoped Student ownership; normal student-list search remains. BRANCH scope, indexes, constraints and policy intent are registered under Path A; TEN-03 owns enforcement. No product blocker remains for preview-only IMP-01; distributed production rate limiting remains an FND-02 deployment gate.
 
 ## IMP-02 — Confirm and process complete student rows
 

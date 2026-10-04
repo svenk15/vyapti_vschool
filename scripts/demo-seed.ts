@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { localAccessConfig } from "./access-local-config";
 
 /**
@@ -13,6 +14,35 @@ const demos = [
   { name: "ACA-01 academic access", script: "scripts/demo-academics.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
 ] as const;
+
+function prepareImportSample(): void {
+  const fixturePath = "artifacts/imports-01/private-demo.json";
+  const samplePath = "artifacts/imports-01/sample-roster.csv";
+  if (!existsSync(fixturePath)) {
+    console.log("IMP-01 sample skipped; its private local academic fixture is not present.");
+    return;
+  }
+  if (existsSync(samplePath)) {
+    console.log(`Existing synthetic roster sample preserved: ${samplePath}`);
+    return;
+  }
+  const fixture = JSON.parse(readFileSync(fixturePath, "utf8")) as {
+    gradeCode?: unknown;
+    sectionCode?: unknown;
+  };
+  if (typeof fixture.gradeCode !== "string" || !/^[A-Za-z0-9_-]{1,20}$/.test(fixture.gradeCode)
+    || typeof fixture.sectionCode !== "string" || !/^[A-Za-z0-9_-]{1,20}$/.test(fixture.sectionCode)) {
+    throw new Error("SYNTHETIC_IMPORT_FIXTURE_INVALID");
+  }
+  mkdirSync("artifacts/imports-01", { recursive: true, mode: 0o700 });
+  const csv = [
+    "external_student_id,student_first_name,admission_number,grade,section,student_last_name,roll_number",
+    `SAMPLE-NEW-01,Casey,DEMO-ROSTER-001,${fixture.gradeCode},${fixture.sectionCode},Example,0007`,
+    `SAMPLE-INVALID-02,Riley,DEMO-ROSTER-002,${fixture.gradeCode},NO-SUCH-SECTION,Example,`,
+  ].join("\n") + "\n";
+  writeFileSync(samplePath, csv, { flag: "wx", mode: 0o600 });
+  console.log(`Created fictional roster upload sample: ${samplePath}`);
+}
 
 function main(): void {
   // Fail before starting any child if the configured URL is not the guarded
@@ -32,11 +62,13 @@ function main(): void {
       return;
     }
   }
+  prepareImportSample();
 
-  console.log("\nPrivate credential/token locations (open locally; values are never printed):");
+  console.log("\nPrivate demo file locations (credentials/tokens/sample; values are never printed):");
   console.log("- artifacts/iam-01/private-demo.json");
   console.log("- artifacts/iam-03/private-demo.json");
   console.log("- artifacts/iam-03/private-activation.json");
+  if (existsSync("artifacts/imports-01/sample-roster.csv")) console.log("- artifacts/imports-01/sample-roster.csv");
   console.log("Other feature command receipts and synthetic IDs remain in their ignored artifacts/<task>/ files.");
   console.log("Attendance remains unreleased; IAM-03 acceptance remains pending; PER-02 is not enabled by this command.");
 }

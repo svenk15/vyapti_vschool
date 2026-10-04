@@ -1,0 +1,9 @@
+export type ImportYearChoice=Readonly<{id:string;code:string;name:string;startsOn:string;endsOn:string}>;
+export type ImportCampusChoice=Readonly<{id:string;code:string;name:string}>;
+export type ImportOptions=Readonly<{years:readonly ImportYearChoice[];campuses:readonly ImportCampusChoice[]}>;
+export type ImportRowDecision='CREATE'|'NO_CHANGE'|'ERROR'|'CONFLICT';
+export type ImportRowError=Readonly<{column:string;code:string;message:string}>;
+export type ImportPreviewFields=Readonly<{externalStudentId:string;firstName:string;lastName:string;admissionNumber:string;gradeCode:string;sectionCode:string;rollNumber:string|null}>;
+export type ImportPreviewRow=Readonly<{rowNumber:number;decision:ImportRowDecision;fields:ImportPreviewFields;errors:readonly ImportRowError[]}>;
+export type ImportPreview=Readonly<{jobId:string;version:number;previewRevision:number;fileHash:string;state:'REVIEW';replayed:boolean;counts:Readonly<{create:number;noChange:number;error:number;conflict:number}>;nextCursor:string|null}>;
+export type ImportRowPage=Readonly<{items:readonly ImportPreviewRow[];nextCursor:string|null}>;

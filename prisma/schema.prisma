@@ -73,6 +73,7 @@ model School {
   employees Employee[]
   accessInvites AccessInvite[]
   students Student[]
+  importJobs ImportJob[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -108,6 +109,7 @@ model UserAccount {
   publishedAcademicCalendarRevisions CalendarRevision[] @relation("AcademicRevisionPublisher")
  personBindings AccountPersonBinding[] @relation("PersonAccountBinding")
   verifiedPersonBindings AccountPersonBinding[] @relation("PersonBindingVerifier")
+  createdImportJobs ImportJob[] @relation("ImportJobActor")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -193,6 +195,7 @@ model Student {
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_student_school_fkey")
  person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_student_person_fkey")
  enrollments Enrollment[]
+ sourceMaps SourceStudentMap[]
  @@unique([organizationId,schoolId,id],map:"vs_students_student_scope_id_key")
  @@unique([organizationId,schoolId,admissionNumber],map:"vs_students_student_admission_key")
  @@unique([organizationId,schoolId,personId],map:"vs_students_student_person_key")
@@ -375,6 +378,7 @@ model Campus {
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_campus_school_fkey")
  academicSections Section[]
  academicExceptions CalendarException[]
+ importJobs ImportJob[]
  @@unique([organizationId,schoolId,id],map:"vs_access_campus_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_access_campus_scope_code_key")
  @@map("vs_access_campus")
@@ -603,6 +607,7 @@ model AcademicYear {
  calendar SchoolCalendar?
  sections Section[]
  enrollments Enrollment[]
+ importJobs ImportJob[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_academic_year_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_academics_academic_year_code_key")
  @@map("vs_academics_academic_year")
@@ -708,6 +713,69 @@ model SectionPlacement {
  @@index([organizationId,schoolId,sectionId,validFrom,validTo,enrollmentId],map:"vs_students_placement_roster_idx")
  @@index([organizationId,schoolId,enrollmentId,validFrom],map:"vs_students_placement_history_idx")
  @@map("vs_students_section_placement")
+}
+
+model ImportJob {
+ id String @id(map:"vs_imports_import_job_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ yearId String @map("year_id") @db.Uuid
+ campusId String? @map("campus_id") @db.Uuid
+ namespace String @db.VarChar(40)
+ schemaVersion String @map("schema_version") @db.VarChar(40)
+ state String @db.VarChar(40)
+ fileHash String @map("file_hash") @db.Char(64)
+ sourceBytes Bytes? @map("source_bytes")
+ sourceExpiresAt DateTime @map("source_expires_at") @db.Timestamptz(3)
+ previewRevision Int @default(1) @map("preview_revision")
+ context Json
+ confirmedAt DateTime? @map("confirmed_at") @db.Timestamptz(3)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_imports_import_job_school_fkey")
+ actor UserAccount @relation("ImportJobActor",fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_imports_import_job_actor_fkey")
+ year AcademicYear @relation(fields:[organizationId,schoolId,yearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_imports_import_job_year_fkey")
+ campus Campus? @relation(fields:[organizationId,schoolId,campusId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_imports_import_job_campus_fkey")
+ rows ImportRow[]
+ @@unique([organizationId,schoolId,id],map:"vs_imports_import_job_scope_id_key")
+ @@index([organizationId,schoolId,state,createdAt,id],map:"vs_imports_import_job_list_idx")
+ @@map("vs_imports_import_job")
+}
+
+model ImportRow {
+ id String @id(map:"vs_imports_import_row_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ jobId String @map("job_id") @db.Uuid
+ previewRevision Int @map("preview_revision")
+ rowNumber Int @map("row_number")
+ inputHash String @map("input_hash") @db.Char(64)
+ normalized Json
+ decision String @db.VarChar(20)
+ status String @db.VarChar(20)
+ expectedReferences Json @map("expected_references")
+ errors Json @default("[]")
+ result Json?
+ errorCode String? @map("error_code") @db.VarChar(80)
+ job ImportJob @relation(fields:[organizationId,schoolId,jobId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_imports_import_row_job_fkey")
+ @@unique([organizationId,schoolId,jobId,previewRevision,rowNumber],map:"vs_imports_import_row_revision_row_key")
+ @@index([organizationId,schoolId,jobId,status,rowNumber],map:"vs_imports_import_row_status_idx")
+ @@map("vs_imports_import_row")
+}
+
+model SourceStudentMap {
+ id String @id(map:"vs_imports_source_student_map_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ namespace String @db.VarChar(40)
+ externalStudentId String @map("external_student_id") @db.VarChar(100)
+ studentId String @map("student_id") @db.Uuid
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ student Student @relation(fields:[organizationId,schoolId,studentId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_imports_source_student_map_student_fkey")
+ @@unique([organizationId,schoolId,namespace,externalStudentId],map:"vs_imports_source_student_map_source_key")
+ @@unique([organizationId,schoolId,namespace,studentId],map:"vs_imports_source_student_map_student_key")
+ @@map("vs_imports_source_student_map")
 }
 
 model SchoolCalendar {
