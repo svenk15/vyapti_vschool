@@ -113,16 +113,6 @@
       "constraints": "Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; index(scope,offering_id,valid_from,valid_to)"
     },
     {
-      "model": "AccessInvite",
-      "owner": "access",
-      "table": "vs_access_invite",
-      "status": "PLANNED",
-      "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; account_id uuid; recipient_email varchar(254); organization_id uuid; school_id uuid; membership_id uuid; issuer_account_id uuid; issuer_membership_id uuid; token_hash char(64); purpose STAFF_INVITATION; issuance_channel EMAIL; trust_mode_at_issue varchar(20); organization_configuration_version int; school_configuration_version int; issuer_membership_version int; account_version_at_issue int; proposed_grants jsonb; created_at/expires_at timestamptz(3); accepted_at/revoked_at/sent_at/delivery_failed_at timestamptz(3) nullable; delivery_status PENDING_DELIVERY/SENT/FAILED; delivery_failure_reason varchar(40) nullable",
-      "responsibility": "Email invitation for one pending branch membership; acceptance never creates person or teaching bindings.",
-      "constraints": "FK account/org; FK(scope,membership_id,account_id) and FK(scope,issuer_membership_id,issuer_account_id); UNIQUE(token_hash); one unaccepted/unrevoked row per membership; status/time/reason checks; indexes(account_id,expires_at), (organization_id,school_id,membership_id,created_at), (delivery_status,created_at)"
-    },
-    {
       "model": "AccountActivation",
       "owner": "access",
       "table": "vs_access_account_activation",
@@ -133,6 +123,16 @@
       "constraints": "UNIQUE(token_hash); FK account and created_by (subject account, with explicit operator provenance); UNIQUE(account_id,id); index(account_id,expires_at)"
     },
     {
+      "model": "AccountActivationMembership",
+      "owner": "access",
+      "table": "vs_access_account_activation_membership",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; activation_id uuid; account_id uuid; organization_id uuid; school_id uuid; membership_id uuid; expected_version int",
+      "responsibility": "Owned immutable relational membership intent snapshot for one activation.",
+      "constraints": "UNIQUE(activation_id,membership_id); scoped account/membership FK and activation/account FK; CHECK expected_version>0"
+    },
+    {
       "model": "AccountPersonBinding",
       "owner": "access",
       "table": "vs_access_account_person_binding",
@@ -140,7 +140,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid",
       "responsibility": "Deliberate verified account-to-person link; People supplies scoped Person reference.",
-      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
+      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)\u2192Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
     },
     {
       "model": "AuthSecurityEvent",
@@ -160,7 +160,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int",
       "responsibility": "Optional subordinate site; no campus-level grants in first release.",
-      "constraints": "FK(scope)→School; UNIQUE(scope,id); UNIQUE(scope,code)"
+      "constraints": "FK(scope)\u2192School; UNIQUE(scope,id); UNIQUE(scope,code)"
     },
     {
       "model": "InstitutionGrant",
@@ -173,6 +173,16 @@
       "constraints": "FKs organization/account; UNIQUE(organization_id,account_id,role); INDEX(account_id,status,organization_id); role/status/version checks"
     },
     {
+      "model": "AccessInvite",
+      "owner": "access",
+      "table": "vs_access_invite",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; account_id uuid; recipient_email varchar(254); organization_id uuid; school_id uuid; membership_id uuid; issuer_account_id uuid; issuer_membership_id uuid; token_hash char(64); purpose STAFF_INVITATION; issuance_channel EMAIL; trust_mode_at_issue varchar(20); organization_configuration_version int; school_configuration_version int; issuer_membership_version int; account_version_at_issue int; proposed_grants jsonb; created_at/expires_at timestamptz(3); accepted_at/revoked_at/sent_at/delivery_failed_at timestamptz(3) nullable; delivery_status PENDING_DELIVERY/SENT/FAILED; delivery_failure_reason varchar(40) nullable",
+      "responsibility": "Email invitation for one pending branch membership; acceptance never creates person or teaching bindings.",
+      "constraints": "FK account/org; FK(scope,membership_id,account_id) and FK(scope,issuer_membership_id,issuer_account_id); UNIQUE(token_hash); one unaccepted/unrevoked row per membership; status/time/reason checks; indexes(account_id,expires_at), (organization_id,school_id,membership_id,created_at), (delivery_status,created_at)"
+    },
+    {
       "model": "Organization",
       "owner": "access",
       "table": "vs_access_organization",
@@ -183,6 +193,16 @@
       "constraints": "CHECK trust_mode allowed; CHECK version>0; UNIQUE(id); CHECK configuration_version>0"
     },
     {
+      "model": "PasswordResetToken",
+      "owner": "access",
+      "table": "vs_access_password_reset_token",
+      "status": "PLANNED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; account_id uuid; issuing_organization_id uuid nullable; issued_by_account_id uuid nullable; token_hash char(64); purpose PASSWORD_RESET; issuance_channel EMAIL; policy_snapshot jsonb; created_at/expires_at timestamptz(3); consumed_at/revoked_at/sent_at/delivery_failed_at timestamptz(3) nullable; delivery_status PENDING_DELIVERY/SENT/FAILED; delivery_failure_reason varchar(40) nullable",
+      "responsibility": "Short-lived account-global recovery token; snapshot covers all active branch and institution-level access.",
+      "constraints": "FK account/issuer and optional org; UNIQUE(token_hash); one outstanding token per account; status/time/reason checks; indexes(account_id,expires_at), (issuing_organization_id,created_at), (delivery_status,created_at)"
+    },
+    {
       "model": "RoleGrant",
       "owner": "access",
       "table": "vs_access_role_grant",
@@ -190,7 +210,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER",
       "responsibility": "Fixed permission mapping in code; no arbitrary permission JSON.",
-      "constraints": "FK(scope,membership_id)→membership; UNIQUE(scope,membership_id,code)"
+      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code)"
     },
     {
       "model": "School",
@@ -223,16 +243,6 @@
       "constraints": "UNIQUE(normalized_email); counters>=0; index(status,id)"
     },
     {
-      "model": "PasswordResetToken",
-      "owner": "access",
-      "table": "vs_access_password_reset_token",
-      "status": "PLANNED",
-      "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; account_id uuid; issuing_organization_id uuid nullable; issued_by_account_id uuid nullable; token_hash char(64); purpose PASSWORD_RESET; issuance_channel EMAIL; policy_snapshot jsonb; created_at/expires_at timestamptz(3); consumed_at/revoked_at/sent_at/delivery_failed_at timestamptz(3) nullable; delivery_status PENDING_DELIVERY/SENT/FAILED; delivery_failure_reason varchar(40) nullable",
-      "responsibility": "Short-lived account-global recovery token; snapshot covers all active branch and institution-level access.",
-      "constraints": "FK account/issuer and optional org; UNIQUE(token_hash); one outstanding token per account; status/time/reason checks; indexes(account_id,expires_at), (issuing_organization_id,created_at), (delivery_status,created_at)"
-    },
-    {
       "model": "AttendanceRecord",
       "owner": "attendance",
       "table": "vs_attendance_record",
@@ -240,7 +250,7 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; status PRESENT/ABSENT/LATE/EXCUSED; late_minutes int nullable; current_revision int",
       "responsibility": "Current submitted status; one per roster pupil. No blank record stored before submit.",
-      "constraints": "FK(scope,session_id,student_id)→roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)"
+      "constraints": "FK(scope,session_id,student_id)\u2192roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)"
     },
     {
       "model": "AttendanceRevision",
@@ -330,7 +340,7 @@
       "design": "docs/modules/imports/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable",
       "responsibility": "Normalized bounded row, explicit preview outcome and durable safe result. No plaintext credentials. Status changes within one School-guard transaction, so process crash rolls back current row.",
-      "constraints": "FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number)"
+      "constraints": "FK(scope,job_id)\u2192ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number)"
     },
     {
       "model": "SourceStudentMap",
@@ -460,7 +470,7 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; actor_account_id uuid; expected_revision int; new_revision int; changes jsonb; reason varchar(500); occurred_at timestamptz(3); request_id uuid",
       "responsibility": "Append-only institution or branch configuration history with an atomically enlisted revision.",
-      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5–500; append-only"
+      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5\u2013500; append-only"
     },
     {
       "model": "OrganizationEntitlement",
@@ -491,16 +501,6 @@
       "fields": "id uuid PK; organization_id uuid; type varchar(100); schema_version int; payload jsonb; occurred_at timestamptz(3); state varchar(20) PENDING/PROCESSING/DELIVERED/FAILED; attempts int default 0; available_at timestamptz(3)",
       "responsibility": "Institution-scoped integration events with immutable payload and mutable delivery state.",
       "constraints": "FK organization; index(organization_id,state,available_at,id); attempts>=0; schema_version>0; immutable envelope except delivery state"
-    },
-    {
-      "model": "AccountActivationMembership",
-      "owner": "access",
-      "table": "vs_access_account_activation_membership",
-      "status": "MIGRATED",
-      "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; activation_id uuid; account_id uuid; organization_id uuid; school_id uuid; membership_id uuid; expected_version int",
-      "responsibility": "Owned immutable relational membership intent snapshot for one activation.",
-      "constraints": "UNIQUE(activation_id,membership_id); scoped account/membership FK and activation/account FK; CHECK expected_version>0"
     }
   ]
 }
