@@ -10,6 +10,8 @@ Last updated: 2026-10-03. Fresh baseline; no imported task completion. Design re
 
 ## Current checkpoint
 
+**Design readiness (4 October 2026):** STU-01/02 LLDs and task criteria now restate People/Academics ownership, existing scoped schemas and joins, scoped uniqueness/FKs/indexes, School-guarded write/replay rules, failure states and TEN-ADR-006 requirements for future tables. No implementation started. STU-01 awaits PER-01/ACA-01; STU-02 awaits STU-01/ACA-02.
+
 No module business code or tables are implemented. DESIGN.md and TASKS.md are specifications only.
 
 ## Next action

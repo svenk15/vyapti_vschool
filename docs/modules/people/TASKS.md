@@ -57,6 +57,7 @@ Files: extend `backend/modules/people/domain`, `application`, `contracts` and `i
 - Browser: Bind intended teacher, show teaching eligibility; wrong account conflict; offboarding impact warning.
 - Failure contract: Account/person already differently bound→409; foreign membership→404; impacted sessions→409 EMPLOYEE_IN_USE.
 - Required DB effect: Teacher (academic facade), AccountPersonBinding (access facade), Employee end/status if safe; audit/outbox/receipt.
+- Persistence/security gate: use existing AccountPersonBinding uniqueness/scoped Person FK, sorted account→Organization→School locks, current `user.manage`, explicit out-of-band verification reference and cross-owner rollback. No login email or IAM activation substitutes for person verification. Any new tenant table follows TEN-ADR-006; no Access-wide RLS retrofit occurs in PER-02.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 

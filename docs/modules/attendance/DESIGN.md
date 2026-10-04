@@ -95,6 +95,8 @@ sequenceDiagram
 
 **Verification:** Unit — Occurrence/date/calendar eligibility and role policy. Functional PostgreSQL — Schedule-vs-calendar publication serialization; occurrence race; scope/year consistency. E2E — Admin schedules; intended teacher sees it; other teacher does not.
 
+**Design-readiness note (4 October 2026):** Attendance owns scheduled occurrences and envelopes; Academics owns offering, immutable calendar revision and dated primary-teacher assignment; Students owns placement history. Schedule takes account→Organization→School guards and enlists the Academic calendar-impact path so publication/close cannot race creation. `UNIQUE(scope,offering_id,occurrence_key)` plus command receipt handles duplicate/retry; scoped offer/calendar FKs and `(scope,school_date,status,starts_at,id)` support scoped day reads. `TeacherAssignment` has both offering/date and teacher/date lookup indexes; do not copy assignment state into Attendance. Prevent two scheduled sessions for the same primary teacher from overlapping in instant time under the shared School guard; no room allocation is modeled. Teacher Today rechecks active membership, Employee/Teacher eligibility, dated assignment and resource permission, and returns only assigned sessions. Future session migration includes TEN-ADR-006 RLS policy/grant/index/restricted-role tests; absent-context and pool-isolation enforcement across the app remains TEN-03. No additional product decision blocks design.
+
 ## ATT-02 — Open the exact roster and submit attendance
 
 **Success response contract:** Open `{sessionId,version,status:"OPEN",rosterRevision,roster:[{studentId,displayName,rollNumber}]}`; submit `{sessionId,version,status:"SUBMITTED",revision,submittedAt,counts:{present,absent,late,excused}}`.

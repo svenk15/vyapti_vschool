@@ -90,6 +90,8 @@ sequenceDiagram
 
 **Verification:** Unit — Admission identifier preserves zeros; names not identifiers. Functional PostgreSQL — Rollback Person on Student failure; concurrent admission number uniqueness. E2E — Create student, search, refresh detail and denied foreign profile.
 
+**Design-readiness note (4 October 2026):** Student identity belongs to Students; organization-local Person identity remains People-owned. Create a new Person by default; reuse only an explicitly selected same-organization Person after authorized lookup, never similarity/email matching. The physical Student contract requires unique `(organization_id,school_id,admission_number)` and `(organization_id,school_id,person_id)`, scoped school/person FKs, and bounded scope/status/admission search; joined reads retain unenrolled profiles without exposing contact data. People+Student writes and evidence share one guarded transaction; duplicate races are settled by constraints and return 409. Future Student table migration includes its TEN-ADR-006 RLS class/policy/grants/index/restricted-role tests; RLS runtime enforcement remains a TEN-03 gate.
+
 ## STU-02 — Enroll students into a dated section
 
 **Success response contract:** `{enrollmentId,version,studentId,yearId,placements:[{placementId,sectionId,validFrom,validTo,rollNumber}]}`.
@@ -137,6 +139,8 @@ sequenceDiagram
 ```
 
 **Verification:** Unit — Bounds and half-open membership; roll remains text. Functional PostgreSQL — Two enrollments racing yield one root; scoped FKs and complete rollback. E2E — Enroll, refresh class roster, reject wrong-year section.
+
+**Design-readiness note (4 October 2026):** Enrollment belongs to Students; Section/year remain Academics-owned. One enrollment per scoped student/year, half-open date ranges, and nonoverlapping placements are enforced under the School guard plus scoped composite FKs/unique keys; `(scope,section_id,valid_from,valid_to,enrollment_id)` supports current roster reads. Creating enrollment and first placement is atomic, duplicate requests replay by receipt, and a second yearly root conflicts rather than silently transferring. Transfer/roster impact is reserved for STU-03/ATT-01. New tenant tables follow TEN-ADR-006 migration RLS requirements; database RLS enforcement awaits TEN-03.
 
 ## STU-03 — Transfer or archive with historical protection
 

@@ -34,7 +34,7 @@ ACA-01 installs the six setup tables; ACA-02 adds the immutable calendar revisio
 | `vs_academics_calendar_exception` (CalendarException) | id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; campus_id uuid nullable; on_date date; is_teaching_day boolean; label varchar(160) | Date exception; campus beats school beats weekly rule. Dates inside year. | Scoped revision/campus FKs; two NULL/non-NULL partial unique indexes(scope,revision_id,on_date[,campus_id]); immutable |
 | `vs_academics_teacher` (Teacher) | id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int | Academic teacher profile, not a login identity. | UNIQUE(scope,employee_id); UNIQUE(scope,id); scoped Employee FK |
 | `vs_academics_course_offering` (CourseOffering) | id uuid PK; organization_id uuid; school_id uuid; year_id uuid; section_id uuid; subject_id uuid; code varchar(40); version int; active boolean | One section subject offering in year. | UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped section/year composite FK and subject FK; UNIQUE(scope,id) |
-| `vs_academics_teacher_assignment` (TeacherAssignment) | id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int | Primary attendance duty only in Phase 1; one eligible teacher per offering/date. | Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; index(scope,offering_id,valid_from,valid_to) |
+| `vs_academics_teacher_assignment` (TeacherAssignment) | id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int | Primary attendance duty only in Phase 1; one eligible teacher per offering/date. | Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to) |
 
 ## Read workflows and joins
 
@@ -199,6 +199,8 @@ sequenceDiagram
 ```
 
 **Verification:** Unit — Effective-date endpoints and teacher eligibility. Functional PostgreSQL — Assignment races serialize; cross-school FK; end-assignment vs teacher submit reauthorization. E2E — Create offering, assign teacher, inspect effective dates; reject overlap.
+
+**Design-readiness note (4 October 2026):** Ready when ACA-02 and PER-02 are accepted/verified per task dependencies. Academics owns offerings, teacher eligibility and dated assignments; People owns Employee and Access owns bindings. Existing physical contracts define scoped uniqueness/FKs; add a teacher/date lookup index `(organization_id,school_id,teacher_id,valid_from,valid_to)` beside the offering overlap index for assignment and eligibility reads. School guard serializes cross-row overlap checks; versioned commands and receipts make retries exact. Portal binding is required only for portal access, never teaching eligibility. ATT-01 owns time-slot clash enforcement; until then ACA-03 prevents overlapping effective assignments for the same offering and does not invent room/timetable allocation. All new tables follow TEN-ADR-006 class/policy/grant/index/restricted-role migration requirements; application checks do not claim RLS enforcement before TEN-03.
 
 ## Migration, retention and handoff
 

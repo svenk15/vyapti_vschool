@@ -10,6 +10,8 @@ Last updated: 2026-10-04. Fresh independent-project state; no imported task comp
 
 ## Current checkpoint
 
+**Design readiness (4 October 2026):** ACA-03 LLD and acceptance now align on Academics ownership, Access/People reference ownership, dated assignment constraints/indexes, guarded overlap checks, replay and TEN-ADR-006 migration policy requirements. No implementation started. Dependency gate: ACA-02 and PER-02 acceptance/verification.
+
 ACA-01 source commit `fc3fc6c294be5ec51c9abbb5c4481ace10809679`. It implements the first academic setup slice: trusted release and tenant guards, draft year with unpublished calendar, adjacent nonoverlapping terms, grade/subject catalogs, sections, transactional evidence and the shared-token screen. ACA-02 source commit `69fb440a4427249c73fc45d2b06b33682adf2466` adds immutable calendar publication/evaluation and guarded year open/close, including failure states. The unrelated untracked `.puku-cli/` directory remains untouched and excluded.
 
 Migrations `20261004000900_academic_setup` and `20261004001000_academic_calendar` are applied to `vyapti_vschool` and `vyapti_vschool_test`. The local migrated business table count is 31. The dedicated test database is separate from the development database; neither database was reset or deleted. ACA-02 JUnit reports and exact build/test metadata are in the linked evidence directory.

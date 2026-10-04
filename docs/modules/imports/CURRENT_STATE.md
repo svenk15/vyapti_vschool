@@ -10,6 +10,8 @@ Last updated: 2026-10-03. Fresh baseline; no imported task completion. Design re
 
 ## Current checkpoint
 
+**Design readiness (4 October 2026):** IMP-01 LLD/task now align on Imports-only preview storage, immutable source/hash/revision, 2 MiB/retention bounds, exact source mapping, no student writes, current scope authorization, failure states and TEN-ADR-006 migration requirements. No implementation started. Dependency gate: STU-02.
+
 No module business code or tables are implemented. DESIGN.md and TASKS.md are specifications only.
 
 ## Next action

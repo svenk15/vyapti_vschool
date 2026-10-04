@@ -110,7 +110,7 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int",
       "responsibility": "Primary attendance duty only in Phase 1; one eligible teacher per offering/date.",
-      "constraints": "Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; index(scope,offering_id,valid_from,valid_to)"
+      "constraints": "Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to)"
     },
     {
       "model": "AccountActivation",

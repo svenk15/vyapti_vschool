@@ -9,6 +9,8 @@ Last updated: 2026-10-04. Human review is tracked separately from implementation
 
 ## Current checkpoint
 
+**Design readiness (4 October 2026):** PER-02 LLD/task clarify owner-enlisted Teacher/AccountPersonBinding writes, scoped uniqueness, account→Organization→School locking and explicit out-of-band school-admin verification reference; account email or activation alone is not proof. No implementation started. Execution remains explicitly gated on PER-01, ACA-01 and IAM-03 human acceptance.
+
 PER-01 creates a distinct organization-local Person and school-scoped Employee record in one guarded transaction. Contact similarity never merges people. Authorized staff see a branch-scoped list and a separate portal-link status. Creating a profile does not create a login, bind an account or enable teaching eligibility. Access owns the `AccountPersonBinding` table; it is installed now with no rows, and only the explicit identity-verified PER-02 flow may add bindings.
 
 ## PER-01 verification — 4 October 2026

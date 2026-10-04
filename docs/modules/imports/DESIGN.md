@@ -94,6 +94,8 @@ sequenceDiagram
 
 **Verification:** Unit — CSV parser cases, explicit blank semantics, hash canonicalization. Functional PostgreSQL — Preview leaves business row counts unchanged; scope constraints; consistent source-key resolution. E2E — Upload sample and inspect errors; count students unchanged before confirm.
 
+**Design-readiness note (4 October 2026):** Imports owns ImportJob/ImportRow/SourceStudentMap; Students/People own all pupil identity and enrollment writes. The existing physical contracts scope every row by institution/branch, pin immutable source bytes/hash and preview revision, bound payload to 2 MiB, retain source for seven days and index job-state pagination, row status and source-key resolution. Preview is a consistent scoped read plus import-only writes; it never creates Persons, Students or Enrollments. Stable namespace/external ID is exact-match only; an unmapped existing admission is a conflict, not a fuzzy merge. Authorization is checked before body read and again for row access; same transaction/School guard rules apply. RLS policy/grants/index/restricted-role tests are part of the new-table migration under TEN-ADR-006; TEN-03 must later enforce the full runtime role/context model. No product blocker remains for preview-only IMP-01; processing/idempotent row writes stay in IMP-02/03.
+
 ## IMP-02 — Confirm and process complete student rows
 
 **Success response contract:** Confirm `{jobId,version,state,approvedCount,skippedCount}`; process `{jobId,state,counts:{pending,succeeded,failed,skipped},hasMore}`; row success `{studentId,enrollmentId,outcome}`.

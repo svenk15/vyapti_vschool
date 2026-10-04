@@ -25,6 +25,7 @@ Files: extend `backend/modules/imports/domain`, `application`, `contracts` and `
 - Browser: Upload sample and inspect errors; count students unchanged before confirm.
 - Failure contract: Malformed file→422 with row/column; oversize→413; wrong references→preview ERROR; existing unmapped admission→CONFLICT.
 - Required DB effect: ImportJob, ImportRow only; preview does not emit student-created events. Access/audit metadata records upload without raw row bodies.
+- Persistence/security gate: authorize and bound request before body parsing, scope every job/row/source map, keep raw rows/tokens out of audit logs, and preserve immutable preview/source hashes. Each new import table migration includes its TEN-ADR-006 RLS policy, grants, indexes and restricted-role SQL tests; full pooled-context enforcement stays TEN-03.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
