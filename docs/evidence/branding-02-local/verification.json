@@ -1,0 +1,32 @@
+{
+  "task": "BRD-02",
+  "implementation": "VERIFIED",
+  "humanReview": "PENDING",
+  "testedCommit": null,
+  "buildId": "SWGrRA6qlltLdUKZFeR-q",
+  "demoUrl": "http://127.0.0.1:3406/sign-in/vschool-demo-69a6f7fe",
+  "databases": {
+    "development": "vyapti_vschool",
+    "test": "vyapti_vschool_test",
+    "migrationCount": 12,
+    "brandingMigrations": [
+      "20261004000600_branding_publish",
+      "20261004000700_branding_check_corrections",
+      "20261004000800_brand_asset_immutable"
+    ],
+    "resetOrDeletion": false
+  },
+  "checks": [
+    {"command": "pnpm check", "exit": 0, "unitTests": 59},
+    {"command": "pnpm test:functional", "exit": 0, "database": "vyapti_vschool_test", "tests": 44},
+    {"command": "pnpm test:e2e", "exit": 0, "desktopAndMobileTests": 56},
+    {"command": "pnpm build", "exit": 0, "buildId": "SWGrRA6qlltLdUKZFeR-q"},
+    {"command": "pnpm db:setup", "exit": 0, "database": "vyapti_vschool", "operation": "forward migrations only"},
+    {"command": "pnpm demo:branding", "exit": 0, "database": "vyapti_vschool", "operation": "synthetic profile via application use cases"}
+  ],
+  "limitations": [
+    "Custom-host serving remains gated on deployment TLS and trusted host forwarding.",
+    "Canonical sanitized logo bytes are stored in PostgreSQL; no production object-store/CDN adapter is configured.",
+    "Institution-default branding editing UI is outside BRD-02."
+  ]
+}

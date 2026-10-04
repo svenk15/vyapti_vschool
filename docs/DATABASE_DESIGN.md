@@ -67,10 +67,10 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AttendanceRevision | `vs_attendance_revision` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceSession | `vs_attendance_session` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
 | SessionRosterEntry | `vs_attendance_session_roster_entry` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
-| BrandAsset | `vs_branding_brand_asset` | branding | PLANNED | [branding LLD](modules/branding/DESIGN.md) |
-| BrandProfile | `vs_branding_brand_profile` | branding | PLANNED | [branding LLD](modules/branding/DESIGN.md) |
-| BrandRevision | `vs_branding_brand_revision` | branding | PLANNED | [branding LLD](modules/branding/DESIGN.md) |
-| VerifiedBrandHost | `vs_branding_verified_brand_host` | branding | PLANNED | [branding LLD](modules/branding/DESIGN.md) |
+| BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
+| BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
+| BrandRevision | `vs_branding_brand_revision` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
+| VerifiedBrandHost | `vs_branding_verified_brand_host` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | ImportJob | `vs_imports_import_job` | imports | PLANNED | [imports LLD](modules/imports/DESIGN.md) |
 | ImportRow | `vs_imports_import_row` | imports | PLANNED | [imports LLD](modules/imports/DESIGN.md) |
 | SourceStudentMap | `vs_imports_source_student_map` | imports | PLANNED | [imports LLD](modules/imports/DESIGN.md) |
@@ -152,7 +152,7 @@ Resolve an exact public_slug or verified hostname. Select a published institutio
 | Submit attendance | Exact frozen roster/version, every required status, current entitlement and teaching authority | All current records + immutable submit revision + SUBMITTED session + envelopes in one commit |
 | Correct attendance | Submitted session/version, current correction permission and reason | Current projection + immutable correction revision + version + envelopes; original history retained |
 | Confirm CSV import | Job preview/version, row hash and external student mapping | Each accepted row enlists owner creation and SourceStudentMap with row result; resumable job avoids duplicate pupils |
-| Publish branding | Current authority, profile version, approved safe assets and palette | New immutable published revision + pointer + appropriate audit/outbox/receipt; bounded observable cache invalidation |
+| Publish branding | Current authority, profile version, approved safe assets and palette | New immutable published revision + pointer + transactional audit/outbox/receipt; public identity JSON is no-store and image URLs are content-hash immutable, so no mutable cache invalidation is needed |
 | Export scoped report | Effective module and export permission, current scoped sessions/records/revisions | ExportRun and safe download result; no stored competing attendance totals or permanent public files |
 
 Commands lock actor account rows → Organization guard → School guard in the documented order. Business commands take Organization FOR SHARE; configuration commands take FOR UPDATE. Scoped aggregates/version checks and receipt replay follow current authorization. Audit/outbox/receipt failures roll back business writes. Network side effects occur after commit through durable outbox consumers. Concurrency/deadlock behavior is verified with real PostgreSQL, not mocked repositories alone.
@@ -179,6 +179,6 @@ CREATE TABLE public.vs_platform_setup_check (
 );
 ```
 
-Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. The forward history now contains nine migrations. `20261004000300_institution_context` introduces InstitutionGrant and genuine institution-scoped configuration history, command receipts and outbox with scoped FKs and immutable guards. `20261004000500_module_entitlements` adds organization contracts and scoped branch activation without duplicating evidence tables. Module CURRENT_STATE records actual application/rehearsal evidence. Prisma models map explicit FK/index contracts.
+Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. The forward history now contains twelve migrations. `20261004000300_institution_context` introduces InstitutionGrant and genuine institution-scoped configuration history, command receipts and outbox with scoped FKs and immutable guards. `20261004000500_module_entitlements` adds organization contracts and scoped branch activation without duplicating evidence tables. BRD-02 migrations 006–008 add scoped branding profiles, immutable revisions, canonical approved image assets and verified-host challenges with forward-only corrections and an immutable-asset trigger. Module CURRENT_STATE records actual application/rehearsal evidence. Prisma models map explicit FK/index contracts.
 
 References: [Prisma database mapping](https://www.prisma.io/docs/orm/prisma-schema/data-model/database-mapping), [PostgreSQL identifier rules](https://www.postgresql.org/docs/16/sql-syntax-lexical.html). These explain tool behavior; VS names and scope are VSchool architectural decisions.

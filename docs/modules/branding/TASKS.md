@@ -26,7 +26,7 @@ Depends on: TEN-02, IAM-03, BRD-01
 
 ### Implementation instructions
 
-Implement BrandProfile/Revision/Asset/VerifiedBrandHost and preview/publish/rollback contracts. Add safe logo pipeline and exact public DTO. Integrate real NextAuth flow with current tenant membership and context selector. Unknown host/slug fails closed; no arbitrary CSS or redirects. Validate scoped asset refs, contrast, publication race, cache invalidation and mobile/keyboard error states.
+Implement BrandProfile/Revision/Asset/VerifiedBrandHost and preview/publish/rollback contracts. Add safe logo pipeline and exact public DTO. Integrate real NextAuth flow with current tenant membership and context selector. Unknown host/slug fails closed; no arbitrary CSS or redirects. Validate exact scoped asset refs, canonical PNG sanitization, contrast, stale/publication races, evidence rollback, immutable history, wrong-host mapping, no-store public identity and mobile/keyboard error states. Custom-host use also requires the separately provisioned TLS/trusted-forwarding release condition in DESIGN.md.
 
 ### Acceptance and test strategy
 

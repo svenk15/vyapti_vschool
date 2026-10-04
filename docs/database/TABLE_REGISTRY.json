@@ -256,41 +256,41 @@
       "model": "BrandAsset",
       "owner": "branding",
       "table": "vs_branding_brand_asset",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/branding/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; object_key varchar(512); sha256 char(64); mime varchar(100); bytes int; width int; height int; state varchar(20) UPLOADED/SCANNING/APPROVED/REJECTED; created_at timestamptz(3)",
-      "responsibility": "Published identity, safe asset or verified public host.",
-      "constraints": "private source; approved derivative reference; size<=2MiB and dims<=2048; scoped retrieval; object_key server assigned"
+      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; sha256 char(64); mime varchar(100); content_bytes bytea; bytes int; width int; height int; state varchar(20) APPROVED; created_at timestamptz(3)",
+      "responsibility": "Sanitized canonical PNG derivative, submitted source discarded.",
+      "constraints": "Scoped organization/nullable School FKs; exact-owner checks; bytea length=bytes<=2 MiB; dims 1..2048; SHA-256; approved content immutable"
     },
     {
       "model": "BrandProfile",
       "owner": "branding",
       "table": "vs_branding_brand_profile",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/branding/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; version int; current_revision_id uuid nullable; public_slug varchar(80)",
-      "responsibility": "Published identity, safe asset or verified public host.",
-      "constraints": "one institution default WHERE school_id IS NULL; one per branch WHERE school_id IS NOT NULL; separate partial unique indexes; scoped School FK; UNIQUE(public_slug); lowercase slug format check"
+      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; version int; current_revision_id uuid nullable; public_slug varchar(80); created_at timestamptz(3); updated_at timestamptz(3)",
+      "responsibility": "Owns one editable draft and append-only published identity revisions.",
+      "constraints": "one institution default and one per branch via separate partial unique indexes; scoped School FK; globally UNIQUE(public_slug); lowercase slug check; pointer trigger requires same profile/scope published revision"
     },
     {
       "model": "BrandRevision",
       "owner": "branding",
       "table": "vs_branding_brand_revision",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/branding/DESIGN.md",
       "fields": "id uuid PK; profile_id uuid; organization_id uuid; school_id uuid nullable; revision int; state varchar(20) DRAFT/PUBLISHED; display_name varchar(160); branch_label varchar(160) nullable; logo_asset_id uuid nullable; palette varchar(20) forest/indigo/clay; welcome varchar(180); support_email varchar(254); locale varchar(35); published_at timestamptz(3) nullable; published_by uuid nullable",
-      "responsibility": "Published identity, safe asset or verified public host.",
-      "constraints": "UNIQUE(profile_id,revision); composite owner FK; published rows immutable; pointer references same profile revision"
+      "responsibility": "Private draft or immutable published sign-in identity.",
+      "constraints": "UNIQUE(profile_id,revision); one DRAFT per profile; exact null-safe profile/asset owner trigger; published rows cannot update/delete; publisher/time both present only for PUBLISHED"
     },
     {
       "model": "VerifiedBrandHost",
       "owner": "branding",
       "table": "vs_branding_verified_brand_host",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/branding/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; hostname varchar(253); verification_token_hash char(64); state varchar(20) PENDING/VERIFIED/REVOKED; verified_at timestamptz(3) nullable; brand_profile_id uuid",
-      "responsibility": "Published identity, safe asset or verified public host.",
-      "constraints": "UNIQUE(lowercase canonical hostname); ownership challenge; exact verified lookup, no wildcard arbitrary Host trust"
+      "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; hostname varchar(253); verification_token_hash char(64); state varchar(20) PENDING/VERIFIED/REVOKED; verified_at timestamptz(3) nullable; profile_id uuid",
+      "responsibility": "Exact DNS TXT ownership proof for one published profile host mapping.",
+      "constraints": "globally unique canonical lowercase hostname; exact null-safe profile scope; no wildcard/IP; verified_at iff VERIFIED; deployment TLS/trusted-host requirement"
     },
     {
       "model": "ImportJob",

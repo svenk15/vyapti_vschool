@@ -29,6 +29,9 @@ model Organization {
   tenantOutbox TenantOutbox[]
   entitlements OrganizationEntitlement[]
   branchActivations BranchActivation[]
+  brandProfiles BrandProfile[]
+  brandAssets BrandAsset[]
+  verifiedBrandHosts VerifiedBrandHost[]
 
   @@map("vs_access_organization")
 }
@@ -51,6 +54,9 @@ model School {
   outboxEvents         OutboxEvent[]
   commandReceipts      CommandReceipt[]
   moduleActivations BranchActivation[]
+  brandProfiles BrandProfile[]
+  brandAssets BrandAsset[]
+  verifiedBrandHosts VerifiedBrandHost[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -78,6 +84,7 @@ model UserAccount {
   createdActivations AccountActivation[] @relation("ActivationCreator")
   auditEntries        AuditEntry[]
   commandReceipts     CommandReceipt[]
+  publishedBrandRevisions BrandRevision[]
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -339,4 +346,81 @@ model BranchActivation {
  @@unique([organizationId,schoolId,moduleId],map:"vs_tenancy_branch_activation_scope_module_key")
  @@index([organizationId,schoolId,state,moduleId],map:"vs_tenancy_branch_activation_status_idx")
  @@map("vs_tenancy_branch_activation")
+}
+model BrandProfile {
+ id String @id(map:"vs_branding_brand_profile_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String? @map("school_id") @db.Uuid
+ version Int
+ currentRevisionId String? @map("current_revision_id") @db.Uuid
+ publicSlug String @unique(map:"vs_branding_brand_profile_slug_key") @map("public_slug") @db.VarChar(80)
+ createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_profile_org_fkey")
+ school School? @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_profile_school_fkey")
+ revisions BrandRevision[] @relation("BrandProfileRevisions")
+ currentRevision BrandRevision? @relation("BrandProfileCurrent",fields:[currentRevisionId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_profile_current_revision_fkey")
+ hosts VerifiedBrandHost[]
+ @@unique([organizationId,id],map:"vs_branding_brand_profile_scope_id_key")
+ @@unique([id,organizationId,schoolId],map:"vs_branding_brand_profile_owner_key")
+ @@map("vs_branding_brand_profile")
+}
+model BrandRevision {
+ id String @id(map:"vs_branding_brand_revision_pkey") @db.Uuid
+ profileId String @map("profile_id") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String? @map("school_id") @db.Uuid
+ revision Int
+ state String @db.VarChar(20)
+ displayName String @map("display_name") @db.VarChar(160)
+ branchLabel String? @map("branch_label") @db.VarChar(160)
+ logoAssetId String? @map("logo_asset_id") @db.Uuid
+ palette String @db.VarChar(20)
+ welcome String @db.VarChar(180)
+ supportEmail String @map("support_email") @db.VarChar(254)
+ locale String @db.VarChar(35)
+ publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+ publishedBy String? @map("published_by") @db.Uuid
+ profile BrandProfile @relation("BrandProfileRevisions",fields:[profileId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_revision_profile_fkey")
+ currentFor BrandProfile[] @relation("BrandProfileCurrent")
+ logoAsset BrandAsset? @relation(fields:[logoAssetId,organizationId,schoolId],references:[id,organizationId,schoolId],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_revision_asset_fkey")
+ publisher UserAccount? @relation(fields:[publishedBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_revision_publisher_fkey")
+ @@unique([profileId,revision],map:"vs_branding_brand_revision_profile_revision_key")
+ @@unique([id,organizationId,schoolId],map:"vs_branding_brand_revision_owner_key")
+ @@index([organizationId,schoolId,state,revision],map:"vs_branding_brand_revision_scope_state_idx")
+ @@map("vs_branding_brand_revision")
+}
+model BrandAsset {
+ id String @id(map:"vs_branding_brand_asset_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String? @map("school_id") @db.Uuid
+ sha256 String @db.Char(64)
+ mime String @db.VarChar(100)
+ contentBytes Bytes @map("content_bytes") @db.ByteA
+ bytes Int
+ width Int
+ height Int
+ state String @db.VarChar(20)
+ createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_asset_org_fkey")
+ school School? @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_brand_asset_school_fkey")
+ revisions BrandRevision[]
+ @@unique([id,organizationId,schoolId],map:"vs_branding_brand_asset_owner_key")
+ @@index([organizationId,schoolId,sha256],map:"vs_branding_brand_asset_digest_idx")
+ @@map("vs_branding_brand_asset")
+}
+model VerifiedBrandHost {
+ id String @id(map:"vs_branding_verified_brand_host_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String? @map("school_id") @db.Uuid
+ hostname String @db.VarChar(253)
+ verificationTokenHash String @map("verification_token_hash") @db.Char(64)
+ state String @db.VarChar(20)
+ verifiedAt DateTime? @map("verified_at") @db.Timestamptz(3)
+ profileId String @map("profile_id") @db.Uuid
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_verified_brand_host_org_fkey")
+ school School? @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_verified_brand_host_school_fkey")
+ profile BrandProfile @relation(fields:[profileId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_verified_brand_host_profile_fkey")
+ @@index([hostname,state],map:"vs_branding_verified_brand_host_lookup_idx")
+ @@map("vs_branding_verified_brand_host")
 }

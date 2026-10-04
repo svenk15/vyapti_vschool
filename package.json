@@ -32,7 +32,8 @@
     "demo:tenancy": "node --import tsx scripts/demo-tenancy.ts",
     "verify:tenancy-local": "node scripts/verify-tenancy-local.mjs",
     "tenancy-operator": "node --import tsx scripts/tenancy-operator.ts",
-    "demo:tenancy-modules": "node --import tsx scripts/demo-tenancy-modules.ts"
+    "demo:tenancy-modules": "node --import tsx scripts/demo-tenancy-modules.ts",
+    "demo:branding": "node --import tsx scripts/demo-branding.ts"
   },
   "dependencies": {
     "next": "16.3.8",
