@@ -63,6 +63,8 @@ model UserAccount {
   memberships         SchoolMembership[]
   securityEvents      AuthSecurityEvent[] @relation("SecuritySubject")
   actorSecurityEvents AuthSecurityEvent[] @relation("SecurityActor")
+  activations AccountActivation[] @relation("ActivationAccount")
+  createdActivations AccountActivation[] @relation("ActivationCreator")
   auditEntries        AuditEntry[]
   commandReceipts     CommandReceipt[]
 
@@ -81,9 +83,11 @@ model SchoolMembership {
   school         School      @relation(fields: [organizationId, schoolId], references: [organizationId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_membership_r1_fkey")
   account        UserAccount @relation(fields: [accountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_membership_r2_fkey")
   grants         RoleGrant[]
+  activationIntents AccountActivationMembership[]
 
   @@unique([organizationId, schoolId, id], map: "vs_access_school_membership_u0_key")
   @@unique([organizationId, schoolId, accountId], map: "vs_access_school_membership_u1_key")
+  @@unique([organizationId, schoolId, id, accountId], map: "vs_access_school_membership_u2_key")
   @@index([organizationId, schoolId], map: "vs_access_school_membership_r1_idx")
   @@index([accountId], map: "vs_access_school_membership_r2_idx")
   @@map("vs_access_school_membership")
@@ -194,4 +198,41 @@ model Campus {
  @@unique([organizationId,schoolId,id],map:"vs_access_campus_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_access_campus_scope_code_key")
  @@map("vs_access_campus")
+}
+
+model AccountActivation {
+ id String @id(map:"vs_access_account_activation_pkey") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ tokenHash String @map("token_hash") @db.Char(64)
+ expiresAt DateTime @map("expires_at") @db.Timestamptz(3)
+ consumedAt DateTime? @map("consumed_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ createdBy String @map("created_by") @db.Uuid
+ operatorId String @map("operator_id") @db.Uuid
+ caseReference String @map("case_reference") @db.VarChar(80)
+ reason String @db.VarChar(500)
+ issuedTokenVersion Int @map("issued_token_version")
+ account UserAccount @relation("ActivationAccount",fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_activation_r0_fkey")
+ creator UserAccount @relation("ActivationCreator",fields:[createdBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_activation_r1_fkey")
+ intents AccountActivationMembership[]
+ @@unique([tokenHash],map:"vs_access_account_activation_u0_key")
+ @@unique([accountId,id],map:"vs_access_account_activation_u1_key")
+ @@index([accountId,expiresAt],map:"vs_access_account_activation_r0_idx")
+ @@index([createdBy],map:"vs_access_account_activation_r1_idx")
+ @@map("vs_access_account_activation")
+}
+model AccountActivationMembership {
+ id String @id(map:"vs_access_account_activation_membership_pkey") @db.Uuid
+ activationId String @map("activation_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ expectedVersion Int @map("expected_version")
+ activation AccountActivation @relation(fields:[accountId,activationId],references:[accountId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_activation_membership_r0_fkey")
+ membership SchoolMembership @relation(fields:[organizationId,schoolId,membershipId,accountId],references:[organizationId,schoolId,id,accountId],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_activation_membership_r1_fkey")
+ @@unique([activationId,membershipId],map:"vs_access_account_activation_membership_u0_key")
+ @@index([accountId,activationId],map:"vs_access_account_activation_membership_r0_idx")
+ @@index([organizationId,schoolId,membershipId,accountId],map:"vs_access_account_activation_membership_r1_idx")
+ @@map("vs_access_account_activation_membership")
 }

@@ -6,7 +6,7 @@ Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally v
 |---|---|---|---|
 | IAM-01 | VERIFIED | PASSED | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
 | IAM-02 | VERIFIED | PASSED | [Local verification](../../evidence/iam-02-local/verification.json), JUnit and source handoff below |
-| IAM-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| IAM-03 | IN_PROGRESS | NOT_REQUESTED | Activation/recovery slice in progress |
 
 ## Current checkpoint
 
@@ -107,3 +107,11 @@ Tested source `2a9418f9ae2265532aae946c4c540be39c28a79f`; production build `e547
 ### IAM-02 acceptance and execution policy — 4 October 2026
 
 Owner: “IAM-02 looks good - Pass”. PASSED applies to tested source 2a9418f9ae2265532aae946c4c540be39c28a79f and documentation handoff 7f72d13. Owner now authorizes continuing after each verified demo with human review PENDING; never infer human acceptance. Defects take priority and explicit acceptance dependencies remain gates. No timer, deployment or external messaging authorized. Clean main at 7f72d13; pnpm next-task selects IAM-03.
+
+### IAM-03 start — 4 October 2026
+
+Clean main at c8eb176 after policy/acceptance checkpoint. Demo outcome: issue private verified-operator token, activate synthetic teacher, sign in, reject replay, recover and invalidate old sessions. IAM-ADR-007 resolves operator FK provenance, relational membership intent, account-wide recovery state and attempt limits before coding. Required forward migrations, PostgreSQL invariants and Playwright journeys; no timer/deployment/external send.
+
+### IAM-03 automated source checkpoint — 4 October 2026
+
+Implementation IN_PROGRESS pending frozen production demo verification. pnpm check passed (53 unit tests, lint/types/docs/48-table registry/boundaries/backend). Full PostgreSQL baseline passed 27 tests; final focused activation suite passed 7, including real lock-wait expiry and bounded retry rollback (29 distinct current functional cases covered across retained reports). Full browser baseline passed 48 desktop/mobile journeys; final activation/recovery scope passed 4 after the retry change. pnpm build passed with standalone local snapshot output. Six forward migrations applied to dev/test; schema comparison empty. Pending synthetic teacher/private token is prepared in ignored mode-0600 artifacts/iam-03. Human review NOT_REQUESTED until the production snapshot/probe pass. Exact commit and manual steps follow in the verification handoff.

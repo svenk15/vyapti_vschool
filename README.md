@@ -26,3 +26,28 @@ Run `pnpm setup:auth` once to create private authentication-only `.env.local` wh
 For a separately verified local operator, `pnpm provision-school --organizationName '<institution>' --schoolCode MAIN --schoolName '<school>' --timezone Asia/Kolkata --adminEmail '<administrator email>'` prompts for a hidden password. `--password-stdin` supports a private pipe. Never pass passwords as command arguments. The command requires the configured operator UUID, only targets local `vyapti_vschool`, refuses duplicate institution names/emails, and has no public HTTP provisioning endpoint. File/terminal access establishes this local operator trust boundary; production operator controls are FND-02 work.
 
 Sessions last eight hours. Five failed credential comparisons lock an active account for 15 minutes; disabled, unknown, wrong and locked credentials share generic feedback. Membership/status/tokenVersion changes are checked on every protected server request. Setup currently describes the next task; editable settings/staff are IAM-02. No business module is enabled by this bootstrap.
+
+IAM-03 activation and recovery use the restricted local operator configuration.
+New staff remain pending until the operator verifies the intended identity and
+records a non-sensitive case reference and reason. Tokens are never emailed.
+
+```sh
+pnpm issue-activation --accountId <account UUID> --membershipIds <pending membership UUIDs separated by commas> --caseReference <case> --reason <non-sensitive reason> --output artifacts/private-activation-<unique>.json
+pnpm recover-account --accountId <account UUID> --caseReference <case> --reason <non-sensitive reason> --output artifacts/private-recovery-<unique>.json
+```
+
+Open the newly created mode-0600 private file locally, paste its token into
+`/activate`, and set a new password. Initial activation binds only the explicitly
+selected pending memberships. Recovery immediately invalidates old sessions and
+credentials across branches, preserving suspended/revoked memberships. The
+operator flow rejects disabled accounts and never overwrites a private output
+file. If private file writing fails after issuance, issue a fresh token using a
+new path; the old token cannot be recovered from its stored hash.
+
+`pnpm demo:activation` prepares synthetic private review instructions.
+`pnpm demo:task IAM-03 3403` snapshots a committed standalone build for local
+review while later tasks proceed. Snapshot output lives only in ignored artifacts;
+this starts a localhost server and performs no deployment. To restart an older snapshot after further commits, pass its full tested commit SHA as the third argument. Set the process-only
+`VSCHOOL_DEMO_URL` for operator instructions when reviewing on another port.
+Functional/E2E commands accept test filenames after the command to run the
+applicable slice; the guarded dedicated test database setup remains mandatory.

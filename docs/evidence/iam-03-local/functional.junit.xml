@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="7" failures="0" errors="0" time="14.953491292">
+    <testsuite name="test/functional/activation.test.ts" timestamp="2026-10-04T03:02:23.686Z" hostname="Venkateshs-MacBook-Air.local" tests="7" failures="0" errors="0" skipped="0" time="14.953491292">
+        <testcase classname="test/functional/activation.test.ts" name="stores only token hashes, binds exact membership intent, and concurrent redemption wins once" time="3.530994667">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="rejects foreign scope, changed intent, disabled subject and token replacement without partial activation" time="1.581292375">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="rolls consumption, credentials, membership and actual evidence back on enlisted writer failure" time="1.457517167">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="recovery immediately invalidates old credentials/sessions in every branch and preserves suspended memberships" time="3.475662125">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="expiry boundary and five-account-attempt budget persist across new tokens, then recover after the window" time="1.790725792">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="rechecks expiry after waiting on the real School guard" time="1.275144167">
+        </testcase>
+        <testcase classname="test/functional/activation.test.ts" name="serialization retries preserve one consumption and stop after three rolled-back attempts" time="1.839219041">
+        </testcase>
+    </testsuite>
+</testsuites>

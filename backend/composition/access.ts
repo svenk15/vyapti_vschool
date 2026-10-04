@@ -1,3 +1,7 @@
+import { createActivationUseCases } from "../modules/access/application/activation";
+import { PrismaActivationRepository } from "../modules/access/infrastructure/activation";
+import { OpaqueActivationTokens } from "../modules/access/infrastructure/activation-tokens";
+import { PrismaAccessSecurityEvidence } from "../modules/platform/infrastructure/access-security-evidence";
 import { createManagementUseCases } from "../modules/access/application/management";
 import { PrismaManagementRepository } from "../modules/access/infrastructure/management";
 import { PrismaCommandEvidence } from "../modules/platform/infrastructure/command-evidence";
@@ -13,5 +17,6 @@ export function createAccessServices(config:{databaseUrl:string;now?:()=>Date;cu
  const db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]});
  const repository=new PrismaAccessRepository(db,tx=>new PrismaProvisionEvidence(tx),config.now);
  const management=createManagementUseCases(new PrismaManagementRepository(db,tx=>new PrismaCommandEvidence(tx),tx=>new PrismaScheduledSessions(tx),config.cursorSecret??randomUUID(),config.now));
- return {...management,...createAccessUseCases(repository,new BcryptPasswords(),randomUUID),disconnect:()=>db.$disconnect()};
+ const activation=createActivationUseCases(new PrismaActivationRepository(db,tx=>new PrismaAccessSecurityEvidence(tx),config.now??(()=>new Date())),new BcryptPasswords(),new OpaqueActivationTokens(),config.now??(()=>new Date()));
+ return {...activation,...management,...createAccessUseCases(repository,new BcryptPasswords(),randomUUID),disconnect:()=>db.$disconnect()};
 }

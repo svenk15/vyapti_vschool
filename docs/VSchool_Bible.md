@@ -2,7 +2,7 @@
 
 Version 4.4 · Configurable multi-institution platform baseline · 3 October 2026
 
-Status: comprehensive product blueprint with Phase 1 implementation contracts. The repository implements the local foundation, shared UI primitives, public synthetic branding/configuration previews and pure entitlement reference rules. IAM-01 adds local operator bootstrap, real administrator authentication and current school authorization; IAM-02 adds local school settings, campuses and guarded staff administration; operational school business modules remain planned until module evidence says otherwise. There is no active 24-hour run, no inherited completion claim and no production deployment.
+Status: comprehensive product blueprint with Phase 1 implementation contracts. The repository implements the local foundation, shared UI primitives, public synthetic branding/configuration previews and pure entitlement reference rules. IAM-01 adds local operator bootstrap, real administrator authentication and current school authorization; IAM-02 adds local school settings, campuses and guarded staff administration; IAM-03 adds one-time operator-assisted activation and account-wide recovery; operational school business modules remain planned until module evidence says otherwise. There is no active 24-hour run, no inherited completion claim and no production deployment.
 
 ## 1. Product purpose
 
@@ -134,7 +134,7 @@ NextAuth credentials adapter is installed and locally verified by IAM-01 at pinn
 
 ## 7. Database and transaction contract
 
-Physical tables use the VS convention: `vs_<module>_<singular_entity>` with lowercase snake_case columns, explicitly mapped from PascalCase domain models and camelCase properties through Prisma. [Database design](DATABASE_DESIGN.md) defines names, schema ownership, constraints, joins and migration rules; module DESIGN.md files define column schemas and workflow-specific writes. This supersedes the earlier physical PascalCase convention. `_prisma_migrations` remains Prisma-owned and is exempt. UUID business IDs, PostgreSQL DATE for civil dates, TIMESTAMPTZ(3) for instants, integer version, JSONB only for versioned snapshots/envelopes; relational IDs remain constrained columns. Explicit indexes serve scoped foreign keys and queries. All module tables in DESIGN.md are proposed until migrated; eleven tables are migrated through IAM-02: the foundation marker, nine Access/Platform bootstrap contracts and Campus. See the table registry and module evidence for actual status.
+Physical tables use the VS convention: `vs_<module>_<singular_entity>` with lowercase snake_case columns, explicitly mapped from PascalCase domain models and camelCase properties through Prisma. [Database design](DATABASE_DESIGN.md) defines names, schema ownership, constraints, joins and migration rules; module DESIGN.md files define column schemas and workflow-specific writes. This supersedes the earlier physical PascalCase convention. `_prisma_migrations` remains Prisma-owned and is exempt. UUID business IDs, PostgreSQL DATE for civil dates, TIMESTAMPTZ(3) for instants, integer version, JSONB only for versioned snapshots/envelopes; relational IDs remain constrained columns. Explicit indexes serve scoped foreign keys and queries. All module tables in DESIGN.md are proposed until migrated; thirteen tables are migrated through IAM-03: the foundation marker, nine Access/Platform bootstrap contracts, Campus, AccountActivation and its owned membership intent snapshot. See the table registry and module evidence for actual status.
 
 `SchoolCommand` transaction: account rows (sorted IDs) FOR UPDATE → Organization guard FOR SHARE → School guard FOR UPDATE → current actor authorization → receipt lookup → owned roots/references → domain decision → persistence + audit + outbox + receipt → commit. This conservative serialization is intentional at initial pilot scale; unrelated branches can execute concurrently under shared Organization guards. Account-wide disable/recovery takes account locks first, then all affected Organization guards and School guards in sorted ID order. No code may take School then account locks. Ordinary protected reads recheck current actor; snapshot read results are allowed, but mutations linearize under guards. Account creation uses its normalized-email unique constraint; conflict rolls back and requires explicit binding.
 
@@ -206,6 +206,8 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 - [Reporting](modules/reporting/DESIGN.md) · [Tasks](modules/reporting/TASKS.md) · [State](modules/reporting/CURRENT_STATE.md)
 
 ## 13. Change log
+
+2026-10-04 / IAM-03: IAM-ADR-007 resolves outside-account operator provenance, relational intended-membership binding, account-wide recovery quarantine/session revocation and bounded activation attempts.
 
 2026-10-04 / IAM-02: resolved the circular activation demo reference; pending staff belong to IAM-02, activation to dependent IAM-03. IAM-ADR-006 specifies guarded settings/campus/membership commands, current last-admin counting, scope-safe account attachment, receipt replay, cursor binding, self-only staff context and Attendance-owned timezone protection.
 

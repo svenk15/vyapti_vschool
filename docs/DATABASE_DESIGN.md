@@ -52,7 +52,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | Subject | `vs_academics_subject` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | Teacher | `vs_academics_teacher` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| AccountActivation | `vs_access_account_activation` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
+| AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| AccountActivationMembership | `vs_access_account_activation_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountPersonBinding | `vs_access_account_person_binding` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | AuthSecurityEvent | `vs_access_auth_security_event` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | Campus | `vs_access_campus` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |

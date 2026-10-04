@@ -116,11 +116,11 @@
       "model": "AccountActivation",
       "owner": "access",
       "table": "vs_access_account_activation",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; account_id uuid; token_hash char(64); expires_at timestamptz(3); consumed_at timestamptz(3) nullable; revoked_at timestamptz(3) nullable; created_by uuid",
+      "fields": "id uuid PK; account_id uuid; token_hash char(64); expires_at timestamptz(3); consumed_at timestamptz(3) nullable; revoked_at timestamptz(3) nullable; created_by uuid; operator_id uuid; case_reference varchar(80); reason varchar(500); issued_token_version int",
       "responsibility": "One-time 256-bit random opaque activation, hash stored; 24h expiry. Raw token shown once to authorized local operator, never audit/log/URL query.",
-      "constraints": "UNIQUE(token_hash); FK account and created_by; index(account_id,expires_at)"
+      "constraints": "UNIQUE(token_hash); FK account and created_by (subject account, with explicit operator provenance); UNIQUE(account_id,id); index(account_id,expires_at)"
     },
     {
       "model": "AccountPersonBinding",
@@ -471,6 +471,16 @@
       "fields": "id uuid PK; organization_id uuid; type varchar(100); schema_version int; payload jsonb; occurred_at timestamptz(3); state varchar(20) PENDING/PROCESSING/DELIVERED/FAILED; attempts int default 0; available_at timestamptz(3)",
       "responsibility": "Module contract, activation or configuration evidence.",
       "constraints": "FK organization; index(organization_id,state,available_at,id); attempts>=0; schema_version>0; immutable envelope except delivery state"
+    },
+    {
+      "model": "AccountActivationMembership",
+      "owner": "access",
+      "table": "vs_access_account_activation_membership",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; activation_id uuid; account_id uuid; organization_id uuid; school_id uuid; membership_id uuid; expected_version int",
+      "responsibility": "Owned immutable relational membership intent snapshot for one activation.",
+      "constraints": "UNIQUE(activation_id,membership_id); scoped account/membership FK and activation/account FK; CHECK expected_version>0"
     }
   ]
 }

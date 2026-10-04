@@ -23,7 +23,11 @@
     "setup:auth": "node scripts/setup-auth.mjs",
     "provision-school": "node --import tsx scripts/provision-school.ts",
     "demo:access": "node --import tsx scripts/demo-access.ts",
-    "verify:access-local": "node scripts/verify-access-local.mjs"
+    "verify:access-local": "node scripts/verify-access-local.mjs",
+    "issue-activation": "node --import tsx scripts/issue-activation.ts",
+    "recover-account": "node --import tsx scripts/recover-account.ts",
+    "demo:activation": "node --import tsx scripts/demo-activation.ts",
+    "demo:task": "node scripts/demo-task.mjs"
   },
   "dependencies": {
     "next": "16.3.8",

@@ -1,0 +1,14 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="47.286768">
+<testsuite name="access-activation.spec.ts" timestamp="2026-10-04T03:05:21.316Z" hostname="chromium" tests="2" failures="0" skipped="0" time="26.233" errors="0">
+<testcase name="one-time activation, sign-in and recovery revoke the original session and password" classname="access-activation.spec.ts" time="23.906">
+</testcase>
+<testcase name="confirmation and generic invalid token clear credentials, reject origin/body abuse, and cannot bypass host limits" classname="access-activation.spec.ts" time="2.327">
+</testcase>
+</testsuite>
+<testsuite name="access-activation.spec.ts" timestamp="2026-10-04T03:05:21.316Z" hostname="mobile" tests="2" failures="0" skipped="0" time="12.028" errors="0">
+<testcase name="one-time activation, sign-in and recovery revoke the original session and password" classname="access-activation.spec.ts" time="9.637">
+</testcase>
+<testcase name="confirmation and generic invalid token clear credentials, reject origin/body abuse, and cannot bypass host limits" classname="access-activation.spec.ts" time="2.391">
+</testcase>
+</testsuite>
+</testsuites>

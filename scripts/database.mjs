@@ -14,6 +14,6 @@ run("node_modules/prisma/build/index.js",["generate"]);
 run("node_modules/prisma/build/index.js",["migrate","deploy"]);
 const client=new Client({connectionString:value,connectionTimeoutMillis:5000});
 try {await client.connect();await client.query('INSERT INTO vs_platform_setup_check (id) VALUES ($1) ON CONFLICT (id) DO NOTHING',["starter"]);} finally {await client.end();}
-if(mode==="functional")run("node_modules/vitest/vitest.mjs",["run","--config","vitest.functional.config.ts"]);
-else if(mode==="e2e")run("node_modules/@playwright/test/cli.js",["test"]);
+if(mode==="functional")run("node_modules/vitest/vitest.mjs",["run","--config","vitest.functional.config.ts",...process.argv.slice(3)]);
+else if(mode==="e2e")run("node_modules/@playwright/test/cli.js",["test",...process.argv.slice(3)]);
 else console.log("Fresh development database is ready. Run pnpm dev.");
