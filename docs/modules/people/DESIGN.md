@@ -18,12 +18,13 @@ PER-ADR-002: organization-wide person corrections are restricted operator mainte
 
 ## Physical data contract
 
-PER-01 installs Person, Employee and the Access-owned AccountPersonBinding table; binding rows remain empty until PER-02. Later People tables are planned. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+PER-01 installs Person, Employee and the Access-owned AccountPersonBinding table; binding rows remain empty until PER-02. PER-02 installs the Academics-owned Teacher eligibility table. Later People tables remain planned. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
 | `vs_people_person` (Person) | id uuid PK; organization_id uuid; first_name varchar(100); last_name varchar(100) default empty; contact_email varchar(254) nullable; version int; created_at timestamptz(3) | Canonical name/contact; email contact is not verified login ownership. Minimal pilot PII, no health/document fields. | FK organization; UNIQUE(organization_id,id); index(organization_id,last_name,id); no email/name uniqueness |
 | `vs_people_employee` (Employee) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int | School institutional profile; links rather than duplicates identity. | Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end |
+| `vs_academics_teacher` (Teacher) | id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int | Academics-owned teacher eligibility, not an account or login. | Scoped FK(scope,employee_id)→Employee(scope,id); UNIQUE(scope,employee_id); UNIQUE(scope,id); index(scope,active,employee_id); Path A RLS metadata; TEN-03 enforcement gate |
 
 ## Read workflows and joins
 
@@ -39,7 +40,7 @@ All screens additionally follow Bible §8: loading, empty, validation, permissio
 
 Each named flow below is an application use case. Inputs/outputs are plain DTOs; adapters implement owned repositories and public cross-module facades. Use SchoolCommand, ActorResolver, Clock, IdGenerator and transactional envelope writers from the shared contract. Do not pass Prisma.TransactionClient into application/domain code. Generic `save(any)` is not a replacement for named commands. Domain factories create new roots/events; rehydration restores without events.
 
-Mutations use the account → Organization → School guard protocol in Bible §7. Read-only flows do not take write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
+Mutations use the account → Organization → School guard protocol in Bible §7. Every protected read and write reauthorizes current scope and resource permission. Read-only flows do not acquire write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before mutation receipt replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
 
 ## PER-01 — Create and inspect staff profiles
 
@@ -95,19 +96,19 @@ sequenceDiagram
 
 **Transport:** POST /api/v1/employees/:id/teacher-profile; POST /api/v1/employees/:id/account-binding; PATCH /api/v1/employees/:id/end
 
-**Input:** Teacher enable expectedVersion; binding accountId + verificationReference + reason, user.manage required; end effectiveDate + reason/version; key.
+**Input:** Teacher enable expectedVersion; binding accountId + verificationReference + reason, `user.manage` required; end effectiveDate (last employed day, inclusive) + reason/version; key. Offboarding currently accepts only the current school-local date; future-dated termination is unsupported. The stored `employed_to` remains the exclusive next day so the half-open employment range stays valid.
 
 **Workflow:**
 
-1. Discover actor/target account IDs, acquire sorted account locks then School; resolve actor.
-2. Resolve scoped Employee/Person, membership and explicit verified account; account email equality is not proof.
-3. Create Teacher through academic facade; bind through access facade, each in the same owner-enlisted transaction.
-4. For end-employment, query impacted assignments/open/future sessions; reject until reassigned/cancelled under their owner commands.
-5. Persist only owning-module changes and envelopes; present eligibility and account badges.
+1. Acquire the initiating account, Organization and School guards in order; reauthorize the current resource capability before receipt replay and commit. Binding target account rows are guarded by Access inside the same transaction.
+2. Resolve the scoped Employee/Person; account email equality, activation, or login possession is not proof. Only a user.manage administrator may bind after recording an out-of-band identity-check reference.
+3. Create Teacher through the Academics facade; bind through the Access facade, each in the same owner-enlisted transaction. Each command has its own idempotency receipt.
+4. End only for the current school-local date; mark Employee ENDED with the next-day exclusive `employed_to` and Teacher inactive atomically. The employment end revokes eligibility immediately. Assignment/session tables are not installed yet; ACA-03 and ATT-01 must add owner-side assignment/submission guards before those workflows are released. Do not claim an impact query in PER-02.
+5. Persist audit/outbox/receipt and school configuration revision with the owning-module changes; present eligibility and account badges.
 
-**Database writes / atomicity:** Teacher (academic facade), AccountPersonBinding (access facade), Employee end/status if safe; audit/outbox/receipt.
+**Database writes / atomicity:** Teacher (Academics facade), AccountPersonBinding (Access facade), Employee end/status; audit/outbox/receipt and school revision in one serializable transaction. Binding records an Access security event containing only the safe verification reference, never the account email or raw evidence. Reads remain reauthorized and do not lock; mutations use account→Organization→School row locks.
 
-**Errors and recovery:** Account/person already differently bound→409; foreign membership→404; impacted sessions→409 EMPLOYEE_IN_USE.
+**Errors and recovery:** Account/person already differently bound, inactive/unverified account, or missing active same-branch TEACHER membership→409; employee outside branch→404; stale version or competing write→409; past/future end date→422; invalid capability→403. Failure in any owner facade rolls back all owner rows and envelopes. When assignments/sessions ship, their owning mutation guards must reject incompatible offboarding with a safe conflict.
 
 ```mermaid
 sequenceDiagram
@@ -135,9 +136,9 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Verified binding and eligibility policy. Functional PostgreSQL — Whole multi-owner rollback; binding uniqueness race; offboarding vs attendance submit guard. E2E — Bind intended teacher, show teaching eligibility; wrong account conflict; offboarding impact warning.
+**Verification:** Unit — Input validation and safe errors. Functional PostgreSQL — Scoped Teacher FK/uniqueness, verified same-school binding, wrong-account/foreign-membership rejection, binding uniqueness race, atomic cross-owner rollback and same-day offboarding CAS. E2E — Enable eligibility, bind the intended synthetic active teacher account, refresh, reject a second binding; end employment and confirm eligibility becomes disabled. Assignment/session impact race evidence belongs to ACA-03/ATT-01 when those tables exist.
 
-**Design-readiness note (4 October 2026):** Schema ownership is settled: People owns Employee lifecycle; Academics owns Teacher eligibility; Access owns the existing organization-local AccountPersonBinding keyed uniquely by `(organization_id,account_id)` and `(organization_id,person_id)`. A `user.manage` school administrator may bind only after an explicit out-of-band identity check and records a non-sensitive verification reference/reason; email equality, activation, or possession of a login alone never proves person identity. The operation enlists Access and Academics in one account→Organization→School guarded transaction; binding races and offboarding/session-impact failures roll back all owners. IAM-03 must be VERIFIED and explicitly human-accepted before this dependent task begins. No new binding schema is required. Future tenant-owned tables still follow TEN-ADR-006; no existing Access policy is retrofitted here. Design is complete; its execution gate remains IAM-03 acceptance plus PER-01/ACA-01 dependencies.
+**Design-readiness note (4 October 2026):** Schema ownership is settled: People owns Employee lifecycle; Academics owns Teacher eligibility; Access owns the existing organization-local AccountPersonBinding keyed uniquely by `(organization_id,account_id)` and `(organization_id,person_id)`. A `user.manage` school administrator may bind only after an explicit out-of-band identity check and records a non-sensitive verification reference/reason; email equality, activation, or possession of a login alone never proves person identity. The operation enlists Access and Academics in one account→Organization→School guarded transaction; binding races roll back all owners. Dated dependency snapshot on 4 October: PER-01 VERIFIED/PENDING, IAM-03 VERIFIED/PENDING, ACA-01 VERIFIED/PENDING. PER-01 and ACA-01 pending reviews do not block PER-02; IAM-03 has the explicit owner-acceptance gate recorded in Access CURRENT_STATE and must be PASSED before PER-02 begins. CURRENT_STATE tables remain authoritative. No new binding schema is required. Path A defers database enforcement to TEN-03 while application authorization remains active.
 
 ## Migration, retention and handoff
 

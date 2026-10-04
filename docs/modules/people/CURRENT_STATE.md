@@ -5,11 +5,13 @@ Last updated: 2026-10-04. Human review is tracked separately from implementation
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | PER-01 | VERIFIED | PENDING | [Local verification](../../evidence/people-01-local/verification.json), JUnit reports, source `45ca6d6` |
-| PER-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| PER-02 | BLOCKED | NOT_REQUESTED | IAM-03 is VERIFIED/PENDING; its explicit owner-acceptance gate must pass before PER-02 begins |
 
 ## Current checkpoint
 
-**Design readiness (4 October 2026):** PER-02 LLD/task clarify owner-enlisted Teacher/AccountPersonBinding writes, scoped uniqueness, account→Organization→School locking and explicit out-of-band school-admin verification reference; account email or activation alone is not proof. No implementation started. Execution remains explicitly gated on PER-01, ACA-01 and IAM-03 human acceptance.
+**Design readiness (4 October 2026):** PER-02 LLD/task clarify owner-enlisted Teacher/AccountPersonBinding writes, scoped uniqueness, account→Organization→School locking and explicit out-of-band school-admin verification reference; account email or activation alone is not proof. Dated dependency snapshot: PER-01 VERIFIED/PENDING, IAM-03 VERIFIED/PENDING, ACA-01 VERIFIED/PENDING. PER-01 and ACA-01 review may remain PENDING. Access CURRENT_STATE explicitly gates PER-02 on IAM-03 human acceptance; the task criteria now state that requirement consistently. The implementation status table remains authoritative.
+
+**Partial PER-02 work before gate reconciliation (4 October 2026):** Work began before the explicit IAM-03 acceptance gate was noticed. Migration `20261004001400_teacher_eligibility` has been applied to local `vyapti_vschool` and `vyapti_vschool_test`; it creates the Academics-owned, scoped Teacher table under the Path A TEN-03 closure rule. Focused PostgreSQL tests passed 5/5 and PER-02 desktop/mobile Playwright journeys passed 2/2 against the test DB. These are partial-work checks, not a verified task checkpoint. The code and migration are being isolated on branch `wip/per-02-before-iam03-acceptance`; no stable PER-02 review demo was prepared. PER-02 remains BLOCKED until IAM-03 review is PASSED. Preserve the branch and both database histories; do not reset either database.
 
 PER-01 creates a distinct organization-local Person and school-scoped Employee record in one guarded transaction. Contact similarity never merges people. Authorized staff see a branch-scoped list and a separate portal-link status. Creating a profile does not create a login, bind an account or enable teaching eligibility. Access owns the `AccountPersonBinding` table; it is installed now with no rows, and only the explicit identity-verified PER-02 flow may add bindings.
 
@@ -38,4 +40,4 @@ The browser smoke already used two clearly synthetic names/numbers in the develo
 
 ## Limitations and next action
 
-PER-01 does not create a login or account binding and does not make the employee eligible to teach. PER-02 remains unstarted. Following the updated owner execution request, reconcile the IAM-04 task sequence and contract next; IAM-02, IAM-03 and TEN-02 are already implemented, while IAM-03 and TEN-02 human reviews remain PENDING. Keep PER-01 review PENDING until explicit feedback; proceed without waiting unless a documented acceptance dependency requires it.
+PER-01 does not create a login or account binding and does not make the employee eligible to teach. PER-02 has partial implementation but remains BLOCKED and unverified until explicit IAM-03 owner acceptance. Its partial code/migration are checkpointed on `wip/per-02-before-iam03-acceptance`. STU-01 is independently eligible from verified PER-01 and ACA-01 implementations; continue it without merging or completing PER-02. Keep PER-01/ACA-01 reviews PENDING until explicit feedback.

@@ -157,10 +157,26 @@ model Employee {
  version Int
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_employee_school_fkey")
  person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_employee_person_fkey")
+ teacher Teacher?
  @@unique([organizationId,schoolId,id],map:"vs_people_employee_scope_id_key")
  @@unique([organizationId,schoolId,staffNumber],map:"vs_people_employee_staff_number_key")
  @@unique([organizationId,schoolId,personId],map:"vs_people_employee_person_key")
  @@map("vs_people_employee")
+}
+
+
+model Teacher {
+ id String @id(map:"vs_academics_teacher_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ employeeId String @map("employee_id") @db.Uuid
+ active Boolean
+ version Int
+ employee Employee @relation(fields:[organizationId,schoolId,employeeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_employee_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_scope_id_key")
+ @@unique([organizationId,schoolId,employeeId],map:"vs_academics_teacher_employee_key")
+ @@index([organizationId,schoolId,active,employeeId],map:"vs_academics_teacher_eligibility_idx")
+ @@map("vs_academics_teacher")
 }
 
 model SchoolMembership {
