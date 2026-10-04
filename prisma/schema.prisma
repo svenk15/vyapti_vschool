@@ -32,6 +32,9 @@ model Organization {
   brandProfiles BrandProfile[]
   brandAssets BrandAsset[]
   verifiedBrandHosts VerifiedBrandHost[]
+  academicYears AcademicYear[]
+  academicGrades GradeLevel[]
+  academicSubjects Subject[]
 
   @@map("vs_access_organization")
 }
@@ -57,6 +60,11 @@ model School {
   brandProfiles BrandProfile[]
   brandAssets BrandAsset[]
   verifiedBrandHosts VerifiedBrandHost[]
+  academicYears AcademicYear[]
+  academicGrades GradeLevel[]
+  academicSubjects Subject[]
+  academicSections Section[]
+  academicCalendars SchoolCalendar[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -213,6 +221,7 @@ model Campus {
  status String @db.VarChar(20)
  version Int
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_campus_school_fkey")
+ academicSections Section[]
  @@unique([organizationId,schoolId,id],map:"vs_access_campus_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_access_campus_scope_code_key")
  @@map("vs_access_campus")
@@ -423,4 +432,105 @@ model VerifiedBrandHost {
  profile BrandProfile @relation(fields:[profileId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_verified_brand_host_profile_fkey")
  @@index([hostname,state],map:"vs_branding_verified_brand_host_lookup_idx")
  @@map("vs_branding_verified_brand_host")
+}
+
+model AcademicYear {
+ id String @id(map:"vs_academics_academic_year_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ code String @db.VarChar(40)
+ name String @db.VarChar(160)
+ startsOn DateTime @map("starts_on") @db.Date
+ endsOn DateTime @map("ends_on") @db.Date
+ status String @db.VarChar(20)
+ version Int
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_academic_year_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_academic_year_school_fkey")
+ terms AcademicTerm[]
+ calendar SchoolCalendar?
+ sections Section[]
+ @@unique([organizationId,schoolId,id],map:"vs_academics_academic_year_scope_id_key")
+ @@unique([organizationId,schoolId,code],map:"vs_academics_academic_year_code_key")
+ @@map("vs_academics_academic_year")
+}
+
+model AcademicTerm {
+ id String @id(map:"vs_academics_academic_term_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ yearId String @map("year_id") @db.Uuid
+ code String @db.VarChar(40)
+ name String @db.VarChar(160)
+ startsOn DateTime @map("starts_on") @db.Date
+ endsOn DateTime @map("ends_on") @db.Date
+ year AcademicYear @relation(fields:[organizationId,schoolId,yearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_academic_term_year_fkey")
+ @@unique([organizationId,schoolId,yearId,code],map:"vs_academics_academic_term_code_key")
+ @@index([organizationId,schoolId,yearId,startsOn],map:"vs_academics_academic_term_range_idx")
+ @@map("vs_academics_academic_term")
+}
+
+model GradeLevel {
+ id String @id(map:"vs_academics_grade_level_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ code String @db.VarChar(40)
+ name String @db.VarChar(160)
+ sortOrder Int @map("sort_order")
+ active Boolean
+ version Int
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_grade_level_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_grade_level_school_fkey")
+ sections Section[]
+ @@unique([organizationId,schoolId,id],map:"vs_academics_grade_level_scope_id_key")
+ @@unique([organizationId,schoolId,code],map:"vs_academics_grade_level_code_key")
+ @@map("vs_academics_grade_level")
+}
+
+model Subject {
+ id String @id(map:"vs_academics_subject_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ code String @db.VarChar(40)
+ name String @db.VarChar(160)
+ active Boolean
+ version Int
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_subject_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_subject_school_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_academics_subject_scope_id_key")
+ @@unique([organizationId,schoolId,code],map:"vs_academics_subject_code_key")
+ @@map("vs_academics_subject")
+}
+
+model Section {
+ id String @id(map:"vs_academics_section_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ yearId String @map("year_id") @db.Uuid
+ gradeId String @map("grade_id") @db.Uuid
+ campusId String? @map("campus_id") @db.Uuid
+ code String @db.VarChar(40)
+ name String @db.VarChar(160)
+ active Boolean
+ version Int
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_section_school_fkey")
+ year AcademicYear @relation(fields:[organizationId,schoolId,yearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_section_year_fkey")
+ grade GradeLevel @relation(fields:[organizationId,schoolId,gradeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_section_grade_fkey")
+ campus Campus? @relation(fields:[organizationId,schoolId,campusId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_section_campus_fkey")
+ @@unique([organizationId,schoolId,id,yearId],map:"vs_academics_section_scope_year_id_key")
+ @@index([organizationId,schoolId,yearId,gradeId],map:"vs_academics_section_year_grade_idx")
+ @@map("vs_academics_section")
+}
+
+model SchoolCalendar {
+ id String @id(map:"vs_academics_school_calendar_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ yearId String @map("year_id") @db.Uuid
+ currentRevisionId String? @map("current_revision_id") @db.Uuid
+ version Int
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_school_calendar_school_fkey")
+ year AcademicYear @relation(fields:[organizationId,schoolId,yearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_school_calendar_year_fkey")
+ @@unique([organizationId,schoolId,yearId],map:"vs_academics_school_calendar_year_key")
+ @@unique([organizationId,schoolId,id],map:"vs_academics_school_calendar_scope_id_key")
+ @@map("vs_academics_school_calendar")
 }

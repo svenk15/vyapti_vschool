@@ -1,5 +1,5 @@
 /** Pure reference policy. Persistence and protected product endpoints are TEN-02 work. */
-import { dependencyClosure,moduleCatalog, type ModuleId } from "../../../../shared/contracts/modules";
+import { dependencyClosure,moduleCatalog,isModuleId,type ModuleId } from "../../../../shared/contracts/modules";
 import type { ActivationState,EntitlementState,ModuleConfigurationItem } from "../../../../shared/contracts/tenancy-modules";
 export { moduleCatalog, dependencyClosure, isModuleId } from "../../../../shared/contracts/modules";
 export type { ModuleId } from "../../../../shared/contracts/modules";
@@ -64,4 +64,11 @@ export function previewBlockers(input:{desired:readonly ModuleId[];items:readonl
  return blockers;
 }
 
-export function capabilityReleaseManifest():ReleaseManifest{return NO_PRODUCT_RELEASES;}
+export function releasedModuleIds(raw?:string):ModuleId[]{
+ if(!raw?.trim())return [];const values=raw.split(',').map(value=>value.trim());
+ if(values.some(value=>!value||!isModuleId(value))||new Set(values).size!==values.length)throw new Error('INVALID_RELEASE_MANIFEST');
+ return (values as ModuleId[]).sort();
+}
+export function capabilityReleaseManifest(released:readonly ModuleId[]=[]):ReleaseManifest{
+ const manifest={...NO_PRODUCT_RELEASES} as Record<ModuleId,boolean>;for(const moduleId of released)manifest[moduleId]=true;return Object.freeze(manifest);
+}

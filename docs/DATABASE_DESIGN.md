@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; the connected checkpoint has 19 migrated tables through TEN-02. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; the local checkpoint has 29 migrated tables through ACA-01. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work.
 
 ## Naming decision — DB-ADR-001
 
@@ -41,15 +41,15 @@ Each link below opens the module LLD containing its complete fields, storage pur
 
 | Domain model | Physical table | Owner | Status | Column schema / workflow authority |
 |---|---|---|---|---|
-| AcademicTerm | `vs_academics_academic_term` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| AcademicYear | `vs_academics_academic_year` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
+| AcademicTerm | `vs_academics_academic_term` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
+| AcademicYear | `vs_academics_academic_year` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | CalendarException | `vs_academics_calendar_exception` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | CalendarRevision | `vs_academics_calendar_revision` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | CourseOffering | `vs_academics_course_offering` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| GradeLevel | `vs_academics_grade_level` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| SchoolCalendar | `vs_academics_school_calendar` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| Section | `vs_academics_section` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
-| Subject | `vs_academics_subject` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
+| GradeLevel | `vs_academics_grade_level` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
+| SchoolCalendar | `vs_academics_school_calendar` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
+| Section | `vs_academics_section` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
+| Subject | `vs_academics_subject` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Teacher | `vs_academics_teacher` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
@@ -179,6 +179,6 @@ CREATE TABLE public.vs_platform_setup_check (
 );
 ```
 
-Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. The forward history now contains twelve migrations. `20261004000300_institution_context` introduces InstitutionGrant and genuine institution-scoped configuration history, command receipts and outbox with scoped FKs and immutable guards. `20261004000500_module_entitlements` adds organization contracts and scoped branch activation without duplicating evidence tables. BRD-02 migrations 006–008 add scoped branding profiles, immutable revisions, canonical approved image assets and verified-host challenges with forward-only corrections and an immutable-asset trigger. Module CURRENT_STATE records actual application/rehearsal evidence. Prisma models map explicit FK/index contracts.
+Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. The forward history now contains thirteen migrations. ACA-01 migration 009 installs academic year, terms, grade and subject catalogs, sections, and unpublished calendar roots. `20261004000300_institution_context` introduces InstitutionGrant and genuine institution-scoped configuration history, command receipts and outbox with scoped FKs and immutable guards. `20261004000500_module_entitlements` adds organization contracts and scoped branch activation without duplicating evidence tables. BRD-02 migrations 006–008 add scoped branding profiles, immutable revisions, canonical approved image assets and verified-host challenges with forward-only corrections and an immutable-asset trigger. Module CURRENT_STATE records actual application/rehearsal evidence. Prisma models map explicit FK/index contracts.
 
 References: [Prisma database mapping](https://www.prisma.io/docs/orm/prisma-schema/data-model/database-mapping), [PostgreSQL identifier rules](https://www.postgresql.org/docs/16/sql-syntax-lexical.html). These explain tool behavior; VS names and scope are VSchool architectural decisions.

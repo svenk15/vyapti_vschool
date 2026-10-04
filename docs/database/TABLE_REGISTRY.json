@@ -6,7 +6,7 @@
       "model": "AcademicTerm",
       "owner": "academics",
       "table": "vs_academics_academic_term",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date",
       "responsibility": "Owned by year; no overlapping intervals; all within year.",
@@ -16,11 +16,11 @@
       "model": "AcademicYear",
       "owner": "academics",
       "table": "vs_academics_academic_year",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date; status DRAFT/OPEN/CLOSED; version int",
       "responsibility": "Half-open year; terms are editable only while DRAFT. Multiple open years permitted if dates/business selection are explicit.",
-      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code); CHECK starts_on<ends_on"
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code); CHECK dates, status, version, code and name"
     },
     {
       "model": "CalendarException",
@@ -56,7 +56,7 @@
       "model": "GradeLevel",
       "owner": "academics",
       "table": "vs_academics_grade_level",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); sort_order int; active boolean; version int",
       "responsibility": "School-wide grade catalog. No cross-school shared write.",
@@ -66,7 +66,7 @@
       "model": "SchoolCalendar",
       "owner": "academics",
       "table": "vs_academics_school_calendar",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; current_revision_id uuid nullable; version int",
       "responsibility": "One calendar root per school year; no current pointer until publication.",
@@ -76,7 +76,7 @@
       "model": "Section",
       "owner": "academics",
       "table": "vs_academics_section",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; grade_id uuid; campus_id uuid nullable; code varchar(40); name varchar(160); active boolean; version int",
       "responsibility": "Section in one year/grade/campus, including school-wide no-campus scope.",
@@ -86,7 +86,7 @@
       "model": "Subject",
       "owner": "academics",
       "table": "vs_academics_subject",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); active boolean; version int",
       "responsibility": "School-wide subject catalog.",
@@ -130,7 +130,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid",
       "responsibility": "Deliberate verified account-to-person link; People supplies scoped Person reference.",
-      "constraints": "FK account; FK(organization_id,person_id)\u2192Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
+      "constraints": "FK account; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
     },
     {
       "model": "AuthSecurityEvent",
@@ -150,7 +150,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int",
       "responsibility": "Optional subordinate site; no campus-level grants in first release.",
-      "constraints": "FK(scope)\u2192School; UNIQUE(scope,id); UNIQUE(scope,code)"
+      "constraints": "FK(scope)→School; UNIQUE(scope,id); UNIQUE(scope,code)"
     },
     {
       "model": "InstitutionGrant",
@@ -180,7 +180,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER",
       "responsibility": "Fixed permission mapping in code; no arbitrary permission JSON.",
-      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code)"
+      "constraints": "FK(scope,membership_id)→membership; UNIQUE(scope,membership_id,code)"
     },
     {
       "model": "School",
@@ -220,7 +220,7 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; status PRESENT/ABSENT/LATE/EXCUSED; late_minutes int nullable; current_revision int",
       "responsibility": "Current submitted status; one per roster pupil. No blank record stored before submit.",
-      "constraints": "FK(scope,session_id,student_id)\u2192roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)"
+      "constraints": "FK(scope,session_id,student_id)→roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)"
     },
     {
       "model": "AttendanceRevision",
@@ -310,7 +310,7 @@
       "design": "docs/modules/imports/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable",
       "responsibility": "Normalized bounded row, explicit preview outcome and durable safe result. No plaintext credentials. Status changes within one School-guard transaction, so process crash rolls back current row.",
-      "constraints": "FK(scope,job_id)\u2192ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number)"
+      "constraints": "FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number)"
     },
     {
       "model": "SourceStudentMap",
@@ -440,7 +440,7 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; actor_account_id uuid; expected_revision int; new_revision int; changes jsonb; reason varchar(500); occurred_at timestamptz(3); request_id uuid",
       "responsibility": "Append-only institution or branch configuration history with an atomically enlisted revision.",
-      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5\u2013500; append-only"
+      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5–500; append-only"
     },
     {
       "model": "OrganizationEntitlement",

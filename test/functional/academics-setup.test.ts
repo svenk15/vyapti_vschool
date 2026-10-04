@@ -1,0 +1,67 @@
+import {afterAll,beforeAll,describe,expect,it} from 'vitest';
+import {randomUUID} from 'node:crypto';
+import {PrismaClient} from '../../generated/prisma/client';
+import {PrismaPg} from '@prisma/adapter-pg';
+import {createAccessServices} from '../../backend/composition/access';
+import {createAcademicServices} from '../../backend/composition/academics';
+import {createTenancyServices} from '../../backend/composition/tenancy';
+import {createAcademicSetupUseCases} from '../../backend/modules/academics/application/setup';
+import {PrismaAcademicSetupRepository} from '../../backend/modules/academics/infrastructure/setup';
+import {capabilityReleaseManifest} from '../../backend/modules/tenancy/domain/entitlements';
+import {schoolInput} from '../fixtures/access-management';
+
+const url=process.env.TEST_DATABASE_URL??'';if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated academic PostgreSQL test DB required');
+const access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules:['academic_core']}),academics=createAcademicServices({databaseUrl:url,releasedModules:['academic_core']}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const};
+let primary:Awaited<ReturnType<typeof access.provisionSchool>>,foreign:Awaited<ReturnType<typeof access.provisionSchool>>,identity:{accountId:string;tokenVersion:number};
+const reason='Synthetic academic setup integration';
+beforeAll(async()=>{
+ primary=await access.provisionSchool(schoolInput(),operator);identity={accountId:primary.accountId,tokenVersion:1};
+ const grant=await access.institutionOperation({kind:'SetInstitutionGrant',organizationId:primary.organizationId,accountId:primary.accountId,status:'ACTIVE',expectedVersion:0,key:randomUUID(),reason:'Synthetic academic entitlement authority'},operator);
+ await tenancy.setEntitlement(operator,{kind:'SetOrganizationEntitlement',organizationId:primary.organizationId,actorAccountId:primary.accountId,moduleId:'academic_core',state:'ACTIVE',startsAt:new Date('2026-01-01T00:00:00.000Z').toISOString(),endsAt:null,expectedVersion:0,manifestVersion:1,limits:{},key:randomUUID(),reason});
+ const preview=await tenancy.preview(identity,primary.organizationId,primary.schoolId,['academic_core']);expect(preview.blockers).toEqual([]);
+ await tenancy.confirm(identity,primary.organizationId,primary.schoolId,{enabled:['academic_core'],expectedVersions:preview.expectedVersions,previewHash:preview.previewHash,expectedInstitutionRevision:preview.institutionRevision,expectedBranchRevision:preview.branchRevision,key:randomUUID(),reason});
+ foreign=await access.provisionSchool(schoolInput(),operator);void grant;
+});
+afterAll(async()=>{await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
+function yearInput(code:string){return {code,name:`Synthetic ${code}`,startsOn:'2026-04-01',endsOn:'2027-04-01',key:randomUUID(),reason};}
+function terms(){return [{code:'T1',name:'Term 1',startsOn:'2026-04-01',endsOn:'2026-10-01'},{code:'T2',name:'Term 2',startsOn:'2026-10-01',endsOn:'2027-04-01'}];}
+async function createYear(code:string){return academics.createYear(identity,primary.organizationId,primary.schoolId,yearInput(code));}
+
+describe('ACA-01 PostgreSQL setup',()=>{
+ it('creates a scoped draft year and calendar atomically, replaces adjacent terms, and persists school setup',async()=>{
+  const yearCommand=yearInput('AY26'),created=await academics.createYear(identity,primary.organizationId,primary.schoolId,yearCommand);expect(created.status).toBe('DRAFT');expect(created.version).toBe(1);
+  const calendar=await db.schoolCalendar.findFirst({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,yearId:created.id}});expect(calendar).toMatchObject({id:created.calendarId,currentRevisionId:null,version:1});
+  const replay=await academics.createYear(identity,primary.organizationId,primary.schoolId,yearCommand);expect(replay).toMatchObject({id:created.id,replayed:true});
+  const updated=await academics.replaceTerms(identity,primary.organizationId,primary.schoolId,created.id,{expectedVersion:1,terms:terms(),key:randomUUID(),reason});expect(updated).toMatchObject({yearId:created.id,version:2,replayed:false});expect(updated.terms.map(x=>x.startsOn)).toEqual(['2026-04-01','2026-10-01']);
+  const grade=await academics.createGrade(identity,primary.organizationId,primary.schoolId,{code:'8',name:'Grade 8',key:randomUUID(),reason}),subject=await academics.createSubject(identity,primary.organizationId,primary.schoolId,{code:'MATH',name:'Mathematics',key:randomUUID(),reason});
+  const section=await academics.createSection(identity,primary.organizationId,primary.schoolId,{yearId:created.id,gradeId:grade.id,campusId:null,code:'A',name:'Section A',key:randomUUID(),reason});
+  const workspace=await academics.workspace(identity,primary.organizationId,primary.schoolId);expect(workspace.years[0]?.terms).toHaveLength(2);expect(workspace.grades).toContainEqual(expect.objectContaining({id:grade.id,name:'Grade 8'}));expect(workspace.subjects).toContainEqual(expect.objectContaining({id:subject.id,name:'Mathematics'}));expect(workspace.sections).toContainEqual(expect.objectContaining({id:section.id,gradeName:'Grade 8',campusName:null}));
+  await expect(academics.replaceTerms(identity,primary.organizationId,primary.schoolId,created.id,{expectedVersion:2,terms:[{...terms()[0]!,endsOn:'2026-10-02'},terms()[1]!],key:randomUUID(),reason})).rejects.toMatchObject({code:'VALIDATION'});
+  expect(await db.academicTerm.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,yearId:created.id}})).toBe(2);
+  const foreignYearId=randomUUID(),foreignGradeId=randomUUID();await db.academicYear.create({data:{id:foreignYearId,organizationId:foreign.organizationId,schoolId:foreign.schoolId,code:'FOREIGN',name:'Synthetic foreign year',startsOn:new Date('2026-01-01T00:00:00Z'),endsOn:new Date('2027-01-01T00:00:00Z'),status:'DRAFT',version:1}});await db.gradeLevel.create({data:{id:foreignGradeId,organizationId:foreign.organizationId,schoolId:foreign.schoolId,code:'FOREIGN',name:'Synthetic foreign grade',sortOrder:1,active:true,version:1}});
+  await expect(db.section.create({data:{id:randomUUID(),organizationId:primary.organizationId,schoolId:primary.schoolId,yearId:foreignYearId,gradeId:foreignGradeId,campusId:null,code:'FORGED',name:'Synthetic invalid scope',active:true,version:1}})).rejects.toMatchObject({code:'P2003'});
+ });
+
+ it('serializes duplicate school-wide sections and maps a duplicate to CONFLICT',async()=>{
+  const year=await createYear('AYRACE'),grade=await academics.createGrade(identity,primary.organizationId,primary.schoolId,{code:'RACE',name:'Race Grade',key:randomUUID(),reason});
+  const create=()=>academics.createSection(identity,primary.organizationId,primary.schoolId,{yearId:year.id,gradeId:grade.id,campusId:null,code:'A',name:'Section A',key:randomUUID(),reason});
+  const results=await Promise.allSettled([create(),create()]);expect(results.filter(x=>x.status==='fulfilled')).toHaveLength(1);const failed=results.find(x=>x.status==='rejected') as PromiseRejectedResult;expect(failed.reason).toMatchObject({code:expect.stringMatching(/CONFLICT|STALE_VERSION/)});expect(await db.section.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,yearId:year.id,gradeId:grade.id,code:'A',campusId:null}})).toBe(1);
+ });
+
+ it('denies foreign branches, inactive academic contracts, and revoked current permission',async()=>{
+  await expect(academics.workspace(identity,foreign.organizationId,foreign.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
+  const foreignIdentity={accountId:foreign.accountId,tokenVersion:1};await expect(academics.workspace(foreignIdentity,foreign.organizationId,foreign.schoolId)).rejects.toMatchObject({code:'MODULE_NOT_LICENSED'});
+  const membership=await db.schoolMembership.findUniqueOrThrow({where:{organizationId_schoolId_accountId:{organizationId:primary.organizationId,schoolId:primary.schoolId,accountId:primary.accountId}}});
+  const secondAdmin=await db.schoolMembership.create({data:{id:randomUUID(),organizationId:primary.organizationId,schoolId:primary.schoolId,accountId:foreign.accountId,status:'ACTIVE',version:1}});await db.roleGrant.create({data:{id:randomUUID(),organizationId:primary.organizationId,schoolId:primary.schoolId,membershipId:secondAdmin.id,code:'SCHOOL_ADMIN'}});
+  const changed=await access.institutionOperation({kind:'SetBranchMembership',organizationId:primary.organizationId,schoolId:primary.schoolId,accountId:primary.accountId,status:'ACTIVE',roles:['TEACHER'],expectedVersion:membership.version,key:randomUUID(),reason:'Revoke academic setup capability'},operator);
+  await expect(academics.workspace(identity,primary.organizationId,primary.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await access.institutionOperation({kind:'SetBranchMembership',organizationId:primary.organizationId,schoolId:primary.schoolId,accountId:primary.accountId,status:'ACTIVE',roles:['SCHOOL_ADMIN'],expectedVersion:changed.version,key:randomUUID(),reason:'Restore synthetic test administrator'},operator);
+ });
+
+ it('rolls back year, calendar, configuration revision and evidence when the enlisted writer fails',async()=>{
+  const failure=createAcademicSetupUseCases(new PrismaAcademicSetupRepository(db,()=>({async append(){throw new Error('synthetic writer unavailable');}}),capabilityReleaseManifest(['academic_core'])));
+  const code='AYROLLBACK',input=yearInput(code),before=await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}}),yearCount=await db.academicYear.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}}),calendarCount=await db.schoolCalendar.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}}),receiptCount=await db.tenantCommandReceipt.count({where:{organizationId:primary.organizationId,actorAccountId:primary.accountId,command:'AcademicYearCreated'}});
+  await expect(failure.createYear(identity,primary.organizationId,primary.schoolId,input)).rejects.toMatchObject({code:'UNAVAILABLE'});
+  expect(await db.academicYear.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,code}})).toBe(0);expect(await db.academicYear.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}})).toBe(yearCount);expect(await db.schoolCalendar.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId}})).toBe(calendarCount);expect((await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}})).configurationVersion).toBe(before.configurationVersion);expect(await db.tenantCommandReceipt.count({where:{organizationId:primary.organizationId,actorAccountId:primary.accountId,command:'AcademicYearCreated'}})).toBe(receiptCount);
+ });
+});

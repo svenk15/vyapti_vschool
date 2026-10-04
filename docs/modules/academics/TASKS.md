@@ -15,6 +15,7 @@ Design: [flow ACA-01](DESIGN.md). Scope and API: POST /api/v1/academics/years; P
 3. Create DRAFT year and unpublished calendar atomically; terms replace only while DRAFT, within year and nonoverlapping.
 4. Create school grade/subject and section after validating active references and matching year/campus.
 5. Return joined display DTO; audit/outbox/receipt commit with version change.
+6. Require the trusted `academic_core` release, active institution entitlement and branch activation on every read/write; do not enable it through browser input. Default deployment release remains deny-all. The local ACA-01 demo may explicitly pass `academic_core` to its server process and must use TEN-02 application commands to provision its synthetic contract/activation.
 
 Files: extend `backend/modules/academics/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/academics`, `test/functional/academics` and `test/e2e/academics` as the suite grows.
 

@@ -17,3 +17,4 @@
 .skip-link{top:0;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}.skip-link:focus{top:10px;width:auto;height:auto;clip-path:none;overflow:visible}
 
 .access-login{max-width:480px;margin-inline:auto}.access-login .field{margin-bottom:0}
+.section-space{margin-top:24px}.year-choice{width:100%;text-align:left}.year-choice[aria-pressed=true]{border-color:var(--primary);background:var(--brand-soft);color:var(--primary)}

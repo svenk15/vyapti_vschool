@@ -11,9 +11,9 @@ Start with [START_HERE.md](START_HERE.md). This independent Next.js / TypeScript
 | `/sign-in/aster-central` | Indigo school sign-in preview |
 | `/api/health`, `/api/health/live` | Database readiness and liveness |
 
-Preview data is synthetic. Branded `/sign-in/<slug>` screens remain non-authenticating previews; `/sign-in` provides real IAM-01 administrator authentication and `/admin` checks current school access. Module activation and other school business workflows remain planned. IAM-01 installs access bootstrap and shared evidence tables alongside SetupCheck. Reference entitlement policies do not yet provide production module enforcement. See [verification](docs/VERIFICATION.md).
+Preview data is synthetic. Branded `/sign-in/<slug>` screens remain non-authenticating previews; `/sign-in` provides real IAM-01 administrator authentication and `/admin` checks current school access. TEN-02 provides entitlement and branch activation; ACA-01 now provides academic setup. Remaining school business workflows remain planned. IAM-01 installs access bootstrap and shared evidence tables alongside SetupCheck. Reference entitlement policies do not yet provide production module enforcement. See [verification](docs/VERIFICATION.md).
 
-Database design uses VS-branded physical names with explicit Prisma mappings. [Database design](docs/DATABASE_DESIGN.md) indexes 48 table contracts and links their complete module LLDs; BRD-02 has now applied its branding migrations, bringing the local migrated set to 23 tables. pnpm check includes a naming/catalog consistency gate.
+Database design uses VS-branded physical names with explicit Prisma mappings. [Database design](docs/DATABASE_DESIGN.md) indexes 48 table contracts and links their complete module LLDs; BRD-02 applied its branding migrations, and ACA-01 adds six academic setup tables, bringing the local migrated set to 29 tables. pnpm check includes a naming/catalog consistency gate.
 
 Portable backend lives in backend/modules and backend/composition. Next hosting adapters live in lib/server and browser-safe contracts in shared/contracts. [NestJS extraction contract](docs/BACKEND_EXTRACTION.md) explains what is reused, which adapters change and the cutover tests. pnpm check includes independent backend compilation and dependency gates.
 
