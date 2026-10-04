@@ -1,0 +1,44 @@
+{
+  "task": "ACA-01",
+  "implementation": "VERIFIED",
+  "humanReview": "PENDING",
+  "sourceCommit": "fc3fc6c294be5ec51c9abbb5c4481ace10809679",
+  "testedCommit": "fc3fc6c294be5ec51c9abbb5c4481ace10809679",
+  "buildId": "-DXsQ7qoiBBSjZnBWIGIx",
+  "schema": {
+    "migration": "20261004000900_academic_setup",
+    "appliedTo": ["vyapti_vschool", "vyapti_vschool_test"],
+    "migratedBusinessTables": 29
+  },
+  "checks": [
+    {"command": "pnpm check", "result": "passed; 63 unit tests plus lint, typecheck, docs, DB design, backend boundary and compilation gates"},
+    {"command": "pnpm test:functional", "result": "passed; 48 PostgreSQL tests in 9 files against vyapti_vschool_test"},
+    {"command": "pnpm test:e2e", "result": "passed; all 58 desktop and mobile Playwright journeys"},
+    {"command": "pnpm build", "result": "passed; Next.js 16.3.8 production build"},
+    {"command": "git diff --check", "result": "passed"}
+  ],
+  "demo": {
+    "url": "http://127.0.0.1:3407",
+    "adminPath": "/admin/academics",
+    "serverRelease": ["academic_core"],
+    "smoke": {
+      "liveHealth": 200,
+      "signIn": 200,
+      "unauthenticatedAdmin": 307,
+      "unauthenticatedWorkspaceApi": 401,
+      "syntheticSignIn": "passed",
+      "authorizedAcademicScreen": "visible",
+      "authorizedWorkspaceApi": 200
+    }
+  },
+  "reports": {
+    "unit": "unit.junit.xml",
+    "functional": "functional.junit.xml",
+    "playwright": "e2e.junit.xml"
+  },
+  "limitations": [
+    "The development demo uses synthetic identity and test data only.",
+    "Production release availability remains deny-all unless an operator-controlled server manifest explicitly releases a module.",
+    "Pilot deployment, backup/restore and retention decisions remain FND-02 work."
+  ]
+}
