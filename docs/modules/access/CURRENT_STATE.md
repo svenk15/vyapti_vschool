@@ -1,20 +1,20 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted. No imported task completion or active execution timer.
+Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified with review pending. No imported task completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | IAM-01 | VERIFIED | PASSED | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
 | IAM-02 | VERIFIED | PASSED | [Local verification](../../evidence/iam-02-local/verification.json), JUnit and source handoff below |
-| IAM-03 | IN_PROGRESS | NOT_REQUESTED | Activation/recovery slice in progress |
+| IAM-03 | VERIFIED | PENDING | [Production verification](../../evidence/iam-03-local/verification.json); source e0f262a |
 
 ## Current checkpoint
 
-IAM-01 implements restricted operator bootstrap, bcrypt credentials/lockout, provider JWT sessions, current account/membership/school/institution authorization and a protected administrator home/setup summary. IAM-02 now implements guarded settings, Campus and staff administration with atomic audit/outbox/receipt writes, pending account creation, fixed roles and last-active-admin protection. Eleven tables are installed through five forward migrations; IAM-03 activation/recovery is still a specification.
+IAM-01 implements restricted operator bootstrap, bcrypt credentials/lockout, provider JWT sessions, current account/membership/school/institution authorization and a protected administrator home/setup summary. IAM-02 now implements guarded settings, Campus and staff administration with atomic audit/outbox/receipt writes, pending account creation, fixed roles and last-active-admin protection. IAM-03 implements private operator issuance, one-time activation and account-wide recovery. Thirteen tables are installed through six forward migrations.
 
 ## Next action
 
-Implement IAM-03 under the revised owner policy: verify, commit and hand off with review PENDING, then continue to the next eligible task. Explicit acceptance dependencies and reported defects take priority.
+Continue to TEN-01 under the revised owner policy with IAM-03 review PENDING. Explicit acceptance dependencies and reported defects take priority.
 
 ## Pending decisions / limitations
 
@@ -116,4 +116,22 @@ Clean main at c8eb176 after policy/acceptance checkpoint. Demo outcome: issue pr
 
 Implementation IN_PROGRESS pending frozen production demo verification. pnpm check passed (53 unit tests, lint/types/docs/48-table registry/boundaries/backend). Full PostgreSQL baseline passed 27 tests; final focused activation suite passed 7, including real lock-wait expiry and bounded retry rollback (29 distinct current functional cases covered across retained reports). Full browser baseline passed 48 desktop/mobile journeys; final activation/recovery scope passed 4 after the retry change. pnpm build passed with standalone local snapshot output. Six forward migrations applied to dev/test; schema comparison empty. Pending synthetic teacher/private token is prepared in ignored mode-0600 artifacts/iam-03. Human review NOT_REQUESTED until the production snapshot/probe pass. Exact commit and manual steps follow in the verification handoff.
 
-Snapshot iteration: initial source 869658a passed application checks/build but its demo copy flattened pnpm symlinks, causing missing @swc/helpers at startup. No stable demo/review was claimed. Preserve verbatim internal dependency links; all 17 snapshot source links were checked to remain within standalone output. Production startup/probe still pending.
+Snapshot iteration: initial source 869658a passed application checks/build but its demo copy flattened pnpm symlinks, causing missing @swc/helpers at startup. No stable demo/review was claimed. Preserve verbatim internal dependency links; all 38 snapshot source links were checked to remain within standalone output. Production startup/probe still pending.
+
+
+### IAM-03 verified production handoff — 4 October 2026
+
+Implementation VERIFIED; human review PENDING. Tested source `e0f262a78d7e020919cd36be80d508c9032d1e07` (activation source 869658a plus verified snapshot-copy correction). Frozen production build `JNmMa4cpe5cN-U2FWkYa7` runs at http://127.0.0.1:3403 independently of subsequent source builds. Health reports ready. [Production probe](../../evidence/iam-03-local/verification.json) passed all seven checks: screen/health, actual private operator CLI and output guards, one-time activation/sign-in, immediate recovery session revocation, fresh credentials with replay rejection, both migration histories/markers, and unchanged private environment.
+
+Portable Access use cases enforce verified operator provenance, hash-only tokens, 24-hour expiry, account-wide credential quarantine/revocation, immutable scoped membership intent and transactional current-state guards. Redeem activates only unchanged intended pending memberships; recovery preserves active/suspended/revoked memberships. Account and host attempt limits, safe same-origin/body/error handling, password confirmation and clearing, bounded known-aborted transaction retries, atomic Platform audit/outbox evidence and private mode-0600 CLI outputs are implemented. No operator HTTP route, email delivery or person binding is claimed.
+
+Executed evidence: pnpm check passed lint/types/docs/database registry/boundaries/backend and 53 unit tests. Full PostgreSQL baseline passed 27; final activation suite passed 7 after retry/lock-wait coverage changes (29 distinct current cases across retained reports, not a single 29-test run). Full Playwright baseline passed 48 desktop/mobile journeys; final activation/recovery suite passed 4 after the final business change. JUnit reports are retained in docs/evidence/iam-03-local. Production build and targeted script lint passed. Prisma read-only schema comparison returned empty. Six forward migrations are applied to both databases; 13 tables and 16 foreign keys. Original migration history and foundation markers are preserved. No reset/reseed/delete or private .env overwrite occurred. The first snapshot startup failed due to flattened dependency links; corrected copying preserves 38 internal links, and the replacement frozen server/probe passed.
+
+Manual review:
+
+1. Open the ignored private files artifacts/iam-03/private-demo.json and artifacts/iam-03/private-activation.json in your editor. At http://127.0.0.1:3403/activate paste the activation token and use the demo password for both password fields. Expect success and cleared fields.
+2. Sign in with the private demo email/password. Expect the protected account page. Replay the first token: expect generic rejection with cleared fields.
+3. In your terminal run `VSCHOOL_DEMO_URL=http://127.0.0.1:3403 pnpm recover-account --accountId <accountId-from-private-demo> --caseReference SYNTHETIC-REVIEW --reason "Synthetic identity verified" --output artifacts/iam-03/private-review-recovery.json`. Use a new output filename if it exists. Expect a private token file; the old session loses protected access immediately.
+4. Paste that recovery token at /activate and use recoveryPassword from private-demo.json. Expect success, sign-in with the new password and continued rejection of the old session/password.
+
+Limitations: local configured-operator trust only; anonymous hosting uses a conservative shared bucket because no trusted source IP is available. Production distributed limits/trusted proxy, TLS, delivery, runtime DB roles and release recovery remain FND-02 gates. Person binding remains PER-01/PER-02. Synthetic evidence is retained without destructive cleanup. The prepared manual teacher/token were not consumed by the production probe; it used a separate synthetic account. No secrets or generated build artifacts are committed. Owner review remains PENDING; continue TEN-01 and prioritize reported defects.

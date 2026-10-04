@@ -1,0 +1,120 @@
+{
+  "observedAt": "2026-10-04T03:21:25.297Z",
+  "demoUrl": "http://127.0.0.1:3403",
+  "checks": [
+    {
+      "name": "Production health and activation screen",
+      "passed": true
+    },
+    {
+      "name": "Real verified-operator CLI writes private token, refuses overwrite and served output namespace",
+      "passed": true
+    },
+    {
+      "name": "Private token activates once and teacher signs in",
+      "passed": true
+    },
+    {
+      "name": "Real recovery CLI immediately revokes existing session",
+      "passed": true
+    },
+    {
+      "name": "Recovery token redeems once; new credentials work and original session stays revoked",
+      "passed": true
+    },
+    {
+      "name": "Six migrations and original foundation markers preserved in both databases",
+      "passed": true
+    },
+    {
+      "name": "Private environment preserved",
+      "passed": true
+    }
+  ],
+  "databases": [
+    {
+      "database": "vyapti_vschool",
+      "migrations": [
+        {
+          "migration_name": "20261003000100_foundation",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000200_vora_naming",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000300_vs_prefix",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000400_access_bootstrap",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261004000100_staff_management",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261004000200_account_activation",
+          "applied": true,
+          "rolled_back": false
+        }
+      ],
+      "marker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T12:56:01.303Z"
+        }
+      ]
+    },
+    {
+      "database": "vyapti_vschool_test",
+      "migrations": [
+        {
+          "migration_name": "20261003000100_foundation",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000200_vora_naming",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000300_vs_prefix",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261003000400_access_bootstrap",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261004000100_staff_management",
+          "applied": true,
+          "rolled_back": false
+        },
+        {
+          "migration_name": "20261004000200_account_activation",
+          "applied": true,
+          "rolled_back": false
+        }
+      ],
+      "marker": [
+        {
+          "id": "starter",
+          "created_at": "2026-10-03T13:00:16.941Z"
+        }
+      ]
+    }
+  ],
+  "testedSourceCommit": "e0f262a78d7e020919cd36be80d508c9032d1e07",
+  "productionBuildId": "JNmMa4cpe5cN-U2FWkYa7"
+}
