@@ -4,7 +4,7 @@ This is a new, independent starter folder. Do not extract it over the existing p
 
 The running app includes a polished landing page, a genuine PostgreSQL readiness check, a working shared-component gallery, synthetic institution/branch configuration and school-branded sign-in previews. Configuration previews are temporary; login previews do not authenticate. Persistent tenant setup, school management and attendance remain implementation tasks.
 
-This revision includes Bible v4.4, 11 module documentation packs and 29 Phase 1 tasks. It establishes institution tenants, multiple branches, independent module packaging and a consistent brandable experience. Later-phase product blueprints are in the Bible; their implementation-ready module packs are added before development begins.
+This revision includes Bible v4.4, 11 module documentation packs and 30 Phase 1 tasks, including the reconciled IAM-04 trust-mode and email recovery work. It establishes institution tenants, multiple branches, independent module packaging and a consistent brandable experience. Later-phase product blueprints are in the Bible; their implementation-ready module packs are added before development begins.
 
 ## Your first step
 

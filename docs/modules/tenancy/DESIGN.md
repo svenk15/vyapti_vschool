@@ -16,6 +16,8 @@ TEN-ADR-002: shared PostgreSQL with composite constraints, scoped repositories a
 
 TEN-ADR-003: configuration metadata changes use actor account locks → Organization guard → School guards in sorted order. Ordinary business commands take Organization FOR SHARE after account locks and before School FOR UPDATE; institution entitlement/config changes use Organization FOR UPDATE. Global account changes take all affected Organization/School guards in sorted order. This extends CORE-005 and prevents disable racing a command with cached entitlement. No acquiring an account lock after a scope lock.
 
+TEN-ADR-005: Tenancy owns per-institution Access trust-mode configuration and its versioned history; Access owns UserAccount, invitations, password-reset tokens and security facts. The database Organization root remains Access-owned and has a conservative OPERATOR_CLI default; the application explicitly selects HYBRID only when creating a new institution after IAM-04. A platform operator alone changes trust mode; an institution administrator cannot change recovery/provisioning channels. The typed Access invalidation application port is enlisted by Tenancy in the same unit of work, so ConfigurationChange and token revocation cannot commit separately. See Access IAM-ADR-008 for modes, table contracts, recovery policy and lock ordering.
+
 ## Planned tables and fields
 
 The migrated checkpoint before TEN-01 has 13 tables through IAM-03. TEN-01 installs InstitutionGrant and the institution evidence tables; entitlements/activation remain TEN-02. `scope` is institution/branch. UUID IDs, integer positive version, TIMESTAMPTZ(3) instants. Scoped FK targets include matching UNIQUE keys.
@@ -96,6 +98,10 @@ Access-owned Organization and School contain configuration_version integer defau
 BrandProfile public_slug is globally unique lowercase [a-z0-9] plus internal hyphens, 3–80 characters, exact lookup; publication never enumerates private memberships. Brand owner-null scope comparisons require IS NOT DISTINCT FROM or equivalent reviewed guards, not a nullable foreign key shortcut.
 
 Until a released module defines a typed quota shape, `limits` accepts only the empty JSON object. Unknown/free-form keys are rejected; TEN-02 does not store tenant SQL or feature flags in this column.
+
+Trust mode is not an entitlement, capability, membership or branch grant. `setTrustMode` is a platform-operator application command with organization ID, expected configuration revision, stable idempotency key, non-sensitive reason and valid in-organization audit anchor. Same-mode input is a no-op. Actual transition increments Organization configuration/root version and atomically appends ConfigurationChange, TenantCommandReceipt and TenantOutbox while the Access owner port invalidates only email tokens affected by a transition to OPERATOR_CLI. Access performs the required all-issuer/token-account joins; Tenancy never queries or writes Access token tables. Returning to HYBRID/EMAIL never restores revoked tokens. Configuration history records principalKind=OPERATOR plus operator ID and an audit-anchor account ID, without impersonating that account.
+
+IAM-04's reserved cross-institution recovery advisory transaction guard is acquired before account/org/school row locks by trust-mode transition and all Access operations that change applicable recovery-policy access. Tenancy's operator `setEntitlement` transaction continues to take account → Organization FOR UPDATE; it does not affect the recovery access predicate. A trust transition and contract mutation still serialize on the Organization row/configuration revision. The Access port receives Tenancy's active unit-of-work context and returns only invalidated token/account IDs and a correlation reference for bounded configuration evidence.
 
 ## Portable backend integration
 

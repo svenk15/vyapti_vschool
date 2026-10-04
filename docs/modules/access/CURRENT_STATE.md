@@ -7,14 +7,15 @@ Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally v
 | IAM-01 | VERIFIED | PASSED | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
 | IAM-02 | VERIFIED | PASSED | [Local verification](../../evidence/iam-02-local/verification.json), JUnit and source handoff below |
 | IAM-03 | VERIFIED | PENDING | [Production verification](../../evidence/iam-03-local/verification.json); source e0f262a |
+| IAM-04 | IN_PROGRESS | NOT_REQUESTED | Selected by `pnpm next-task`; design/task order reconciled to the owner update. IAM-02, IAM-03 and TEN-02 implementations are present |
 
 ## Current checkpoint
 
-IAM-01 implements restricted operator bootstrap, bcrypt credentials/lockout, provider JWT sessions, current account/membership/school/institution authorization and a protected administrator home/setup summary. IAM-02 now implements guarded settings, Campus and staff administration with atomic audit/outbox/receipt writes, pending account creation, fixed roles and last-active-admin protection. IAM-03 implements private operator issuance, one-time activation and account-wide recovery. Thirteen tables are installed through six forward migrations.
+IAM-01 implements restricted operator bootstrap, bcrypt credentials/lockout, provider JWT sessions, current account/membership/school/institution authorization and a protected administrator home/setup summary. IAM-02 implements guarded settings, Campus and staff administration with atomic audit/outbox/receipt writes, pending account creation, fixed roles and last-active-admin protection. IAM-03 implements private operator issuance, one-time activation and account-wide recovery. Current implementation includes 34 migrated table contracts; IAM-04 adds two token tables and conservative trust-mode/verified-email/security evidence fields through a new forward migration.
 
 ## Next action
 
-Continue to TEN-01 under the revised owner policy with IAM-03 review PENDING. Explicit acceptance dependencies and reported defects take priority.
+Implement IAM-04 after PER-01. IAM-02, IAM-03 and TEN-02 implementation prerequisites are already VERIFIED; IAM-03 and TEN-02 human reviews remain PENDING and do not gate implementation under the owner's current policy. PER-01 human review is also PENDING. Preserve all review states and address any reported defect before dependent work.
 
 ## Pending decisions / limitations
 

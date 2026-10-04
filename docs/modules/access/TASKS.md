@@ -34,6 +34,38 @@ Provision a synthetic school; sign in; see its name/timezone; sign out; verify t
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## IAM-04 — Institution trust modes, email invitations and password recovery
+
+Depends on: IAM-02, IAM-03, TEN-02
+
+Design: [IAM-ADR-008 and IAM-04 flow](DESIGN.md); [TEN-ADR-005 trust-mode transition](../tenancy/DESIGN.md). This task updates the existing implementation plan and does not replace operator-issued IAM-02/IAM-03 flows.
+
+### Implementation instructions
+
+1. Add `Organization.trustMode` with database default and explicit existing-row backfill to `OPERATOR_CLI`; Access/Institution creation use cases explicitly select `HYBRID` for newly created institutions after this task ships.
+2. Add Access-owned `vs_access_invite` and `vs_access_password_reset_token`, plus the required verified-email and structured security-evidence columns. Hash high-entropy tokens; only `SENT` tokens can be consumed. Preserve all applied migrations and rows.
+3. Keep `OPERATOR_CLI` invitations/resets disabled. In `HYBRID`/`EMAIL`, allow current school administrators to invite staff and authorized resend. Reuse pending accounts/memberships; preserve credentials/status for existing active accounts; never bind a Person or enable teaching on acceptance.
+4. Implement the portable email sender port and development-only private mail sink. Do not send real email. Persist issuance plus evidence, send outside transactions, then persist `SENT`/`FAILED`; late results cannot revive a revoked token.
+5. Implement an account-wide recovery evaluator. Include active branch memberships and active `InstitutionGrant` access without membership. Any `OPERATOR_CLI` institution denies email reset. Require an active eligible account and a previously verified login address; never accept a replacement address.
+6. At reset consumption, re-evaluate all current applicable access under the serialization guard. Atomically consume one sent token, update the global password, bump `tokenVersion`, revoke other account reset tokens, preserve all memberships/roles and do not sign in.
+7. Implement platform-operator `setTrustMode`; institution administrators cannot change it. A transition to `OPERATOR_CLI` revokes the organization's open email invitations and all outstanding email reset tokens for its applicable accounts across every issuer. Preserve AccountActivation tokens. Enlist Access token invalidation inside the Tenancy configuration unit of work.
+8. Add trust-aware staff-add/resend UI, invitation acceptance, forgot-password and `/reset-password` with generic public feedback, no-store/referrer protection, accessible loading/success/failure/expired/revoked/used states, and current authorization checks.
+
+### Acceptance and test strategy
+
+- Unit: trust-mode policy; account-wide recovery evaluator; generic-result contract; token expiry/state; safe provider reason mapping; no Person binding on invitation.
+- Real PostgreSQL: legacy backfill remains `OPERATOR_CLI`; new organizations explicitly `HYBRID`; existing active-account invite does not change password/status; membership and InstitutionGrant policy joins; stricter policy between issue/consume; institution B tightening revokes a reset issued through A; admin trust-mode denial; delivery pending/failed denial; resend revocation; transaction rollback; exactly one concurrent consume; consume vs trust/access changes follows the lock contract.
+- Browser: all three modes; operator flows remain usable; invitation failure and authorized resend; accept invitation with inviter/scope/grants revalidation; generic forgot-password behavior; reset failure states; successful reset invalidates sessions across institutions and preserves roles/memberships.
+- Prove no token plaintext in DB, logs, audit, HTTP responses or committed artifacts. Real email is not authorized; use only the private development sink.
+
+Run `pnpm check`, real-PostgreSQL `pnpm test:functional`, full desktop/mobile `pnpm test:e2e`, and `pnpm build`. Add the forward migration to both designated databases; do not reset/reseed. Capture safe JUnit XML, migration/schema status, source commit and frozen build identity.
+
+### Demo and checkpoint
+
+With a synthetic institution in HYBRID, invite a new staff email, show delivery state in the private local sink, accept it and sign in. Invite an existing active account and prove its password/session and global account status remain unchanged while its new membership is activated. Cause a synthetic delivery failure, inspect the sanitized admin message and resend. Request and consume a password reset, then prove the prior session fails. Change the institution to OPERATOR_CLI with the local platform-operator CLI; show prior email invitations/resets remain revoked and operator activation/recovery still works. Do not use real addresses or deliver email externally.
+
+Start/check a frozen local demo, report URL and tested source commit, give exact steps, record human review PENDING and continue without waiting unless a documented acceptance dependency or blocking verification issue applies. Do not mark acceptance passed without explicit owner feedback.
+
 ## IAM-02 — Manage school settings and staff access
 
 Depends on: IAM-01

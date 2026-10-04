@@ -16,6 +16,7 @@ Index only; module CURRENT_STATE owns status. No run is active. New tenancy, bra
 | ACA-01 | [academics](modules/academics/TASKS.md) | Configure academic year, terms, grades and sections | IAM-02, TEN-02 |
 | ACA-02 | [academics](modules/academics/TASKS.md) | Publish calendar and open or close the year | ACA-01 |
 | PER-01 | [people](modules/people/TASKS.md) | Create and inspect staff profiles | IAM-02 |
+| IAM-04 | [access](modules/access/TASKS.md) | Preserve operator access while adding trust-mode email invitations and account-wide recovery | IAM-02, IAM-03, TEN-02 |
 | PER-02 | [people](modules/people/TASKS.md) | Enable teaching eligibility and verified account binding | PER-01, IAM-03, ACA-01 |
 | ACA-03 | [academics](modules/academics/TASKS.md) | Create offerings and assign teachers | ACA-02, PER-02 |
 | STU-01 | [students](modules/students/TASKS.md) | Register and inspect students | PER-01, ACA-01 |
@@ -34,4 +35,4 @@ Index only; module CURRENT_STATE owns status. No run is active. New tenancy, bra
 | DS-02 | [design-system](modules/design-system/TASKS.md) | Validate production screen recipes and accessibility | DS-01, ATT-02, BRD-02 |
 | FND-02 | [platform](modules/platform/TASKS.md) | Demonstrate and release the complete pilot | RPT-02, IMP-03, IAM-03, ATT-04, TEN-03, BRD-02, DS-02 |
 
-Use pnpm next-task for a read-only suggestion. Explicit user pause and failed review take priority. A single 24-hour timebox does not guarantee all 29 tasks complete.
+Use pnpm next-task for a read-only suggestion. Explicit user pause and failed review take priority. A single 24-hour timebox does not guarantee all 30 tasks complete.

@@ -52,6 +52,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | Subject | `vs_academics_subject` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Teacher | `vs_academics_teacher` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
+| AccessInvite | `vs_access_invite` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivationMembership | `vs_access_account_activation_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountPersonBinding | `vs_access_account_person_binding` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
@@ -79,6 +80,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AuditEntry | `vs_platform_audit_entry` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | CommandReceipt | `vs_platform_command_receipt` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | OutboxEvent | `vs_platform_outbox_event` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
+| PasswordResetToken | `vs_access_password_reset_token` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | SetupCheck | `vs_platform_setup_check` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | ExportRun | `vs_reporting_export_run` | reporting | PLANNED | [reporting LLD](modules/reporting/DESIGN.md) |
 | Enrollment | `vs_students_enrollment` | students | PLANNED | [students LLD](modules/students/DESIGN.md) |
