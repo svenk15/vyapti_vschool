@@ -691,3 +691,7 @@ TEN-ADR-006 selects temporary Path A for the current development sequence: recor
 ### 4 October 2026 — IMP-01 preview contract
 
 Roster preview requires `student.manage` and active student_core/academic_core access. A source mapping plus exact normalized identity and target enrollment is required for NO_CHANGE; any mismatch is a conflict and never an update. Existing student-list search remains separate from identity mapping.
+
+### 5 October 2026 — IMP-03 retention and cancellation
+
+IMP-03 uses explicit local pilot retention windows (source bytes 7 days; terminal row PII 30 days), while production durations/legal holds remain school-approved FND-02 decisions. Global retention operations use an append-only platform operator audit rather than attributing the action to a school account. Cancellation preserves committed rows and skips pending rows only; import mappings and immutable receipts remain durable.

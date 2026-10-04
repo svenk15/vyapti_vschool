@@ -78,15 +78,15 @@ Design: [flow IMP-03](DESIGN.md). Scope and API: POST /api/v1/imports/:id/cancel
 1. Read durable row counts; distinguish failed, skipped, pending and succeeded.
 2. Resume invokes same bounded process command; no client-local progress authority.
 3. Cancel under School guard after current row commits/rolls back, mark pending rows SKIPPED with cancellation reason.
-4. Authorize error CSV; quote/escape dangerous spreadsheet prefixes, stream no private unrestricted file URL.
-5. Retention command purges expired sourceBytes and later row PII while preserving minimal job/result/key evidence per policy; refuse resume if unprocessed source is expired.
+4. Authorize error CSV on every request; export row number/column/error code/fixed message only, RFC 4180 quote cells, neutralize spreadsheet formulas, and use no private unrestricted file URL.
+5. Guard `imports:purge-expired` to local `vyapti_vschool`; null sourceBytes after 7 days and terminal row PII after 30 days while preserving row states, hashes, source mappings and immutable receipts. Append aggregate-only operator audit. Production retention remains subject to FND-02 school policy.
 
 Files: extend `backend/modules/imports/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/imports`, `test/functional/imports` and `test/e2e/imports` as the suite grows.
 
 ### Acceptance and test strategy
 
 - Unit / application: Terminal state totals and formula-safe cells.
-- Real PostgreSQL: Crash/resume idempotency; revoke actor mid-job; cancellation preserves successes; retention does not erase source mappings.
+- Real PostgreSQL: Crash/resume idempotency; revoke actor mid-job; cancellation preserves successes and terminal CANCELLED state; source expiry leaves pending rows untouched; retention scrubs terminal row PII without erasing source mappings and writes append-only aggregate operator audit.
 - Browser: Reload while work pending; resume; cancel remaining; download errors.
 - Failure contract: Cancel terminal→safe existing response; expired unprocessed source→409 SOURCE_EXPIRED; permission lost→403 with no sensitive download.
 - Required DB effect: Job CANCELLED and pending rows SKIPPED; previously committed student rows remain; expiry purge writes audited technical retention outcome.

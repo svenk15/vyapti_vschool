@@ -82,6 +82,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | Person | `vs_people_person` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | AuditEntry | `vs_platform_audit_entry` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | CommandReceipt | `vs_platform_command_receipt` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
+| OperatorAuditEntry | `vs_platform_operator_audit` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | OutboxEvent | `vs_platform_outbox_event` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | PasswordResetToken | `vs_access_password_reset_token` | access | PLANNED | [access LLD](modules/access/DESIGN.md) |
 | SetupCheck | `vs_platform_setup_check` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |

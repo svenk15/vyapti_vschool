@@ -24,8 +24,8 @@ IMP-01 installs ImportJob, ImportRow and SourceStudentMap so preview can resolve
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
-| `vs_imports_import_job` (ImportJob) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3) | Imports-owned job stores immutable source and SHA-256; context contains sanitized display name and selected reference versions. Audit excludes source hash/content and row data. CSV max 2 MiB; source expires after 7 days; row outcomes retain minimal identifiers for 30 days. | Scoped School/year/nullable Campus FKs; global actor FK; UNIQUE(scope,id); index(scope,state,created_at,id); CHECK state/schema/hash/revision/version and octet_length(source_bytes)<=2097152 when nonnull |
-| `vs_imports_import_row` (ImportRow) | id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable; errors jsonb | Normalized bounded row, explicit preview outcome and column-safe row errors. Contains pupil data only in owned ImportRow storage. No credentials. | FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); CHECK row 2–1001, decision/status values and JSON shapes; index(scope,job_id,status,row_number) |
+| `vs_imports_import_job` (ImportJob) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state UPLOADED/REVIEW/CONFIRMED/RUNNING/COMPLETED/COMPLETED_WITH_ERRORS/FAILED/CANCELLED varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3) | Imports-owned job stores immutable source and SHA-256; context contains sanitized display name and selected reference versions. Audit excludes source hash/content and row data. CSV max 2 MiB; source expires after 7 days; terminal row PII expires after 30 days. | Scoped School/year/nullable Campus FKs; global actor FK; UNIQUE(scope,id); index(scope,state,created_at,id); CHECK state/schema/hash/revision/version and octet_length(source_bytes)<=2097152 when nonnull; partial index(source_expires_at,id) where source_bytes is not null |
+| `vs_imports_import_row` (ImportRow) | id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb nullable; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable; errors jsonb | Normalized bounded row, explicit preview outcome and column-safe row errors. Contains pupil data only in owned ImportRow storage until terminal retention expiry. No credentials. | FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); CHECK row 2–1001, decision/status values and nullable normalized object/expected-reference object/errors array shapes; index(scope,job_id,status,row_number); partial index(scope,job_id,row_number) where normalized is not null |
 | `vs_imports_source_student_map` (SourceStudentMap) | id uuid PK; organization_id uuid; school_id uuid; namespace varchar(40); external_student_id varchar(100); student_id uuid; created_at timestamptz(3) | Stable cross-job source key; no name/email matching. | UNIQUE(scope,namespace,external_student_id); scoped Student FK; UNIQUE(scope,namespace,student_id) to refuse accidental second source identity |
 
 ## Read workflows and joins
@@ -156,23 +156,23 @@ sequenceDiagram
 
 ## IMP-03 — Resume, cancel and explain partial imports
 
-**Success response contract:** Same progress DTO; cancel includes committedCount and skippedCount with `state:"CANCELLED"`. Error CSV includes rowNumber,column,errorCode,message and safe reviewed identifiers only.
+**Success response contract:** Same progress DTO; cancel/status report succeeded, failed, pending and skipped totals with `state:"CANCELLED"`. Status reports `sourceExpired` and `detailsPurged`. Error CSV includes rowNumber,column,errorCode,message only; it never exports names, admission numbers or source identifiers. Formula-leading cells are prefixed with an apostrophe and RFC 4180 quoted.
 
 **Transport:** POST /api/v1/imports/:id/cancel; GET /api/v1/imports/:id; GET /api/v1/imports/:id/errors.csv; operator purge-import-sources
 
-**Input:** Cancel expectedVersion,reason,key; reads limited current-school scope; purge only expired payloads under operator retention policy.
+**Input:** Cancel expectedVersion, a bounded 160-character reason and idempotency key; reads are limited to current authorized branch scope. `purge-import-sources` requires a verified local operator and the guarded `vyapti_vschool` development connection.
 
 **Workflow:**
 
 1. Read durable row counts; distinguish failed, skipped, pending and succeeded.
 2. Resume invokes same bounded process command; no client-local progress authority.
-3. Cancel under School guard after current row commits/rolls back, mark pending rows SKIPPED with cancellation reason.
+3. Cancel under School guard after current row commits/rolls back, mark pending rows SKIPPED with code `CANCELLED_BY_OPERATOR`; require a bounded reason input, but keep its free text out of audit/outbox/error export to prevent identifier leakage.
 4. Authorize error CSV; quote/escape dangerous spreadsheet prefixes, stream no private unrestricted file URL.
-5. Retention command purges expired sourceBytes and later row PII while preserving minimal job/result/key evidence per policy; refuse resume if unprocessed source is expired.
+5. Retention command nulls sourceBytes at source_expires_at (7 days after preview); after 30 days from job creation and only for terminal jobs, it nulls normalized row PII, expected reference JSON and row errors/results. It preserves row number, status, decision, input hash, error code, file hash, counts, source mappings and immutable receipts. Resume is refused with SOURCE_EXPIRED if pending work remains after source expiry. School-approved production retention/legal hold policy remains FND-02 work; the 7/30-day contract is the local pilot behavior.
 
-**Database writes / atomicity:** Job CANCELLED and pending rows SKIPPED; previously committed student rows remain; expiry purge writes audited technical retention outcome.
+**Database writes / atomicity:** Cancel takes the account→Organization→School→job→rows locks, then marks only remaining PENDING rows SKIPPED and sets job CANCELLED; already committed student rows remain. Source/detail purge plus an append-only global `vs_platform_operator_audit` aggregate entry commits atomically. ImportRow.normalized becomes nullable in a forward migration; terminal state includes CANCELLED; partial expiry indexes support the sweeper.
 
-**Errors and recovery:** Cancel terminal→safe existing response; expired unprocessed source→409 SOURCE_EXPIRED; permission lost→403 with no sensitive download.
+**Errors and recovery:** Repeated cancellation returns current durable status; stale expectedVersion→409; expired unprocessed source→409 SOURCE_EXPIRED; permission lost→403 with no sensitive download. Purge never removes SourceStudentMap or business records.
 
 ```mermaid
 sequenceDiagram
@@ -187,6 +187,7 @@ sequenceDiagram
   P->>D: Scoped reads and transaction guards
   D-->>P: Current authorized facts
   A->>P: Cancel under School guard after current row commits/rolls back, mark pending rows SKIPPED with cancellation reason
+  A->>D: Purge expired source/detail PII and append aggregate operator audit in one transaction
   alt Preconditions hold
     P->>D: Apply documented writes atomically
     D-->>P: Committed result
@@ -200,7 +201,7 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Terminal state totals and formula-safe cells. Functional PostgreSQL — Crash/resume idempotency; revoke actor mid-job; cancellation preserves successes; retention does not erase source mappings. E2E — Reload while work pending; resume; cancel remaining; download errors.
+**Verification:** Unit — Terminal state totals and formula-safe cells. Functional PostgreSQL — Crash/resume idempotency; revoke actor mid-job; cancellation preserves successes; source expiry blocks pending work; retention scrubs only terminal row detail, preserves source mappings and append-only operator audit. E2E — Reload while work pending; resume; cancel remaining; download generic errors.
 
 ## Migration, retention and handoff
 

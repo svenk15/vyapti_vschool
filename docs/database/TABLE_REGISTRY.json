@@ -280,7 +280,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid",
       "responsibility": "Deliberate verified account-to-person link; People supplies scoped Person reference.",
-      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)",
+      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)\u2192Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)",
       "rls": {
         "classification": "INSTITUTION",
         "scopeColumns": [
@@ -300,7 +300,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; account_id uuid nullable; kind varchar(40); occurred_at timestamptz(3); request_id uuid; actor_account_id uuid nullable; decision varchar(12) nullable; safe_reason varchar(80) nullable; policy_snapshot jsonb nullable",
       "responsibility": "Redacted auth/recovery evidence including internal cross-institution policy decisions. request_id is the correlation ID; no password, raw token or raw unknown identifier.",
-      "constraints": "FK accounts when present; index(account_id,occurred_at,id); immutable except one guarded NULL→account_id association for an initially unknown reset attempt resolved in the same locked transaction; cross-institution details only via operator/security authorization",
+      "constraints": "FK accounts when present; index(account_id,occurred_at,id); immutable except one guarded NULL\u2192account_id association for an initially unknown reset attempt resolved in the same locked transaction; cross-institution details only via operator/security authorization",
       "rls": {
         "classification": "GLOBAL_SECURITY",
         "scopeColumns": [],
@@ -318,7 +318,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int",
       "responsibility": "Optional subordinate site; no campus-level grants in first release.",
-      "constraints": "FK(scope)→School; UNIQUE(scope,id); UNIQUE(scope,code)",
+      "constraints": "FK(scope)\u2192School; UNIQUE(scope,id); UNIQUE(scope,code)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -418,7 +418,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER",
       "responsibility": "Fixed permission mapping in code; no arbitrary permission JSON.",
-      "constraints": "FK(scope,membership_id)→membership; UNIQUE(scope,membership_id,code)",
+      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -501,7 +501,7 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; status PRESENT/ABSENT/LATE/EXCUSED; late_minutes int nullable; current_revision int",
       "responsibility": "Current submitted status; one per roster pupil. No blank record stored before submit.",
-      "constraints": "FK(scope,session_id,student_id)→roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)",
+      "constraints": "FK(scope,session_id,student_id)\u2192roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -667,9 +667,9 @@
       "table": "vs_imports_import_job",
       "status": "MIGRATED",
       "design": "docs/modules/imports/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3)",
-      "responsibility": "Imports-owned job stores immutable source and SHA-256; context carries sanitized display name and selected reference versions; audit excludes source hash/content and row data. CSV max 2 MiB; source expires after 7 days; row outcomes retain minimal identifiers for 30 days.",
-      "constraints": "Scoped School/year/nullable Campus FKs; global actor FK; UNIQUE(scope,id); index(scope,state,created_at,id); CHECK state/schema/hash/revision/version and octet_length(source_bytes)<=2097152 when nonnull",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state UPLOADED/REVIEW/CONFIRMED/RUNNING/COMPLETED/COMPLETED_WITH_ERRORS/FAILED/CANCELLED varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3)",
+      "responsibility": "Imports-owned job stores immutable source and SHA-256; source bytes expire after 7 days; terminal row details expire after 30 days. Audit excludes source hash/content and row data.",
+      "constraints": "Scoped School/year/nullable Campus FKs; global actor FK; UNIQUE(scope,id); index(scope,state,created_at,id); CHECK state/schema/hash/revision/version and octet_length(source_bytes)<=2097152 when nonnull; partial index(source_expires_at,id) where source_bytes is not null",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -688,9 +688,9 @@
       "table": "vs_imports_import_row",
       "status": "MIGRATED",
       "design": "docs/modules/imports/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable; errors jsonb",
-      "responsibility": "Normalized bounded row and column-safe preview errors stay in owned ImportRow; no credentials. Status changes in a School-guard transaction.",
-      "constraints": "FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); CHECK row 2–1001, decision/status values and JSON shapes; index(scope,job_id,status,row_number)",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb nullable; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable; errors jsonb",
+      "responsibility": "Normalized bounded row and column-safe preview errors stay in owned ImportRow until terminal retention expiry; status changes in a School-guard transaction.",
+      "constraints": "FK(scope,job_id)\u2192ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); CHECK row 2\u20131001, decision/status values and nullable normalized object/expected-reference object/errors array shapes; index(scope,job_id,status,row_number); partial index(scope,job_id,row_number) where normalized is not null",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -917,7 +917,7 @@
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); status ACTIVE/ARCHIVED; version int; created_at timestamptz(3)",
       "responsibility": "Students-owned branch identity and admission number; the Person remains People-owned and is never inferred by name or email.",
-  "constraints": "FK(scope)→School; FK(organization_id,person_id)→Person; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number; index(scope,status,id)",
+      "constraints": "FK(scope)\u2192School; FK(organization_id,person_id)\u2192Person; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number; index(scope,status,id)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -959,7 +959,7 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; actor_account_id uuid; expected_revision int; new_revision int; changes jsonb; reason varchar(500); occurred_at timestamptz(3); request_id uuid",
       "responsibility": "Append-only institution or branch configuration history with an atomically enlisted revision.",
-      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5–500; append-only",
+      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5\u2013500; append-only",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -1030,6 +1030,24 @@
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "tenancy",
         "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "OperatorAuditEntry",
+      "owner": "platform",
+      "table": "vs_platform_operator_audit",
+      "status": "MIGRATED",
+      "design": "docs/modules/platform/DESIGN.md",
+      "fields": "id uuid PK; operator_id uuid; command varchar(80); resource_type varchar(80); resource_id uuid; occurred_at timestamptz(3); details jsonb",
+      "responsibility": "Append-only global platform-operator audit; aggregate technical outcomes only, no tenant/student/source identifiers.",
+      "constraints": "CHECK bounded command and details object; index(operator_id,occurred_at,id); UPDATE/DELETE rejected by trigger",
+      "rls": {
+        "classification": "GLOBAL_OPERATOR",
+        "scopeColumns": [],
+        "intendedPolicy": "Access only through verified platform operator tooling; never exposed to tenant runtime routes.",
+        "enforcement": "APPLICATION_GUARD",
+        "owner": "platform",
+        "closureGate": "PLATFORM"
       }
     }
   ],

@@ -86,3 +86,7 @@ Owner feedback: “Pass. Please go ahead and implement with the next task”. Hu
 ### IAM-01 shared schema observation — 4 October 2026
 
 Access IAM-01 adds the forward access-bootstrap migration plus Platform-owned audit/outbox/receipt envelopes. Both dedicated databases preserve the prior foundation marker IDs/timestamps and all four migration records. The enlisted Platform writer appends provisioning audit/outbox in the Access transaction; real-DB tests prove rollback after append and immutable history guards. See [Access verification](../access/CURRENT_STATE.md) and [safe evidence](../../evidence/iam-01-local/verification.json). This does not implement FND-02 or external event delivery.
+
+### 5 October 2026 — shared operator audit contract (IMP-03)
+
+A new global `vs_platform_operator_audit` table was added by the Imports retention task because tenant `AuditEntry` requires an account FK and would misattribute a platform operator. It stores aggregate retention counts only, has an append-only trigger and operator/time index, and is applied in both local databases at migration 22. No tenant scope or public/runtime route is provided. Database catalog checks pass; implementation evidence and IMP-03 acceptance remain tracked in [Imports current state](../imports/CURRENT_STATE.md).

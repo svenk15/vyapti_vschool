@@ -326,6 +326,18 @@ model AuditEntry {
   @@map("vs_platform_audit_entry")
 }
 
+model OperatorAuditEntry {
+ id String @id @db.Uuid
+ operatorId String @map("operator_id") @db.Uuid
+ command String @db.VarChar(80)
+ resourceType String @map("resource_type") @db.VarChar(80)
+ resourceId String @map("resource_id") @db.Uuid
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ details Json
+ @@index([operatorId,occurredAt,id],map:"vs_platform_operator_audit_actor_idx")
+ @@map("vs_platform_operator_audit")
+}
+
 model OutboxEvent {
   id               String    @id(map: "vs_platform_outbox_event_pkey") @db.Uuid
   organizationId   String    @map("organization_id") @db.Uuid
@@ -751,7 +763,7 @@ model ImportRow {
  previewRevision Int @map("preview_revision")
  rowNumber Int @map("row_number")
  inputHash String @map("input_hash") @db.Char(64)
- normalized Json
+ normalized Json?
  decision String @db.VarChar(20)
  status String @db.VarChar(20)
  expectedReferences Json @map("expected_references")
