@@ -24,7 +24,7 @@ function decodeCursor(cursor: string | null, expected: Omit<Cursor,"after">, sec
   if (!payload || !signature || extra.length || !/^[A-Za-z0-9_-]{43}$/.test(signature)) throw new AccessError("INVALID_CURSOR");
   const expectedSignature=createHmac("sha256",secret).update(payload).digest("base64url");
   if (!timingSafeEqual(Buffer.from(signature),Buffer.from(expectedSignature))) throw new AccessError("INVALID_CURSOR");
-  try { const value=JSON.parse(Buffer.from(payload,"base64url").toString("utf8")) as Cursor;if(value.organizationId!==expected.organizationId||value.schoolId!==expected.schoolId||value.accountId!==expected.accountId||value.searchHash!==expected.searchHash||typeof value.after!=="string"||!/^[0-9a-f-]{36}$/i.test(value.after))throw new Error();return value.after; }
+  try { const value=JSON.parse(Buffer.from(payload,"base64url").toString("utf8")) as Cursor;if(value.organizationId!==expected.organizationId||value.schoolId!==expected.schoolId||value.accountId!==expected.accountId||value.searchHash!==expected.searchHash||value.status!==expected.status||typeof value.after!=="string"||!/^[0-9a-f-]{36}$/i.test(value.after))throw new Error();return value.after; }
   catch { throw new AccessError("INVALID_CURSOR"); }
 }
 function profile(row: {id:string;personId:string;version:number;admissionNumber:string;status:string;person:{firstName:string;lastName:string}}): StudentProfile {

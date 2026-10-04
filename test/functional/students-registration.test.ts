@@ -24,8 +24,10 @@ describe("STU-01 PostgreSQL student registration",()=>{
   it("preserves zeros, records a PII-free replay receipt and reads scoped list/detail",async()=>{
     const command={...input("0007"),key:randomUUID()},created=await students.create(identity,primary.organizationId,primary.schoolId,command),replayed=await students.create(identity,primary.organizationId,primary.schoolId,command);
     expect(created).toMatchObject({admissionNumber:"0007",displayName:"Synthetic Student",status:"ACTIVE",enrollment:null,replayed:false});expect(replayed).toMatchObject({studentId:created.studentId,replayed:true});
+    await students.create(identity,primary.organizationId,primary.schoolId,input("0008","Synthetic","Next"));
     const receipt=await db.commandReceipt.findFirstOrThrow({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,command:"StudentRegistered",key:command.key},select:{response:true}});expect(receipt.response).not.toHaveProperty("displayName");expect(receipt.response).not.toHaveProperty("admissionNumber");
     expect(await students.list(identity,primary.organizationId,primary.schoolId,{search:"0007"})).toMatchObject({items:[{studentId:created.studentId,admissionNumber:"0007"}],nextCursor:null});expect(await students.get(identity,primary.organizationId,primary.schoolId,created.studentId)).toMatchObject({studentId:created.studentId,history:[],enrollment:null});
+    const firstPage=await students.list(identity,primary.organizationId,primary.schoolId,{search:"",limit:1});expect(firstPage.nextCursor).toBeTruthy();await expect(students.list(identity,primary.organizationId,primary.schoolId,{search:"",status:"ALL",cursor:firstPage.nextCursor,limit:1})).rejects.toMatchObject({code:"INVALID_CURSOR"});
   });
 
   it("allows only exact authorized same-institution Person selection and keeps list search separate",async()=>{
