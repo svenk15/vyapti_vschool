@@ -20,7 +20,7 @@ ACA-ADR-003: academic setup is available only when the trusted server release ma
 
 ## Physical data contract
 
-ACA-01 installs the six setup tables; ACA-02 adds the immutable calendar revision and exception tables listed here. The remaining academic tables are installed only by their named tasks. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+ACA-01 installs the six setup tables; ACA-02 adds the immutable calendar revision and exception tables listed here; PER-02 installs Academics-owned Teacher eligibility because that task first enables and revokes the profile. Remaining academic tables are installed only by their named tasks. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
@@ -40,7 +40,7 @@ ACA-01 installs the six setup tables; ACA-02 adds the immutable calendar revisio
 
 Setup page reads scoped Year → Terms, Year → Sections → Grade/Campus, Subjects, and Calendar → currentRevision → Exceptions. Reference selectors return code/name/ID/version. Class list joins Offering→Section→Grade and Subject; current assignments join Teacher→Employee→Person for display name. All joins include scope, except Person joins organizationId+personId behind People contract. No account credentials appear.
 
-Teacher Today is an Attendance read contract, not an Academics write. It uses dated TeacherAssignment to Offering and Session. Default lists are keyset-paged 50; calendar exception payload max 500. DB DATE maps to YYYY-MM-DD at adapter boundary; never parse civil dates with local-machine timezone assumptions.
+Teacher Today is an Attendance read contract, not an Academics write. It uses dated TeacherAssignment to Offering and Session. The eligibility predicate is `organization_id=? AND school_id=? AND teacher_id=? AND valid_from<=school_date AND valid_to>school_date`; assignment-overlap validation uses `organization_id=? AND school_id=? AND offering_id=? AND valid_from<requested_valid_to AND valid_to>requested_valid_from`. Default lists are keyset-paged 50; calendar exception payload max 500. DB DATE maps to YYYY-MM-DD at adapter boundary; never parse civil dates with local-machine timezone assumptions.
 
 ## Screen contract
 
@@ -52,7 +52,7 @@ All screens additionally follow Bible §8: loading, empty, validation, permissio
 
 Each named flow below is an application use case. Inputs/outputs are plain DTOs; adapters implement owned repositories and public cross-module facades. Use SchoolCommand, ActorResolver, Clock, IdGenerator and transactional envelope writers from the shared contract. Do not pass Prisma.TransactionClient into application/domain code. Generic `save(any)` is not a replacement for named commands. Domain factories create new roots/events; rehydration restores without events.
 
-Mutations use the account → Organization → School guard protocol in Bible §7. Read-only flows do not take write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
+Mutations use the account → Organization → School guard protocol in Bible §7. Every protected read and write reauthorizes current scope and resource permission. Read-only flows do not acquire write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before mutation receipt replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
 
 ## ACA-01 — Configure academic year, terms, grades and sections
 
@@ -198,9 +198,9 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Effective-date endpoints and teacher eligibility. Functional PostgreSQL — Assignment races serialize; cross-school FK; end-assignment vs teacher submit reauthorization. E2E — Create offering, assign teacher, inspect effective dates; reject overlap.
+**Verification:** Unit — Effective-date endpoints and teacher eligibility. Functional PostgreSQL — Assignment races serialize; cross-school FK; end-assignment vs teacher submit reauthorization. Capture `EXPLAIN (ANALYZE, BUFFERS)` for both documented offering/date overlap and teacher/date eligibility predicates at representative pilot cardinality; confirm the corresponding composite index is selected and record actual plans/rows/times without making TEN-03's larger scale thresholds this task's gate. E2E — Create offering, assign teacher, inspect effective dates; reject overlap.
 
-**Design-readiness note (4 October 2026):** Ready when ACA-02 and PER-02 are accepted/verified per task dependencies. Academics owns offerings, teacher eligibility and dated assignments; People owns Employee and Access owns bindings. Existing physical contracts define scoped uniqueness/FKs; add a teacher/date lookup index `(organization_id,school_id,teacher_id,valid_from,valid_to)` beside the offering overlap index for assignment and eligibility reads. School guard serializes cross-row overlap checks; versioned commands and receipts make retries exact. Portal binding is required only for portal access, never teaching eligibility. ATT-01 owns time-slot clash enforcement; until then ACA-03 prevents overlapping effective assignments for the same offering and does not invent room/timetable allocation. All new tables follow TEN-ADR-006 class/policy/grant/index/restricted-role migration requirements; application checks do not claim RLS enforcement before TEN-03.
+**Design-readiness note (4 October 2026):** Dependency links are satisfied by VERIFIED implementation even when human review is PENDING, unless a task explicitly declares an acceptance gate. Academics owns offerings, teacher eligibility and dated assignments; People owns Employee and Access owns bindings. Existing physical contracts define scoped uniqueness/FKs; use teacher/date lookup index `(organization_id,school_id,teacher_id,valid_from,valid_to)` beside offering overlap index. School guard serializes cross-row overlap checks; versioned commands and receipts make retries exact. Portal binding is required only for portal access, never teaching eligibility. ATT-01 owns time-slot clash enforcement; until then ACA-03 prevents overlapping effective assignments for the same offering and does not invent room/timetable allocation. Protected reads/writes reauthorize current scope/resource permission; only mutations lock. Path A records classification/policy intent in the registry and defers enforcement to TEN-03.
 
 ## Migration, retention and handoff
 

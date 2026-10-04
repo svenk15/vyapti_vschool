@@ -4,7 +4,7 @@
 
 Implementation: NOT_STARTED → IN_PROGRESS → VERIFIED. BLOCKED is allowed with reason and safe next action. VERIFIED means the task's automated gates and stable demo passed, not that a human accepted it. Human review: NOT_REQUESTED → PENDING → PASSED or FAILED. FND-01 starts IMPLEMENTED for the prepared scaffold, with local verification/acceptance still needed; this is not a product acceptance.
 
-At resume, read module CURRENT_STATE tables and the latest evidence. `pnpm next-task` prioritizes FAILED human reviews, then IN_PROGRESS, then dependencies satisfied by VERIFIED + PASSED/PENDING. It is a suggestion only: an explicit pause or release gate controls execution. FND-01 must be locally VERIFIED before IAM-01 starts. Never mark a design or task document as implementation evidence.
+At resume, read module CURRENT_STATE tables and the latest evidence. `pnpm next-task` prioritizes FAILED human reviews, then IN_PROGRESS, then dependencies whose implementation is VERIFIED and human review is PASSED or PENDING. A dependency does not require human PASSED unless its owning task explicitly declares that acceptance gate. The task's CURRENT_STATE table is authoritative; dated dependency snapshots in design/checkpoint notes are historical context only. The suggestion is advisory: an explicit pause or documented release/acceptance gate controls execution. FND-01 must be locally VERIFIED before IAM-01 starts. Never mark a design or task document as implementation evidence.
 
 ## One task loop
 

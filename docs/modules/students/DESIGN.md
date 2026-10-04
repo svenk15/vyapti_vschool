@@ -22,13 +22,13 @@ All tables are planned except SetupCheck. `scope` below means `(organizationId,s
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
-| `vs_students_student` (Student) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); status ACTIVE/ARCHIVED; version int; created_at timestamptz(3) | Institutional student identity; admission number never recycled after archive. | UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); scoped school and organization Person FKs |
+| `vs_students_student` (Student) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); status ACTIVE/ARCHIVED; version int; created_at timestamptz(3) | Institutional student identity; admission number never recycled after archive. | FK(scope)→School; FK(organization_id,person_id)→Person; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number; index(scope,status,id) |
 | `vs_students_enrollment` (Enrollment) | id uuid PK; organization_id uuid; school_id uuid; student_id uuid; year_id uuid; valid_from date; valid_to date; version int | Yearly enrollment root; retained historical ranges. | UNIQUE(scope,student_id,year_id); UNIQUE(scope,id,year_id); scoped Student/Year FKs; CHECK from<to |
 | `vs_students_section_placement` (SectionPlacement) | id uuid PK; organization_id uuid; school_id uuid; enrollment_id uuid; year_id uuid; section_id uuid; valid_from date; valid_to date; roll_number varchar(30) nullable | Section membership intervals; no duplicated year/student rows per transfer. Roll is display identifier, not a globally unique identity. | Scoped FK(enrollment_id,year_id) and FK(section_id,year_id); CHECK from<to; index(scope,section_id,valid_from,valid_to,enrollment_id); nonoverlap under School guard, verified concurrency tests |
 
 ## Read workflows and joins
 
-Student list filters School scope/status/year and joins Student → Person (organization-qualified), optional Enrollment by year and Placement at selected date → Section/Grade. Left joins retain unenrolled students; multiple historical placements must not duplicate a current list row. Detail shows immutable identity ID and ordered placement history. Roster query: Offering.sectionId + session.schoolDate → Placement where from<=D AND D<to → Enrollment same year and dates → Student ACTIVE at scheduling/opening eligibility → Person display fields. Once session opens, Attendance uses frozen roster, not this live join. Search matches school profile names/admission numbers with bounded pagination; no organization-wide Person search.
+STU-01 list filters current School scope/status and joins Student → Person on `organization_id,person_id`; enrollment is not installed yet, so every row returns `enrollment:null`. Detail returns the authorized Student identity and an empty history until STU-02 installs Enrollment/Placement. Normal list search matches branch-owned admission numbers and Person first/last names with signed bounded pagination. Existing-Person selection is a separate exact full-display-name query over only the current organization; it requires `student.manage`, returns at most 20 `{personId,displayName}` choices, and never accepts admission-number matches or infers a match. The user must explicitly select an ID. Student ownership and admission-number uniqueness resolve against `vs_students_student` by `(organization_id,school_id,person_id)` and `(organization_id,school_id,admission_number)`; the same admission string in another branch is not a collision. No organization-wide unbounded Person search or contact fields are returned.
 
 ## Screen contract
 
@@ -40,45 +40,46 @@ All screens additionally follow Bible §8: loading, empty, validation, permissio
 
 Each named flow below is an application use case. Inputs/outputs are plain DTOs; adapters implement owned repositories and public cross-module facades. Use SchoolCommand, ActorResolver, Clock, IdGenerator and transactional envelope writers from the shared contract. Do not pass Prisma.TransactionClient into application/domain code. Generic `save(any)` is not a replacement for named commands. Domain factories create new roots/events; rehydration restores without events.
 
-Mutations use the account → Organization → School guard protocol in Bible §7. Read-only flows do not take write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
+Mutations use the account → Organization → School guard protocol in Bible §7. Every protected read and write reauthorizes current scope and resource permission. Read-only flows do not acquire write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before mutation receipt replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
 
 ## STU-01 — Register and inspect students
 
-**Success response contract:** `{studentId,version,admissionNumber,displayName,status,enrollment:null}` initially; profile contains only authorized yearly placement history.
+**Success response contract:** `{studentId,personId,version,admissionNumber,displayName,status:"ACTIVE",enrollment:null,replayed}`. List returns `{items,nextCursor}` and detail returns the same profile with `history:[]` until STU-02. Receipts store only scoped resource ID/version/status; a replay reconstructs the response after current authorization, so names/admission data are not persisted in receipts.
 
-**Transport:** POST /api/v1/students; GET /api/v1/students; GET /api/v1/students/:id
+**Transport:** POST /api/v1/students; GET /api/v1/students; GET /api/v1/students/:id; GET /api/v1/people/selection?q= (student.manage, exact bounded existing-Person choices only)
 
-**Input:** firstName,lastName?,admissionNumber; new Person by default; existingPersonId only explicit verified mapping; command key. Search q<=100, limit<=100.
+**Input:** POST accepts `firstName`, optional `lastName`, `admissionNumber`, optional `existingPersonId`, and stable command key. A new organization-local Person is the default; existingPersonId is accepted only after the separate exact authorized choice flow and is rechecked in the write transaction. GET list accepts `search`≤100 chars, optional `status` (`ACTIVE` by default, `ARCHIVED` or `ALL`), `limit` 1–100 and signed cursor; exact Person selection accepts `q`≤100 chars and returns ≤20 minimal choices. Student-list search remains separate and searches admission number/name without selecting or linking a Person.
 
 **Workflow:**
 
-1. Require student.manage for create, student.read with resource policy for list/detail.
-2. Acquire guards; validate admission number and deliberate Person identity.
-3. Invoke People enlisted facade then Student factory; no guardian/account invented.
-4. Persist Person+Student+envelopes in one transaction.
-5. Read joined detail and show Not enrolled until enrollment exists.
+1. Resolve current identity/membership, institution and active branch; require the `student_core` release, entitlement and activation plus `student.manage` for writes/selection or `student.read` for list/detail.
+2. Mutations lock the actor account, Organization and School in the shared order; reads use a repeatable-read snapshot without write locks. For optional Person reuse, call the separate exact selection query and revalidate the selected organization-local Person inside the write transaction.
+3. Resolve admission collisions only against Student in the selected branch. Call the People enlisted identity facade to create a Person when no ID was selected, then create Student.
+4. Commit the School revision, Student, audit, minimal outbox event and PII-free idempotency receipt together. Unique constraints settle concurrent admission/person races; a failure rolls back the newly created Person.
+5. Read the organization-qualified Person join, return only display identity and show Not enrolled until STU-02 adds Enrollment.
 
-**Database writes / atomicity:** Person via People owner and Student; audit/outbox/receipt.
+**Database writes / atomicity:** Person via the People identity facade and Student via Students; School configuration revision, `StudentRegistered.v1`, audit and PII-free receipt in one PostgreSQL transaction. Receipt replay reauthorizes, checks the canonical input hash and reconstructs from the current scoped row.
 
-**Errors and recovery:** Duplicate admission→409; foreign Person→404; malformed name→422.
+**Errors and recovery:** Duplicate branch admission or already-registered branch Person→409; foreign/nonexistent Person→404; missing current permission→403; missing/stale session→401; inactive module/branch or unavailable release→safe 409/503; malformed name/admission/limit/name-selection→422; malformed/scope-mismatched cursor→422 with refresh guidance; database/evidence failure→503 with the same idempotency key safe to retry.
 
 ```mermaid
 sequenceDiagram
   actor U as User
   participant W as Delivery adapter
   participant A as STU-01 use case
-  participant P as Owner ports
+  participant P as People identity facade
   participant D as PostgreSQL
   U->>W: Request named flow
   W->>A: Validated input and verified session
-  A->>P: Acquire guards
-  P->>D: Scoped reads and transaction guards
-  D-->>P: Current authorized facts
-  A->>P: Invoke People enlisted facade then Student factory
+  A->>D: Current membership, entitlement, branch and guards
+  D-->>A: Authorized scope
+  A->>P: Create or resolve explicit organization Person in enlisted transaction
+  P->>D: People-owned Person operation
+  D-->>P: Minimal Person identity
+  P-->>A: Person ID
+  A->>D: Create branch Student and atomic evidence
   alt Preconditions hold
-    P->>D: Apply documented writes atomically
-    D-->>P: Committed result
-    P-->>A: Safe result DTO
+    D-->>A: Committed Student and safe result DTO
     A-->>W: Acknowledged outcome
     W-->>U: Updated view and next action
   else Conflict or denied access
@@ -88,9 +89,9 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Admission identifier preserves zeros; names not identifiers. Functional PostgreSQL — Rollback Person on Student failure; concurrent admission number uniqueness. E2E — Create student, search, refresh detail and denied foreign profile.
+**Verification:** Unit — Admission identifier preserves zeros; exact existing-Person selection stays separate from normal list search. Real PostgreSQL — scoped FKs/uniqueness, authorized tenant/resource reads, Person rollback on Student/evidence failure, same Person/admission races, branch-isolated admission reuse and PII-free receipt. E2E — Create student, search by admission/name, refresh detail, explicitly reuse an exact Person, reject duplicate admission without orphan Person, and deny foreign profile.
 
-**Design-readiness note (4 October 2026):** Student identity belongs to Students; organization-local Person identity remains People-owned. Create a new Person by default; reuse only an explicitly selected same-organization Person after authorized lookup, never similarity/email matching. The physical Student contract requires unique `(organization_id,school_id,admission_number)` and `(organization_id,school_id,person_id)`, scoped school/person FKs, and bounded scope/status/admission search; joined reads retain unenrolled profiles without exposing contact data. People+Student writes and evidence share one guarded transaction; duplicate races are settled by constraints and return 409. Future Student table migration includes its TEN-ADR-006 RLS class/policy/grants/index/restricted-role tests; RLS runtime enforcement remains a TEN-03 gate.
+**Design-readiness note (4 October 2026):** Student identity belongs to Students; organization-local Person identity remains People-owned. Create a new Person by default; reuse only an explicitly selected same-organization Person through a separate authorized exact-name selection query, never similarity/email matching. Normal Student list search remains intact. Admission uniqueness/collision checks use the actual branch-scoped Student table. People+Student writes and evidence share one guarded transaction; reads reauthorize but do not acquire write locks; duplicate races are settled by constraints and return 409. Path A records the BRANCH classification, `(organization_id,school_id)` scope, policy/index intent and TEN-03 closure gate; application authorization remains active while database enforcement is deferred. The initial Bible pilot remains the only pilot benchmark; the larger scale profile belongs to TEN-03.
 
 ## STU-02 — Enroll students into a dated section
 
@@ -140,7 +141,7 @@ sequenceDiagram
 
 **Verification:** Unit — Bounds and half-open membership; roll remains text. Functional PostgreSQL — Two enrollments racing yield one root; scoped FKs and complete rollback. E2E — Enroll, refresh class roster, reject wrong-year section.
 
-**Design-readiness note (4 October 2026):** Enrollment belongs to Students; Section/year remain Academics-owned. One enrollment per scoped student/year, half-open date ranges, and nonoverlapping placements are enforced under the School guard plus scoped composite FKs/unique keys; `(scope,section_id,valid_from,valid_to,enrollment_id)` supports current roster reads. Creating enrollment and first placement is atomic, duplicate requests replay by receipt, and a second yearly root conflicts rather than silently transferring. Transfer/roster impact is reserved for STU-03/ATT-01. New tenant tables follow TEN-ADR-006 migration RLS requirements; database RLS enforcement awaits TEN-03.
+**Design-readiness note (4 October 2026):** Enrollment belongs to Students; Section/year remain Academics-owned. One enrollment per scoped student/year, half-open date ranges, and nonoverlapping placements are enforced under the School guard plus scoped composite FKs/unique keys; `(scope,section_id,valid_from,valid_to,enrollment_id)` supports current roster reads. Creating enrollment and first placement is atomic, duplicate requests replay by receipt, and a second yearly root conflicts rather than silently transferring. Transfer/roster impact is reserved for STU-03/ATT-01. Path A records Enrollment/Placement classification, scope, constraints/indexes, policy intent and TEN-03 closure; database enforcement is deferred.
 
 ## STU-03 — Transfer or archive with historical protection
 

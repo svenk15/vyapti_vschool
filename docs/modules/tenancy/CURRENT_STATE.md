@@ -32,6 +32,10 @@ Proposed reproducible synthetic load profile: 100 institutions/500 branches, 100
 
 Verification plan requires direct connections as restricted runtime; role/grant/ownership assertions; absent, empty, malformed, wrong-account, cross-institution, same-institution other-branch and forged-scope SELECT/INSERT/UPDATE/DELETE tests; `WITH CHECK` and FORCE tests; narrow recovery/operator/audit/public-brand exceptions; pool-size-one commit/rollback/error/cancel alternating A/no-context/B checks; empty and upgrade migration paths; restore/reconciliation; EXPLAIN/ANALYZE and RLS-on/off isolated benchmark. No mocks substitute for database-policy, grants, transaction-local or pooling evidence. Human review: NOT_REQUESTED; this is not a demoable implementation checkpoint. Next action: retain TEN-03 as gated consolidated task and apply the future-table migration rule in subsequent module designs/migrations.
 
+### TEN-03 Path A reconciliation — 4 October 2026
+
+Current development sequence explicitly uses Path A: TABLE_REGISTRY.json records classification, tenant scope columns, intended policy, existing schema constraints/indexes, owner and `closureGate:TEN-03` for every registered table. Metadata marks `PATH_A_DEFERRED_TEN_03`; no RLS policies, roles or connection behavior were installed. Application authorization remains mandatory. This temporary exception does not permit multi-client production. TEN-03 remains the sole consolidated enforcement/verification gate.
+
 
 ### TEN-01 inspection and blocking design decision — 4 October 2026
 

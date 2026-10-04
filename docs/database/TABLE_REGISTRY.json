@@ -10,7 +10,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date",
       "responsibility": "Owned by year; no overlapping intervals; all within year.",
-      "constraints": "FK(scope,year_id); UNIQUE(scope,year_id,code); CHECK starts_on<ends_on; index(scope,year_id,starts_on)"
+      "constraints": "FK(scope,year_id); UNIQUE(scope,year_id,code); CHECK starts_on<ends_on; index(scope,year_id,starts_on)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AcademicYear",
@@ -20,7 +31,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date; status DRAFT/OPEN/CLOSED; version int",
       "responsibility": "Half-open year; terms are editable only while DRAFT. Multiple open years permitted if dates/business selection are explicit.",
-      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code); CHECK dates, status, version, code and name"
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code); CHECK dates, status, version, code and name",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "CalendarException",
@@ -30,7 +52,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; campus_id uuid nullable; on_date date; is_teaching_day boolean; label varchar(160)",
       "responsibility": "Date exception; campus beats school beats weekly rule. Dates inside year.",
-      "constraints": "Scoped revision/campus FKs; two NULL/non-NULL partial unique indexes(scope,revision_id,on_date[,campus_id]); immutable"
+      "constraints": "Scoped revision/campus FKs; two NULL/non-NULL partial unique indexes(scope,revision_id,on_date[,campus_id]); immutable",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "CalendarRevision",
@@ -40,7 +73,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; calendar_id uuid; number int; teaching_weekdays int[]; published_at timestamptz(3); published_by uuid",
       "responsibility": "Immutable full policy snapshot. No generic mutable JSON calendar.",
-      "constraints": "UNIQUE(scope,calendar_id,number); UNIQUE(scope,calendar_id,id); FK calendar; published_by account; append-only guard"
+      "constraints": "UNIQUE(scope,calendar_id,number); UNIQUE(scope,calendar_id,id); FK calendar; published_by account; append-only guard",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "CourseOffering",
@@ -50,7 +94,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; section_id uuid; subject_id uuid; code varchar(40); version int; active boolean",
       "responsibility": "One section subject offering in year.",
-      "constraints": "UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped section/year composite FK and subject FK; UNIQUE(scope,id)"
+      "constraints": "UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped section/year composite FK and subject FK; UNIQUE(scope,id)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "GradeLevel",
@@ -60,7 +115,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); sort_order int; active boolean; version int",
       "responsibility": "School-wide grade catalog. No cross-school shared write.",
-      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code)"
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "SchoolCalendar",
@@ -70,7 +136,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; current_revision_id uuid nullable; version int",
       "responsibility": "One calendar root per school year; no current pointer until publication.",
-      "constraints": "UNIQUE(scope,year_id); UNIQUE(scope,id); FK year; deferred current_revision scoped FK added in SQL"
+      "constraints": "UNIQUE(scope,year_id); UNIQUE(scope,id); FK year; deferred current_revision scoped FK added in SQL",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Section",
@@ -80,7 +157,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; grade_id uuid; campus_id uuid nullable; code varchar(40); name varchar(160); active boolean; version int",
       "responsibility": "Section in one year/grade/campus, including school-wide no-campus scope.",
-      "constraints": "Scoped FKs year/grade/campus; UNIQUE(scope,id,year_id); two partial UNIQUE indexes (scope,year_id,grade_id,code) WHERE campus_id IS NULL and (scope,year_id,grade_id,campus_id,code) WHERE NOT NULL"
+      "constraints": "Scoped FKs year/grade/campus; UNIQUE(scope,id,year_id); two partial UNIQUE indexes (scope,year_id,grade_id,code) WHERE campus_id IS NULL and (scope,year_id,grade_id,campus_id,code) WHERE NOT NULL",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Subject",
@@ -90,17 +178,39 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); active boolean; version int",
       "responsibility": "School-wide subject catalog.",
-      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code)"
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,code)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Teacher",
       "owner": "academics",
       "table": "vs_academics_teacher",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int",
-      "responsibility": "Academic teacher profile, not a login identity.",
-      "constraints": "UNIQUE(scope,employee_id); UNIQUE(scope,id); scoped Employee FK"
+      "responsibility": "Academic teacher profile, not a login identity; PER-02 owns its eligibility mutations.",
+      "constraints": "UNIQUE(scope,employee_id); UNIQUE(scope,id); scoped Employee FK",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "TeacherAssignment",
@@ -110,7 +220,18 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int",
       "responsibility": "Primary attendance duty only in Phase 1; one eligible teacher per offering/date.",
-      "constraints": "Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to)"
+      "constraints": "Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AccountActivation",
@@ -120,7 +241,15 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; account_id uuid; token_hash char(64); expires_at timestamptz(3); consumed_at timestamptz(3) nullable; revoked_at timestamptz(3) nullable; created_by uuid; operator_id uuid; case_reference varchar(80); reason varchar(500); issued_token_version int",
       "responsibility": "One-time 256-bit random opaque activation, hash stored; 24h expiry. Raw token shown once to authorized local operator, never audit/log/URL query.",
-      "constraints": "UNIQUE(token_hash); FK account and created_by (subject account, with explicit operator provenance); UNIQUE(account_id,id); index(account_id,expires_at)"
+      "constraints": "UNIQUE(token_hash); FK account and created_by (subject account, with explicit operator provenance); UNIQUE(account_id,id); index(account_id,expires_at)",
+      "rls": {
+        "classification": "GLOBAL_SECURITY",
+        "scopeColumns": [],
+        "intendedPolicy": "Deny generic tenant DML; permit only narrow guarded Access token/security workflow and separately authorized redacted audit review.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AccountActivationMembership",
@@ -130,7 +259,18 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; activation_id uuid; account_id uuid; organization_id uuid; school_id uuid; membership_id uuid; expected_version int",
       "responsibility": "Owned immutable relational membership intent snapshot for one activation.",
-      "constraints": "UNIQUE(activation_id,membership_id); scoped account/membership FK and activation/account FK; CHECK expected_version>0"
+      "constraints": "UNIQUE(activation_id,membership_id); scoped account/membership FK and activation/account FK; CHECK expected_version>0",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AccountPersonBinding",
@@ -140,7 +280,17 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid",
       "responsibility": "Deliberate verified account-to-person link; People supplies scoped Person reference.",
-      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)\u2192Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)"
+      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization scope and current institution authorization; application resource permission remains required.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AuthSecurityEvent",
@@ -150,7 +300,15 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; account_id uuid nullable; kind varchar(40); occurred_at timestamptz(3); request_id uuid; actor_account_id uuid nullable; decision varchar(12) nullable; safe_reason varchar(80) nullable; policy_snapshot jsonb nullable",
       "responsibility": "Redacted auth/recovery evidence including internal cross-institution policy decisions. request_id is the correlation ID; no password, raw token or raw unknown identifier.",
-      "constraints": "FK accounts when present; index(account_id,occurred_at,id); immutable except one guarded NULL\u2192account_id association for an initially unknown reset attempt resolved in the same locked transaction; cross-institution details only via operator/security authorization"
+      "constraints": "FK accounts when present; index(account_id,occurred_at,id); immutable except one guarded NULL→account_id association for an initially unknown reset attempt resolved in the same locked transaction; cross-institution details only via operator/security authorization",
+      "rls": {
+        "classification": "GLOBAL_SECURITY",
+        "scopeColumns": [],
+        "intendedPolicy": "Deny generic tenant DML; permit only narrow guarded Access token/security workflow and separately authorized redacted audit review.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Campus",
@@ -160,7 +318,18 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int",
       "responsibility": "Optional subordinate site; no campus-level grants in first release.",
-      "constraints": "FK(scope)\u2192School; UNIQUE(scope,id); UNIQUE(scope,code)"
+      "constraints": "FK(scope)→School; UNIQUE(scope,id); UNIQUE(scope,code)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "InstitutionGrant",
@@ -170,7 +339,17 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; role varchar(40) INSTITUTION_ADMIN; status varchar(20) ACTIVE/REVOKED; version int; granted_at timestamptz(3); granted_by uuid",
       "responsibility": "Institution configuration grant; no implicit pupil access.",
-      "constraints": "FKs organization/account; UNIQUE(organization_id,account_id,role); INDEX(account_id,status,organization_id); role/status/version checks"
+      "constraints": "FKs organization/account; UNIQUE(organization_id,account_id,role); INDEX(account_id,status,organization_id); role/status/version checks",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization scope and current institution authorization; application resource permission remains required.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AccessInvite",
@@ -180,7 +359,18 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; account_id uuid; organization_id uuid; school_id uuid; inviter_account_id uuid; token_hash char(64); proposed_roles text[]; membership_version int; organization_configuration_version int; school_configuration_version int; delivery_status varchar(24); delivery_failed_at timestamptz(3) nullable; delivery_failure_reason varchar(120) nullable; created_at/expires_at/accepted_at/revoked_at timestamptz(3)",
       "responsibility": "Email invitation bound to the target global account and scoped pending membership; acceptance never creates Person or Employee bindings.",
-      "constraints": "FK account, organization, scoped school and inviter; UNIQUE(token_hash); CHECK delivery status, roles and expiry/failure relation; indexes(scope,delivery_status,created_at),(account_id,expires_at)"
+      "constraints": "FK account, organization, scoped school and inviter; UNIQUE(token_hash); CHECK delivery status, roles and expiry/failure relation; indexes(scope,delivery_status,created_at),(account_id,expires_at)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Organization",
@@ -190,7 +380,17 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; name varchar(160); status ACTIVE/SUSPENDED; trust_mode OPERATOR_CLI/HYBRID/EMAIL varchar(20) default OPERATOR_CLI; version int; created_at timestamptz(3); configuration_version int default 1",
       "responsibility": "Contractual tenant; trust mode controls provisioning/recovery channels only; existing rows backfilled to OPERATOR_CLI.",
-      "constraints": "CHECK trust_mode allowed; CHECK version>0; UNIQUE(id); CHECK configuration_version>0"
+      "constraints": "CHECK trust_mode allowed; CHECK version>0; UNIQUE(id); CHECK configuration_version>0",
+      "rls": {
+        "classification": "INSTITUTION_ROOT",
+        "scopeColumns": [
+          "id"
+        ],
+        "intendedPolicy": "Require verified app.organization_id=id and current institution authorization; platform operator commands use a separately audited narrow path.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "PasswordResetToken",
@@ -200,7 +400,15 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; account_id uuid; issuing_organization_id uuid nullable; token_hash char(64); delivery_status varchar(24); policy_snapshot jsonb; organization_configuration_versions jsonb; delivery_failed_at timestamptz(3) nullable; delivery_failure_reason varchar(120) nullable; created_at/expires_at/consumed_at/revoked_at timestamptz(3) nullable",
       "responsibility": "Account-global password recovery token; issue and consume snapshots include every active school membership and institution grant trust mode/version.",
-      "constraints": "FK account and optional issuer; UNIQUE(token_hash); CHECK delivery status and expiry/failure relation; indexes(account_id,created_at),(issuing_organization_id,created_at)"
+      "constraints": "FK account and optional issuer; UNIQUE(token_hash); CHECK delivery status and expiry/failure relation; indexes(account_id,created_at),(issuing_organization_id,created_at)",
+      "rls": {
+        "classification": "GLOBAL_SECURITY",
+        "scopeColumns": [],
+        "intendedPolicy": "Deny generic tenant DML; permit only narrow guarded Access token/security workflow and separately authorized redacted audit review.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "RoleGrant",
@@ -210,7 +418,18 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER",
       "responsibility": "Fixed permission mapping in code; no arbitrary permission JSON.",
-      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code)"
+      "constraints": "FK(scope,membership_id)→membership; UNIQUE(scope,membership_id,code)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "School",
@@ -220,7 +439,18 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
       "responsibility": "Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1.",
-      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); CHECK configuration_version>0"
+      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); CHECK configuration_version>0",
+      "rls": {
+        "classification": "BRANCH_DIRECTORY",
+        "scopeColumns": [
+          "organization_id",
+          "id"
+        ],
+        "intendedPolicy": "Require verified institution/branch context and current membership; directory visibility grants no pupil access.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "SchoolMembership",
@@ -230,7 +460,18 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; account_id uuid; status PENDING/ACTIVE/SUSPENDED/REVOKED; version int",
       "responsibility": "School access root; granting role does not prove teacher eligibility.",
-      "constraints": "FK school; FK account; UNIQUE(scope,id); UNIQUE(scope,account_id)"
+      "constraints": "FK school; FK account; UNIQUE(scope,id); UNIQUE(scope,account_id)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "UserAccount",
@@ -240,7 +481,17 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; normalized_email varchar(254); email_verified_at timestamptz(3) nullable; password_hash text nullable; status PENDING/ACTIVE/DISABLED; token_version int; failed_attempts int; locked_until timestamptz(3) nullable; version int; created_at timestamptz(3)",
       "responsibility": "Globally unique login; reset requires a previously verified address; no school access without membership. Never return hash/counters.",
-      "constraints": "UNIQUE(normalized_email); counters>=0; index(status,id)"
+      "constraints": "UNIQUE(normalized_email); counters>=0; index(status,id)",
+      "rls": {
+        "classification": "GLOBAL_IDENTITY",
+        "scopeColumns": [
+          "account_id"
+        ],
+        "intendedPolicy": "Runtime access self-scoped to app.account_id; exact account-wide lookup only through guarded Access authentication/recovery workflow.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AttendanceRecord",
@@ -250,7 +501,18 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; status PRESENT/ABSENT/LATE/EXCUSED; late_minutes int nullable; current_revision int",
       "responsibility": "Current submitted status; one per roster pupil. No blank record stored before submit.",
-      "constraints": "FK(scope,session_id,student_id)\u2192roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)"
+      "constraints": "FK(scope,session_id,student_id)→roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AttendanceRevision",
@@ -260,7 +522,18 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; number int; kind SUBMIT/CORRECT/CANCEL; actor_account_id uuid; occurred_at timestamptz(3); reason varchar(500) nullable; changes jsonb",
       "responsibility": "Immutable status diff with old/new values and affected student IDs; submit includes complete initial set, cancel includes state transition. No raw private notes field in pilot.",
-      "constraints": "Scoped session FK; actor FK; UNIQUE(scope,session_id,number); reason required for CORRECT/CANCEL; append-only guard"
+      "constraints": "Scoped session FK; actor FK; UNIQUE(scope,session_id,number); reason required for CORRECT/CANCEL; append-only guard",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AttendanceSession",
@@ -270,7 +543,18 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; school_date date; starts_at timestamptz(3); ends_at timestamptz(3); occurrence_key varchar(80); calendar_revision_id uuid; status SCHEDULED/OPEN/SUBMITTED/CANCELLED; version int; roster_revision char(64) nullable; opened_at timestamptz(3) nullable; submitted_at timestamptz(3) nullable; submitted_by uuid nullable; cancelled_at timestamptz(3) nullable",
       "responsibility": "One actual offering occurrence; retains calendar version and scope. School timezone used to validate local date.",
-      "constraints": "Scoped Offering/CalendarRevision FKs; UNIQUE(scope,offering_id,occurrence_key); UNIQUE(scope,id); CHECK starts<ends; index(scope,school_date,status,starts_at,id)"
+      "constraints": "Scoped Offering/CalendarRevision FKs; UNIQUE(scope,offering_id,occurrence_key); UNIQUE(scope,id); CHECK starts<ends; index(scope,school_date,status,starts_at,id)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "SessionRosterEntry",
@@ -280,7 +564,18 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; enrollment_id uuid; placement_id uuid; display_name_snapshot varchar(210); roll_number_snapshot varchar(30) nullable",
       "responsibility": "Frozen at OPEN. Minimal name/roll historical display; access remains current. No mutable roster after OPEN in Phase 1.",
-      "constraints": "Scoped session/student/enrollment/placement FKs; UNIQUE(scope,session_id,student_id); append-only; session cancellation retains rows"
+      "constraints": "Scoped session/student/enrollment/placement FKs; UNIQUE(scope,session_id,student_id); append-only; session cancellation retains rows",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "BrandAsset",
@@ -290,7 +585,18 @@
       "design": "docs/modules/branding/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; sha256 char(64); mime varchar(100); content_bytes bytea; bytes int; width int; height int; state varchar(20) APPROVED; created_at timestamptz(3)",
       "responsibility": "Sanitized canonical PNG derivative, submitted source discarded.",
-      "constraints": "Scoped organization/nullable School FKs; exact-owner checks; bytea length=bytes<=2 MiB; dims 1..2048; SHA-256; approved content immutable"
+      "constraints": "Scoped organization/nullable School FKs; exact-owner checks; bytea length=bytes<=2 MiB; dims 1..2048; SHA-256; approved content immutable",
+      "rls": {
+        "classification": "TENANT_PRIVATE_WITH_SANITIZED_PUBLIC_READ",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Private access requires current verified tenant scope and capability; public access only through sanitized public DTO/view.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "branding",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "BrandProfile",
@@ -300,7 +606,18 @@
       "design": "docs/modules/branding/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; version int; current_revision_id uuid nullable; public_slug varchar(80); created_at timestamptz(3); updated_at timestamptz(3)",
       "responsibility": "Owns one editable draft and append-only published identity revisions.",
-      "constraints": "one institution default and one per branch via separate partial unique indexes; scoped School FK; globally UNIQUE(public_slug); lowercase slug check; pointer trigger requires same profile/scope published revision"
+      "constraints": "one institution default and one per branch via separate partial unique indexes; scoped School FK; globally UNIQUE(public_slug); lowercase slug check; pointer trigger requires same profile/scope published revision",
+      "rls": {
+        "classification": "TENANT_PRIVATE_WITH_SANITIZED_PUBLIC_READ",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Private access requires current verified tenant scope and capability; public access only through sanitized public DTO/view.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "branding",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "BrandRevision",
@@ -310,7 +627,18 @@
       "design": "docs/modules/branding/DESIGN.md",
       "fields": "id uuid PK; profile_id uuid; organization_id uuid; school_id uuid nullable; revision int; state varchar(20) DRAFT/PUBLISHED; display_name varchar(160); branch_label varchar(160) nullable; logo_asset_id uuid nullable; palette varchar(20) forest/indigo/clay; welcome varchar(180); support_email varchar(254); locale varchar(35); published_at timestamptz(3) nullable; published_by uuid nullable",
       "responsibility": "Private draft or immutable published sign-in identity.",
-      "constraints": "UNIQUE(profile_id,revision); one DRAFT per profile; exact null-safe profile/asset owner trigger; published rows cannot update/delete; publisher/time both present only for PUBLISHED"
+      "constraints": "UNIQUE(profile_id,revision); one DRAFT per profile; exact null-safe profile/asset owner trigger; published rows cannot update/delete; publisher/time both present only for PUBLISHED",
+      "rls": {
+        "classification": "TENANT_PRIVATE_WITH_SANITIZED_PUBLIC_READ",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Private access requires current verified tenant scope and capability; public access only through sanitized public DTO/view.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "branding",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "VerifiedBrandHost",
@@ -320,7 +648,18 @@
       "design": "docs/modules/branding/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; hostname varchar(253); verification_token_hash char(64); state varchar(20) PENDING/VERIFIED/REVOKED; verified_at timestamptz(3) nullable; profile_id uuid",
       "responsibility": "Exact DNS TXT ownership proof for one published profile host mapping.",
-      "constraints": "globally unique canonical lowercase hostname; exact null-safe profile scope; no wildcard/IP; verified_at iff VERIFIED; deployment TLS/trusted-host requirement"
+      "constraints": "globally unique canonical lowercase hostname; exact null-safe profile scope; no wildcard/IP; verified_at iff VERIFIED; deployment TLS/trusted-host requirement",
+      "rls": {
+        "classification": "TENANT_PRIVATE_WITH_SANITIZED_PUBLIC_READ",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Private access requires current verified tenant scope and capability; public access only through sanitized public DTO/view.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "branding",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "ImportJob",
@@ -329,8 +668,19 @@
       "status": "PLANNED",
       "design": "docs/modules/imports/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3)",
-      "responsibility": "Pilot bounded CSV is private DB bytea (max 2 MiB), not public filesystem upload. Context pins dates/reference versions. Raw source expires after 7 days; row outcomes retain minimal identifiers for 30 days, then purge payload by explicit operator retention job.",
-      "constraints": "Scoped year/campus FKs; account FK; index(scope,state,created_at,id); CHECK octet_length(source_bytes)<=2097152 when nonnull"
+      "responsibility": "Imports-owned job stores immutable source and SHA-256; audit excludes source hash/content and row data. CSV max 2 MiB; source expires after 7 days; row outcomes retain minimal identifiers for 30 days.",
+      "constraints": "Scoped year/campus FKs; account FK; index(scope,state,created_at,id); CHECK octet_length(source_bytes)<=2097152 when nonnull; metadata/envelope <=8 KiB and multipart framing <=16 KiB",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "imports",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "ImportRow",
@@ -340,7 +690,18 @@
       "design": "docs/modules/imports/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable",
       "responsibility": "Normalized bounded row, explicit preview outcome and durable safe result. No plaintext credentials. Status changes within one School-guard transaction, so process crash rolls back current row.",
-      "constraints": "FK(scope,job_id)\u2192ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number)"
+      "constraints": "FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "imports",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "SourceStudentMap",
@@ -350,7 +711,18 @@
       "design": "docs/modules/imports/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; namespace varchar(40); external_student_id varchar(100); student_id uuid; created_at timestamptz(3)",
       "responsibility": "Stable cross-job source key; no name/email matching.",
-      "constraints": "UNIQUE(scope,namespace,external_student_id); scoped Student FK; UNIQUE(scope,namespace,student_id) to refuse accidental second source identity"
+      "constraints": "UNIQUE(scope,namespace,external_student_id); scoped Student FK; UNIQUE(scope,namespace,student_id) to refuse accidental second source identity",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "imports",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Employee",
@@ -360,7 +732,18 @@
       "design": "docs/modules/people/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int",
       "responsibility": "School institutional profile; links rather than duplicates identity.",
-      "constraints": "Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end"
+      "constraints": "Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "people",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Person",
@@ -370,7 +753,17 @@
       "design": "docs/modules/people/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; first_name varchar(100); last_name varchar(100) default empty; contact_email varchar(254) nullable; version int; created_at timestamptz(3)",
       "responsibility": "Canonical name/contact; email contact is not verified login ownership. Minimal pilot PII, no health/document fields.",
-      "constraints": "FK organization; UNIQUE(organization_id,id); index(organization_id,last_name,id); no email/name uniqueness"
+      "constraints": "FK organization; UNIQUE(organization_id,id); index(organization_id,last_name,id); no email/name uniqueness",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization scope and current institution authorization; application resource permission remains required.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "people",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AuditEntry",
@@ -380,7 +773,18 @@
       "design": "docs/modules/platform/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; module varchar(40); command varchar(80); resource_type varchar(80); resource_id uuid; before jsonb; after jsonb; reason varchar(500) nullable; request_id uuid; occurred_at timestamptz(3)",
       "responsibility": "Redacted business changes only; immutable. before/after are small allowlisted diffs, never password/token/CSV bodies.",
-      "constraints": "FK school scope; actor account FK; index(scope,module,resource_id,occurred_at,id); DB trigger denies UPDATE/DELETE to app role"
+      "constraints": "FK school scope; actor account FK; index(scope,module,resource_id,occurred_at,id); DB trigger denies UPDATE/DELETE to app role",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "platform",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "CommandReceipt",
@@ -390,7 +794,18 @@
       "design": "docs/modules/platform/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; command varchar(80); key varchar(100); input_hash char(64); response jsonb; created_at timestamptz(3)",
       "responsibility": "Only committed safe success response; all fields immutable. Unsuccessful transaction writes no receipt.",
-      "constraints": "UNIQUE(scope,actor_account_id,command,key); FK school and account; hash/key format checks; immutable trigger"
+      "constraints": "UNIQUE(scope,actor_account_id,command,key); FK school and account; hash/key format checks; immutable trigger",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "platform",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "OutboxEvent",
@@ -400,7 +815,18 @@
       "design": "docs/modules/platform/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; module varchar(40); type varchar(100); schema_version int; aggregate_id uuid; aggregate_version int; occurred_at timestamptz(3); payload jsonb; state varchar(20) default PENDING; attempts int default 0; available_at timestamptz(3); delivered_at timestamptz(3) nullable",
       "responsibility": "Internal domain fact. Phase 1 only persists; no external delivery is claimed. Future dispatcher uses an explicit lease and receipt migration.",
-      "constraints": "FK school scope; CHECK schema_version>0, aggregate_version>0, attempts>=0, state in PENDING/DELIVERED/EXHAUSTED; index(state,available_at,id)"
+      "constraints": "FK school scope; CHECK schema_version>0, aggregate_version>0, attempts>=0, state in PENDING/DELIVERED/EXHAUSTED; index(state,available_at,id)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "platform",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "SetupCheck",
@@ -410,7 +836,15 @@
       "design": "docs/modules/platform/DESIGN.md",
       "fields": "id text PK; created_at timestamptz(3) default now",
       "responsibility": "id=starter is the idempotently seeded readiness marker. No school data.",
-      "constraints": "PK(id)"
+      "constraints": "PK(id)",
+      "rls": {
+        "classification": "DEPLOYMENT_ONLY",
+        "scopeColumns": [],
+        "intendedPolicy": "No tenant-row policy. Grant only designated deployment health access.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "platform",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "ExportRun",
@@ -420,7 +854,18 @@
       "design": "docs/modules/reporting/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; filters jsonb; requested_at timestamptz(3); state GENERATED/FAILED; row_count int; content_hash char(64) nullable; request_id uuid",
       "responsibility": "Synchronous bounded export metadata, no public stored CSV. GENERATED means the bytes were prepared, not that browser received them.",
-      "constraints": "Scoped school/account FKs; index(scope,requested_at,id); no raw exported CSV or credentials"
+      "constraints": "Scoped school/account FKs; index(scope,requested_at,id); no raw exported CSV or credentials",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "reporting",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Enrollment",
@@ -430,7 +875,18 @@
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; year_id uuid; valid_from date; valid_to date; version int",
       "responsibility": "Yearly enrollment root; retained historical ranges.",
-      "constraints": "UNIQUE(scope,student_id,year_id); UNIQUE(scope,id,year_id); scoped Student/Year FKs; CHECK from<to"
+      "constraints": "UNIQUE(scope,student_id,year_id); UNIQUE(scope,id,year_id); scoped Student/Year FKs; CHECK from<to",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "students",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "SectionPlacement",
@@ -440,17 +896,39 @@
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; enrollment_id uuid; year_id uuid; section_id uuid; valid_from date; valid_to date; roll_number varchar(30) nullable",
       "responsibility": "Section membership intervals; no duplicated year/student rows per transfer. Roll is display identifier, not a globally unique identity.",
-      "constraints": "Scoped FK(enrollment_id,year_id) and FK(section_id,year_id); CHECK from<to; index(scope,section_id,valid_from,valid_to,enrollment_id); nonoverlap under School guard, verified concurrency tests"
+      "constraints": "Scoped FK(enrollment_id,year_id) and FK(section_id,year_id); CHECK from<to; index(scope,section_id,valid_from,valid_to,enrollment_id); nonoverlap under School guard, verified concurrency tests",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "students",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "Student",
       "owner": "students",
       "table": "vs_students_student",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); status ACTIVE/ARCHIVED; version int; created_at timestamptz(3)",
-      "responsibility": "Institutional student identity; admission number never recycled after archive.",
-      "constraints": "UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); scoped school and organization Person FKs"
+      "responsibility": "Students-owned branch identity and admission number; the Person remains People-owned and is never inferred by name or email.",
+  "constraints": "FK(scope)→School; FK(organization_id,person_id)→Person; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number; index(scope,status,id)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "students",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "BranchActivation",
@@ -460,7 +938,18 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; module_id varchar(40); state varchar(20) DISABLED/PROVISIONING/ACTIVE/READ_ONLY/SUSPENDED/RETIRED; version int; enabled_at timestamptz(3) nullable",
       "responsibility": "Module contract, activation or configuration evidence.",
-      "constraints": "UNIQUE(organization_id,school_id,module_id); composite scoped School FK plus Organization FK; index(scope,state,module_id); state/version/enabled_at consistency; active requires entitlement via locked transaction"
+      "constraints": "UNIQUE(organization_id,school_id,module_id); composite scoped School FK plus Organization FK; index(scope,state,module_id); state/version/enabled_at consistency; active requires entitlement via locked transaction",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "tenancy",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "ConfigurationChange",
@@ -470,7 +959,18 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; actor_account_id uuid; expected_revision int; new_revision int; changes jsonb; reason varchar(500); occurred_at timestamptz(3); request_id uuid",
       "responsibility": "Append-only institution or branch configuration history with an atomically enlisted revision.",
-      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5\u2013500; append-only"
+      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5–500; append-only",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "tenancy",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "OrganizationEntitlement",
@@ -480,7 +980,17 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; module_id varchar(40); state varchar(20) ACTIVE/READ_ONLY/SUSPENDED/RETIRED; starts_at timestamptz(3); ends_at timestamptz(3) nullable; limits jsonb empty object; manifest_version int; version int",
       "responsibility": "Module contract, activation or configuration evidence.",
-      "constraints": "UNIQUE(organization_id,module_id); FK organization; module_id in static catalog; state/date/version checks; limits restricted to empty object until typed quotas ship; contracted operator write only"
+      "constraints": "UNIQUE(organization_id,module_id); FK organization; module_id in static catalog; state/date/version checks; limits restricted to empty object until typed quotas ship; contracted operator write only",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization scope and current institution authorization; application resource permission remains required.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "tenancy",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "TenantCommandReceipt",
@@ -490,7 +1000,17 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; actor_account_id uuid; command varchar(80); key varchar(100); input_hash char(64); response jsonb; created_at timestamptz(3)",
       "responsibility": "Idempotent institution command outcomes, scoped to the verified account and tenant.",
-      "constraints": "FKs organization/actor; UNIQUE(organization_id,actor_account_id,command,key); INDEX(actor_account_id); input_hash SHA-256; immutable"
+      "constraints": "FKs organization/actor; UNIQUE(organization_id,actor_account_id,command,key); INDEX(actor_account_id); input_hash SHA-256; immutable",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization scope and current institution authorization; application resource permission remains required.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "tenancy",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "TenantOutbox",
@@ -500,7 +1020,22 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; type varchar(100); schema_version int; payload jsonb; occurred_at timestamptz(3); state varchar(20) PENDING/PROCESSING/DELIVERED/FAILED; attempts int default 0; available_at timestamptz(3)",
       "responsibility": "Institution-scoped integration events with immutable payload and mutable delivery state.",
-      "constraints": "FK organization; index(organization_id,state,available_at,id); attempts>=0; schema_version>0; immutable envelope except delivery state"
+      "constraints": "FK organization; index(organization_id,state,available_at,id); attempts>=0; schema_version>0; immutable envelope except delivery state",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization scope and current institution authorization; application resource permission remains required.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "tenancy",
+        "closureGate": "TEN-03"
+      }
     }
-  ]
+  ],
+  "rlsPlan": {
+    "decision": "Path A: table policy metadata now; database RLS enforcement deferred to TEN-03 during development.",
+    "productionGate": "No multi-client production release until TEN-03 verifies enforcement with the restricted runtime role.",
+    "enforcementImplemented": false
+  }
 }

@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. IAM-01 installs the initial access bootstrap; ACA-02 adds two academic calendar tables, PER-01 adds three People/Access tables, and IAM-04 adds two Access tables, bringing the test database checkpoint to 36 migrated tables. Remaining operational module tables are planned; this is not a claim that attendance/student/finance workflows work. The configured development database remains unavailable and has not received IAM-04 migration.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. The local PostgreSQL checkpoints include the Academics-owned Teacher table and Students-owned Student registration table after academic calendar, People and IAM-04 migrations. Enrollment/Placement and Attendance tables remain planned. Migration status is physical state only and does not claim task verification or human acceptance.
 
 ## Naming decision — DB-ADR-001
 
@@ -27,7 +27,7 @@ The initial deployment uses one PostgreSQL database and the `public` SQL schema.
 
 Institution control-plane tables have organization scope. Brand defaults have nullable school scope with explicit partial uniqueness and same-owner reference checks. The SetupCheck marker is deployment-scoped. RLS, restricted runtime roles and transaction-local verified scope remain required TEN-03 production work; a prefix and a scoped WHERE clause alone do not prove isolation. Exports, jobs, file paths, caches, logs and notification recipients must carry the same verified scope. Institution administrator permissions do not imply branch pupil/finance/health access.
 
-Every future migration creating a tenant-owned or identity/security table must define its tenancy class, scope/owner columns, composite constraints, RLS policy and ENABLE/FORCE decision, runtime grants, policy-supporting indexes, and restricted-runtime-role SQL tests in the same reviewed forward migration. Document privileged exceptions with an owner, rationale and narrow path. Do not retrofit existing tables ad hoc; TEN-03 owns the complete inventory, compatibility review and consolidated enforcement. See [TEN-ADR-006](modules/tenancy/DESIGN.md#rls-and-release-verification) for table classes, roles, context, exception and verification contracts. This requirement is design policy; RLS is not yet implemented in this repository.
+Under the temporary Path A development exception in TEN-ADR-006, every future tenant-owned or identity/security table migration must record its tenancy class, scope/owner columns, composite constraints, indexes, intended RLS policy and TEN-03 closure gate in its LLD and TABLE_REGISTRY.json. Database enforcement, ENABLE/FORCE, role grants and restricted-role SQL tests are deferred to TEN-03; application authorization and scoped data access remain mandatory now. Do not retrofit existing tables ad hoc. No multi-client production release before TEN-03 proves enforcement. See [TEN-ADR-006](modules/tenancy/DESIGN.md#rls-and-release-verification).
 
 ## Column schema rules
 
@@ -52,7 +52,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SchoolCalendar | `vs_academics_school_calendar` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Section | `vs_academics_section` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Subject | `vs_academics_subject` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
-| Teacher | `vs_academics_teacher` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
+| Teacher | `vs_academics_teacher` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
 | AccessInvite | `vs_access_invite` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
@@ -88,7 +88,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | ExportRun | `vs_reporting_export_run` | reporting | PLANNED | [reporting LLD](modules/reporting/DESIGN.md) |
 | Enrollment | `vs_students_enrollment` | students | PLANNED | [students LLD](modules/students/DESIGN.md) |
 | SectionPlacement | `vs_students_section_placement` | students | PLANNED | [students LLD](modules/students/DESIGN.md) |
-| Student | `vs_students_student` | students | PLANNED | [students LLD](modules/students/DESIGN.md) |
+| Student | `vs_students_student` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |
 | BranchActivation | `vs_tenancy_branch_activation` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
 | ConfigurationChange | `vs_tenancy_configuration_change` | tenancy | MIGRATED | [tenancy LLD](modules/tenancy/DESIGN.md) |
 | OrganizationEntitlement | `vs_tenancy_organization_entitlement` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |

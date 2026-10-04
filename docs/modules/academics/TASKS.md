@@ -90,7 +90,7 @@ Files: extend `backend/modules/academics/domain`, `application`, `contracts` and
 - Browser: Create offering, assign teacher, inspect effective dates; reject overlap.
 - Failure contract: Overlapping assignment→409; inactive teacher/employee→409; section from other year→422; foreign references→404.
 - Required DB effect: CourseOffering, TeacherAssignment; may create Teacher through academic owner when Employee already exists; envelopes.
-- Persistence/security gate: preserve scoped composite FKs/unique keys and both offering/date and teacher/date indexes; serialize effective-range checks under School guard and reauthorize before replay/commit. Any new tenant table migration must satisfy TEN-ADR-006 with a policy, role grants, supporting indexes and restricted-role SQL verification; RLS runtime enforcement is not claimed before TEN-03.
+- Persistence/security gate: preserve scoped composite FKs/unique keys and both offering/date and teacher/date indexes; serialize effective-range checks under School guard and reauthorize before replay/commit. Under TEN-ADR-006 Path A, record class, scope, constraints, indexes, intended policy and TEN-03 closure in the LLD/registry; defer database enforcement to TEN-03 while application authorization stays active.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 

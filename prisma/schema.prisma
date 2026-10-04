@@ -72,6 +72,7 @@ model School {
   academicCalendars SchoolCalendar[]
   employees Employee[]
   accessInvites AccessInvite[]
+  students Student[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -139,6 +140,7 @@ model Person {
  createdAt DateTime @map("created_at") @db.Timestamptz(3)
  organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_person_organization_fkey")
  employees Employee[]
+ students Student[]
  accountBinding AccountPersonBinding?
  @@unique([organizationId,id],map:"vs_people_person_organization_id_key")
  @@index([organizationId,lastName,id],map:"vs_people_person_name_idx")
@@ -177,6 +179,24 @@ model Teacher {
  @@unique([organizationId,schoolId,employeeId],map:"vs_academics_teacher_employee_key")
  @@index([organizationId,schoolId,active,employeeId],map:"vs_academics_teacher_eligibility_idx")
  @@map("vs_academics_teacher")
+}
+
+model Student {
+ id String @id(map:"vs_students_student_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ personId String @map("person_id") @db.Uuid
+ admissionNumber String @map("admission_number") @db.VarChar(40)
+ status String @db.VarChar(20)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_student_school_fkey")
+ person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_student_person_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_students_student_scope_id_key")
+ @@unique([organizationId,schoolId,admissionNumber],map:"vs_students_student_admission_key")
+ @@unique([organizationId,schoolId,personId],map:"vs_students_student_person_key")
+ @@index([organizationId,schoolId,status,id],map:"vs_students_student_list_idx")
+ @@map("vs_students_student")
 }
 
 model SchoolMembership {

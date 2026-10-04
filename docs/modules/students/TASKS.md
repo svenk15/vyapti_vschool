@@ -25,7 +25,7 @@ Files: extend `backend/modules/students/domain`, `application`, `contracts` and 
 - Browser: Create student, search, refresh detail and denied foreign profile.
 - Failure contract: Duplicate admission→409; foreign Person→404; malformed name→422.
 - Required DB effect: Person via People owner and Student; audit/outbox/receipt.
-- Persistence/security gate: retain scoped admission/person uniqueness and Person/School FKs; authorized same-institution Person lookup only; never infer identity from names/email. A new Student tenant table migration must include TEN-ADR-006 RLS policy, grants, indexes and restricted-role SQL checks; runtime-wide enforcement remains TEN-03.
+- Persistence/security gate: retain scoped admission/person uniqueness and Person/School FKs; authorized same-institution Person lookup only; never infer identity from names/email. Under TEN-ADR-006 Path A, record class/scope/constraints/indexes/policy intent and TEN-03 closure; defer database enforcement to TEN-03 while application authorization stays active.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
@@ -58,7 +58,7 @@ Files: extend `backend/modules/students/domain`, `application`, `contracts` and 
 - Browser: Enroll, refresh class roster, reject wrong-year section.
 - Failure contract: Already enrolled→409 ENROLLMENT_EXISTS; cross-year/dates→422; closed year→409.
 - Required DB effect: Enrollment, SectionPlacement; audit/outbox/receipt.
-- Persistence/security gate: preserve one enrollment per scoped student/year, half-open dates, scoped section/year FK and School-guarded placement nonoverlap. Any added tenant table follows TEN-ADR-006 migration RLS requirements; do not claim pooled runtime isolation ahead of TEN-03.
+- Persistence/security gate: preserve one enrollment per scoped student/year, half-open dates, scoped section/year FK and School-guarded placement nonoverlap. Under TEN-ADR-006 Path A, register classification/scope/constraints/indexes/policy intent and TEN-03 closure; database enforcement is deferred to TEN-03.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 

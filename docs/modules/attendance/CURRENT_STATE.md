@@ -11,7 +11,7 @@ Last updated: 2026-10-03. Fresh baseline; no imported task completion. Design re
 
 ## Current checkpoint
 
-**Design readiness (4 October 2026):** ATT-01 LLD/task align ownership across Attendance, Academics and Students; scoped session keys/FKs/indexes, guarded schedule/calendar serialization, teacher-time clash rejection, assignment reauthorization, retry and failure behavior, and TEN-ADR-006 migration requirements are explicit. No implementation started. Dependency gate: ACA-03 and STU-02.
+**Design readiness (4 October 2026):** ATT-01 LLD/task align ownership, scoped session constraints/indexes, guarded schedule/calendar serialization, teacher-time clash rejection, current authorization, retry/failure behavior and Path A metadata. Dependency snapshot: ACA-03 IN_PROGRESS/NOT_REQUESTED; STU-02 NOT_STARTED. Current task table is authoritative.
 
 No attendance workflow or tables are implemented. IAM-02 adds the owner-scoped ScheduledSessionQuery read contract and Prisma adapter for timezone protection. Absence of the not-yet-migrated session table yields false; database errors fail closed. ATT tasks remain NOT_STARTED.
 

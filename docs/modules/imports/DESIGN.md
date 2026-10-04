@@ -24,13 +24,13 @@ All tables are planned except SetupCheck. `scope` below means `(organizationId,s
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
-| `vs_imports_import_job` (ImportJob) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3) | Pilot bounded CSV is private DB bytea (max 2 MiB), not public filesystem upload. Context pins dates/reference versions. Raw source expires after 7 days; row outcomes retain minimal identifiers for 30 days, then purge payload by explicit operator retention job. | Scoped year/campus FKs; account FK; index(scope,state,created_at,id); CHECK octet_length(source_bytes)<=2097152 when nonnull |
+| `vs_imports_import_job` (ImportJob) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; year_id uuid; campus_id uuid nullable; namespace varchar(40); schema_version varchar(40); state varchar(40); file_hash char(64); source_bytes bytea nullable; source_expires_at timestamptz(3); preview_revision int; context jsonb; confirmed_at timestamptz(3) nullable; version int; created_at timestamptz(3) | Imports-owned job stores immutable source and SHA-256; audit excludes source hash/content and row data. CSV max 2 MiB; source expires after 7 days; row outcomes retain minimal identifiers for 30 days. | Scoped year/campus FKs; account FK; index(scope,state,created_at,id); CHECK octet_length(source_bytes)<=2097152 when nonnull; metadata/envelope <=8 KiB and multipart framing <=16 KiB |
 | `vs_imports_import_row` (ImportRow) | id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable | Normalized bounded row, explicit preview outcome and durable safe result. No plaintext credentials. Status changes within one School-guard transaction, so process crash rolls back current row. | FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); index(scope,job_id,status,row_number) |
 | `vs_imports_source_student_map` (SourceStudentMap) | id uuid PK; organization_id uuid; school_id uuid; namespace varchar(40); external_student_id varchar(100); student_id uuid; created_at timestamptz(3) | Stable cross-job source key; no name/email matching. | UNIQUE(scope,namespace,external_student_id); scoped Student FK; UNIQUE(scope,namespace,student_id) to refuse accidental second source identity |
 
 ## Read workflows and joins
 
-Preview list reads ImportJob scope/actor + ImportRow by rowNumber, paged 50, with counts grouped by decision/status. Resolve CSV grade/section through Year/Grade/Section using exact codes and selected campus; never create a misspelled section. Match SourceStudentMap→Student→Person→Enrollment/Placement. If mapping absent but admission number already exists, preview CONFLICT_REQUIRES_MAPPING; no automatic bind. First release does not offer a mapping repair UI: authorized operator must establish a reviewed source mapping separately or correct the file before repreview.
+Preview list reads ImportJob scope/actor + ImportRow by rowNumber, paged 50, with counts grouped by decision/status. Resolve CSV grade/section through Year/Grade/Section using exact codes and selected campus; never create a misspelled section. Match SourceStudentMap→Student→Person→Enrollment/Placement. Admission-number collision resolution queries Student by `(organization_id,school_id,admission_number)`; another branch's matching string is not a collision. If mapping is absent but a branch-scoped Student admission number already exists, preview CONFLICT_REQUIRES_MAPPING; no automatic bind. First release does not offer a mapping repair UI: authorized operator must establish a reviewed source mapping separately or correct the file before repreview.
 
 Progress derives from durable rows, not an in-memory counter. Refresh/restart shows committed successes. No job-level success counter is trusted without reconciliation. Status reads are school-admin authorized; actor ownership alone does not bypass current membership. Downloads reauthorize and escape formula prefixes.
 
@@ -44,7 +44,7 @@ All screens additionally follow Bible §8: loading, empty, validation, permissio
 
 Each named flow below is an application use case. Inputs/outputs are plain DTOs; adapters implement owned repositories and public cross-module facades. Use SchoolCommand, ActorResolver, Clock, IdGenerator and transactional envelope writers from the shared contract. Do not pass Prisma.TransactionClient into application/domain code. Generic `save(any)` is not a replacement for named commands. Domain factories create new roots/events; rehydration restores without events.
 
-Mutations use the account → Organization → School guard protocol in Bible §7. Read-only flows do not take write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
+Mutations use the account → Organization → School guard protocol in Bible §7. Every protected read and write reauthorizes current scope and resource permission. Read-only flows do not acquire write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before mutation receipt replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
 
 ## IMP-01 — Upload and preview a roster without changing students
 
@@ -52,19 +52,19 @@ Mutations use the account → Organization → School guard protocol in Bible §
 
 **Transport:** POST /api/v1/imports/preview; GET /api/v1/imports/:id/rows
 
-**Input:** Multipart file + schemaVersion=STUDENT_ROSTER_V1,yearId,campusId?,namespace,validFrom. Strict template in Bible; hash calculated server-side. Upload request max 2 MiB plus bounded envelope.
+**Input:** Multipart file + schemaVersion=STUDENT_ROSTER_V1,yearId,campusId?,namespace,validFrom. Strict template in Bible; hash calculated server-side. CSV file limit is 2 MiB. Non-file metadata/envelope is separately limited to 8 KiB; multipart framing is limited to 16 KiB, making the maximum request body 2 MiB + 24 KiB. Neither bound applies the metadata limit to file bytes.
 
 **Workflow:**
 
-1. Authenticate and require student.manage before reading the bounded body; enforce size/rate limits.
+1. Authenticate and require `student.manage` before reading the bounded multipart body; enforce the distinct file, metadata and framing limits plus rate limits. Keep this existing capability; do not introduce `import.upload` in IMP-01.
 2. Parse strict CSV and validate complete schema, count/cell limits, duplicate keys.
 3. Resolve exact configured references and stable source mappings inside a consistent read snapshot.
-4. Store immutable source, preview revision, canonical rows/reference versions and errors; create no Person/Student/Enrollment.
+4. Store immutable source bytes, server-calculated source hash in ImportJob, preview revision, canonical rows/reference versions and errors; create no Person/Student/Enrollment.
 5. Return safe preview summary and paginated row decisions.
 
-**Database writes / atomicity:** ImportJob, ImportRow only; preview does not emit student-created events. Access/audit metadata records upload without raw row bodies.
+**Database writes / atomicity:** ImportJob, ImportRow only; preview does not emit student-created events. Audit records actor, scope, job ID, schema/state transition, decision counts and request ID only. Exclude file name/path, source bytes/hash, raw/normalized row values, student/admission identifiers, contact data and row-level errors. `file_hash` remains only in its owned ImportJob storage and authorized job DTO; it is not copied to AuditEntry, outbox, logs, analytics or receipts beyond an opaque job reference.
 
-**Errors and recovery:** Malformed file→422 with row/column; oversize→413; wrong references→preview ERROR; existing unmapped admission→CONFLICT.
+**Errors and recovery:** Malformed file→422 with row/column; file/metadata/framing bound exceeded→413 with the relevant field limit; wrong references→preview ERROR; existing branch-scoped unmapped admission→CONFLICT.
 
 ```mermaid
 sequenceDiagram
@@ -94,7 +94,7 @@ sequenceDiagram
 
 **Verification:** Unit — CSV parser cases, explicit blank semantics, hash canonicalization. Functional PostgreSQL — Preview leaves business row counts unchanged; scope constraints; consistent source-key resolution. E2E — Upload sample and inspect errors; count students unchanged before confirm.
 
-**Design-readiness note (4 October 2026):** Imports owns ImportJob/ImportRow/SourceStudentMap; Students/People own all pupil identity and enrollment writes. The existing physical contracts scope every row by institution/branch, pin immutable source bytes/hash and preview revision, bound payload to 2 MiB, retain source for seven days and index job-state pagination, row status and source-key resolution. Preview is a consistent scoped read plus import-only writes; it never creates Persons, Students or Enrollments. Stable namespace/external ID is exact-match only; an unmapped existing admission is a conflict, not a fuzzy merge. Authorization is checked before body read and again for row access; same transaction/School guard rules apply. RLS policy/grants/index/restricted-role tests are part of the new-table migration under TEN-ADR-006; TEN-03 must later enforce the full runtime role/context model. No product blocker remains for preview-only IMP-01; processing/idempotent row writes stay in IMP-02/03.
+**Design-readiness note (4 October 2026):** Imports owns ImportJob/ImportRow/SourceStudentMap; Students/People own all pupil identity and enrollment writes. The physical contracts scope rows by institution/branch, pin source bytes/hash/revision, retain source for seven days and index job-state pagination, row status and source-key resolution. The 2 MiB limit is for CSV bytes; metadata/envelope is separately capped at 8 KiB and multipart framing at 16 KiB. Preview retains the existing `student.manage` capability; `import.upload` is not adopted. It authorizes before body read and on every protected read, writes import-only rows, and takes no write lock for reads; it never creates Persons, Students or Enrollments. Hash remains in ImportJob storage; sensitive upload/row data is excluded from audit. Admission collision is resolved by branch-scoped Student ownership while normal student-list name/admission search remains. Path A records policy intent and TEN-03 closure metadata now; enforcement is deferred without weakening application authorization. No product blocker remains for preview-only IMP-01.
 
 ## IMP-02 — Confirm and process complete student rows
 

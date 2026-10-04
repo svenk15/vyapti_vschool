@@ -25,7 +25,7 @@ Files: extend `backend/modules/attendance/domain`, `application`, `contracts` an
 - Browser: Admin schedules; intended teacher sees it; other teacher does not.
 - Failure contract: Duplicate occurrence→409 unless same receipt replay; nonteaching day→422; no teacher→409; ambiguous/mismatched date→422.
 - Required DB effect: AttendanceSession + envelopes; no attendance records/roster rows yet.
-- Persistence/security gate: preserve scoped offering/calendar composite FKs, unique occurrence receipt, teacher/date query index and School-serialized teacher-time overlap check; reauthorize current assignment on reads and writes. Session migration includes TEN-ADR-006 RLS policy/grants/indexes/restricted-role SQL tests; global role/context retrofit remains TEN-03.
+- Persistence/security gate: preserve scoped offering/calendar composite FKs, unique occurrence receipt, teacher/date query index and School-serialized teacher-time overlap check; reauthorize current assignment on reads and writes. Under TEN-ADR-006 Path A, register session class/scope/constraints/indexes/policy intent and TEN-03 closure; defer database enforcement while keeping application authorization active.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
