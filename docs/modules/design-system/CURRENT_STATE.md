@@ -9,17 +9,23 @@ DS-01 locally verified and accepted on 3 October 2026. No active timer. Gallery 
 
 ## Implemented now
 
-Shared component primitives and interactive gallery, including CSV/2 MiB rejection and recovery, associated live field errors, and dialog/drawer boundary keyboard focus wrapping. Shared palettes, table interactions, forms, overlays, tabs and feedback are covered by local checks. Full WCAG conformance and native assistive-technology validation are not claimed.
+Shared component primitives and interactive gallery, including CSV/2 MiB rejection and recovery, associated live field errors, and dialog/drawer boundary keyboard focus wrapping. Shared palettes, table interactions, forms, overlays, tabs and feedback are covered by local checks. Full WCAG conformance and native assistive-technology validation are not claimed. The shared admin and teacher portal shells, responsive dashboard, shared authentication layout, and server-resolved published institution/branch theme are implemented. Current visual checkpoint source is recorded in the 6 October route coverage note; screenshots cover 49 renders across 25 routes at desktop/mobile, with explicit omissions and the final screenshot refresh blocker recorded there.
 
 The shared administrator/teacher shells and the common AuthLayout now compose protected workspaces and account flows. Published palette resolution is active-member/branch scoped, honors branch-over-institution inheritance, and ignores drafts; branding preview renders shared production components in an isolated local subtree. The dashboard links institution branch administration to its own workspace. See [route coverage](ROUTE_COVERAGE.md); its family-level review remains in progress and visual acceptance is PENDING.
 
 ## Next action
 
-DS-02 remains implementation-in-progress until route-family rendered review is complete. The focused shared-shell, theme publication, and showcase journeys pass, but not every implemented route or true native 200% zoom has been inspected. VoiceOver and NVDA sessions remain outstanding and cannot be claimed from browser automation. ATT-02 and BRD-02 are VERIFIED/PENDING; pending human acceptance does not block implementation under the current execution policy. Continue route coverage and remaining authorized Phase 1 work without calling accessibility conformance or release readiness complete.
+DS-02 remains BLOCKED pending route gaps, final-source screenshot review, true native 200% zoom, VoiceOver and NVDA sessions. The focused shared-shell, theme publication, and showcase journeys pass, but those checks do not replace rendered review or native assistive technology. The final screenshot refresh was blocked when the browser runtime could not initialize because its versioned service module was missing. Do not call accessibility conformance or release readiness complete. ATT-02 and BRD-02 remain VERIFIED/PENDING; pending human acceptance does not block implementation under the current execution policy.
 
 ## Evidence and feedback
 
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.
+
+### Portal-wide UX checkpoint — 6 October 2026
+
+Added responsive summary-card grid rules, wrapped long institution/branch context, prevented mobile sign-out label wrapping, and made the shared generic authentication intro distinct from each form's task heading. The 49 earlier route renders exposed these issues before the correction; focused design-system and branding tests passed 10/10 (`test/e2e/design-system.spec.ts`, `test/e2e/branding-management.spec.ts`, chromium and mobile projects). The PostgreSQL-backed attendance flow passed 1/1 desktop and 1/1 mobile after its report check was made a direct route visit; it asserts three summary columns at desktop and one at mobile. `pnpm lint && pnpm typecheck` passed; `VSCHOOL_E2E=1 pnpm build` passed on Next 16.3.8, producing build `Wk4IhwKd3gwEgJmY8Xug_`. Existing database migrations were already applied; no schema or migration change was made.
+
+The route screenshots in ignored `artifacts/portal-ux/` predate this last responsive/copy patch and remain useful as before/finding evidence, not proof of final pixels. Browser control could not initialize to refresh them because its runtime requested absent `browser/26.930.21537/scripts/browser-service.mjs`; this limitation is also in [route coverage](ROUTE_COVERAGE.md). The production demo at `http://127.0.0.1:3436` now serves tested commit `d1e3bc7efbce0eb33eb95bc4b4e18a685b3c709e`, build `Wk4IhwKd3gwEgJmY8Xug_`, with `academic_core`, `attendance`, `staff_core` and `student_core` enabled. Health returned ready and `/design-system` returned 200. An unauthenticated `/admin` request returned the authorization-unavailable fallback; sign in with the demo administrator to review the protected workspace. Human visual review remains PENDING; DS-02 remains BLOCKED by route gaps, native 200% zoom, VoiceOver and NVDA evidence.
 
 ### DS-02 implementation checkpoint — 5 October 2026
 
