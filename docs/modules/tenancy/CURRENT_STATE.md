@@ -6,7 +6,7 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 |---|---|---|---|
 | TEN-01 | VERIFIED | PENDING | Source `c09519ca10bddd6286aba242d21aa9a5000ff0ae`; production build `fGxMmBd-8b7ScLU7mVhug`; local verification report and JUnit evidence below |
 | TEN-02 | VERIFIED | PENDING | Source/build/test evidence: `docs/evidence/tenancy-02-local/`; owner review remains pending |
-| TEN-03 | BLOCKED | NOT_REQUESTED | Requires explicit ATT-04 human acceptance before consolidated RLS enforcement/verification; design checkpoint only, no policies or runtime-role enforcement implemented |
+| TEN-03 | NOT_STARTED | NOT_REQUESTED | ATT-04 implementation is VERIFIED; its human review remains PENDING and does not block implementation; RLS enforcement remains unimplemented |
 
 ## Implemented now
 
@@ -14,7 +14,7 @@ TEN-01 delivers persisted institution/branch setup, operator-issued institution 
 
 ## Next action
 
-Continue with the next task selected by `pnpm next-task`; TEN-01, IAM-03, and TEN-02 human reviews remain PENDING. TEN-03 remains gated on ATT-04 acceptance as recorded in the execution index. RLS compatibility has been designed early; enforcement stays consolidated in TEN-03.
+Continue with the next task selected by `pnpm next-task`; human reviews do not block Phase 1 implementation. TEN-03 follows RPT-02 and ATT-04's implementation dependency is VERIFIED (human review PENDING). RLS compatibility has been designed early; enforcement stays consolidated in TEN-03. Its restricted-role SQL, pooling, policy and load verification remain mandatory technical/release gates.
 
 ## Evidence and feedback
 

@@ -1,6 +1,6 @@
-# Phase 1 execution index — v4.4
+# Phase 1 execution index — v4.5
 
-Index only; module CURRENT_STATE owns status. No run is active. New tenancy, branding and shared UX are first-release foundations. Later product modules remain design-gated.
+This index defines the complete currently authorized Phase 1 task scope (30 tasks in dependency order). Module CURRENT_STATE owns implementation evidence and human review. Human review PENDING or NOT_REQUESTED does not block dependent implementation; only failed automated prerequisites, unresolved technical/security decisions, or unavailable required access can block work. Record human review truthfully and keep release gates outstanding until their evidence exists. New tenancy, branding and shared UX are first-release foundations. Later product modules remain design-gated and out of scope.
 
 | Task | Module | Demo outcome | Dependencies |
 |---|---|---|---|
@@ -35,4 +35,4 @@ Index only; module CURRENT_STATE owns status. No run is active. New tenancy, bra
 | DS-02 | [design-system](modules/design-system/TASKS.md) | Validate production screen recipes and accessibility | DS-01, ATT-02, BRD-02 |
 | FND-02 | [platform](modules/platform/TASKS.md) | Demonstrate and release the complete pilot | RPT-02, IMP-03, IAM-03, ATT-04, TEN-03, BRD-02, DS-02 |
 
-Use pnpm next-task for a read-only suggestion. Explicit user pause and failed review take priority. A single 24-hour timebox does not guarantee all 30 tasks complete.
+Use `pnpm next-task` for a read-only suggestion based on implementation status only; failed human feedback is prioritized for defect resolution. Human acceptance does not control task eligibility under the current owner policy. Accessibility and other explicit technical release gates remain mandatory for release readiness. Later phases are out of scope.

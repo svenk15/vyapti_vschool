@@ -1,10 +1,10 @@
 import { readTasks } from "./docs-model.mjs";
 
 const tasks = readTasks();
-const acceptedDependency = id => tasks.some(t => t.id === id && t.implementation === "VERIFIED" && ["PASSED", "PENDING"].includes(t.review));
+const implementationReadyDependency = id => tasks.some(t => t.id === id && t.implementation === "VERIFIED");
 const task = tasks.find(t => t.review === "FAILED")
   ?? tasks.find(t => t.implementation === "IN_PROGRESS")
-  ?? tasks.find(t => ["NOT_STARTED", "IMPLEMENTED"].includes(t.implementation) && t.dependencies.every(acceptedDependency));
+  ?? tasks.find(t => ["NOT_STARTED", "IMPLEMENTED"].includes(t.implementation) && t.dependencies.every(implementationReadyDependency));
 if (task) {
   console.log(`Suggested task: ${task.id} — ${task.title}\nRead docs/modules/${task.module}/DESIGN.md, TASKS.md and CURRENT_STATE.md.`);
 } else {
