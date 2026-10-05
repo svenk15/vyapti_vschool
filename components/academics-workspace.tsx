@@ -3,7 +3,6 @@ import {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import type {AcademicsWorkspace} from '@/shared/contracts/academics';
 import type {AdminHome} from '@/shared/contracts/access';
-import {BranchSwitcher} from '@/components/institution-context';
 import {Alert,Badge,Button,Card,PageHeader} from './ui/primitives';
 import {SelectField,TextField} from './ui/forms';
 
@@ -17,7 +16,7 @@ export function AcademicsWorkspaceScreen({initial,home}:{initial:AcademicsWorksp
  async function refresh(){const response=await fetch('/api/v1/academics',{cache:'no-store'}),value=await response.json();if(!response.ok)throw new Error(value.message??'Academic setup could not be refreshed.');setData(value);setSelectedYearId((old:string)=>value.years.some((y:{id:string})=>y.id===old)?old:value.years[0]?.id??'');setGradeId((old:string)=>value.grades.some((g:{id:string})=>g.id===old)?old:value.grades[0]?.id??'');router.refresh();}
  async function send(path:string,method:'POST'|'PUT',value:Record<string,unknown>){const commandKey=key(),response=await fetch(path,{method,headers:{'Content-Type':'application/json','Idempotency-Key':commandKey},body:JSON.stringify({...value,key:commandKey})}),body=await response.json();if(!response.ok)throw new Error(body.message??'Academic change failed.');return body;}
  async function act(work:()=>Promise<void>){setBusy(true);setMessage('');setError(false);try{await work();await refresh();setMessage('Academic setup saved.');}catch(e){setError(true);setMessage(e instanceof Error?e.message:'Academic change failed.');}finally{setBusy(false);}}
- return <><PageHeader eyebrow={`${home.institutionName} · ${home.schoolName}`} title="Academic setup" description="Set up the school year, terms, grade catalog, subjects and sections."/><BranchSwitcher home={home} manageBranches/>
+ return <><PageHeader eyebrow={`${home.institutionName} · ${home.schoolName}`} title="Academic setup" description="Set up the school year, terms, grade catalog, subjects and sections."/>
  {message&&<div role={error?'alert':'status'} aria-live="polite" aria-label="Academic setup feedback"><Alert tone={error?'danger':'success'} title={error?'Change not saved':'Saved'}>{message}</Alert></div>}
  <Card className="padded"><div className="spread"><div><h2>Academic year</h2><p className="muted small">Dates are civil days. Enter the last included day; the stored end is exclusive.</p></div><Badge>{data.years.length} year{data.years.length===1?'':'s'}</Badge></div>
  <div className="two-columns"><section className="control-stack"><TextField label="Year code" maxLength={40} value={yearCode} onChange={e=>setYearCode(e.target.value)}/><TextField label="Year name" maxLength={160} value={yearName} onChange={e=>setYearName(e.target.value)}/><TextField label="First included day" type="date" value={yearStart} onChange={e=>setYearStart(e.target.value)}/><TextField label="Last included day" type="date" min={yearStart} value={yearThrough} onChange={e=>setYearThrough(e.target.value)}/><Button disabled={busy} onClick={()=>void act(async()=>{const result=await send('/api/v1/academics/years','POST',{code:yearCode,name:yearName,startsOn:yearStart,endsOn:addDay(yearThrough,1),reason:'Create academic year'});setSelectedYearId(result.id);setTerm1Through(addDay(yearStart,182));setTerm2Start(addDay(yearStart,183));})}>Create draft year</Button></section>

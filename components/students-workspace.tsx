@@ -1,12 +1,11 @@
 "use client";
-import { useState } from "react";
+import {useState} from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import type { ExistingPersonChoice, StudentWorkspace } from "@/shared/contracts/students";
 import type { AdminHome } from "@/shared/contracts/access";
-import { BranchSwitcher } from "@/components/institution-context";
-import { SelectField,TextField } from "@/components/ui/forms";
-import { Alert, Badge, Button, ButtonLink, Card, EmptyState, PageHeader } from "@/components/ui/primitives";
+import {SelectField,TextField} from "@/components/ui/forms";
+import {Alert,Badge,Button,Card,EmptyState,PageHeader} from "@/components/ui/primitives";
 
 async function json<T>(response:Response):Promise<T>{const value=await response.json();if(!response.ok)throw new Error(typeof value.message==="string"?value.message:"Student request could not be completed.");return value as T;}
 
@@ -17,7 +16,7 @@ export function StudentsWorkspace({initial,home}:{initial:StudentWorkspace;home:
   async function findPerson(){setBusy(true);setMessage("");setFailed(false);setSelectedPersonId("");try{const result=await json<{items:readonly ExistingPersonChoice[]}>(await fetch(`/api/v1/people/selection?q=${encodeURIComponent(exactName)}`,{cache:"no-store"}));setChoices(result.items);if(!result.items.length)setMessage("No exact Person name matched. This search does not create or link a Person.");}catch(error){setFailed(true);setMessage(error instanceof Error?error.message:"Existing Person choices could not be loaded.");}finally{setBusy(false);}}
   async function create(){setBusy(true);setMessage("");setFailed(false);try{const key=crypto.randomUUID(),response=await fetch("/api/v1/students",{method:"POST",headers:{"Content-Type":"application/json","Idempotency-Key":key},body:JSON.stringify({firstName,lastName,admissionNumber,existingPersonId:selectedPersonId||null,key})}),result=await json<{studentId:string}>(response);router.push(`/admin/students/${result.studentId}`);router.refresh();}catch(error){setFailed(true);setMessage(error instanceof Error?error.message:"Student registration failed. Retry with a new request.");}finally{setBusy(false);}}
   return <>
-    <PageHeader eyebrow={`${home.institutionName} · ${home.schoolName}`} title="Students" description="Register branch students and inspect their school identity." actions={<ButtonLink href="/admin" variant="secondary">School home</ButtonLink>}/><BranchSwitcher home={home}/>
+    <PageHeader eyebrow={`${home.institutionName} · ${home.schoolName}`} title="Students" description="Register branch students and inspect their school identity."/>
     {message&&<div role={failed?"alert":"status"} aria-live="polite" aria-label="Student feedback"><Alert tone={failed?"danger":"info"} title={failed?"Request not completed":"Student lookup"}>{message}</Alert></div>}
     <div className="two-columns section-space">
       <Card className="padded">
