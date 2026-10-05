@@ -30,4 +30,8 @@ export class PrismaScheduledSessions implements ScheduledSessionQuery {
   const rows=await this.tx.$queryRaw<{present:boolean}[]>`SELECT EXISTS(SELECT 1 FROM vs_attendance_session s JOIN vs_academics_course_offering o ON o.organization_id=s.organization_id AND o.school_id=s.school_id AND o.id=s.offering_id JOIN vs_academics_teacher_assignment a ON a.organization_id=o.organization_id AND a.school_id=o.school_id AND a.offering_id=o.id WHERE s.organization_id=${input.organizationId}::uuid AND s.school_id=${input.schoolId}::uuid AND a.id=${input.assignmentId}::uuid AND s.school_date >= ${input.onOrAfter}::date AND s.status IN ('SCHEDULED','OPEN')) AS present`;
   return rows[0]?.present===true;
  }
+ async hasFrozenSessions(input:{organizationId:string;schoolId:string;sectionIds:readonly string[];fromDate:string;toDate:string}){
+  const rows=await this.tx.$queryRaw<{present:boolean}[]>`SELECT EXISTS(SELECT 1 FROM vs_attendance_session s JOIN vs_academics_course_offering o ON o.organization_id=s.organization_id AND o.school_id=s.school_id AND o.id=s.offering_id JOIN vs_academics_section sec ON sec.organization_id=o.organization_id AND sec.school_id=o.school_id AND sec.id=o.section_id WHERE s.organization_id=${input.organizationId}::uuid AND s.school_id=${input.schoolId}::uuid AND sec.id=ANY(${[...input.sectionIds]}::uuid[]) AND s.school_date>=${input.fromDate}::date AND s.school_date<${input.toDate}::date AND s.status IN ('OPEN','SUBMITTED')) AS present`;
+  return rows[0]?.present===true;
+ }
 }

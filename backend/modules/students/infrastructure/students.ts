@@ -1,12 +1,12 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 import type { Prisma, PrismaClient } from "../../../../generated/prisma/client";
 import type { Identity } from "../../../../shared/contracts/access";
-import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentDetail, StudentEnrollmentHistory, StudentProfile, StudentWorkspace } from "../../../../shared/contracts/students";
+import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentArchiveResult, StudentDetail, StudentEnrollmentHistory, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, capabilitiesFor } from "../../access/contracts/index";
 import type { PersonIdentityPort } from "../../people/contracts/person-identity";
 import type { CommandEvidenceWriter } from "../../platform/contracts/command-evidence";
 import type { ReleaseManifest } from "../../tenancy/contracts/index";
-import type { StudentRepository } from "../application/students";
+import type { AttendanceStudentImpactPort, StudentRepository } from "../application/students";
 import type { StudentInput } from "../domain/student";
 import { displayStudentName } from "../domain/student";
 import type { EnlistedRegistrationInput, EnlistedRegistrationResult, StudentRegistrationTransaction } from "../contracts/enlisted-student-registration";
@@ -34,7 +34,7 @@ function profile(row: {id:string;personId:string;version:number;admissionNumber:
 }
 function civilDate(date:Date){return date.toISOString().slice(0,10);}
 function schoolToday(now:Date,timezone:string){const parts=new Intl.DateTimeFormat("en-US",{timeZone:timezone,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now),values=Object.fromEntries(parts.map(part=>[part.type,part.value]));return `${values.year}-${values.month}-${values.day}`;}
-function enrollmentHistory(rows:{id:string;yearId:string;validFrom:Date;validTo:Date;year:{code:string;name:string};placements:{id:string;sectionId:string;validFrom:Date;validTo:Date;rollNumber:string|null;section:{code:string;name:string;grade:{name:string}}}[]}[],rosterCounts:Map<string,number>):StudentEnrollmentHistory[]{return rows.map(row=>({enrollmentId:row.id,yearId:row.yearId,yearCode:row.year.code,yearName:row.year.name,validFrom:civilDate(row.validFrom),validTo:civilDate(row.validTo),placements:row.placements.map(placement=>({placementId:placement.id,sectionId:placement.sectionId,sectionCode:placement.section.code,sectionName:placement.section.name,gradeName:placement.section.grade.name,validFrom:civilDate(placement.validFrom),validTo:civilDate(placement.validTo),rollNumber:placement.rollNumber,activeRosterCount:rosterCounts.get(placement.sectionId)??0}))}));}
+function enrollmentHistory(rows:{id:string;version:number;yearId:string;validFrom:Date;validTo:Date;year:{code:string;name:string};placements:{id:string;sectionId:string;validFrom:Date;validTo:Date;rollNumber:string|null;section:{code:string;name:string;grade:{name:string}}}[]}[],rosterCounts:Map<string,number>):StudentEnrollmentHistory[]{return rows.map(row=>({enrollmentId:row.id,version:row.version,yearId:row.yearId,yearCode:row.year.code,yearName:row.year.name,validFrom:civilDate(row.validFrom),validTo:civilDate(row.validTo),placements:row.placements.map(placement=>({placementId:placement.id,sectionId:placement.sectionId,sectionCode:placement.section.code,sectionName:placement.section.name,gradeName:placement.section.grade.name,validFrom:civilDate(placement.validFrom),validTo:civilDate(placement.validTo),rollNumber:placement.rollNumber,activeRosterCount:rosterCounts.get(placement.sectionId)??0}))}));}
 function enrollmentResult(row:{id:string;version:number;studentId:string;yearId:string;validFrom:Date;validTo:Date;year:{code:string;name:string};placements:{id:string;sectionId:string;validFrom:Date;validTo:Date;rollNumber:string|null;section:{code:string;name:string;grade:{name:string}}}[]},replayed:boolean,activeRosterCount:number):EnrollmentResult{
   const placement=row.placements[0]!;
   return {enrollmentId:row.id,version:row.version,studentId:row.studentId,yearId:row.yearId,yearCode:row.year.code,yearName:row.year.name,validFrom:civilDate(row.validFrom),validTo:civilDate(row.validTo),placement:{placementId:placement.id,sectionId:placement.sectionId,sectionCode:placement.section.code,sectionName:placement.section.name,gradeName:placement.section.grade.name,validFrom:civilDate(placement.validFrom),validTo:civilDate(placement.validTo),rollNumber:placement.rollNumber,activeRosterCount},replayed};
@@ -49,7 +49,7 @@ function fail(error: unknown): never {
 }
 
 export class PrismaStudentRepository implements StudentRepository {
-  constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly people:PersonIdentityPort,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret="",private readonly manifest:ReleaseManifest=NO_RELEASE){}
+  constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly people:PersonIdentityPort,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret="",private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly attendanceImpact:AttendanceStudentImpactPort={async hasFrozenSessions(){throw new AccessError("UNAVAILABLE");}}){}
 
   private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,permission:"student.manage"|"student.read",lock:boolean,modules:readonly ("student_core"|"academic_core")[]=["student_core"]):Promise<Guard>{
     if(lock) await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;
@@ -75,6 +75,12 @@ export class PrismaStudentRepository implements StudentRepository {
   private async moduleActive(tx:Prisma.TransactionClient,organizationId:string,schoolId:string,moduleId:"student_core"|"academic_core"){
     if(!this.manifest[moduleId])return false;const now=this.now(),[entitlement,activation]=await Promise.all([tx.organizationEntitlement.findUnique({where:{organizationId_moduleId:{organizationId,moduleId}}}),tx.branchActivation.findUnique({where:{organizationId_schoolId_moduleId:{organizationId,schoolId,moduleId}}})]);
     return !!entitlement&&entitlement.state==="ACTIVE"&&entitlement.startsAt<=now&&(entitlement.endsAt===null||entitlement.endsAt>now)&&activation?.state==="ACTIVE";
+  }
+  private async enrollmentTimeline(tx:Prisma.TransactionClient,organizationId:string,schoolId:string,enrollmentId:string,today:string){
+    const rows=await tx.enrollment.findMany({where:{id:enrollmentId,organizationId,schoolId},include:{year:{select:{code:true,name:true}},placements:{where:{organizationId,schoolId},orderBy:{validFrom:"asc"},include:{section:{select:{code:true,name:true,grade:{select:{name:true}}}}}}}});
+    if(!rows.length)throw new AccessError("NOT_FOUND");
+    const todayDate=new Date(`${today}T00:00:00.000Z`),counts=await tx.sectionPlacement.groupBy({by:["sectionId"],where:{organizationId,schoolId,validFrom:{lte:todayDate},validTo:{gt:todayDate},enrollment:{is:{year:{is:{status:"OPEN"}}}}},_count:{_all:true}});
+    return enrollmentHistory(rows,new Map(counts.map(count=>[count.sectionId,count._count._all])));
   }
 
   async list(actor:Identity,organizationId:string,schoolId:string,query:{search:string;cursor:string|null;limit:number;status:"ACTIVE"|"ARCHIVED"|"ALL"}):Promise<StudentWorkspace>{try{return await this.db.$transaction(async tx=>{
@@ -141,6 +147,38 @@ export class PrismaStudentRepository implements StudentRepository {
     const occurredAt=now.toISOString(),requestId=randomUUID();
     await this.evidence(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response:{...safeReceipt,resourceId:id},before:{},after:{version:1,status:"ACTIVE"},reason:"Student registration",requestId,occurredAt:occurredAt,resourceType:"Student",module:"students"});
     return {...result,replayed:false};
+  },{isolationLevel:"Serializable",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
+
+  async transfer(actor:Identity,organizationId:string,schoolId:string,enrollmentId:string,input:{expectedVersion:number;toSectionId:string;effectiveDate:string;rollNumber?:string;reason:string;key:string}):Promise<StudentTransferResult>{try{return await this.db.$transaction(async tx=>{
+    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true,["student_core","academic_core"]),command="StudentPlacementTransferred",hash=inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,enrollmentId,...input}),scope={organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key};
+    const prior=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:scope}});
+    if(prior){if(prior.inputHash!==hash)throw new AccessError("IDEMPOTENCY_CONFLICT");const id=(prior.response as {enrollmentId?:unknown}).enrollmentId;if(typeof id!=="string")throw new AccessError("UNAVAILABLE");const enrollment=await tx.enrollment.findFirst({where:{id,organizationId,schoolId},select:{version:true,studentId:true,yearId:true}});if(!enrollment)throw new AccessError("NOT_FOUND");return {enrollmentId:id,version:enrollment.version,studentId:enrollment.studentId,yearId:enrollment.yearId,history:await this.enrollmentTimeline(tx,organizationId,schoolId,id,schoolToday(this.now(),guard.timezone)),replayed:true};}
+    const enrollment=await tx.enrollment.findFirst({where:{id:enrollmentId,organizationId,schoolId},include:{student:{select:{id:true,status:true}},year:{select:{id:true,code:true,name:true,startsOn:true,endsOn:true,status:true}},placements:{where:{organizationId,schoolId},orderBy:{validFrom:"asc"}}}});
+    if(!enrollment)throw new AccessError("NOT_FOUND");if(enrollment.student.status!=="ACTIVE"||enrollment.year.status!=="OPEN")throw new AccessError("CONFLICT");if(enrollment.version!==input.expectedVersion)throw new AccessError("STALE_VERSION");
+    const today=schoolToday(this.now(),guard.timezone),todayDate=new Date(`${today}T00:00:00.000Z`),old=enrollment.placements.find(p=>p.validFrom<=todayDate&&p.validTo>todayDate);
+    if(!old)throw new AccessError("CONFLICT");const oldStart=civilDate(old.validFrom),oldEnd=civilDate(old.validTo);if(input.effectiveDate<today||input.effectiveDate<=oldStart||input.effectiveDate>=oldEnd||input.effectiveDate<civilDate(enrollment.year.startsOn)||input.effectiveDate>=civilDate(enrollment.year.endsOn))throw new AccessError("VALIDATION");
+    if(enrollment.placements.some(p=>p.validFrom>todayDate))throw new AccessError("CONFLICT");
+    const ordered=enrollment.placements;for(let index=1;index<ordered.length;index++)if(ordered[index-1]!.validTo>ordered[index]!.validFrom)throw new AccessError("CONFLICT");
+    const destination=await tx.section.findFirst({where:{id:input.toSectionId,organizationId,schoolId,yearId:enrollment.yearId},select:{id:true,active:true}});if(!destination)throw new AccessError("NOT_FOUND");if(!destination.active)throw new AccessError("CONFLICT");if(destination.id===old.sectionId)throw new AccessError("CONFLICT");
+    if(await this.attendanceImpact.hasFrozenSessions(tx,{organizationId,schoolId,sectionIds:[old.sectionId,destination.id],fromDate:input.effectiveDate,toDate:oldEnd}))throw new AccessError("ROSTER_IN_USE");
+    const changed=await tx.sectionPlacement.updateMany({where:{id:old.id,organizationId,schoolId,enrollmentId:enrollment.id,validTo:old.validTo},data:{validTo:new Date(`${input.effectiveDate}T00:00:00.000Z`)}});if(changed.count!==1)throw new AccessError("STALE_VERSION");
+    await tx.sectionPlacement.create({data:{id:randomUUID(),organizationId,schoolId,enrollmentId:enrollment.id,yearId:enrollment.yearId,sectionId:destination.id,validFrom:new Date(`${input.effectiveDate}T00:00:00.000Z`),validTo:old.validTo,rollNumber:input.rollNumber===undefined?old.rollNumber:input.rollNumber}});
+    const nextVersion=enrollment.version+1,updated=await tx.enrollment.updateMany({where:{id:enrollment.id,organizationId,schoolId,version:input.expectedVersion},data:{version:nextVersion}});if(updated.count!==1)throw new AccessError("STALE_VERSION");
+    const schoolUpdated=await tx.school.updateMany({where:{organizationId,id:schoolId,configurationVersion:guard.configurationVersion},data:{configurationVersion:{increment:1},version:{increment:1}}});if(schoolUpdated.count!==1)throw new AccessError("STALE_VERSION");
+    const occurredAt=this.now().toISOString(),response={enrollmentId:enrollment.id,studentId:enrollment.studentId,yearId:enrollment.yearId,version:nextVersion,status:"TRANSFERRED"};
+    await this.evidence(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response:{...response,resourceId:enrollment.id},before:{sectionId:old.sectionId,validFrom:oldStart,validTo:oldEnd,version:enrollment.version},after:{sectionId:destination.id,validFrom:input.effectiveDate,validTo:oldEnd,version:nextVersion},reason:input.reason,requestId:randomUUID(),occurredAt,resourceType:"Enrollment",module:"students"});
+    return {enrollmentId:enrollment.id,version:nextVersion,studentId:enrollment.studentId,yearId:enrollment.yearId,history:await this.enrollmentTimeline(tx,organizationId,schoolId,enrollment.id,today),replayed:false};
+  },{isolationLevel:"ReadCommitted",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
+
+  async archive(actor:Identity,organizationId:string,schoolId:string,studentId:string,input:{expectedVersion:number;reason:string;key:string}):Promise<StudentArchiveResult>{try{return await this.db.$transaction(async tx=>{
+    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true,["student_core","academic_core"]),command="StudentArchived",hash=inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,studentId,...input}),scope={organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key};
+    const prior=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:scope}});
+    if(prior){if(prior.inputHash!==hash)throw new AccessError("IDEMPOTENCY_CONFLICT");const response=prior.response as {studentId?:unknown;version?:unknown;status?:unknown};if(response.studentId!==studentId||typeof response.version!=="number"||response.status!=="ARCHIVED")throw new AccessError("UNAVAILABLE");return {studentId,version:response.version,status:"ARCHIVED",replayed:true};}
+    const student=await tx.student.findFirst({where:{id:studentId,organizationId,schoolId},select:{id:true,status:true,version:true}});if(!student)throw new AccessError("NOT_FOUND");if(student.status!=="ACTIVE")throw new AccessError("CONFLICT");if(student.version!==input.expectedVersion)throw new AccessError("STALE_VERSION");
+    const today=schoolToday(this.now(),guard.timezone),todayDate=new Date(`${today}T00:00:00.000Z`),[futureEnrollment,futurePlacement]=await Promise.all([tx.enrollment.findFirst({where:{organizationId,schoolId,studentId,validTo:{gt:todayDate}},select:{id:true}}),tx.sectionPlacement.findFirst({where:{organizationId,schoolId,enrollment:{is:{studentId}},validTo:{gt:todayDate}},select:{id:true}})]);if(futureEnrollment||futurePlacement)throw new AccessError("STUDENT_IN_USE");
+    const version=student.version+1,changed=await tx.student.updateMany({where:{id:student.id,organizationId,schoolId,status:"ACTIVE",version:input.expectedVersion},data:{status:"ARCHIVED",version}});if(changed.count!==1)throw new AccessError("STALE_VERSION");
+    const schoolUpdated=await tx.school.updateMany({where:{organizationId,id:schoolId,configurationVersion:guard.configurationVersion},data:{configurationVersion:{increment:1},version:{increment:1}}});if(schoolUpdated.count!==1)throw new AccessError("STALE_VERSION");
+    const occurredAt=this.now().toISOString(),response={studentId,version,status:"ARCHIVED" as const};await this.evidence(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response:{...response,resourceId:studentId},before:{status:"ACTIVE",version:student.version},after:{status:"ARCHIVED",version},reason:input.reason,requestId:randomUUID(),occurredAt,resourceType:"Student",module:"students"});return {...response,replayed:false};
   },{isolationLevel:"Serializable",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
 
   async registerAndEnroll(transaction:StudentRegistrationTransaction,actor:Identity,input:EnlistedRegistrationInput):Promise<EnlistedRegistrationResult>{

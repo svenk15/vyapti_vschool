@@ -1,16 +1,18 @@
 # Students, enrollment and placement history — current state
 
-Last updated: 2026-10-04. This is an independent project checkpoint; no completion was imported.
+Last updated: 2026-10-05. This is an independent project checkpoint; no completion was imported.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | STU-01 | VERIFIED | PENDING | Real PostgreSQL, desktop/mobile Playwright, repository checks and build passed; local demo available |
 | STU-02 | VERIFIED | PENDING | Depends on STU-01 and ACA-02 implementation; both are VERIFIED/PENDING and neither declares human PASSED as a dependency gate |
-| STU-03 | NOT_STARTED | NOT_REQUESTED | Depends on STU-02 and ATT-01 |
+| STU-03 | VERIFIED | PENDING | PostgreSQL, unit, desktop/mobile Playwright, repository checks, build and repeatable seed passed; local demo checkpoint to be recorded below |
 
 ## Current checkpoint
 
-**STU-01 — Register and inspect students (4 October 2026):** implemented on `work/stu-01-after-per02-wip`; source commit and follow-up evidence commit are recorded below. The branch retains its explicit ancestry at the PER-02 WIP checkpoint; PER-02 remains BLOCKED/PENDING IAM-03 owner acceptance on `wip/per-02-before-iam03-acceptance`. STU-01 does not invoke PER-02 Teacher workflows and is implemented independently.
+**STU-03 — Transfer placements and archive unused students (5 October 2026):** implemented. Transfer requires the active placement in an OPEN year, school-local today or later, strict interval boundaries, active same-year destination, no queued future placement, expected Enrollment version and a non-no-op section. It checks both affected sections for OPEN/SUBMITTED Attendance sessions in the affected interval. The mutation uses the documented account→Organization→School locks and READ COMMITTED so validation queries after a lock wait observe newly committed sessions. Archive retains history and rejects current/future Enrollment or Placement intervals. Current permission and both module contracts are checked on each mutation; reads stay unlocked. No schema change or new migration was needed. Table RLS remains deferred to TEN-03 under TEN-ADR-006 Path A.
+
+**STU-01 — Register and inspect students (4 October 2026):** implemented on `work/stu-01-after-per02-wip`; source commit and follow-up evidence commit are recorded below. The branch retains its explicit ancestry at the PER-02 WIP checkpoint. STU-01 does not invoke PER-02 Teacher workflows and is implemented independently. At that checkpoint PER-02's IAM-03 gate was still pending; on 5 October it was cleared when the owner accepted the exact IAM-03 demo source `e0f262a78d7e020919cd36be80d508c9032d1` (full source recorded in Access CURRENT_STATE). PER-02 implementation remains VERIFIED and its own human review remains PENDING.
 
 People owns organization-local Person creation and exact authorized Person lookup. Students owns branch Student registration. A new Person is the default; selecting an existing Person is explicit and exact-name lookup is separate from normal student list search. The Student migration adds `vs_students_student` with branch-scoped admission/person uniqueness, organization-qualified Person and School foreign keys, bounded status/name/admission reads and a scope/status list index. Tenant classification is BRANCH with `(organization_id,school_id)` scope; policy intent and TEN-03 closure are recorded under temporary Path A. Database RLS is **not enforced**; application authorization, release/entitlement/activation checks and scoped reads remain active.
 
@@ -37,9 +39,19 @@ Mutations serialize through account → Organization → School guards and commi
 - Demo snapshot: `http://127.0.0.1:3413/admin/students`, tested commit `2cf3c9da357e24f0e10d09b4df2324618b35c3ef`, build `XEByftuaHQmRxBtt1p15b`, release manifest `academic_core,student_core`. Health returned `alive:true`; Playwright signed into the snapshot, opened the synthetic Student, verified the active Academic year choice and confirmed the student was still unenrolled. Private synthetic demo file `artifacts/students-02/private-demo.json` has mode 0600. Use it locally for the sign-in and student/year/section identifiers; no credentials are included here.
 - Manual review: sign in at `http://127.0.0.1:3413/sign-in` using the private fixture; open Students and the fixture's admission number; choose its listed Academic year and Section A; set First included day and Last included day from the fixture, enter roll `0007`, and enroll. Expect saved feedback, history with the same inclusive dates and roll text, and active roster count 1. Refresh and verify history/list summary persist. Submit the same year again and expect a conflict; automated checks also confirm wrong-year section and duplicate requests fail without extra writes. Human review remains PENDING.
 
+## Evidence — STU-03 (5 October 2026)
+
+- Tested implementation checkpoint: source/evidence commit SHA will be recorded after the focused commit. This checkpoint continues on the existing work branch and preserves unrelated `.puku-cli/` and `readiness-review.diff` files.
+- Persistence: `pnpm test:functional test/functional/students-registration.test.ts` passed 9/9 against real PostgreSQL `vyapti_vschool_test` (24 migrations found/applied, none pending). Includes transfer vs School-locked insertion of an OPEN session, rejection with unchanged placement history, SCHEDULED-session eligibility, adjacent interval/history and roll carry-forward, idempotent replay, and archive protection/history preservation. No migration or schema change was made.
+- Browser: `pnpm test:e2e test/e2e/student-transfer.spec.ts` passed 2/2 (Chromium desktop and mobile), covering today transfer, prior and destination interval display, enrolled archive rejection, successful archive of an unused Student, archived status filtering, and mobile overflow.
+- Repository checks: `pnpm check` passed (lint, typecheck, docs: 30 tasks, DB design: 51 registered contracts, boundaries, backend compile, unit: 88/88 across 14 files). `pnpm build` passed on Next.js 16.3.8.
+- Demo data: guarded `pnpm demo:seed` passed twice on development database `vyapti_vschool`; it reused the synthetic People/ACA/ATT fixtures and student command receipts, created no duplicates on replay, and did not replace credential files. Private Student IDs and idempotency keys are in ignored mode-0600 `artifacts/students-03/private-demo.json`; administrator credentials remain in `artifacts/people-02/private-demo.json`.
+- No RLS policy is enforced by STU-03. `student_core` and `academic_core` application authorization, branch activation and entitlements remain checked server-side.
+- Local manual demo URL, tested source commit and browser verification will be added after creating the task snapshot. Human review remains PENDING.
+
 ## Next action
 
-Keep ports 3412 (STU-01) and 3413 (STU-02) available for review. Select the next task only when its implementation does not depend on pending feedback and its documented acceptance gates are met. PER-02 remains blocked until explicit IAM-03 acceptance.
+Keep ports 3412 (STU-01), 3413 (STU-02), 3423 (ATT-01), and the STU-03 demo port (recorded after startup) available for review. STU-03's STU-02 and ATT-01 dependencies are implementation-verified/PENDING review and do not require human PASSED. PER-02's IAM-03 acceptance gate is cleared, but PER-02 itself remains human-review PENDING.
 
 ## Pending decisions / limitations
 

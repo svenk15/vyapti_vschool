@@ -76,11 +76,11 @@ Design: [flow STU-03](DESIGN.md). Scope and API: POST /api/v1/enrollments/:id/tr
 
 ### Implementation instructions
 
-1. Authorize student.manage and acquire guard protocol; validate date not before school-local today.
-2. Load full placement timeline; disallow overlapping queued transfers and no-op same-section move.
-3. Ask attendance impact facade about every OPEN/SUBMITTED session affected by changed eligibility, including future-opened sessions.
-4. If safe, close prior placement at D and create new [D,oldEnd); archive only when no current/future enrollment/impact remains.
-5. Commit versions and envelopes; detail preserves the old interval and audit.
+1. Recheck current identity, membership, `student.manage`, `student_core` and `academic_core` release/entitlement/activation; lock account→Organization→School for either mutation.
+2. Transfer only the current placement in its OPEN year; require D >= school-local today, D > old.validFrom and D < old.validTo, active same-year destination Section, no queued future placement, non-no-op destination and expected Enrollment.version.
+3. In the enlisted transaction, ask Attendance whether a scoped OPEN/SUBMITTED session exists in either affected section on `[D,old.validTo)`; reject it as `ROSTER_IN_USE`. SCHEDULED unopened sessions remain eligible for later roster calculation. This check and ATT-02 opening serialize on the School guard.
+4. If safe, close prior placement at D and create new `[D,oldEnd)`; carry old roll number unless a new one is supplied. Archive only with no current/future placement/enrollment or Attendance impact; preserve all historical rows.
+5. Require a 5–500-character reason and stable key; commit versions, audit/outbox/receipt atomically and return the updated full timeline or archived status.
 
 Files: extend `backend/modules/students/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/students`, `test/functional/students` and `test/e2e/students` as the suite grows.
 
@@ -89,13 +89,13 @@ Files: extend `backend/modules/students/domain`, `application`, `contracts` and 
 - Unit / application: Date boundary D belongs only to new placement; no backdate.
 - Real PostgreSQL: Transfer vs OpenSession serializes; no duplicate overlapping placement; failure preserves old history.
 - Browser: Future transfer detail; impact explanation on unsafe move; archive inactive eligible synthetic profile.
-- Failure contract: Historical/open-roster impact→409 ROSTER_IN_USE; invalid effective date→422; archive enrolled→409 STUDENT_IN_USE.
+- Failure contract: Open/submitted roster impact→409 ROSTER_IN_USE; active/future enrollment or placement on archive→409 STUDENT_IN_USE; stale versions, queued transfer, same-section move or overlap→409; invalid date, reason or destination year→422; foreign scoped references→404; revoked permission→403; service/evidence failure→503 with same-key recovery.
 - Required DB effect: SectionPlacement interval/new row and Enrollment.version; Student.status/version only for permitted archive; envelopes.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
 ### Demo and checkpoint
 
-Schedule a safe future transfer from A to B and inspect both intervals; attempt a move affecting an open session and confirm rejection without changing history.
+Transfer the seeded Casey Learner from Section A to Section B effective today; inspect both intervals and carried roll `0007`. Attempt to archive the still-enrolled student and confirm rejection without changing history; archive the separate unused Riley Learner and retrieve it with the ARCHIVED filter. The PostgreSQL test covers the open-session rejection and unchanged history.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.

@@ -1,6 +1,6 @@
 # VS database design — VSchool v4.3
 
-This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. The local PostgreSQL checkpoints include the Academics-owned Teacher table and Students-owned Student registration table after academic calendar, People and IAM-04 migrations. Enrollment/Placement and Attendance tables remain planned. Migration status is physical state only and does not claim task verification or human acceptance.
+This is the connected physical database contract. The Bible owns product and architecture rules; module DESIGN.md files own column schemas, responsibilities and named transaction workflows. TABLE_REGISTRY.json is a checked catalog derived from those LLDs, not a second independent design. Local PostgreSQL checkpoints include the Academics-owned Teacher table; Students-owned Student, Enrollment and SectionPlacement tables; and AttendanceSession after their forward migrations. Other Attendance tables remain planned. Migration status is physical state only and does not claim task verification or human acceptance.
 
 ## Naming decision — DB-ADR-001
 
@@ -69,7 +69,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | UserAccount | `vs_access_user_account` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AttendanceRecord | `vs_attendance_record` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceRevision | `vs_attendance_revision` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
-| AttendanceSession | `vs_attendance_session` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
+| AttendanceSession | `vs_attendance_session` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | SessionRosterEntry | `vs_attendance_session_roster_entry` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
@@ -185,6 +185,6 @@ CREATE TABLE public.vs_platform_setup_check (
 );
 ```
 
-Migration history: 20261003000100_foundation creates the original marker; 20261003000200_vora_naming preserves the previously released rename; 20261003000300_vs_prefix performs the current rename in place. `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify the actual PostgreSQL table/columns/constraint and ORM access. Historical SQL names in the original migration are deliberately exempt. The forward history now contains thirteen migrations. ACA-01 migration 009 installs academic year, terms, grade and subject catalogs, sections, and unpublished calendar roots. `20261004000300_institution_context` introduces InstitutionGrant and genuine institution-scoped configuration history, command receipts and outbox with scoped FKs and immutable guards. `20261004000500_module_entitlements` adds organization contracts and scoped branch activation without duplicating evidence tables. BRD-02 migrations 006–008 add scoped branding profiles, immutable revisions, canonical approved image assets and verified-host challenges with forward-only corrections and an immutable-asset trigger. Module CURRENT_STATE records actual application/rehearsal evidence. Prisma models map explicit FK/index contracts.
+Migration history: `pnpm check:db-design` verifies catalog/LLD mappings and current Prisma naming; functional tests verify actual PostgreSQL tables, columns, constraints and ORM access. Historical SQL names in original migrations are deliberately exempt. The forward history contains 24 migrations. `20261004001400_teacher_eligibility`, `20261004001500_student_registration`, and `20261004001600_student_enrollment` add the scoped staff/student identity and dated placement contracts. `20261004001700_import_preview` and `20261005001800_import_cancellation_retention` add the import workflows. `20261005001900_academic_offerings` adds scoped offerings and date-effective teacher assignments. `20261005002000_attendance_sessions` adds the scoped scheduled occurrence, status/version/time checks, School/Offering/CalendarRevision references, occurrence key and day index. Module CURRENT_STATE records actual application/rehearsal evidence. Prisma models map explicit FK/index contracts.
 
 References: [Prisma database mapping](https://www.prisma.io/docs/orm/prisma-schema/data-model/database-mapping), [PostgreSQL identifier rules](https://www.postgresql.org/docs/16/sql-syntax-lexical.html). These explain tool behavior; VS names and scope are VSchool architectural decisions.

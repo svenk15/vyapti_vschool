@@ -1,6 +1,6 @@
 # Students, enrollment and placement history — design
 
-Phase 1 · Design revision 1 · 3 October 2026. Status: specified for implementation; only the platform readiness path is implemented in this starter. Review unresolved deployment choices in FND-02 before real-data use.
+Phase 1 · Design revision 1 · 3 October 2026. Status: STU-01 and STU-02 are locally implemented; STU-03 is in progress; later student workflows remain planned. Review unresolved deployment choices in FND-02 before real-data use.
 
 ## Database naming and physical mapping
 
@@ -151,9 +151,19 @@ sequenceDiagram
 
 **Input:** Transfer expectedVersion,toSectionId,effectiveDate,rollNumber?,reason; archive expectedVersion,reason; key.
 
+**Ownership and transaction contract:** Students owns the SectionPlacement interval change, Enrollment.version and Student archive state. Academics owns the destination Section/AcademicYear references; validate both in the same branch and the same OPEN year. Transfer and archive require current `student.manage`, `student_core` and `academic_core` release/entitlement/branch activation; no new capability is introduced. Mutations recheck identity, membership and scope under account→Organization→School guards; read-only timeline reads use no write locks. `expectedVersion` is the Enrollment version for transfer and Student version for archive. One idempotency receipt, audit/outbox evidence and business writes commit together.
+
+**Transfer decision:** Only the currently active placement in an OPEN year may be changed. `effectiveDate` is school-local, today or later, strictly after the old placement's `validFrom`, and before its exclusive `validTo`. The old interval becomes `[old.validFrom,D)` and the destination interval is `[D,old.validTo)`; destination Section must be active and belong to the same year. Reject a same-section no-op, an existing future-dated placement/queued transfer, a stale Enrollment version, or invalid/overlapping timeline. If `rollNumber` is omitted, carry its current value to the new placement; a supplied value changes only the new placement. Transfer reason is required (5–500 characters).
+
+Before changing intervals, enlist the Attendance-owned `PlacementImpact` query inside this same transaction. It checks scoped sessions joined through Offering/Section for both old and destination sections with `school_date >= D AND school_date < old.validTo AND status IN ('OPEN','SUBMITTED')`. Any match returns `ROSTER_IN_USE`; a SCHEDULED unopened session is safe because its roster is calculated after the transfer. Future-dated OPEN/SUBMITTED rows are checked defensively if present, while ATT-ADR-001 continues to prohibit opening a future session. Both transfer and ATT-02 opening take the School write guard, so whichever commits first is visible to the other. ATT-01 has no roster-entry table yet; the check uses migrated session status and section, conservatively blocking a frozen session for either affected section.
+
+**Archive decision:** Archive is a status/version transition only; do not delete Person, Student, Enrollment, Placement or attendance history. Require no Enrollment/SectionPlacement interval with `valid_to > schoolLocalToday`, which rejects current or future enrollment/placement. Since no such interval remains, future session roster impact cannot include the student; historical Attendance rows do not block archive. Use Student.expectedVersion, require a 5–500-character reason and the same School transaction/evidence protocol. Past intervals remain available on the Student detail. Repeating a committed request with the same key replays its scoped result after current authorization; different input under that key conflicts.
+
+**Failure contract:** Foreign Student/Enrollment/Section and foreign-branch IDs return 404. Stale Enrollment/Student version, same-section move, queued transfer, interval conflict, open roster, or active/future enrollment on archive return 409 (`ROSTER_IN_USE` or `STUDENT_IN_USE` as appropriate). Backdated, boundary-empty, out-of-year or malformed dates/reasons return 422. Missing permission returns 403; stale session identity returns 401; missing module release/entitlement/activation returns a safe 409/503. Unexpected database/evidence failure rolls back all writes and returns retryable 503 using the same command key.
+
 **Workflow:**
 
-1. Authorize student.manage and acquire guard protocol; validate date not before school-local today.
+1. Authorize student.manage and acquire guard protocol; validate date not before school-local today. The transfer uses READ COMMITTED so queries after waiting on the School lock see a just-committed attendance session; School-guarded writers serialize the validations and writes.
 2. Load full placement timeline; disallow overlapping queued transfers and no-op same-section move.
 3. Ask attendance impact facade about every OPEN/SUBMITTED session affected by changed eligibility, including future-opened sessions.
 4. If safe, close prior placement at D and create new [D,oldEnd); archive only when no current/future enrollment/impact remains.
@@ -189,7 +199,9 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Date boundary D belongs only to new placement; no backdate. Functional PostgreSQL — Transfer vs OpenSession serializes; no duplicate overlapping placement; failure preserves old history. E2E — Future transfer detail; impact explanation on unsafe move; archive inactive eligible synthetic profile.
+**Verification:** Unit — Date boundary D belongs only to new placement; no backdate. Functional PostgreSQL — Transfer vs OpenSession serializes; no duplicate overlapping placement; failure preserves old history. E2E — Today-or-future transfer detail; archive impact explanation; archive unused synthetic profile and filter it from the list.
+
+**Design-readiness note (5 October 2026):** All core ownership, scoped predicates, guard ordering, version/idempotency behavior, date boundaries, roster impact query, permission/module checks and safe failure outcomes are defined above. No new table or migration is required; current Student/Enrollment/Placement constraints and the migrated AttendanceSession status/School lock are sufficient. The one permitted cross-owner read is the Attendance PlacementImpact facade enlisted on the Student transaction; neither module writes the other's rows. Automated acceptance does not require STU-02 or ATT-01 human reviews to pass. No unresolved product decision blocks STU-03.
 
 ## Migration, retention and handoff
 

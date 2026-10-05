@@ -61,6 +61,14 @@ export function enrollmentInput(input:{studentId:unknown;yearId:unknown;sectionI
   }
   return {studentId:uuid(input.studentId),yearId:uuid(input.yearId),sectionId:uuid(input.sectionId),validFrom:startsOn,validTo:addCivilDay(lastDay),rollNumber};
 }
+function reasonText(value:unknown):string{if(typeof value!=="string")throw new AccessError("VALIDATION");const result=value.normalize("NFC").trim();if(result.length<5||result.length>500||/[\u0000-\u001f\u007f]/.test(result))throw new AccessError("VALIDATION");return result;}
+function expectedVersion(value:unknown):number{if(typeof value!=="number"||!Number.isSafeInteger(value)||value<1)throw new AccessError("VALIDATION");return value;}
+export function transferInput(input:{expectedVersion:unknown;toSectionId:unknown;effectiveDate:unknown;rollNumber?:unknown;reason:unknown}){
+  let rollNumber:string|undefined;
+  if(input.rollNumber!==undefined){if(input.rollNumber===null||typeof input.rollNumber!=="string")throw new AccessError("VALIDATION");rollNumber=input.rollNumber.normalize("NFC").trim();if(rollNumber.length>30||/[\u0000-\u001f\u007f]/.test(rollNumber))throw new AccessError("VALIDATION");}
+  return {expectedVersion:expectedVersion(input.expectedVersion),toSectionId:uuid(input.toSectionId),effectiveDate:civilDate(input.effectiveDate),rollNumber,reason:reasonText(input.reason)};
+}
+export function archiveInput(input:{expectedVersion:unknown;reason:unknown}){return {expectedVersion:expectedVersion(input.expectedVersion),reason:reasonText(input.reason)};}
 function uuid(value:unknown){if(typeof value!=="string"||!uuidPattern.test(value))throw new AccessError("VALIDATION");return value.toLowerCase();}
 
 export function displayStudentName(firstName: string, lastName: string): string { return `${firstName} ${lastName}`.trim(); }

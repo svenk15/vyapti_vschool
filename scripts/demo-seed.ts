@@ -15,6 +15,7 @@ const demos = [
   { name: "PER-02 people and teacher eligibility", script: "scripts/demo-people.ts" },
   { name: "ACA-03 offerings and teacher assignments", script: "scripts/demo-academics-03.ts" },
   { name: "ATT-01 sessions and assigned teacher day", script: "scripts/demo-attendance-01.ts" },
+  { name: "STU-03 placements and student archive", script: "scripts/demo-students-03.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
 ] as const;
 
@@ -84,6 +85,7 @@ function main(): void {
   console.log("- artifacts/people-02/private-demo.json");
   console.log("- artifacts/academics-03/private-demo.json");
   console.log("- artifacts/attendance-01/private-demo.json");
+  console.log("- artifacts/students-03/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster.csv")) console.log("- artifacts/imports-01/sample-roster.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial.csv")) console.log("- artifacts/imports-01/sample-roster-partial.csv");
   console.log("Other feature command receipts and synthetic IDs remain in their ignored artifacts/<task>/ files.");
