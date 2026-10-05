@@ -1,0 +1,36 @@
+{
+  "capturedAt": "2026-10-05T01:41:33.777Z",
+  "database": "vyapti_vschool temporary benchmark table",
+  "profile": {
+    "institutions": 5,
+    "branches": 20,
+    "pupilsPerBranch": 5000,
+    "totalPupils": 100000,
+    "simulatedAssignmentRows": 100000,
+    "requestedTeacherSubmitConcurrency": "realistic concurrent submissions per Bible §20 pilot context",
+    "benchmarkConcurrencyExercised": 0,
+    "queryMix": "This capture runs the two documented indexed read predicates only; submit concurrency and pilot latency acceptance are not claimed."
+  },
+  "rowsInserted": 100000,
+  "measurementLimit": "EXPLAIN ANALYZE plan capture only; no concurrent workload or end-to-end submit latency was exercised.",
+  "queries": {
+    "offeringDate": [
+      "Index Scan using aca03_assignment_benchmark_organization_id_school_id_offeri_idx on aca03_assignment_benchmark  (cost=0.42..8.45 rows=1 width=16) (actual time=0.018..0.033 rows=5 loops=1)",
+      "  Index Cond: ((organization_id = 'a8d899a4-2029-d806-24b7-a414eab21801'::uuid) AND (school_id = 'e2608824-f8e3-e6e5-813e-21b0a05e813b'::uuid) AND (offering_id = 'b4222d9a-e95a-500c-e565-ffcd0af808a0'::uuid) AND (valid_from < '2026-11-01'::date) AND (valid_to > '2026-10-01'::date))",
+      "  Buffers: local read=8 written=8",
+      "Planning:",
+      "  Buffers: shared hit=60, local read=4 written=4",
+      "Planning Time: 0.244 ms",
+      "Execution Time: 0.041 ms"
+    ],
+    "teacherDate": [
+      "Index Scan using aca03_assignment_benchmark_organization_id_school_id_teache_idx on aca03_assignment_benchmark  (cost=0.42..8.45 rows=1 width=16) (actual time=0.015..0.016 rows=3 loops=1)",
+      "  Index Cond: ((organization_id = 'a8d899a4-2029-d806-24b7-a414eab21801'::uuid) AND (school_id = 'e2608824-f8e3-e6e5-813e-21b0a05e813b'::uuid) AND (teacher_id = '3feb9de2-20ec-0805-8afd-807388b7c323'::uuid) AND (valid_from <= '2026-10-05'::date) AND (valid_to > '2026-10-05'::date))",
+      "  Buffers: local hit=3 read=3 written=3",
+      "Planning:",
+      "  Buffers: shared hit=6",
+      "Planning Time: 0.034 ms",
+      "Execution Time: 0.018 ms"
+    ]
+  }
+}

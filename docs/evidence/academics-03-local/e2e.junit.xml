@@ -1,0 +1,10 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="32.740456">
+<testsuite name="academics-offerings.spec.ts" timestamp="2026-10-05T02:02:13.206Z" hostname="chromium" tests="1" failures="0" skipped="0" time="18.498" errors="0">
+<testcase name="administrator switches offering year, assigns an eligible teacher and sees overlap rejected after refresh" classname="academics-offerings.spec.ts" time="18.498">
+</testcase>
+</testsuite>
+<testsuite name="academics-offerings.spec.ts" timestamp="2026-10-05T02:02:13.206Z" hostname="mobile" tests="1" failures="0" skipped="0" time="5.719" errors="0">
+<testcase name="administrator switches offering year, assigns an eligible teacher and sees overlap rejected after refresh" classname="academics-offerings.spec.ts" time="5.719">
+</testcase>
+</testsuite>
+</testsuites>

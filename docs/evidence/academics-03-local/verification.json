@@ -1,0 +1,56 @@
+{
+  "task": "ACA-03",
+  "implementation": "VERIFIED",
+  "humanAcceptance": "PENDING",
+  "testedCommit": "e99f17b64a3615a340559a9ebdc6761c8d8c78be",
+  "testOnlyCheckpoint": "42340512746941d979bd14f5eea2ed7684498c56",
+  "buildId": "kPgbRHrJxQkTI7Wscxxn7",
+  "demoUrl": "http://127.0.0.1:3422",
+  "database": {
+    "development": "vyapti_vschool",
+    "test": "vyapti_vschool_test",
+    "appliedMigrations": 23,
+    "pendingMigrations": 0,
+    "newMigration": "20261005001900_academic_offerings",
+    "migrationState": "applied in development and dedicated test database"
+  },
+  "authorizationAndRls": {
+    "applicationAuthorization": "current account/token version, active membership, class.manage, academic_core release, organization entitlement and branch activation checked on all offering reads and mutations",
+    "mutationLockOrder": "account, organization, school",
+    "readWriteLocking": "scoped reads reauthorize without write locks; mutations use the shared School guard",
+    "rlsStatus": "deferred to TEN-03 under TEN-ADR-006 Path A; not database-enforced in this task"
+  },
+  "checks": {
+    "pnpmCheck": "passed at the core implementation checkpoint: lint, typecheck, docs, database design, boundaries, backend compile and 84 unit tests; final year-switch UI follow-up separately passed lint, typecheck, Playwright and production build",
+    "pnpmTestFunctional": "passed: 17 tests across Academics and People suites against real PostgreSQL vyapti_vschool_test",
+    "pnpmTestE2e": "passed: 2 Playwright Chromium desktop/mobile journeys",
+    "pnpmBuild": "passed: Next.js 16.3.8 production build",
+    "pnpmDemoSeed": "passed twice against guarded local development database; ACA-03 fixture and credentials reused"
+  },
+  "indexPlanEvidence": {
+    "profile": "100,000 temporary synthetic assignment rows across 5 institutions and 20 branches (5,000 per branch); 100,000 pupils are the Bible \u00a720 profile context, not rows inserted in this assignment table",
+    "offeringDate": "Documented index scan; 5 rows; 0.041 ms execution",
+    "teacherDate": "Documented index scan; 3 rows; 0.018 ms execution",
+    "concurrentSubmitsExercised": 0,
+    "measurementLimit": "EXPLAIN ANALYZE predicate evidence only; no concurrent teacher-submit workload or pilot latency claim"
+  },
+  "browserSmoke": {
+    "health": "alive",
+    "adminSignIn": true,
+    "seededOfferingVisible": true,
+    "seededTeacherVisible": true,
+    "pageErrors": 0,
+    "yearSwitchRegression": "passed in desktop/mobile Playwright with two open years"
+  },
+  "syntheticSeed": {
+    "credentials": "artifacts/people-02/private-demo.json",
+    "fixture": "artifacts/academics-03/private-demo.json",
+    "delivery": "development-only file email sink; no external messages"
+  },
+  "limitations": [
+    "RLS and restricted runtime role enforcement remain a TEN-03 gate; application authorization stays active.",
+    "AttendanceSession does not yet exist. The explicit zero-impact assignment/session adapter must be replaced by ATT-01 before scheduling; teacher-submit reauthorization/concurrency evidence belongs to ATT-02.",
+    "Pilot index-plan evidence does not measure the Bible \u00a720 concurrent submission workload or latency targets.",
+    "Human acceptance is pending until the owner reviews the local demo."
+  ]
+}

@@ -1,16 +1,34 @@
 # Academic setup and teaching context — current state
 
-Last updated: 2026-10-04. Fresh independent-project state; no imported task completion. Design revision 3. No active execution timer.
+Last updated: 2026-10-05. Task state is local to this checkout; no imported task completion. Design revision 3. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | ACA-01 | VERIFIED | PENDING | [Local verification](../../evidence/academics-01-local/verification.json); 63 unit, 48 PostgreSQL and 58 desktop/mobile browser tests passed |
 | ACA-02 | VERIFIED | PENDING | [Local verification](../../evidence/academics-02-local/verification.json); 65 unit, 50 PostgreSQL and 58 desktop/mobile browser tests passed |
-| ACA-03 | NOT_STARTED | NOT_REQUESTED | Depends on ACA-02 and PER-02 |
+| ACA-03 | VERIFIED | PENDING | [Local verification](../../evidence/academics-03-local/verification.json); 84 unit, 17 real-PostgreSQL functional and 2 desktop/mobile browser tests passed |
 
 ## Current checkpoint
 
 **Design readiness (4 October 2026):** ACA-03 LLD and acceptance align on ownership, dated assignment constraints/indexes, guarded overlap checks, replay and Path A metadata. Dependency snapshot: ACA-02 VERIFIED/PENDING; PER-02 IN_PROGRESS/NOT_REQUESTED. The current task table is authoritative.
+
+**ACA-03 readiness reconciliation (5 October 2026):** Current dependency snapshot: ACA-02 VERIFIED/PENDING and PER-02 VERIFIED/PENDING. Neither dependency declares a human-acceptance gate, so implementation may continue under AGENT_RUNBOOK. Academics owns CourseOffering and TeacherAssignment; People owns Employee; Access owns account bindings. The LLD, task acceptance and Path A registry align on scoped composite keys, unique constraints, the offering/date overlap and teacher/date eligibility predicates/indexes, current class.manage authorization and account→Organization→School mutation guards. Offering assignment requires active Teacher plus active Employee across the half-open range; account binding remains separate from instructional eligibility. `valid_to` and API `endDate` are exclusive. A same-offering primary overlap is prevented under the School lock; cross-offering time/room clashes remain ATT-01 scope. AttendanceSession is absent at this task boundary, so use a zero-impact session-impact port and replace it in ATT-01 before scheduling is released. The actual assignment-end/teacher-submit race moves to ATT-02, where submit exists. Bible §20 supplies the pilot benchmark context for planned EXPLAIN ANALYZE evidence; TEN-03's larger profile/thresholds are separate. No product decision blocks implementation; the absent session integration is a documented dependency, not a claim of test coverage.
+
+**Implementation checkpoint (5 October 2026):** ACA-03 is implementation VERIFIED and human review PENDING. Tested application source `e99f17b64a3615a340559a9ebdc6761c8d8c78be`; test-only PostgreSQL checkpoint `42340512746941d979bd14f5eea2ed7684498c56`. Forward migration `20261005001900_academic_offerings` is applied to development and test PostgreSQL; both report 23 migrations and none pending. Course offerings and teacher assignments have scoped composite FKs, version/date/code checks and offering/date plus teacher/date indexes; registry status is MIGRATED under Path A, with RLS still deferred to TEN-03.
+
+The server-side `/admin/classes` and APIs provide year-scoped offering reads/creation, eligible-teacher assignment, overlap rejection and versioned assignment end. Every protected read/write rechecks current identity/token version, branch membership and `class.manage`, release availability, institution entitlement and branch activation. Reads remain unlocked; mutations preserve account→Organization→School lock order, receipt/evidence transaction, and same-offering date-overlap serialization. People offboarding invokes the Academics teacher port in its transaction and rolls back if an assignment survives the exclusive employment cutoff. The Attendance impact boundary is an explicit zero-impact adapter while no sessions can be scheduled; ATT-01 replaces it before scheduling release and ATT-02 owns submit reauthorization/concurrency tests.
+
+Checks: `pnpm check` passed, including 84 unit tests at the core checkpoint; focused real PostgreSQL functional suites passed 17/17 across Academics and People, including FK, overlap race, replay, scope, current permission, employment cutoff, version CAS, session-impact rejection and offboarding rollback; the final year-switch UI follow-up passed lint, typecheck and Playwright desktop/mobile 2/2; `pnpm build` passed (build ID `kPgbRHrJxQkTI7Wscxxn7`). `pnpm demo:seed` passed twice without replacing the private credentials or duplicating the synthetic offering. Both documented predicates used their intended indexes in a 100,000-row temporary synthetic assignment table: offering/date returned 5 rows in 0.041 ms; teacher/date returned 3 in 0.018 ms. This is plan evidence only; no concurrent submit or pilot latency workload was exercised. Full reports and limitations are in [local verification](../../evidence/academics-03-local/verification.json).
+
+The frozen production-mode local demo for source `e99f17b64a3615a340559a9ebdc6761c8d8c78be` is live at http://127.0.0.1:3422. Health, administrator sign-in, seeded offering/teacher rendering and browser errors were checked. Private credentials are in ignored `artifacts/people-02/private-demo.json`; the ACA-03 synthetic IDs/command keys are in ignored `artifacts/academics-03/private-demo.json`.
+
+Manual review (PENDING):
+
+1. Sign in at http://127.0.0.1:3422/sign-in with the administrator credentials from `artifacts/people-02/private-demo.json`; open `/admin/classes`. Expect the synthetic `DEMO-MATH8A` offering and Avery Example as the assigned teacher.
+2. Create another offering by selecting the open synthetic year, Demo Section A and Mathematics Demo; enter a unique code such as `DEMO-MATH8B`. Expect it under Course offerings with “No current teacher assignment.”
+3. Select Avery Example, use 2026-10-05 through 2027-03-31, and assign. Expect the effective dates and teacher name to persist after reload.
+4. Assign Avery to that same offering for the same dates again. Expect a safe conflict and the original assignment to remain unchanged.
+5. On the seeded offering, set “First included day” to 2026-11-01 and end the current assignment; expect the last included day to become 2026-10-31. Reassign Avery beginning 2026-11-01; expect adjacent half-open ranges with no overlap.
 
 ACA-01 source commit `fc3fc6c294be5ec51c9abbb5c4481ace10809679`. It implements the first academic setup slice: trusted release and tenant guards, draft year with unpublished calendar, adjacent nonoverlapping terms, grade/subject catalogs, sections, transactional evidence and the shared-token screen. ACA-02 source commit `69fb440a4427249c73fc45d2b06b33682adf2466` adds immutable calendar publication/evaluation and guarded year open/close, including failure states. The unrelated untracked `.puku-cli/` directory remains untouched and excluded.
 
@@ -32,7 +50,7 @@ Human review remains PENDING until owner feedback is received. Automated verific
 
 ## Next action
 
-ACA-02 automated verification is complete; human review remains PENDING and no acceptance is inferred. Continue with the next eligible task from `pnpm next-task`, honoring explicit dependencies. Keep both academic snapshots stable during their pending reviews. The ACA-02 session-impact empty adapter may only ship while Attendance session storage/creation is absent; ATT-01 must replace it before session workflows are released.
+ACA-03 implementation verification is complete; human review remains PENDING. Keep the ACA-03 snapshot stable and continue only with the next task selected by `pnpm next-task`, honoring explicit acceptance gates. ACA-02 calendar and ACA-03 assignment impact adapters are valid only while Attendance session storage/creation is absent; ATT-01 replaces them before session workflows are released.
 
 ## Pending decisions / limitations
 

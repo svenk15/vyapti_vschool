@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="17" failures="0" errors="0" time="7.140564416">
+    <testsuite name="test/functional/academics-setup.test.ts" timestamp="2026-10-05T01:57:54.230Z" hostname="Venkateshs-MacBook-Air.local" tests="8" failures="0" errors="0" skipped="0" time="1.867699458">
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; creates a scoped draft year and calendar atomically, replaces adjacent terms, and persists school setup" time="0.179998583">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; serializes duplicate school-wide sections and maps a duplicate to CONFLICT" time="0.043273334">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; denies foreign branches, inactive academic contracts, and revoked current permission" time="0.040404916">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-01 PostgreSQL setup &gt; rolls back year, calendar, configuration revision and evidence when the enlisted writer fails" time="0.015848834">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-02 PostgreSQL calendar publication and year state &gt; publishes immutable revisions, evaluates precedence, and opens while rejecting terms edits" time="0.089660291">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-02 PostgreSQL calendar publication and year state &gt; requires a calendar to open and atomically rejects impacted publication and close" time="0.055366042">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-03 PostgreSQL offerings and teacher assignments &gt; creates scoped offerings, rejects overlapping assignments, ends by CAS, and blocks employment cutoff atomically" time="0.304637083">
+        </testcase>
+        <testcase classname="test/functional/academics-setup.test.ts" name="ACA-03 PostgreSQL offerings and teacher assignments &gt; enforces scoped foreign keys when a forged offering is written directly" time="0.00603525">
+        </testcase>
+    </testsuite>
+    <testsuite name="test/functional/people-employees.test.ts" timestamp="2026-10-05T01:57:54.231Z" hostname="Venkateshs-MacBook-Air.local" tests="9" failures="0" errors="0" skipped="0" time="5.272864958">
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-01 PostgreSQL employee profiles &gt; creates distinct same-name People profiles, pages scoped staff, and leaves accounts unlinked" time="0.172284084">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-01 PostgreSQL employee profiles &gt; serializes duplicate staff numbers and enforces the organization-scoped Person FK" time="0.038566167">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-01 PostgreSQL employee profiles &gt; rolls back both Person and Employee with school revision, receipt and events if evidence fails" time="0.033805875">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-02 PostgreSQL cross-owner staff lifecycle &gt; enables a scoped teacher, binds only a verified same-branch teacher account, and ends employment atomically" time="0.6778615">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-02 PostgreSQL cross-owner staff lifecycle &gt; rolls back Teacher eligibility when an owner facade fails" time="0.024800375">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-02 PostgreSQL cross-owner staff lifecycle &gt; rolls back actual Academics and Access writes when an enlisted owner fails after writing" time="0.580548792">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-02 PostgreSQL cross-owner staff lifecycle &gt; serializes two verified accounts racing to bind the same school account to different people" time="0.606378459">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-02 PostgreSQL cross-owner staff lifecycle &gt; rejects unverified accounts and verified teachers without active membership in the target branch" time="1.122705459">
+        </testcase>
+        <testcase classname="test/functional/people-employees.test.ts" name="PER-02 PostgreSQL cross-owner staff lifecycle &gt; denies a teacher account from reading or managing staff profiles without class.manage/user.manage" time="0.541571917">
+        </testcase>
+    </testsuite>
+</testsuites>
