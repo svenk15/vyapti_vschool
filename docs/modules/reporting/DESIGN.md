@@ -18,11 +18,11 @@ RPT-ADR-002: bounded direct CSV response, not public file hosting. Authorize bef
 
 ## Physical data contract
 
-All tables are planned except SetupCheck. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+Reporting tables are planned except the RPT-02 ExportRun; `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
-| `vs_reporting_export_run` (ExportRun) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; filters jsonb; requested_at timestamptz(3); state GENERATED/FAILED; row_count int; content_hash char(64) nullable; request_id uuid | Synchronous bounded export metadata, no public stored CSV. GENERATED means the bytes were prepared, not that browser received them. | Scoped school/account FKs; index(scope,requested_at,id); no raw exported CSV or credentials |
+| `vs_reporting_export_run` (ExportRun) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; filters jsonb; requested_at timestamptz(3); state GENERATED/FAILED; row_count int; content_hash char(64) nullable; request_id uuid | Synchronous bounded export metadata, no public stored CSV. GENERATED means the bytes were prepared, not that browser received them. | Composite FK(scope)->School and FK(actor_account_id)->UserAccount; CHECK state in GENERATED/FAILED, row_count>=0, object filters and null-or-lowercase-SHA256 content_hash; index(scope,requested_at,id); no raw exported CSV, pupil data, or credentials |
 
 ## Read workflows and joins
 
@@ -100,9 +100,11 @@ The expected/pending/future/cancelled counts are session counts. Expected is a s
 
 ## RPT-02 — Export a scoped report and review audit history
 
-**Success response contract:** CSV attachment bytes plus safe Content-Disposition filename; history `{items:[{id,occurredAt,actor,command,reason,before,after}],nextCursor}`. Staff-only fields omitted from every teacher-facing DTO.
+**Design-readiness note (5 October 2026):** RPT-01 and ATT-04 are implementation-VERIFIED; their human reviews are PENDING and are not implementation gates under the current Phase 1 policy. Attendance owns the immutable `vs_attendance_revision` timeline and exposes scoped `AttendanceFacade.history`; reuse it for correction/cancellation details rather than duplicating attendance history in Platform audit. Platform owns `vs_platform_audit_entry`, which is already installed, but currently exposes no audit append/query contract. Add a narrow `PlatformAuditWriter` port/factory for the safe `AttendanceExportGenerated` event, implemented by Platform infrastructure and enlisted by Reporting composition on the same Prisma transaction as `ExportRun`; Reporting must not directly issue platform-table writes. The existing AuditEntry index `(organization_id,school_id,module,resource_id,occurred_at,id)` supports scoped export-event lookup. Add `ExportRun` as Reporting-owned with a forward migration, scoped School and Account FKs, index `(organization_id,school_id,requested_at,id)`, and Path A BRANCH metadata/TEN-03 closure. Export rows come from scoped session→frozen roster→current attendance record, plus Student admission number and offering/section/subject labels, only for SUBMITTED sessions; pending and canceled rows are represented only in the session-level report, not synthesized as pupil attendance. Preserve the date-range, filter and 10,000-row bounds. The CSV generation is in-memory and no-store; first obtain a repeatable-read snapshot after current export/read permissions and entitlements, then in a short account→Organization→School guarded transaction reauthorize and atomically append ExportRun plus safe Platform audit before returning bytes. No CSV body, pupil name/admission number, credential, raw reason or source data enters ExportRun/audit. Audit history uses `AttendanceFacade.history` and requires current `attendance.read_school`, active dependencies/branch scope and a submitted/cancelled session; teacher DTOs never include it. No per-export command idempotency is introduced: each authorized export is a new read and audit event. On a generation/write failure after valid scope is established, store a FAILED ExportRun only if the metadata transaction can be committed safely; authorization and validation failures create no record. Reauthorize immediately before bytes are returned; no persistent file or reusable download permission is created.
 
-**Transport:** GET /api/v1/reports/attendance.csv; GET /api/v1/audit?module=attendance&resourceId=
+**Success response contract:** CSV attachment bytes with safe Content-Disposition filename, `X-Export-Run-Id`, `X-Export-Row-Count` and generated-time headers; `/api/v1/audit?module=attendance&resourceId=<sessionId>&cursor=&limit=50` returns `{sessionId,status,version,items:[{number,kind,occurredAt,reason,actorDisplayName,changes}],nextCursor}`. This endpoint is the Attendance-owned immutable revision timeline (not a generic Platform-audit projection); correction/cancellation reason and changes are available only to current `attendance.read_school` callers. Staff-only fields are omitted from teacher-facing DTOs.
+
+**Transport:** GET /api/v1/reports/attendance.csv; GET /api/v1/audit?module=attendance&resourceId=<sessionId>&cursor=<opaque>&limit=50
 
 **Input:** Same bounded filters as RPT-01; export requires attendance.export; history attendance.read_school. No stored-file URL.
 
@@ -110,13 +112,13 @@ The expected/pending/future/cancelled counts are session counts. Expected is a s
 
 1. Authorize current actor/filter scope and take consistent report snapshot.
 2. Refuse >10,000rows or >31days; generate UTF-8 CSV with quoted cells and formula-safe text.
-3. Recheck access immediately before streaming and record ExportRun metadata plus export audit (no student payload).
-4. Return no-store attachment; history query filters scope/module/resource and paginates occurredAt/id.
+3. Recheck current membership, `attendance.export`, release/entitlements and branch activation in an account→Organization→School guarded transaction immediately before returning bytes; append ExportRun metadata and the safe Platform audit event atomically (no CSV or pupil payload).
+4. Return no-store attachment. History resolves a scoped submitted/cancelled session via Attendance, paginates its immutable revision number descending with a 50-row default (max 100), and returns each page chronologically with an opaque cursor.
 5. Present export result and immutable correction/cancellation timeline; label generated/downloaded distinction accurately.
 
 **Database writes / atomicity:** ExportRun and scoped export audit; attendance/history are read-only. Export audit resource references the ExportRun UUID.
 
-**Errors and recovery:** Too broad→422; access revoked before stream→403; failure→FAILED metadata; replay export is a new authorized read, not a stale download permission.
+**Errors and recovery:** Too broad (>31 days or >10,000 submitted pupil rows)→422; missing permission/revoked before response→403; unknown/foreign filters/session→404; operational query failure after current export authorization attempts safe FAILED metadata and returns 503; metadata/audit failure rolls back both and returns 503. Replay export is a new authorized read with a new ExportRun/audit event, not a stale download permission.
 
 ```mermaid
 sequenceDiagram
@@ -144,7 +146,7 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — CSV quoting/BOM policy and dangerous prefix neutralization; no raw staff notes. Functional PostgreSQL — Scope denial; snapshot consistency; event audit module filter; safe metadata and failure path. E2E — Export matches visible selected range; spreadsheet-safe synthetic names; history shows reason/old/new.
+**Verification:** Unit — CSV quoting/BOM policy and dangerous prefix neutralization; no raw staff notes. Functional PostgreSQL — scoped session/roster/record joins; export/read permission and entitlement denial; foreign filters/scope; row bound; current authorization recheck before metadata commit; ExportRun+Platform audit atomic commit/rollback; FAILED metadata after an authorized query failure; safe metadata; revision cursor pages. E2E — browser download matches selected range and submitted records; formula-safe synthetic text; admin sees correction/cancellation reason and changes; teacher is denied audit history; unknown/revoked access fails safely. `EXPLAIN (ANALYZE, BUFFERS)` captures the submitted session→roster→record/student join using scope/date/status and optional offering filters; small test data is query/index evidence only, not pilot or TEN-03 scale proof.
 
 ## Migration, retention and handoff
 

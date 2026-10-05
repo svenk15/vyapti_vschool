@@ -11,4 +11,4 @@ export type AttendanceCorrectionResult=Readonly<{sessionId:string;version:number
 export type AttendanceCancelResult=Readonly<{sessionId:string;version:number;status:'CANCELLED';cancelledAt:string;revision:number;replayed:boolean}>;
 export type AttendanceCommandStatus=Readonly<{state:'UNKNOWN'}|{state:'FOUND';result:AttendanceSubmitResult|AttendanceCancelResult}>;
 export type AttendanceHistoryRevision=Readonly<{number:number;kind:'SUBMIT'|'CORRECT'|'CANCEL';occurredAt:string;reason:string|null;actorDisplayName:string;changes:Readonly<Record<string,unknown>>}>;
-export type AttendanceHistory=Readonly<{sessionId:string;version:number;status:'SUBMITTED'|'CANCELLED';revisions:readonly AttendanceHistoryRevision[]}>;
+export type AttendanceHistory=Readonly<{sessionId:string;version:number;status:'SUBMITTED'|'CANCELLED';revisions:readonly AttendanceHistoryRevision[];nextCursor:string|null}>;

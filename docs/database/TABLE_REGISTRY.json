@@ -850,11 +850,11 @@
       "model": "ExportRun",
       "owner": "reporting",
       "table": "vs_reporting_export_run",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/reporting/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; filters jsonb; requested_at timestamptz(3); state GENERATED/FAILED; row_count int; content_hash char(64) nullable; request_id uuid",
       "responsibility": "Synchronous bounded export metadata, no public stored CSV. GENERATED means the bytes were prepared, not that browser received them.",
-      "constraints": "Scoped school/account FKs; index(scope,requested_at,id); no raw exported CSV or credentials",
+      "constraints": "Composite FK(scope)->School and FK(actor_account_id)->UserAccount; CHECK state in GENERATED/FAILED, row_count>=0, object filters and null-or-lowercase-SHA256 content_hash; index(scope,requested_at,id); no raw exported CSV, pupil data, or credentials",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

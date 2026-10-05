@@ -54,10 +54,12 @@ Files: extend `backend/modules/reporting/domain`, `application`, `contracts` and
 ### Acceptance and test strategy
 
 - Unit / application: CSV quoting/BOM policy and dangerous prefix neutralization; no raw staff notes.
-- Real PostgreSQL: Scope denial; snapshot consistency; event audit module filter; safe metadata and failure path.
+- Real PostgreSQL: Scoped filter/session/roster/record joins; current membership, `attendance.export` and `attendance.read_school` rechecks; cross-school and teacher denial; ExportRun and safe Platform audit atomicity/rollback; event audit module/resource filters; cursor pagination; bounded-row refusal; FAILED metadata after authorized generation failure.
 - Browser: Export matches visible selected range; spreadsheet-safe synthetic names; history shows reason/old/new.
 - Failure contract: Too broad→422; access revoked before stream→403; failure→FAILED metadata; replay export is a new authorized read, not a stale download permission.
-- Required DB effect: ExportRun and scoped export audit; attendance/history are read-only. Export audit resource references the ExportRun UUID.
+- Required DB effect: forward migration for `vs_reporting_export_run`, scoped export audit in existing `vs_platform_audit_entry`; attendance/revision/history are read-only. Export audit resource references the ExportRun UUID and contains only safe filters/count/hash metadata. Verify foreign keys and registered Path A classification; no CSV bytes or pupil data in export metadata/audit.
+
+Design readiness: [RPT-02 design note](DESIGN.md#rpt-02--export-a-scoped-report-and-review-audit-history) resolves shared audit ownership through the Platform writer port and uses Attendance's existing scoped revision-history facade. No human acceptance dependency blocks implementation.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 

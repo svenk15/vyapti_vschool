@@ -59,6 +59,7 @@ model School {
   campuses             Campus[]
   memberships          SchoolMembership[]
   auditEntries         AuditEntry[]
+  exportRuns          ExportRun[]
   outboxEvents         OutboxEvent[]
   commandReceipts      CommandReceipt[]
   moduleActivations BranchActivation[]
@@ -104,6 +105,7 @@ model UserAccount {
   passwordResetTokens PasswordResetToken[] @relation("ResetAccount")
   createdActivations AccountActivation[] @relation("ActivationCreator")
   auditEntries        AuditEntry[]
+  exportRuns          ExportRun[]
   commandReceipts     CommandReceipt[]
   publishedBrandRevisions BrandRevision[]
   publishedAcademicCalendarRevisions CalendarRevision[] @relation("AcademicRevisionPublisher")
@@ -327,6 +329,23 @@ model AuditEntry {
   @@index([actorAccountId], map: "vs_platform_audit_entry_r7_idx")
   @@index([organizationId, schoolId, module, resourceId, occurredAt, id], map: "vs_platform_audit_entry_q0_idx")
   @@map("vs_platform_audit_entry")
+}
+
+model ExportRun {
+ id String @id(map:"vs_reporting_export_run_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ filters Json
+ requestedAt DateTime @map("requested_at") @db.Timestamptz(3)
+ state String @db.VarChar(20)
+ rowCount Int @map("row_count")
+ contentHash String? @map("content_hash") @db.Char(64)
+ requestId String @map("request_id") @db.Uuid
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_reporting_export_run_school_fkey")
+ actorAccount UserAccount @relation(fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_reporting_export_run_actor_fkey")
+ @@index([organizationId,schoolId,requestedAt,id],map:"vs_reporting_export_run_list_idx")
+ @@map("vs_reporting_export_run")
 }
 
 model OperatorAuditEntry {
