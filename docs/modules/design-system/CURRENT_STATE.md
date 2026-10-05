@@ -5,7 +5,7 @@ DS-01 locally verified and accepted on 3 October 2026. No active timer. Gallery 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | DS-01 | VERIFIED | PASSED | [Local evidence](../../evidence/ds-01-local/verification.json); 26 unit, 4 PostgreSQL and 20 browser tests passed |
-| DS-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| DS-02 | IN_PROGRESS | NOT_REQUESTED | Started 5 October 2026; read-only screen inventory and accessibility review underway |
 
 ## Implemented now
 
@@ -13,7 +13,7 @@ Shared component primitives and interactive gallery, including CSV/2 MiB rejecti
 
 ## Next action
 
-Owner accepted DS-01 and authorized the next task. BRD-01 selected using pnpm next-task. See branding CURRENT_STATE for the current demo.
+Complete DS-02 against current protected admin, teacher and branch-switching screens; retain the RPT-01 demo build while building DS-02 into `.next-e2e`. Dependencies ATT-02 and BRD-02 are VERIFIED/PENDING implementation checkpoints without human-PASSED gates. RPT-02 and TEN-03 are blocked on ATT-04 explicit human acceptance.
 
 ## Evidence and feedback
 

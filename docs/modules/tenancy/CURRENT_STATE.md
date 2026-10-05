@@ -6,7 +6,7 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 |---|---|---|---|
 | TEN-01 | VERIFIED | PENDING | Source `c09519ca10bddd6286aba242d21aa9a5000ff0ae`; production build `fGxMmBd-8b7ScLU7mVhug`; local verification report and JUnit evidence below |
 | TEN-02 | VERIFIED | PENDING | Source/build/test evidence: `docs/evidence/tenancy-02-local/`; owner review remains pending |
-| TEN-03 | NOT_STARTED | NOT_REQUESTED | Design checkpoint only: [TEN-ADR-006 / RLS compatibility and verification plan](DESIGN.md#rls-and-release-verification); no policies or runtime-role enforcement implemented |
+| TEN-03 | BLOCKED | NOT_REQUESTED | Requires explicit ATT-04 human acceptance before consolidated RLS enforcement/verification; design checkpoint only, no policies or runtime-role enforcement implemented |
 
 ## Implemented now
 

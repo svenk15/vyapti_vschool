@@ -5,7 +5,7 @@ Last updated: 2026-10-05. No active execution timer.
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | RPT-01 | VERIFIED | PENDING | Source `370c7d703a9e4209ca5db406c22400f4eccf5519`; entitlement test follow-up `a92501b048160673a40771ee5ddd3d11305fa5cf`; live build `LCX3HkLL1u3jYJ1THM-GR` at port 3428 |
-| RPT-02 | NOT_STARTED | NOT_REQUESTED | Explicitly gated by ATT-04 human acceptance |
+| RPT-02 | BLOCKED | NOT_REQUESTED | Requires explicit ATT-04 human acceptance before export/audit implementation |
 
 ## Current checkpoint
 
