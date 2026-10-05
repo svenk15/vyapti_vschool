@@ -1,6 +1,9 @@
 import fs from "node:fs";
 const catalog=JSON.parse(fs.readFileSync("docs/database/TABLE_REGISTRY.json","utf8"));
 const errors=[],models=new Set(),tables=new Set();
+const tenantClasses=new Set(["BRANCH","INSTITUTION","INSTITUTION_ROOT","BRANCH_DIRECTORY","GLOBAL_IDENTITY","GLOBAL_SECURITY","TENANT_PRIVATE_WITH_SANITIZED_PUBLIC_READ","DEPLOYMENT_ONLY","GLOBAL_OPERATOR"]);
+const futureRule=catalog.rlsPlan?.futureMigrationRule;
+if(futureRule?.closureGate!=="TEN-03"||futureRule?.checkedBy!=="pnpm check:db-design"||!Array.isArray(futureRule?.requiredRegistryFields)||!futureRule.pathARequirement||!futureRule.enforcementRequirement||!futureRule.exceptions)errors.push("Missing TEN-03 future-migration RLS rule");
 for(const item of catalog.tables){
  if(models.has(item.model))errors.push(`Duplicate logical model ${item.model}`);
  if(tables.has(item.table))errors.push(`Duplicate physical table ${item.table}`);
@@ -17,6 +20,13 @@ for(const item of catalog.tables){
   if(/\b[a-z]+[A-Z][a-zA-Z]*\b/.test(cells[1]))errors.push(`Non-snake-case physical column ${item.table}`);
  }
  if(!item.fields||!item.responsibility||!item.constraints)errors.push(`Incomplete table contract ${item.table}`);
+ const rls=item.rls;
+ const expectedGate=rls?.classification==="GLOBAL_OPERATOR"?"PLATFORM":"TEN-03",expectedEnforcement=rls?.classification==="GLOBAL_OPERATOR"?"APPLICATION_GUARD":rls?.classification==="DEPLOYMENT_ONLY"?(catalog.rlsPlan.enforcementImplemented?"TEN_03_EXCEPTION":"PATH_A_DEFERRED_TEN_03"):catalog.rlsPlan.enforcementImplemented?"TEN_03_ENFORCED":"PATH_A_DEFERRED_TEN_03";
+ if(!rls||!futureRule?.requiredRegistryFields?.every(field=>Object.hasOwn(rls,field))||!tenantClasses.has(rls.classification)||!Array.isArray(rls.scopeColumns)||!rls.intendedPolicy||rls.owner!==item.owner||rls.closureGate!==expectedGate)errors.push(`Incomplete RLS classification/policy/owner/gate ${item.table}`);
+ if(rls?.classification==="BRANCH"&&(!rls.scopeColumns.includes("organization_id")||!rls.scopeColumns.includes("school_id")))errors.push(`Branch RLS scope must include organization_id and school_id ${item.table}`);
+ if(rls?.classification==="INSTITUTION"&&!rls.scopeColumns.includes("organization_id"))errors.push(`Institution RLS scope must include organization_id ${item.table}`);
+ if(rls?.classification==="INSTITUTION_ROOT"&&!rls.scopeColumns.includes("id"))errors.push(`Institution root scope must include its id ${item.table}`);
+ if(rls?.enforcement!==expectedEnforcement)errors.push(`Unexpected pre-TEN-03 enforcement state ${item.table}`);
  const moduleLld=`docs/modules/${item.owner}/DESIGN.md`;
  if(!fs.existsSync(moduleLld))errors.push(`Missing owner LLD ${item.owner}`);
  if(!fs.readFileSync("docs/DATABASE_DESIGN.md","utf8").includes(`\`${item.table}\``))errors.push(`Database index missing ${item.table}`);
@@ -37,5 +47,19 @@ for(const match of prisma.matchAll(/model\s+(\w+)\s*\{([\s\S]*?)\n\}/g)){
  }
 }
 for(const item of catalog.tables.filter(t=>t.status==="MIGRATED"))if(!new RegExp(`model\\s+${item.model}\\s*\\{`).test(prisma))errors.push(`Migrated catalog model missing ${item.model}`);
+const ruleDate=catalog.rlsPlan.futureMigrationRule.effectiveFrom;
+for(const migrationDir of fs.readdirSync("prisma/migrations").filter(name=>/^\d{14}_/.test(name)&&name.slice(0,8)>=ruleDate)){
+ const path=`prisma/migrations/${migrationDir}/migration.sql`;
+ if(!fs.existsSync(path))continue;
+ const sql=fs.readFileSync(path,"utf8"),created=[...sql.matchAll(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:public\.)?"?(vs_[a-z0-9_]+)"?/gi)].map(match=>match[1]);
+ for(const table of new Set(created)){
+  const item=catalog.tables.find(row=>row.table===table),tableComment=sql.match(new RegExp(`COMMENT\\s+ON\\s+TABLE\\s+(?:public\\.)?"?${table}"?\\s+IS\\s+'([^']*)'`,"i"))?.[1]??"";
+  if(!item)errors.push(`New tenant table ${table} in ${migrationDir} is missing TABLE_REGISTRY.json contract`);
+  if(item&&["GLOBAL_OPERATOR","DEPLOYMENT_ONLY"].includes(item.rls?.classification))continue;
+  if(catalog.rlsPlan.enforcementImplemented){
+   if(!new RegExp(`ALTER\\s+TABLE\\s+(?:public\\.)?"?${table}"?\\s+ENABLE\\s+ROW\\s+LEVEL\\s+SECURITY`,"i").test(sql)||!new RegExp(`ALTER\\s+TABLE\\s+(?:public\\.)?"?${table}"?\\s+FORCE\\s+ROW\\s+LEVEL\\s+SECURITY`,"i").test(sql)||!new RegExp(`CREATE\\s+POLICY\\s+[^;]+\\s+ON\\s+(?:public\\.)?"?${table}"?`,"i").test(sql))errors.push(`Enforced tenant table migration must ENABLE/FORCE RLS and create its policy ${table} (${migrationDir})`);
+  }else if(!tableComment.includes("TEN-ADR-006 Path A")||!tableComment.includes(`${item?.rls?.classification??""} class`)||!tableComment.includes(`owner ${item?.owner??""}`)||!tableComment.includes(`scope ${item?.rls?.scopeColumns?.join(",")??""}`)||!tableComment.includes("closureGate TEN-03"))errors.push(`Path A tenant table migration comment must record class, owner, scope and TEN-03 closure ${table} (${migrationDir})`);
+ }
+}
 if(errors.length){console.error(errors.join("\n"));process.exit(1);}
 console.log(`Database design checks passed: ${catalog.tables.length} registered table contracts; physical names, owner prefixes, LLD schemas and Prisma mappings agree.`);

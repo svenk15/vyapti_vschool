@@ -172,6 +172,8 @@ Commands lock actor account rows → Organization guard → School guard in the 
 5. Rehearse both a clean database and an existing baseline containing synthetic rows. Prove row IDs/timestamps/history survive an upgrade, ORM and SQL agree, and rerunning deploy changes nothing.
 6. Record actual migration IDs, tests, source fingerprint/commit, demo URL and owner feedback in the module CURRENT_STATE. Rollback of application code after a schema change needs compatibility analysis; do not assume old binaries still understand renamed objects.
 
+Every new tenant-owned or identity/security table migration must record its table class, exact scope columns, constraints, supporting indexes, intended policy, owner and TEN-03 closure gate in the owning LLD and `TABLE_REGISTRY.json`. During the explicit TEN-ADR-006 Path A development exception, the same forward migration adds a table comment documenting deferred enforcement; `pnpm check:db-design` enforces that annotation. After TEN-03 turns on enforcement, each new tenant table migration must ENABLE and FORCE RLS and create its policy in that same migration. Global operator and deployment-only tables require their recorded exception and narrow access path. Never change an applied migration to retrofit these rules.
+
 The current rename migration transaction renames the previously released vora_platform_setup_check and its PK to vs_ names without DROP/CREATE or copying/deleting rows. Stop the previous local server before migrating, regenerate Prisma, then restart the matching code. Health API behavior stays unchanged. A stopped older starter would otherwise look for the old physical table. No business-table schema is migrated by this change.
 
 ## Foundation physical schema — preserved by IAM-01

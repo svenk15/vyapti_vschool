@@ -1054,6 +1054,21 @@
   "rlsPlan": {
     "decision": "Path A: table policy metadata now; database RLS enforcement deferred to TEN-03 during development.",
     "productionGate": "No multi-client production release until TEN-03 verifies enforcement with the restricted runtime role.",
+    "futureMigrationRule": {
+      "effectiveFrom": "20261006",
+      "closureGate": "TEN-03",
+      "requiredRegistryFields": [
+        "classification",
+        "scopeColumns",
+        "intendedPolicy",
+        "owner",
+        "closureGate"
+      ],
+      "pathARequirement": "A new tenant table migration records its policy class, exact scope, owner and TEN-03 gate in TABLE_REGISTRY.json and adds the canonical TEN-ADR-006 Path A class/owner/scope/closureGate table comment in that forward migration.",
+      "enforcementRequirement": "After enforcementImplemented is true, each new tenant table migration must ENABLE and FORCE ROW LEVEL SECURITY and create its policy in the same migration.",
+      "exceptions": "GLOBAL_OPERATOR remains under the PLATFORM audit gate; DEPLOYMENT_ONLY is an explicit TEN-03 exception with no tenant runtime path.",
+      "checkedBy": "pnpm check:db-design"
+    },
     "enforcementImplemented": false
   }
 }
