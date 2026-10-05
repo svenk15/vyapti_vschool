@@ -3,7 +3,7 @@ import Link from 'next/link';
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {usePathname} from 'next/navigation';
 import type {AdminHome} from '@/shared/contracts/access';
-import type {AdminNavigationGroup} from '@/lib/server/admin-navigation';
+type AdminNavigationGroup=Readonly<{label:string;items:readonly Readonly<{href:string;label:string}>[]}>;
 import {BranchSwitcher} from '@/components/institution-context';
 import {AccessSignOut} from '@/components/access-login';
 
