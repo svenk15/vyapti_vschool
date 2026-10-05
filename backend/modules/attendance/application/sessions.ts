@@ -1,7 +1,7 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {AttendanceCorrectionResult,AttendanceHistory,AttendanceMarkEntry,AttendanceOpenResult,AttendanceSessionRecord,AttendanceSubmitResult} from '../../../../shared/contracts/attendance';
+import type {AttendanceCancelResult,AttendanceCommandStatus,AttendanceCorrectionResult,AttendanceHistory,AttendanceMarkEntry,AttendanceOpenResult,AttendanceSessionRecord,AttendanceSubmitResult} from '../../../../shared/contracts/attendance';
 import {AccessError,uuidPattern} from '../../access/contracts/index';
-import {correctSessionInput,openSessionInput,submitSessionInput} from '../domain/roll-call';
+import {cancelSessionInput,commandStatusInput,correctSessionInput,openSessionInput,submitSessionInput} from '../domain/roll-call';
 
 export type SessionRecord=AttendanceSessionRecord;
 export interface SessionRepository {
@@ -10,6 +10,8 @@ export interface SessionRepository {
  open(actor:Identity,organizationId:string,schoolId:string,sessionId:string,input:{expectedVersion:number;key:string}):Promise<AttendanceOpenResult>;
  submit(actor:Identity,organizationId:string,schoolId:string,sessionId:string,input:{expectedVersion:number;rosterRevision:string;entries:readonly AttendanceMarkEntry[];key:string}):Promise<AttendanceSubmitResult>;
  correct(actor:Identity,organizationId:string,schoolId:string,sessionId:string,input:{expectedVersion:number;changes:readonly AttendanceMarkEntry[];reason:string;key:string}):Promise<AttendanceCorrectionResult>;
+ cancel(actor:Identity,organizationId:string,schoolId:string,sessionId:string,input:{expectedVersion:number;reason:string;key:string}):Promise<AttendanceCancelResult>;
+ commandStatus(actor:Identity,organizationId:string,schoolId:string,command:'attendance.submit'|'attendance.cancel',key:string):Promise<AttendanceCommandStatus>;
  history(actor:Identity,organizationId:string,schoolId:string,sessionId:string):Promise<AttendanceHistory>;
  schoolDay(actor:Identity,organizationId:string,schoolId:string,date:string):Promise<SessionRecord[]>;
  teacherDay(actor:Identity,organizationId:string,schoolId:string,date:string):Promise<SessionRecord[]>;
@@ -27,6 +29,8 @@ export function createAttendanceUseCases(repo:SessionRepository){
   open(raw:Identity|null,org:unknown,school:unknown,session:unknown,input:{expectedVersion:unknown;key:unknown}){const s=scope(raw,org,school);return repo.open(s.actor,s.organizationId,s.schoolId,id(session),openSessionInput(input));},
   submit(raw:Identity|null,org:unknown,school:unknown,session:unknown,input:{expectedVersion:unknown;rosterRevision:unknown;entries:unknown;key:unknown}){const s=scope(raw,org,school);return repo.submit(s.actor,s.organizationId,s.schoolId,id(session),submitSessionInput(input));},
   correct(raw:Identity|null,org:unknown,school:unknown,session:unknown,input:{expectedVersion:unknown;changes:unknown;reason:unknown;key:unknown}){const s=scope(raw,org,school);return repo.correct(s.actor,s.organizationId,s.schoolId,id(session),correctSessionInput(input));},
+  cancel(raw:Identity|null,org:unknown,school:unknown,session:unknown,input:{expectedVersion:unknown;reason:unknown;key:unknown}){const s=scope(raw,org,school);return repo.cancel(s.actor,s.organizationId,s.schoolId,id(session),cancelSessionInput(input));},
+  commandStatus(raw:Identity|null,org:unknown,school:unknown,command:unknown,keyValue:unknown){const s=scope(raw,org,school),request=commandStatusInput(command,keyValue);return repo.commandStatus(s.actor,s.organizationId,s.schoolId,request.command,request.key);},
   history(raw:Identity|null,org:unknown,school:unknown,session:unknown){const s=scope(raw,org,school);return repo.history(s.actor,s.organizationId,s.schoolId,id(session));},
   schoolDay(raw:Identity|null,org:unknown,school:unknown,day:unknown){const s=scope(raw,org,school);return repo.schoolDay(s.actor,s.organizationId,s.schoolId,date(day));},
   teacherDay(raw:Identity|null,org:unknown,school:unknown,day:unknown){const s=scope(raw,org,school);return repo.teacherDay(s.actor,s.organizationId,s.schoolId,date(day));},

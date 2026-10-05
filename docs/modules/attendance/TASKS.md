@@ -107,24 +107,24 @@ Start and verify the server, give the user the URL and this script, record human
 
 Depends on: ATT-03, STU-03
 
-Design: [flow ATT-04](DESIGN.md). Scope and API: POST /api/v1/sessions/:id/cancel; GET /api/v1/commands/:command/key/:key (key URL opaque, no student/token content).
+Design: [flow ATT-04](DESIGN.md). Scope and API: POST /api/v1/sessions/:id/cancel; GET /api/v1/commands/:command/key/:key (allowlisted `attendance.submit`/`attendance.cancel`, opaque key URL). No schema/migration change is expected; existing cancellation columns, immutable revision type and receipt uniqueness are sufficient. If implementation proves otherwise, update this design and table registry before adding a forward migration.
 
 ### Implementation instructions
 
 1. For SCHEDULED/OPEN require class.manage; SUBMITTED requires attendance.correct, always reason.
 2. Acquire guards, reauthorize resource and version; set CANCELLED without deleting snapshots/records/revisions.
 3. Append CANCEL revision, audit, fact and receipt.
-4. Unknown submission result: check receipt with the same actor/scope/key and read current session; FOUND reconciles success, UNKNOWN permits same-payload retry.
-5. On cancellation/conflict/revocation return accurate UI state; clear drafts on denied access; cancelled sessions excluded from attendance denominator.
+4. Unknown submission result: check receipt for the current organization/account/command/key; resolve its session ID and repeat scoped current-resource authorization before returning FOUND. Another actor, branch or revoked resource returns 404; only an absent key is UNKNOWN. FOUND reconciles success; UNKNOWN permits same-payload/same-key retry.
+5. On cancellation/conflict/revocation return accurate UI state; clear drafts on denied access; canceled sessions stay visible with retained read-only history to school admins, are omitted from teacher lists and excluded from attendance denominator.
 
 Files: extend `backend/modules/attendance/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/attendance`, `test/functional/attendance` and `test/e2e/attendance` as the suite grows.
 
 ### Acceptance and test strategy
 
 - Unit / application: Cancellation capability by state; result reconciliation state machine.
-- Real PostgreSQL: Submit-vs-cancel serialization; no duplicate outbox; revoked actor cannot read prior receipt payload.
-- Browser: Simulated response loss recovers; cancel submitted session retains visible history and excludes metrics.
-- Failure contract: Status lookup foreign/other actor→404; cancellation race→409; duplicate same command key returns receipt; no resurrection route.
+- Real PostgreSQL: Submit-vs-cancel serialization has one winner; losing transition writes no partial records/revisions; exactly one receipt/outbox; retained frozen roster/records; revoked actor/assignment and other actor/branch cannot read receipt payload; evidence failure rolls back. Capture EXPLAIN ANALYZE for admin/teacher date predicates and receipt lookup.
+- Browser: Drop a committed submit response, recover FOUND through status lookup, and verify retry behavior; cancel a separate submitted synthetic session, confirm admin history remains visible/read-only, teacher list excludes it, and canceled status is excluded by the denominator predicate.
+- Failure contract: status lookup foreign/other actor/revoked resource→404; absent receipt→UNKNOWN; cancellation race/stale/already canceled→409; duplicate same command key and payload returns receipt; changed payload conflicts; no resurrection route.
 - Required DB effect: Session cancellation state/time/version + immutable cancellation revision + envelopes. No deleting records or mutating earlier revision.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.

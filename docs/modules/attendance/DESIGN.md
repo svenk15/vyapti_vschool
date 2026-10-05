@@ -228,6 +228,44 @@ sequenceDiagram
 
 ## ATT-04 — Cancel sessions and recover failed submissions
 
+**Design-readiness note (5 October 2026):** ATT-03 and STU-03 are VERIFIED/PENDING; their implementation status satisfies this task's dependencies, with no human-PASSED gate recorded. The existing `vs_attendance_session` already has `cancelled_at`, `status`, `version` and scoped day/occurrence indexes; `vs_attendance_revision` already permits immutable `CANCEL` rows keyed by `(organization_id,school_id,session_id,number)`. `vs_tenancy_tenant_command_receipt` is organization/account/command/key unique and stores a safe response JSON, but has no branch column; every found response therefore must resolve its session ID and pass current branch/resource authorization before returning it. No migration/table/index is needed for ATT-04. Path A remains in force: application authorization runs on every read/write; RLS is deferred to TEN-03, and the existing BRANCH table registry entry remains gated on TEN-03 closure.
+
+Cancellation owner is Attendance. `AttendanceSession` owns `SessionRosterEntry`, `AttendanceRecord`, and immutable `AttendanceRevision`; cancellation changes only session status/time/version, adds one revision and standard tenancy audit/outbox/receipt evidence. It never deletes rows or reverses status. Reason is NFC-normalized/trimmed, 5–500 chars, stored only in the owned revision; audit reason stays a fixed generic label and outbox/receipt contain no student IDs, names, roll numbers or free-text reason. The command hash binds schema version, organization, school, actor, session, expected version, reason and key. Reuse by the same actor/scope/command/key with the same hash returns the safe original result after fresh authorization; a different payload is IDEMPOTENCY_CONFLICT.
+
+For SCHEDULED/OPEN, cancel requires current `class.manage`; for SUBMITTED it requires `attendance.correct`. Recheck active account/token, active organization/school membership, current grant, active Attendance and dependency entitlements/branch activations, release manifest and the session in scope on every call. No teacher can cancel. Session detail/history remain administrator school-read operations after cancellation; show the retained submitted records and revisions read-only. The admin day list includes CANCELLED rows so history is reachable; teacher lists continue excluding them. Future metrics must predicate out `status='CANCELLED'`; no report is added in this task.
+
+Add `GET /api/v1/commands/:command/key/:key` for the allowlisted opaque names `attendance.submit` and `attendance.cancel`. It queries receipts by current organization and actor. If the key exists only for another actor, return resource-safe 404; if the actor's matching receipt is found, resolve its `sessionId`, re-run current scoped read authorization (including current teacher assignment for a submit receipt), and return only the allowlisted safe result. A receipt from another branch or revoked authorization is 404. Only a truly absent key returns UNKNOWN. This makes a leaked/replayed URL insufficient to recover receipt data. The cancel command has no response-loss mutation in the UI; submission preserves its key and draft when transport outcome is unknown, checks status, and offers same-payload/same-key retry only after UNKNOWN. FOUND renders the committed result. Status checks are reads and acquire no write locks.
+
+Mutation protocol preserves account → organization → school → session lock order. Submit and cancel both lock the same scoped session row before state/version checks, then write session/revision/evidence within one serializable/transactional boundary using the repository's established isolation and School configuration guard. If submit wins, a stale cancellation returns 409 and changes nothing; if cancel wins, submit returns 409 and writes no records. Exactly one transition/revision/receipt/outbox is committed. Same-key replay occurs only after current permission/scope checks. Reads remain lock-free. Existing indexes support scope/date/status list reads and session/revision lookup; receipt uniqueness supports actor command reconciliation.
+
+**Failure/API/UI details:** cancel POST accepts `{expectedVersion,reason,key}` and returns `{sessionId,version,status:"CANCELLED",cancelledAt,revision}`. Errors: unauthenticated 401; forbidden current grant 403; foreign/revoked resource 404; malformed or short/long reason 422; stale version, already cancelled, or concurrent transition 409; DB/evidence failure 503 with full rollback. Admin detail offers a reasoned cancel confirmation only for SCHEDULED/OPEN/SUBMITTED; CANCELLED is read-only and displays retained history. The teacher sees no cancelled sessions. Use existing shared controls, accessible status/error feedback, and no optimistic status change before the response.
+
+**Query contract and evidence:** admin day list uses `(organization_id,school_id,school_date,status,starts_at,id)` and includes all four statuses. Teacher/date reads retain current assignment join and `status <> 'CANCELLED'`. Receipt lookup uses its existing unique organization/actor/command/key index. Record EXPLAIN ANALYZE for these predicates/receipt lookup in functional evidence; do not claim the Bible pilot latency target from a tiny fixture or conflate it with TEN-03's larger scale profile.
+
+```mermaid
+sequenceDiagram
+  actor U as Admin/teacher
+  participant W as Attendance HTTP/UI
+  participant A as Attendance facade
+  participant P as Attendance repository
+  participant D as PostgreSQL
+  U->>W: Cancel session or check submit result
+  W->>A: Verified identity, scoped command/key
+  A->>P: Reauthorize membership, grant, entitlement and resource
+  P->>D: account→organization→school→session guards for mutation
+  alt cancel command
+    P->>D: Update session + CANCEL revision + audit/outbox/receipt atomically
+    D-->>P: committed safe result
+  else status check
+    P->>D: Own receipt lookup, then scoped current resource authorization
+    D-->>P: FOUND safe result or absent
+  end
+  P-->>W: typed result/UNKNOWN/error
+  W-->>U: canceled history, recovered result, retry or conflict
+```
+
+**Verification criteria:** unit cancellation-state and reconciliation tests; real PostgreSQL submit-vs-cancel race proving one winner, no duplicate evidence and retained rows; revoked membership/assignment and other-actor/branch receipt checks; injected evidence failure rollback; explain plans for admin/teacher day predicates and receipt lookup. Playwright simulates a committed submission whose response is dropped, recovers FOUND, then cancels a separate synthetic submitted session and verifies it remains visible to admin with history while omitted from the teacher list and any attendance denominator. Metrics denominator assertion is a direct scoped query contract until reporting ships.
+
 **Success response contract:** Cancel `{sessionId,version,status:"CANCELLED",cancelledAt,revision}`; command status `{state:"FOUND",result}` or `{state:"UNKNOWN"}`. UNKNOWN is not proof the command failed; same-key retry is safe.
 
 **Transport:** POST /api/v1/sessions/:id/cancel; GET /api/v1/commands/:command/key/:key (key URL opaque, no student/token content)
