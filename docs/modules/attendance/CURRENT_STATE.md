@@ -7,7 +7,7 @@ Last updated: 2026-10-05. No imported task completion or active execution timer.
 | ATT-01 | VERIFIED | PENDING | Source `5a9e528a65a6e96b63b8546d9eda590567483ea5`; local PostgreSQL, Playwright, checks, build and live demo evidence below |
 | ATT-02 | VERIFIED | PENDING | Source checkpoint recorded below; full checks, 99 PostgreSQL functional tests, desktop/mobile Playwright and production build passed |
 | ATT-03 | VERIFIED | PENDING | Full repository checks, 99 PostgreSQL functional tests, desktop/mobile Playwright and production build passed; frozen demo and source identity below |
-| ATT-04 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| ATT-04 | VERIFIED | PENDING | Source `a59de23ee180b97a3d92dd6c41c97b4ad48b657f`; evidence below |
 
 ## Current checkpoint
 
@@ -17,7 +17,7 @@ Last updated: 2026-10-05. No imported task completion or active execution timer.
 
 ATT-02 implementation is VERIFIED. Domain validation, scoped roster read, transactional open/submit, thin API routes, teacher UI and migration `20261005002500_attendance_roll_call` are implemented. The forward migration is applied in `vyapti_vschool` and `vyapti_vschool_test`; each has 25 migrations and none pending. The focused functional cases cover roster freeze/hash/replay, exact-set rejection, empty and >200 refusal, transaction rollback, open-versus-enrollment concurrency, dependency entitlement suspension, administrator read-only behavior, current-role reauthorization on replay and safe receipt/revision fields. The full PostgreSQL functional suite passed 99/99; `pnpm check` passed (90 unit tests, docs, 51 table contracts, boundaries and backend compilation); desktop and mobile Playwright passed 2/2; and `pnpm build` passed. `pnpm demo:seed` passed twice against the guarded development database and retained existing records. `artifacts/attendance-02-local/query-plan.json` records EXPLAIN ANALYZE evidence for a small synthetic profile (205 active students, 4 live section rows, 3 frozen rows/records, concurrency 1); this is not the Bible pilot benchmark or TEN-03 scale profile.
 
-ATT-01 schedules school-local occurrences against active offerings, published calendars and date-effective eligible teachers; current access is rechecked server-side. ATT-02 freezes the exact date-effective Student roster and persists atomic submission revisions. ATT-03 updates selected records with reasoned immutable correction revisions and scoped history. Cancellation and command recovery remain for ATT-04. Student transfer impact is enforced by STU-03. Failure states include validation, scope/configuration conflict, duplicate/replay, overlap, missing calendar, empty/oversized roster, stale state, no-op correction and unavailable service.
+ATT-01 schedules school-local occurrences against active offerings, published calendars and date-effective eligible teachers; current access is rechecked server-side. ATT-02 freezes the exact date-effective Student roster and persists atomic submission revisions. ATT-03 updates selected records with reasoned immutable correction revisions and scoped history. ATT-04 adds cancellation and command recovery. Student transfer impact is enforced by STU-03. Failure states include validation, scope/configuration conflict, duplicate/replay, overlap, missing calendar, empty/oversized roster, stale state, no-op correction and unavailable service.
 
 Migration `20261005002000_attendance_sessions` is applied to the guarded development database and the dedicated functional test database. It adds `vs_attendance_session` with scoped Offering, CalendarRevision and School references, occurrence uniqueness, time/status/version checks and the school-day index. Both databases retain migration history; no reset or applied migration edit occurred. Path A classifies this as BRANCH-scoped with owner, policy intent and TEN-03 closure gate registered. Runtime RLS/restricted roles are not enabled; application authorization remains active on every protected read/write.
 
@@ -61,13 +61,28 @@ ATT-03 frozen local demo: http://127.0.0.1:3426/sign-in; tested commit `a438bd19
 
 ## Next action
 
-ATT-03 review is PENDING and does not block implementation. Inspect ATT-04 DESIGN/TASKS/CURRENT_STATE and its STU-03 dependency, complete the design-readiness gate, then proceed with cancellation and command-recovery work if no explicit acceptance dependency or unresolved blocker applies. TEN-03 remains separately gated by ATT-04 human acceptance.
+ATT-04 human review is PENDING. RPT-01 may proceed because its sole dependency, ATT-03, is implemented and has no explicit human-acceptance gate. RPT-02 and TEN-03 remain gated on ATT-04 human acceptance.
 
 ## Pending decisions / limitations
 
 No product completion is assumed. Pilot deployment/provider, staff activation delivery procedure, backup targets and school retention requirements must be resolved in FND-02 before real-data release. Module-specific risks are listed in DESIGN.md.
 
 ## Evidence history
+
+### ATT-04 implementation checkpoint — 5 October 2026
+
+Intended demo: recover a submitted attendance command after a lost response, then cancel a separate submitted occurrence while retaining its roster and immutable history for administrators and hiding it from the assigned teacher's active day. Implementation commit `a59de23ee180b97a3d92dd6c41c97b4ad48b657f`; demo build `TQf60T_3XJ_z11F2mxu4Pa59` at http://127.0.0.1:3427/sign-in. `/api/health` and `/sign-in` returned HTTP 200; authenticated Chromium loaded the admin session list and cancellation workspace. The server is running from the task snapshot. ATT-03 at 3426 and earlier task snapshots at 3425, 3424, 3423, 3413 and 3412 remain available.
+
+`pnpm check` passed (lint, types, docs 30 tasks, DB design 51 contracts, boundaries/backend and 94 unit tests); `pnpm test:functional` passed 100/100 against real PostgreSQL `vyapti_vschool_test`; focused attendance functional tests passed 7/7; `pnpm test:e2e test/e2e/attendance-sessions.spec.ts` passed 2/2 desktop/mobile; `pnpm build` and `git diff --check` passed. Guarded development and test databases each report 25 migrations applied and none pending; ATT-04 adds no schema change. `pnpm demo:seed` ran twice safely, preserving the existing submitted occurrence and preparing/preserving a separate cancellation occurrence. Private synthetic admin/teacher credentials remain in ignored `artifacts/people-02/private-demo.json`; command keys and secondary teacher credentials remain in ignored `artifacts/attendance-01/private-demo.json`. No real messages were sent. Cancellation reason stays in the owned immutable revision; audit/receipt/outbox excludes pupil PII and reason. RLS remains deferred to TEN-03; application authorization remains active on protected reads/writes. Attendance metrics are not yet a product feature, so exclusion is a query contract for RPT-01 rather than a delivered metric.
+
+Manual review (PENDING):
+
+1. Sign in at http://127.0.0.1:3427/sign-in as administrator using `artifacts/people-02/private-demo.json`, then open `/admin/attendance/sessions`. Find the synthetic Mathematics session at 10:00–10:45 and choose “Review or correct”.
+2. Enter `Synthetic closure cancellation` and cancel it. Expect CANCELLED, retained submitted records, and a read-only cancellation revision with reason, actor and time.
+3. Refresh the admin list. Expect the canceled occurrence to remain visible as “View cancellation”. Open it and confirm the saved history.
+4. Sign in as the assigned teacher from the same private file and open `/teacher/today`. Expect the canceled occurrence to be absent; the 09:00 correction-review session remains available.
+
+Human review remains PENDING. No migration or table-registry change was needed; TEN-03 remains the consolidated RLS enforcement and verification gate.
 
 ### ATT-01 implementation checkpoint — 5 October 2026
 
