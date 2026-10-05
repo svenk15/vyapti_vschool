@@ -28,9 +28,13 @@ Depends on: DS-01, ATT-02, BRD-02
 
 Integrate shared components into real protected teacher/admin screens. Verify async unknown/conflict/success states and authorized menus, keyboard order, 200% zoom/360px/high contrast, reduced motion, VoiceOver and NVDA with recorded results. Add required server table and institution-switcher composition. Specialized future widgets remain gated before their consuming module, no claim all are already implemented.
 
+Use the shared semantic server-table presentation for server-authorized report rows; keep filters and cursor ownership in the server-backed feature. Put the existing authorized branch switcher after the page heading across protected admin/teacher workflows, and use the shared dialog for discard confirmation. UI visibility never replaces current server authorization.
+
 ### Acceptance and test strategy
 
 Run pnpm check, applicable PostgreSQL functional and Playwright suites, and production build. Capture source fingerprint/commit and actual test commands/exits. Validate the documented negative cases, not only the happy path. Update module state and affected Bible/ADRs in the same checkpoint.
+
+Browser evidence covers branch switching by keyboard, focus containment/return, current-context propagation, 360px and 2x layout scaling, forced-colors/reduced-motion emulation, semantic server-table names, and report/attendance success, unknown-result and denial recovery. Record actual VoiceOver and NVDA use independently; an accessibility snapshot is not a substitute.
 
 ### Demo and checkpoint
 

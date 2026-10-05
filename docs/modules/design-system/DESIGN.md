@@ -73,7 +73,9 @@ Use the included component gallery. Review all controls and three palettes, data
 
 ## DS-02 — Validate production screen recipes and accessibility
 
-Integrate shared components into real protected teacher/admin screens. Verify async unknown/conflict/success states and authorized menus, keyboard order, 200% zoom/360px/high contrast, reduced motion, VoiceOver and NVDA with recorded results. Add required server table and institution-switcher composition. Specialized future widgets remain gated before their consuming module, no claim all are already implemented.
+Integrate shared components into real protected teacher/admin screens. `ServerTable` is the semantic presentation shell for rows already queried and authorized by the server: it owns caption, row/column headers, and a keyboard-focusable overflow region; filters, cursor and authorization remain in the owning page/use case. Compose the current-context branch switcher on protected operational screens, list only server-returned selectable branches, and use the shared modal interaction for the discard/reload confirmation. The browser-provided branch is only a candidate; switch and subsequent reads/writes reauthorize on the server.
+
+Verify async unknown/conflict/success states and authorized routes, keyboard order and modal focus return, 200% layout scale/360px/high-contrast emulation, and reduced motion. Record VoiceOver and NVDA sessions separately from automated accessibility-tree evidence; do not imply full WCAG conformance. Specialized future widgets remain gated before their consuming module, no claim all are already implemented.
 
 **Manual demo:** Complete login → branch switch → attendance submission using keyboard and mobile; demonstrate conflict recovery, labels and same component styles across setup/roster/reports.
 

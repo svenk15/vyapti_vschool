@@ -5,7 +5,7 @@ DS-01 locally verified and accepted on 3 October 2026. No active timer. Gallery 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | DS-01 | VERIFIED | PASSED | [Local evidence](../../evidence/ds-01-local/verification.json); 26 unit, 4 PostgreSQL and 20 browser tests passed |
-| DS-02 | IN_PROGRESS | NOT_REQUESTED | Started 5 October 2026; read-only screen inventory and accessibility review underway |
+| DS-02 | BLOCKED | PENDING | Browser and production-build checks pass; native VoiceOver and NVDA review requires unavailable assistive-technology access |
 
 ## Implemented now
 
@@ -13,11 +13,21 @@ Shared component primitives and interactive gallery, including CSV/2 MiB rejecti
 
 ## Next action
 
-Complete DS-02 against current protected admin, teacher and branch-switching screens; retain the RPT-01 demo build while building DS-02 into `.next-e2e`. Dependencies ATT-02 and BRD-02 are VERIFIED/PENDING implementation checkpoints without human-PASSED gates. RPT-02 and TEN-03 are blocked on ATT-04 explicit human acceptance.
+DS-02 code and browser verification are complete. Resume the task only when native VoiceOver and NVDA sessions can be performed and recorded; until then, do not claim its accessibility acceptance gate complete. Dependencies ATT-02 and BRD-02 are VERIFIED/PENDING implementation checkpoints without human-PASSED gates. RPT-02 and TEN-03 remain blocked on ATT-04 explicit human acceptance. The available follow-on task FND-02 depends on DS-02, so there is no independent eligible implementation task.
 
 ## Evidence and feedback
 
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.
+
+### DS-02 implementation checkpoint — 5 October 2026
+
+Added the shared `ServerTable` semantic presentation and integrated the authorized branch-context switcher after headings across protected admin and teacher flows, retaining branch management only on pages that already exposed it. Replaced the branch-change confirmation markup with the shared native dialog. Report presentation now uses shared fields, table and empty state. Server-owned filtering and authorization remain in the owning gateways/use cases; branch selection remains server reauthorized. E2E coverage exercises keyboard confirmation/cancel and focus restoration, mobile/360px and 2x scaling, reduced motion/forced colors, context propagation and protected report/attendance success and denial paths.
+
+Verification on the implementation source before this documentation-only update: `pnpm check` passed (lint, typecheck, docs, database design, boundaries, backend compile and unit tests); `VSCHOOL_E2E=1 pnpm build` passed to isolated `.next-e2e` (build ID `8DrFO2ZwwJDeli_7hBUTu`); `pnpm test:e2e test/e2e/attendance-sessions.spec.ts --project=chromium` passed 1/1; the same spec on `--project=mobile` passed 1/1; `pnpm test:e2e test/e2e/tenancy.spec.ts` passed the branch desktop/mobile journeys (4/4), and a focused rerun of its corrected module-configuration desktop/mobile journeys passed (2/2). These Playwright journeys used the dedicated real PostgreSQL test database. Post-checkpoint `pnpm check:docs`, `pnpm check:db-design`, `pnpm check:boundaries`, `pnpm check:backend`, and `git diff --check` also passed. No schema, migration or seed change was required.
+
+Production build demo: `http://127.0.0.1:3429` (DS-02 build ID above; standalone server). `/sign-in` returned 200; `/admin` and `/teacher/today` redirect unauthenticated users (307); `/admin/reports/attendance` redirects to sign-in (307). Sign in using the fictional administrator in ignored local credential file `artifacts/people-02/private-demo.json`. Manual review: (1) open the admin attendance report and confirm the institution-context panel follows the heading and the report has a captioned semantic table; (2) use Tab to focus an authorized alternate-branch control, open its confirmation dialog, verify Tab/Shift+Tab stay in the dialog, press Escape and confirm focus returns; (3) confirm a branch switch and observe the page reload with its server-provided context; (4) open `/teacher/today` and submit a scheduled attendance session, then verify the saved roster/status; (5) resize to 360px and browser zoom 200%, checking no page-level horizontal overflow. Human review is PENDING.
+
+Limitations/blocker: automated forced-colors and reduced-motion browser emulation is recorded, but actual native VoiceOver and NVDA use has not been performed because this environment provides neither a VoiceOver session nor Windows/NVDA access. These explicit DS-02 design/task criteria remain unverified; implementation status is BLOCKED rather than VERIFIED. Request access to a native VoiceOver device/session and a Windows/NVDA session, record results separately, then rerun any affected focused browser check. No WCAG conformance claim is made. Next action: obtain that assistive-technology access; separately, wait for explicit ATT-04 human acceptance for RPT-02 and TEN-03. No independent task currently meets its documented dependencies.
 
 ### DS-01 started — 3 October 2026
 

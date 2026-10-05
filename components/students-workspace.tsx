@@ -3,19 +3,21 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ExistingPersonChoice, StudentWorkspace } from "@/shared/contracts/students";
+import type { AdminHome } from "@/shared/contracts/access";
+import { BranchSwitcher } from "@/components/institution-context";
 import { SelectField,TextField } from "@/components/ui/forms";
 import { Alert, Badge, Button, ButtonLink, Card, EmptyState, PageHeader } from "@/components/ui/primitives";
 
 async function json<T>(response:Response):Promise<T>{const value=await response.json();if(!response.ok)throw new Error(typeof value.message==="string"?value.message:"Student request could not be completed.");return value as T;}
 
-export function StudentsWorkspace({initial,institutionName,schoolName}:{initial:StudentWorkspace;institutionName:string;schoolName:string}){
+export function StudentsWorkspace({initial,home}:{initial:StudentWorkspace;home:AdminHome}){
   const router=useRouter(),[data,setData]=useState(initial),[search,setSearch]=useState(""),[appliedSearch,setAppliedSearch]=useState(""),[status,setStatus]=useState<"ACTIVE"|"ARCHIVED"|"ALL">("ACTIVE"),[appliedStatus,setAppliedStatus]=useState<"ACTIVE"|"ARCHIVED"|"ALL">("ACTIVE"),[firstName,setFirstName]=useState(""),[lastName,setLastName]=useState(""),[admissionNumber,setAdmissionNumber]=useState(""),[exactName,setExactName]=useState(""),[choices,setChoices]=useState<readonly ExistingPersonChoice[]>([]),[selectedPersonId,setSelectedPersonId]=useState(""),[busy,setBusy]=useState(false),[message,setMessage]=useState(""),[failed,setFailed]=useState(false);
   async function runSearch(value=search){setBusy(true);setMessage("");setFailed(false);try{const params=new URLSearchParams({search:value,status});const result=await json<StudentWorkspace>(await fetch(`/api/v1/students?${params}`,{cache:"no-store"}));setData(result);setAppliedSearch(value);setAppliedStatus(status);}catch(error){setFailed(true);setMessage(error instanceof Error?error.message:"Students could not be loaded. Try again.");}finally{setBusy(false);}}
   async function loadMore(){if(!data.nextCursor)return;setBusy(true);setMessage("");setFailed(false);try{const params=new URLSearchParams({search:appliedSearch,status:appliedStatus,cursor:data.nextCursor});const result=await json<StudentWorkspace>(await fetch(`/api/v1/students?${params}`,{cache:"no-store"}));setData(current=>({...result,items:[...current.items,...result.items]}));}catch(error){setFailed(true);setMessage(error instanceof Error?error.message:"More students could not be loaded. Try again.");}finally{setBusy(false);}}
   async function findPerson(){setBusy(true);setMessage("");setFailed(false);setSelectedPersonId("");try{const result=await json<{items:readonly ExistingPersonChoice[]}>(await fetch(`/api/v1/people/selection?q=${encodeURIComponent(exactName)}`,{cache:"no-store"}));setChoices(result.items);if(!result.items.length)setMessage("No exact Person name matched. This search does not create or link a Person.");}catch(error){setFailed(true);setMessage(error instanceof Error?error.message:"Existing Person choices could not be loaded.");}finally{setBusy(false);}}
   async function create(){setBusy(true);setMessage("");setFailed(false);try{const key=crypto.randomUUID(),response=await fetch("/api/v1/students",{method:"POST",headers:{"Content-Type":"application/json","Idempotency-Key":key},body:JSON.stringify({firstName,lastName,admissionNumber,existingPersonId:selectedPersonId||null,key})}),result=await json<{studentId:string}>(response);router.push(`/admin/students/${result.studentId}`);router.refresh();}catch(error){setFailed(true);setMessage(error instanceof Error?error.message:"Student registration failed. Retry with a new request.");}finally{setBusy(false);}}
   return <>
-    <PageHeader eyebrow={`${institutionName} · ${schoolName}`} title="Students" description="Register branch students and inspect their school identity." actions={<ButtonLink href="/admin" variant="secondary">School home</ButtonLink>}/>
+    <PageHeader eyebrow={`${home.institutionName} · ${home.schoolName}`} title="Students" description="Register branch students and inspect their school identity." actions={<ButtonLink href="/admin" variant="secondary">School home</ButtonLink>}/><BranchSwitcher home={home}/>
     {message&&<div role={failed?"alert":"status"} aria-live="polite" aria-label="Student feedback"><Alert tone={failed?"danger":"info"} title={failed?"Request not completed":"Student lookup"}>{message}</Alert></div>}
     <div className="two-columns section-space">
       <Card className="padded">

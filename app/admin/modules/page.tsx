@@ -5,6 +5,7 @@ import {moduleGateway} from '@/lib/server/tenancy';
 import {AccessError} from '@/backend/modules/access/contracts';
 import {Alert,BrandSurface,PageHeader,Card,ButtonLink} from '@/components/ui/primitives';
 import {TenancyModuleConfiguration} from '@/components/tenancy-module-configuration';
+import {BranchSwitcher} from '@/components/institution-context';
 export const dynamic='force-dynamic';
 export default async function ModuleConfigurationPage(){
  const identity=await getIdentity();let home:Awaited<ReturnType<typeof accountGateway.getHome>>;
@@ -12,5 +13,5 @@ export default async function ModuleConfigurationPage(){
  let configuration:Awaited<ReturnType<typeof moduleGateway.getCurrent>>|undefined,configurationError:unknown;
  try{configuration=await moduleGateway.getCurrent(identity);}catch(e){configurationError=e;}
  if(!configuration){const denied=configurationError instanceof AccessError&&(configurationError.code==='FORBIDDEN'||configurationError.code==='NOT_FOUND');return <BrandSurface><main className="container page-space"><PageHeader title="Branch module access" description={home.schoolName}/><Card className="padded"><Alert tone={denied?'warning':'danger'} title={denied?'No configuration access':'Configuration service unavailable'}>{denied?'Module configuration requires institution administrator authority and an active school administrator membership in this branch.':'Refresh to try again.'}</Alert><ButtonLink href="/admin" variant="secondary">Back to school</ButtonLink></Card></main></BrandSurface>;}
- return <BrandSurface><main id="main-content" className="container page-space"><PageHeader eyebrow={home.institutionName} title="Branch module access" description={`Review contracts and released capabilities for ${home.schoolName}.`} actions={<ButtonLink href="/admin" variant="secondary">Back to school</ButtonLink>}/><TenancyModuleConfiguration initial={configuration}/></main></BrandSurface>;
+ return <BrandSurface><main id="main-content" className="container page-space"><PageHeader eyebrow={home.institutionName} title="Branch module access" description={`Review contracts and released capabilities for ${home.schoolName}.`} actions={<ButtonLink href="/admin" variant="secondary">Back to school</ButtonLink>}/><BranchSwitcher home={home}/><TenancyModuleConfiguration initial={configuration}/></main></BrandSurface>;
 }
