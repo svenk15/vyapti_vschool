@@ -711,6 +711,7 @@ model CourseOffering {
  section Section @relation(fields:[organizationId,schoolId,sectionId,yearId],references:[organizationId,schoolId,id,yearId],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_course_offering_section_fkey")
  subject Subject @relation(fields:[organizationId,schoolId,subjectId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_course_offering_subject_fkey")
  assignments TeacherAssignment[]
+ sessions AttendanceSession[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_course_offering_scope_id_key")
  @@unique([organizationId,schoolId,yearId,code],map:"vs_academics_course_offering_code_key")
  @@unique([organizationId,schoolId,yearId,sectionId,subjectId],map:"vs_academics_course_offering_section_subject_key")
@@ -859,6 +860,7 @@ model CalendarRevision {
  calendar SchoolCalendar @relation("AcademicCalendarHistory",fields:[organizationId,schoolId,calendarId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_calendar_revision_calendar_fkey")
  publisher UserAccount @relation("AcademicRevisionPublisher",fields:[publishedBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_calendar_revision_publisher_fkey")
  exceptions CalendarException[]
+ attendanceSessions AttendanceSession[] @relation("AttendanceSessionCalendarRevision")
  currentForCalendars SchoolCalendar[] @relation("AcademicCalendarCurrent")
  @@unique([organizationId,schoolId,calendarId,number],map:"vs_academics_calendar_revision_number_key")
  @@unique([organizationId,schoolId,calendarId,id],map:"vs_academics_calendar_revision_scope_calendar_id_key")
@@ -880,4 +882,29 @@ model CalendarException {
  campus Campus? @relation(fields:[organizationId,schoolId,campusId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_calendar_exception_campus_fkey")
  @@index([organizationId,schoolId,revisionId,onDate],map:"vs_academics_calendar_exception_date_idx")
  @@map("vs_academics_calendar_exception")
+}
+
+model AttendanceSession {
+ id String @id(map:"vs_attendance_session_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ offeringId String @map("offering_id") @db.Uuid
+ schoolDate DateTime @map("school_date") @db.Date
+ startsAt DateTime @map("starts_at") @db.Timestamptz(3)
+ endsAt DateTime @map("ends_at") @db.Timestamptz(3)
+ occurrenceKey String @map("occurrence_key") @db.VarChar(80)
+ calendarRevisionId String @map("calendar_revision_id") @db.Uuid
+ status String @db.VarChar(20)
+ version Int
+ rosterRevision String? @map("roster_revision") @db.Char(64)
+ openedAt DateTime? @map("opened_at") @db.Timestamptz(3)
+ submittedAt DateTime? @map("submitted_at") @db.Timestamptz(3)
+ submittedBy String? @map("submitted_by") @db.Uuid
+ cancelledAt DateTime? @map("cancelled_at") @db.Timestamptz(3)
+ offering CourseOffering @relation(fields:[organizationId,schoolId,offeringId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_offering_fkey")
+ calendarRevision CalendarRevision @relation("AttendanceSessionCalendarRevision",fields:[organizationId,schoolId,calendarRevisionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_calendar_revision_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_attendance_session_scope_id_key")
+ @@unique([organizationId,schoolId,offeringId,occurrenceKey],map:"vs_attendance_session_occurrence_key")
+ @@index([organizationId,schoolId,schoolDate,status,startsAt,id],map:"vs_attendance_session_school_day_idx")
+ @@map("vs_attendance_session")
 }

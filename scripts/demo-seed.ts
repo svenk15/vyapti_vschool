@@ -14,6 +14,7 @@ const demos = [
   { name: "ACA-01 academic access", script: "scripts/demo-academics.ts" },
   { name: "PER-02 people and teacher eligibility", script: "scripts/demo-people.ts" },
   { name: "ACA-03 offerings and teacher assignments", script: "scripts/demo-academics-03.ts" },
+  { name: "ATT-01 sessions and assigned teacher day", script: "scripts/demo-attendance-01.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
 ] as const;
 
@@ -82,10 +83,11 @@ function main(): void {
   console.log("- artifacts/iam-03/private-activation.json");
   console.log("- artifacts/people-02/private-demo.json");
   console.log("- artifacts/academics-03/private-demo.json");
+  console.log("- artifacts/attendance-01/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster.csv")) console.log("- artifacts/imports-01/sample-roster.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial.csv")) console.log("- artifacts/imports-01/sample-roster-partial.csv");
   console.log("Other feature command receipts and synthetic IDs remain in their ignored artifacts/<task>/ files.");
-  console.log("Attendance remains unreleased. Human acceptance remains tracked per task and reviewed source.");
+  console.log("Feature access is enabled only for implemented local demos; server release and human acceptance remain tracked per task and reviewed source.");
 }
 
 try {

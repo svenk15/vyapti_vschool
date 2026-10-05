@@ -10,11 +10,11 @@ Design: [flow ATT-01](DESIGN.md). Scope and API: POST /api/v1/sessions; GET /api
 
 ### Implementation instructions
 
-1. Require class.manage for schedule; acquire guards and validate OPEN year/current calendar teaching day for section campus.
-2. Resolve offering and an eligible dated primary teacher; validate starts/ends map to schoolDate and lie within one school day; schoolDate cannot be before today (an elapsed start time earlier today is allowed).
+1. Recheck current account/membership/class.manage, attendance release, institution entitlement and branch activation for the admin screen and every protected route; acquire account→Organization→School locks for writes and validate OPEN year/current calendar teaching day for section campus.
+2. Resolve an active offering and exactly one eligible dated primary teacher; require explicit-offset instants with both endpoints in the same school-local date, end after start, and schoolDate no earlier than today (elapsed start time earlier today is allowed).
 3. Create SCHEDULED with pinned calendar revision and unique occurrence key; legitimately different occurrences need distinct keys/times.
-4. Implement CalendarImpact/PlacementImpact facades so academic publication/year close and student transfer query real session state.
-5. Teacher query returns only own dated assigned sessions; empty schedule and service failure are distinct.
+4. Implement enlisted CalendarImpact reads so academic publication/year close and teacher-assignment end query real session state in their existing owner transactions. Defer the Student transfer impact port until STU-03 defines the placement-changing workflow; current Student tasks do not mutate an existing placement.
+5. Teacher query rechecks active identity/person binding, Employee/Teacher, membership, attendance.read_class and date-effective assignment; returns only own dated sessions. Date defaults to school-local today and history stays within today's open academic year. Empty schedule and service failure are distinct.
 
 Files: extend `backend/modules/attendance/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/attendance`, `test/functional/attendance` and `test/e2e/attendance` as the suite grows.
 
@@ -23,15 +23,18 @@ Files: extend `backend/modules/attendance/domain`, `application`, `contracts` an
 - Unit / application: Occurrence/date/calendar eligibility and role policy.
 - Real PostgreSQL: Schedule-vs-calendar publication serialization; occurrence race; scope/year consistency.
 - Browser: Admin schedules; intended teacher sees it; other teacher does not.
-- Failure contract: Duplicate occurrence→409 unless same receipt replay; nonteaching day→422; no teacher→409; ambiguous/mismatched date→422.
-- Required DB effect: AttendanceSession + envelopes; no attendance records/roster rows yet.
+- Failure contract: Duplicate occurrence→409 unless same receipt replay; nonteaching day→422; no eligible teacher or teacher overlap→409; missing calendar/stale scope→409; ambiguous/offset-free/past/mismatched date→422; unavailable service→503 with same-key recovery.
+- Required DB effect: AttendanceSession + transactional command envelope/receipt; no attendance records/roster rows yet. ATT-01 creates no separate attendance-owned audit/outbox tables.
 - Persistence/security gate: preserve scoped offering/calendar composite FKs, unique occurrence receipt, teacher/date query index and School-serialized teacher-time overlap check; reauthorize current assignment on reads and writes. Under TEN-ADR-006 Path A, register session class/scope/constraints/indexes/policy intent and TEN-03 closure; defer database enforcement while keeping application authorization active.
+- Read/index evidence: record `EXPLAIN (ANALYZE, BUFFERS)` for the documented offering/date and teacher/date joins with the synthetic pilot data sizes and measured plans/latency. The larger TEN-03 RLS scale profile is a separate enforcement gate.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
 ### Demo and checkpoint
 
 Schedule today’s Mathematics session; sign in as assigned teacher and see it; sign in as a second teacher and verify it is absent.
+
+Run `pnpm demo:seed` first. It preserves existing local records, prepares one idempotent session per seeded school date, uses the development mail sink for the second synthetic teacher and stores credentials in ignored mode-0600 files. For the ATT-01 frozen demo, the administrator/assigned-teacher credentials are in `artifacts/people-02/private-demo.json`; the unassigned teacher login is in `artifacts/attendance-01/private-demo.json`.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 

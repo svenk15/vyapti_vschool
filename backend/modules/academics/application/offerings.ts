@@ -10,7 +10,7 @@ export interface AcademicOfferingRepository {
  assign(actor:Identity,organizationId:string,schoolId:string,input:AssignmentInput):Promise<{assignmentId:string;version:number;teacherId:string;offeringId:string;validFrom:string;validTo:string;replayed:boolean}>;
  end(actor:Identity,organizationId:string,schoolId:string,assignmentId:string,input:{expectedVersion:number;endDate:string;key:string;reason:string}):Promise<{assignmentId:string;version:number;validTo:string;replayed:boolean}>;
 }
-export type AssignmentImpactPort={hasFutureSessions(input:{organizationId:string;schoolId:string;assignmentId:string;onOrAfter:string}):Promise<boolean>};
+export type AssignmentImpactPort={hasFutureSessions(input:{organizationId:string;schoolId:string;assignmentId:string;onOrAfter:string},transaction?:unknown):Promise<boolean>};
 export const NO_ASSIGNMENT_SESSIONS:AssignmentImpactPort={async hasFutureSessions(){return false;}};
 function actor(value:Identity|null):Identity{if(!value||!uuidPattern.test(value.accountId)||!Number.isSafeInteger(value.tokenVersion))throw new AccessError('UNAUTHENTICATED');return value;}
 function civil(value:unknown){if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isFinite(Date.parse(`${value}T00:00:00Z`))||new Date(`${value}T00:00:00Z`).toISOString().slice(0,10)!==value)throw new AccessError('VALIDATION');return value;}

@@ -5,7 +5,7 @@ import {code,identifier,name,positiveVersion,validateRange} from '../domain/setu
 import {calendarExceptions,evaluateCalendar,weekdays,type CalendarExceptionInput} from '../domain/calendar';
 
 export type AcademicCapability='school.manage'|'class.manage';
-export type CalendarImpactPort={publicationAffectsSessions(input:{organizationId:string;schoolId:string;yearId:string;startsOn:string;endsOn:string;exceptions:readonly CalendarExceptionInput[]}):Promise<boolean>;hasPendingSessions(input:{organizationId:string;schoolId:string;yearId:string;onOrAfter:string}):Promise<boolean>};
+export type CalendarImpactPort={publicationAffectsSessions(input:{organizationId:string;schoolId:string;yearId:string;startsOn:string;endsOn:string;teachingWeekdays:readonly number[];exceptions:readonly CalendarExceptionInput[]},transaction?:unknown):Promise<boolean>;hasPendingSessions(input:{organizationId:string;schoolId:string;yearId:string;onOrAfter:string},transaction?:unknown):Promise<boolean>};
 export const NO_ATTENDANCE_SESSIONS:CalendarImpactPort={async publicationAffectsSessions(){return false;},async hasPendingSessions(){return false;}};
 export interface AcademicSetupRepository{
  workspace(actor:Identity,organizationId:string,schoolId:string):Promise<AcademicsWorkspace>;
