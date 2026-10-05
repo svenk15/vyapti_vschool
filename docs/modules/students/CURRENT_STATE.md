@@ -41,17 +41,18 @@ Mutations serialize through account → Organization → School guards and commi
 
 ## Evidence — STU-03 (5 October 2026)
 
-- Tested implementation checkpoint: source/evidence commit SHA will be recorded after the focused commit. This checkpoint continues on the existing work branch and preserves unrelated `.puku-cli/` and `readiness-review.diff` files.
+- Tested source commit: `df93e3944d96c41ed4654c93cb9662a5951cced8` on `work/stu-01-after-per02-wip`; focused STU-03 commit. This checkpoint preserves unrelated `.puku-cli/` and `readiness-review.diff` files.
 - Persistence: `pnpm test:functional test/functional/students-registration.test.ts` passed 9/9 against real PostgreSQL `vyapti_vschool_test` (24 migrations found/applied, none pending). Includes transfer vs School-locked insertion of an OPEN session, rejection with unchanged placement history, SCHEDULED-session eligibility, adjacent interval/history and roll carry-forward, idempotent replay, and archive protection/history preservation. No migration or schema change was made.
 - Browser: `pnpm test:e2e test/e2e/student-transfer.spec.ts` passed 2/2 (Chromium desktop and mobile), covering today transfer, prior and destination interval display, enrolled archive rejection, successful archive of an unused Student, archived status filtering, and mobile overflow.
 - Repository checks: `pnpm check` passed (lint, typecheck, docs: 30 tasks, DB design: 51 registered contracts, boundaries, backend compile, unit: 88/88 across 14 files). `pnpm build` passed on Next.js 16.3.8.
 - Demo data: guarded `pnpm demo:seed` passed twice on development database `vyapti_vschool`; it reused the synthetic People/ACA/ATT fixtures and student command receipts, created no duplicates on replay, and did not replace credential files. Private Student IDs and idempotency keys are in ignored mode-0600 `artifacts/students-03/private-demo.json`; administrator credentials remain in `artifacts/people-02/private-demo.json`.
 - No RLS policy is enforced by STU-03. `student_core` and `academic_core` application authorization, branch activation and entitlements remain checked server-side.
-- Local manual demo URL, tested source commit and browser verification will be added after creating the task snapshot. Human review remains PENDING.
+- Local demo: `http://127.0.0.1:3424/sign-in`, standalone snapshot `artifacts/demos/STU-03/df93e3944d96c41ed4654c93cb9662a5951cced8/`, build ID `mqt4SLcE5gv1fFvsFUbp9`, release manifest `academic_core,student_core`. Live health returned HTTP 200; authenticated Playwright smoke signed in using the private People fixture, opened the seeded Student detail (HTTP 200), and confirmed the transfer form/destination loaded. Human review remains PENDING.
+- Manual review: sign in with `artifacts/people-02/private-demo.json`; open Casey Learner (`DEMO-STU03-0007`, ID in `artifacts/students-03/private-demo.json`); transfer from Section A to Section B effective today with reason `Move to Section B`, leaving roll blank. Expect saved feedback, Section A ending yesterday, Section B beginning today, and roll `0007` carried forward. Attempt to archive Casey and expect a current/future enrollment conflict with the Student still active. Open Riley Learner (`DEMO-STU03-ARCHIVE`, also identified in the fixture) and archive with a reason; expect ARCHIVED status, then return to Students, choose Archived and search that admission number to find the preserved record. Human review remains PENDING.
 
 ## Next action
 
-Keep ports 3412 (STU-01), 3413 (STU-02), 3423 (ATT-01), and the STU-03 demo port (recorded after startup) available for review. STU-03's STU-02 and ATT-01 dependencies are implementation-verified/PENDING review and do not require human PASSED. PER-02's IAM-03 acceptance gate is cleared, but PER-02 itself remains human-review PENDING.
+Keep ports 3412 (STU-01), 3413 (STU-02), 3423 (ATT-01), and 3424 (STU-03) available for review. STU-03's STU-02 and ATT-01 dependencies are implementation-verified/PENDING review and do not require human PASSED. PER-02's IAM-03 acceptance gate is cleared, but PER-02 itself remains human-review PENDING.
 
 ## Pending decisions / limitations
 
