@@ -36,3 +36,5 @@ This index defines the complete currently authorized Phase 1 task scope (30 task
 | FND-02 | [platform](modules/platform/TASKS.md) | Demonstrate and release the complete pilot | RPT-02, IMP-03, IAM-03, ATT-04, TEN-03, BRD-02, DS-02 |
 
 Use `pnpm next-task` for a read-only suggestion based on implementation status only; failed human feedback is prioritized for defect resolution. Human acceptance does not control task eligibility under the current owner policy. Accessibility and other explicit technical release gates remain mandatory for release readiness. Later phases are out of scope.
+
+Owner reaffirmed 6 October 2026: continue every eligible Phase 1 implementation without per-task approval. Human PENDING/NOT_REQUESTED, including historical IAM-03 and ATT-04 acceptance gates, never blocks implementation. Keep their review states truthful. Implementation-VERIFIED prerequisites, technical/security gates and explicit release evidence remain mandatory; do not mark a task VERIFIED around failed or skipped checks. PER-02's former IAM-03 human-PASSED prerequisite is superseded; IAM-03 implementation must still be VERIFIED.

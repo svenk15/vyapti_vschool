@@ -38,7 +38,7 @@ Start and verify the server, give the user the URL and this script, record human
 
 Depends on: PER-01, IAM-03, ACA-01
 
-Dependency rule: PER-01 and ACA-01 implementations must be VERIFIED; their human reviews may remain PENDING. IAM-03 must be VERIFIED and human acceptance PASSED before PER-02 begins, per the explicit dependency gate recorded in [Access CURRENT_STATE](../access/CURRENT_STATE.md). This is the only prerequisite human-acceptance gate for PER-02. Keep its own review PENDING after implementation until the owner reviews the PER-02 demo.
+Dependency rule: PER-01, ACA-01 and IAM-03 implementations must be VERIFIED before PER-02 begins. Their human reviews may remain PENDING under the current Phase 1 execution policy; IAM-03 human acceptance is not a prerequisite. Keep PER-02's own review PENDING until the owner reviews that demo.
 
 Design: [flow PER-02](DESIGN.md). Scope and API: POST /api/v1/employees/:id/teacher-profile; POST /api/v1/employees/:id/account-binding; PATCH /api/v1/employees/:id/end.
 

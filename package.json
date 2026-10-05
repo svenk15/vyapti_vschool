@@ -19,6 +19,7 @@
     "test:e2e": "node scripts/database.mjs e2e",
     "next-task": "node scripts/next-task.mjs",
     "check:db-design": "node scripts/check-db-design.mjs",
+    "tenancy:03:setup-runtime-roles": "node scripts/tenancy-03-setup-runtime-roles.mjs",
     "check:backend": "tsc -p backend/tsconfig.json",
     "setup:auth": "node scripts/setup-auth.mjs",
     "provision-school": "node --import tsx scripts/provision-school.ts",
