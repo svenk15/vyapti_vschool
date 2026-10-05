@@ -1,7 +1,7 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {AttendanceMarkEntry,AttendanceOpenResult,AttendanceSessionRecord,AttendanceSubmitResult} from '../../../../shared/contracts/attendance';
+import type {AttendanceCorrectionResult,AttendanceHistory,AttendanceMarkEntry,AttendanceOpenResult,AttendanceSessionRecord,AttendanceSubmitResult} from '../../../../shared/contracts/attendance';
 import {AccessError,uuidPattern} from '../../access/contracts/index';
-import {openSessionInput,submitSessionInput} from '../domain/roll-call';
+import {correctSessionInput,openSessionInput,submitSessionInput} from '../domain/roll-call';
 
 export type SessionRecord=AttendanceSessionRecord;
 export interface SessionRepository {
@@ -9,6 +9,9 @@ export interface SessionRepository {
  schedule(actor:Identity,organizationId:string,schoolId:string,input:{offeringId:string;schoolDate:string;startsAt:string;endsAt:string;occurrenceKey:string;key:string;reason:string}):Promise<SessionRecord & {replayed:boolean}>;
  open(actor:Identity,organizationId:string,schoolId:string,sessionId:string,input:{expectedVersion:number;key:string}):Promise<AttendanceOpenResult>;
  submit(actor:Identity,organizationId:string,schoolId:string,sessionId:string,input:{expectedVersion:number;rosterRevision:string;entries:readonly AttendanceMarkEntry[];key:string}):Promise<AttendanceSubmitResult>;
+ correct(actor:Identity,organizationId:string,schoolId:string,sessionId:string,input:{expectedVersion:number;changes:readonly AttendanceMarkEntry[];reason:string;key:string}):Promise<AttendanceCorrectionResult>;
+ history(actor:Identity,organizationId:string,schoolId:string,sessionId:string):Promise<AttendanceHistory>;
+ schoolDay(actor:Identity,organizationId:string,schoolId:string,date:string):Promise<SessionRecord[]>;
  teacherDay(actor:Identity,organizationId:string,schoolId:string,date:string):Promise<SessionRecord[]>;
  detail(actor:Identity,organizationId:string,schoolId:string,sessionId:string):Promise<SessionRecord>;
 }
@@ -23,6 +26,9 @@ export function createAttendanceUseCases(repo:SessionRepository){
   schedule(raw:Identity|null,org:unknown,school:unknown,input:{offeringId:unknown;schoolDate:unknown;startsAt:unknown;endsAt:unknown;occurrenceKey:unknown;key:unknown;reason:unknown}){const s=scope(raw,org,school);return repo.schedule(s.actor,s.organizationId,s.schoolId,{offeringId:id(input.offeringId),schoolDate:date(input.schoolDate),startsAt:text(input.startsAt,40),endsAt:text(input.endsAt,40),occurrenceKey:text(input.occurrenceKey,80),key:id(input.key),reason:text(input.reason,500)});},
   open(raw:Identity|null,org:unknown,school:unknown,session:unknown,input:{expectedVersion:unknown;key:unknown}){const s=scope(raw,org,school);return repo.open(s.actor,s.organizationId,s.schoolId,id(session),openSessionInput(input));},
   submit(raw:Identity|null,org:unknown,school:unknown,session:unknown,input:{expectedVersion:unknown;rosterRevision:unknown;entries:unknown;key:unknown}){const s=scope(raw,org,school);return repo.submit(s.actor,s.organizationId,s.schoolId,id(session),submitSessionInput(input));},
+  correct(raw:Identity|null,org:unknown,school:unknown,session:unknown,input:{expectedVersion:unknown;changes:unknown;reason:unknown;key:unknown}){const s=scope(raw,org,school);return repo.correct(s.actor,s.organizationId,s.schoolId,id(session),correctSessionInput(input));},
+  history(raw:Identity|null,org:unknown,school:unknown,session:unknown){const s=scope(raw,org,school);return repo.history(s.actor,s.organizationId,s.schoolId,id(session));},
+  schoolDay(raw:Identity|null,org:unknown,school:unknown,day:unknown){const s=scope(raw,org,school);return repo.schoolDay(s.actor,s.organizationId,s.schoolId,date(day));},
   teacherDay(raw:Identity|null,org:unknown,school:unknown,day:unknown){const s=scope(raw,org,school);return repo.teacherDay(s.actor,s.organizationId,s.schoolId,date(day));},
   detail(raw:Identity|null,org:unknown,school:unknown,session:unknown){const s=scope(raw,org,school);return repo.detail(s.actor,s.organizationId,s.schoolId,id(session));}
  };

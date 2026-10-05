@@ -14,8 +14,8 @@ const demos = [
   { name: "ACA-01 academic access", script: "scripts/demo-academics.ts" },
   { name: "PER-02 people and teacher eligibility", script: "scripts/demo-people.ts" },
   { name: "ACA-03 offerings and teacher assignments", script: "scripts/demo-academics-03.ts" },
-  { name: "ATT-01 sessions and assigned teacher day", script: "scripts/demo-attendance-01.ts" },
   { name: "STU-03 placements and student archive", script: "scripts/demo-students-03.ts" },
+  { name: "ATT-02 submitted attendance and correction base", script: "scripts/demo-attendance-01.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
 ] as const;
 

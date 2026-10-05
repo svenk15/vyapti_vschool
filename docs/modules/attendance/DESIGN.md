@@ -177,35 +177,54 @@ sequenceDiagram
 
 **Database writes / atomicity:** AttendanceRecord statuses/revision, immutable AttendanceRevision, AttendanceSession.version and envelopes.
 
+**Authorization and physical contract:** Recheck active account/token, Organization/School, membership, `attendance` and its `student_core`/`academic_core`/`staff_core` dependencies and current resource permission for every history read or correction. `attendance.correct` is currently granted only to School administrators; class-read teachers cannot mutate. History requires current `attendance.read_school` and returns only rows for the scoped session. No tenant ID comes from the request. Correction locks account → Organization → School → AttendanceSession, then reads current roster/records and derives old values server-side. Read paths use no write locks.
+
+ATT-02 already provides the physical contract: `vs_attendance_record` has scoped `(organization_id,school_id,session_id,student_id)` membership and `current_revision >= 1`; `vs_attendance_revision` has scoped session and global actor FKs, unique `(organization_id,school_id,session_id,number)` (`vs_attendance_revision_number_key`), known-kind/reason constraints and an immutable trigger. No new table or migration is expected. A correction updates only selected current record rows to the next revision, appends one CORRECT JSON change set with student IDs and from/to status values, increments session version, and commits safe evidence atomically. Revision changes may retain student IDs/statuses in Attendance-owned history, but names, roll values, emails and raw pupil PII are excluded from audit/outbox/receipt.
+
+History reads filter by `(organization_id,school_id,session_id)` and order by `number` on the revision unique index. Current record values join the frozen roster by scoped session/student key. After branch authorization, actor display resolves through AccountPersonBinding→Person; an unbound administrator receives the generic “School administrator” label. No email is returned. Record EXPLAIN ANALYZE/BUFFERS for history and roster/current-record join with counts, indexes and buffers; small synthetic plan evidence is separate from the Bible pilot performance gate and TEN-03's scale profile.
+
+Failures are typed: invalid reason/status/late-minute shape→422; teacher/unauthorized→403 or resource-safe 404; no-op, duplicate/out-of-roster IDs, wrong lifecycle or stale version→409; foreign session→404; database/evidence failure→503 with record, session, revision and receipt rollback. Same actor/scope/key/canonical command replays the prior result after current authorization; changed payload conflicts. Concurrent correction writes serialize on the session, so only the command with the current expected session version can commit.
+
 **Errors and recovery:** Teacher denial→403; missing reason→422; cancelled/non-submitted→409; stale concurrent correction→409.
 
 ```mermaid
 sequenceDiagram
-  actor U as User
-  participant W as Delivery adapter
-  participant A as ATT-03 use case
-  participant P as Owner ports
+  actor U as School administrator
+  participant W as Next hosting adapter
+  participant A as Attendance use case
+  participant R as Attendance repository
   participant D as PostgreSQL
-  U->>W: Request named flow
-  W->>A: Validated input and verified session
-  A->>P: Validate students belong to frozen roster, expected version and meaningful mandatory reason
-  P->>D: Scoped reads and transaction guards
-  D-->>P: Current authorized facts
-  A->>P: Calculate old/new diff
-  alt Preconditions hold
-    P->>D: Apply documented writes atomically
-    D-->>P: Committed result
-    P-->>A: Safe result DTO
-    A-->>W: Acknowledged outcome
-    W-->>U: Updated view and next action
-  else Conflict or denied access
-    P-->>A: Typed failure, no partial business writes
-    A-->>W: Safe error with request ID
-    W-->>U: Explain recovery, keep permitted inputs
+  U->>W: POST correction with version, changes, reason and key
+  W->>A: Verified identity and bounded input
+  A->>R: correct(sessionId, command)
+  R->>D: Recheck current account, branch, modules and attendance.correct
+  R->>D: Lock account → organization → school → session
+  R->>D: Read scoped session, frozen roster and current records
+  alt Submitted session, version and change subset valid
+    R->>R: Derive old/new values and next revision
+    R->>D: Update selected records, append CORRECT revision, increment version and write evidence
+    D-->>R: Commit all or roll back all
+    R-->>A: Safe correction result
+    A-->>W: Result
+    W-->>U: Updated values and correction status
+  else Permission, lifecycle, version or validation failure
+    R-->>A: Typed failure; transaction writes nothing
+    A-->>W: Safe error and request ID
+    W-->>U: Explain recovery and retain editable draft
   end
+  U->>W: GET scoped revision history
+  W->>A: Verified identity
+  A->>R: history(sessionId)
+  R->>D: Recheck read permission; no write locks
+  R->>D: Read ordered scoped revisions and safe actor labels
+  D-->>R: History
+  R-->>W: Safe revision DTOs
+  W-->>U: Current values, reasons and history
 ```
 
-**Verification:** Unit — Correction policy/diff/no-op; reason bounds. Functional PostgreSQL — Concurrent corrections CAS; forced audit failure rolls records back; immutable revision trigger. E2E — Admin corrects absent to excused; teacher remains read-only; history and rate update.
+**Verification:** Unit — Correction subset/diff/no-op; normalized reason bounds; status/late-minute pairing. Functional PostgreSQL — scoped current-row update, next revision number/session version, concurrent correction with stale loser, same-key replay and changed-payload conflict, forced evidence failure rollback of every write, immutable trigger, current permission/dependency and foreign-scope denial. E2E desktop/mobile — admin corrects absent to excused and sees history values/reason/safe actor/time; assigned teacher remains read-only and direct action is denied. Run EXPLAIN ANALYZE/BUFFERS for revision history and roster/current-record join. Keep pilot benchmark and TEN-03 load evidence distinct.
+
+**Design-readiness note (5 October 2026):** ATT-02 is implementation-VERIFIED/PENDING and no explicit acceptance gate blocks this dependency. Reused existing revision schema and `attendance.correct` capability; resolved current admin/history permission boundaries, transaction guard order, version/revision numbering, subset/no-op/reason semantics, safe history projection, idempotency, race/rollback/errors, query indexes and browser acceptance. No unresolved product or schema decision blocks ATT-03.
 
 ## ATT-04 — Cancel sessions and recover failed submissions
 

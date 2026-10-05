@@ -78,27 +78,28 @@ Design: [flow ATT-03](DESIGN.md). Scope and API: POST /api/v1/sessions/:id/corre
 
 ### Implementation instructions
 
-1. Require attendance.correct for command; acquire guards and submitted session.
-2. Validate students belong to frozen roster, expected version and meaningful mandatory reason.
-3. Calculate old/new diff; reject ordinary teacher correction despite class-read permission.
-4. Update affected current AttendanceRecord rows, append CORRECT revision and increment session version.
-5. Commit audit/outbox/receipt; show prior/current values and corrected badge with author/time.
+1. Recheck current account/token, membership, active branch, attendance and dependency module availability, scoped session and `attendance.correct`; this currently resolves to an active School administrator. For correction mutations lock account → Organization → School → AttendanceSession. Keep history reads lock-free and require current `attendance.read_school`.
+2. Require a SUBMITTED session and expected session version. Validate a nonempty subset of unique IDs in the frozen roster, reject duplicate/no-op changes, validate status/late-minute pairing and a normalized 5–500 character reason.
+3. Compute from/to values from locked AttendanceRecord rows; never trust caller-supplied prior values. Update only selected current records and set their `current_revision` to the next number. Append one immutable CORRECT revision at the next session revision number and increment session version.
+4. Write safe audit/outbox/receipt in the same transaction. Identical same-key retry returns its original result only after fresh authorization; changed payload conflicts. Concurrent writes serialize on the session and stale versions fail atomically.
+5. Add authorized scoped history read, ordered by revision number with safe actor display name/time/reason. Admin UI shows old/new values and corrected state; teacher remains read-only and direct correction is denied.
 
 Files: extend `backend/modules/attendance/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/attendance`, `test/functional/attendance` and `test/e2e/attendance` as the suite grows.
 
 ### Acceptance and test strategy
 
-- Unit / application: Correction policy/diff/no-op; reason bounds.
-- Real PostgreSQL: Concurrent corrections CAS; forced audit failure rolls records back; immutable revision trigger.
-- Browser: Admin corrects absent to excused; teacher remains read-only; history and rate update.
-- Failure contract: Teacher denial→403; missing reason→422; cancelled/non-submitted→409; stale concurrent correction→409.
-- Required DB effect: AttendanceRecord statuses/revision, immutable AttendanceRevision, AttendanceSession.version and envelopes.
+- Unit / application: Correction subset/diff/no-op; reason normalization/bounds; status/late-minute pairing.
+- Real PostgreSQL: Exact scoped record and revision update; concurrent corrections produce one success and one stale-version failure; forced evidence failure rolls back records/session/revision/receipt; immutable revision trigger; same-key replay and changed-payload conflict; current permission, foreign scope and teacher denial.
+- Browser desktop/mobile: Admin corrects absent to excused; sees prior/current values, reason, safe author and timestamp; teacher remains read-only and direct action is denied.
+- Failure contract: Teacher/unauthorized→403 or resource-safe 404; invalid input/reason→422; no-op/duplicate/out-of-roster/non-submitted/cancelled→409; stale concurrent correction→409; foreign session→404; unavailable database/evidence→503 with full rollback.
+- Required DB effect: Update selected AttendanceRecord statuses/current_revision; append immutable AttendanceRevision; increment AttendanceSession.version; append transactional envelopes. No new table or migration is expected because ATT-02 schema already contains these fields/constraints.
+- Read support: scoped session key; `(organization_id,school_id,session_id,number)` revision unique index; scoped roster-record composite key. Capture EXPLAIN ANALYZE/BUFFERS for scoped revision history and roster/current-record join; keep this small-plan evidence distinct from Bible pilot and TEN-03 scale gates.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
 ### Demo and checkpoint
 
-As admin correct one absence to excused with a reason; inspect old/new values; as teacher confirm correction controls are unavailable and direct action is denied.
+Run `pnpm demo:seed`; it preserves a synthetic current-day submitted session with Present/Absent/Late records. Sign in at the frozen ATT-03 URL as admin using `artifacts/people-02/private-demo.json`; open `/admin/attendance/sessions`, choose “Review or correct”, change Riley Example from Absent to Excused with reason `Approved office correction`, then save. Expect a new correction revision, refreshed current status and visible old/new values, reason, author and time. Refresh and confirm history persists. Sign in as the assigned teacher from the same private file and confirm the submitted result is read-only and correction controls are unavailable; automated checks exercise direct-action denial.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 

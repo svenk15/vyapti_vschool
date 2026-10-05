@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {openSessionInput,submitSessionInput} from '../../backend/modules/attendance/domain/roll-call';
+import {correctSessionInput,openSessionInput,submitSessionInput} from '../../backend/modules/attendance/domain/roll-call';
 
 const id='c6ec3257-35c7-4a4c-942a-c082c4311201',key='3233a2aa-d2f2-4942-9a0e-54d47e62e19f',hash='a'.repeat(64);
 describe('ATT-02 roll-call policy',()=>{
@@ -12,5 +12,12 @@ describe('ATT-02 roll-call policy',()=>{
   expect(()=>submitSessionInput({expectedVersion:2,rosterRevision:hash,key,entries:[{studentId:id,status:'PRESENT',displayName:'not accepted'}]})).toThrow();
   expect(()=>submitSessionInput({expectedVersion:2,rosterRevision:hash,key,entries:[{studentId:id,status:'PRESENT'}],actorAccountId:id} as never)).toThrow();
   expect(()=>submitSessionInput({expectedVersion:2,rosterRevision:'wrong',key,entries:[{studentId:id,status:'PRESENT'}]})).toThrow();
+ });
+});
+describe('ATT-03 correction policy',()=>{
+ it('normalizes reason and accepts a unique changed-status subset',()=>{expect(correctSessionInput({expectedVersion:4,key,reason:'  Registrar correction  ',changes:[{studentId:id,status:'EXCUSED'}]})).toEqual({expectedVersion:4,key,reason:'Registrar correction',changes:[{studentId:id,status:'EXCUSED'}]});});
+ it('rejects empty/duplicate/extra changes, no command fields, and invalid reason or late minutes',()=>{
+  const base={expectedVersion:4,key,reason:'Valid correction reason',changes:[{studentId:id,status:'ABSENT'}]};
+  expect(()=>correctSessionInput({...base,changes:[]})).toThrow();expect(()=>correctSessionInput({...base,changes:[...base.changes,...base.changes]})).toThrow();expect(()=>correctSessionInput({...base,reason:'no'})).toThrow();expect(()=>correctSessionInput({...base,reason:`${'x'.repeat(501)}`})).toThrow();expect(()=>correctSessionInput({...base,changes:[{studentId:id,status:'LATE',lateMinutes:0}]})).toThrow();expect(()=>correctSessionInput({...base,changes:[{studentId:id,status:'ABSENT',lateMinutes:4}]})).toThrow();expect(()=>correctSessionInput({...base,unexpected:true} as never)).toThrow();
  });
 });
