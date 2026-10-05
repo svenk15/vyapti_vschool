@@ -1,0 +1,10 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="41.208246">
+<testsuite name="people-employees.spec.ts" timestamp="2026-10-05T01:08:56.356Z" hostname="chromium" tests="1" failures="0" skipped="0" time="22.52" errors="0">
+<testcase name="administrator creates separate same-name employee profiles, sees unlinked portal status after refresh, and gets safe failures" classname="people-employees.spec.ts" time="22.52">
+</testcase>
+</testsuite>
+<testsuite name="people-employees.spec.ts" timestamp="2026-10-05T01:08:56.356Z" hostname="mobile" tests="1" failures="0" skipped="0" time="9.83" errors="0">
+<testcase name="administrator creates separate same-name employee profiles, sees unlinked portal status after refresh, and gets safe failures" classname="people-employees.spec.ts" time="9.83">
+</testcase>
+</testsuite>
+</testsuites>

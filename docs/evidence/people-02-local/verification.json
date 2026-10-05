@@ -1,0 +1,47 @@
+{
+  "task": "PER-02",
+  "implementation": "VERIFIED",
+  "humanAcceptance": "PENDING",
+  "testedCommit": "e72125d4545e48c4b5c69c4ba3c9a646f7eea5d1",
+  "buildId": "M14FdBP2K8Hgq60j29NAE",
+  "demoUrl": "http://127.0.0.1:3421",
+  "database": {
+    "development": "vyapti_vschool",
+    "test": "vyapti_vschool_test",
+    "appliedMigrations": 22,
+    "pendingMigrations": 0,
+    "teacherMigration": "20261004001400_teacher_eligibility",
+    "teacherMigrationState": "previously applied; no new PER-02 migration in this checkpoint"
+  },
+  "authorizationAndRls": {
+    "applicationAuthorization": "enforced on protected reads and writes; current class.manage and user.manage checks verified",
+    "restrictedRuntimeRolesFound": [],
+    "teacherTableRlsEnabled": false,
+    "rlsStatus": "deferred to TEN-03 under TEN-ADR-006 Path A"
+  },
+  "checks": {
+    "pnpmCheck": "passed: lint, typecheck, docs, database design, boundaries, backend compile, 84 unit tests",
+    "pnpmTestFunctional": "passed: 90 tests across 14 files against real PostgreSQL vyapti_vschool_test",
+    "pnpmTestE2e": "passed: PER-02 desktop and mobile Chromium journeys, 2 tests",
+    "pnpmBuild": "passed: Next.js production build; dynamic employee and cross-owner routes compiled",
+    "pnpmDemoSeed": "passed: guarded local development seed; repeated PER-02 seeding reused existing tenant, invitation and profile command keys"
+  },
+  "browserSmoke": {
+    "health": "alive",
+    "adminSignIn": true,
+    "staffListAndTwoUnboundProfiles": true,
+    "employeesApiStatus": 200,
+    "teacherSignIn": true,
+    "teacherStaffManagementDenied": true,
+    "pageErrors": 0
+  },
+  "syntheticSeed": {
+    "privateCredentials": "artifacts/people-02/private-demo.json",
+    "delivery": "development-only file email sink; no external messages"
+  },
+  "limitations": [
+    "Database row-level security and restricted-role enforcement remain planned for TEN-03; no production RLS enforcement is claimed.",
+    "Assignment and attendance-session impact guards remain owned by ACA-03 and ATT-01 because those tables are not installed.",
+    "Human acceptance applies only after explicit review of this PER-02 demo/source."
+  ]
+}
