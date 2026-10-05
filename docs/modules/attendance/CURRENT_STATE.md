@@ -25,9 +25,9 @@ Seed fixture: `pnpm demo:seed` ran twice against guarded development DB `vyapti_
 
 Pilot query evidence, 5 October 2026: read-only `EXPLAIN (ANALYZE, BUFFERS)` ran against the single synthetic offering/assignment and one current-day session. Active-offering/date assignment returned 1 row, 6 shared buffer hits and 1.952 ms execution; plan used `vs_academics_course_offering_section_subject_key` and `vs_academics_teacher_assignment_teacher_date_idx`. Teacher/date session join returned 1 row, 4 shared buffer hits and 0.406 ms; the tiny data set led PostgreSQL to choose `vs_attendance_session_occurrence_key` and `vs_academics_teacher_assignment_offering_date_idx`, not the day/teacher indexes. This is plan evidence only, not a meaningful latency benchmark or proof of the Bible pilot load target; populated pilot-scale benchmark remains outstanding. TEN-03's larger RLS profile is a separate gate.
 
-## Next action
+## ATT-02 demo and pending review
 
-ATT-02 frozen local demo: http://127.0.0.1:3425/sign-in; tested commit `9b04ea2163cec24741f45231c4d6072153b9732c`; build ID `ZHSgofiCwCHUAlt83ilkf`; release manifest `academic_core,attendance,staff_core,student_core`. `/api/health` returned HTTP 200/ready and `/sign-in` returned HTTP 200. Server runs from its immutable task snapshot. Admin and assigned-teacher credentials are in ignored `artifacts/people-02/private-demo.json`; attendance command keys and second-teacher credentials are in ignored mode-0600 `artifacts/attendance-01/private-demo.json`; Student identifiers are in `artifacts/students-03/private-demo.json`. The same synthetic seed now has a submitted session, so use it to inspect submitted results; create a second occurrence on the current teaching date to exercise a fresh open/submit. Existing demos on ports 3412 (STU-01), 3413 (STU-02), 3423 (ATT-01), and 3424 (STU-03) remain available.
+ATT-02 frozen local demo: http://127.0.0.1:3425/sign-in; tested commit `9b04ea2163cec24741f45231c4d6072153b9732c`; build ID `ZHSgofiCwCHUAlt83ilkf`; release manifest `academic_core,attendance,staff_core,student_core`. `/api/health` returned HTTP 200/ready and `/sign-in` returned HTTP 200. Server runs from its immutable task snapshot. Admin and assigned-teacher credentials are in ignored `artifacts/people-02/private-demo.json`; attendance command keys and second-teacher credentials are in ignored mode-0600 `artifacts/attendance-01/private-demo.json`; Student identifiers are in `artifacts/students-03/private-demo.json`. The same synthetic seed now has a submitted session, so use it to inspect submitted results; create a second occurrence on the current teaching date to exercise a fresh open/submit. ATT-03 uses port 3426. Earlier demos on 3412 (STU-01), 3413 (STU-02), 3423 (ATT-01), and 3424 (STU-03) remain available.
 
 ATT-02 manual review (PENDING):
 
@@ -52,12 +52,16 @@ ATT-03 verification passed: `pnpm check` (92 unit tests, docs 30 tasks, DB desig
 
 ATT-03 query evidence from real PostgreSQL: profile 205 active synthetic students, 4 live placement rows, 3 frozen roster rows, 3 attendance rows, 3 revisions, concurrency 1. Live date-roster query returned 4 rows in 0.143 ms and used `vs_students_placement_roster_idx` (446 shared buffer hits across joins); frozen roster/record join returned 3 rows in 0.028 ms with 9 hits and planner chose sequential scans at this small size; scoped history returned 3 revisions in 0.006 ms using `vs_attendance_revision_number_key` (2 hits). Full plans with UUIDs redacted remain in ignored `artifacts/attendance-02-local/query-plan.json`. These are query-shape/index checks, not a Bible pilot benchmark or TEN-03 scale result.
 
-ATT-03 frozen local demo: **source/build identity and URL are recorded immediately after startup below**. Use `artifacts/people-02/private-demo.json` for the synthetic administrator and assigned teacher; private file values are never printed. `pnpm demo:seed` passed twice and prepared one submitted current-day session with three students. Manual review remains PENDING:
+ATT-03 frozen local demo: http://127.0.0.1:3426/sign-in; tested commit `a438bd198c4c8c5fed94ea694795373bd4953393`; build ID `pfdYMbGJGOReqvXFFzsB1`; release manifest `academic_core,attendance,staff_core,student_core`. `/api/health` returned HTTP 200/ready and `/sign-in` returned HTTP 200. An authenticated headless Chromium smoke with the ignored synthetic admin credential loaded the session list, review workspace, correction controls and history. The immutable task snapshot server is running; ATT-02 review remains on `http://127.0.0.1:3425` and earlier demos on 3412, 3413, 3423 and 3424 remain available. Use `artifacts/people-02/private-demo.json` for administrator and assigned teacher; private values are never printed. `pnpm demo:seed` passed twice and prepared one submitted current-day session with three students. Manual review remains PENDING:
 
 1. Sign in as administrator at the ATT-03 demo URL below; open `/admin/attendance/sessions`. Expect today’s Mathematics session in SUBMITTED state and choose “Review or correct”.
-2. Change Riley Example from Absent to Excused, enter `Approved office correction`, and save. Expect correction revision 2 and saved status.
-3. Refresh the review page. Expect Riley’s current value to remain Excused and history to show `Absent → Excused`, the reason, author and time.
+2. Find the student currently marked Absent, change that student to Excused, enter `Approved office correction`, and save. Expect a new correction revision and saved status.
+3. Refresh the review page. Expect that student’s current value to remain Excused and history to show `Absent → Excused`, the reason, author and time.
 4. Sign in as the assigned teacher in `artifacts/people-02/private-demo.json`, open the same session from `/teacher/today`, and verify it remains read-only with no correction control. Automated desktop/mobile checks also confirm the direct correction request is denied.
+
+## Next action
+
+ATT-03 review is PENDING and does not block implementation. Inspect ATT-04 DESIGN/TASKS/CURRENT_STATE and its STU-03 dependency, complete the design-readiness gate, then proceed with cancellation and command-recovery work if no explicit acceptance dependency or unresolved blocker applies. TEN-03 remains separately gated by ATT-04 human acceptance.
 
 ## Pending decisions / limitations
 
