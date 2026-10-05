@@ -1,6 +1,6 @@
 # Attendance review, completeness and exports — design
 
-Phase 1 · Design revision 1 · 3 October 2026. Status: specified for implementation; only the platform readiness path is implemented in this starter. Review unresolved deployment choices in FND-02 before real-data use.
+Phase 1 · Design revision 1 · 5 October 2026. RPT-01 is implemented; RPT-02 remains specified for its gated task. Review unresolved deployment choices in FND-02 before real-data use.
 
 ## Database naming and physical mapping
 
@@ -91,6 +91,12 @@ sequenceDiagram
 ```
 
 **Verification:** Unit — 2 present +1 late+1 absent+1 excused yields75%; all excused→unavailable; pending distinct. Functional PostgreSQL — Cross-school join denial; REPEATABLE READ consistency while correction commits. E2E — Filter, inspect metrics, drill down with same range; compare to hand-counted fixture.
+
+**RPT-01 design-readiness and implementation contract (5 October 2026):** Reporting owns only derived read models. It adds no table, migration, index or write; existing session, offering, section, subject and attendance-record contracts remain owned by their modules. The aggregate predicate is `session.organization_id = scope.organization_id AND session.school_id = scope.school_id AND session.school_date >= fromDate AND session.school_date < toDate`, plus exact offering `year_id`, `section_id` and `subject_id` predicates when selected. Joins retain both scope columns: session→offering→section/subject and session→attendance_record by `(organization_id,school_id,session_id)`. Attendance records contribute only for SUBMITTED, noncancelled sessions. This uses existing `vs_attendance_session_school_day_idx (organization_id,school_id,school_date,status,starts_at,id)` and `vs_attendance_record_session_student_key`; page order/cursor is `(school_date,starts_at,id)`. The scoped date query and offering/date filter will be captured with `EXPLAIN (ANALYZE, BUFFERS)`; small fixture timings are plan evidence, not the Bible pilot benchmark or TEN-03 scale gate.
+
+Every report request rechecks active account/token version, current active membership and `attendance.read_school`, active Organization/Branch, release manifest, attendance entitlement/activation and all declared attendance dependencies. Only the current school administrator capability projection includes school-wide read; teachers receive 403. Filter IDs are first resolved in the authorized scope, so foreign/absent IDs return 404 before aggregates. Reads run in one PostgreSQL REPEATABLE READ transaction; they do not acquire write locks. No RLS is enforced yet: attendance tables retain their Path A BRANCH classification/scope metadata and TEN-03 owns restricted-role enforcement and cross-tenant proof. Application authorization remains in force on every read.
+
+The expected/pending/future/cancelled counts are session counts. Expected is a started, noncancelled SUBMITTED/SCHEDULED/OPEN session; submitted and pending split that set. Future is a not-yet-started SCHEDULED session; cancellation is separate. P/L/A/E are submitted student-session counts; missing records do not become ABSENT. Rate is `(present + late)/(present + late + absent)`, with exact numerator/denominator retained and `value:null` for zero denominator. Excused and pending are excluded. Session DTOs expose only the session UUID/date/state/class labels and aggregate counts, never pupil identity. Errors: unauthenticated 401, teacher/permission denial 403, foreign filter 404, invalid/reversed/>31-day range or cursor 422, inactive module/release denied safely, database failure 503. No results are shown as a truthful empty state, not as a service failure.
 
 ## RPT-02 — Export a scoped report and review audit history
 

@@ -23,8 +23,9 @@ Files: extend `backend/modules/reporting/domain`, `application`, `contracts` and
 - Unit / application: 2 present +1 late+1 absent+1 excused yields75%; all excused→unavailable; pending distinct.
 - Real PostgreSQL: Cross-school join denial; REPEATABLE READ consistency while correction commits.
 - Browser: Filter, inspect metrics, drill down with same range; compare to hand-counted fixture.
-- Failure contract: Foreign filter→404; too broad/reversed range→422; forbidden teacher school report→403; DB failure distinct from empty.
+- Failure contract: Unauthenticated→401; teacher/current permission denial→403; foreign scoped filter→404; missing/reversed/>31-day range or invalid cursor→422; inactive entitlement/branch activation/release denied; database failure distinct from empty. Filters remain available to correct invalid input.
 - Required DB effect: Read-only; no derived total writes. Operational metrics may be non-sensitive, no product analytics dependency.
+- Database evidence: Use real PostgreSQL for current scoped joins and the correction/report REPEATABLE READ race. Capture the scoped offering/date plan with `EXPLAIN (ANALYZE, BUFFERS)`; no migration or table-registry change is expected.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
