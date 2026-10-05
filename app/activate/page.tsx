@@ -1,3 +1,3 @@
 import { AccountActivation } from "@/components/account-activation";
-import { BrandSurface,Card,PageHeader } from "@/components/ui/primitives";
-export default function ActivationPage(){return <BrandSurface><main id="main-content" className="container page-space"><PageHeader eyebrow="VSchool" title="Activate your account" description="Use your private operator token to set a password."/><Card className="padded"><AccountActivation/></Card></main></BrandSurface>;}
+import {AuthLayout} from '@/components/auth-layout';
+export default function ActivationPage(){return <AuthLayout eyebrow="Account activation" title="Activate your account" description="Use the private activation link provided for your school."><AccountActivation/></AuthLayout>;}

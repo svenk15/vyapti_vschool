@@ -11,9 +11,11 @@ DS-01 locally verified and accepted on 3 October 2026. No active timer. Gallery 
 
 Shared component primitives and interactive gallery, including CSV/2 MiB rejection and recovery, associated live field errors, and dialog/drawer boundary keyboard focus wrapping. Shared palettes, table interactions, forms, overlays, tabs and feedback are covered by local checks. Full WCAG conformance and native assistive-technology validation are not claimed.
 
+The shared administrator/teacher shells and the common AuthLayout now compose protected workspaces and account flows. Published palette resolution is active-member/branch scoped, honors branch-over-institution inheritance, and ignores drafts; branding preview renders shared production components in an isolated local subtree. The dashboard links institution branch administration to its own workspace. See [route coverage](ROUTE_COVERAGE.md); its family-level review remains in progress and visual acceptance is PENDING.
+
 ## Next action
 
-DS-02 code and browser verification are complete. Resume the task only when native VoiceOver and NVDA sessions can be performed and recorded; until then, do not claim its accessibility acceptance gate complete. Dependencies ATT-02 and BRD-02 are VERIFIED/PENDING implementation checkpoints without human-PASSED gates. RPT-02 and TEN-03 remain blocked on ATT-04 explicit human acceptance. The available follow-on task FND-02 depends on DS-02, so there is no independent eligible implementation task. Safe FND-02 preparation can inventory existing verification/demo evidence, prepare a release-gate matrix, and draft synthetic-only install/upgrade/backup/restore rehearsals; executing those rehearsals or asserting release readiness still requires all FND-02 dependencies and approved disposable targets.
+DS-02 remains implementation-in-progress until route-family rendered review is complete. The focused shared-shell, theme publication, and showcase journeys pass, but not every implemented route or true native 200% zoom has been inspected. VoiceOver and NVDA sessions remain outstanding and cannot be claimed from browser automation. ATT-02 and BRD-02 are VERIFIED/PENDING; pending human acceptance does not block implementation under the current execution policy. Continue route coverage and remaining authorized Phase 1 work without calling accessibility conformance or release readiness complete.
 
 ## Evidence and feedback
 

@@ -14,6 +14,8 @@ DS-ADR-002: one calm neutral surface system with constrained brand tokens. Defau
 
 See components/ui/primitives.tsx (Button, ButtonLink, Badge, Card, PageHeader, Alert, EmptyState, Skeleton, StatCard, Avatar, Breadcrumbs, Progress, Timeline, Stepper, BrandSurface); forms.tsx (TextField, SelectField, TextArea, Checkbox, Switch, RadioGroup, DateRange, FileUpload); interactive.tsx (Dialog/Drawer, Tabs, Toast, Disclosure, Tooltip, DataTable with pagination). SiteHeader, SchoolArt and branded login/configurator compose these primitives. Native datalist demonstrates basic local autocomplete; it is not an async directory lookup.
 
+`/design-system` is a live showcase of these production components and tokens. Its palette selector is explicitly a local preview. Protected shells receive only the effective published palette for the verified current member and branch; all screen compositions inherit that semantic token scope. See [the rendered route coverage record](ROUTE_COVERAGE.md) for route groups, observed issues and remaining visual evidence.
+
 | Pattern | Implemented contract | Extension boundary |
 |---|---|---|
 | Button | 4 variants; default type=button; loading disables; aria-busy; visible focus | Server action pending/error supplied by module |

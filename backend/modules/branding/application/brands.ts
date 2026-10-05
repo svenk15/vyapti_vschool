@@ -1,5 +1,6 @@
 import type {Identity} from '../../../../shared/contracts/access';
 import type {BrandFields,BrandingCommandResult,BrandingWorkspace,PublicBrandRecord} from '../../../../shared/contracts/branding-management';
+import type {BrandPalette} from '../../../../shared/contracts/branding';
 import {BrandingError,normalizeBrandFields,normalizeHost,normalizeSlug} from '../domain/brand';
 const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export type SanitizedBrandImage=Readonly<{bytes:Uint8Array;sha256:string;width:number;height:number}>;
@@ -7,6 +8,7 @@ export interface BrandAssetSanitizer{sanitize(input:Uint8Array):SanitizedBrandIm
 export interface BrandingSecurity{issueToken():{token:string;hash:string};hashToken(value:string):string}
 export interface BrandingRepository{
  workspace(actor:Identity,organizationId:string,schoolId:string):Promise<BrandingWorkspace>;
+ effectivePalette(organizationId:string,schoolId:string):Promise<BrandPalette|null>;
  createProfile(actor:Identity,organizationId:string,schoolId:string,slug:string,fields:BrandFields,key:string,reason:string):Promise<BrandingCommandResult>;
  saveDraft(actor:Identity,organizationId:string,schoolId:string,profileId:string,version:number,fields:BrandFields,key:string,reason:string):Promise<BrandingCommandResult>;
  uploadLogo(actor:Identity,organizationId:string,schoolId:string,profileId:string,version:number,asset:{bytes:Uint8Array;sha256:string;width:number;height:number},key:string,reason:string):Promise<{assetId:string;sha256:string;version:number}>;
@@ -17,7 +19,7 @@ export interface BrandingRepository{
  publicBrand(slug:string,host:string,canonicalHost:string):Promise<PublicBrandRecord|null>;
  publicAsset(assetId:string,sha256:string):Promise<Uint8Array|null>;
 }
-export interface CurrentBrandPermission{assertBrandingManage(actor:Identity,organizationId:string,schoolId:string):Promise<void>}
+export interface CurrentBrandPermission{assertBrandingManage(actor:Identity,organizationId:string,schoolId:string):Promise<void>;assertCurrentMember(actor:Identity,organizationId:string,schoolId:string):Promise<void>}
 export interface BrandHostChallengePort{txt(name:string):Promise<string[]>}
 export type BrandingFacade=ReturnType<typeof createBrandingUseCases>;
 const id=(v:unknown)=>{if(typeof v!=='string'||!uuidPattern.test(v))throw new BrandingError('VALIDATION');return v;};
@@ -29,6 +31,7 @@ export function createBrandingUseCases(repo:BrandingRepository,permission:Curren
  const authorized=async(actorRaw:Identity|null,orgRaw:unknown,schoolRaw:unknown)=>{const actor=identity(actorRaw),organizationId=id(orgRaw),schoolId=id(schoolRaw);await permission.assertBrandingManage(actor,organizationId,schoolId);return {actor,organizationId,schoolId};};
  return {
   async workspace(actor:Identity|null,org:unknown,school:unknown){const a=await authorized(actor,org,school);return repo.workspace(a.actor,a.organizationId,a.schoolId);},
+  async effectivePalette(actorRaw:Identity|null,orgRaw:unknown,schoolRaw:unknown){const actor=identity(actorRaw),organizationId=id(orgRaw),schoolId=id(schoolRaw);await permission.assertCurrentMember(actor,organizationId,schoolId);return repo.effectivePalette(organizationId,schoolId);},
   async createProfile(actor:Identity|null,org:unknown,school:unknown,raw:{slug:unknown;fields:unknown;key:unknown;reason:unknown}){const a=await authorized(actor,org,school);return repo.createProfile(a.actor,a.organizationId,a.schoolId,normalizeSlug(raw.slug),normalizeBrandFields(raw.fields),key(raw.key),reason(raw.reason));},
   async preview(actor:Identity|null,org:unknown,school:unknown,raw:unknown){const a=await authorized(actor,org,school);return {fields:normalizeBrandFields(raw),scope:{organizationId:a.organizationId,schoolId:a.schoolId}};},
   async saveDraft(actor:Identity|null,org:unknown,school:unknown,profile:unknown,raw:{version:unknown;fields:unknown;key:unknown;reason:unknown}){const a=await authorized(actor,org,school);return repo.saveDraft(a.actor,a.organizationId,a.schoolId,id(profile),version(raw.version),normalizeBrandFields(raw.fields),key(raw.key),reason(raw.reason));},

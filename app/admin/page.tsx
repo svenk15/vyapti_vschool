@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import {InstitutionBranchManager} from '@/components/institution-context';
 import {Alert,Badge,ButtonLink,Card,EmptyState,PageHeader} from '@/components/ui/primitives';
 import {contextGateway,accountGateway} from '@/lib/server/access';
 import {getIdentity} from '@/lib/server/auth';
@@ -39,6 +38,6 @@ export default async function AdminPage(){
    <section className="dashboard-actions" aria-labelledby="common-actions-title"><div className="dashboard-section-heading"><div><p className="eyebrow">Next steps</p><h2 id="common-actions-title">Common tasks</h2></div></div>{actions.length?<div className="dashboard-action-list">{actions.map((action,index)=><Card className="dashboard-action-card" key={action.href}><span className="dashboard-action-number" aria-hidden="true">0{index+1}</span><div><h3>{action.label}</h3><p className="muted">{action.description}</p><Link href={action.href} className="dashboard-action-link">Open workspace <span aria-hidden="true">→</span></Link></div></Card>)}</div>:<Card className="padded"><EmptyState title="No active workspaces" description="Your current account has no released school workspace actions for this branch."/></Card>}</section>
    <aside className="dashboard-school-card"><Card className="padded"><p className="eyebrow">Current branch</p><h2>{home.institutionName}</h2><dl className="school-facts"><div><dt>Branch code</dt><dd>{home.schoolCode}</dd></div><div><dt>Timezone</dt><dd>{home.timezone}</dd></div></dl>{canReadAttendance&&summary&&<ButtonLink href={`/admin/reports/attendance?fromDate=${today}&toDate=${tomorrow(today)}`} variant="secondary">View attendance report</ButtonLink>}</Card></aside>
   </div>
-  {managerDirectory.length>0&&<details className="dashboard-branch-management"><summary>Manage institution branches</summary><Card className="padded"><p className="muted">Create branch metadata here. Membership and module access remain separate authorized steps.</p><InstitutionBranchManager institutions={managerDirectory}/></Card></details>}
+  {managerDirectory.length>0&&<section className="dashboard-branch-management" aria-labelledby="branch-admin-title"><Card className="padded"><div><p className="eyebrow">Institution administration</p><h2 id="branch-admin-title">Manage branches</h2><p className="muted">Create and review branch details in the institution workspace. Branch setup does not grant staff or module access.</p></div><ButtonLink href="/institutions" variant="secondary">Open institution workspace</ButtonLink></Card></section>}
  </main>;
 }

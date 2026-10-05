@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, CSSProperties } from "react";
 import { palettes, type BrandPalette } from "@/shared/contracts/branding";
 
-export function BrandSurface({palette="forest",children,className=""}:{palette?:BrandPalette;children:ReactNode;className?:string}) {
- const p=palettes[palette];
- const style={"--primary":p.primary,"--on-primary":p.onPrimary,"--brand-soft":p.soft,"--brand-accent":p.accent} as CSSProperties;
+export function BrandSurface({palette,children,className=""}:{palette?:BrandPalette;children:ReactNode;className?:string}) {
+ const p=palette?palettes[palette]:null;
+ const style=p?{"--primary":p.primary,"--on-primary":p.onPrimary,"--brand-soft":p.soft,"--brand-accent":p.accent} as CSSProperties:undefined;
  return <div style={style} className={`brand-surface ${className}`}>{children}</div>;
 }
 export function Button({variant="primary",size="normal",loading=false,children,className="",disabled,type="button",...props}:ButtonHTMLAttributes<HTMLButtonElement>&{variant?:"primary"|"secondary"|"ghost"|"danger";size?:"normal"|"small";loading?:boolean}) {

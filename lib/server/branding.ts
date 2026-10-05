@@ -7,6 +7,7 @@ import {getIdentity} from './auth';
 const service=createBrandingServices({databaseUrl:process.env.DATABASE_URL??''});
 async function scope(identity:Parameters<BrandingFacade['workspace']>[0]){const home=await accountGateway.getHome(identity);return home.scope;}
 export const brandingGateway={
+ async effectivePalette(identity:Parameters<BrandingFacade['effectivePalette']>[0]){const home=await accountGateway.getHome(identity);return service.effectivePalette(identity,home.scope.organizationId,home.scope.schoolId);},
  async workspace(identity:Parameters<BrandingFacade['workspace']>[0]){const s=await scope(identity);return service.workspace(identity,s.organizationId,s.schoolId);},
  async createProfile(identity:Parameters<BrandingFacade['createProfile']>[0],input:Parameters<BrandingFacade['createProfile']>[3]){const s=await scope(identity);return service.createProfile(identity,s.organizationId,s.schoolId,input);},
  async preview(identity:Parameters<BrandingFacade['preview']>[0],input:Parameters<BrandingFacade['preview']>[3]){const s=await scope(identity);return service.preview(identity,s.organizationId,s.schoolId,input);},
