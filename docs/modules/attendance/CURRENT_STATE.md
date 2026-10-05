@@ -4,7 +4,7 @@ Last updated: 2026-10-05. No imported task completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
-| ATT-01 | IN_PROGRESS | PENDING | Implementation and local verification below; final checkpoint commit/demo pending |
+| ATT-01 | VERIFIED | PENDING | Source `5a9e528a65a6e96b63b8546d9eda590567483ea5`; local PostgreSQL, Playwright, checks, build and live demo evidence below |
 | ATT-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 | ATT-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 | ATT-04 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
@@ -23,7 +23,7 @@ Pilot query evidence, 5 October 2026: read-only `EXPLAIN (ANALYZE, BUFFERS)` ran
 
 ## Next action
 
-Finish ATT-01 checkpoint verification, commit, and run the production-mode local demo. Keep human review PENDING. Then select the next task by `pnpm next-task`; do not infer acceptance from automated evidence.
+Keep ATT-01 human review PENDING and its local demo available. Then select the next task by `pnpm next-task`; do not infer acceptance from automated evidence.
 
 ## Pending decisions / limitations
 
@@ -33,8 +33,19 @@ No product completion is assumed. Pilot deployment/provider, staff activation de
 
 ### ATT-01 implementation checkpoint — 5 October 2026
 
-Intended demo: an administrator schedules today's Mathematics occurrence, its assigned synthetic teacher sees it, and a second teacher sees no session. Source commit and production snapshot are pending final verification. Focused implementation is in Attendance domain/application/infrastructure/composition, shared contracts and thin Next adapters/screens; it enlists Academics/People-owned facts through existing ports and transaction boundaries. A compatibility correction records `AttendanceSession.calendarRevision` in Prisma to match the existing scoped FK in the applied migration. Admin loading renders explicit unavailable state on authorization/service errors rather than disguising them as an empty offering list.
+Intended demo: an administrator schedules Mathematics, its assigned synthetic teacher sees the session, and a second teacher sees no session. Focused implementation is in Attendance domain/application/infrastructure/composition, shared contracts and thin Next adapters/screens; it enlists Academics/People-owned facts through existing ports and transaction boundaries. A compatibility correction records `AttendanceSession.calendarRevision` in Prisma to match the existing scoped FK in the applied migration. Admin loading renders explicit unavailable state on authorization/service errors rather than disguising them as an empty offering list.
 
-Focused verification already passed: `pnpm test:functional test/functional/attendance-sessions.test.ts` against real PostgreSQL `vyapti_vschool_test` (2 tests, including serialization/race, replay, scope, permission recheck and rollback); `pnpm test:e2e test/e2e/attendance-sessions.spec.ts` (2/2 desktop/mobile journeys); `pnpm demo:seed` twice (repeat-safe). `pnpm check:backend`, `pnpm check:boundaries`, and `pnpm check:db-design` passed before the Prisma relation/doc reconciliation. Final checkpoint runs of `pnpm check`, focused functional/E2E and `pnpm build` are still required and must be recorded after execution.
+Source commit: `5a9e528a65a6e96b63b8546d9eda590567483ea5`; production build ID `1VGlc35egghmvzpO97gMP`; local frozen demo http://127.0.0.1:3423. Health returned 200/`alive:true`, sign-in rendered, and unauthenticated teacher API returned 401. Read-only authenticated Chromium smoke verified one admin offering choice, assigned teacher session visibility, and an empty day for the second teacher. E2E additionally exercised scheduling, detail and unauthorized-teacher isolation.
 
-Human review: PENDING. Once final checks pass, record the focused source commit, build ID, live URL and the manual steps in this file. No credentials or pupil PII belong in this document.
+Verification passed: `pnpm check` (lint, typecheck, docs, 51 table contracts, boundaries, backend compilation, 86/86 unit tests); `pnpm test:functional test/functional/attendance-sessions.test.ts` against real PostgreSQL `vyapti_vschool_test` (2 tests, including serialization/race, replay, scope, permission recheck and rollback); `pnpm test:e2e test/e2e/attendance-sessions.spec.ts` (2/2 desktop/mobile journeys); `pnpm build`; `pnpm db:setup` (development `vyapti_vschool`, 24 migrations applied, no pending); functional setup found all 24 migrations applied in `vyapti_vschool_test`; `pnpm demo:seed` twice (repeat-safe). Final docs/database-design checks and `git diff --check` passed after the transfer-impact contract reconciliation. A lint-only unused-import warning seen in the full check was removed and the changed files were linted cleanly. No production database, real email, reset, or migration rewrite was used.
+
+Demo credentials are generated/ignored and never printed: admin and assigned teacher in `artifacts/people-02/private-demo.json`; second/unassigned teacher and attendance command keys in `artifacts/attendance-01/private-demo.json` (mode 0600); invite tokens are confined to ignored `artifacts/mail-sink/`. Seed data is fictional and uses DevelopmentMailSink only.
+
+Manual review (PENDING):
+
+1. Open http://127.0.0.1:3423/sign-in with the administrator credentials in `artifacts/people-02/private-demo.json`; open `/admin/attendance/sessions`. Expect the synthetic Mathematics offering and school-local date/time context.
+2. Schedule a future published teaching date at a free time. Expect “Session scheduled” and SCHEDULED state; a same-teacher overlapping time or duplicate occurrence should be rejected without a second session.
+3. Sign in as the assigned synthetic teacher from the same private file and open `/teacher/today`. Expect today's seeded Mathematics session; open its details and expect the offering, section, time and SCHEDULED state without roster/marking controls.
+4. Sign in as the second teacher using `artifacts/attendance-01/private-demo.json` and open `/teacher/today`. Expect “No sessions on this date”; opening the assigned teacher's detail URL must not disclose the session.
+
+Human review: PENDING. No credentials or pupil PII belong in this document.
