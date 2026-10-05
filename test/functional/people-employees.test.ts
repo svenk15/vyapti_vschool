@@ -11,6 +11,8 @@ import {capabilityReleaseManifest} from '../../backend/modules/tenancy/domain/en
 import {createTenancyServices} from '../../backend/composition/tenancy';
 import {activeStaffFixture} from '../fixtures/access-management';
 import {schoolInput} from '../fixtures/access-management';
+import {PrismaVerifiedPersonBinding} from '../../backend/modules/access/infrastructure/person-binding';
+import {PrismaTeacherProfile} from '../../backend/modules/academics/infrastructure/teacher-profile';
 
 const url=process.env.TEST_DATABASE_URL??'';if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated People PostgreSQL test DB required');
 const access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules:['academic_core']}),people=createPeopleServices({databaseUrl:url,cursorSecret:'people-test-cursor-secret-32-bytes-minimum',releasedModules:['academic_core']}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]});
@@ -57,5 +59,47 @@ describe('PER-02 PostgreSQL cross-owner staff lifecycle',()=>{
   const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('PER02-ROLLBACK'));
   const failing=createPeopleUseCases(new PrismaPeopleRepository(db,tx=>new PrismaInstitutionEvidence(tx),()=>new Date(),'people-test-cursor-secret-32-bytes-minimum',undefined,{async enable(){throw new Error('synthetic academics failure');},async disable(){return null;}},capabilityReleaseManifest(['academic_core'])));
   const receipts=await db.commandReceipt.count({where:{organizationId:primary.organizationId,command:'TeacherEligibilityEnabled'}});await expect(failing.enableTeacher(identity,primary.organizationId,primary.schoolId,employee.employeeId,{expectedVersion:employee.version,key:randomUUID()})).rejects.toMatchObject({code:'UNAVAILABLE'});expect(await db.teacher.count({where:{employeeId:employee.employeeId}})).toBe(0);expect(await db.commandReceipt.count({where:{organizationId:primary.organizationId,command:'TeacherEligibilityEnabled'}})).toBe(receipts);
+ });
+ it('rolls back actual Academics and Access writes when an enlisted owner fails after writing',async()=>{
+  const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('PER02-OWNER-ROLLBACK'));
+  const actualTeachers=new PrismaTeacherProfile(),actualBindings=new PrismaVerifiedPersonBinding(),receipts=await db.commandReceipt.count({where:{organizationId:primary.organizationId,command:{in:['TeacherEligibilityEnabled','PersonAccountBound']}}}),audit=await db.auditEntry.count({where:{organizationId:primary.organizationId,resourceId:employee.employeeId}}),revision=(await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}})).configurationVersion;
+  const failing=createPeopleUseCases(new PrismaPeopleRepository(db,tx=>new PrismaInstitutionEvidence(tx),()=>new Date(),'people-test-cursor-secret-32-bytes-minimum',{async bind(tx,value){await actualBindings.bind(tx,value);throw new Error('failure after Access write');}},{async enable(tx,value){await actualTeachers.enable(tx,value);throw new Error('failure after Academics write');},async disable(tx,value){return actualTeachers.disable(tx,value);}},capabilityReleaseManifest(['academic_core'])));
+  await expect(failing.enableTeacher(identity,primary.organizationId,primary.schoolId,employee.employeeId,{expectedVersion:employee.version,key:randomUUID()})).rejects.toMatchObject({code:'UNAVAILABLE'});
+  expect(await db.teacher.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,employeeId:employee.employeeId}})).toBe(0);
+  expect(await db.outboxEvent.count({where:{organizationId:primary.organizationId,module:'academics',aggregateId:employee.employeeId}})).toBe(0);
+  const target=await activeStaffFixture(db,primary,['TEACHER']);await db.userAccount.update({where:{id:target.accountId},data:{emailVerifiedAt:new Date()}});
+  await expect(failing.bindAccount(identity,primary.organizationId,primary.schoolId,employee.employeeId,{accountId:target.accountId,verificationReference:'synthetic-rollback-check',reason:'Synthetic identity check',key:randomUUID()})).rejects.toMatchObject({code:'UNAVAILABLE'});
+  expect(await db.accountPersonBinding.count({where:{organizationId:primary.organizationId,accountId:target.accountId}})).toBe(0);
+  expect(await db.authSecurityEvent.count({where:{accountId:target.accountId,kind:'PERSON_BINDING_VERIFIED'}})).toBe(0);
+  expect(await db.commandReceipt.count({where:{organizationId:primary.organizationId,command:{in:['TeacherEligibilityEnabled','PersonAccountBound']}}})).toBe(receipts);
+  expect(await db.auditEntry.count({where:{organizationId:primary.organizationId,resourceId:employee.employeeId}})).toBe(audit);
+  expect((await db.school.findUniqueOrThrow({where:{id:primary.schoolId},select:{configurationVersion:true}})).configurationVersion).toBe(revision);
+ });
+ it('serializes two verified accounts racing to bind the same school account to different people',async()=>{
+  const one=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('PER02-BIND-RACE-1')),
+   two=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('PER02-BIND-RACE-2')),
+   target=await activeStaffFixture(db,primary,['TEACHER']);await db.userAccount.update({where:{id:target.accountId},data:{emailVerifiedAt:new Date()}});
+  const results=await Promise.allSettled([
+   people.bindAccount(identity,primary.organizationId,primary.schoolId,one.employeeId,{accountId:target.accountId,verificationReference:'synthetic-race-one',reason:'Synthetic check one',key:randomUUID()}),
+   people.bindAccount(identity,primary.organizationId,primary.schoolId,two.employeeId,{accountId:target.accountId,verificationReference:'synthetic-race-two',reason:'Synthetic check two',key:randomUUID()}),
+  ]);
+  expect(results.filter(result=>result.status==='fulfilled')).toHaveLength(1);expect(results.filter(result=>result.status==='rejected')).toHaveLength(1);
+  const rejected=results.find(result=>result.status==='rejected');expect(rejected?.status==='rejected'&&['CONFLICT','STALE_VERSION'].includes(rejected.reason.code)).toBe(true);
+  expect(await db.accountPersonBinding.count({where:{organizationId:primary.organizationId,accountId:target.accountId}})).toBe(1);
+ });
+ it('rejects unverified accounts and verified teachers without active membership in the target branch',async()=>{
+  const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('PER02-BIND-GUARD')),
+   unverified=await activeStaffFixture(db,primary,['TEACHER']),foreignTeacher=await activeStaffFixture(db,foreign,['TEACHER']);
+  await db.userAccount.update({where:{id:foreignTeacher.accountId},data:{emailVerifiedAt:new Date()}});
+  const attempt=(accountId:string,reference:string)=>people.bindAccount(identity,primary.organizationId,primary.schoolId,employee.employeeId,{accountId,verificationReference:reference,reason:'Synthetic identity check',key:randomUUID()});
+  await expect(attempt(unverified.accountId,'synthetic-unverified')).rejects.toMatchObject({code:'CONFLICT'});
+  await expect(attempt(foreignTeacher.accountId,'synthetic-foreign-branch')).rejects.toMatchObject({code:'CONFLICT'});
+  expect(await db.accountPersonBinding.count({where:{organizationId:primary.organizationId,personId:employee.person.id}})).toBe(0);
+ });
+ it('denies a teacher account from reading or managing staff profiles without class.manage/user.manage',async()=>{
+  const teacher=await activeStaffFixture(db,primary,['TEACHER']);
+  await expect(people.workspace(teacher.identity,primary.organizationId,primary.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
+  const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('PER02-PERMISSION'));
+  await expect(people.bindAccount(teacher.identity,primary.organizationId,primary.schoolId,employee.employeeId,{accountId:teacher.accountId,verificationReference:'self-check',reason:'Synthetic permission denial',key:randomUUID()})).rejects.toMatchObject({code:'FORBIDDEN'});
  });
 });

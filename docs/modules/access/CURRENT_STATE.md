@@ -1,21 +1,21 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-04. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified with review pending. No imported task completion or active execution timer.
+Last updated: 2026-10-05. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | IAM-01 | VERIFIED | PASSED | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
 | IAM-02 | VERIFIED | PASSED | [Local verification](../../evidence/iam-02-local/verification.json), JUnit and source handoff below |
-| IAM-03 | VERIFIED | PENDING | [Production verification](../../evidence/iam-03-local/verification.json); source e0f262a |
+| IAM-03 | VERIFIED | PASSED | [Production verification](../../evidence/iam-03-local/verification.json); accepted source e0f262a |
 | IAM-04 | VERIFIED | PENDING | [Local evidence](../../evidence/iam-04-local/); tested source recorded after focused commit. PostgreSQL test cluster at temporary local port 5433; development DB was not migrated for this task. |
 
 ## Current checkpoint
 
-IAM-01 through IAM-03 remain as previously verified; IAM-01 and IAM-02 human reviews are PASSED, IAM-03 review remains PENDING. IAM-04 implements operator-preserving trust modes, school-admin invitations with sanitized delivery state/resend, exact-address invitation acceptance without Person/Employee binding, account-wide verified-address password recovery, cross-institution policy rechecks, tokenVersion session revocation, and platform-operator trust transitions with atomic Access invalidation. No real email is sent; only the development-only private local sink is configured. Migration 012 adds trust/recovery schema and migration 013 narrows the append-only AuthSecurityEvent exception to a one-time NULL account association for a resolved reset denial.
+IAM-01 through IAM-03 remain verified; IAM-01, IAM-02 and IAM-03 human reviews are PASSED. IAM-03 acceptance is limited to the restored local demo/source `e0f262a78d7e020919cd36be80d508c9032d1e07` at `http://127.0.0.1:3411`; it does not accept later IAM changes. IAM-04 implements operator-preserving trust modes, school-admin invitations with sanitized delivery state/resend, exact-address invitation acceptance without Person/Employee binding, account-wide verified-address password recovery, cross-institution policy rechecks, tokenVersion session revocation, and platform-operator trust transitions with atomic Access invalidation. No real email is sent; only the development-only private local sink is configured. Migration 012 adds trust/recovery schema and migration 013 narrows the append-only AuthSecurityEvent exception to a one-time NULL account association for a resolved reset denial.
 
 ## Next action
 
-The IAM-04 demo is running at http://127.0.0.1:3410 and health returns `alive:true`; credential file `artifacts/iam-04/private-demo.json` is ignored and mode 0600. The server uses the isolated temporary PostgreSQL test cluster, not the configured development DB. Tested implementation is committed as the focused IAM-04 checkpoint. Human review is PENDING. IAM-04 depends on IAM-02, IAM-03 and TEN-02; PER-02 also depends on pending IAM-03 human acceptance, so it is not eligible while that documented gate remains pending. Continue with another independent eligible task or the next task after an explicit dependency is accepted; address reported defects before dependent work.
+The IAM-04 demo is running at http://127.0.0.1:3410 and health returns `alive:true`; credential file `artifacts/iam-04/private-demo.json` is ignored and mode 0600. The server uses the isolated temporary PostgreSQL test cluster, not the configured development DB. Tested implementation is committed as the focused IAM-04 checkpoint. Human review is PENDING. IAM-04 depends on IAM-02, IAM-03 and TEN-02; PER-02's IAM-03 acceptance gate was satisfied on 5 October 2026 for the exact source/demo recorded above.
 
 ## Pending decisions / limitations
 
@@ -65,6 +65,10 @@ Limitations: settings/staff/activation/recovery, multi-branch switching, license
 ### Source identity handoff — 4 October 2026
 
 Tested source `56ba5f7551fe06ff28b14ff40d11c57065e53f38`; production Next build ID `rC-4vzc5Or9U9lY2cvy2A`. No executable changes after final check/build/browser/persistence verification. Human review PENDING. pnpm next-task suggests IAM-02, but work is paused until explicit owner feedback and permission.
+
+### IAM-03 owner acceptance — 5 October 2026
+
+Owner: “IAM-03 manual review passed for the demo source you just provided.” PASSED applies only to source `e0f262a78d7e020919cd36be80d508c9032d1e07` and its restored local activation/recovery demo at `http://127.0.0.1:3411`. This satisfies PER-02's explicit dependency gate; it does not imply acceptance of IAM-04 or any later IAM source.
 
 ### IAM-01 owner acceptance and IAM-02 start — 4 October 2026
 

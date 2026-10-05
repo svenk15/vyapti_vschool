@@ -12,6 +12,7 @@ const demos = [
   { name: "TEN-01 institutions and branches", script: "scripts/demo-tenancy.ts" },
   { name: "TEN-02 entitlement contract", script: "scripts/demo-tenancy-modules.ts" },
   { name: "ACA-01 academic access", script: "scripts/demo-academics.ts" },
+  { name: "PER-02 people and teacher eligibility", script: "scripts/demo-people.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
 ] as const;
 
@@ -78,10 +79,11 @@ function main(): void {
   console.log("- artifacts/iam-01/private-demo.json");
   console.log("- artifacts/iam-03/private-demo.json");
   console.log("- artifacts/iam-03/private-activation.json");
+  console.log("- artifacts/people-02/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster.csv")) console.log("- artifacts/imports-01/sample-roster.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial.csv")) console.log("- artifacts/imports-01/sample-roster-partial.csv");
   console.log("Other feature command receipts and synthetic IDs remain in their ignored artifacts/<task>/ files.");
-  console.log("Attendance remains unreleased; IAM-03 acceptance remains pending; PER-02 is not enabled by this command.");
+  console.log("Attendance remains unreleased. Human acceptance remains tracked per task and reviewed source.");
 }
 
 try {

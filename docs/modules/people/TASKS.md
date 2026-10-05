@@ -65,6 +65,12 @@ Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm 
 
 ### Demo and checkpoint
 
-Enable teaching eligibility for a staff profile, bind a separate active teacher account after recording an out-of-band check, then end employment using today’s school-local date. Expect eligibility to change to DISABLED; attempts to bind a conflicting account return a safe conflict.
+Run `pnpm demo:seed`; the PER-02 seed creates an isolated synthetic school, two unbound staff profiles and an active, email-verified teacher account through the Access invitation/local-mail-sink flow. It writes admin/teacher credentials and account/profile IDs to ignored mode-0600 `artifacts/people-02/private-demo.json`. Run `pnpm build`, then `pnpm demo:task PER-02 3421 <tested-commit> academic_core`.
+
+1. Open `http://127.0.0.1:3421/sign-in` and use the administrator credentials in the private demo file; open `/admin/teachers`. Expect Avery and Jordan's synthetic profiles, both unlinked and not yet teaching-eligible.
+2. Enable teaching for Avery. Expect ENABLED; refresh and confirm it persists.
+3. On Avery, bind the `teacherAccountId` from the private demo file with an out-of-band verification reference and reason. Expect active portal access. Try binding that same account to Jordan; expect a safe conflict and no second binding.
+4. End Avery's employment using today's displayed school-local date. Expect ENDED and teaching eligibility DISABLED after refresh.
+5. Sign out, sign in with the synthetic teacher credentials, then open `/admin/teachers`. Expect the server-side staff-profile access-denied state.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.

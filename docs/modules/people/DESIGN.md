@@ -1,6 +1,6 @@
 # People and staff identity — design
 
-Phase 1 · Design revision 2 · 4 October 2026. PER-01 is verified; PER-02 is blocked on IAM-03 human acceptance. Its Teacher schema is installed as partial work, but its business flow is unverified. Review unresolved deployment choices in FND-02 before real-data use.
+Phase 1 · Design revision 2 · 5 October 2026. PER-01 is verified; PER-02 resumes from preserved partial implementation after IAM-03 acceptance was recorded for source `e0f262a78d7e020919cd36be80d508c9032d1e07`. Teacher schema is installed; PER-02 business flow remains under verification. Review unresolved deployment choices in FND-02 before real-data use.
 
 ## Database naming and physical mapping
 
