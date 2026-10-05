@@ -11,3 +11,4 @@ export type AcademicCommandResult=Readonly<{id:string;version:number;code:string
 export type AcademicCalendarEvaluation=Readonly<{date:string;campusId:string|null;isTeachingDay:boolean;source:'CAMPUS_EXCEPTION'|'SCHOOL_EXCEPTION'|'WEEKLY_RULE';revisionId:string;revisionNumber:number;label:string|null}>;
 export type AcademicCalendarPublication=Readonly<{calendarId:string;version:number;revisionId:string;revisionNumber:number;replayed:boolean}>;
 export type AcademicYearTransition=Readonly<{yearId:string;version:number;status:AcademicYearStatus;replayed:boolean}>;
+export type CourseOfferingRecord=Readonly<{id:string;version:number;code:string;active:boolean;yearId:string;section:{id:string;code:string;name:string;gradeName:string};subject:{id:string;code:string;name:string};assignment:{id:string;teacherId:string;teacherName:string;validFrom:string;validTo:string;version:number}|null}>;

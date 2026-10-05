@@ -17,7 +17,7 @@ Design: [flow ACA-01](DESIGN.md). Scope and API: POST /api/v1/academics/years; P
 5. Return joined display DTO; audit/outbox/receipt commit with version change.
 6. Require the trusted `academic_core` release, active institution entitlement and branch activation on every read/write; do not enable it through browser input. Default deployment release remains deny-all. The local ACA-01 demo may explicitly pass `academic_core` to its server process and must use TEN-02 application commands to provision its synthetic contract/activation.
 
-Files: extend `backend/modules/academics/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/academics`, `test/functional/academics` and `test/e2e/academics` as the suite grows.
+Files: extend `backend/modules/academics/application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/academics`, `test/functional/academics` and `test/e2e/academics` as the suite grows.
 
 ### Acceptance and test strategy
 
@@ -75,22 +75,23 @@ Design: [flow ACA-03](DESIGN.md). Scope and API: POST /api/v1/offerings; POST /a
 
 ### Implementation instructions
 
-1. Require class.manage, acquire actor/School guards and recheck OPEN year.
-2. Validate section/year identity, subject active, Teacher→Employee eligibility and current account binding only when portal access needed.
-3. Check assignment interval inside year and nonoverlap for offering.
-4. Ending assignment rejects intervals that leave future open sessions with no eligible teacher; admin must replan/cancel explicitly.
-5. Persist offering/assignment and envelopes; class list displays joined teacher names and dates.
+1. Reauthorize class.manage plus trusted release, institution entitlement and branch activation on each protected read/write; mutations use account→Organization→School guards and recheck before replay/commit.
+2. Create offerings only in an OPEN year with an active same-year section and active same-school subject.
+3. Assign only an active Academics Teacher with an active People Employee for the entire half-open interval inside both the year and employment period. AccountPersonBinding is not required for an instructional assignment; it controls portal access separately.
+4. Enforce one primary assignment per offering/date using the documented offering/date predicate under the shared School guard. End via expected-version CAS and an exclusive `valid_to`; reject surviving assignments when People offboards the Employee.
+5. Use a zero-impact Attendance session port only while sessions cannot be scheduled. ATT-01 replaces it before scheduling release; ATT-02 owns actual end-assignment versus teacher-submit reauthorization evidence.
+6. Persist Academics-owned Offering/Assignment changes and shared envelopes atomically; class list joins current scoped Section/Grade/Subject and date-effective Teacher/Employee/Person.
 
 Files: extend `backend/modules/academics/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/academics`, `test/functional/academics` and `test/e2e/academics` as the suite grows.
 
 ### Acceptance and test strategy
 
-- Unit / application: Effective-date endpoints and teacher eligibility.
-- Real PostgreSQL: Assignment races serialize; cross-school FK; end-assignment vs teacher submit reauthorization.
-- Browser: Create offering, assign teacher, inspect effective dates; reject overlap.
-- Failure contract: Overlapping assignment→409; inactive teacher/employee→409; section from other year→422; foreign references→404.
+- Unit / application: Half-open effective-date endpoints, teacher eligibility and transition rules.
+- Real PostgreSQL: Scoped offering/assignment keys and FKs; concurrent same-offering assignment race; assignment-end CAS; Employee offboarding rollback when assignments survive; authorization and replay.
+- Browser: Read current-year offerings, create offering, assign teacher, inspect effective dates; reject overlap and assignment outside employment.
+- Failure contract: Overlapping assignment, inactive teacher/employee, closed year or impacted session→409; section/year mismatch→422; foreign references→404; missing capability→403; invalid range→422.
 - Required DB effect: CourseOffering, TeacherAssignment; may create Teacher through academic owner when Employee already exists; envelopes.
-- Persistence/security gate: preserve scoped composite FKs/unique keys and both offering/date and teacher/date indexes; serialize effective-range checks under School guard and reauthorize before replay/commit. Under TEN-ADR-006 Path A, record class, scope, constraints, indexes, intended policy and TEN-03 closure in the LLD/registry; defer database enforcement to TEN-03 while application authorization stays active.
+- Persistence/security gate: preserve scoped composite FKs/unique keys and both offering/date and teacher/date indexes; serialize effective-range checks under School guard and reauthorize before replay/commit. Capture `EXPLAIN (ANALYZE, BUFFERS)` plans at the Bible §20 pilot profile and record actual plans/cardinality/timing; do not impose TEN-03's larger scale thresholds as the pilot gate. Under TEN-ADR-006 Path A, record class, scope, constraints, indexes, intended policy and TEN-03 closure in the LLD/registry; defer database enforcement to TEN-03 while application authorization stays active.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 

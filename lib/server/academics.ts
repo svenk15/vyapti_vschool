@@ -15,4 +15,8 @@ export const academicsGateway={
  async publishCalendar(identity:Identity|null,calendarId:string,input:Parameters<AcademicSetupFacade['publishCalendar']>[4]){const s=await scope(identity);return academics.publishCalendar(identity,s.organizationId,s.schoolId,calendarId,input);},
  async evaluateCalendar(identity:Identity|null,calendarId:string,query:Parameters<AcademicSetupFacade['evaluateCalendar']>[4]){const s=await scope(identity);return academics.evaluateCalendar(identity,s.organizationId,s.schoolId,calendarId,query);},
  async transitionYear(identity:Identity|null,yearId:string,input:Parameters<AcademicSetupFacade['transitionYear']>[4]){const s=await scope(identity);return academics.transitionYear(identity,s.organizationId,s.schoolId,yearId,input);},
+ async offerings(identity:Identity|null,yearId:string){const s=await scope(identity);return academics.list(identity,s.organizationId,s.schoolId,yearId);},
+ async createOffering(identity:Identity|null,input:Parameters<typeof academics.create>[3]){const s=await scope(identity);return academics.create(identity,s.organizationId,s.schoolId,input);},
+ async assignTeacher(identity:Identity|null,input:Parameters<typeof academics.assign>[3]){const s=await scope(identity);return academics.assign(identity,s.organizationId,s.schoolId,input);},
+ async endTeacherAssignment(identity:Identity|null,id:string,input:Parameters<typeof academics.end>[4]){const s=await scope(identity);return academics.end(identity,s.organizationId,s.schoolId,id,input);},
 };

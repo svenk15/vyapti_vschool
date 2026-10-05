@@ -90,11 +90,11 @@
       "model": "CourseOffering",
       "owner": "academics",
       "table": "vs_academics_course_offering",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; section_id uuid; subject_id uuid; code varchar(40); version int; active boolean",
       "responsibility": "One section subject offering in year.",
-      "constraints": "UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped section/year composite FK and subject FK; UNIQUE(scope,id)",
+      "constraints": "UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped year, section/year and subject composite FKs; UNIQUE(scope,id); CHECK version>0 and code format",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -216,11 +216,11 @@
       "model": "TeacherAssignment",
       "owner": "academics",
       "table": "vs_academics_teacher_assignment",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int",
       "responsibility": "Primary attendance duty only in Phase 1; one eligible teacher per offering/date.",
-      "constraints": "Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to)",
+      "constraints": "Scoped offering/teacher FKs; CHECK valid_from<valid_to and version>0; overlap guarded by School lock/application predicate; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

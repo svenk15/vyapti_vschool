@@ -47,13 +47,13 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AcademicYear | `vs_academics_academic_year` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | CalendarException | `vs_academics_calendar_exception` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | CalendarRevision | `vs_academics_calendar_revision` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
-| CourseOffering | `vs_academics_course_offering` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
+| CourseOffering | `vs_academics_course_offering` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | GradeLevel | `vs_academics_grade_level` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | SchoolCalendar | `vs_academics_school_calendar` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Section | `vs_academics_section` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Subject | `vs_academics_subject` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Teacher | `vs_academics_teacher` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
-| TeacherAssignment | `vs_academics_teacher_assignment` | academics | PLANNED | [academics LLD](modules/academics/DESIGN.md) |
+| TeacherAssignment | `vs_academics_teacher_assignment` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | AccessInvite | `vs_access_invite` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivationMembership | `vs_access_account_activation_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |

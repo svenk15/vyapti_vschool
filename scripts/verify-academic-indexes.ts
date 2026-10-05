@@ -1,0 +1,14 @@
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {Client} from 'pg';
+import {localAccessConfig} from './access-local-config';
+const profile={institutions:5,branches:20,pupilsPerBranch:5000,totalPupils:100000,simulatedAssignmentRows:100000,requestedTeacherSubmitConcurrency:'realistic concurrent submissions per Bible §20 pilot context',benchmarkConcurrencyExercised:0,queryMix:'This capture runs the two documented indexed read predicates only; submit concurrency and pilot latency acceptance are not claimed.'};
+async function main(){const {databaseUrl}=localAccessConfig(),u=new URL(databaseUrl);if(!['127.0.0.1','localhost','[::1]'].includes(u.hostname)||u.pathname!=='/vyapti_vschool')throw new Error('LOCAL_DEVELOPMENT_DATABASE_REQUIRED');const c=new Client({connectionString:databaseUrl});await c.connect();try{
+ await c.query('CREATE TEMP TABLE aca03_assignment_benchmark (LIKE vs_academics_teacher_assignment INCLUDING ALL)');
+ await c.query(`INSERT INTO aca03_assignment_benchmark (id,organization_id,school_id,offering_id,teacher_id,valid_from,valid_to,version)
+ SELECT md5('row-'||g)::uuid,md5('org-'||floor((g-1)/20000))::uuid,md5('school-'||floor((g-1)/5000))::uuid,md5('offer-'||(g%1000))::uuid,md5('teacher-'||(g%2000))::uuid,DATE '2026-04-01'+(g%180),DATE '2026-10-01'+(g%180),1 FROM generate_series(1,100000) g`);
+ await c.query('ANALYZE aca03_assignment_benchmark');
+ const offering=await c.query(`EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) SELECT id FROM aca03_assignment_benchmark WHERE organization_id=md5('org-0')::uuid AND school_id=md5('school-0')::uuid AND offering_id=md5('offer-17')::uuid AND valid_from<DATE '2026-11-01' AND valid_to>DATE '2026-10-01'`);
+ const teacher=await c.query(`EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) SELECT id FROM aca03_assignment_benchmark WHERE organization_id=md5('org-0')::uuid AND school_id=md5('school-0')::uuid AND teacher_id=md5('teacher-21')::uuid AND valid_from<=DATE '2026-10-05' AND valid_to>DATE '2026-10-05'`);
+ const result={capturedAt:new Date().toISOString(),database:'vyapti_vschool temporary benchmark table',profile,rowsInserted:100000,measurementLimit:'EXPLAIN ANALYZE plan capture only; no concurrent workload or end-to-end submit latency was exercised.',queries:{offeringDate:offering.rows.map((r:{'QUERY PLAN':string})=>r['QUERY PLAN']),teacherDate:teacher.rows.map((r:{'QUERY PLAN':string})=>r['QUERY PLAN'])}};mkdirSync('docs/evidence/academics-03-local',{recursive:true});writeFileSync('docs/evidence/academics-03-local/query-plans.json',JSON.stringify(result,null,2)+'\n');console.log('Captured both offering/date and teacher/date EXPLAIN ANALYZE plans in docs/evidence/academics-03-local/query-plans.json');
+ }finally{await c.end();}}
+main().catch(e=>{console.error(`ACADEMIC_INDEX_EVIDENCE_FAILED: ${e instanceof Error?e.message:'UNKNOWN'}`);process.exitCode=1;});

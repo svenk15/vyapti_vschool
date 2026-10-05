@@ -1,6 +1,6 @@
 # Academic setup and teaching context — design
 
-Phase 1 · Design revision 3 · 4 October 2026. ACA-01 is verified and ACA-02 is in progress; later task schemas remain planned. Review unresolved deployment choices in FND-02 before real-data use.
+Phase 1 · Design revision 3 · 5 October 2026. ACA-01 and ACA-02 are implementation-verified; ACA-03 is in progress. CourseOffering and TeacherAssignment are installed by forward migration `20261005001900_academic_offerings`. Review unresolved deployment choices in FND-02 before real-data use.
 
 ## Database naming and physical mapping
 
@@ -33,8 +33,8 @@ ACA-01 installs the six setup tables; ACA-02 adds the immutable calendar revisio
 | `vs_academics_calendar_revision` (CalendarRevision) | id uuid PK; organization_id uuid; school_id uuid; calendar_id uuid; number int; teaching_weekdays int[]; published_at timestamptz(3); published_by uuid | Immutable full policy snapshot. No generic mutable JSON calendar. | UNIQUE(scope,calendar_id,number); UNIQUE(scope,calendar_id,id); FK calendar; published_by account; append-only guard |
 | `vs_academics_calendar_exception` (CalendarException) | id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; campus_id uuid nullable; on_date date; is_teaching_day boolean; label varchar(160) | Date exception; campus beats school beats weekly rule. Dates inside year. | Scoped revision/campus FKs; two NULL/non-NULL partial unique indexes(scope,revision_id,on_date[,campus_id]); immutable |
 | `vs_academics_teacher` (Teacher) | id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int | Academic teacher profile, not a login identity. | UNIQUE(scope,employee_id); UNIQUE(scope,id); scoped Employee FK |
-| `vs_academics_course_offering` (CourseOffering) | id uuid PK; organization_id uuid; school_id uuid; year_id uuid; section_id uuid; subject_id uuid; code varchar(40); version int; active boolean | One section subject offering in year. | UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped section/year composite FK and subject FK; UNIQUE(scope,id) |
-| `vs_academics_teacher_assignment` (TeacherAssignment) | id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int | Primary attendance duty only in Phase 1; one eligible teacher per offering/date. | Scoped offering/teacher FKs; CHECK from<to; range overlap protected by School guard and app query; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to) |
+| `vs_academics_course_offering` (CourseOffering) | id uuid PK; organization_id uuid; school_id uuid; year_id uuid; section_id uuid; subject_id uuid; code varchar(40); version int; active boolean | One section subject offering in year. | UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped year, section/year and subject composite FKs; UNIQUE(scope,id); CHECK version>0 and code format |
+| `vs_academics_teacher_assignment` (TeacherAssignment) | id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int | Primary attendance duty only in Phase 1; one eligible teacher per offering/date. | Scoped offering/teacher FKs; CHECK valid_from<valid_to and version>0; overlap guarded by School lock/application predicate; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to) |
 
 ## Read workflows and joins
 
@@ -156,21 +156,25 @@ sequenceDiagram
 
 **Success response contract:** `{offeringId,version,code,yearId,section:{id,code,name},subject:{id,code,name}}`; assignment `{assignmentId,version,teacherId,offeringId,validFrom,validTo}`.
 
-**Transport:** POST /api/v1/offerings; POST /api/v1/teacher-assignments; PATCH /api/v1/teacher-assignments/:id/end
+**Transport:** GET /api/v1/offerings?yearId=; POST /api/v1/offerings; POST /api/v1/teacher-assignments; PATCH /api/v1/teacher-assignments/:id/end. Admin screen `/admin/classes`.
 
-**Input:** Offering yearId/sectionId/subjectId/code; assignment offeringId/teacherId/validFrom/validTo; end expectedVersion/endDate/reason. Key required.
+**Input:** Read yearId required and page cursor optional. Offering yearId/sectionId/subjectId/code; assignment offeringId/teacherId/validFrom/validTo; end expectedVersion/endDate/reason. All assignment ranges are half-open civil dates `[validFrom,validTo)`; `validTo` and `endDate` are exclusive API dates. The UI asks for the last included day and adds one day at its boundary. Key required for each mutation.
 
 **Workflow:**
 
-1. Require class.manage, acquire actor/School guards and recheck OPEN year.
-2. Validate section/year identity, subject active, Teacher→Employee eligibility and current account binding only when portal access needed.
-3. Check assignment interval inside year and nonoverlap for offering.
-4. Ending assignment rejects intervals that leave future open sessions with no eligible teacher; admin must replan/cancel explicitly.
-5. Persist offering/assignment and envelopes; class list displays joined teacher names and dates.
+1. Require the trusted `academic_core` release, active institution entitlement, active branch activation and current `class.manage` for every read/write. Mutations lock account → Organization → School and recheck scope/permission before replay and commit; reads reauthorize without write locks.
+2. Create an offering only in an OPEN scoped year, for an active section belonging to that same year and an active same-school subject. A scoped unique key prevents duplicate section/subject offerings in a year.
+3. Assign only an active Academics Teacher whose People Employee is active for the full requested interval. The interval must lie inside the OPEN year and Employee's half-open employment interval. Do not require AccountPersonBinding for the teaching assignment; account access is separate from instructional eligibility.
+4. Permit one primary assignment per offering at a time. Under the shared School guard, reject a same-offering overlap using `organization_id=? AND school_id=? AND offering_id=? AND valid_from<requested_valid_to AND valid_to>requested_valid_from`. Do not impose cross-offering time/room clashes; ATT-01 owns session timing.
+5. End an assignment with expected-version CAS by shortening `valid_to`; reject an empty/reversed range, an extension beyond the current `valid_to`, or future sessions that would have no eligible teacher. The assignment's Employee offboarding path also rejects an end date that would leave any assignment beyond the Employee's new exclusive `employed_to`.
+6. Read the selected year's offering list scoped by organization/school/year, joining Section→GradeLevel and Subject, with the date-effective primary assignment joined to Teacher→Employee→Person. Derive `school_date` from the server-owned school timezone. Return no credentials; portal access remains a separate badge.
+7. Persist offering/assignment and shared evidence in the same guarded transaction. Exact replay returns the recorded result only after current actor/resource authorization.
 
-**Database writes / atomicity:** CourseOffering, TeacherAssignment; may create Teacher through academic owner when Employee already exists; envelopes.
+**Database writes / atomicity:** Academics owns CourseOffering and TeacherAssignment. Employee and Person remain People-owned; Teacher eligibility is read/disabled through its Academics owner facade and Access owns AccountPersonBinding. Create Offering/Assignment, update assignment end/version, School configuration revision and audit/outbox/receipt atomically; no cross-owner table writes.
 
-**Errors and recovery:** Overlapping assignment→409; inactive teacher/employee→409; section from other year→422; foreign references→404.
+**Errors and recovery:** Same-offering overlap, stale version, inactive teacher/employee, closed year, or impacted future session→409; section/year mismatch→422; foreign/out-of-scope references→404; current permission denied→403; invalid civil dates or interval bounds→422; unavailable release/entitlement/branch activation→409. Refresh the class list and effective dates before retrying.
+
+**Attendance boundary:** AttendanceSession does not exist yet. ACA-03 uses an explicit `NO_ATTENDANCE_SESSIONS` assignment-impact port, safe only while session scheduling/submission is absent. ATT-01 replaces it with Attendance-owned future-session impact checks before scheduling is released. Assignment end versus actual teacher-submit reauthorization is verified in ATT-02, when submission exists; ACA-03 verifies that the assignment mutation and People offboarding use current versions and the shared School guard. Do not report the absent session race as tested here.
 
 ```mermaid
 sequenceDiagram
@@ -198,9 +202,13 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Effective-date endpoints and teacher eligibility. Functional PostgreSQL — Assignment races serialize; cross-school FK; end-assignment vs teacher submit reauthorization. Capture `EXPLAIN (ANALYZE, BUFFERS)` for both documented offering/date overlap and teacher/date eligibility predicates at representative pilot cardinality; confirm the corresponding composite index is selected and record actual plans/rows/times without making TEN-03's larger scale thresholds this task's gate. E2E — Create offering, assign teacher, inspect effective dates; reject overlap.
+**Verification:** Unit — Half-open civil-date endpoints, Employee eligibility and assignment state transitions. Functional PostgreSQL — Offering/assignment uniqueness and scoped FKs; concurrent same-offering assignments serialize; assignment end CAS; Teacher/Employee offboarding rejects surviving assignments and rolls back; current authorization and exact replay. Capture `EXPLAIN (ANALYZE, BUFFERS)` for both documented predicates at the Bible §20 initial-pilot profile (20 branches across multiple institutions, at least 5,000 pupils per branch and realistic concurrent teacher activity); record actual rows, plan and timing. The plan check is evidence, not a new latency gate. Do not apply TEN-03's larger dataset or thresholds as the pilot gate. E2E — Create an offering, assign an eligible employee, inspect joined effective dates; reject an overlap and an assignment past employment; end/reassign before offboarding.
 
 **Design-readiness note (4 October 2026):** Dependency links are satisfied by VERIFIED implementation even when human review is PENDING, unless a task explicitly declares an acceptance gate. Academics owns offerings, teacher eligibility and dated assignments; People owns Employee and Access owns bindings. Existing physical contracts define scoped uniqueness/FKs; use teacher/date lookup index `(organization_id,school_id,teacher_id,valid_from,valid_to)` beside offering overlap index. School guard serializes cross-row overlap checks; versioned commands and receipts make retries exact. Portal binding is required only for portal access, never teaching eligibility. ATT-01 owns time-slot clash enforcement; until then ACA-03 prevents overlapping effective assignments for the same offering and does not invent room/timetable allocation. Protected reads/writes reauthorize current scope/resource permission; only mutations lock. Path A records classification/policy intent in the registry and defers enforcement to TEN-03.
+
+**Design-readiness note (5 October 2026):** Dated dependency snapshot: ACA-02 VERIFIED/PENDING and PER-02 VERIFIED/PENDING. Their task files declare no human-acceptance gate, so both are eligible dependencies while review remains pending. The registry records both new table contracts as Academics-owned BRANCH rows with `(organization_id,school_id)`, composite constraints, the offering/date and teacher/date indexes, intended scoped policies and TEN-03 closure. No account binding is required to assign an eligible Teacher; it only controls portal access. Date intervals and API end values are exclusive at `valid_to`. There are no attendance session rows yet: use an explicit zero-impact port until ATT-01 replaces it, then test teacher-submit reauthorization in ATT-02. Existing locks remain account→Organization→School for mutations; scoped reads remain unlocked. The Bible §20 pilot load profile informs plan capture; TEN-03's separate large scale profile and acceptance thresholds are not imported. No remaining product decision blocks implementation.
+
+**Implementation evidence (5 October 2026):** Forward migration `20261005001900_academic_offerings` installs the scoped tables, composite foreign keys, checks and date indexes; Path A RLS remains deferred to TEN-03. App authorization remains checked on every read/write. Employee offboarding asks the Academics owner port to reject any assignment ending after the exclusive employment cutoff, inside the same transaction. `EXPLAIN (ANALYZE, BUFFERS)` was captured on 100,000 temporary synthetic assignment rows across 20 branches/5 institutions (5,000 rows per branch). The offering/date index scan returned 5 rows in 0.131 ms; the teacher/date index scan returned 3 rows in 0.025 ms. This is predicate plan evidence only: no concurrent teacher-submit load or pilot latency target was exercised because session submit does not exist until ATT-02.
 
 ## Migration, retention and handoff
 

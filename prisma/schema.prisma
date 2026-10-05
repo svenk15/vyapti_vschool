@@ -177,6 +177,7 @@ model Teacher {
  active Boolean
  version Int
  employee Employee @relation(fields:[organizationId,schoolId,employeeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_employee_fkey")
+ assignments TeacherAssignment[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_scope_id_key")
  @@unique([organizationId,schoolId,employeeId],map:"vs_academics_teacher_employee_key")
  @@index([organizationId,schoolId,active,employeeId],map:"vs_academics_teacher_eligibility_idx")
@@ -618,6 +619,7 @@ model AcademicYear {
  terms AcademicTerm[]
  calendar SchoolCalendar?
  sections Section[]
+ offerings CourseOffering[]
  enrollments Enrollment[]
  importJobs ImportJob[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_academic_year_scope_id_key")
@@ -667,6 +669,7 @@ model Subject {
  version Int
  organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_subject_org_fkey")
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_subject_school_fkey")
+ offerings CourseOffering[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_subject_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_academics_subject_code_key")
  @@map("vs_academics_subject")
@@ -688,9 +691,47 @@ model Section {
  grade GradeLevel @relation(fields:[organizationId,schoolId,gradeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_section_grade_fkey")
  campus Campus? @relation(fields:[organizationId,schoolId,campusId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_section_campus_fkey")
  placements SectionPlacement[]
+ offerings CourseOffering[]
  @@unique([organizationId,schoolId,id,yearId],map:"vs_academics_section_scope_year_id_key")
  @@index([organizationId,schoolId,yearId,gradeId],map:"vs_academics_section_year_grade_idx")
  @@map("vs_academics_section")
+}
+
+model CourseOffering {
+ id String @id(map:"vs_academics_course_offering_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ yearId String @map("year_id") @db.Uuid
+ sectionId String @map("section_id") @db.Uuid
+ subjectId String @map("subject_id") @db.Uuid
+ code String @db.VarChar(40)
+ version Int
+ active Boolean
+ year AcademicYear @relation(fields:[organizationId,schoolId,yearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_course_offering_year_fkey")
+ section Section @relation(fields:[organizationId,schoolId,sectionId,yearId],references:[organizationId,schoolId,id,yearId],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_course_offering_section_fkey")
+ subject Subject @relation(fields:[organizationId,schoolId,subjectId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_course_offering_subject_fkey")
+ assignments TeacherAssignment[]
+ @@unique([organizationId,schoolId,id],map:"vs_academics_course_offering_scope_id_key")
+ @@unique([organizationId,schoolId,yearId,code],map:"vs_academics_course_offering_code_key")
+ @@unique([organizationId,schoolId,yearId,sectionId,subjectId],map:"vs_academics_course_offering_section_subject_key")
+ @@map("vs_academics_course_offering")
+}
+
+model TeacherAssignment {
+ id String @id(map:"vs_academics_teacher_assignment_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ offeringId String @map("offering_id") @db.Uuid
+ teacherId String @map("teacher_id") @db.Uuid
+ validFrom DateTime @map("valid_from") @db.Date
+ validTo DateTime @map("valid_to") @db.Date
+ version Int
+ offering CourseOffering @relation(fields:[organizationId,schoolId,offeringId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_assignment_offering_fkey")
+ teacher Teacher @relation(fields:[organizationId,schoolId,teacherId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_assignment_teacher_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_assignment_scope_id_key")
+ @@index([organizationId,schoolId,offeringId,validFrom,validTo],map:"vs_academics_teacher_assignment_offering_date_idx")
+ @@index([organizationId,schoolId,teacherId,validFrom,validTo],map:"vs_academics_teacher_assignment_teacher_date_idx")
+ @@map("vs_academics_teacher_assignment")
 }
 
 model Enrollment {
