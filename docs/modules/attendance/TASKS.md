@@ -46,27 +46,27 @@ Design: [flow ATT-02](DESIGN.md). Scope and API: POST /api/v1/sessions/:id/open;
 
 ### Implementation instructions
 
-1. Require attendance.mark and dated assignment; lock account/School then session; recheck school-local today.
-2. Open calculates eligible live roster through Student facade, refuses empty/>200, inserts frozen entries/hash and OPEN version atomically.
-3. UI prepares in-memory statuses, explicitly shows Not submitted, validates all entries and confirms counts.
-4. Submit reauthorizes and validates version/hash/exact roster ID set/status fields; save all current records plus immutable SUBMIT revision.
-5. Set SUBMITTED/by/at/version; audit/outbox/receipt commit; on replay return original authorized receipt after scope check.
+1. Require current `attendance.mark`, effective attendance and dependency modules, active assigned Teacher/Employee and date-effective assignment. Lock account → Organization → School → session; recheck school-local today and session start time.
+2. Through the enlisted Students roster read, query only ACTIVE students with an OPEN-year Enrollment and SectionPlacement for this offering Section/date. Open refuses 0 or >200 pupils, creates immutable name/roll and version snapshots, stores a deterministic sorted roster hash, and changes SCHEDULED→OPEN atomically. School serialization defines the point-in-time roster; do not refresh it after OPEN.
+3. UI prepares a memory-only draft, shows “Not submitted”, permits Present/Absent/Late/Excused (1–480 minutes only for Late), and confirms the exact roster/count summary. Validation and stale errors preserve permitted draft state.
+4. Submit reauthorizes assigned teacher and validates current session version, stored hash, exact student-ID set with no duplicates, statuses and late minutes. Save every AttendanceRecord and immutable SUBMIT revision 1 plus session state in one transaction.
+5. Write safe audit/outbox/receipt evidence without names or roll values. Same-key identical payload replays only after fresh authorization; changed payload conflicts. A lost response keeps the exact payload/key retryable; refreshing reads the committed snapshot/state.
 
 Files: extend `backend/modules/attendance/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/attendance`, `test/functional/attendance` and `test/e2e/attendance` as the suite grows.
 
 ### Acceptance and test strategy
 
-- Unit / application: Exact set equality, status/late validation, lifecycle, deterministic roster hash.
-- Real PostgreSQL: Atomic rollback after records; submit lost-response replay once; open vs enrollment transfer; two-tab conflict.
-- Browser: Teacher marks exceptions, confirms, refreshes read-only result; network retry and stale tab.
-- Failure contract: Empty roster→409 EMPTY_ROSTER; changed version/hash→409; missing/extra/duplicate entries→422; revoked assignment→403; closed date/session→409.
-- Required DB effect: Open: SessionRosterEntry + session version/hash/status. Submit: AttendanceRecord for every pupil + AttendanceRevision + session metadata + envelopes.
+- Unit / application: Exact set equality; status and late-minute policy; SCHEDULED→OPEN→SUBMITTED lifecycle; deterministic roster hash; no record before complete submit.
+- Real PostgreSQL: Open roster snapshot/order/hash; max 200 and empty roster refusal; transaction rollback after any record/revision failure; one same-key replay; open racing enrollment/transfer yields a School-serialized point-in-time snapshot; duplicate submission/two-tab version conflict; cross-branch and revoked-assignment isolation.
+- Browser: Assigned teacher opens current-day session, marks all present then changes one absent and one late, confirms, submits, refreshes read-only result; retry the identical key after response loss and reject a stale tab.
+- Failure contract: Empty roster→409 `EMPTY_ROSTER`; >200→409 `ROSTER_TOO_LARGE`; stale version/hash or invalid lifecycle/date→409; missing/extra/duplicate roster entries, invalid status/late minutes→422; revoked membership/assignment/current permission→403/404; foreign scoped session→404; unavailable DB/evidence→503 with transaction rollback and same-key recovery.
+- Required DB effect: Open: immutable SessionRosterEntry snapshots + session version/hash/status. Submit: AttendanceRecord for every frozen pupil + immutable AttendanceRevision + session metadata + safe audit/outbox/receipt. Forward migration only; no edit to ATT-01 history and no RLS enforcement before TEN-03.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
 ### Demo and checkpoint
 
-Open the session; mark all present, change one absent and one late; confirm submit; refresh and see saved counts; resubmit identical intent and confirm one submission revision.
+Run `pnpm demo:seed`; the existing current-day SCHEDULED session must have at least three enrolled synthetic students. Sign in as assigned teacher; open the session; mark all present, change one absent and one late; confirm submit; refresh and see saved counts; retry the identical command key and confirm one submission revision. Keep STU-03/CURRENT_STATE review PENDING; ATT-01 human review is not an ATT-02 gate.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 

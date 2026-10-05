@@ -67,10 +67,10 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | School | `vs_access_school` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | SchoolMembership | `vs_access_school_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | UserAccount | `vs_access_user_account` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
-| AttendanceRecord | `vs_attendance_record` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
-| AttendanceRevision | `vs_attendance_revision` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
+| AttendanceRecord | `vs_attendance_record` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
+| AttendanceRevision | `vs_attendance_revision` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceSession | `vs_attendance_session` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
-| SessionRosterEntry | `vs_attendance_session_roster_entry` | attendance | PLANNED | [attendance LLD](modules/attendance/DESIGN.md) |
+| SessionRosterEntry | `vs_attendance_session_roster_entry` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandRevision | `vs_branding_brand_revision` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |

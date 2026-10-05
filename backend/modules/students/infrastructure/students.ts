@@ -10,6 +10,7 @@ import type { AttendanceStudentImpactPort, StudentRepository } from "../applicat
 import type { StudentInput } from "../domain/student";
 import { displayStudentName } from "../domain/student";
 import type { EnlistedRegistrationInput, EnlistedRegistrationResult, StudentRegistrationTransaction } from "../contracts/enlisted-student-registration";
+import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
 
 type Guard = { configurationVersion: number; timezone:string };
 const NO_RELEASE: ReleaseManifest = { student_core:false,academic_core:false,staff_core:false,attendance:false,fees:false,admissions:false,assessments:false,family:false,communication:false,timetable:false,homework:false,transport:false,hr:false,library:false,inventory:false,health:false,analytics:false,ai:false };
@@ -48,7 +49,7 @@ function fail(error: unknown): never {
   throw new AccessError("UNAVAILABLE");
 }
 
-export class PrismaStudentRepository implements StudentRepository {
+export class PrismaStudentRepository implements StudentRepository,StudentAttendanceRosterPort {
   constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly people:PersonIdentityPort,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret="",private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly attendanceImpact:AttendanceStudentImpactPort={async hasFrozenSessions(){throw new AccessError("UNAVAILABLE");}}){}
 
   private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,permission:"student.manage"|"student.read",lock:boolean,modules:readonly ("student_core"|"academic_core")[]=["student_core"]):Promise<Guard>{
@@ -112,6 +113,28 @@ export class PrismaStudentRepository implements StudentRepository {
     const years=await tx.academicYear.findMany({where:{organizationId,schoolId,status:"OPEN"},orderBy:{startsOn:"desc"},include:{sections:{where:{organizationId,schoolId,active:true},orderBy:[{grade:{sortOrder:"asc"}},{code:"asc"}],include:{grade:{select:{name:true}}}}}});
     return {today:schoolToday(this.now(),guard.timezone),enrolledYearIds:student.enrollments.map(enrollment=>enrollment.yearId),years:years.filter(year=>year.sections.length>0).map(year=>({yearId:year.id,code:year.code,name:year.name,startsOn:civilDate(year.startsOn),endsOn:civilDate(year.endsOn),sections:year.sections.map(section=>({sectionId:section.id,code:section.code,name:section.name,gradeName:section.grade.name}))}))};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
+
+  async listForSession(transaction:object,actor:Identity,organizationId:string,schoolId:string,sectionId:string,schoolDate:string):Promise<readonly StudentAttendanceRosterEntry[]>{
+    if(!transaction||typeof transaction!=='object')throw new AccessError('UNAVAILABLE');const tx=transaction as Prisma.TransactionClient;
+    try{
+      await this.guard(tx,actor,organizationId,schoolId,'student.read',false,['student_core','academic_core']);
+      const rows=await tx.$queryRaw<StudentAttendanceRosterEntry[]>`WITH current_placements AS MATERIALIZED (
+        SELECT organization_id,school_id,enrollment_id,year_id,section_id,roll_number
+        FROM vs_students_section_placement
+        WHERE organization_id=${organizationId}::uuid AND school_id=${schoolId}::uuid AND section_id=${sectionId}::uuid AND valid_from<=${schoolDate}::date AND valid_to>${schoolDate}::date
+      )
+        SELECT st.id::text AS "studentId", st.version AS "studentVersion", e.version AS "enrollmentVersion", btrim(concat_ws(' ', p.first_name, p.last_name)) AS "displayName", pl.roll_number AS "rollNumber"
+        FROM current_placements pl
+        JOIN vs_students_enrollment e ON e.organization_id=pl.organization_id AND e.school_id=pl.school_id AND e.id=pl.enrollment_id AND e.year_id=pl.year_id
+        JOIN vs_students_student st ON st.organization_id=e.organization_id AND st.school_id=e.school_id AND st.id=e.student_id
+        JOIN vs_people_person p ON p.organization_id=st.organization_id AND p.id=st.person_id
+        JOIN vs_academics_section sec ON sec.organization_id=pl.organization_id AND sec.school_id=pl.school_id AND sec.id=pl.section_id AND sec.year_id=pl.year_id
+        JOIN vs_academics_academic_year y ON y.organization_id=e.organization_id AND y.school_id=e.school_id AND y.id=e.year_id
+        WHERE y.status='OPEN' AND sec.active=true AND st.status='ACTIVE' AND e.valid_from<=${schoolDate}::date AND e.valid_to>${schoolDate}::date
+        ORDER BY st.id LIMIT 201`;
+      if(rows.length>200)throw new AccessError('ROSTER_TOO_LARGE');if(rows.length===0)throw new AccessError('EMPTY_ROSTER');const seen=new Set<string>();for(const row of rows){if(seen.has(row.studentId))throw new AccessError('CONFLICT');seen.add(row.studentId);}return rows;
+    }catch(error){return fail(error);}
+  }
 
   async enroll(actor:Identity,organizationId:string,schoolId:string,input:{studentId:string;yearId:string;sectionId:string;validFrom:string;validTo:string;rollNumber:string|null;key:string}):Promise<EnrollmentResult>{try{return await this.db.$transaction(async tx=>{
     const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true,["student_core","academic_core"]),command="StudentEnrolled",hash=inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,...input});

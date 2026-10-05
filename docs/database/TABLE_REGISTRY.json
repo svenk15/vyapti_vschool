@@ -497,18 +497,18 @@
       "model": "AttendanceRecord",
       "owner": "attendance",
       "table": "vs_attendance_record",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; status PRESENT/ABSENT/LATE/EXCUSED; late_minutes int nullable; current_revision int",
       "responsibility": "Current submitted status; one per roster pupil. No blank record stored before submit.",
-      "constraints": "FK(scope,session_id,student_id)\u2192roster unique; UNIQUE(scope,session_id,student_id); CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL)",
+      "constraints": "FK(scope,session_id,student_id)\u2192SessionRosterEntry UNIQUE(scope,session_id,student_id); UNIQUE(scope,session_id,student_id); CHECK recognized status; CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL); current_revision>=1; unique key supports roster join",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
           "organization_id",
           "school_id"
         ],
-        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "intendedPolicy": "Require organization_id and school_id tenant context plus active membership; application checks current attendance permission and dated assignment; WITH CHECK binds both keys. Owner/operator exceptions remain TEN-03-controlled.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "attendance",
         "closureGate": "TEN-03"
@@ -518,18 +518,18 @@
       "model": "AttendanceRevision",
       "owner": "attendance",
       "table": "vs_attendance_revision",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; number int; kind SUBMIT/CORRECT/CANCEL; actor_account_id uuid; occurred_at timestamptz(3); reason varchar(500) nullable; changes jsonb",
-      "responsibility": "Immutable status diff with old/new values and affected student IDs; submit includes complete initial set, cancel includes state transition. No raw private notes field in pilot.",
-      "constraints": "Scoped session FK; actor FK; UNIQUE(scope,session_id,number); reason required for CORRECT/CANCEL; append-only guard",
+      "responsibility": "Immutable status diff with old/new values and affected student IDs; SUBMIT includes the complete initial status set and counts. No names, roll values or raw private notes in changes.",
+      "constraints": "Scoped session FK; global UserAccount actor FK; UNIQUE(scope,session_id,number); number>=1; CHECK recognized kind; SUBMIT requires null reason and CORRECT/CANCEL require reason length 5..500; append-only trigger; unique key supports ordered history",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
           "organization_id",
           "school_id"
         ],
-        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "intendedPolicy": "Require organization_id and school_id tenant context plus active membership; application checks current attendance permission and dated assignment; WITH CHECK binds both keys. Owner/operator exceptions remain TEN-03-controlled.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "attendance",
         "closureGate": "TEN-03"
@@ -560,18 +560,18 @@
       "model": "SessionRosterEntry",
       "owner": "attendance",
       "table": "vs_attendance_session_roster_entry",
-      "status": "PLANNED",
+      "status": "MIGRATED",
       "design": "docs/modules/attendance/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; enrollment_id uuid; placement_id uuid; display_name_snapshot varchar(210); roll_number_snapshot varchar(30) nullable",
-      "responsibility": "Frozen at OPEN. Minimal name/roll historical display; access remains current. No mutable roster after OPEN in Phase 1.",
-      "constraints": "Scoped session/student/enrollment/placement FKs; UNIQUE(scope,session_id,student_id); append-only; session cancellation retains rows",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; student_version int; enrollment_version int; display_name_snapshot varchar(210); roll_number_snapshot varchar(30) nullable",
+      "responsibility": "Exact membership, versions and minimal name/roll display frozen at OPEN. Access remains current. No mutable roster after OPEN in Phase 1.",
+      "constraints": "Scoped Session and Student FKs; UNIQUE(scope,session_id,student_id); CHECK both snapshot versions>=1; immutable trigger; session cancellation retains rows; unique key supports read and record join",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
           "organization_id",
           "school_id"
         ],
-        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "intendedPolicy": "Require organization_id and school_id tenant context plus active membership; application checks current attendance permission and dated assignment; WITH CHECK binds both keys. Owner/operator exceptions remain TEN-03-controlled.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "attendance",
         "closureGate": "TEN-03"

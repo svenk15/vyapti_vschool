@@ -2,6 +2,7 @@ import type { Identity } from "../../../../shared/contracts/access";
 import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentArchiveResult, StudentDetail, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, uuidPattern } from "../../access/contracts/index";
 import type { EnlistedStudentRegistrationPort } from "../contracts/enlisted-student-registration";
+import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
 import { archiveInput, enrollmentInput, exactSelectionName, studentInput, studentListQuery, transferInput } from "../domain/student";
 
 export interface AttendanceStudentImpactPort {
@@ -18,6 +19,8 @@ export interface StudentRepository {
   transfer(actor:Identity,organizationId:string,schoolId:string,enrollmentId:string,input:ReturnType<typeof transferInput>&{key:string}):Promise<StudentTransferResult>;
   archive(actor:Identity,organizationId:string,schoolId:string,studentId:string,input:ReturnType<typeof archiveInput>&{key:string}):Promise<StudentArchiveResult>;
 }
+
+export type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort};
 
 export type EnlistedStudentRegistrationRepository = EnlistedStudentRegistrationPort;
 

@@ -5,7 +5,7 @@ Last updated: 2026-10-05. No imported task completion or active execution timer.
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | ATT-01 | VERIFIED | PENDING | Source `5a9e528a65a6e96b63b8546d9eda590567483ea5`; local PostgreSQL, Playwright, checks, build and live demo evidence below |
-| ATT-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| ATT-02 | VERIFIED | PENDING | Source checkpoint recorded below; full checks, 99 PostgreSQL functional tests, desktop/mobile Playwright and production build passed |
 | ATT-03 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 | ATT-04 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
 
@@ -13,7 +13,11 @@ Last updated: 2026-10-05. No imported task completion or active execution timer.
 
 **Design readiness (4 October 2026):** ATT-01 LLD/task align ownership, scoped session constraints/indexes, guarded schedule/calendar serialization, teacher-time clash rejection, current authorization, retry/failure behavior and Path A metadata. The dated snapshot then was ACA-03 IN_PROGRESS/NOT_REQUESTED; STU-02 NOT_STARTED. Current task table is authoritative. **Dependency snapshot (5 October 2026):** ACA-03 VERIFIED/PENDING; STU-02 VERIFIED/PENDING. Their implementation dependencies are satisfied; these tasks do not require human PASSED as an ATT-01 gate.
 
-ATT-01 now schedules a school-local occurrence against an active offering, published teaching calendar and one date-effective eligible teacher; tenant/branch entitlement, activation and current resource permission are rechecked server-side. The assigned teacher can read the current day and session detail; another teacher receives an empty list and cannot open the foreign session. Calendar publication, year close and teacher-assignment end use Attendance-owned impact queries enlisted in their existing owner transactions. Student transfer impact is deferred to STU-03 because no current Student task changes an existing placement. Failure states include validation, scope/configuration conflict, duplicate/replay, overlap, missing calendar and unavailable service. The aggregate currently persists only SCHEDULED sessions; roster, submission, correction and cancellation tables/workflows remain planned.
+**ATT-02 design-readiness note (5 October 2026):** ATT-01 is VERIFIED/PENDING and is the only task dependency; its task does not specify a human-PASSED gate. Resolved assigned-teacher-only mutation versus admin read, attendance module dependency checks, the exact ACTIVE Student/OPEN-year/section/date roster predicate, a School-serialized point-in-time snapshot, 200-pupil bound, deterministic roster hash/version columns, submit exact-set validation, immutable revision/evidence shape, idempotent retry and rollback behavior. New BRANCH tables use Path A metadata and TEN-03 closure; app authorization stays active. No unresolved product decision blocks ATT-02.
+
+ATT-02 implementation is VERIFIED. Domain validation, scoped roster read, transactional open/submit, thin API routes, teacher UI and migration `20261005002500_attendance_roll_call` are implemented. The forward migration is applied in `vyapti_vschool` and `vyapti_vschool_test`; each has 25 migrations and none pending. The focused functional cases cover roster freeze/hash/replay, exact-set rejection, empty and >200 refusal, transaction rollback, open-versus-enrollment concurrency, dependency entitlement suspension, administrator read-only behavior, current-role reauthorization on replay and safe receipt/revision fields. The full PostgreSQL functional suite passed 99/99; `pnpm check` passed (90 unit tests, docs, 51 table contracts, boundaries and backend compilation); desktop and mobile Playwright passed 2/2; and `pnpm build` passed. `pnpm demo:seed` passed twice against the guarded development database and retained existing records. `artifacts/attendance-02-local/query-plan.json` records EXPLAIN ANALYZE evidence for a small synthetic profile (205 active students, 4 live section rows, 3 frozen rows/records, concurrency 1); this is not the Bible pilot benchmark or TEN-03 scale profile.
+
+ATT-01 schedules school-local occurrences against active offerings, published calendars and date-effective eligible teachers; current access is rechecked server-side. ATT-02 now freezes the exact date-effective Student roster and persists atomic submission revisions. Correction and cancellation behavior remain for ATT-03/04. Student transfer impact is enforced by STU-03. Failure states include validation, scope/configuration conflict, duplicate/replay, overlap, missing calendar, empty/oversized roster, stale state and unavailable service.
 
 Migration `20261005002000_attendance_sessions` is applied to the guarded development database and the dedicated functional test database. It adds `vs_attendance_session` with scoped Offering, CalendarRevision and School references, occurrence uniqueness, time/status/version checks and the school-day index. Both databases retain migration history; no reset or applied migration edit occurred. Path A classifies this as BRANCH-scoped with owner, policy intent and TEN-03 closure gate registered. Runtime RLS/restricted roles are not enabled; application authorization remains active on every protected read/write.
 
@@ -23,7 +27,7 @@ Pilot query evidence, 5 October 2026: read-only `EXPLAIN (ANALYZE, BUFFERS)` ran
 
 ## Next action
 
-Keep ATT-01 human review PENDING and its local demo available. Then select the next task by `pnpm next-task`; do not infer acceptance from automated evidence.
+ATT-02 is committed and its frozen local demo checkpoint is being prepared. Human review remains PENDING; it does not gate ATT-03. Continue with ATT-03 after the demo handoff, while honoring its explicit task dependencies and design-readiness gate. ATT-01 and STU-03 remain human-review PENDING.
 
 ## Pending decisions / limitations
 

@@ -110,6 +110,7 @@ model UserAccount {
  personBindings AccountPersonBinding[] @relation("PersonAccountBinding")
   verifiedPersonBindings AccountPersonBinding[] @relation("PersonBindingVerifier")
   createdImportJobs ImportJob[] @relation("ImportJobActor")
+  attendanceRevisions AttendanceRevision[] @relation("AttendanceRevisionActor")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -197,6 +198,7 @@ model Student {
  person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_student_person_fkey")
  enrollments Enrollment[]
  sourceMaps SourceStudentMap[]
+ attendanceRosterEntries SessionRosterEntry[]
  @@unique([organizationId,schoolId,id],map:"vs_students_student_scope_id_key")
  @@unique([organizationId,schoolId,admissionNumber],map:"vs_students_student_admission_key")
  @@unique([organizationId,schoolId,personId],map:"vs_students_student_person_key")
@@ -903,8 +905,60 @@ model AttendanceSession {
  cancelledAt DateTime? @map("cancelled_at") @db.Timestamptz(3)
  offering CourseOffering @relation(fields:[organizationId,schoolId,offeringId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_offering_fkey")
  calendarRevision CalendarRevision @relation("AttendanceSessionCalendarRevision",fields:[organizationId,schoolId,calendarRevisionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_calendar_revision_fkey")
+ rosterEntries SessionRosterEntry[]
+ attendanceRecords AttendanceRecord[]
+ revisions AttendanceRevision[]
  @@unique([organizationId,schoolId,id],map:"vs_attendance_session_scope_id_key")
  @@unique([organizationId,schoolId,offeringId,occurrenceKey],map:"vs_attendance_session_occurrence_key")
  @@index([organizationId,schoolId,schoolDate,status,startsAt,id],map:"vs_attendance_session_school_day_idx")
  @@map("vs_attendance_session")
+}
+
+model SessionRosterEntry {
+ id String @id(map:"vs_attendance_session_roster_entry_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ sessionId String @map("session_id") @db.Uuid
+ studentId String @map("student_id") @db.Uuid
+ studentVersion Int @map("student_version")
+ enrollmentVersion Int @map("enrollment_version")
+ displayNameSnapshot String @map("display_name_snapshot") @db.VarChar(210)
+ rollNumberSnapshot String? @map("roll_number_snapshot") @db.VarChar(30)
+ session AttendanceSession @relation(fields:[organizationId,schoolId,sessionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_roster_entry_session_fkey")
+ student Student @relation(fields:[organizationId,schoolId,studentId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_roster_entry_student_fkey")
+ record AttendanceRecord?
+ @@unique([organizationId,schoolId,sessionId,studentId],map:"vs_attendance_session_roster_entry_student_key")
+ @@map("vs_attendance_session_roster_entry")
+}
+
+model AttendanceRecord {
+ id String @id(map:"vs_attendance_record_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ sessionId String @map("session_id") @db.Uuid
+ studentId String @map("student_id") @db.Uuid
+ status String @db.VarChar(20)
+ lateMinutes Int? @map("late_minutes")
+ currentRevision Int @map("current_revision")
+ session AttendanceSession @relation(fields:[organizationId,schoolId,sessionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_record_session_fkey")
+ rosterEntry SessionRosterEntry @relation(fields:[organizationId,schoolId,sessionId,studentId],references:[organizationId,schoolId,sessionId,studentId],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_record_roster_fkey")
+ @@unique([organizationId,schoolId,sessionId,studentId],map:"vs_attendance_record_session_student_key")
+ @@map("vs_attendance_record")
+}
+
+model AttendanceRevision {
+ id String @id(map:"vs_attendance_revision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ sessionId String @map("session_id") @db.Uuid
+ number Int
+ kind String @db.VarChar(20)
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ reason String? @db.VarChar(500)
+ changes Json
+ session AttendanceSession @relation(fields:[organizationId,schoolId,sessionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_revision_session_fkey")
+ actor UserAccount @relation("AttendanceRevisionActor",fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_revision_actor_fkey")
+ @@unique([organizationId,schoolId,sessionId,number],map:"vs_attendance_revision_number_key")
+ @@map("vs_attendance_revision")
 }
