@@ -4,7 +4,7 @@
   "implementation": "VERIFIED",
   "humanReview": "PENDING",
   "date": "2026-10-06",
-  "executableSource": "c678be0dfe82204960f858a69383445939ea5788",
+  "executableSource": "dd6c863850d9fb7e260388c4017003ea55f25c38",
   "demo": {
     "url": "http://127.0.0.1:3440",
     "mode": "Next.js production server using isolated .next-e2e build",
@@ -19,7 +19,8 @@
       "artifacts/people-02/private-demo.json",
       "artifacts/attendance-01/private-demo.json"
     ],
-    "seedCommand": "pnpm demo:seed"
+    "seedCommand": "pnpm demo:seed",
+    "buildId": "zqWBs7C8HCt8KfqT1iZjB"
   },
   "database": {
     "development": "vyapti_vschool",
@@ -33,13 +34,14 @@
     "email": "File-only local development sink; no real messages sent."
   },
   "checks": {
-    "pnpm check": "PASS: lint, TypeScript, docs, database-design (51 table contracts), boundaries, backend compilation, 104 unit tests",
-    "pnpm test:functional": "PASS: 106 tests across 16 suites on real PostgreSQL; run before final UI-only dialog callback correction, with no business or persistence code changed afterward",
-    "pnpm test:e2e": "PASS: 78/78 on final executable source using isolated production build and designated test database",
-    "productionBuild": "PASS: isolated .next-e2e production build used by final Playwright suite and demo server",
-    "finalSourceRouteCapture": "PASS: 28 implemented page routes at desktop and mobile widths (56 renders), 0 failed responses, 0 page errors, 0 document-width overflow; see ignored artifacts/fnd-02-demo/route-captures.json and screenshots",
-    "visualInspection": "Dashboard, mobile grouped navigation, attendance report, student/import forms, teacher day and published branded sign-in inspected on rendered screenshots",
-    "databaseSetup": "PASS: designated development database has 31 applied migrations and no pending migrations"
+    "pnpm check": "PASS on final source dd6c863: lint, typecheck, docs, database-design (51 contracts), boundaries, backend compile, 104 unit tests",
+    "pnpm test:functional": "PASS: 106 tests across 16 suites on real PostgreSQL; before the UI-only teacher account navigation follow-up, with no persistence/business code changed afterward",
+    "pnpm test:e2e": "PASS 26/26 on final source dd6c863 using isolated production build: attendance workflow (desktop/mobile) plus public-entry and auth/revocation suites (desktop/mobile). Previous complete suite passed 78/78 on c678be0.",
+    "productionBuild": "PASS: isolated .next-e2e production build for final dd6c863 source used by focused Playwright and stable demo",
+    "finalSourceRouteCapture": "PASS: earlier 28-route desktop/mobile capture (56 renders) had 0 failed responses, page errors or document overflow; after teacher-entry change, desktop/mobile account screens were recaptured and reached three assigned sessions with no overflow.",
+    "visualInspection": "Dashboard, mobile grouped navigation, attendance report, student/import forms, teacher day, published branded sign-in and updated desktop/mobile teacher account entry inspected on rendered screenshots",
+    "databaseSetup": "PASS: designated development database has 31 applied migrations and no pending migrations",
+    "livePersonaSmoke": "PASS: admin signs in to /admin; teacher signs in to /account, follows capability-gated My teaching day link to /teacher/today and sees three assigned sessions; published school-branded sign-in is visible."
   },
   "ten03": {
     "status": "IN_PROGRESS; remaining work explicitly deferred until after consolidated product demo/review",
@@ -60,6 +62,6 @@
   "limitations": [
     "Local synthetic data only; no production readiness or real-client data authorization",
     "Native assistive-technology and native 200% zoom checks were not run",
-    "Functional PostgreSQL suite preceded the final presentation-only dialog callback correction; full E2E and pnpm check ran after it"
+    "The 106-test real-PostgreSQL functional suite passed before the final teacher-account navigation-only change; no persistence/business code changed afterward."
   ]
 }
