@@ -34,34 +34,39 @@ Open localhost:3400; confirm Database connected; review the illustrative workspa
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
-## FND-02 — Demonstrate and release the complete pilot
+## FND-02 — Prepare and verify the complete Phase 1 demo
 
 Depends on: RPT-02, IMP-03, IAM-03, ATT-04, TEN-03, BRD-02, DS-02
+
+Demo-sequence dependencies: RPT-02, IMP-03, IAM-03, ATT-04, BRD-02. Per the 6 October PHASE 1 DEMO READY decision, TEN-03 remaining RLS/context-proof work and DS-02 native accessibility evidence do not block local demo preparation. Both remain production-release gates. DS-02 shared UX and rendered route checks are part of the FND-02 demo verification.
 
 Design: [flow FND-02](DESIGN.md). Scope and API: Full UI journey plus operator release runbook.
 
 ### Implementation instructions
 
-1. Run all module acceptance suites and production build from a recorded source commit.
-2. Rehearse clean install and upgrade migrations against separate disposable databases.
-3. Take a synthetic DB backup, restore to a fresh isolated target and reconcile keys, row counts and attendance rates.
-4. Verify identity recovery, TLS/secrets, rate controls, redacted logging and operator permissions.
-5. Start final release candidate and request owner acceptance of the complete school day.
+1. Preserve and commit the partial TEN-03 context groundwork. Do not enable RLS or alter existing migration history/data.
+2. Run `pnpm demo:seed` twice against only the guarded development database and verify no existing user data/credentials are replaced and no real email is sent.
+3. Run unit, real-PostgreSQL, Playwright desktop/mobile and production-build checks needed for the local demo source.
+4. Verify connected admin and assigned-teacher journeys across Access, Tenancy, Branding, Academics, People, Students, Imports, Attendance and Reporting, with realistic failures/denials.
+5. Verify shared portal layout/theme propagation, theme preview/cancel/publish/rollback and school-branded sign-in.
+6. Start one stable production-mode local demo and capture exact source, enabled modules, URL, seed and private credential paths. Human review remains PENDING until owner feedback.
 
-Files: extend `backend/modules/platform/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/platform`, `test/functional/platform` and `test/e2e/platform` as the suite grows.
+This demo-ready checkpoint is not a production release. Keep the release evidence below outstanding for TEN-03 RLS/context proof, provider role/security review, native accessibility, backup/restore and the larger isolation benchmark. No real client data may be onboarded before those gates pass.
+
+Files: use existing feature-owned seed scripts and current shared components. Fix integration defects in their owning module; keep FND-02 evidence in `docs/evidence/fnd-02-demo/` and update module CURRENT_STATE only with executed evidence. Do not add a generic seed framework, new platform business tables or fake feature operations.
 
 ### Acceptance and test strategy
 
 - Unit / application: Only new risk-specific regression tests needed.
-- Real PostgreSQL: Backup/restore, migration upgrade and full scope/transaction regression.
-- Browser: Admin setup → import → assignment → teacher submit → admin correction/export.
-- Failure contract: Restore mismatch or failed security gate → BLOCKED release; never route real data into an unverified candidate.
-- Required DB effect: No new feature schema unless a reviewed release defect requires a forward migration; evidence includes restore verification.
+- Real PostgreSQL: Full functional authorization, tenant/branch scope, migration, concurrency and rollback suites; run seed twice and inspect idempotency. Do not reset/delete the current development or test databases.
+- Browser: Full admin/teacher flow from setup and theme publication through student/import/attendance/reporting, plus access denial, partial import and attendance recovery states.
+- Failure contract: failed journey or check leaves PHASE 1 DEMO READY incomplete. Missing release evidence keeps production BLOCKED; no real data is used.
+- Required DB effect: Only existing idempotent synthetic seed commands; no new feature schema or destructive database operation.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
 
 ### Demo and checkpoint
 
-Use the final candidate to complete the entire school day, including a failed import row and attendance correction; open the restored isolated copy and compare report totals.
+Use the local candidate and synthetic admin/teacher personas to complete the documented school day, including a failed import row, attendance correction and report export. Verify published branding at the institution's school-branded sign-in URL.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.

@@ -6,6 +6,8 @@ import {moduleGateway} from '@/lib/server/tenancy';
 import {reportingGateway} from '@/lib/server/reporting';
 import type {AdminHome} from '@/shared/contracts/access';
 import type {AttendanceReport} from '@/shared/contracts/reporting';
+import {notFound,redirect} from 'next/navigation';
+import {AccessError} from '@/backend/modules/access/contracts';
 
 export const dynamic='force-dynamic';
 const localDate=(date:Date,timezone:string)=>new Intl.DateTimeFormat('en-CA',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(date);
@@ -13,7 +15,7 @@ function tomorrow(date:string){const value=new Date(`${date}T00:00:00.000Z`);val
 
 export default async function AdminPage(){
  const identity=await getIdentity();let home:AdminHome|null=null,directory=null,summary:AttendanceReport|null=null,summaryFailure=false;
- try{home=await accountGateway.getHome(identity);}catch{home=null;}
+ try{home=await accountGateway.getHome(identity);}catch(error){if(error instanceof AccessError&&error.code==='UNAUTHENTICATED')redirect('/sign-in');if(error instanceof AccessError&&error.code==='NOT_FOUND')notFound();home=null;}
  if(!home)return <main id="main-content" className="container page-space"><Alert tone="danger" title="School overview unavailable">Your current school access could not be verified. Refresh or sign in again.</Alert></main>;
  directory=await contextGateway.getContexts(identity).catch(()=>null);
  const canReadAttendance=home.capabilities.includes('attendance.read_school')&&await moduleGateway.canUseCurrent(identity,'attendance','attendance.read_school');

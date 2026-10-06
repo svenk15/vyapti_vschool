@@ -33,6 +33,6 @@ test("dialog tabs notifications and palettes support keyboard interaction",async
  await page.getByRole("button",{name:"View details ↗",exact:true}).click();await expect(page.getByRole("dialog",{name:"Record details"})).toBeVisible();await page.getByRole("button",{name:"Close Record details"}).click();
  await page.getByRole("tab",{name:"Empty",exact:true}).focus();await page.keyboard.press("ArrowRight");await expect(page.getByRole("tab",{name:"Loading",exact:true})).toBeFocused();await expect(page.getByRole("status",{name:"Loading sample roster"})).toBeVisible();
  await page.getByRole("button",{name:"Primary action",exact:true}).click();await expect(page.getByText("Your preview action is complete. No data was saved.")).toBeVisible();await page.getByRole("button",{name:"Dismiss notification"}).click();
- await page.getByLabel("Preview palette").selectOption("indigo");await expect(page.locator(".brand-surface")).toHaveAttribute("style",/464985/);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+ await page.getByLabel("Preview palette").selectOption("indigo");await expect(page.locator(".brand-surface").first()).toHaveAttribute("style",/464985/);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
  await page.screenshot({path:`artifacts/gallery-${test.info().project.name}.png`,fullPage:true});
 });

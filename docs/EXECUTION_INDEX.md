@@ -1,4 +1,4 @@
-# Phase 1 execution index — v4.5
+# Phase 1 execution index — v4.6
 
 This index defines the complete currently authorized Phase 1 task scope (30 tasks in dependency order). Module CURRENT_STATE owns implementation evidence and human review. Human review PENDING or NOT_REQUESTED does not block dependent implementation; only failed automated prerequisites, unresolved technical/security decisions, or unavailable required access can block work. Record human review truthfully and keep release gates outstanding until their evidence exists. New tenancy, branding and shared UX are first-release foundations. Later product modules remain design-gated and out of scope.
 
@@ -33,8 +33,19 @@ This index defines the complete currently authorized Phase 1 task scope (30 task
 | RPT-02 | [reporting](modules/reporting/TASKS.md) | Export a scoped report and review audit history | RPT-01, ATT-04 |
 | TEN-03 | [tenancy](modules/tenancy/TASKS.md) | Prove tenant isolation and configuration recovery | TEN-02, ATT-04 |
 | DS-02 | [design-system](modules/design-system/TASKS.md) | Validate production screen recipes and accessibility | DS-01, ATT-02, BRD-02 |
-| FND-02 | [platform](modules/platform/TASKS.md) | Demonstrate and release the complete pilot | RPT-02, IMP-03, IAM-03, ATT-04, TEN-03, BRD-02, DS-02 |
+| FND-02 | [platform](modules/platform/TASKS.md) | Prepare and verify the complete Phase 1 demo | RPT-02, IMP-03, IAM-03, ATT-04, TEN-03, BRD-02, DS-02 |
 
 Use `pnpm next-task` for a read-only suggestion based on implementation status only; failed human feedback is prioritized for defect resolution. Human acceptance does not control task eligibility under the current owner policy. Accessibility and other explicit technical release gates remain mandatory for release readiness. Later phases are out of scope.
+
+## PHASE 1 DEMO READY sequencing decision — 6 October 2026
+
+The immediate milestone is a complete local **PHASE 1 DEMO READY** checkpoint, not production release. TEN-03 remains IN_PROGRESS; its remaining non-forgeable context proof, RLS enforcement, restricted-role cross-tenant policy proof, provider review and scale profile are deferred until after the owner’s consolidated product demo/review. TEN-03 still blocks production release and onboarding any real client data. Preserve the applied migrations/data and partial TEN-03 checkpoint. Application authorization and tenant/branch scoping remain required for every protected operation.
+
+For demo sequencing only, skip the unfinished TEN-03 remainder and select FND-02 when these implementation prerequisites are VERIFIED: RPT-02, IMP-03, IAM-03, ATT-04 and BRD-02. The complete TEN-03 dependency list in the task row remains the release gate. DS-02 shared UX implementation and rendered demo review are included in FND-02 verification; native VoiceOver/NVDA and other unperformed accessibility criteria remain release gates. Never record human review as passed without owner feedback.
+
+| Task | Deferred for demo milestone | Demo dependencies |
+|---|---|---|
+| TEN-03 | yes — remaining security enforcement only | — |
+| FND-02 | no | RPT-02, IMP-03, IAM-03, ATT-04, BRD-02 |
 
 Owner reaffirmed 6 October 2026: continue every eligible Phase 1 implementation without per-task approval. Human PENDING/NOT_REQUESTED, including historical IAM-03 and ATT-04 acceptance gates, never blocks implementation. Keep their review states truthful. Implementation-VERIFIED prerequisites, technical/security gates and explicit release evidence remain mandatory; do not mark a task VERIFIED around failed or skipped checks. PER-02's former IAM-03 human-PASSED prerequisite is superseded; IAM-03 implementation must still be VERIFIED.

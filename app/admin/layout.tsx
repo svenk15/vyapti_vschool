@@ -5,11 +5,12 @@ import {getIdentity} from '@/lib/server/auth';
 import {accountGateway} from '@/lib/server/access';
 import {getAdminNavigation} from '@/lib/server/admin-navigation';
 import {brandingGateway} from '@/lib/server/branding';
+import {redirect} from 'next/navigation';
 export const dynamic='force-dynamic';
 
 export default async function AdminLayout({children}:{children:ReactNode}){
  const identity=await getIdentity();
- if(!identity)return children;
+ if(!identity)redirect('/sign-in');
  const home=await accountGateway.getHome(identity).catch(()=>null);
  if(!home)return children;
  const [groups,palette]=await Promise.all([getAdminNavigation(identity,home),brandingGateway.effectivePalette(identity).catch(()=>null)]);

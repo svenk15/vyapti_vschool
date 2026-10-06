@@ -87,25 +87,26 @@ sequenceDiagram
 
 **Verification:** Unit — Readiness labels; provider exception hides secret. Functional PostgreSQL — Real persistence replay and failed transaction rollback. E2E — Desktop/mobile page; health and no secret response.
 
-## FND-02 — Demonstrate and release the complete pilot
+## FND-02 — Prepare and verify the complete Phase 1 demo
 
-**Success response contract:** Release evidence with source commit, verified deployment/restore target labels, acceptance outcomes and remaining limitations; release stays BLOCKED if any gate fails.
+**Success response contract:** Local demo evidence records source commit, migration/schema state, guarded idempotent seed results, verified administrator/teacher journeys, demo URL and limitations. This reaches PHASE 1 DEMO READY only. Production release and real-client data remain BLOCKED by TEN-03 enforcement, outstanding accessibility evidence, provider/security review, backup/restore targets and other release gates.
 
-**Transport:** Full UI journey plus operator release runbook
+**Transport:** Full local UI journey plus demo runbook; release evidence remains a separate operational gate.
 
-**Input:** Synthetic school fixtures first; deployment target and approved real-data policy explicitly selected before production.
+**Input:** Synthetic school fixtures only. No deployment target, client data, external mail or production operation is part of this task.
 
 **Workflow:**
 
-1. Run all module acceptance suites and production build from a recorded source commit.
-2. Rehearse clean install and upgrade migrations against separate disposable databases.
-3. Take a synthetic DB backup, restore to a fresh isolated target and reconcile keys, row counts and attendance rates.
-4. Verify identity recovery, TLS/secrets, rate controls, redacted logging and operator permissions.
-5. Start final release candidate and request owner acceptance of the complete school day.
+1. Preserve and checkpoint partial TEN-03 implementation without enabling RLS or changing applied migrations.
+2. Run the guarded `pnpm demo:seed` command twice; confirm fictional data is added without replacing records/credentials or sending real messages.
+3. Run relevant unit, real-PostgreSQL functional, browser and production-build checks for the exact demo source.
+4. Exercise the administrator and assigned-teacher school-day journey, including denial/failure recovery, import partial results, attendance correction and reporting/export.
+5. Verify theme draft preview/cancel, publish/rollback, isolation/inheritance, and the published school-branded sign-in route.
+6. Start one stable local production-mode demo and record source commit, enabled modules, credential-file locations, URL and limitations. Set owner review to PENDING.
 
-**Database writes / atomicity:** No new feature schema unless a reviewed release defect requires a forward migration; evidence includes restore verification.
+**Database writes / atomicity:** Only existing module-owned guarded synthetic seed writes. No reset/delete/restore into existing databases and no new FND-02 business schema. Preserve applied migration history and existing records.
 
-**Errors and recovery:** Restore mismatch or failed security gate → BLOCKED release; never route real data into an unverified candidate.
+**Errors and recovery:** Seed conflict, denied authorization, partial import, stale form, failed attendance submission, or export/storage error must show the owning module's truthful recovery path. Failed technical checks leave the demo checkpoint incomplete. Missing release evidence leaves production blocked; never route real data into an unverified candidate.
 
 ```mermaid
 sequenceDiagram
@@ -116,10 +117,9 @@ sequenceDiagram
   participant D as PostgreSQL
   U->>W: Request named flow
   W->>A: Validated input and verified session
-  A->>P: Rehearse clean install and upgrade migrations against separate disposable databases
+  A->>P: Verify seed, browser journeys and production build at the recorded source
   P->>D: Scoped reads and transaction guards
   D-->>P: Current authorized facts
-  A->>P: Take a synthetic DB backup, restore to a fresh isolated target and reconcile keys, row counts and attendance rates
   alt Preconditions hold
     P->>D: Apply documented writes atomically
     D-->>P: Committed result
@@ -133,13 +133,13 @@ sequenceDiagram
   end
 ```
 
-**Verification:** Unit — Only new risk-specific regression tests needed. Functional PostgreSQL — Backup/restore, migration upgrade and full scope/transaction regression. E2E — Admin setup → import → assignment → teacher submit → admin correction/export.
+**Verification:** Unit — only risk-specific regressions for integration defects. Real PostgreSQL — full functional suite at this coherent checkpoint, including auth, scope, transactions, migrations and seed idempotency. Playwright desktop/mobile — admin setup → brand preview/publish → staff/teacher assignment → student import/enrolment → teacher attendance → admin correction/report/export, plus denied/unknown-result recovery. Production build from the exact source commit. Release-only evidence remains explicitly open.
 
 ## Migration, retention and handoff
 
 Implement tables only in the task that first uses them; migrate from empty database and the previous task checkpoint. Add scoped unique indexes before composite FKs; detect existing duplicates before adding constraints. SQL append-only/null-campus/range safeguards must appear in reviewed migrations and real-DB tests. No seed may erase prior data. Use synthetic fixtures and clean only owned test records. Preserve schema-compatible app rollback; use a reviewed forward migration when incompatible. Retention changes must preserve required immutable evidence and legal holds under the school-approved policy, not an ad hoc DELETE.
 
-Starter unit checks provider error sanitization and truthful readiness. Functional checks exercise migration, idempotent marker creation and rollback in real PostgreSQL. Browser tests check desktop/mobile readiness, plan labels, safe health response and horizontal overflow. FND-02 adds the complete release/recovery suite, not artificial tests of documentation text alone.
+Starter unit checks provider error sanitization and truthful readiness. Functional checks exercise migration, idempotent marker creation and rollback in real PostgreSQL. Browser tests check desktop/mobile readiness, plan labels, safe health response and horizontal overflow. FND-02 demo verification exercises existing implemented module journeys end to end; clean-install/restore, provider, TEN-03 RLS and native accessibility evidence remain release-only checks.
 
 See [tasks](TASKS.md), [current state](CURRENT_STATE.md), [Bible](../../VSchool_Bible.md) and [agent runbook](../../AGENT_RUNBOOK.md).
 

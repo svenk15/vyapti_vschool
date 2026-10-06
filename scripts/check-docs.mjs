@@ -10,10 +10,12 @@ const reviews = ["NOT_REQUESTED", "PENDING", "PASSED", "FAILED"];
 for (const t of tasks) {
   if (!allowed.includes(t.implementation) || !reviews.includes(t.review)) errors.push(`Invalid status ${t.id}`);
   for (const dep of t.dependencies) if (!ids.has(dep)) errors.push(`Missing dependency ${dep}`);
+  for (const dep of t.demoDependencies ?? []) if (!ids.has(dep)) errors.push(`Missing demo dependency ${dep}`);
   const plan = fs.readFileSync(`docs/modules/${t.module}/TASKS.md`, "utf8");
   const section = plan.split(`## ${t.id} — `)[1]?.split("\n## ")[0];
   if (!section) errors.push(`Missing task section ${t.id}`);
   if (!section?.includes(`Depends on: ${t.dependencies.join(", ") || "none"}`)) errors.push(`Dependency drift ${t.id}`);
+  if (t.demoDependencies?.length && !section?.includes(`Demo-sequence dependencies: ${t.demoDependencies.join(", ")}`)) errors.push(`Demo dependency drift ${t.id}`);
   if (!section?.includes("### Demo and checkpoint")) errors.push(`Missing demo ${t.id}`);
   const design = fs.readFileSync(`docs/modules/${t.module}/DESIGN.md`, "utf8");
   if (!design.includes(`## ${t.id} — `)) errors.push(`Missing design flow ${t.id}`);

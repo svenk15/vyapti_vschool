@@ -14,7 +14,7 @@ test.beforeAll(async()=>{const operator={operatorId:randomUUID(),verified:true a
 test.afterAll(async()=>{await service.disconnect();await db.$disconnect();});
 async function login(page:Page,email=input.adminEmail,password=input.password){await page.goto("/sign-in");await page.getByRole("textbox",{name:"Email",exact:true}).fill(email);await page.getByLabel(/^Password/).fill(password);await page.getByRole("button",{name:"Sign in",exact:true}).click();}
 test("logged-out home and setup redirect; API returns private 401",async({page})=>{
- for(const path of ["/admin","/admin/setup"]){await page.goto(path);await expect(page).toHaveURL(/\/sign-in$/);await expect(page.getByRole("heading",{name:"School administrator sign in"})).toBeVisible();}
+ for(const path of ["/admin","/admin/setup"]){await page.goto(path);await expect(page).toHaveURL(/\/sign-in$/);await expect(page.getByRole("heading",{name:"A thoughtful space for your school.",level:1})).toBeVisible();}
  const response=await page.request.get("/api/v1/school");expect(response.status()).toBe(401);expect(response.headers()["cache-control"]).toContain("no-store");
 });
 test("administrator signs in, sees current scope and setup, rejects foreign school, signs out",async({page})=>{
@@ -24,7 +24,7 @@ test("administrator signs in, sees current scope and setup, rejects foreign scho
  const cookies=await page.context().cookies();const cookie=cookies.find(c=>c.name.endsWith("session-token"));expect(cookie?.httpOnly).toBe(true);expect(cookie?.sameSite).toBe("Lax");
  const own=await page.request.get(`/api/v1/school?schoolId=${ids.schoolId}`);expect(own.status()).toBe(200);expect((await own.json()).scope.schoolId).toBe(ids.schoolId);
  const denied=await page.request.get(`/api/v1/school?schoolId=${foreignIds.schoolId}`);expect(denied.status()).toBe(404);expect(await denied.json()).toEqual({error:"NOT_FOUND"});
- await page.getByRole("link",{name:"School setup",exact:true}).click();await expect(page.getByRole("heading",{name:"School setup",exact:true})).toBeVisible();await page.getByRole("link",{name:"Back to school home"}).click();await expect(page.getByRole("heading",{name:input.schoolName,exact:true})).toBeVisible();
+ if(test.info().project.name==="mobile")await page.getByRole("button",{name:"Open navigation"}).click();await page.getByRole("link",{name:"School setup",exact:true}).click();await expect(page.getByRole("heading",{name:"School setup",exact:true})).toBeVisible();if(test.info().project.name==="mobile")await page.getByRole("button",{name:"Open navigation"}).click();await page.getByRole("link",{name:"School overview",exact:true}).click();await expect(page.getByRole("heading",{name:input.schoolName,exact:true})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`artifacts/iam-admin-${test.info().project.name}.png`,fullPage:true});
  await page.getByRole("button",{name:"Sign out",exact:true}).click();await expect(page).toHaveURL(/\/sign-in$/);await page.goto("/admin");await expect(page).toHaveURL(/\/sign-in$/);expect(errors).toEqual([]);
 });
