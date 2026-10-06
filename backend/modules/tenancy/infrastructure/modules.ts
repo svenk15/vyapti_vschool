@@ -8,6 +8,7 @@ import type {SetOrganizationTrustMode} from '../../../../shared/contracts/tenanc
 import type {AccessTrustModeInvalidator} from '../../access/contracts/trust-mode-invalidation';
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import {dependencyClosure,moduleCatalog,type EntitlementRecord,type ActivationRecord,type ReleaseManifest,configurationItems} from '../domain/entitlements';
+import type {VerifiedDatabaseContextPort} from '../contracts/verified-database-context';
 
 const modules=Object.keys(moduleCatalog).sort() as ModuleId[];
 const canonical=(v:unknown):string=>Array.isArray(v)?`[${v.map(canonical).join(',')}]`:v&&typeof v==='object'?`{${Object.entries(v).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>`${JSON.stringify(k)}:${canonical(x)}`).join(',')}}`:JSON.stringify(v);
@@ -16,19 +17,21 @@ function fail(e:unknown):never{if(e instanceof AccessError)throw e;const code=(e
 function itemMap(config:BranchModuleConfiguration){return new Map(config.modules.map(m=>[m.moduleId,m]));}
 
 export class PrismaCurrentModulePermission implements CurrentModulePermission{
- constructor(private readonly db:PrismaClient){}
- async assertCurrentPermission(actor:Identity,input:TenantModulePermission){try{
+ constructor(private readonly db:PrismaClient,private readonly databaseContext:VerifiedDatabaseContextPort){}
+ async assertCurrentPermission(actor:Identity,input:TenantModulePermission){try{return await this.db.$transaction(async tx=>{
+  await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId:input.organizationId,branchId:input.schoolId});
   if(input.resourceId)throw new AccessError('FORBIDDEN');
-  const account=await this.db.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
-  const membership=await this.db.schoolMembership.findFirst({where:{accountId:actor.accountId,organizationId:input.organizationId,schoolId:input.schoolId,status:'ACTIVE',school:{status:'ACTIVE',organization:{status:'ACTIVE'}},grants:{some:{code:{in:['SCHOOL_ADMIN','TEACHER']}}}},select:{grants:true}});
+  const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
+  const membership=await tx.schoolMembership.findFirst({where:{accountId:actor.accountId,organizationId:input.organizationId,schoolId:input.schoolId,status:'ACTIVE',school:{status:'ACTIVE',organization:{status:'ACTIVE'}},grants:{some:{code:{in:['SCHOOL_ADMIN','TEACHER']}}}},select:{grants:true}});
   if(!membership||!capabilitiesFor(membership.grants.map(g=>g.code as 'SCHOOL_ADMIN'|'TEACHER')).includes(input.permission))throw new AccessError('FORBIDDEN');
- }catch(e){fail(e);}}
+ },{isolationLevel:'RepeatableRead'});}catch(e){fail(e);}}
 }
 
 export class PrismaTenancyModuleRepository implements TenancyModuleRepository{
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly trustInvalidator?:AccessTrustModeInvalidator<Prisma.TransactionClient>){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly trustInvalidator?:AccessTrustModeInvalidator<Prisma.TransactionClient>,private readonly databaseContext?:VerifiedDatabaseContextPort){}
  private async identity(tx:Prisma.TransactionClient,actor:Identity){const a=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!a||a.status!=='ACTIVE'||a.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');}
  private async branch(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string){
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
   await this.identity(tx,actor);const school=await tx.school.findFirst({where:{id:schoolId,organizationId,status:'ACTIVE',organization:{status:'ACTIVE',institutionGrants:{some:{accountId:actor.accountId,status:'ACTIVE',role:'INSTITUTION_ADMIN'}}},memberships:{some:{accountId:actor.accountId,status:'ACTIVE',grants:{some:{code:'SCHOOL_ADMIN'}}}}},select:{configurationVersion:true,organization:{select:{configurationVersion:true}}}});
   if(!school)throw new AccessError('NOT_FOUND');return school;
  }
@@ -41,6 +44,7 @@ export class PrismaTenancyModuleRepository implements TenancyModuleRepository{
  private hash(org:string,school:string,config:BranchModuleConfiguration,enabled:ModuleId[]){return digest({schemaVersion:1,command:'ConfigureBranchModules',organizationId:org,schoolId:school,institutionRevision:config.institutionRevision,branchRevision:config.branchRevision,expectedVersions:Object.fromEntries(config.modules.map(m=>[m.moduleId,m.version])),enabled:[...enabled].sort()});}
  async preview(actor:Identity,organizationId:string,schoolId:string,enabled:ModuleId[]):Promise<BranchModulePreview>{try{const config=await this.getBranch(actor,organizationId,schoolId),desired=dependencyClosure(enabled),map=itemMap(config),blockers:{moduleId:ModuleId;code:string}[]=[];for(const moduleId of desired){const row=map.get(moduleId)!;if(!this.manifest[moduleId])blockers.push({moduleId,code:'RELEASE_UNAVAILABLE'});if(!row.licensedState||row.licensedState!=='ACTIVE'||row.blockingReasons.includes('ENTITLEMENT_INACTIVE'))blockers.push({moduleId,code:'MODULE_NOT_LICENSED'});for(const dep of row.dependencies){if(!desired.includes(dep))blockers.push({moduleId,code:'DEPENDENCY_DISABLED'});const depRow=map.get(dep)!;if(!depRow.licensedState||depRow.licensedState!=='ACTIVE'||depRow.blockingReasons.includes('ENTITLEMENT_INACTIVE'))blockers.push({moduleId,code:'DEPENDENCY_DISABLED'});if(!this.manifest[dep])blockers.push({moduleId,code:'RELEASE_UNAVAILABLE'});}}return {organizationId,schoolId,institutionRevision:config.institutionRevision,branchRevision:config.branchRevision,desired,expectedVersions:Object.fromEntries(config.modules.map(m=>[m.moduleId,m.version])),previewHash:this.hash(organizationId,schoolId,config,enabled),blockers:[...new Map(blockers.map(b=>[`${b.moduleId}:${b.code}`,b])).values()]};}catch(e){fail(e);}}
  async confirm(actor:Identity,organizationId:string,schoolId:string,input:ConfirmBranchModules){try{return await this.db.$transaction(async tx=>{
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
   await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${organizationId}::uuid FOR UPDATE`;await tx.$queryRaw`SELECT id FROM vs_access_school WHERE organization_id=${organizationId}::uuid AND id=${schoolId}::uuid FOR UPDATE`;
   const scope=await this.branch(tx,actor,organizationId,schoolId),command='ConfigureBranchModules',inputHash=digest({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,input});const receipt=await tx.tenantCommandReceipt.findUnique({where:{organizationId_actorAccountId_command_key:{organizationId,actorAccountId:actor.accountId,command,key:input.key}}});
   if(receipt){if(receipt.inputHash!==inputHash)throw new AccessError('IDEMPOTENCY_CONFLICT');return {...receipt.response as {organizationId:string;schoolId:string;modules:ModuleId[];branchRevision:number;replayed:boolean},replayed:true};}
@@ -82,5 +86,5 @@ export class PrismaTenancyModuleRepository implements TenancyModuleRepository{
   await this.evidence(tx).append({organizationId:org.id,actorAccountId:actor.id,command,key:input.key,inputHash,response:result,expectedRevision:org.configurationVersion,newRevision:revision,reason:input.reason,requestId,occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'OPERATOR',operatorId:operator.operatorId,resourceId:org.id,version:revision,trustMode:input.trustMode}});
   return result;
  },{timeout:15000,maxWait:10000});}catch(e){fail(e);}}
- async moduleState(organizationId:string,schoolId:string,moduleId:ModuleId){try{const now=this.now(),[e,a]=await Promise.all([this.db.organizationEntitlement.findUnique({where:{organizationId_moduleId:{organizationId,moduleId}}}),this.db.branchActivation.findUnique({where:{organizationId_schoolId_moduleId:{organizationId,schoolId,moduleId}}})]);return {releaseAvailable:this.manifest[moduleId],enabled:!!e&&e.state==='ACTIVE'&&e.startsAt<=now&&(!e.endsAt||e.endsAt>now)&&a?.state==='ACTIVE'};}catch(e){fail(e);}}
+ async moduleState(actor:Identity,organizationId:string,schoolId:string,moduleId:ModuleId){try{return await this.db.$transaction(async tx=>{if(!this.databaseContext)throw new AccessError('UNAVAILABLE');await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});const now=this.now(),[e,a]=await Promise.all([tx.organizationEntitlement.findUnique({where:{organizationId_moduleId:{organizationId,moduleId}}}),tx.branchActivation.findUnique({where:{organizationId_schoolId_moduleId:{organizationId,schoolId,moduleId}}})]);return {releaseAvailable:this.manifest[moduleId],enabled:!!e&&e.state==='ACTIVE'&&e.startsAt<=now&&(!e.endsAt||e.endsAt>now)&&a?.state==='ACTIVE'};},{isolationLevel:'RepeatableRead'});}catch(e){fail(e);}}
 }

@@ -40,17 +40,27 @@ try{
  }
  for(const item of databases)await admin.query(`GRANT CONNECT ON DATABASE "${item.name}" TO "${item.role}"`);
  await admin.query("COMMIT");
- for(const item of databases)if(!existing.has(item.role)){
+ for(const item of databases){
   const owner=new Client({connectionString:item.ownerUrl,connectionTimeoutMillis:5000});
-  try{await owner.connect();await owner.query(`GRANT USAGE ON SCHEMA public TO "${item.role}"`);}finally{await owner.end();}
+  try{
+   await owner.connect();
+   await owner.query(`GRANT USAGE ON SCHEMA public TO "${item.role}"`);
+   const contextFunction=await owner.query("SELECT to_regprocedure('public.vs_set_verified_branch_context(uuid,integer,uuid,uuid)') IS NOT NULL AS present");
+   if(contextFunction.rows[0]?.present)await owner.query(`GRANT EXECUTE ON FUNCTION public.vs_set_verified_branch_context(uuid,integer,uuid,uuid) TO "${item.role}"`);
+  }finally{await owner.end();}
  }
  for(const item of databases){
   const runtimeUrl=new URL(item.ownerUrl);runtimeUrl.username=item.role;runtimeUrl.password=passwords[item.key].password;
   const runtime=new Client({connectionString:runtimeUrl.toString(),connectionTimeoutMillis:5000});
   try{
    await runtime.connect();
-   const verify=await runtime.query("SELECT current_user AS role,current_database() AS database,(SELECT rolsuper OR rolbypassrls OR rolinherit OR rolcreatedb OR rolcreaterole FROM pg_roles WHERE rolname=current_user) AS privileged,has_schema_privilege(current_user,'public','CREATE') AS schema_create,(SELECT count(*)::int FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relkind IN ('r','p') AND (has_table_privilege(current_user,c.oid,'SELECT') OR has_table_privilege(current_user,c.oid,'INSERT') OR has_table_privilege(current_user,c.oid,'UPDATE') OR has_table_privilege(current_user,c.oid,'DELETE'))) AS dml_tables");
-   if(verify.rows[0].role!==item.role||verify.rows[0].database!==item.name||verify.rows[0].privileged||verify.rows[0].schema_create||verify.rows[0].dml_tables!==0)throw new Error(`Restricted runtime role verification failed for ${item.name}`);
+   const verify=await runtime.query("SELECT current_user AS role,current_database() AS database,(SELECT rolsuper OR rolbypassrls OR rolinherit OR rolcreatedb OR rolcreaterole FROM pg_roles WHERE rolname=current_user) AS privileged,has_schema_privilege(current_user,'public','CREATE') AS schema_create,(SELECT count(*)::int FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relkind IN ('r','p') AND (has_table_privilege(current_user,c.oid,'SELECT') OR has_table_privilege(current_user,c.oid,'INSERT') OR has_table_privilege(current_user,c.oid,'UPDATE') OR has_table_privilege(current_user,c.oid,'DELETE'))) AS dml_tables,(SELECT count(*)::int FROM pg_class WHERE relowner=(SELECT oid FROM pg_roles WHERE rolname=current_user)) AS owned_relations,(SELECT count(*)::int FROM pg_auth_members WHERE member=(SELECT oid FROM pg_roles WHERE rolname=current_user)) AS memberships");
+   if(verify.rows[0].role!==item.role||verify.rows[0].database!==item.name||verify.rows[0].privileged||verify.rows[0].schema_create||verify.rows[0].dml_tables!==0||verify.rows[0].owned_relations!==0||verify.rows[0].memberships!==0)throw new Error(`Restricted runtime role verification failed for ${item.name}`);
+   const contextFunction=await runtime.query("SELECT to_regprocedure('public.vs_set_verified_branch_context(uuid,integer,uuid,uuid)') IS NOT NULL AS present");
+   if(contextFunction.rows[0]?.present){
+    const denied=await runtime.query("SELECT public.vs_set_verified_branch_context($1::uuid,1,$2::uuid,$3::uuid) AS verified,current_setting('app.account_id',true) AS account,current_setting('app.organization_id',true) AS organization,current_setting('app.school_id',true) AS school",[crypto.randomUUID(),crypto.randomUUID(),crypto.randomUUID()]);
+    if(denied.rows[0]?.verified!==false||denied.rows[0]?.account||denied.rows[0]?.organization||denied.rows[0]?.school)throw new Error(`Restricted runtime context helper failed closed for ${item.name}`);
+   }
  }finally{await runtime.end();}
  }
  if(!records){

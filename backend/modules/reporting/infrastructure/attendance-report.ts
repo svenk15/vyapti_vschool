@@ -5,6 +5,7 @@ import type {ModuleId} from '../../../../shared/contracts/modules';
 import {moduleCatalog} from '../../../../shared/contracts/modules';
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import type {ReleaseManifest} from '../../tenancy/contracts/index';
+import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/verified-database-context';
 import type {AttendanceReport,AttendanceReportRow} from '../../../../shared/contracts/reporting';
 import type {AttendanceReportRepository} from '../application/attendance-report';
 import type {AttendanceExportFilters} from '../application/attendance-report';
@@ -15,8 +16,10 @@ const modules=['attendance',...moduleCatalog.attendance.dependencies] as ModuleI
 const encodeCursor=(row:AttendanceReportRow)=>Buffer.from(JSON.stringify({date:row.schoolDate,startsAt:row.startsAt,id:row.id})).toString('base64url');
 function decodeCursor(value:string|null){if(!value)return null;try{const row=JSON.parse(Buffer.from(value,'base64url').toString('utf8'));if(typeof row.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(row.date)||typeof row.startsAt!=='string'||!Number.isFinite(Date.parse(row.startsAt))||typeof row.id!=='string'||!/^[0-9a-f-]{36}$/i.test(row.id))throw new Error();return {date:row.date,startsAt:new Date(row.startsAt),id:row.id};}catch{throw new AccessError('VALIDATION');}}
 export class PrismaAttendanceReportRepository implements AttendanceReportRepository {
- constructor(private readonly db:PrismaClient,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly platformAudit:(tx:Prisma.TransactionClient)=>PlatformAuditWriter){}
- private async authorize(tx:Prisma.TransactionClient,actor:Identity,scope:Scope,permission:'attendance.read_school'|'attendance.export'='attendance.read_school'){
+ constructor(private readonly db:PrismaClient,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly platformAudit:(tx:Prisma.TransactionClient)=>PlatformAuditWriter,private readonly databaseContext?:VerifiedDatabaseContextPort){}
+ private async authorize(tx:Prisma.TransactionClient,actor:Identity,scope:Scope,permission:'attendance.read_school'|'attendance.export'='attendance.read_school',contextVerified=false){
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');
+  if(!contextVerified)await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId:scope.organizationId,branchId:scope.schoolId});
   const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
   const school=await tx.school.findFirst({where:{organizationId:scope.organizationId,id:scope.schoolId,status:'ACTIVE'},select:{id:true}}),organization=await tx.organization.findFirst({where:{id:scope.organizationId,status:'ACTIVE'},select:{id:true}});if(!school||!organization)throw new AccessError('NOT_FOUND');
   const member=await tx.schoolMembership.findFirst({where:{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:actor.accountId,status:'ACTIVE'},select:{grants:{select:{code:true}}}}),caps=member?capabilitiesFor(member.grants.map(g=>g.code as 'SCHOOL_ADMIN'|'TEACHER')):[];if(!member||!caps.includes(permission))throw new AccessError('FORBIDDEN');
@@ -38,10 +41,11 @@ export class PrismaAttendanceReportRepository implements AttendanceReportReposit
   return rows;
  });}
  async recordExport(actor:Identity,organizationId:string,schoolId:string,input:{filters:AttendanceExportFilters;state:'GENERATED'|'FAILED';rowCount:number;csv?:string}){return this.run(async tx=>{
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
   await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;
   await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${organizationId}::uuid FOR UPDATE`;
   await tx.$queryRaw`SELECT id FROM vs_access_school WHERE organization_id=${organizationId}::uuid AND id=${schoolId}::uuid FOR UPDATE`;
-  const scope={organizationId,schoolId};await this.authorize(tx,actor,scope,'attendance.export');const requestId=randomUUID(),exportRunId=randomUUID(),occurredAt=this.now(),contentHash=input.csv===undefined?null:createHash('sha256').update(input.csv,'utf8').digest('hex');
+  const scope={organizationId,schoolId};await this.authorize(tx,actor,scope,'attendance.export',true);const requestId=randomUUID(),exportRunId=randomUUID(),occurredAt=this.now(),contentHash=input.csv===undefined?null:createHash('sha256').update(input.csv,'utf8').digest('hex');
   const filtersJson={fromDate:input.filters.fromDate,toDate:input.filters.toDate,yearId:input.filters.yearId,sectionId:input.filters.sectionId,subjectId:input.filters.subjectId};
   await tx.exportRun.create({data:{id:exportRunId,...scope,actorAccountId:actor.accountId,filters:filtersJson,requestedAt:occurredAt,state:input.state,rowCount:input.rowCount,contentHash,requestId}});
   await this.platformAudit(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,module:'attendance',command:input.state==='GENERATED'?'AttendanceReportExportGenerated':'AttendanceReportExportFailed',resourceType:'ExportRun',resourceId:exportRunId,before:{},after:{state:input.state,filters:filtersJson,rowCount:input.rowCount,contentHash},reason:'Attendance report export',requestId,occurredAt});return {exportRunId,contentHash,generatedAt:occurredAt.toISOString()};

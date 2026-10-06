@@ -4,13 +4,15 @@ import type {Identity} from '../../../../shared/contracts/access';
 import type {CourseOfferingRecord} from '../../../../shared/contracts/academics';
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import type {ReleaseManifest,InstitutionEvidenceWriter} from '../../tenancy/contracts/index';
+import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/index';
 import type {AcademicOfferingRepository,AssignmentImpactPort} from '../application/offerings';
 const canonical=(v:unknown):string=>Array.isArray(v)?`[${v.map(canonical).join(',')}]`:v&&typeof v==='object'?`{${Object.entries(v).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>`${JSON.stringify(k)}:${canonical(x)}`).join(',')}}`:JSON.stringify(v);
 const hash=(v:unknown)=>createHash('sha256').update(canonical(v)).digest('hex'),date=(v:Date)=>v.toISOString().slice(0,10);
 type Guard={configurationVersion:number;timezone:string};
 export class PrismaAcademicOfferingRepository implements AcademicOfferingRepository {
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly assignmentImpact:AssignmentImpactPort={async hasFutureSessions(){return false;}}){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly databaseContext:VerifiedDatabaseContextPort,private readonly now:()=>Date=()=>new Date(),private readonly assignmentImpact:AssignmentImpactPort={async hasFutureSessions(){return false;}}){}
  private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,lock=true):Promise<Guard>{
+  await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${organizationId}::uuid FOR UPDATE`;if(!await tx.organization.findFirst({where:{id:organizationId,status:'ACTIVE'},select:{id:true}}))throw new AccessError('NOT_FOUND');
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_school WHERE organization_id=${organizationId}::uuid AND id=${schoolId}::uuid FOR UPDATE`;const school=await tx.school.findFirst({where:{organizationId,id:schoolId,status:'ACTIVE'},select:{configurationVersion:true,timezone:true}});if(!school)throw new AccessError('NOT_FOUND');

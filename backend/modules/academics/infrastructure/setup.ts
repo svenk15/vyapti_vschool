@@ -8,6 +8,7 @@ import {schoolCivilDate} from '../domain/calendar';
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import type {ReleaseManifest} from '../../tenancy/contracts/index';
 import type {InstitutionEvidenceWriter} from "../../tenancy/contracts/index";
+import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/index';
 
 type Scope={organizationId:string;schoolId:string};
 type Guard={scope:Scope;configurationVersion:number;timezone:string};
@@ -21,8 +22,9 @@ function yearDto(row:{id:string;version:number;code:string;name:string;startsOn:
 }
 
 export class PrismaAcademicSetupRepository implements AcademicSetupRepository{
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly calendarImpact:CalendarImpactPort={async publicationAffectsSessions(){return false;},async hasPendingSessions(){return false;}}){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly databaseContext:VerifiedDatabaseContextPort,private readonly now:()=>Date=()=>new Date(),private readonly calendarImpact:CalendarImpactPort={async publicationAffectsSessions(){return false;},async hasPendingSessions(){return false;}}){}
  private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,needed:AcademicCapability[]=['school.manage','class.manage']):Promise<Guard>{
+  await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
   await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;
   const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
   await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${organizationId}::uuid FOR UPDATE`;

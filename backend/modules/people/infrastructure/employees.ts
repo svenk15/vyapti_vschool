@@ -10,6 +10,7 @@ import type {InstitutionEvidenceWriter} from '../../tenancy/contracts/index';
 import type {VerifiedPersonBindingPort} from '../../access/contracts/person-binding';
 import type {TeacherProfilePort} from '../../academics/contracts/teacher-profile';
 import type {ReleaseManifest} from '../../tenancy/contracts/index';
+import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/verified-database-context';
 
 type Guard={configurationVersion:number;timezone:string};
 const NO_RELEASE:ReleaseManifest={student_core:false,academic_core:false,staff_core:false,attendance:false,fees:false,admissions:false,assessments:false,family:false,communication:false,timetable:false,homework:false,transport:false,hr:false,library:false,inventory:false,health:false,analytics:false,ai:false};
@@ -29,8 +30,10 @@ function dto(row:{id:string;version:number;staffNumber:string;employedFrom:Date;
  return {employeeId:row.id,version:row.version,staffNumber:row.staffNumber,person:{id:row.person.id,displayName:displayName(row.person.firstName,row.person.lastName)},employment:{from:dateText(row.employedFrom),to:row.employedTo?dateText(row.employedTo):null,status:row.status as 'ACTIVE'|'ENDED'},portalAccess,teachingEligibility:!row.teacher?'NOT_ENABLED':row.teacher.active?'ENABLED':'DISABLED',teacherId:row.teacher?.id??null};
 }
 export class PrismaPeopleRepository implements PeopleRepository{
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret='',private readonly bindings?:VerifiedPersonBindingPort,private readonly teachers?:TeacherProfilePort,private readonly manifest:ReleaseManifest=NO_RELEASE){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret='',private readonly bindings?:VerifiedPersonBindingPort,private readonly teachers?:TeacherProfilePort,private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly databaseContext?:VerifiedDatabaseContextPort){}
  private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,lock:boolean,additionalAccountIds:string[]=[]):Promise<Guard>{
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');
+  await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
   if(lock)for(const accountId of [...new Set([actor.accountId,...additionalAccountIds])].sort())await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${accountId}::uuid FOR UPDATE`;
   const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${organizationId}::uuid FOR UPDATE`;

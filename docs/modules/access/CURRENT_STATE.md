@@ -111,7 +111,7 @@ Tested source `2a9418f9ae2265532aae946c4c540be39c28a79f`; production build `e547
 
 ### IAM-02 acceptance and execution policy — 4 October 2026
 
-Owner: “IAM-02 looks good - Pass”. PASSED applies to tested source 2a9418f9ae2265532aae946c4c540be39c28a79f and documentation handoff 7f72d13. Owner now authorizes continuing after each verified demo with human review PENDING; never infer human acceptance. Defects take priority and explicit acceptance dependencies remain gates. No timer, deployment or external messaging authorized. Clean main at 7f72d13; pnpm next-task selects IAM-03.
+Owner: “IAM-02 looks good - Pass”. PASSED applies to tested source 2a9418f9ae2265532aae946c4c540be39c28a79f and documentation handoff 7f72d13. At that checkpoint the owner authorized continuation after each verified demo with human review PENDING; never infer acceptance. The 6 October execution policy later superseded its statement that explicit human-acceptance dependencies remain implementation gates. Defects take priority; technical prerequisites remain mandatory. No timer, deployment or external messaging authorized. Clean main at 7f72d13; pnpm next-task selected IAM-03.
 
 ### IAM-03 start — 4 October 2026
 

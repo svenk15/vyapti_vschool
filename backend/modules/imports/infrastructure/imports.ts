@@ -5,6 +5,7 @@ import type {ImportConfirmation,ImportJobStatus,ImportOptions,ImportPreview,Impo
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import type {CommandEvidenceWriter} from '../../platform/contracts/command-evidence';
 import type {ReleaseManifest} from '../../tenancy/contracts/index';
+import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/index';
 import type {ImportsRepository,PreviewCommand} from '../application/imports';
 import type {ParsedRosterRow,RosterFields} from '../domain/csv';
 import type {EnlistedStudentRegistrationPort} from '../../students/contracts/enlisted-student-registration';
@@ -26,8 +27,9 @@ function summary(job:{id:string;version:number;previewRevision:number;fileHash:s
 function safeRows(rows:readonly ParsedRosterRow[],_year:{id:string;version:number},refs:{gradeId:string|null;gradeVersion:number|null;sectionId:string|null;sectionVersion:number|null;studentId:string|null;studentVersion:number|null;enrollmentId:string|null;enrollmentVersion:number|null;rowInputHash:string;decision:string}[],decisions:{decision:'CREATE'|'NO_CHANGE'|'ERROR'|'CONFLICT';errors:readonly ImportRowError[]}[]){return rows.map((row,index)=>({row,refs:refs[index]!,decision:decisions[index]!}));}
 function exactNoChange(row:RosterFields,student:{status:string;admissionNumber:string;person:{firstName:string;lastName:string};enrollments:{id:string;validFrom:Date;validTo:Date;placements:{rollNumber:string|null;sectionId:string;validFrom:Date;validTo:Date}[]}[]},sectionId:string,validFrom:Date,yearEnd:Date){const enrollment=student.enrollments[0],placement=enrollment?.placements[0];return student.status==='ACTIVE'&&student.person.firstName===row.firstName&&student.person.lastName===row.lastName&&student.admissionNumber===row.admissionNumber&&student.enrollments.length===1&&enrollment!.validFrom.getTime()===validFrom.getTime()&&enrollment!.validTo.getTime()===yearEnd.getTime()&&enrollment!.placements.length===1&&placement!.sectionId===sectionId&&placement!.validFrom.getTime()===validFrom.getTime()&&placement!.validTo.getTime()===yearEnd.getTime()&&placement!.rollNumber===row.rollNumber;}
 export class PrismaImportsRepository implements ImportsRepository{
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret='',private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly studentRegistration?:EnlistedStudentRegistrationPort){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret='',private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly databaseContext:VerifiedDatabaseContextPort,private readonly studentRegistration?:EnlistedStudentRegistrationPort){}
  private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,lock:boolean):Promise<Scope>{
+  await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;
   const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${organizationId}::uuid FOR SHARE`;

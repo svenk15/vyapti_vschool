@@ -6,6 +6,7 @@ import {moduleCatalog} from '../../../../shared/contracts/modules';
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import type {StudentAttendanceRosterPort} from '../../students/contracts/attendance-roster';
 import type {ReleaseManifest,InstitutionEvidenceWriter} from '../../tenancy/contracts/index';
+import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/verified-database-context';
 import type {SessionRecord,SessionRepository} from '../application/sessions';
 import {schoolDate,validateSchedule} from '../domain/schedule';
 import {cancellationPermissions} from '../domain/roll-call';
@@ -17,8 +18,10 @@ type Scope={organizationId:string;schoolId:string};
 type Guard={timezone:string;configurationVersion:number};
 type Permission='class.manage'|'attendance.mark'|'attendance.correct'|'attendance.read_class'|'attendance.read_school';
 export class PrismaSessionRepository implements SessionRepository {
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly studentRoster:StudentAttendanceRosterPort={async listForSession(){throw new AccessError('UNAVAILABLE');}}){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly studentRoster:StudentAttendanceRosterPort={async listForSession(){throw new AccessError('UNAVAILABLE');}},private readonly databaseContext?:VerifiedDatabaseContextPort){}
  private async guard(tx:Prisma.TransactionClient,actor:Identity,scope:Scope,permission:Permission|readonly Permission[],lock:boolean):Promise<Guard>{
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');
+  await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId:scope.organizationId,branchId:scope.schoolId});
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;
   const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
   if(lock)await tx.$queryRaw`SELECT id FROM vs_access_organization WHERE id=${scope.organizationId}::uuid FOR UPDATE`;

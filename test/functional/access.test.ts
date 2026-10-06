@@ -7,6 +7,7 @@ import { createAccessUseCases } from "../../backend/modules/access/application/s
 import { PrismaAccessRepository } from "../../backend/modules/access/infrastructure/repository";
 import { BcryptPasswords } from "../../backend/modules/access/infrastructure/passwords";
 import { PrismaProvisionEvidence } from "../../backend/modules/platform/infrastructure/provision-evidence";
+import {PrismaVerifiedDatabaseContext} from '../../backend/modules/tenancy/infrastructure/verified-db-context';
 const url=process.env.TEST_DATABASE_URL??"";
 if(new URL(url).pathname!=="/vyapti_vschool_test")throw new Error("Dedicated test database required");
 const db=new PrismaClient({adapter:new PrismaPg({connectionString:url,connectionTimeoutMillis:5000,max:10}),log:[]});
@@ -22,7 +23,7 @@ it("provisions all aggregates and safe operator evidence atomically",async()=>{
 });
 it("rolls the entire provision back when enlisted evidence fails",async()=>{
  let enlistedSchool:string|undefined;
- const input=fixture();const failing=createAccessUseCases(new PrismaAccessRepository(db,tx=>({appendProvisioned:async evidence=>{enlistedSchool=evidence.schoolId;await new PrismaProvisionEvidence(tx).appendProvisioned(evidence);throw new Error("injected platform failure");}})),new BcryptPasswords(),randomUUID);
+ const input=fixture();const failing=createAccessUseCases(new PrismaAccessRepository(db,tx=>({appendProvisioned:async evidence=>{enlistedSchool=evidence.schoolId;await new PrismaProvisionEvidence(tx).appendProvisioned(evidence);throw new Error("injected platform failure");}}),new PrismaVerifiedDatabaseContext()),new BcryptPasswords(),randomUUID);
  await expect(failing.provisionSchool(input,operator)).rejects.toThrow("UNAVAILABLE");expect(await db.organization.count({where:{name:input.organizationName}})).toBe(0);expect(await db.userAccount.count({where:{normalizedEmail:input.adminEmail}})).toBe(0);
  expect(enlistedSchool).toBeDefined();expect(await db.auditEntry.count({where:{resourceId:enlistedSchool}})).toBe(0);expect(await db.outboxEvent.count({where:{aggregateId:enlistedSchool}})).toBe(0);
 });
@@ -33,7 +34,7 @@ it("serializes duplicate institution bootstrap and handles unique email races wi
 });
 it("rejects invalid zone before writes",async()=>{const input={...fixture(),timezone:"Invalid/Zone"};await expect(service.provisionSchool(input,operator)).rejects.toThrow("VALIDATION");expect(await db.organization.count({where:{name:input.organizationName}})).toBe(0);});
 it("serializes concurrent failures, locks valid credentials, and recovers after expiry",async()=>{
- let clock=new Date();const timed=createAccessUseCases(new PrismaAccessRepository(db,tx=>new PrismaProvisionEvidence(tx),()=>clock),new BcryptPasswords(),randomUUID);
+ let clock=new Date();const timed=createAccessUseCases(new PrismaAccessRepository(db,tx=>new PrismaProvisionEvidence(tx),new PrismaVerifiedDatabaseContext(),()=>clock),new BcryptPasswords(),randomUUID);
  const input=fixture(),ids=await timed.provisionSchool(input,operator),wrong=randomBytes(24).toString("hex");
  const failures=await Promise.all(Array.from({length:5},()=>timed.authenticate(input.adminEmail,wrong)));expect(failures).toEqual([null,null,null,null,null]);
  const locked=await db.userAccount.findUniqueOrThrow({where:{id:ids.accountId}});expect(locked.failedAttempts).toBe(5);expect(locked.lockedUntil).toEqual(new Date(clock.getTime()+900000));expect(await timed.authenticate(input.adminEmail,input.password)).toBeNull();

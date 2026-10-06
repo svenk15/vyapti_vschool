@@ -61,7 +61,7 @@ ATT-03 frozen local demo: http://127.0.0.1:3426/sign-in; tested commit `a438bd19
 
 ## Next action
 
-ATT-04 human review is PENDING. RPT-01 may proceed because its sole dependency, ATT-03, is implemented and has no explicit human-acceptance gate. RPT-02 and TEN-03 remain gated on ATT-04 human acceptance.
+ATT-04 human review is PENDING. RPT-01, RPT-02 and TEN-03 implementation dependencies are satisfied; the owner’s 6 October execution policy removes ATT-04 human acceptance as an implementation gate. Keep ATT-04 review PENDING and preserve all technical prerequisites.
 
 ## Pending decisions / limitations
 

@@ -5,12 +5,13 @@ import {PrismaPg} from "@prisma/adapter-pg";
 import {createAccessServices} from "../../backend/composition/access";
 import {createStaffInviteUseCases,type AccessEmailSender} from "../../backend/modules/access/application/password-reset";
 import {PrismaStaffInviteRepository} from "../../backend/modules/access/infrastructure/staff-invites";
+import {PrismaVerifiedDatabaseContext} from "../../backend/modules/tenancy/infrastructure/verified-db-context";
 import {OpaqueActivationTokens} from "../../backend/modules/access/infrastructure/activation-tokens";
 import {BcryptPasswords} from "../../backend/modules/access/infrastructure/passwords";
 import {schoolInput} from "../fixtures/access-management";
 
 const url=process.env.TEST_DATABASE_URL??"";if(new URL(url).pathname!=="/vyapti_vschool_test")throw new Error("Dedicated test DB required");
-const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),service=createAccessServices({databaseUrl:url}),operator={operatorId:randomUUID(),verified:true as const},repo=new PrismaStaffInviteRepository(db),tokens=new OpaqueActivationTokens(),passwords=new BcryptPasswords();
+const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),service=createAccessServices({databaseUrl:url}),operator={operatorId:randomUUID(),verified:true as const},repo=new PrismaStaffInviteRepository(db,new PrismaVerifiedDatabaseContext()),tokens=new OpaqueActivationTokens(),passwords=new BcryptPasswords();
 afterAll(async()=>{await service.disconnect();await db.$disconnect();});
 async function fixture(){const school=await service.provisionSchool(schoolInput(),operator);return {school,identity:{accountId:school.accountId,tokenVersion:1}};}
 function flow(sender:AccessEmailSender){return createStaffInviteUseCases(repo,sender,tokens,passwords,()=>new Date());}

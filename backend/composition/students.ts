@@ -8,12 +8,14 @@ import { createEnlistedStudentRegistrationUseCases, createStudentUseCases } from
 import { PrismaStudentRepository } from "../modules/students/infrastructure/students";
 import { PrismaScheduledSessions } from "../modules/attendance/infrastructure/scheduled-sessions";
 import { capabilityReleaseManifest, releasedModuleIds, type ModuleId } from "../modules/tenancy/domain/entitlements";
+import { PrismaVerifiedDatabaseContext } from "../modules/tenancy/infrastructure/verified-db-context";
 
 export function createStudentsServices(config:{databaseUrl:string;cursorSecret?:string;now?:()=>Date;releasedModules?:readonly ModuleId[]}){
   const db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]});
   const people=createPersonIdentityUseCases(new PrismaPersonIdentity());
   const manifest=capabilityReleaseManifest(config.releasedModules??releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES));
+  const databaseContext=new PrismaVerifiedDatabaseContext();
   const attendanceImpact={hasFrozenSessions:(transaction:object,input:Parameters<PrismaScheduledSessions["hasFrozenSessions"]>[0])=>new PrismaScheduledSessions(transaction as Prisma.TransactionClient).hasFrozenSessions(input)};
-  const repository=new PrismaStudentRepository(db,tx=>new PrismaCommandEvidence(tx),people,config.now,config.cursorSecret??process.env.NEXTAUTH_SECRET??"",manifest,attendanceImpact);
+  const repository=new PrismaStudentRepository(db,tx=>new PrismaCommandEvidence(tx),people,config.now,config.cursorSecret??process.env.NEXTAUTH_SECRET??"",manifest,attendanceImpact,databaseContext);
   return {...createStudentUseCases(repository),enlistedRegistration:createEnlistedStudentRegistrationUseCases(repository),disconnect:()=>db.$disconnect()};
 }

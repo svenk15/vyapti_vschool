@@ -6,6 +6,7 @@ import { AccessError, capabilitiesFor } from "../../access/contracts/index";
 import type { PersonIdentityPort } from "../../people/contracts/person-identity";
 import type { CommandEvidenceWriter } from "../../platform/contracts/command-evidence";
 import type { ReleaseManifest } from "../../tenancy/contracts/index";
+import type { VerifiedDatabaseContextPort } from "../../tenancy/contracts/index";
 import type { AttendanceStudentImpactPort, StudentRepository } from "../application/students";
 import type { StudentInput } from "../domain/student";
 import { displayStudentName } from "../domain/student";
@@ -50,9 +51,11 @@ function fail(error: unknown): never {
 }
 
 export class PrismaStudentRepository implements StudentRepository,StudentAttendanceRosterPort {
-  constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly people:PersonIdentityPort,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret="",private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly attendanceImpact:AttendanceStudentImpactPort={async hasFrozenSessions(){throw new AccessError("UNAVAILABLE");}}){}
+  constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly people:PersonIdentityPort,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret="",private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly attendanceImpact:AttendanceStudentImpactPort={async hasFrozenSessions(){throw new AccessError("UNAVAILABLE");}},private readonly databaseContext?:VerifiedDatabaseContextPort){}
 
   private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,permission:"student.manage"|"student.read",lock:boolean,modules:readonly ("student_core"|"academic_core")[]=["student_core"]):Promise<Guard>{
+    if(!this.databaseContext)throw new AccessError("UNAVAILABLE");
+    await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
     if(lock) await tx.$queryRaw`SELECT id FROM vs_access_user_account WHERE id=${actor.accountId}::uuid FOR UPDATE`;
     const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});
     if(!account||account.status!=="ACTIVE"||account.tokenVersion!==actor.tokenVersion) throw new AccessError("UNAUTHENTICATED");

@@ -1,6 +1,6 @@
 import type { AdminHome, Identity, OperatorPrincipal, ProvisionInput, ProvisionResult } from "../../../../shared/contracts/access";
 import { AccessError, capabilitiesFor, currentIdentity, normalizeEmail, normalizeProvision, uuidPattern, validPassword } from "../domain/policy";
-export type LoginRecord = { id:string; passwordHash:string|null };
+export type LoginRecord = { id:string; passwordHash:string|null; tokenVersion:number };
 export interface AccessRepository {
  provision(input:Omit<ProvisionInput,"password">,passwordHash:string,operator:OperatorPrincipal,requestId:string):Promise<ProvisionResult>;
  loginRecord(email:string):Promise<LoginRecord|null>;
