@@ -1,0 +1,65 @@
+{
+  "task": "FND-02",
+  "milestone": "PHASE 1 DEMO READY",
+  "implementation": "VERIFIED",
+  "humanReview": "PENDING",
+  "date": "2026-10-06",
+  "executableSource": "c678be0dfe82204960f858a69383445939ea5788",
+  "demo": {
+    "url": "http://127.0.0.1:3440",
+    "mode": "Next.js production server using isolated .next-e2e build",
+    "health": [
+      "/api/health returned ready=true",
+      "/api/health/live returned alive=true"
+    ],
+    "admin": "/admin",
+    "teacher": "/teacher/today",
+    "publishedSchoolSignIn": "/sign-in/vschool-demo-69a6f7fe",
+    "credentials": [
+      "artifacts/people-02/private-demo.json",
+      "artifacts/attendance-01/private-demo.json"
+    ],
+    "seedCommand": "pnpm demo:seed"
+  },
+  "database": {
+    "development": "vyapti_vschool",
+    "test": "vyapti_vschool_test",
+    "migrationsApplied": 31,
+    "pendingMigrations": 0,
+    "fnd02SchemaChanges": 0,
+    "databaseResetOrDeleted": false,
+    "seedRuns": 2,
+    "seedIdempotency": "Both completed; existing records and credentials preserved.",
+    "email": "File-only local development sink; no real messages sent."
+  },
+  "checks": {
+    "pnpm check": "PASS: lint, TypeScript, docs, database-design (51 table contracts), boundaries, backend compilation, 104 unit tests",
+    "pnpm test:functional": "PASS: 106 tests across 16 suites on real PostgreSQL; run before final UI-only dialog callback correction, with no business or persistence code changed afterward",
+    "pnpm test:e2e": "PASS: 78/78 on final executable source using isolated production build and designated test database",
+    "productionBuild": "PASS: isolated .next-e2e production build used by final Playwright suite and demo server",
+    "finalSourceRouteCapture": "PASS: 28 implemented page routes at desktop and mobile widths (56 renders), 0 failed responses, 0 page errors, 0 document-width overflow; see ignored artifacts/fnd-02-demo/route-captures.json and screenshots",
+    "visualInspection": "Dashboard, mobile grouped navigation, attendance report, student/import forms, teacher day and published branded sign-in inspected on rendered screenshots",
+    "databaseSetup": "PASS: designated development database has 31 applied migrations and no pending migrations"
+  },
+  "ten03": {
+    "status": "IN_PROGRESS; remaining work explicitly deferred until after consolidated product demo/review",
+    "rlsEnabledTables": 0,
+    "policies": 0,
+    "applicationAuthorization": "Remains active on protected operations",
+    "runtime": "Application still uses owner credentials; restricted-role enforcement proof is incomplete",
+    "productionAndRealClientData": "Blocked"
+  },
+  "releaseGatesOutstanding": [
+    "TEN-03 non-forgeable transaction-context proof, RLS enforcement, restricted-role denial and pooled-connection leakage verification",
+    "Production-provider/security review and restricted role configuration",
+    "Restore/reconciliation and operational backup/rollback evidence",
+    "Native 200% browser zoom, VoiceOver and NVDA testing; DS-02 remains BLOCKED",
+    "TEN-03 scale benchmark and query plan evidence",
+    "Owner consolidated manual product review (PENDING)"
+  ],
+  "limitations": [
+    "Local synthetic data only; no production readiness or real-client data authorization",
+    "Native assistive-technology and native 200% zoom checks were not run",
+    "Functional PostgreSQL suite preceded the final presentation-only dialog callback correction; full E2E and pnpm check ran after it"
+  ]
+}

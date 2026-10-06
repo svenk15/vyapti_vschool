@@ -28,3 +28,7 @@ The captured pass did not include `/account`, `/institutions`, or the admin atte
 ## Review rule
 
 Use 1440px desktop and 390px mobile captures for representative pages in every route group. Check 768px, 360px, and 200% browser zoom for shared layout patterns. Capture actual route renders with realistic synthetic data; record native VoiceOver/NVDA separately. A route-family check does not replace functional task verification or owner visual acceptance.
+
+## Final-source FND-02 route capture — 6 October 2026
+
+The isolated production build used by the final `pnpm test:e2e` run was captured at desktop and mobile sizes for 28 implemented page routes (56 renders). All returned successfully: 0 failed HTTP responses, 0 page errors and 0 document-width overflow findings. The ignored screenshots are in `artifacts/fnd-02-demo/routes/`; `artifacts/fnd-02-demo/route-captures.json` contains route-level results. Spot inspection included the administrator dashboard, mobile grouped navigation, attendance report, student and import forms, teacher day, and published school-branded sign-in. This rendered evidence supplements earlier historical route passes above. Native browser zoom at 200%, VoiceOver, NVDA and owner visual acceptance remain outstanding; no accessibility conformance or human acceptance is claimed.

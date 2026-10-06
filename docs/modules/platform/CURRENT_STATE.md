@@ -1,11 +1,11 @@
 # Development foundation and delivery — current state
 
-Last updated: 2026-10-03. FND-01 locally verified and accepted on the owner’s Mac. No active execution timer.
+Last updated: 2026-10-06. FND-01 locally verified and accepted on the owner’s Mac. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | FND-01 | VERIFIED | PASSED | [Local verification](../../evidence/fnd-01-local/verification.json); source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff |
-| FND-02 | NOT_STARTED | NOT_REQUESTED | No implementation evidence |
+| FND-02 | VERIFIED | PENDING | [Demo verification](../../evidence/fnd-02-demo/verification.json); executable checkpoint and evidence commit recorded there |
 
 ## Current checkpoint
 
@@ -13,11 +13,23 @@ Foundation source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff passed local checks, 
 
 ## Next action
 
-Owner accepted FND-01 and authorized the next task. DS-01 selected using pnpm next-task. No timer is started.
+Keep the stable FND-02 local demo available for consolidated owner review. Address any reported defect before subsequent authorized work. Native 200% zoom, VoiceOver and NVDA evidence remains outstanding. TEN-03 remains IN_PROGRESS and blocks production release and real-client data; its deferred RLS/context-proof work is still unverified.
 
 ## Pending decisions / limitations
 
 No product completion is assumed. Pilot deployment/provider, staff activation delivery procedure, backup targets and school retention requirements must be resolved in FND-02 before real-data release. Module-specific risks are listed in DESIGN.md.
+
+### FND-02 PHASE 1 DEMO READY — 6 October 2026
+
+Implementation VERIFIED for the source checkpoint in [verification.json](../../evidence/fnd-02-demo/verification.json); human review is PENDING. Demo URL: http://127.0.0.1:3440. Local-only synthetic credentials are in ignored `artifacts/people-02/private-demo.json`; attendance credentials are also present in ignored `artifacts/attendance-01/private-demo.json`. Seed with `pnpm demo:seed`. The two guarded seed runs succeeded without replacing existing credentials or records; the development mail sink is file-only, and no real message was sent.
+
+Checks on the candidate: `pnpm check` passed, including lint/typecheck/docs/database-design/boundary/backend checks and 104 unit tests; `pnpm test:functional` passed 106 tests across 16 suites on real PostgreSQL before the final UI-only dialog callback correction; `pnpm test:e2e` passed 78/78 on the final executable source using an isolated production build. The same final build was captured for 28 implemented routes at desktop/mobile sizes (56 renders), with no failed responses, page errors or page-width overflow. Selected screens were visually inspected. `pnpm db:setup` confirms the designated development schema is current; both local databases retain the existing 31 migrations. No FND-02 schema change or destructive database operation occurred. Focused Playwright covers keyboard/dialog behavior, responsive layouts, authorization denial and admin/teacher flows; native 200% zoom and VoiceOver/NVDA were not performed.
+
+The stable server is a production-mode Next process from `.next-e2e`, bound to loopback port 3440 and connected to the guarded local development database. Health `/api/health` and `/api/health/live`, public school sign-in `/sign-in/vschool-demo-69a6f7fe`, protected admin entry `/admin`, and teacher workspace `/teacher/today` returned expected responses. Admin/teacher synthetic persona credentials are stored privately in the ignored People credential file above. Manual review remains PENDING; this milestone does not establish production readiness.
+
+### PHASE 1 DEMO READY sequencing — 6 October 2026
+
+Owner changes the immediate milestone from release to PHASE 1 DEMO READY. Pending human review never blocks the demo. Remaining TEN-03 RLS enforcement and non-forgeable context proof are deferred until after the consolidated demo/review; TEN-03 must remain IN_PROGRESS and is still a production and real-client-data gate. Preserve its partial code and migrations. Demo sequencing prerequisites are RPT-02, IMP-03, IAM-03, ATT-04 and BRD-02; the full release dependencies remain listed in the execution index. Outstanding native VoiceOver/NVDA and other accessibility tests are reported as not run. No production readiness is claimed.
 
 ## Evidence history
 
