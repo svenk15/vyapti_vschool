@@ -16,8 +16,9 @@
     "teacher": "/teacher/today",
     "publishedSchoolSignIn": "/sign-in/vschool-demo-69a6f7fe",
     "credentials": [
-      "artifacts/people-02/private-demo.json",
-      "artifacts/attendance-01/private-demo.json"
+      "artifacts/iam-01/private-demo.json (institution administrator and published branded branch)",
+      "artifacts/people-02/private-demo.json (operational school administrator and assigned teacher)",
+      "artifacts/attendance-01/private-demo.json (secondary teacher and attendance command data)"
     ],
     "seedCommand": "pnpm demo:seed",
     "buildId": "zqWBs7C8HCt8KfqT1iZjB"
@@ -41,7 +42,7 @@
     "finalSourceRouteCapture": "PASS: earlier 28-route desktop/mobile capture (56 renders) had 0 failed responses, page errors or document overflow; after teacher-entry change, desktop/mobile account screens were recaptured and reached three assigned sessions with no overflow.",
     "visualInspection": "Dashboard, mobile grouped navigation, attendance report, student/import forms, teacher day, published branded sign-in and updated desktop/mobile teacher account entry inspected on rendered screenshots",
     "databaseSetup": "PASS: designated development database has 31 applied migrations and no pending migrations",
-    "livePersonaSmoke": "PASS: admin signs in to /admin; teacher signs in to /account, follows capability-gated My teaching day link to /teacher/today and sees three assigned sessions; published school-branded sign-in is visible."
+    "livePersonaSmoke": "PASS: institution admin switched between the original and authorized synthetic TEN branch, then returned to the original; non-selectable branch was absent. Operational admin signs in to /admin. Teacher signs in to /account, follows capability-and-module-gated My teaching day link to /teacher/today and sees three assigned sessions. Published school-branded sign-in is visible."
   },
   "ten03": {
     "status": "IN_PROGRESS; remaining work explicitly deferred until after consolidated product demo/review",
