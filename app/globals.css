@@ -175,3 +175,55 @@ body{font-family:var(--font-ui)}
 @media(max-width:760px){.portal-shell{display:block}.portal-sidebar{display:none;position:fixed;top:65px;left:12px;right:12px;width:auto;height:auto;max-height:calc(100dvh - 78px);padding:14px;overflow:auto;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 42px #162a211f}.portal-sidebar-open{display:block}.portal-sidebar>.portal-brand{display:none}.portal-sidebar nav{gap:16px;margin-top:0}.portal-nav-group{gap:2px}.portal-nav-group a{min-height:44px}.portal-topbar{display:grid;grid-template-columns:42px minmax(0,1fr) auto;grid-template-rows:auto auto;gap:9px 12px;min-height:0;padding:10px 16px}.portal-menu-toggle{display:inline-grid;place-items:center;width:42px;height:42px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--ink);font-size:20px}.portal-mobile-brand{display:flex;align-items:center;gap:8px;width:fit-content;color:var(--ink);font-size:16px;font-weight:700;text-decoration:none}.portal-mobile-brand .portal-brand-mark{width:28px;height:30px;font-size:23px}.portal-top-context{grid-column:1/-1;display:flex;justify-content:space-between;gap:12px;min-width:0;padding-top:8px;border-top:1px solid var(--line)}.portal-context-label{display:none}.portal-context-control{flex:1;justify-content:space-between;gap:8px;min-width:0}.portal-context-current{max-width:46%;flex:1}.portal-context-control .field{width:min(52%,220px)}.portal-context-control .field select{min-height:42px;padding:9px;font-size:11px}.portal-account>div{justify-items:end}.portal-account .btn{min-height:40px;padding:8px 10px}.portal-page-content .brand-surface{min-height:calc(100dvh - 116px)}.portal-page-content .page-space{padding-top:26px;padding-bottom:48px}.portal-page-content .page-heading{flex-direction:column;gap:12px}.portal-page-content .header-actions{width:auto}.portal-page-content .form-grid{grid-template-columns:minmax(0,1fr)}.teacher-portal-header{grid-template-columns:auto minmax(0,1fr) auto;gap:10px 16px;padding:10px 16px}.teacher-context{grid-column:1/3;grid-row:2;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:4px 10px;padding-top:9px;border-top:1px solid var(--line)}.teacher-context>span{grid-column:1/-1}.teacher-context .portal-context-control{grid-column:1/-1;justify-content:space-between}.teacher-context .portal-context-control .field{width:min(60%,230px)}.teacher-portal-header nav{grid-column:2;grid-row:1;text-align:right}.teacher-portal-header .portal-account{grid-column:3;grid-row:1}.teacher-portal-content .page-space{padding-top:26px}.dashboard-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-columns{grid-template-columns:minmax(0,1fr)}.dashboard-school-card{grid-row:2}}
 @media(max-width:460px){.portal-topbar{padding-inline:12px}.portal-context-current strong{font-size:11px}.portal-context-control .field{width:54%}.portal-context-control .field select{max-width:100%}.portal-account .btn{font-size:11px}.portal-page-content .container,.teacher-portal-content .container{padding-inline:18px}.dashboard-stat-grid{grid-template-columns:minmax(0,1fr)}.dashboard-stat-grid .stat-card{min-height:118px}.dashboard-section-heading{align-items:flex-start}.dashboard-action-card{padding:16px}.teacher-portal-header{padding-inline:12px}.teacher-context .portal-context-control .field{width:58%}}
 .section-space{margin-top:24px}.year-choice{width:100%;text-align:left}.year-choice[aria-pressed=true]{border-color:var(--primary);background:var(--brand-soft);color:var(--primary)}
+
+/* Production portal compositions. Shared structure takes precedence over legacy page spacing. */
+:root{--sidebar-width:248px;--content-workspace:1280px;--content-teacher:1120px;--content-form:720px}
+.portal-page-content .container{max-width:var(--content-workspace)}
+.portal-page-content .page-space,.teacher-portal-content .page-space{padding-top:32px;padding-bottom:64px}
+.portal-page-content .page-heading,.teacher-portal-content .page-heading{align-items:flex-start;margin:0}
+.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{margin-bottom:8px;font-size:30px;line-height:1.18;letter-spacing:-.7px}
+.portal-page-content .page-description,.teacher-portal-content .page-description{max-width:700px;font-size:15px;line-height:1.55}
+.page-stack{display:grid;gap:24px;min-width:0}
+.page-stack>.alert,.page-stack>div>.alert{margin-block:0}
+.section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}
+.section-header h2{margin:0 0 5px;font-size:20px;letter-spacing:-.25px}
+.section-header p{max-width:680px;margin:0;font-size:13px}
+.section-actions{flex:none}
+.form-actions{display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-top:6px}
+.subsection-divider{margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
+.settings-page{max-width:100%}
+.settings-panel{box-shadow:var(--elevation-card)}
+.settings-form{width:min(100%,var(--content-form))}
+.settings-form>.field:last-of-type{margin-bottom:20px}
+.portal-page-content fieldset.control-stack{min-width:0;margin:0;padding:0;border:0}
+.compact-toolbar{display:flex;align-items:flex-end;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);background:#fbfcf9}
+.compact-toolbar .field{margin:0}
+.compact-toolbar .btn{flex:none;margin-bottom:18px}
+.portal-nav-group a{gap:10px;font-size:14px}
+.portal-nav-icon{display:inline-grid;place-items:center;flex:none;width:20px;height:20px;color:var(--muted)}
+.portal-nav-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.portal-nav-group a[aria-current=page] .portal-nav-icon{color:var(--primary)}
+.empty-symbol svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.portal-page-content main>.card+ .card,.portal-page-content main>.card+form>.card,.portal-page-content main>form+ .card,.portal-page-content main>.alert+ .card{margin-top:24px}
+.portal-page-content main>.two-columns.section-space{grid-template-columns:minmax(300px,380px) minmax(0,1fr);align-items:start}
+.portal-page-content main>.two-columns.section-space>.card{height:auto}
+.portal-page-content .card>h2:first-child{font-size:20px}
+.teacher-portal-content{max-width:var(--content-teacher)}
+.teacher-portal-content .container{max-width:var(--content-teacher);padding-inline:clamp(20px,4vw,44px)}
+.teacher-day-workspace{overflow:hidden;box-shadow:var(--elevation-card)}
+.teacher-date-field{width:240px}
+.teacher-day-state{padding:18px 22px}
+.teacher-day-state .alert{margin:0}
+.teacher-session-list{display:grid}
+.teacher-session-card{display:grid;grid-template-columns:105px minmax(220px,1fr) auto auto;align-items:center;gap:18px;padding:18px 22px;border-top:1px solid var(--line);background:var(--surface)}
+.teacher-session-card:first-child{border-top:0}
+.teacher-session-card:hover{background:#fbfcf9}
+.teacher-session-time{display:grid;line-height:1.35}
+.teacher-session-time strong{font-size:17px}
+.teacher-session-summary{min-width:0}
+.teacher-session-summary h2{margin:0 0 3px;font-size:17px;letter-spacing:-.15px}
+.teacher-session-summary p{margin:0;font-size:13px;overflow-wrap:anywhere}
+.teacher-session-card>.btn{min-width:138px}
+@media(max-width:900px){.portal-page-content main>.two-columns.section-space{grid-template-columns:minmax(0,1fr)}.teacher-session-card{grid-template-columns:90px minmax(180px,1fr) auto}.teacher-session-card>.btn{grid-column:2/4;justify-self:start}}
+@media(max-width:760px){.portal-top-context{grid-row:2}.portal-topbar>.portal-account{grid-column:3;grid-row:1}.portal-page-content .page-space,.teacher-portal-content .page-space{padding-top:24px;padding-bottom:48px}.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{font-size:28px}.page-stack{gap:18px}.section-header{margin-bottom:16px}.settings-panel{padding:20px}.compact-toolbar{align-items:flex-start;flex-direction:column;padding:18px}.compact-toolbar .field{width:100%}.compact-toolbar .btn{margin:0}.teacher-day-state{padding:10px 18px}.teacher-session-card{grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;padding:18px}.teacher-session-time{grid-column:1}.teacher-session-summary{grid-column:1/-1;grid-row:2}.teacher-session-card>.badge{grid-column:2;grid-row:1}.teacher-session-card>.btn{grid-column:1/-1;grid-row:3;justify-self:start}.portal-nav-icon{width:22px}.portal-nav-icon svg{width:19px;height:19px}}
+@media(max-width:460px){.section-header{flex-direction:column}.settings-panel{padding:18px}.settings-form .form-grid{gap:0}.form-actions .btn{width:100%}.teacher-session-card>.btn{width:100%}}

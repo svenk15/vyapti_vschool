@@ -2,25 +2,26 @@ import 'server-only';
 import type {AdminHome,Identity} from '../../shared/contracts/access';
 import type {ModuleId} from '../../shared/contracts/modules';
 import {moduleGateway} from './tenancy';
+import type {PortalIconName} from '../../components/portal-navigation-group';
 
-export type AdminNavigationItem=Readonly<{label:string;href:string}>;
+export type AdminNavigationItem=Readonly<{label:string;href:string;icon:PortalIconName}>;
 export type AdminNavigationGroup=Readonly<{label:string;items:readonly AdminNavigationItem[]}>;
-type Route={label:string;href:string;permission:string;modules?:readonly ModuleId[];institutionAdmin?:boolean};
+type Route={label:string;href:string;icon:PortalIconName;permission:string;modules?:readonly ModuleId[];institutionAdmin?:boolean};
 
 const routes:readonly Route[]=[
- {label:'School overview',href:'/admin',permission:'school.manage'},
- {label:'School setup',href:'/admin/setup',permission:'school.manage'},
- {label:'School settings',href:'/admin/school',permission:'school.manage'},
- {label:'Branch module access',href:'/admin/modules',permission:'module.configure',institutionAdmin:true},
- {label:'Sign-in branding',href:'/admin/branding',permission:'branding.manage'},
- {label:'Staff access',href:'/admin/users',permission:'user.manage'},
- {label:'Staff profiles',href:'/admin/teachers',permission:'class.manage',modules:['staff_core']},
- {label:'Students',href:'/admin/students',permission:'student.read',modules:['student_core']},
- {label:'Roster preview',href:'/admin/imports',permission:'student.manage',modules:['student_core','academic_core']},
- {label:'Academic setup',href:'/admin/academics',permission:'class.manage',modules:['academic_core']},
- {label:'Classes and teachers',href:'/admin/classes',permission:'class.read',modules:['academic_core','staff_core']},
- {label:'Schedule sessions',href:'/admin/attendance/sessions',permission:'attendance.read_school',modules:['attendance']},
- {label:'Attendance report',href:'/admin/reports/attendance',permission:'attendance.read_school',modules:['attendance']},
+ {label:'School overview',href:'/admin',icon:'overview',permission:'school.manage'},
+ {label:'School setup',href:'/admin/setup',icon:'setup',permission:'school.manage'},
+ {label:'School settings',href:'/admin/school',icon:'settings',permission:'school.manage'},
+ {label:'Branch module access',href:'/admin/modules',icon:'modules',permission:'module.configure',institutionAdmin:true},
+ {label:'Sign-in branding',href:'/admin/branding',icon:'branding',permission:'branding.manage'},
+ {label:'Staff access',href:'/admin/users',icon:'staff',permission:'user.manage'},
+ {label:'Staff profiles',href:'/admin/teachers',icon:'people',permission:'class.manage',modules:['staff_core']},
+ {label:'Students',href:'/admin/students',icon:'students',permission:'student.read',modules:['student_core']},
+ {label:'Roster preview',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
+ {label:'Academic setup',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
+ {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
+ {label:'Schedule sessions',href:'/admin/attendance/sessions',icon:'calendar',permission:'attendance.read_school',modules:['attendance']},
+ {label:'Attendance report',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
 const sections:readonly Readonly<{label:string;hrefs:readonly string[]}>[]=[
  {label:'Overview',hrefs:['/admin']},
@@ -49,5 +50,5 @@ export async function getAdminNavigation(identity:Identity,home:AdminHome):Promi
   return [route.href,true] as const;
  }));
  const visible=new Set(checks.filter(([,allowed])=>allowed).map(([href])=>href));
- return sections.map(section=>({label:section.label,items:routes.filter(route=>section.hrefs.includes(route.href)&&visible.has(route.href)).map(({label,href})=>({label,href}))})).filter(group=>group.items.length>0);
+ return sections.map(section=>({label:section.label,items:routes.filter(route=>section.hrefs.includes(route.href)&&visible.has(route.href)).map(({label,href,icon})=>({label,href,icon}))})).filter(group=>group.items.length>0);
 }

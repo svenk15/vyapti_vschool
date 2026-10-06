@@ -29,6 +29,25 @@ The captured pass did not include `/account`, `/institutions`, or the admin atte
 
 Use 1440px desktop and 390px mobile captures for representative pages in every route group. Check 768px, 360px, and 200% browser zoom for shared layout patterns. Capture actual route renders with realistic synthetic data; record native VoiceOver/NVDA separately. A route-family check does not replace functional task verification or owner visual acceptance.
 
+## Production-layout correction — 6 October 2026
+
+The production routes now use the shared 248px grouped sidebar, outline navigation icons, compact context header, 28–30px page titles, 24px section rhythm, 720px settings forms and 1120px teacher workspace. School settings has a single page title, header Refresh action, separate General information and Campuses sections, and aligned form actions. Teacher Today has a 240px desktop date control, adjacent intrinsic-width Refresh action, timezone hint, compact session rows, state-specific actions and a calendar empty state with the selected date. The design-system workspace example now uses the same navigation, header, compact toolbar and calendar state composition.
+
+| Classification | Implemented routes inspected |
+|---|---|
+| Overview | `/`, `/account`, `/admin`, `/admin/setup`, `/design-system` |
+| Authentication | `/sign-in`, `/sign-in/[school]`, `/activate`, `/invite`, `/forgot-password`, `/reset-password` |
+| Settings/form | `/configure`, `/admin/school`, `/admin/modules`, `/admin/branding`, `/admin/academics` |
+| Directory/table | `/institutions`, `/admin/users`, `/admin/teachers`, `/admin/students`, `/admin/classes`, `/admin/attendance/sessions` |
+| Detail | `/admin/students/[id]`, `/admin/attendance/sessions/[id]` |
+| Import wizard | `/admin/imports` |
+| Teacher task | `/teacher/today`, `/teacher/sessions/[id]` |
+| Report | `/admin/reports/attendance` |
+
+Final local Playwright audit opened every implemented route at 1440×1000 and 390×844, resolved real dynamic student/attendance links, and also checked four representative admin routes at a 720px layout equivalent to 200% scaling. All 60 renders returned without HTTP failure or page error and had zero document-width overflow. The audit found and then verified the correction of a five-pixel mobile Academic setup overflow caused by a default fieldset minimum width. Computed styles recorded 30px desktop/28px mobile portal titles, a 1120px teacher main width and three real assigned sessions on both desktop and mobile. Evidence is in ignored `artifacts/portal-ux-final/after/route-audit.json`; representative after screenshots are beside it. Before images for School settings and Teacher Today are in `artifacts/portal-ux-final/before/`.
+
+Visual inspection covered School settings, Teacher Today, dashboard, student directory, import, report/permission state, Academic setup mobile, shared gallery and school-branded sign-in. The remaining visual limitations are deliberate horizontal scrolling for content-heavy tables on narrow screens and long single-page Academic setup content. The mobile shell keeps account controls in the top row and branch context below; keyboard open/first-link focus/Escape return remain covered by browser journeys. Native browser 200% zoom, VoiceOver, NVDA and owner visual acceptance remain outstanding, so this evidence does not establish accessibility conformance or human acceptance.
+
 ## Final-source FND-02 route capture — 6 October 2026
 
 The isolated production build used by the full `pnpm test:e2e` run captured 28 implemented page routes at desktop and mobile sizes (56 renders). After the follow-up teacher-entry fix on source `dd6c863`, the updated account page was recaptured at desktop and mobile sizes and both linked to the assigned teaching day. All returned successfully: 0 failed HTTP responses, 0 page errors and 0 document-width overflow findings. The ignored screenshots are in `artifacts/fnd-02-demo/routes/`; `artifacts/fnd-02-demo/route-captures.json` contains route-level results. Spot inspection included the administrator dashboard, mobile grouped navigation, attendance report, student and import forms, teacher day, and published school-branded sign-in. This rendered evidence supplements earlier historical route passes above. Native browser zoom at 200%, VoiceOver, NVDA and owner visual acceptance remain outstanding; no accessibility conformance or human acceptance is claimed.

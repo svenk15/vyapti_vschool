@@ -63,6 +63,10 @@ ATT-03 frozen local demo: http://127.0.0.1:3426/sign-in; tested commit `a438bd19
 
 ATT-04 human review is PENDING. RPT-01, RPT-02 and TEN-03 implementation dependencies are satisfied; the owner’s 6 October execution policy removes ATT-04 human acceptance as an implementation gate. Keep ATT-04 review PENDING and preserve all technical prerequisites.
 
+### Consolidated demo persona clarification — 6 October 2026
+
+The portal UX review reproduced the reported empty-day discrepancy without changing attendance persistence. Use the assigned teacher in ignored `artifacts/people-02/private-demo.json`, the VSchool People branch and school-local date `2026-10-06`; the authorized teacher/date read returns three persisted Mathematics Demo sessions at 06:30, 09:00 and 10:00. The secondary teacher stored in `artifacts/attendance-01/private-demo.json` is the cross-teacher denial/empty-state persona and correctly has no assigned sessions. The UI now names the selected date in its calendar empty state, which makes the distinction visible without silently changing branch/date or bypassing authorization. The final local screenshot audit observed three session rows for the assigned persona at both desktop and mobile sizes. Human review remains PENDING.
+
 ## Pending decisions / limitations
 
 No product completion is assumed. Pilot deployment/provider, staff activation delivery procedure, backup targets and school retention requirements must be resolved in FND-02 before real-data release. Module-specific risks are listed in DESIGN.md.
