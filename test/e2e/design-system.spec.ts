@@ -65,9 +65,11 @@ test("gallery supports all palettes and negative states at 360px", async ({ page
   await expect(page.getByRole("tab", { name: "Empty", exact: true })).toBeFocused();
   await page.keyboard.press("ArrowLeft");
   await expect(page.getByRole("tab", { name: "Error", exact: true })).toBeFocused();
-  await page.getByLabel("Search sample records").fill("no-such-example");
+  await page.getByRole("searchbox", { name: "Search sample records" }).fill("no-such-example");
+  await expect(page.getByRole("table", { name: "Sample roster" })).toBeVisible();
+  await page.getByRole("searchbox", { name: "Search sample records" }).press("Enter");
   await expect(page.getByRole("heading", { name: "No matching records" })).toBeVisible();
-  await page.getByLabel("Search sample records").fill("");
+  await page.getByRole("button", { name: "Clear search sample records" }).click();
   await expect(page.getByRole("table", { name: "Sample roster" })).toBeVisible();
   const guidance = page.locator(".tooltip-wrap");
   await guidance.focus();
@@ -81,6 +83,53 @@ test("gallery supports all palettes and negative states at 360px", async ({ page
   await page.keyboard.press("Enter");
   await expect(page.getByRole("dialog", { name: "Review this change" })).toBeVisible();
   await page.keyboard.press("Escape");
+});
+
+test("controlled list recipes apply or discard drafts and retain unknown request identity", async ({ page }) => {
+  await page.goto("/design-system");
+  const attribute = page.getByRole("combobox", { name: "Search by" });
+  await attribute.focus();
+  await attribute.selectOption("section");
+  await expect(attribute).toBeFocused();
+  await expect(page.getByRole("searchbox", { name: "Search sample records" })).not.toBeFocused();
+  const filterTrigger = page.getByRole("button", { name: "Filters", exact: true });
+  await filterTrigger.click();
+  const filterDialog = page.getByRole("dialog", { name: "Filters" });
+  await expect(filterDialog).toBeVisible();
+  await page.getByRole("checkbox", { name: "Absent", exact: true }).check();
+  await expect(filterDialog.locator("details")).toHaveAttribute("open", "");
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(filterTrigger).toBeFocused();
+  await expect(page.getByRole("row")).toHaveCount(7);
+
+  await filterTrigger.click();
+  await expect(page.getByRole("checkbox", { name: "Absent", exact: true })).not.toBeChecked();
+  await page.getByRole("checkbox", { name: "Present", exact: true }).check();
+  await page.getByRole("checkbox", { name: "Absent", exact: true }).check();
+  await page.getByRole("button", { name: "Apply filters" }).click();
+  await expect(page.getByRole("button", { name: "Filters (2)" })).toBeFocused();
+  await expect(page.getByRole("row")).toHaveCount(5);
+
+  const sortTrigger = page.getByRole("button", { name: /Sort · Student A–Z/ });
+  await sortTrigger.click();
+  const sortDialog = page.getByRole("dialog", { name: "Sort" });
+  await expect(sortDialog.locator("details")).toHaveCount(2);
+  await expect(sortDialog.locator("details").nth(0)).toHaveAttribute("open", "");
+  await expect(sortDialog.locator("details").nth(1)).toHaveAttribute("open", "");
+  await page.getByRole("radio", { name: "Class", exact: true }).check();
+  await page.getByRole("radio", { name: "Descending", exact: true }).check();
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(sortTrigger).toBeFocused();
+  await expect(sortTrigger).toContainText("Student A–Z");
+  await sortTrigger.click();
+  await page.getByRole("radio", { name: "Class", exact: true }).check();
+  await page.getByRole("radio", { name: "Descending", exact: true }).check();
+  await page.getByRole("button", { name: "Apply sort" }).click();
+  await expect(page.getByRole("button", { name: /Sort · Class Z–A/ })).toBeFocused();
+
+  await expect(page.getByText("example-request-6f0f4d8a", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Retry same request" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "same fictional request key" })).toBeVisible();
 });
 
 test("form examples and disclosure respond to keyboard without losing entered text", async ({ page }) => {

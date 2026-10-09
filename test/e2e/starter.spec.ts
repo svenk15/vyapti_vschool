@@ -21,11 +21,10 @@ test("configuration keeps branch selections separate and supports fees-only",asy
  await page.getByLabel("Brand palette").selectOption("clay");await page.getByLabel("Welcome message").fill("A welcome of our own.");await expect(page.locator(".brand-preview")).toContainText("A welcome of our own.");await page.getByRole("button",{name:"Review configuration"}).click();await expect(page.getByText(/Nothing was persisted/)).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);await page.screenshot({path:`artifacts/configuration-${test.info().project.name}.png`,fullPage:true});
 });
-test("table searches sorts and paginates accessible sample records",async({page})=>{
- await page.goto("/design-system");const table=page.getByRole("table",{name:"Sample roster"});await expect(table.getByRole("row")).toHaveCount(6);
- await page.getByRole("button",{name:"Next",exact:true}).click();await expect(table).toContainText("Noor Example");await page.getByRole("button",{name:"Previous",exact:true}).click();
- await page.getByLabel("Search sample records").fill("Ravi");await expect(table.getByRole("row")).toHaveCount(2);await page.getByLabel("Search sample records").fill("zz-no-match");await expect(page.getByRole("heading",{name:"No matching records"})).toBeVisible();
- await page.getByLabel("Search sample records").fill("");await page.getByRole("button",{name:"Student",exact:true}).click();await expect(page.getByRole("columnheader",{name:/Student/})).toHaveAttribute("aria-sort","ascending");
+test("table applies controlled search and sort to accessible sample records",async({page})=>{
+ await page.goto("/design-system");const table=page.getByRole("table",{name:"Sample roster"}),search=page.getByRole("searchbox",{name:"Search sample records"});await expect(table.getByRole("row")).toHaveCount(7);await expect(table).toContainText("Noor Example");
+ await search.fill("Ravi");await search.press("Enter");await expect(table.getByRole("row")).toHaveCount(2);await search.fill("zz-no-match");await search.press("Enter");await expect(page.getByRole("heading",{name:"No matching records"})).toBeVisible();
+ await page.getByRole("button",{name:"Clear search sample records"}).click();await page.getByRole("button",{name:/Sort · Student A–Z/}).click();await page.getByRole("radio",{name:"Class",exact:true}).check();await page.getByRole("radio",{name:"Descending",exact:true}).check();await page.getByRole("button",{name:"Apply sort"}).click();await expect(page.getByRole("button",{name:/Sort · Class Z–A/})).toBeVisible();
  await page.locator("#data").screenshot({path:`artifacts/table-${test.info().project.name}.png`});
 });
 test("dialog tabs notifications and palettes support keyboard interaction",async({page})=>{

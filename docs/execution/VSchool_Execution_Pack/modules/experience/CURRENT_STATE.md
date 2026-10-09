@@ -1,6 +1,6 @@
 # Experience implementation state
 
-EX-00 through EX-02 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-03 is the next eligible slice. EX-03–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
+EX-00 through EX-03 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-04 is the next eligible slice. EX-04–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
 
 Authoritative implementation evidence belongs to the live repository module CURRENT_STATE files after EX-00. queue.json starts with no evidence; it is a scheduling projection. Do not copy historical snapshot test counts into a new VERIFIED claim.
 
@@ -37,3 +37,13 @@ BE-01 is VERIFIED. Students and Imports portable composition factories now requi
 All known Students and Imports factory call sites now pass explicit deterministic configuration. Focused unit tests passed 14/14, including proof that ambient environment values cannot override injected configuration and that missing database URL or invalid secrets/manifests fail closed. Real-PostgreSQL Students/Imports functional tests passed 20/20 with all 31 migrations already applied. The full repository check passed 111 unit tests plus lint, typecheck, documentation, database-design, boundary and backend extraction gates. No schema, migration, seed or database-row change occurred. The live demo remained healthy at `http://127.0.0.1:3400`.
 
 The factory audit found the same environment-fallback pattern in academics, attendance, people, reporting and tenancy composition. Those owners are recorded as later focused corrections when their factories are touched; BE-01 did not broaden into a wholesale composition rewrite. Detailed evidence is in `docs/execution/VSchool_Execution_Pack/evidence/BE-01.md`. Human review remains PENDING.
+
+## EX-03 — 10 October 2026
+
+EX-03 is VERIFIED with human review PENDING. Shared controlled ListToolbar, FilterDrawer, SortDrawer and CommandFeedback compositions now implement the UI LLD: Enter commits bounded search text, Clear commits an empty search, attribute selection leaves the search input alone, filter/sort drawers keep a separate draft until Apply, Cancel/Escape discard it, multi-select attributes remain expanded, and unknown command feedback keeps the exact request key available for status/retry actions. The gallery uses fictional rows only.
+
+The real Students directory consumes the shared toolbar and filter drawer through its existing authorized server listing. Search and the supported single status filter are validated by the Students owner, persisted in safe URL query fields, restore through Back/Forward and clear the cursor when changed. The screen intentionally exposes no Sort control because Students has no server sort contract. Its semantic table uses a compact right-aligned named View action and remains horizontally contained on mobile.
+
+Focused Playwright against real `vyapti_vschool_test` PostgreSQL passed all current affected journeys. A combined 26/26 desktop/mobile run passed after resolving a search-landmark naming ambiguity. Added attribute-focus and Back/Forward cases then produced one test-setup failure per viewport because programmatic `selectOption` does not focus a control; after focusing it like a keyboard user, the final gallery rerun passed 10/10. The final real Students rerun passed 2/2 after the inspected table-density correction; the unchanged starter and transfer journeys had passed 14/14 in the preceding current-source build. Every run built the production app and confirmed all 31 migrations applied. `pnpm demo:seed` completed idempotently against `vyapti_vschool` and preserved private credentials.
+
+No owner API, write behavior, schema, migration, transaction or persisted record contract changed. Desktop/mobile gallery, open drawer and populated Students screenshots were inspected; no document overflow was observed. Detailed evidence and manual steps are in `docs/evidence/ex-03/README.md`. Native VoiceOver/NVDA, native 200% zoom, TEN-03 and owner visual acceptance remain open gates.
