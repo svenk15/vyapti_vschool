@@ -31,6 +31,14 @@ The live schema has 51 models and matches the pack hash `26780ff92ebfcc9a84ea442
 
 Verification executed now: `pnpm check:docs` passed after the live-doc checker excluded the immutable historical source-reference subtree; `pnpm check:boundaries` passed; `git diff --check` passed. The local database status command passed without applying migrations. The live development server at `http://127.0.0.1:3400` returned `{ready:true,state:"ready"}` and `/sign-in` returned 200. This checkpoint did not rerun prior functional, E2E or build evidence. EX-01 is next; DS-02 native VoiceOver/NVDA and TEN-03 security proof remain open.
 
+### EX-01 visual baseline — 9 October 2026
+
+EX-01 is implementation VERIFIED; human visual review is PENDING. [Durable evidence](../../evidence/ex-01/README.md) pins 24 hashed screenshots for executable baseline `61f619e58093925bb20433e839f6ac375654b659`: six approved role references, representative actual authentication/admin/teacher routes at desktop and mobile sizes, the administrator mobile drawer, the teacher unavailable state and the permission-filtered teacher-to-admin state. The screenshots were visually compared for hierarchy, navigation, density, context repetition, mobile reachability and unsupported prototype content.
+
+EX-02 must adopt only the approved enhanced navigation: forest sidebar, grouped server-authorized links, compact context, consistent focus/selected states, reachable identity and separate sign-out, plus accessible mobile focus containment/return. Current real page bodies and owner contracts remain authoritative. Operator, parent, student and principal references do not authorize missing identities or routes; prototype timetable/count data must not be copied.
+
+No product source, dependency, schema, migration, seed or database data changed. `pnpm check:docs` and `git diff --check` passed. New captures used repository Playwright because the installed in-app browser launcher referenced a missing browser-service module; this is recorded as a tooling limitation. DS-02 native VoiceOver/NVDA and TEN-03 remain open production gates.
+
 ### Production portal layout correction — 6 October 2026
 
 The portal-wide integration correction is implementation-complete and human visual review remains PENDING. Shared production compositions now govern admin and teacher titles, page/section gaps, settings forms, directory splits, table containment, compact toolbars, state panels and role-specific navigation. The desktop administrator shell uses a 248px grouped sidebar with consistent outline icons and selected/focus states. Its mobile menu retains keyboard open, first-link focus, Escape close and trigger focus return; the account action now remains in the first header row while branch context occupies its own row.

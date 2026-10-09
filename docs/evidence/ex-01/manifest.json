@@ -1,0 +1,161 @@
+{
+  "task": "EX-01",
+  "capturedAt": "2026-10-09",
+  "executableBaseline": "61f619e58093925bb20433e839f6ac375654b659",
+  "executionPackIntegrationCommit": "ca9e683",
+  "desktopViewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "mobileViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "humanReview": "PENDING",
+  "files": [
+    {
+      "path": "actual/admin-mobile-navigation.png",
+      "sha256": "67a45c544a496edfb6a3daa0d3768c3ce1e296feaa57a624cd3f72b579b2603c",
+      "bytes": 109594,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/admin-overview-desktop.png",
+      "sha256": "4361376db160f4dc26372ee842b9311f7a48df75f2da6729b0a4a24760ee6e34",
+      "bytes": 120750,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/admin-overview-mobile.png",
+      "sha256": "ee58e1f8f42d1dfd372311cd561f033bd2417f8b1d56d6468b4f399fe9964556",
+      "bytes": 81916,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/attendance-report-desktop.png",
+      "sha256": "a8bedbd512e71ae290c9c5b0802b33e9bd64165831225092215af3b581aa4efe",
+      "bytes": 83040,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/attendance-report-mobile.png",
+      "sha256": "1d0fd775821e67f715afbf74a6bb434b190dc99e2cbb08adc8c06eb52fd96bf0",
+      "bytes": 47980,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/school-settings-desktop.png",
+      "sha256": "f6133a2a66f1a5d7c136510f5bde1debffd5c5de7b338eee53604bc8585c94ba",
+      "bytes": 132607,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/school-settings-mobile.png",
+      "sha256": "0c0f6eca5e0618cf886e2d9126cdcf0ca2fd22c8d6b372ce076a9b2d85515bac",
+      "bytes": 88408,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/sign-in-desktop.png",
+      "sha256": "06f43c3be78b8a31c4e99289e45e52239417bd1e181e8df100e857ea1a1a06ac",
+      "bytes": 267753,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/sign-in-mobile.png",
+      "sha256": "4f3ed594bbc8da817261b4e8b641ec0bd316090acc94f65d121698b46f98212d",
+      "bytes": 35727,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/students-desktop.png",
+      "sha256": "db9100f5c387b88bdc3bbbde7ba84502d2bb2b7d6f62f59036e40776590bd224",
+      "bytes": 140462,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/students-mobile.png",
+      "sha256": "36c5efb324d57c01a5fce4657b3edbcdb6cc9428795eb4fead6cf424a6cfe50d",
+      "bytes": 96121,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/teacher-admin-denied.png",
+      "sha256": "c46ef07db940e554f58eba7009196d6e9e7b74585194c82ce327009e5a13d9ce",
+      "bytes": 58874,
+      "capture": "new-live-playwright-baseline"
+    },
+    {
+      "path": "actual/teacher-today-desktop.png",
+      "sha256": "e4f131a10ff7ad957535f82308918e5d90408c1cd69a7e8536c06956d7bb0517",
+      "bytes": 78205,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/teacher-today-mobile.png",
+      "sha256": "242c77829d3061c5ba105c4baf7afda51ce8ea746498130ef4944b8c687c0dd1",
+      "bytes": 70388,
+      "capture": "pinned-existing-exact-baseline"
+    },
+    {
+      "path": "actual/teacher-unavailable-desktop.png",
+      "sha256": "c500328e6039e228484970db8ae3fbcd877f1ec67c639c708f36d3f3ca1d6e2b",
+      "bytes": 36197,
+      "capture": "new-live-playwright-baseline"
+    },
+    {
+      "path": "actual/teacher-unavailable-mobile.png",
+      "sha256": "fa1529f2b574d8a1a3b7e5cfff6ec6fcdd09320f55d67245fb3863e4804835d4",
+      "bytes": 29283,
+      "capture": "new-live-playwright-baseline"
+    },
+    {
+      "path": "reference/operator-desktop.png",
+      "sha256": "3b85b9942b8e035c958e6b86469cc2e0a99ee24259cf2542934ba82b2fa6998d",
+      "bytes": 100607,
+      "capture": "newly-rendered-approved-static-reference"
+    },
+    {
+      "path": "reference/parent-desktop.png",
+      "sha256": "2b0278c7d64eb6fdeefb6df56395a6549b72712054609889a3fa30043716d04a",
+      "bytes": 151190,
+      "capture": "newly-rendered-approved-static-reference"
+    },
+    {
+      "path": "reference/principal-desktop.png",
+      "sha256": "07c03ffbe28ae608bc4c7e47c02389b02287ca1df72bf25c87dd299ec33114ad",
+      "bytes": 93252,
+      "capture": "newly-rendered-approved-static-reference"
+    },
+    {
+      "path": "reference/school-admin-desktop.png",
+      "sha256": "8c966caed949ef85b449f977010cf8714793fa91d7838b9d92a8b2c1578ec15a",
+      "bytes": 161976,
+      "capture": "newly-rendered-approved-static-reference"
+    },
+    {
+      "path": "reference/school-admin-mobile.png",
+      "sha256": "6a594a1c4199043a33864eeb8fe8a536a76fc44335d694f5055a8b014c9cf88a",
+      "bytes": 57812,
+      "capture": "newly-rendered-approved-static-reference"
+    },
+    {
+      "path": "reference/student-desktop.png",
+      "sha256": "81d7b77f6d8ff1c0aa229727d93281130a1c1db8c7a26bbe9d04892506a57391",
+      "bytes": 138849,
+      "capture": "newly-rendered-approved-static-reference"
+    },
+    {
+      "path": "reference/teacher-desktop.png",
+      "sha256": "392fba33985ec54d23649cf2100da55149a8c65b4a33c059a59afc0ced301310",
+      "bytes": 156257,
+      "capture": "newly-rendered-approved-static-reference"
+    },
+    {
+      "path": "reference/teacher-mobile.png",
+      "sha256": "8b059feb91a1d21a8ad584b9c98ff1017d97139877ddf0a0ee44592c6311f548",
+      "bytes": 62163,
+      "capture": "newly-rendered-approved-static-reference"
+    }
+  ]
+}
