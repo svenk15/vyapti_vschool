@@ -1,0 +1,36 @@
+{
+  "task": "EX-02",
+  "capturedAt": "2026-10-09",
+  "baseline": "b0f9288",
+  "humanReview": "PENDING",
+  "desktopViewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "mobileViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "files": [
+    {
+      "path": "admin-desktop.png",
+      "sha256": "c89f7231970464623f928552b09e1e6ef7c14cc6303d1cc3fc117583bbc35d18",
+      "bytes": 108654
+    },
+    {
+      "path": "admin-mobile-drawer.png",
+      "sha256": "99975aba82715869ddc679891f77a57a34203384139457c585af179acc1875d5",
+      "bytes": 47960
+    },
+    {
+      "path": "teacher-desktop.png",
+      "sha256": "08758a2df246e73c03f20440a323dc08387658c276cabfe46fd619cbdcba0410",
+      "bytes": 41438
+    },
+    {
+      "path": "teacher-mobile-drawer.png",
+      "sha256": "2f971db2b5230ff687fd9b416902b21cbfabc5bd9e6fb61c185ee89205eeb2c5",
+      "bytes": 21658
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-09T18:06:59.457Z",
+  "source": "working tree based on b0f9288",
+  "baseUrl": "http://127.0.0.1:3400",
+  "adminMetrics": {
+    "width": 248,
+    "background": "color(srgb 0.119216 0.303686 0.240157)",
+    "height": 1000
+  },
+  "checks": [
+    "administrator desktop grouped navigation and footer",
+    "administrator mobile focus containment and return",
+    "teacher desktop role navigation without administrator links",
+    "teacher mobile focus containment and return",
+    "desktop page overflow"
+  ],
+  "humanReview": "PENDING"
+}

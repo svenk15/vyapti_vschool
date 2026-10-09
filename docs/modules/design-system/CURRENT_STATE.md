@@ -39,6 +39,14 @@ EX-02 must adopt only the approved enhanced navigation: forest sidebar, grouped 
 
 No product source, dependency, schema, migration, seed or database data changed. `pnpm check:docs` and `git diff --check` passed. New captures used repository Playwright because the installed in-app browser launcher referenced a missing browser-service module; this is recorded as a tooling limitation. DS-02 native VoiceOver/NVDA and TEN-03 remain open production gates.
 
+### EX-02 shared portal navigation — 9 October 2026
+
+EX-02 is implementation VERIFIED; human visual review is PENDING. [Evidence and demo steps](../../evidence/ex-02/README.md) cover the common administrator/teacher shell, desktop sidebar, mobile drawer, account identity, real sign-out, compact authorized branch context and capability-aware navigation filtering. The teacher receives only the implemented teaching-day destination; current pages and API guards retain their owner authorization.
+
+`pnpm check` passed lint, typecheck, docs, database design, boundaries, backend compile and 105 unit tests. The real-PostgreSQL administrator Playwright suite passed 12/12 on desktop/mobile. A focused mobile teacher attendance run exposed duplicate close-control names, which were corrected; its rerun passed 1/1 through scheduling, submission recovery, foreign-teacher denial, reporting, correction and cancellation. Both E2E runs built the app and reported all 31 migrations applied. Four final screenshots were visually inspected at 1440 × 1000 and 390 × 844. No schema, migration, owner behavior or seed changed.
+
+The running demo is `http://127.0.0.1:3400/sign-in`; private fictional administrator/teacher credentials remain in ignored `artifacts/iam-01/private-demo.json` and `artifacts/people-02/private-demo.json`. The available home DTO has no verified personal display name, so the identity block truthfully shows role and school with a link to `/account`. Native VoiceOver/NVDA, native 200% zoom, TEN-03 and human visual acceptance remain open. EX-03 is next.
+
 ### Production portal layout correction — 6 October 2026
 
 The portal-wide integration correction is implementation-complete and human visual review remains PENDING. Shared production compositions now govern admin and teacher titles, page/section gaps, settings forms, directory splits, table containment, compact toolbars, state panels and role-specific navigation. The desktop administrator shell uses a 248px grouped sidebar with consistent outline icons and selected/focus states. Its mobile menu retains keyboard open, first-link focus, Escape close and trigger focus return; the account action now remains in the first header row while branch context occupies its own row.

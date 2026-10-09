@@ -1,6 +1,6 @@
 # Experience implementation state
 
-EX-00 and EX-01 are VERIFIED with human review PENDING. EX-02 is the next eligible slice. EX-02–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
+EX-00 through EX-02 are VERIFIED with human review PENDING. EX-03 is the next eligible slice. EX-03–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
 
 Authoritative implementation evidence belongs to the live repository module CURRENT_STATE files after EX-00. queue.json starts with no evidence; it is a scheduling projection. Do not copy historical snapshot test counts into a new VERIFIED claim.
 
@@ -21,3 +21,11 @@ EX-01 is VERIFIED with human review PENDING. The durable [visual baseline](../..
 The comparison freezes the enhanced navigation target for EX-02: forest desktop sidebar, grouped authorized destinations, consistent icons and selection/focus state, compact context, reachable identity footer, separate sign-out, and a mobile drawer with focus containment and return. Current real page bodies, owner DTOs and server authorization remain authoritative. Prototype timetable/count data and unavailable operator/parent/student/principal identities are explicitly excluded.
 
 No application source, schema, migration, seed or database row changed. `pnpm check:docs` and `git diff --check` passed for the evidence checkpoint. The installed in-app browser launcher referenced a missing browser-service module, so repository Playwright produced the new captures and the images were inspected directly. This limitation is recorded rather than treated as passed browser-control evidence. EX-02 is next; DS-02 native assistive-technology and TEN-03 production security gates remain open.
+
+## EX-02 — 9 October 2026
+
+EX-02 is VERIFIED with human review PENDING. The [shared navigation evidence](../../../../evidence/ex-02/README.md) records the implementation, focused screenshots and manual demo. Administrator and teacher routes now use one 248px theme-aware dark desktop sidebar and the same accessible mobile drawer. Grouped server-filtered links, compact branch context, distinct account identity and sign-out, scrolling navigation with a pinned footer, initial mobile focus, Tab/Shift+Tab containment, Escape/close recovery and trigger-focus return are implemented. Teacher navigation exposes only My teaching day.
+
+BE-02 is closed: request-local navigation eligibility memoization keys both module and capability, with a unit test proving same-module `student.read` and `student.manage` results stay independent. Page and API authorization remain active. No owner contract, table, migration, transaction or seed changed. Root TypeScript excludes only the immutable historical source-reference tree after EX-00 made it present under `docs/`.
+
+Verification: `pnpm check` passed all repository gates and 105 unit tests. The dedicated-PostgreSQL administrator Playwright suite passed 12/12 across desktop/mobile. The focused mobile teacher attendance journey initially exposed duplicate close-button accessible names; after the label correction it passed 1/1, including authorization, frozen-roster persistence, recovery, correction and cancellation. Both runs built the production application and observed all 31 migrations applied. Four final live screenshots were inspected. The local server at `http://127.0.0.1:3400` is healthy. EX-03 is next; native accessibility and TEN-03 gates remain open.

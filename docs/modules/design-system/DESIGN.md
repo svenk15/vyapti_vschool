@@ -12,7 +12,7 @@ DS-ADR-002: one calm neutral surface system with constrained brand tokens. Defau
 
 ## Component ownership and inventory
 
-See components/ui/primitives.tsx (Button, ButtonLink, Badge, Card, PageHeader, Alert, EmptyState, Skeleton, StatCard, Avatar, Breadcrumbs, Progress, Timeline, Stepper, BrandSurface); forms.tsx (TextField, SelectField, TextArea, Checkbox, Switch, RadioGroup, DateRange, FileUpload); interactive.tsx (Dialog/Drawer, Tabs, Toast, Disclosure, Tooltip, DataTable with pagination). SiteHeader, SchoolArt and branded login/configurator compose these primitives. Native datalist demonstrates basic local autocomplete; it is not an async directory lookup.
+See components/ui/primitives.tsx (Button, ButtonLink, Badge, Card, PageHeader, Alert, EmptyState, Skeleton, StatCard, Avatar, Breadcrumbs, Progress, Timeline, Stepper, BrandSurface); forms.tsx (TextField, SelectField, TextArea, Checkbox, Switch, RadioGroup, DateRange, FileUpload); interactive.tsx (Dialog/Drawer, Tabs, Toast, Disclosure, Tooltip, DataTable with pagination). `components/portal/portal-shell.tsx` owns the shared protected shell, responsive drawer focus lifecycle, identity/footer composition and branch-context placement; thin administrator/teacher wrappers supply only already-authorized route groups. SiteHeader, SchoolArt and branded login/configurator compose the public primitives. Native datalist demonstrates basic local autocomplete; it is not an async directory lookup.
 
 `/design-system` is a live showcase of these production components and tokens. Its palette selector is explicitly a local preview. Protected shells receive only the effective published palette for the verified current member and branch; all screen compositions inherit that semantic token scope. See [the rendered route coverage record](ROUTE_COVERAGE.md) for route groups, observed issues and remaining visual evidence.
 
@@ -26,6 +26,7 @@ See components/ui/primitives.tsx (Button, ButtonLink, Badge, Card, PageHeader, A
 | Alerts/Toast | Text status and persistent dismissible notice | No auto-hiding important errors; only acknowledged writes show success |
 | Tooltip | Hover/focus; Escape dismiss; description relationship | Essential instructions stay visible, not tooltip-only |
 | Theme | Approved primary/on-primary/soft/accent tokens | No role/permission behavior controlled by theme |
+| Protected portal shell | 248px theme-aware dark desktop sidebar; grouped server-filtered routes; account/sign-out footer; mobile focus containment/return | Page/API authorization remains owner-owned; identity labels cannot infer a person from contact data |
 
 ## Tokens and recipes
 

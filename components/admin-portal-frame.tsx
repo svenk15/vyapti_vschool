@@ -1,27 +1,8 @@
-'use client';
-import Link from 'next/link';
-import {useEffect,useRef,useState,type ReactNode} from 'react';
-import {usePathname} from 'next/navigation';
+import type {ReactNode} from 'react';
 import type {AdminHome} from '@/shared/contracts/access';
-import {BranchSwitcher} from '@/components/institution-context';
-import {AccessSignOut} from '@/components/access-login';
-import {PortalNavigationGroup,type PortalNavigationGroupData} from '@/components/portal-navigation-group';
+import type {PortalNavigationGroupData} from '@/components/portal-navigation-group';
+import {PortalShell} from '@/components/portal/portal-shell';
 
 export function AdminPortalFrame({home,groups,children}:{home:AdminHome;groups:readonly PortalNavigationGroupData[];children:ReactNode}){
- const pathname=usePathname(),[openOnPath,setOpenOnPath]=useState<string|null>(null),toggle=useRef<HTMLButtonElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
- useEffect(()=>{if(!open)return;const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape'){setOpenOnPath(null);toggle.current?.focus();}};document.addEventListener('keydown',onKeyDown);return()=>document.removeEventListener('keydown',onKeyDown);},[open]);
- useEffect(()=>{if(open)firstItem.current?.focus();},[open]);
- return <div className="portal-shell">
-  <header className="portal-topbar">
-   <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls="admin-navigation" aria-expanded={open} onClick={()=>setOpenOnPath(open?null:pathname)}><span aria-hidden="true">{open?'×':'☰'}</span><span className="sr-only">{open?'Close navigation':'Open navigation'}</span></button>
-   <Link className="portal-mobile-brand" href="/admin"><span className="portal-brand-mark" aria-hidden="true">v</span>VSchool</Link>
-   <div className="portal-top-context"><BranchSwitcher home={home}/></div>
-   <div className="portal-account"><AccessSignOut/></div>
-  </header>
-  <aside id="admin-navigation" className={`portal-sidebar${open?' portal-sidebar-open':''}`}>
-   <Link className="portal-brand" href="/admin" aria-label="VSchool school administration"><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
-   <nav aria-label="School administration">{groups.map((group,index)=><PortalNavigationGroup key={group.label} group={group} pathname={pathname} onNavigate={()=>setOpenOnPath(null)} firstItemRef={index===0?firstItem:undefined}/>)}</nav>
-  </aside>
-  <div className="portal-page-content">{children}</div>
- </div>;
+ return <PortalShell home={home} groups={groups} homeHref="/admin" navigationLabel="School administration" roleLabel="School administrator">{children}</PortalShell>;
 }

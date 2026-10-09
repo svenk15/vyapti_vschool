@@ -25,10 +25,10 @@
     "depends_on": [
       "EX-01"
     ],
-    "status": "NOT_STARTED",
+    "status": "VERIFIED",
     "design": "READY",
-    "human_review": "NOT_REQUESTED",
-    "evidence": null
+    "human_review": "PENDING",
+    "evidence": "docs/evidence/ex-02/README.md"
   },
   {
     "id": "EX-03",
@@ -37,7 +37,7 @@
       "EX-02"
     ],
     "status": "NOT_STARTED",
-    "design": "READY_SUBJECT_TO_EX00",
+    "design": "READY",
     "human_review": "NOT_REQUESTED",
     "evidence": null
   },
