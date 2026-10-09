@@ -1,6 +1,6 @@
 # Students, enrollment and placement history — current state
 
-Last updated: 2026-10-05. This is an independent project checkpoint; no completion was imported.
+Last updated: 2026-10-09. This is an independent project checkpoint; no completion was imported.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -9,6 +9,8 @@ Last updated: 2026-10-05. This is an independent project checkpoint; no completi
 | STU-03 | VERIFIED | PENDING | PostgreSQL, unit, desktop/mobile Playwright, repository checks, build and repeatable seed passed; local demo checkpoint to be recorded below |
 
 ## Current checkpoint
+
+**BE-01 — Explicit portable composition configuration (9 October 2026):** verified prerequisite correction. `backend/composition/students.ts` and the dependent Imports composition now require an explicitly supplied database URL, release manifest, cursor secret and optional clock. Portable code no longer reads environment variables or substitutes an empty secret. `lib/server` owns environment parsing and keeps one module-scoped service/pool. Missing database URL or invalid secret/release configuration fails closed through `UNAVAILABLE` without logging values. All known direct factory callers now provide deterministic configuration. Focused unit tests passed 14/14; focused real-PostgreSQL Students/Imports tests passed 20/20; the full repository check passed 111 unit tests plus its static/documentation/architecture gates. No migration, schema, seed or row change occurred. Other owner factories with similar legacy fallbacks remain separately recorded for correction when touched.
 
 **STU-03 — Transfer placements and archive unused students (5 October 2026):** implemented. Transfer requires the active placement in an OPEN year, school-local today or later, strict interval boundaries, active same-year destination, no queued future placement, expected Enrollment version and a non-no-op section. It checks both affected sections for OPEN/SUBMITTED Attendance sessions in the affected interval. The mutation uses the documented account→Organization→School locks and READ COMMITTED so validation queries after a lock wait observe newly committed sessions. Archive retains history and rejects current/future Enrollment or Placement intervals. Current permission and both module contracts are checked on each mutation; reads stay unlocked. No schema change or new migration was needed. Table RLS remains deferred to TEN-03 under TEN-ADR-006 Path A.
 

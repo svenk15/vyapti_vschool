@@ -9,7 +9,7 @@ import {schoolInput} from '../fixtures/access-management';
 
 const url=process.env.TEST_DATABASE_URL??'';
 if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated STU-01 E2E PostgreSQL database required');
-const access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules:['student_core']}),students=createStudentsServices({databaseUrl:url,releasedModules:['student_core'],cursorSecret:process.env.NEXTAUTH_SECRET}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},input=schoolInput();
+const access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules:['student_core']}),students=createStudentsServices({databaseUrl:url,releasedModules:['student_core'],cursorSecret:'students-e2e-cursor-secret-32-bytes-minimum'}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},input=schoolInput();
 let school:Awaited<ReturnType<typeof access.provisionSchool>>,foreignStudentId:string,selectablePersonId:string;
 
 test.beforeAll(async()=>{

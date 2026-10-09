@@ -30,7 +30,6 @@ This record distinguishes current owner operations from presentation work and fu
 
 - Source-reference and live files are identical at this checkpoint, so no code is copied from the snapshot.
 - Student and Attendance receipt scopes, lock strength, request limits, key formats and failure mapping remain owner-specific.
-- `backend/composition/students.ts` still reads `VSCHOOL_RELEASED_MODULES` and `NEXTAUTH_SECRET`; BE-01 is confirmed for the first implementation batch.
+- BE-01 closed on 9 October 2026: Students and dependent Imports composition now receive explicit validated release modules, cursor secret, database URL and optional clock from the Next hosting layer. Other legacy owner factories remain audit items to correct when touched.
 - `lib/server/admin-navigation.ts` caches a module check without the capability in its key. BE-02 is confirmed for EX-02. Endpoint authorization remains active regardless of navigation output.
 - TEN-03 restricted-role/RLS context proof and DS-02 native accessibility evidence remain independent release gates.
-
