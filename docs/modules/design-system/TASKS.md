@@ -20,6 +20,12 @@ Visit /design-system; change palettes; search/sort/page sample table; open modal
 
 Start/check the server, give URL and steps, request user review, and mark review PENDING. Do not mark human acceptance until actual feedback.
 
+## Wave A approved experience adoption — EX-00 through EX-15
+
+The executable presentation queue is [modules/experience/TASKS.md](../../execution/VSchool_Execution_Pack/modules/experience/TASKS.md). Execute it in dependency order and use the canonical owner tasks for every business operation. EX-00 pins live contracts and references; EX-01 captures comparable states; EX-02–EX-03 establish shared navigation and interaction recipes; EX-04–EX-12 adopt existing Access, Branding, People, Academics, Students, Imports, Attendance and Reporting operations; EX-13–EX-15 complete fixtures, integrated verification and the delivery checkpoint.
+
+Every EX slice records a short design delta, current-source verification, migration state, demo route and human review separately. Presentation work does not reopen a previously verified owner task or satisfy DS-02 native accessibility gates. Missing backend capability follows BE-03 and remains unavailable until its owner contract is designed and verified.
+
 ## DS-02 — Validate production screen recipes and accessibility
 
 Depends on: DS-01, ATT-02, BRD-02

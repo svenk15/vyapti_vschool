@@ -1,0 +1,30 @@
+# Experience adoption — database and application design
+
+Scope: replace presentation of already implemented workflows, retaining existing owner facades and state machines. No migration is planned for this batch. An absent backend capability is a gap, not permission to fabricate an API or weaken a rule. All query inputs are bounded and validated by the owner; pagination stays server-side.
+
+## Persisted workflows and joins
+| Screen/workflow | Stored facts / join path | Owner and write behavior |
+|---|---|---|
+| Sign-in and branch switch | UserAccount → SchoolMembership → RoleGrant; membership → School → Organization. AccountPersonBinding/Person only for verified display identity. InstitutionGrant separately governs institution administration. | Access issues/verifies session, checks tokenVersion and current status; context switch changes authorized session context, not membership. |
+| Branding | BrandProfile → published BrandRevision; permitted BrandAsset references. Public slug resolves published branding only. | Branding draft/preview/publish/rollback facade; does not change login authority. |
+| Module configuration | OrganizationEntitlement + BranchActivation + server release catalog + capability. | Tenancy config commands with expected version; ConfigurationChange/TenantCommandReceipt/TenantOutbox preserve evidence. |
+| Staff and teacher readiness | Person joined to Employee by organization/person; Employee to Teacher by scoped staff relationship; AccountPersonBinding to UserAccount; separate SchoolMembership/RoleGrant. | People creates profile, Access binds verified identity/grants, Academics enables eligibility. Contact email equality is not identity proof. |
+| Academics | AcademicYear → AcademicTerm; year/SchoolCalendar → CalendarRevision → CalendarException. Section → GradeLevel; CourseOffering → Section + Subject + AcademicYear; TeacherAssignment → Teacher + CourseOffering with validity dates. | Academic facade creates year/terms/grades/subjects/section, publishes calendar, opens/closes year and assigns/ends teachers. |
+| Students | Student → institution Person; Student → Enrollment → AcademicYear; Enrollment → dated SectionPlacement → Section/GradeLevel. | Students facade registers/enrolls/transfers/archives. Show complete history; transfer closes prior placement and creates new dated placement under existing invariant. No direct Person or Attendance updates. |
+| Import | ImportJob → ImportRow; SourceStudentMap connects source key to the owner Student. Row processing invokes Students owner contract. | Imports preview/confirm/process/resume/cancel; don't reuse student matching as broad people search. Private source hash stays in owner storage, never raw rows/file bytes in audit. Preserve current request-size/row limits from live LLD. |
+| Schedule / roll call | AttendanceSession → CourseOffering/TeacherAssignment; SessionRosterEntry is pinned session roster; AttendanceRecord stores final marks; AttendanceRevision records corrections. | Attendance schedule/open/submit/correct/cancel. Opening pins eligible roster according to current design. UI cannot change assignment or enrollment while marking. |
+| Attendance report | Scoped sessions → roster/records/revisions with owner denominator and asOf; ExportRun records permitted export. | Reporting read/query/export facade. A missing register is not equivalent to all pupils absent. Never compute school totals from one paginated result page. |
+| Teacher day | Verified account → AccountPersonBinding → Person → eligible Teacher → dated TeacherAssignment → own AttendanceSession. | Existing teacher gateway/owner query; requesting another session UUID must not disclose it. |
+
+Every branch join carries organization and school scope (or reaches an institution-owned record via the matching organization), even where IDs are UUIDs. Use exact foreign keys and temporal conventions from the source schema/LLD. Do not invent PostgreSQL joins from table labels; the authoritative schema snapshot is in database/EXISTING_SCHEMA.prisma and SQL migration evidence remains in the live repo. RLS must not be assumed active.
+
+## Existing contracts to reuse
+`lib/server/access.ts`, `academics.ts`, `students.ts`, `people.ts`, `imports.ts`, `attendance.ts`, `reporting.ts`, `tenancy.ts`, `branding.ts`; confirm actual export names in EX-00. Composition factories already construct owner repositories. Application interfaces already supply the repository seam analogous to a Spring repository; do not introduce a redundant DAO layer.
+
+Examples observed: academicsGateway.workspace/createYear/replaceTerms/createGrade/createSubject/createSection/publishCalendar/transitionYear/offerings/createOffering/assignTeacher/endTeacherAssignment; studentsGateway.list/get/create/findExistingPeople/enrollmentOptions/enroll/transfer/archive; reportingGateway.overview/exportAttendance. Use their actual parameter/response types. Add a new owner projection only when required by an accepted workflow, with authorization and count/denominator semantics documented before code.
+
+## Known gaps to record rather than hide
+The prototype can show broader institution lifecycle, onboarding drafts, family permissions, student login, principal views and timetable than the existing API supports. “SA-20 update record” does not prove an update endpoint exists; “TEA-07 classes” does not prove an independent class projection exists. The initial ticket transforms the available real behavior and records uncovered operations for the owner module. A workflow is complete only when all of its contracted operations have evidence.
+
+## Read state contract
+Loading keeps shell context but no previous branch's protected content. Empty means successful zero rows. Error means failure; never replace it with fake empty state. Show asOf/stale indication where the source contract provides it. A partial dashboard may show an unavailable card while other independently authorized sections work. Child/branch change invalidates scope-bound requests and data; late old responses are discarded.

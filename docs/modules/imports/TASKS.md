@@ -35,6 +35,10 @@ Upload the provided CSV after creating matching academic references; inspect row
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## Experience overlay consumption
+
+EX-09 adopts preview, confirm, processing, resume, cancel and safe error export through the current Imports facade. Preserve the 2 MiB file contract, preview revision, source hash, idempotency and enlisted Students transaction; prototype file data is never runtime input.
+
 ## IMP-02 — Confirm and process complete student rows
 
 Depends on: IMP-01

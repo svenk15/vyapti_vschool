@@ -35,6 +35,10 @@ Add student 0007, refresh and search by admission number; see Not enrolled; atte
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## Experience overlay consumption
+
+EX-08 adopts directory, detail, registration, enrollment, transfer and archive. BE-04 must first verify the live teacher read policy. Existing-Person selection remains suppressed in the adopted UI until its exact authorized identifier contract is reconciled; this does not remove ordinary Student list search.
+
 ## STU-02 — Enroll students into a dated section
 
 Depends on: STU-01, ACA-02

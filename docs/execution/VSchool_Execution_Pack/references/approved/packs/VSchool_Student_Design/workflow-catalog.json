@@ -1,0 +1,1162 @@
+{
+  "edition": "01",
+  "date": "2026-10-08",
+  "status": "DESIGNED_FOR_UX_REVIEW",
+  "baseline": [
+    "Operator 03.9",
+    "School Administrator 01",
+    "Teacher 01",
+    "Parent & Guardian 01"
+  ],
+  "modules": [
+    {
+      "id": "access",
+      "title": "School access",
+      "icon": "shield",
+      "phase": 2,
+      "owner": "Access + Students",
+      "purpose": "Verified self identity, active enrollment and school policy."
+    },
+    {
+      "id": "day",
+      "title": "My day & classes",
+      "icon": "home",
+      "phase": 3,
+      "owner": "Academics",
+      "purpose": "Actionable published schedule and assigned class context."
+    },
+    {
+      "id": "assignments",
+      "title": "Assignments & submissions",
+      "icon": "book",
+      "phase": 3,
+      "owner": "Learning",
+      "purpose": "Private drafts, safe files and explicit versioned submissions."
+    },
+    {
+      "id": "feedback",
+      "title": "Feedback & progress",
+      "icon": "chat",
+      "phase": 3,
+      "owner": "Learning",
+      "purpose": "Only returned feedback and published criteria."
+    },
+    {
+      "id": "attendance",
+      "title": "My attendance",
+      "icon": "check",
+      "phase": 2,
+      "owner": "Attendance",
+      "purpose": "Read exact recorded sessions and request review."
+    },
+    {
+      "id": "communication",
+      "title": "Messages & notices",
+      "icon": "mail",
+      "phase": 2,
+      "owner": "Communication",
+      "purpose": "Published student notices and staff-scoped conversations."
+    },
+    {
+      "id": "calendar",
+      "title": "Calendar & events",
+      "icon": "calendar",
+      "phase": 3,
+      "owner": "Calendar",
+      "purpose": "Published agenda and eligibility-aware interest responses."
+    },
+    {
+      "id": "results",
+      "title": "Results & reports",
+      "icon": "chart",
+      "phase": 4,
+      "owner": "Assessments",
+      "purpose": "Published, authorized results without private moderation."
+    },
+    {
+      "id": "requests",
+      "title": "Requests & support",
+      "icon": "file",
+      "phase": 2,
+      "owner": "Requests + Students",
+      "purpose": "Track owned requests without changing official records."
+    },
+    {
+      "id": "services",
+      "title": "School services",
+      "icon": "bus",
+      "phase": 6,
+      "owner": "Individual service owners",
+      "purpose": "Library, activities and transport are independently enabled."
+    },
+    {
+      "id": "account",
+      "title": "Account & preferences",
+      "icon": "gear",
+      "phase": 2,
+      "owner": "Access + Preferences",
+      "purpose": "Own sessions, verified changes and private-device choices."
+    },
+    {
+      "id": "assistant",
+      "title": "Learning assistant",
+      "icon": "spark",
+      "phase": 7,
+      "owner": "Reviewed AI",
+      "purpose": "Source-linked explanations within the student purpose."
+    }
+  ],
+  "workflows": [
+    {
+      "id": "STW-01",
+      "area": "access",
+      "title": "Find the correct school sign-in",
+      "phase": 2,
+      "goal": "Enter the school-issued workspace.",
+      "steps": [
+        {
+          "title": "Use school link",
+          "instruction": "Check school name and branch; use the school-issued sign-in link."
+        },
+        {
+          "title": "Sign in",
+          "instruction": "Use the student account assigned by school; no account enumeration or public pupil search."
+        }
+      ],
+      "outcome": "Own permitted enrollment contexts.",
+      "invariant": "A public school slug is branding, never authorization.",
+      "recovery": "Invalid school link offers school contact; invalid credentials remain generic.",
+      "data": "Published BrandProfile; UserAccount; verified StudentAccountLink; active Enrollment.",
+      "extension": false
+    },
+    {
+      "id": "STW-02",
+      "area": "access",
+      "title": "Activate an issued student account",
+      "phase": 2,
+      "goal": "Accept the exact school-verified account binding.",
+      "steps": [
+        {
+          "title": "Review invitation",
+          "instruction": "See intended school and a safe account hint; do not select another child."
+        },
+        {
+          "title": "Activate",
+          "instruction": "Authenticate intended identity and accept a valid, unrevoked invitation under school policy."
+        }
+      ],
+      "outcome": "Account link active with school-defined capabilities.",
+      "invariant": "Mailbox possession does not establish pupil identity; a guardian token cannot activate student authority.",
+      "recovery": "Expired, wrong-account or failed-delivery token routes to school help; no self-link.",
+      "data": "Access invitation + StudentAccountLink + non-sensitive verification reference.",
+      "extension": false
+    },
+    {
+      "id": "STW-03",
+      "area": "access",
+      "title": "Recover access",
+      "phase": 2,
+      "goal": "Regain account access using the permitted policy.",
+      "steps": [
+        {
+          "title": "Request help",
+          "instruction": "Submit school identifier and permitted account identifier through a generic response."
+        },
+        {
+          "title": "Complete recovery",
+          "instruction": "Follow account-wide trust policy; use school/operator assistance if required."
+        }
+      ],
+      "outcome": "Access restored and sessions handled by existing recovery policy.",
+      "invariant": "Preserve OPERATOR_CLI/HYBRID/EMAIL and stricter cross-institution recovery checks.",
+      "recovery": "No guarantee that an email was sent; delivery failure and operator-assisted routes remain explicit.",
+      "data": "Access recovery tokens, organization trust modes, active identity memberships.",
+      "extension": false
+    },
+    {
+      "id": "STW-04",
+      "area": "access",
+      "title": "Switch enrollment context",
+      "phase": 2,
+      "goal": "Move safely between own authorized school contexts.",
+      "steps": [
+        {
+          "title": "Choose context",
+          "instruction": "List only active verified enrollments with institution, branch and academic year."
+        },
+        {
+          "title": "Resolve current work",
+          "instruction": "Save/discard a changed draft; unresolved submission must be reconciled first."
+        }
+      ],
+      "outcome": "Destination context and capabilities are reloaded together.",
+      "invariant": "Never keep one child identity with another branch; no independent arbitrary branch selector.",
+      "recovery": "Revoked or stale destination becomes unavailable; clear protected cached content.",
+      "data": "StudentAccountLink + Enrollment + module entitlements + course assignment.",
+      "extension": false
+    },
+    {
+      "id": "STW-05",
+      "area": "access",
+      "title": "Handle expired or withdrawn access",
+      "phase": 2,
+      "goal": "Understand why a workspace is unavailable.",
+      "steps": [
+        {
+          "title": "See safe state",
+          "instruction": "Clear protected content and explain sign-in or school help is needed."
+        },
+        {
+          "title": "Resume safely",
+          "instruction": "Reauthenticate and recheck current assignment before recovering work."
+        }
+      ],
+      "outcome": "Authorized continuation or safe support route.",
+      "invariant": "Historical access does not authorize current reads, downloads or status lookup.",
+      "recovery": "Unknown submissions keep a reference; do not claim a failure or discard evidence.",
+      "data": "Session + account status + current account link/enrollment; command receipt.",
+      "extension": false
+    },
+    {
+      "id": "STW-06",
+      "area": "day",
+      "title": "Plan my school day",
+      "phase": 3,
+      "goal": "Know the next class and the next deliberate action.",
+      "steps": [
+        {
+          "title": "Review today",
+          "instruction": "Show school-local date, next class and a short prioritized list of due work."
+        },
+        {
+          "title": "Open an action",
+          "instruction": "Go directly to published class details, assignment, returned feedback or notice."
+        }
+      ],
+      "outcome": "Student reaches one clear next task.",
+      "invariant": "No engagement score, anxiety countdown, class rank or fabricated completion percentage.",
+      "recovery": "Empty timetable and nothing-due states remain useful; display last successful refresh.",
+      "data": "Published ScheduleOccurrence + student Assignment projections + returned Feedback.",
+      "extension": false
+    },
+    {
+      "id": "STW-07",
+      "area": "day",
+      "title": "Read my timetable",
+      "phase": 3,
+      "goal": "Understand the published week.",
+      "steps": [
+        {
+          "title": "Select date",
+          "instruction": "Browse days in school timezone and show current published version."
+        },
+        {
+          "title": "Open class",
+          "instruction": "Read subject, period, room and permitted teacher name."
+        }
+      ],
+      "outcome": "Exact occurrence details.",
+      "invariant": "Manual attendance sessions do not imply a recurring timetable engine.",
+      "recovery": "Cancelled, room-changed and not-yet-published are explicit states.",
+      "data": "Academic enrollment, offering, published timetable revision and occurrence.",
+      "extension": false,
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "timetable",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "STW-08",
+      "area": "day",
+      "title": "Respond to a changed class",
+      "phase": 3,
+      "goal": "Notice a schedule change without confusing it with attendance.",
+      "steps": [
+        {
+          "title": "Read change",
+          "instruction": "Show old/new room or time with effective date and published notice."
+        },
+        {
+          "title": "View current class",
+          "instruction": "Navigate to the current occurrence; do not silently open cancelled links."
+        }
+      ],
+      "outcome": "Current class context with visible change.",
+      "invariant": "A cancellation never manufactures an attendance outcome.",
+      "recovery": "Stale links resolve current published version or a safe cancelled state.",
+      "data": "Schedule revision + occurrence + scoped communication update.",
+      "extension": false,
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "timetable",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "STW-09",
+      "area": "day",
+      "title": "Open an assigned class space",
+      "phase": 3,
+      "goal": "Find course-specific work and resources.",
+      "steps": [
+        {
+          "title": "Choose my class",
+          "instruction": "Show only current assigned offerings, grouped by subject."
+        },
+        {
+          "title": "Review class",
+          "instruction": "Open published work, permitted resources and returned feedback."
+        }
+      ],
+      "outcome": "Own course material only.",
+      "invariant": "No class roster, classmates’ marks, guardian contacts or private teacher notes.",
+      "recovery": "Ended enrollment follows explicit historical-access policy; default deny new downloads.",
+      "data": "Offering + dated Enrollment/AssignmentAudience; minimized student projection.",
+      "extension": false
+    },
+    {
+      "id": "STW-10",
+      "area": "assignments",
+      "title": "Find and organize assignments",
+      "phase": 3,
+      "goal": "Locate work by subject, status and deadline.",
+      "steps": [
+        {
+          "title": "Choose search attribute",
+          "instruction": "Default Assignment name; Enter applies search."
+        },
+        {
+          "title": "Refine results",
+          "instruction": "Fluid multiselect filters and a separate Sort drawer; Cancel does not apply changes."
+        }
+      ],
+      "outcome": "Stable, scoped results with clear status.",
+      "invariant": "Draft, Submitted, Returned, Missing and Excused are distinct; due date alone cannot mean failed.",
+      "recovery": "No results offers clear filter removal; loading does not erase a changed draft.",
+      "data": "Published Assignment + recipient + own draft/attempt summary.",
+      "extension": false
+    },
+    {
+      "id": "STW-11",
+      "area": "assignments",
+      "title": "Understand an assignment",
+      "phase": 3,
+      "goal": "Know what is required before starting.",
+      "steps": [
+        {
+          "title": "Read requirements",
+          "instruction": "Show instructions, teacher, subject, due time/timezone, submission modes and published rubric."
+        },
+        {
+          "title": "Choose action",
+          "instruction": "Start/resume draft or open the exact submitted attempt."
+        }
+      ],
+      "outcome": "Requirements and next action are clear.",
+      "invariant": "Policy revision is visible and rechecked on submission.",
+      "recovery": "Withdrawn/unpublished assignment blocks new writes and links to school help.",
+      "data": "Assignment published version + audience + SubmissionPolicy + criteria.",
+      "extension": false
+    },
+    {
+      "id": "STW-12",
+      "area": "assignments",
+      "title": "Open learning resources",
+      "phase": 3,
+      "goal": "Read authorized material safely.",
+      "steps": [
+        {
+          "title": "Choose resource",
+          "instruction": "Show title, type and size before download."
+        },
+        {
+          "title": "Open or download",
+          "instruction": "Reauthorize resource access; use short-lived scoped links only in implementation."
+        }
+      ],
+      "outcome": "Permitted resource delivered.",
+      "invariant": "No arbitrary URL fetching; no unscanned/private resource exposure.",
+      "recovery": "Expired download retries through authorization, not reuse of a permanent object URL.",
+      "data": "Learning resource link + file asset scan state + owner authorization.",
+      "extension": false
+    },
+    {
+      "id": "STW-13",
+      "area": "assignments",
+      "title": "Save and resume my draft",
+      "phase": 3,
+      "goal": "Keep unfinished work without submitting it.",
+      "steps": [
+        {
+          "title": "Write response",
+          "instruction": "Type answer and attach supported work; label Unsaved changes."
+        },
+        {
+          "title": "Save draft",
+          "instruction": "Save against expected draft version; show acknowledged saved time."
+        }
+      ],
+      "outcome": "Private draft saved, still not submitted.",
+      "invariant": "Draft belongs to student and assignment; teachers/guardians see no content by default.",
+      "recovery": "Conflict offers comparison/reload without silently overwriting either version.",
+      "data": "AssignmentDraft keyed student/assignment; optimistic version; attachment references.",
+      "extension": false
+    },
+    {
+      "id": "STW-14",
+      "area": "assignments",
+      "title": "Attach and check a file",
+      "phase": 3,
+      "goal": "Include valid work with clear readiness.",
+      "steps": [
+        {
+          "title": "Choose file",
+          "instruction": "Show configured type, size and count limits before selection."
+        },
+        {
+          "title": "Wait for checks",
+          "instruction": "Show upload/check/ready/blocked separately; retry only failed upload."
+        }
+      ],
+      "outcome": "Clean, student-owned attachment ready for review.",
+      "invariant": "Uploading is not submitted; only clean same-draft assets can enter an attempt.",
+      "recovery": "Offline, oversized, unsupported, blocked and expired uploads have distinct recovery.",
+      "data": "UploadSession, quarantined FileAsset, scan verdict and DraftAttachment.",
+      "extension": false
+    },
+    {
+      "id": "STW-15",
+      "area": "assignments",
+      "title": "Review and submit work",
+      "phase": 3,
+      "goal": "Make one deliberate, confirmed submission.",
+      "steps": [
+        {
+          "title": "Review work",
+          "instruction": "Show assignment revision, answer, ready files, effective due date and late status."
+        },
+        {
+          "title": "Submit assignment",
+          "instruction": "Recheck current rights, assignment policy and draft version; commit one attempt and receipt."
+        }
+      ],
+      "outcome": "Immutable attempt reference, number and accepted time.",
+      "invariant": "No implicit submit on upload/save; no mutable file reference that changes an accepted attempt.",
+      "recovery": "Validation preserves draft; concurrent policy/draft change requires renewed review.",
+      "data": "SubmissionAttempt snapshot + attachment snapshots + command receipt + safe audit.",
+      "extension": false
+    },
+    {
+      "id": "STW-16",
+      "area": "assignments",
+      "title": "Recover an uncertain submission",
+      "phase": 3,
+      "goal": "Find out whether the school accepted the work.",
+      "steps": [
+        {
+          "title": "See confirmation pending",
+          "instruction": "Preserve unchanged intent; disable a new submit or context switch."
+        },
+        {
+          "title": "Check status",
+          "instruction": "Reauthorize and query same command key before retry; exact replay returns the same receipt."
+        }
+      ],
+      "outcome": "Existing accepted receipt or verified safe retry.",
+      "invariant": "A timeout is not a failure; never create a second attempt speculatively.",
+      "recovery": "Still unknown stays pending with help/reference; no false success.",
+      "data": "Scoped CommandReceipt + submission attempt; immutable payload fingerprint.",
+      "extension": false
+    },
+    {
+      "id": "STW-17",
+      "area": "assignments",
+      "title": "Submit under late or extended rules",
+      "phase": 3,
+      "goal": "Understand whether work can still be accepted.",
+      "steps": [
+        {
+          "title": "Read effective deadline",
+          "instruction": "Show school-local deadline, explicit extension if granted and late policy."
+        },
+        {
+          "title": "Review allowed action",
+          "instruction": "Allow late submission only under current policy; otherwise offer extension/support request."
+        }
+      ],
+      "outcome": "Accepted on-time/late attempt or a clear closed state.",
+      "invariant": "Server clock and approved per-student extension decide lateness; requesting one never grants it.",
+      "recovery": "A deadline crossing during review forces policy re-evaluation, preserving work.",
+      "data": "Assignment policy + approved extension + server received_at and effective_due_at.",
+      "extension": false
+    },
+    {
+      "id": "STW-18",
+      "area": "assignments",
+      "title": "Revise and resubmit returned work",
+      "phase": 3,
+      "goal": "Respond to teacher feedback without losing prior evidence.",
+      "steps": [
+        {
+          "title": "Read returned feedback",
+          "instruction": "Show exact attempt and whether revisions are allowed."
+        },
+        {
+          "title": "Create revised draft",
+          "instruction": "Create from an explicit prior attempt; submit a new numbered immutable attempt."
+        }
+      ],
+      "outcome": "New attempt; previous submission and feedback remain traceable.",
+      "invariant": "Feedback return does not itself reopen submission; policy/teacher permission must allow it.",
+      "recovery": "Closed window or revoked permission blocks new attempt without altering old evidence.",
+      "data": "Attempt revision chain + reopened policy + draft + feedback version.",
+      "extension": false
+    },
+    {
+      "id": "STW-19",
+      "area": "assignments",
+      "title": "Withdraw a submission when allowed",
+      "phase": 3,
+      "goal": "Correct an accidental submission through a controlled transition.",
+      "steps": [
+        {
+          "title": "Review eligibility",
+          "instruction": "Show withdraw only when policy permits and review has not locked it."
+        },
+        {
+          "title": "Confirm withdrawal",
+          "instruction": "Recheck expected attempt version; retain evidence and explicitly offer a new draft."
+        }
+      ],
+      "outcome": "Withdrawn attempt with audit trail.",
+      "invariant": "Withdrawal does not delete evidence, reset original accepted time or silently reopen a deadline.",
+      "recovery": "If teacher review began concurrently, deny withdrawal and offer a teacher query.",
+      "data": "Attempt lifecycle/version + teacher review lock + withdrawal event.",
+      "extension": false
+    },
+    {
+      "id": "STW-20",
+      "area": "assignments",
+      "title": "Request more time",
+      "phase": 3,
+      "goal": "Ask for an extension without fabricating approval.",
+      "steps": [
+        {
+          "title": "Describe request",
+          "instruction": "Choose assignment, requested deadline and brief reason; avoid compulsory sensitive detail."
+        },
+        {
+          "title": "Submit request",
+          "instruction": "Show requested, not approved; retain current deadline until an authorized decision."
+        }
+      ],
+      "outcome": "Pending extension request and trackable reference.",
+      "invariant": "Student cannot approve own extension; a support request is not an entitlement.",
+      "recovery": "Duplicates link existing pending request; unavailable category routes to school help.",
+      "data": "Owned request + Assignment reference; authorized extension decision.",
+      "extension": true
+    },
+    {
+      "id": "STW-21",
+      "area": "assignments",
+      "title": "Continue safely on a poor connection",
+      "phase": 3,
+      "goal": "Avoid losing work or duplicating submission.",
+      "steps": [
+        {
+          "title": "Recognize connection state",
+          "instruction": "Show unsaved, locally held and server-saved states distinctly."
+        },
+        {
+          "title": "Reconnect and reconcile",
+          "instruction": "Reauthorize, reconcile draft version and check uncertain command before submitting."
+        }
+      ],
+      "outcome": "Work recovered only after a verified state check.",
+      "invariant": "No silent background submission; persistent device draft is opt-in and separately threat-modeled.",
+      "recovery": "Shared-device default keeps no sensitive persistent cache; do not promise recovery after tab closure.",
+      "data": "Memory editor + optional approved device store; draft version; command status.",
+      "extension": true
+    },
+    {
+      "id": "STW-22",
+      "area": "feedback",
+      "title": "Read returned teacher feedback",
+      "phase": 3,
+      "goal": "Understand feedback tied to my work.",
+      "steps": [
+        {
+          "title": "Open returned item",
+          "instruction": "Show attempt number and returned time, student-facing comments and released rubric."
+        },
+        {
+          "title": "Choose next step",
+          "instruction": "Revise if allowed or ask a permitted clarification."
+        }
+      ],
+      "outcome": "Actionable feedback with appropriate next action.",
+      "invariant": "Private notes, draft marks and unreleased comments never enter student DTOs.",
+      "recovery": "Feedback withdrawn/revised is reauthorized; show latest published revision and prior release policy.",
+      "data": "Returned FeedbackPublication + attempt + student-visible rubric.",
+      "extension": false
+    },
+    {
+      "id": "STW-23",
+      "area": "feedback",
+      "title": "Understand criteria and subject progress",
+      "phase": 3,
+      "goal": "See evidence of learning without misleading averages.",
+      "steps": [
+        {
+          "title": "Read criteria",
+          "instruction": "Explain score/outcome, maximum and published assessment scale."
+        },
+        {
+          "title": "Open evidence",
+          "instruction": "Link to returned tasks and published report items."
+        }
+      ],
+      "outcome": "Transparent evidence, not a synthetic rank.",
+      "invariant": "Zero, Not assessed, Absent and Exempt remain different; no denominator inventing.",
+      "recovery": "No released evidence gets a useful empty state.",
+      "data": "Published criteria + released outcome projections; no private gradebook.",
+      "extension": false
+    },
+    {
+      "id": "STW-24",
+      "area": "feedback",
+      "title": "Ask about feedback",
+      "phase": 3,
+      "goal": "Ask the responsible teacher a focused question.",
+      "steps": [
+        {
+          "title": "Select feedback",
+          "instruction": "Carry exact task/attempt reference into a permitted conversation."
+        },
+        {
+          "title": "Send question",
+          "instruction": "Review recipient and text; only accepted delivery state is reported."
+        }
+      ],
+      "outcome": "Scoped question receipt.",
+      "invariant": "No arbitrary staff/peer recipient search or guardian impersonation.",
+      "recovery": "If messaging is unavailable, route to a school-owned request.",
+      "data": "Conversation grant + feedback reference + message receipt.",
+      "extension": false
+    },
+    {
+      "id": "STW-25",
+      "area": "attendance",
+      "title": "View my recorded attendance",
+      "phase": 2,
+      "goal": "See what the school actually recorded.",
+      "steps": [
+        {
+          "title": "Select date/session",
+          "instruction": "Show exact subject/time and Present/Absent/Late/Excused or Awaiting submission."
+        },
+        {
+          "title": "Read details",
+          "instruction": "Show recorded revision and school-local date."
+        }
+      ],
+      "outcome": "Accurate self-only record.",
+      "invariant": "No parent/staff data; unsubmitted attendance is never absence; avoid unsupported daily aggregates.",
+      "recovery": "Permission change clears records; corrected outcome has traceable published details.",
+      "data": "AttendanceSession + roster member + current authorized mark/revision.",
+      "extension": false
+    },
+    {
+      "id": "STW-26",
+      "area": "attendance",
+      "title": "Query an attendance discrepancy",
+      "phase": 2,
+      "goal": "Ask the school to review an apparent mistake.",
+      "steps": [
+        {
+          "title": "Choose record",
+          "instruction": "Reference a submitted session and give a bounded explanation."
+        },
+        {
+          "title": "Submit for review",
+          "instruction": "Show Pending school review and tracking reference."
+        }
+      ],
+      "outcome": "Owned review request, original record unchanged.",
+      "invariant": "Student cannot directly edit attendance or approve absence.",
+      "recovery": "Duplicate open query links existing request; final decision remains school-owned.",
+      "data": "Student request + exact AttendanceRecord reference; optional authorized correction link.",
+      "extension": true
+    },
+    {
+      "id": "STW-27",
+      "area": "communication",
+      "title": "Read a school notice",
+      "phase": 2,
+      "goal": "Read updates intended for my enrollment.",
+      "steps": [
+        {
+          "title": "Open notice",
+          "instruction": "Show title, sender, audience-safe description and publication time."
+        },
+        {
+          "title": "Read permitted attachments",
+          "instruction": "Reauthorize attachments; show deadlines/actions explicitly."
+        }
+      ],
+      "outcome": "Published notice read.",
+      "invariant": "Read does not mean acknowledged or consented.",
+      "recovery": "Retracted notice becomes unavailable with safe context.",
+      "data": "Published notice version + audience membership + file asset.",
+      "extension": false
+    },
+    {
+      "id": "STW-28",
+      "area": "communication",
+      "title": "Acknowledge a notice",
+      "phase": 2,
+      "goal": "Explicitly confirm the exact notice version was read.",
+      "steps": [
+        {
+          "title": "Review notice",
+          "instruction": "Show what acknowledgement means."
+        },
+        {
+          "title": "Acknowledge",
+          "instruction": "Commit one response per student and notice version."
+        }
+      ],
+      "outcome": "Timestamped acknowledgement.",
+      "invariant": "Acknowledgement never supplies guardian consent or event permission.",
+      "recovery": "Revised notice may need fresh acknowledgement; stale version prompts review.",
+      "data": "NoticeAcknowledgement unique recipient/notice_version.",
+      "extension": false
+    },
+    {
+      "id": "STW-29",
+      "area": "communication",
+      "title": "Message a permitted teacher",
+      "phase": 2,
+      "goal": "Communicate within the school-approved channel.",
+      "steps": [
+        {
+          "title": "Open conversation",
+          "instruction": "Use explicit assignment/enrollment-specific participant grant."
+        },
+        {
+          "title": "Compose and send",
+          "instruction": "Review bounded text and safe attachments; clear pending/sent state."
+        }
+      ],
+      "outcome": "Accepted message reference.",
+      "invariant": "No open peer messaging or access to classmates; block/report route is school-owned.",
+      "recovery": "Participant revocation clears thread; unresolved sends are checked before retry.",
+      "data": "ConversationGrant + participant + Message + DeliveryAttempt.",
+      "extension": false
+    },
+    {
+      "id": "STW-30",
+      "area": "communication",
+      "title": "Recover a message delivery problem",
+      "phase": 2,
+      "goal": "Know whether a message was accepted or failed.",
+      "steps": [
+        {
+          "title": "Inspect status",
+          "instruction": "Distinguish accepted by school, pending and definitive failure."
+        },
+        {
+          "title": "Recover deliberately",
+          "instruction": "Check same intent first; resend only after known failure under current grant."
+        }
+      ],
+      "outcome": "Single traceable message.",
+      "invariant": "Browser success is not staff read confirmation.",
+      "recovery": "Show contact/help for persistent failure without exposing provider details.",
+      "data": "Message command receipt + delivery attempt safe status.",
+      "extension": false
+    },
+    {
+      "id": "STW-31",
+      "area": "calendar",
+      "title": "Review published events and assessments",
+      "phase": 3,
+      "goal": "Plan around the school schedule.",
+      "steps": [
+        {
+          "title": "Browse agenda",
+          "instruction": "Show school-local dates, permitted event details and assessment schedule."
+        },
+        {
+          "title": "Open event",
+          "instruction": "Read changes, venue, participation requirements and contact."
+        }
+      ],
+      "outcome": "Clear upcoming event context.",
+      "invariant": "Draft assessment schedules remain hidden; published changes are visible.",
+      "recovery": "Cancelled events are labelled and no longer accept interest actions.",
+      "data": "CalendarEvent publication + audience + assessment schedule projection.",
+      "extension": false
+    },
+    {
+      "id": "STW-32",
+      "area": "calendar",
+      "title": "Express event interest",
+      "phase": 3,
+      "goal": "Tell school about interest without bypassing consent.",
+      "steps": [
+        {
+          "title": "Check eligibility",
+          "instruction": "Show capacity/age/class rules and whether guardian permission is required."
+        },
+        {
+          "title": "Respond",
+          "instruction": "Record student interest and explicitly show Pending guardian/school approval where required."
+        }
+      ],
+      "outcome": "Interest/withdrawal receipt.",
+      "invariant": "Student interest is not guardian consent, fee payment or confirmed allocation.",
+      "recovery": "Capacity and eligibility are rechecked; waitlist never says confirmed.",
+      "data": "EventInterest + eligibility rule; service-owned allocation and separate ConsentRequest.",
+      "extension": true
+    },
+    {
+      "id": "STW-33",
+      "area": "results",
+      "title": "View my published report",
+      "phase": 4,
+      "goal": "Read official released results.",
+      "steps": [
+        {
+          "title": "Choose published report",
+          "instruction": "List permitted academic year/term versions."
+        },
+        {
+          "title": "Read outcomes",
+          "instruction": "Show subject, score/outcome, scale and teacher comments released to students."
+        }
+      ],
+      "outcome": "Own published report view.",
+      "invariant": "No unreleased marks, moderation, peer ranks or misleading zero for Exempt.",
+      "recovery": "Publication withdrawal and access change reauthorize on every open.",
+      "data": "AssessmentReport publication + student results + scale version.",
+      "extension": false
+    },
+    {
+      "id": "STW-34",
+      "area": "results",
+      "title": "Download a published report",
+      "phase": 4,
+      "goal": "Keep an authorized report copy.",
+      "steps": [
+        {
+          "title": "Review document",
+          "instruction": "Show school, term, version and issued date."
+        },
+        {
+          "title": "Download",
+          "instruction": "Reauthorize at file request; expire download link."
+        }
+      ],
+      "outcome": "Exact released report version.",
+      "invariant": "A UI link is not file authorization; never export another student.",
+      "recovery": "Unavailable/expired document offers recheck, not permanent public URL.",
+      "data": "Document render reference + publication version + authorized asset.",
+      "extension": false
+    },
+    {
+      "id": "STW-35",
+      "area": "results",
+      "title": "Ask about a result",
+      "phase": 4,
+      "goal": "Request clarification within school policy.",
+      "steps": [
+        {
+          "title": "Choose outcome",
+          "instruction": "Carry term, subject and report version."
+        },
+        {
+          "title": "Send query",
+          "instruction": "Explain issue; route to authorized assessment owner."
+        }
+      ],
+      "outcome": "Query reference with school response state.",
+      "invariant": "Student cannot edit a grade or reopen moderation.",
+      "recovery": "If formal review window closed, show policy and school-help path.",
+      "data": "Owned request + report item version + owner decision.",
+      "extension": false
+    },
+    {
+      "id": "STW-36",
+      "area": "requests",
+      "title": "Create a school support request",
+      "phase": 2,
+      "goal": "Ask school for non-emergency help.",
+      "steps": [
+        {
+          "title": "Choose category",
+          "instruction": "Show only student-allowed categories and expected school response window if configured."
+        },
+        {
+          "title": "Review and send",
+          "instruction": "State visible recipient team and submit bounded text."
+        }
+      ],
+      "outcome": "Pending request reference.",
+      "invariant": "No claim of continuous emergency monitoring; show school emergency contact when configured.",
+      "recovery": "Unknown submission checks same intent; validation preserves input.",
+      "data": "Owned request + category routing + command receipt.",
+      "extension": false
+    },
+    {
+      "id": "STW-37",
+      "area": "requests",
+      "title": "Track or withdraw my request",
+      "phase": 2,
+      "goal": "Know what happens next.",
+      "steps": [
+        {
+          "title": "Open own request",
+          "instruction": "View student-visible status history and requested follow-up."
+        },
+        {
+          "title": "Respond or withdraw",
+          "instruction": "Reply or withdraw only in permitted state with expected version."
+        }
+      ],
+      "outcome": "Current status and next action.",
+      "invariant": "Internal staff notes and other requesters remain private.",
+      "recovery": "Concurrent resolution blocks outdated withdrawal; reload current version.",
+      "data": "Request + public timeline projection + optimistic version.",
+      "extension": false
+    },
+    {
+      "id": "STW-38",
+      "area": "requests",
+      "title": "Request a profile correction",
+      "phase": 2,
+      "goal": "Correct an official record through school review.",
+      "steps": [
+        {
+          "title": "Choose allowed field",
+          "instruction": "Display existing permitted field and proposed correction."
+        },
+        {
+          "title": "Submit change request",
+          "instruction": "Explain school approval is required; contact verification follows Access policy."
+        }
+      ],
+      "outcome": "Pending correction, official data unchanged.",
+      "invariant": "No student self-edit of identity, guardian links, enrollment, roles or grants.",
+      "recovery": "Duplicate/stale source values require current review.",
+      "data": "Student profile projection + proposed change request; owner-only update.",
+      "extension": false
+    },
+    {
+      "id": "STW-39",
+      "area": "services",
+      "title": "Review my library loans",
+      "phase": 6,
+      "goal": "Know what is borrowed and when it is due.",
+      "steps": [
+        {
+          "title": "Open loans",
+          "instruction": "Show own current loans, due dates and service policy."
+        },
+        {
+          "title": "Open item",
+          "instruction": "View return instructions and permitted renewal action."
+        }
+      ],
+      "outcome": "Own circulation record.",
+      "invariant": "No other borrower history; fines if shown are read-only service data, not payer authority.",
+      "recovery": "Unreturned/corrected records use library-help path.",
+      "data": "LibraryLoan + item catalogue + own borrower mapping.",
+      "extension": false
+    },
+    {
+      "id": "STW-40",
+      "area": "services",
+      "title": "Request a library renewal",
+      "phase": 6,
+      "goal": "Ask for more borrowing time.",
+      "steps": [
+        {
+          "title": "Review rules",
+          "instruction": "Show eligibility, hold/renewal limits and proposed due date from library."
+        },
+        {
+          "title": "Request renewal",
+          "instruction": "Recheck current loan/holds; show approved only if owner confirms."
+        }
+      ],
+      "outcome": "Confirmed renewal or pending/denied response.",
+      "invariant": "Student cannot set loan due date.",
+      "recovery": "Concurrent return/hold blocks stale renewal and preserves history.",
+      "data": "LibraryLoan version + hold policy + renewal decision.",
+      "extension": false
+    },
+    {
+      "id": "STW-41",
+      "area": "services",
+      "title": "Join an enabled activity",
+      "phase": 6,
+      "goal": "Explore eligible activities and request a place.",
+      "steps": [
+        {
+          "title": "Review activity",
+          "instruction": "Show schedule, eligibility, places and any required guardian consent."
+        },
+        {
+          "title": "Request place",
+          "instruction": "Record interest; confirm only after allocation and required approvals."
+        }
+      ],
+      "outcome": "Requested/waitlisted/confirmed state from owner.",
+      "invariant": "Interest is separate from guardian consent, payment and attendance.",
+      "recovery": "Full activity offers waitlist only if enabled; changed schedule requires new review.",
+      "data": "ActivityOffer + registration + allocation + Consent reference.",
+      "extension": true
+    },
+    {
+      "id": "STW-42",
+      "area": "services",
+      "title": "Read my transport assignment",
+      "phase": 6,
+      "goal": "Know my assigned service and published updates.",
+      "steps": [
+        {
+          "title": "Open transport",
+          "instruction": "Show assigned route/stop and school contact."
+        },
+        {
+          "title": "Read update",
+          "instruction": "Show published delay/cancellation text with time and source."
+        }
+      ],
+      "outcome": "Current assigned service guidance.",
+      "invariant": "No driver private data, other pupils, live location promise or self-changing pickup authority.",
+      "recovery": "Unassigned/unavailable service routes to school; urgent change uses official contact.",
+      "data": "TransportAssignment + published service update; no location stream.",
+      "extension": false
+    },
+    {
+      "id": "STW-43",
+      "area": "services",
+      "title": "Request student wellbeing support",
+      "phase": 6,
+      "goal": "Ask the authorized school team for support.",
+      "steps": [
+        {
+          "title": "Understand visibility",
+          "instruction": "Show who receives the request and school contact for urgent help."
+        },
+        {
+          "title": "Send minimal request",
+          "instruction": "Allow a brief description without compulsory health details; no confidentiality guarantee."
+        }
+      ],
+      "outcome": "Restricted request receipt.",
+      "invariant": "No automated diagnosis, risk score, covert parent disclosure or full health-record access.",
+      "recovery": "Unavailable channel clearly routes to school contact; do not imply 24/7 monitoring.",
+      "data": "Restricted support request + purpose grants + student-safe timeline.",
+      "extension": true
+    },
+    {
+      "id": "STW-44",
+      "area": "account",
+      "title": "Manage my sessions",
+      "phase": 2,
+      "goal": "Protect my school account on shared devices.",
+      "steps": [
+        {
+          "title": "Review sessions",
+          "instruction": "Show only own session labels/time; no secrets or raw device identifiers."
+        },
+        {
+          "title": "Revoke or sign out",
+          "instruction": "Reauthenticate when required; clear local protected state."
+        }
+      ],
+      "outcome": "Selected sessions revoked or current session ended.",
+      "invariant": "Keep sign out separate from identity block; server revocation is authoritative.",
+      "recovery": "Already-revoked is idempotent; failed revoke must not say completed.",
+      "data": "Access session + audit + revocation command.",
+      "extension": false
+    },
+    {
+      "id": "STW-45",
+      "area": "account",
+      "title": "Set preferences or request contact change",
+      "phase": 2,
+      "goal": "Adjust communication/accessibility choices safely.",
+      "steps": [
+        {
+          "title": "Choose preference",
+          "instruction": "Readable text, notification categories and shared-device preference; required school notices labelled."
+        },
+        {
+          "title": "Save or request change",
+          "instruction": "Preferences save directly; identity/contact changes require school/access verification."
+        }
+      ],
+      "outcome": "Saved preference or pending verified-change request.",
+      "invariant": "No guardian link changes; required security notices cannot be silently disabled.",
+      "recovery": "Invalid/failed save keeps prior preferences and announces failure.",
+      "data": "Account preference + school policy; verified-change request.",
+      "extension": false
+    },
+    {
+      "id": "STW-46",
+      "area": "account",
+      "title": "Get help with privacy or accessibility",
+      "phase": 2,
+      "goal": "Find clear help without collecting unnecessary detail.",
+      "steps": [
+        {
+          "title": "Choose help",
+          "instruction": "Offer accessibility issue, account help or privacy enquiry."
+        },
+        {
+          "title": "Send request",
+          "instruction": "Show school contact/recipient and explicit pending response."
+        }
+      ],
+      "outcome": "Help reference or direct contact route.",
+      "invariant": "No invented deletion promise, statutory deadline or automatic disclosure to another account.",
+      "recovery": "Failed delivery remains visible; alternative contact shown when configured.",
+      "data": "School support configuration + minimum request metadata.",
+      "extension": false
+    },
+    {
+      "id": "STW-47",
+      "area": "assistant",
+      "title": "Ask a learning question with sources",
+      "phase": 7,
+      "goal": "Understand permitted learning material.",
+      "steps": [
+        {
+          "title": "Ask about a source",
+          "instruction": "Scope to authorized published resources; show what will be used."
+        },
+        {
+          "title": "Review answer",
+          "instruction": "Cite sources, state uncertainty and allow feedback; follow teacher/school assessment policy."
+        }
+      ],
+      "outcome": "Advisory explanation with source links.",
+      "invariant": "No autonomous submission, grading, attendance or private learner profiling; untrusted content cannot change permissions.",
+      "recovery": "Missing evidence says unavailable; blocked assessment use offers permitted learning help.",
+      "data": "Permission-filtered retrieval + redacted evidence + approved model/provider contract.",
+      "extension": false
+    }
+  ],
+  "timetable_revision": "TT-01"
+}

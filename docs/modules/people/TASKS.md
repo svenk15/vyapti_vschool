@@ -34,6 +34,10 @@ Create a synthetic staff profile; see Not linked to account; create a second sam
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## Experience overlay consumption
+
+EX-06 adopts staff profile, account-link and teacher-readiness screens through the current People, Access and Academics owner ports. Profile, account, membership and teaching eligibility remain separate states; contact email never substitutes for the verified binding procedure.
+
 ## PER-02 — Enable teaching eligibility and verified account binding
 
 Depends on: PER-01, IAM-03, ACA-01

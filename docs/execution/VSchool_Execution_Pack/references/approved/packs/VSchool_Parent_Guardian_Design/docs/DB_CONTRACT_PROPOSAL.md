@@ -1,0 +1,37 @@
+# Proposed database contract worksheet
+
+**This is a physical-design proposal for reconciliation, not a description of tables already present.** The live schema was not supplied for this pack. Preserve the project’s `vs_` naming convention and bind these responsibilities to existing tables before creating anything. Do not add duplicate relationship, request, consent or payment tables because their names differ here.
+
+## Candidate records and constraints
+
+| Proposed owning record / candidate `vs_` name | Required stored data / type guidance | Keys, constraints and lifecycle |
+|---|---|---|
+| GuardianRelationship / `vs_guardian_relationship` | UUID id, organization_id, student_id, verified_adult/person reference, nullable bound account_id before activation, relationship_type, status, effective_from/to, verification_ref, bigint version, timestamps | Validate institution/student pairing against Students; adult/account binding uses Access/People evidence. No uniqueness by email alone. Preserve relationship history and prevent conflicting active duplicate bindings |
+| ChildPurposeGrant / `vs_guardian_purpose_grant` | UUID id, relationship_id, organization_id, school_id/branch scope, purpose key, active_from/to, revoked_at, bigint version | Composite scope FK or equivalent owner invariant; indexed relationship+purpose+effective scope; no implied wildcard. Transfer/branch change requires reauthorization rather than automatic scope expansion |
+| FamilyInvitation / existing Access invitation or owner extension | Invitation ID, relationship ID, intended account/binding reference, hashed token, expiry, consumed/revoked/delivery-failed timestamps, version | Reuse IAM invitation infrastructure where appropriate; single-use atomic consume; token secret never stored raw in audit; verified relationship is separate from mailbox proof |
+| FamilyRequest / `vs_family_request` | UUID id, organization_id, school_id, student_id, originator_account_id, category, status, version, created_at, owner_decision_ref, safe subject; protected minimal payload under retention policy | Read by originator and child-purpose rule, not household equality. Allowed versioned transitions; no destructive deletion of reviewed evidence |
+| AbsenceExplanation / `vs_family_absence_explanation` | request_id, from_date/to_date as school-local DATE, reason_code, minimal bounded note, optional restricted evidence pointer | from_date <= to_date; no update to attendance marks; evidence objects use separate ACL/scan/retention. One request transaction and replay receipt |
+| CommandReceipt / reuse owner idempotency record | actor/scope, command type, idempotency key hash or protected key, canonical intent digest, outcome reference, created/expiry timestamps | Uniqueness scoped to command+actor+tenant+key; digest belongs in protected receipt store, not broad audit; same key/different intent rejected |
+| NoticeAcknowledgement / `vs_communication_acknowledgement` | notice_id, notice_version, account_id, child/audience reference, acknowledged_at | Unique explicit response per relevant audience/version/account; read/open/delivery events are not acknowledgements |
+| ConsentDecision / `vs_consent_decision` | request_id, document_version, signer_policy_version, signer_account_id, organization/child scope, decision enum, recorded_at, supersedes_decision_id | Append traceable decision changes; never overwrite previous signatures; derive readiness from all required valid current responses |
+| NotificationPreference / `vs_communication_preference` | account_id, organization/child/purpose/category scope, permitted channel, preference/version | A preference cannot create access or make an unverified channel safe; service-required notices use explicit policy |
+| PaymentOrder / existing Finance owner record | organization/issuer, invoice_id/version, payer_account_id, child scope, currency code, exact amount in minor units, state, provider_order_ref, command reference, timestamps | Current mandate and payable state checked atomically; pending-order concurrency rule; never trust client amount or use cross-school basket |
+| PaymentAttempt / verified event / allocation / receipt | distinct IDs, order reference, verified provider event ID, exact amount/currency, signature/reconciliation outcome, ledger allocation IDs, receipt number/version | Provider event uniqueness; mismatches quarantine/reconcile; settled allocation+receipt atomic; refund reversals preserve original history |
+
+All table names above are candidates except any subsequently matched to the real schema. UUID/enum/text/date/timestamptz/bigint choices require final bounded lengths, nullability, defaults and migration review. Do not introduce a generic JSON blob as a replacement for indexed relational scope, state and constraints.
+
+## Query and join contracts
+
+1. **My children:** authenticated global Account → active verified Relationship → active branch/purpose grants → permitted Student/Enrollment summary. Do not begin from a global Student search. Select only display name, safe reference, class, school/branch, timezone and allowed capabilities.
+2. **Attendance:** authorized child/branch → exact AttendanceSession → child’s frozen roster entry → effective submitted record/revision. Join on both owner reference and scope; do not infer a mark from an absence of rows. Submitted/cancelled status filters and any future aggregation denominator are explicit.
+3. **Explanation history:** originator account + child + request purpose → FamilyRequest → AbsenceExplanation → approved safe owner response. The join does not disclose another guardian’s notes. Atomic withdrawal updates expected version and appends an audit event.
+4. **Family thread:** live conversation participant and child-purpose grant → Message/version + delivery attempt state. Recipients are derived from current school-approved grants and rechecked on actual send/delivery.
+5. **Learning/results:** authorized child + enrollment/audience → published Assignment/returned FeedbackRevision or PublishedResultVersion → authorized artifact. Never query all mark rows and hide draft columns only in the browser.
+6. **Consent:** current child-purpose signer → ConsentRequest/document version → effective signer policy → immutable decisions. Return the current actor’s decision plus safe overall status; avoid disclosing restricted signer identities.
+7. **Payment:** live payer mandate → current Invoice/version + adjustments + allocated settled ledger amounts → server-calculated balance → one PaymentOrder → verified provider event → ledger allocation/Receipt. Order status reads use current permitted financial scope; operational reconciliation continues under its separate trusted owner even if a parent grant is revoked.
+
+## Index/constraint review before code
+
+Record exact SQL, cardinality and explain plans for active actor→relationship→purpose queries; child/branch/date attendance windows; originator+child+status request lists; notice/audience/version acknowledgements; current signer decisions; issuer/invoice/version/pending order; provider event deduplication. Composite unique/FK constraints must prevent cross-institution references. Register each table’s global/institution/branch scope class and its current TEN-03 policy requirements. Use the intended runtime role in functional and load evidence.
+
+No migration, RLS policy, provider integration or real database test is included in this design pack.

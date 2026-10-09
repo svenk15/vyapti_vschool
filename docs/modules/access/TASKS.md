@@ -34,6 +34,10 @@ Provision a synthetic school; sign in; see its name/timezone; sign out; verify t
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## Experience overlay consumption
+
+EX-04 adopts current sign-in/account behavior, EX-05 maps school settings, and EX-06 maps membership/invitation access. These are presentation slices over the existing Access facades and do not add roles, trust paths or browser operator authority. Use [the reconciled live contracts](../../execution/CONTRACT_DIFF.md); retain all token-version, recovery, membership and generic-failure rules above.
+
 ## IAM-04 — Institution trust modes, email invitations and password recovery
 
 Depends on: IAM-02, IAM-03, TEN-02

@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const queue=JSON.parse(fs.readFileSync(path.join(root,'queue.json'),'utf8'));
+const ids=new Set(queue.map(x=>x.id));
+if(ids.size!==queue.length)throw Error('Duplicate task ids');
+for(const t of queue)for(const d of t.depends_on)if(!ids.has(d))throw Error(`Missing dependency ${d}`);
+const current=queue.find(t=>t.status==='IN_PROGRESS');
+const next=current??queue.find(t=>t.status==='NOT_STARTED'&&t.depends_on.every(d=>queue.find(x=>x.id===d)?.status==='VERIFIED'));
+console.log(next?JSON.stringify(next,null,2):'No ready task in this batch. Read blockers and canonical module CURRENT_STATE; do not bypass dependencies.');

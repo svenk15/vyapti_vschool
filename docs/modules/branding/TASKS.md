@@ -20,6 +20,10 @@ Open Greenwood North, Greenwood South and Aster Central sign-in URLs. Compare id
 
 Start/check the server, give URL and steps, request user review, and mark review PENDING. Do not mark human acceptance until actual feedback.
 
+## Experience overlay consumption
+
+EX-05 adopts the approved branding workspace through the existing draft, isolated preview, publish, rollback and public-brand contracts. Prototype branding never grants tenant access, and no presentation change broadens host verification or asset policy.
+
 ## BRD-02 — Publish authorized school branding and connect real sign-in
 
 Depends on: TEN-02, IAM-03, BRD-01

@@ -35,6 +35,10 @@ Create AY2026, Grade 8, Section A and Mathematics; add two adjacent terms; try a
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## Experience overlay consumption
+
+EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.
+
 ## ACA-02 — Publish calendar and open or close the year
 
 Depends on: ACA-01

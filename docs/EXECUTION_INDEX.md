@@ -1,5 +1,11 @@
 # Phase 1 execution index — v4.6
 
+## Approved experience overlay — revision 2 (9 October 2026)
+
+The current implementation overlay is EX-00–EX-15 in [the execution pack](execution/VSchool_Execution_Pack/modules/experience/TASKS.md). It reuses the Phase 1 owner slices below and does not change their historical verification or human-review evidence. [CONTRACT_DIFF](execution/CONTRACT_DIFF.md) is authoritative for existing, partial and missing operations; [ROUTE_REFERENCE_MAP](execution/ROUTE_REFERENCE_MAP.md) pins the six approved visual references.
+
+Execution begins with EX-00 reconciliation, then EX-01 visual capture and EX-02 shared navigation. Subsequent EX tasks consume only currently implemented owner operations. Pending human review does not block an otherwise verified EX dependency. TEN-03 restricted-role/RLS proof and DS-02 native accessibility remain production-release gates and are not absorbed into this visual queue.
+
 This index defines the complete currently authorized Phase 1 task scope (30 tasks in dependency order). Module CURRENT_STATE owns implementation evidence and human review. Human review PENDING or NOT_REQUESTED does not block dependent implementation; only failed automated prerequisites, unresolved technical/security decisions, or unavailable required access can block work. Record human review truthfully and keep release gates outstanding until their evidence exists. New tenancy, branding and shared UX are first-release foundations. Later product modules remain design-gated and out of scope.
 
 | Task | Module | Demo outcome | Dependencies |

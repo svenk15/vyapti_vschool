@@ -1,0 +1,14 @@
+export type AcademicYearStatus='DRAFT'|'OPEN'|'CLOSED';
+export type AcademicTermRecord=Readonly<{id:string;code:string;name:string;startsOn:string;endsOn:string}>;
+export type AcademicCalendarException=Readonly<{id:string;date:string;campusId:string|null;campusName:string|null;isTeachingDay:boolean;label:string}>;
+export type AcademicCalendarRevision=Readonly<{id:string;number:number;teachingWeekdays:readonly number[];publishedAt:string;exceptions:readonly AcademicCalendarException[]}>;
+export type AcademicCalendar=Readonly<{id:string;version:number;currentRevisionId:string|null;revisions:readonly AcademicCalendarRevision[]}>;
+export type AcademicYearRecord=Readonly<{id:string;version:number;code:string;name:string;startsOn:string;endsOn:string;status:AcademicYearStatus;terms:readonly AcademicTermRecord[];calendarId:string;calendar:AcademicCalendar|null}>;
+export type AcademicReference=Readonly<{id:string;code:string;name:string;active:boolean}>;
+export type AcademicSectionRecord=Readonly<{id:string;code:string;name:string;yearId:string;gradeId:string;gradeName:string;campusId:string|null;campusName:string|null;active:boolean}>;
+export type AcademicsWorkspace=Readonly<{years:readonly AcademicYearRecord[];grades:readonly AcademicReference[];subjects:readonly AcademicReference[];campuses:readonly AcademicReference[];sections:readonly AcademicSectionRecord[]}>;
+export type AcademicCommandResult=Readonly<{id:string;version:number;code:string;name:string;replayed:boolean}>;
+export type AcademicCalendarEvaluation=Readonly<{date:string;campusId:string|null;isTeachingDay:boolean;source:'CAMPUS_EXCEPTION'|'SCHOOL_EXCEPTION'|'WEEKLY_RULE';revisionId:string;revisionNumber:number;label:string|null}>;
+export type AcademicCalendarPublication=Readonly<{calendarId:string;version:number;revisionId:string;revisionNumber:number;replayed:boolean}>;
+export type AcademicYearTransition=Readonly<{yearId:string;version:number;status:AcademicYearStatus;replayed:boolean}>;
+export type CourseOfferingRecord=Readonly<{id:string;version:number;code:string;active:boolean;yearId:string;section:{id:string;code:string;name:string;gradeName:string};subject:{id:string;code:string;name:string};assignment:{id:string;teacherId:string;teacherName:string;validFrom:string;validTo:string;version:number}|null}>;

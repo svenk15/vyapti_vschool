@@ -1,0 +1,2783 @@
+{
+  "edition": "01",
+  "status": "UX_DESIGN_PROPOSAL",
+  "baseline": "Operator 03.9 and School Administrator 01",
+  "scope": "Teacher persona; documented module blueprint with clearly marked proposed extensions",
+  "modules": [
+    {
+      "id": "access",
+      "title": "Account & access",
+      "icon": "shield",
+      "phase": 1,
+      "description": "Enter the right school workspace and keep your account secure.",
+      "owner": "access, tenancy"
+    },
+    {
+      "id": "today",
+      "title": "My teaching day",
+      "icon": "home",
+      "phase": 1,
+      "description": "See the next class and the work that needs attention.",
+      "owner": "academics, attendance"
+    },
+    {
+      "id": "classes",
+      "title": "My classes",
+      "icon": "book",
+      "phase": 1,
+      "description": "See assigned teaching contexts and only the pupil facts needed for them.",
+      "owner": "academics, students"
+    },
+    {
+      "id": "attendance",
+      "title": "Attendance",
+      "icon": "check",
+      "phase": 1,
+      "description": "Record every pupil deliberately, submit once and know the outcome.",
+      "owner": "attendance"
+    },
+    {
+      "id": "communication",
+      "title": "Messages & families",
+      "icon": "mail",
+      "phase": 2,
+      "description": "Communicate through approved audiences and child-specific relationships.",
+      "owner": "communication, guardians"
+    },
+    {
+      "id": "planning",
+      "title": "Timetable & cover",
+      "icon": "calendar",
+      "phase": 3,
+      "description": "Understand published schedules and explicit temporary teaching assignments.",
+      "owner": "academics"
+    },
+    {
+      "id": "learning",
+      "title": "Teaching & learning",
+      "icon": "book",
+      "phase": 3,
+      "description": "Plan, assign, review submissions and return useful feedback.",
+      "owner": "learning, documents"
+    },
+    {
+      "id": "assessments",
+      "title": "Assessments",
+      "icon": "chart",
+      "phase": 4,
+      "description": "Enter marks carefully and participate in controlled moderation and publication.",
+      "owner": "assessments"
+    },
+    {
+      "id": "wellbeing",
+      "title": "Student support",
+      "icon": "heart",
+      "phase": 6,
+      "description": "Refer concerns through a restricted, accountable route.",
+      "owner": "health, safeguarding"
+    },
+    {
+      "id": "self-service",
+      "title": "My requests",
+      "icon": "people",
+      "phase": 6,
+      "description": "Request leave and review your own staff information without administrative authority.",
+      "owner": "people operations, access"
+    },
+    {
+      "id": "resources",
+      "title": "Resources & facilities",
+      "icon": "file",
+      "phase": 6,
+      "description": "Borrow, request or book permitted teaching resources.",
+      "owner": "library, inventory, facilities"
+    },
+    {
+      "id": "duties",
+      "title": "Assigned duties",
+      "icon": "school",
+      "phase": 6,
+      "description": "Carry out explicitly assigned school duties with minimal pupil data.",
+      "owner": "operations, transport"
+    },
+    {
+      "id": "assistant",
+      "title": "Teaching assistant",
+      "icon": "spark",
+      "phase": 7,
+      "description": "Use evidence-based drafts and retain human responsibility for every action.",
+      "owner": "assistant"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "TEA-01",
+      "area": "access",
+      "title": "Sign in to the school workspace",
+      "phase": 1,
+      "capability": "active account + branch membership",
+      "entry": "sign-in",
+      "steps": [
+        {
+          "title": "School entry",
+          "help": "Published school branding helps recognition; it does not grant access.",
+          "fields": [
+            {
+              "name": "email",
+              "label": "Email address",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "password",
+              "label": "Password",
+              "type": "password",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Authorized workspace",
+          "help": "Skip branch selection when only one branch is permitted.",
+          "fields": [
+            {
+              "name": "branch",
+              "label": "Branch",
+              "type": "select",
+              "options": [
+                "Whitefield",
+                "Indiranagar"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "My Teaching Day opens in the authorized branch.",
+      "rule": "Resolve permissions server-side. A Teacher role alone does not establish employee identity, dated eligibility or class assignment.",
+      "recovery": "Generic credential rejection; revoked/suspended access exposes no roster. Safe return URLs only.",
+      "data": "Access reads global UserAccount, branch SchoolMembership/RoleGrant and institution/branch state; creates verified session/context.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-02",
+      "area": "access",
+      "title": "Activate or recover a teacher account",
+      "phase": 1,
+      "capability": "Access activation/recovery policy",
+      "entry": "flow/TEA-02",
+      "steps": [
+        {
+          "title": "Account help",
+          "help": "Use the verified channel allowed by the institution and account-wide policy.",
+          "fields": [
+            {
+              "name": "email",
+              "label": "Account email",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "need",
+              "label": "I need to",
+              "type": "select",
+              "options": [
+                "Activate invited account",
+                "Reset password"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next steps",
+          "help": "The public response does not disclose whether the account exists.",
+          "fields": [
+            {
+              "name": "ack",
+              "label": "I will use the school’s verified recovery instructions.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A generic acknowledgement explains the permitted next step.",
+      "rule": "Existing operator-issued and email-issued paths coexist. A stricter active institution can prevent an account-wide email reset at issue and consumption.",
+      "recovery": "Expired/revoked/consumed/failed-delivery tokens fail safely. Resend and compromised-inbox recovery use their documented owner workflows.",
+      "data": "Access owns token hashes, policy evaluation, single-use consume, session invalidation and sanitized delivery evidence. No secrets in drafts or audit.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-03",
+      "area": "access",
+      "title": "Switch branch or leave the workspace",
+      "phase": 1,
+      "capability": "active target-branch grant / own session",
+      "entry": "account",
+      "steps": [
+        {
+          "title": "Destination",
+          "help": "Only authorized branches appear.",
+          "fields": [
+            {
+              "name": "destination",
+              "label": "Destination",
+              "type": "select",
+              "options": [
+                "Whitefield",
+                "Indiranagar",
+                "Sign out"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Unsaved work",
+          "help": "An unsubmitted attendance draft is held in memory only in Phase 1.",
+          "fields": [
+            {
+              "name": "leave",
+              "label": "I have reviewed unsaved work before leaving.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Context switches after authorization, or the current session ends.",
+      "rule": "Warn before discarding input; clear old-branch protected state/caches. A saved or submitted record belongs to its original branch.",
+      "recovery": "Permission lost during switch shows a safe destination. Unknown submission must be resolved before the draft is discarded.",
+      "data": "Access resolves target scope or revokes session. Business commands and request receipts remain owner-scoped.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-04",
+      "area": "access",
+      "title": "Review my account and sessions",
+      "phase": 1,
+      "capability": "self.read; self-service session actions must match existing Access contract",
+      "entry": "account",
+      "steps": [
+        {
+          "title": "My account",
+          "help": "Review only your own safe account and branch memberships.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Account details",
+                "Authorized branches",
+                "Session information"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Account action",
+          "help": "Role, employee identity and permissions are changed by their authorized owner.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Use password recovery",
+                "Contact school administrator",
+                "Sign out of this session"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher understands their identity, access and permitted account actions.",
+      "rule": "No self-service role escalation, arbitrary branch addition or global identity editing. Listing/revoking other own sessions is an extension unless the repository already supports it.",
+      "recovery": "A stale or expired session returns to school sign-in; never disclose token material.",
+      "data": "Access self DTO from UserAccount/session/membership; no salary, guardian grant or administrator-only record joins.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-05",
+      "area": "today",
+      "title": "Plan my teaching day",
+      "phase": 1,
+      "capability": "class.read + assigned attendance capabilities",
+      "entry": "today",
+      "steps": [
+        {
+          "title": "Choose the date",
+          "help": "The school-local date determines the schedule.",
+          "fields": [
+            {
+              "name": "date",
+              "label": "Teaching date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next action",
+          "help": "Show sessions in time order with their actual state.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Open",
+              "type": "select",
+              "options": [
+                "Next assigned session",
+                "Unsubmitted register",
+                "Submitted session receipt"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher reaches the right class with a clear next action.",
+      "rule": "Scheduled, open, submitted and cancelled are distinct. A missing register never creates absence records. No unrelated school-wide student counts.",
+      "recovery": "No sessions is a helpful empty state, not evidence of an account failure. Refresh rechecks assignments.",
+      "data": "Authorized Offering/Assignment → dated AttendanceSession read model. Include branch zone, as-of time and server-resolved capability.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-06",
+      "area": "today",
+      "title": "Resolve a missing or changed assignment",
+      "phase": 1,
+      "capability": "self.read + minimal assignment status",
+      "entry": "flow/TEA-06",
+      "steps": [
+        {
+          "title": "Readiness",
+          "help": "Show the safe reason the teaching day is incomplete.",
+          "fields": [
+            {
+              "name": "issue",
+              "label": "Issue",
+              "type": "select",
+              "options": [
+                "No active teaching assignment",
+                "Teacher eligibility not ready",
+                "Session changed or cancelled"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Handoff",
+          "help": "The teacher cannot repair identity, eligibility or assignments themselves.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Safe support reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "TEACH-SETUP-108"
+            },
+            {
+              "name": "next",
+              "label": "Next step",
+              "type": "select",
+              "options": [
+                "Contact school administrator",
+                "Refresh after administrator update"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher has a precise, non-sensitive handoff and a retry route.",
+      "rule": "Never widen access, create an assignment or offer another teacher’s session to fill an empty page.",
+      "recovery": "If assignment is revoked while open, stop access and clear protected draft data.",
+      "data": "Read Access/People/Academics readiness through published minimal contracts. Phase 1 handoff is informational, not a new ticket system.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-07",
+      "area": "classes",
+      "title": "Review my assigned classes",
+      "phase": 1,
+      "capability": "class.read for dated assignments",
+      "entry": "classes",
+      "steps": [
+        {
+          "title": "Class context",
+          "help": "Choose an assigned offering, not an institution-wide class directory.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Class workspace",
+          "help": "Show the relevant year, subject, assignment dates and upcoming sessions.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Roster",
+                "Upcoming sessions",
+                "Authorized attendance history"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The class workspace explains what the teacher can do and for which dates.",
+      "rule": "Recheck the dated assignment on every protected read. Historical visibility follows the current approved access contract, not lifelong access from one past lesson.",
+      "recovery": "Ended or changed assignments show unavailable content and an administrator handoff.",
+      "data": "Academics Offering/Assignment/Teacher eligibility compose an authorized class DTO; Students supplies only minimal roster facts.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-08",
+      "area": "classes",
+      "title": "Review a minimal class roster",
+      "phase": 1,
+      "capability": "class.read + assigned-roster student.read",
+      "entry": "classes/c1",
+      "steps": [
+        {
+          "title": "Roster scope",
+          "help": "The effective class/date determines membership.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Roster date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Student context",
+          "help": "See only the data needed for assigned teaching.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Student name and school reference",
+                "Assigned-session attendance"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher can identify the correct pupil without gaining full student-record access.",
+      "rule": "No institution-wide person search, unrelated pupil directory, bulk pupil export, financial ledger, custody detail or clinical narrative.",
+      "recovery": "A pupil joining/leaving on a boundary changes future roster eligibility; already opened session rosters remain frozen.",
+      "data": "Students Student → Person → effective Enrollment/SectionPlacement → authorized class. Session view uses frozen roster instead of live enrollment.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-09",
+      "area": "attendance",
+      "title": "Open an assigned attendance session",
+      "phase": 1,
+      "capability": "attendance.mark + exact dated teacher assignment",
+      "entry": "attendance/a1",
+      "steps": [
+        {
+          "title": "Session context",
+          "help": "Check subject, class, date and branch-local time.",
+          "fields": [
+            {
+              "name": "session",
+              "label": "Assigned session",
+              "type": "select",
+              "options": [
+                "Mathematics · Grade 6 A · 8 Oct, 09:00",
+                "Mathematics · Grade 6 B · 8 Oct, 11:15"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Open register",
+          "help": "Opening freezes the eligible roster, not its attendance statuses.",
+          "fields": [
+            {
+              "name": "open",
+              "label": "This is the intended class session.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The exact frozen roster opens with every pupil initially unmarked.",
+      "rule": "No default presence or absence. Reauthorize at open and submit; validate current session state and assignment.",
+      "recovery": "Empty roster, cancelled session, changed assignment and duplicate open have explicit outcomes. Never manufacture pupils or a replacement session.",
+      "data": "AttendanceSession state/roster transaction reads scoped dated enrollment, pins roster and calendar revision, writes audit/receipt without student attendance statuses.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-10",
+      "area": "attendance",
+      "title": "Mark attendance and review exceptions",
+      "phase": 1,
+      "capability": "attendance.mark for exact open session",
+      "entry": "attendance/a1",
+      "steps": [
+        {
+          "title": "Mark deliberately",
+          "help": "Use Present, Absent, Late or Excused. Unmarked is a draft state.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "status",
+              "label": "Attendance",
+              "type": "select",
+              "options": [
+                "Present",
+                "Absent",
+                "Late",
+                "Excused"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Check the whole class",
+          "help": "A filtered view must not hide incomplete rows from final validation.",
+          "fields": [
+            {
+              "name": "review",
+              "label": "I have checked exceptions and all unmarked pupils.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An in-memory draft accurately represents the teacher’s intended register.",
+      "rule": "Explicit bulk action states its scope. Mark unmarked present preserves existing exceptions; replacing every status requires a separate confirmation.",
+      "recovery": "Search/filter changes never discard edits. Phase 1 reload/navigation may lose unsent input; warn clearly.",
+      "data": "UI draft keyed by exact session/roster revision. No browser durable pupil cache, database record or automatic attendance event before submit.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-11",
+      "area": "attendance",
+      "title": "Submit attendance and keep the receipt",
+      "phase": 1,
+      "capability": "attendance.mark + eligible exact assignment",
+      "entry": "attendance/a1",
+      "steps": [
+        {
+          "title": "Review totals",
+          "help": "Every frozen roster pupil must have one supported status.",
+          "fields": [
+            {
+              "name": "complete",
+              "label": "Every pupil has been marked and totals match the roster.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Submit once",
+          "help": "Send one intent with its stable idempotency key and expected revision.",
+          "fields": [
+            {
+              "name": "confirm",
+              "label": "Submit this attendance register.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An acknowledged immutable submission shows scope, totals, actor, time and receipt reference.",
+      "rule": "Validate the full frozen roster atomically. Same key/payload replay returns the same outcome; changed payload with that key conflicts.",
+      "recovery": "Do not show success before server acknowledgement. On loss of response, retain the intent and use Check status.",
+      "data": "Owner transaction rechecks authorization/guards/version, writes complete attendance records + submission revision + receipt + safe audit/outbox.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-12",
+      "area": "attendance",
+      "title": "Recover an uncertain submission",
+      "phase": 1,
+      "capability": "same authorized command / receipt scope",
+      "entry": "attendance/a1",
+      "steps": [
+        {
+          "title": "Check status",
+          "help": "An interrupted response can mean the server has already committed.",
+          "fields": [
+            {
+              "name": "recovery",
+              "label": "Recovery action",
+              "type": "select",
+              "options": [
+                "Check existing request status",
+                "Retry the unchanged request when confirmed safe"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Resolve the outcome",
+          "help": "A new key would be a new intent; do not create one blindly.",
+          "fields": [
+            {
+              "name": "receipt",
+              "label": "I have resolved the current request before changing the draft.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "One logical submission is acknowledged without duplicated or overwritten attendance.",
+      "rule": "Freeze payload/key while outcome is unknown. Receipt resolution reauthorizes; a receipt key is not a bearer credential.",
+      "recovery": "If status check fails, remain Unknown. If not committed and still authorized, retry unchanged intent.",
+      "data": "Read owner command receipt/current session using institution, branch, account and resource scope; no new business writes during status lookup.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-13",
+      "area": "attendance",
+      "title": "Handle a stale register or lost permission",
+      "phase": 1,
+      "capability": "current assignment and session state",
+      "entry": "flow/TEA-13",
+      "steps": [
+        {
+          "title": "Understand the change",
+          "help": "Explain a revision conflict separately from revoked access.",
+          "fields": [
+            {
+              "name": "change",
+              "label": "Change",
+              "type": "select",
+              "options": [
+                "Session revision changed",
+                "Session cancelled",
+                "Assignment or membership revoked"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Safe next action",
+          "help": "Protected input can be retained only while the teacher remains authorized.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Reload and review current authorized record",
+                "Return to My Teaching Day"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher resolves a valid conflict or leaves an unavailable record without silent overwrite.",
+      "rule": "409 requires explicit review; 401/403 clears protected draft data. Never silently replay an old roster against a new one.",
+      "recovery": "A submitted record stays read-only; an unavailable record does not leak the new teacher or pupils.",
+      "data": "Application rechecks live guards and returns safe errors. New reads query owner state under current scope; no automatic mutation.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-14",
+      "area": "attendance",
+      "title": "Review history and hand off a correction",
+      "phase": 1,
+      "capability": "attendance.read_class within authorized assignment scope",
+      "entry": "history",
+      "steps": [
+        {
+          "title": "Locate the session",
+          "help": "Use class, date and subject to find the exact submitted register.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Session date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Correction handoff",
+          "help": "Teachers cannot directly alter submitted attendance in Phase 1.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Session / submission reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "next",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "View receipt and revision history",
+                "Contact authorized school administrator"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher understands the recorded result and the administrator’s correction route.",
+      "rule": "No attendance.correct from the Teacher role. Show original submission and permitted correction history with safe reasons.",
+      "recovery": "If the current assignment no longer authorizes the record, deny rather than revealing historical rosters.",
+      "data": "Read Session → frozen roster → effective records/revisions plus scoped receipt. Phase 1 support handoff creates no correction or hidden request record.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-15",
+      "area": "attendance",
+      "title": "Use offline-assisted attendance",
+      "phase": 2,
+      "capability": "attendance.mark + approved offline capability",
+      "entry": "flow/TEA-15",
+      "steps": [
+        {
+          "title": "Prepare an authorized session",
+          "help": "Offline access needs a separately approved privacy and device design.",
+          "fields": [
+            {
+              "name": "session",
+              "label": "Assigned session",
+              "type": "select",
+              "options": [
+                "Mathematics · Grade 6 A · 8 Oct, 09:00",
+                "Mathematics · Grade 6 B · 8 Oct, 11:15"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "device",
+              "label": "This device meets the school’s approved offline policy.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Reconnect and reconcile",
+          "help": "Queued does not mean submitted.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Sync action",
+              "type": "select",
+              "options": [
+                "Review pending intent",
+                "Resolve server conflict",
+                "Check acknowledged receipt"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An authorized queued intent is reconciled explicitly and then acknowledged.",
+      "rule": "Phase 1 remains online-first. Any later durable queue needs expiry, minimization, device protection and reauthorization before replay.",
+      "recovery": "Permission revocation, lost device, changed roster, expired queue and competing submission must not silently sync.",
+      "data": "Proposed offline intent metadata + protected local payload; owner submission/receipt unchanged. Storage/security design required before coding.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-16",
+      "area": "attendance",
+      "title": "Request an attendance correction",
+      "phase": 2,
+      "capability": "attendance.correction.request (proposed)",
+      "entry": "flow/TEA-16",
+      "steps": [
+        {
+          "title": "Identify the exact record",
+          "help": "A request is not a correction.",
+          "fields": [
+            {
+              "name": "receipt",
+              "label": "Submission reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "proposed",
+              "label": "Requested status",
+              "type": "select",
+              "options": [
+                "Present",
+                "Absent",
+                "Late",
+                "Excused"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Explain",
+          "help": "Use a minimal reason for authorized review.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "request",
+              "label": "Send this request to the authorized attendance reviewer.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A proposed request has Pending review / Accepted / Declined states and a linked outcome.",
+      "rule": "New extension requiring scope approval. Only the administrator’s attendance.correct command changes the register.",
+      "recovery": "Duplicates, withdrawal, permission loss and already-corrected records are handled with traceable decisions.",
+      "data": "Proposed CorrectionRequest references session/record/revision; Attendance correction owner records accepted effect and audit. No direct teacher record writes.",
+      "proposal": true
+    },
+    {
+      "id": "TEA-17",
+      "area": "communication",
+      "title": "Read school notices and acknowledge",
+      "phase": 2,
+      "capability": "communication.read for explicit audience",
+      "entry": "communication",
+      "steps": [
+        {
+          "title": "Notice",
+          "help": "Open a notice addressed to this teacher.",
+          "fields": [
+            {
+              "name": "notice",
+              "label": "Notice",
+              "type": "select",
+              "options": [
+                "Term planning meeting",
+                "School calendar update"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Acknowledge when requested",
+          "help": "Read, delivered and acknowledged are different states.",
+          "fields": [
+            {
+              "name": "ack",
+              "label": "I acknowledge this notice.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A required acknowledgement records the teacher’s explicit action.",
+      "rule": "Do not infer acknowledgement from an opened page or email tracking. Attachments reauthorize.",
+      "recovery": "Edited/withdrawn notice or revoked audience membership has a safe update state.",
+      "data": "Communication published notice/version + RecipientSnapshot + explicit acknowledgement; access derived from live audience.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-18",
+      "area": "communication",
+      "title": "Prepare a class message",
+      "phase": 2,
+      "capability": "communication.compose; send requires delegated scope",
+      "entry": "communication/compose",
+      "steps": [
+        {
+          "title": "Message",
+          "help": "Keep sensitive details out of notification previews.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "subject",
+              "label": "Subject",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "body",
+              "label": "Message",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Audience review",
+          "help": "Show eligible verified recipients and exclusions without exposing private family restrictions.",
+          "fields": [
+            {
+              "name": "audience",
+              "label": "Audience",
+              "type": "select",
+              "options": [
+                "Approved guardians of this class",
+                "Assigned school staff"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "audienceReviewed",
+              "label": "I have reviewed the intended audience.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Submit for approval",
+          "help": "Direct send is available only when explicitly granted.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Send to authorized approver",
+                "Save draft"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A message draft or approval request has a visible status.",
+      "rule": "Teacher role is not a blanket send grant. Recheck relationship, purpose, consent and module access at actual delivery.",
+      "recovery": "Provider failure/unknown is distinct from sent/delivered. Revoked relationships are suppressed, not retried.",
+      "data": "Communication owns MessageCampaign, recipient snapshot and delivery attempts; Guardians supplies live purpose grants via a minimal contract.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-19",
+      "area": "communication",
+      "title": "Reply in a permitted family conversation",
+      "phase": 2,
+      "capability": "communication.reply + child/conversation grant",
+      "entry": "communication/thread/t1",
+      "steps": [
+        {
+          "title": "Conversation context",
+          "help": "The family and child relationship is checked on every read.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "thread",
+              "label": "Conversation",
+              "type": "select",
+              "options": [
+                "Class learning question"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Reply",
+          "help": "Use the approved conversation; do not reveal other children or private contact lists.",
+          "fields": [
+            {
+              "name": "reply",
+              "label": "Reply",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A reply appears in the authorized thread with its actual delivery state.",
+      "rule": "No teacher-created guardian relationship or invitation. A household contact or payer is not automatically a portal guardian.",
+      "recovery": "Removed participant or revoked child grant prevents further disclosure; report safely to the school office.",
+      "data": "ConversationGrant/Message version references exact child and participants; queued delivery rechecks current grants.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-20",
+      "area": "communication",
+      "title": "Arrange a family meeting",
+      "phase": 2,
+      "capability": "meeting.request within permitted family relationship (proposed)",
+      "entry": "flow/TEA-20",
+      "steps": [
+        {
+          "title": "Purpose and participant",
+          "help": "Use a verified conversation or school-approved scheduling route.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "topic",
+              "label": "Meeting topic",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Preferred date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Availability",
+          "help": "Share only offered times, not the teacher’s private calendar.",
+          "fields": [
+            {
+              "name": "time",
+              "label": "Time",
+              "type": "select",
+              "options": [
+                "15:30–15:45",
+                "15:45–16:00"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "note",
+              "label": "Message to the family",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The request is proposed, confirmed, rescheduled or cancelled with an explicit participant response.",
+      "rule": "This scheduling extension needs approval and a conflict model before implementation. No student-sensitive detail in public calendars.",
+      "recovery": "Concurrent booking, cancellation, time-zone display and guardian revocation require clear recovery.",
+      "data": "Proposed MeetingRequest/SlotReservation with participant grants; Communication handles notices separately.",
+      "proposal": true
+    },
+    {
+      "id": "TEA-21",
+      "area": "communication",
+      "title": "Review permitted absence context",
+      "phase": 2,
+      "capability": "attendance explanation read purpose; no default approval",
+      "entry": "flow/TEA-21",
+      "steps": [
+        {
+          "title": "Student and date",
+          "help": "Read only the limited explanation permitted for teaching.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Session date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "School handoff",
+          "help": "Review status does not itself alter the register.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "View office-reviewed disposition",
+                "Refer a discrepancy to the school office"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher gets necessary context while the school office controls disposition and correction.",
+      "rule": "No clinical attachment, private family dispute or guardian note unless explicitly authorized. No automatic absence inference.",
+      "recovery": "Pending explanation, late attendance, revoked relationship and unavailable detail are distinct.",
+      "data": "Minimal authorized explanation/request read model; Attendance correction and Guardian relationship owners remain separate.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-22",
+      "area": "planning",
+      "title": "Review my published timetable",
+      "phase": 3,
+      "capability": "timetable.read for current assignments",
+      "entry": "planning",
+      "steps": [
+        {
+          "title": "Week",
+          "help": "A published version is distinct from a draft plan.",
+          "fields": [
+            {
+              "name": "week",
+              "label": "Week beginning",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Session details",
+          "help": "See room, subject and permitted changes with a list alternative to the grid.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Published timetable",
+                "Dated exceptions"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher can plan against a versioned schedule and identify changes.",
+      "rule": "Manual Phase 1 sessions do not imply recurring timetable support. A schedule view never creates attendance records.",
+      "recovery": "Draft/unpublished change, room closure and cancelled occurrence clearly identify the current authoritative version.",
+      "data": "Academics TimetableVersion/slots + dated assignments and exceptions compose the view; Attendance references generated occurrence source.",
+      "proposal": false,
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "planning",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "TEA-23",
+      "area": "planning",
+      "title": "Accept and perform a cover assignment",
+      "phase": 3,
+      "capability": "explicit cover/dated assignment grant",
+      "entry": "flow/TEA-23",
+      "steps": [
+        {
+          "title": "Cover request",
+          "help": "Show class, period and responsibilities before acceptance.",
+          "fields": [
+            {
+              "name": "cover",
+              "label": "Cover",
+              "type": "select",
+              "options": [
+                "Grade 6 B · Mathematics · 12 Oct, 11:15"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Confirm availability",
+          "help": "Eligibility and clashes are rechecked before making access effective.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Response",
+              "type": "select",
+              "options": [
+                "Accept availability",
+                "Decline with reason"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An authorized cover assignment grants only the exact required session scope.",
+      "rule": "Accepting a message alone grants nothing. No shared credentials, administrator impersonation or permanent roster access.",
+      "recovery": "Clash, stale request, revoked eligibility and already-opened session follow the approved substitution contract.",
+      "data": "Academics owns Substitution/Assignment changes; attendance assignment resolver checks dated scope at every action.",
+      "proposal": false,
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "planning",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "TEA-24",
+      "area": "planning",
+      "title": "Hand over a lesson or request a schedule change",
+      "phase": 3,
+      "capability": "timetable.change.request (proposed) + own assignment",
+      "entry": "flow/TEA-24",
+      "steps": [
+        {
+          "title": "Affected lesson",
+          "help": "A request does not directly modify the timetable.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reasonType",
+              "label": "Request type",
+              "type": "select",
+              "options": [
+                "Availability change",
+                "Room issue",
+                "Cover handoff"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Handoff",
+          "help": "Share only necessary teaching context with the authorized recipient.",
+          "fields": [
+            {
+              "name": "handoff",
+              "label": "Lesson handoff / request reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The scheduling owner reviews the request and publishes any approved change.",
+      "rule": "Do not move a scheduled session or grant access from a teacher draft. Open/submitted history is preserved.",
+      "recovery": "Denied request or changed assignment leaves the original schedule authoritative.",
+      "data": "Proposed TimetableChangeRequest links an existing offering/occurrence; Academics executes approval. Learning resources keep their grants.",
+      "proposal": true,
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "planning",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "TEA-25",
+      "area": "learning",
+      "title": "Plan a lesson",
+      "phase": 3,
+      "capability": "learning.plan.write for assigned offering",
+      "entry": "learning",
+      "steps": [
+        {
+          "title": "Teaching context",
+          "help": "Prepare against a class, topic and date.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "topic",
+              "label": "Lesson topic",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Lesson date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Plan",
+          "help": "Use clear objectives, activities and a check for understanding.",
+          "fields": [
+            {
+              "name": "objective",
+              "label": "Learning objective",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "activities",
+              "label": "Activities",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "check",
+              "label": "Check for understanding",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Visibility",
+          "help": "Drafts stay private to authorized teaching staff.",
+          "fields": [
+            {
+              "name": "visibility",
+              "label": "Save as",
+              "type": "select",
+              "options": [
+                "Teacher draft",
+                "Share with authorized teaching team"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A versioned lesson plan can be revisited and reused with deliberate context changes.",
+      "rule": "Copying a plan must not copy pupil responses or private notes. Lesson plan is not automatic publication to families.",
+      "recovery": "Concurrent edits preserve current revision; lost assignment removes protected content.",
+      "data": "Learning owns LessonPlan/revision referencing authorized Offering and safe ResourceReferences.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-26",
+      "area": "learning",
+      "title": "Add and reuse teaching resources",
+      "phase": 3,
+      "capability": "learning.resource.write + document permissions",
+      "entry": "resources",
+      "steps": [
+        {
+          "title": "Resource",
+          "help": "Attach only material the school is permitted to use.",
+          "fields": [
+            {
+              "name": "title",
+              "label": "Resource title",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "file",
+              "label": "Resource file",
+              "type": "file",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Audience",
+          "help": "File access follows the owning task/plan, not a public link.",
+          "fields": [
+            {
+              "name": "audience",
+              "label": "Audience",
+              "type": "select",
+              "options": [
+                "Teaching team draft",
+                "Assigned class after publication"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "review",
+              "label": "I have reviewed the resource and its intended audience.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A safe, versioned resource is attached to the intended lesson or assignment.",
+      "rule": "Scan before availability; sanitized preview; scope-bound short-lived downloads; accessible alternative instructions.",
+      "recovery": "Upload progress, interruption, scan rejection and revoked audience remain explicit.",
+      "data": "Documents FileAsset/ScanResult/DocumentVersion; Learning ResourceReference; read authorization rechecked at download.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-27",
+      "area": "learning",
+      "title": "Create and publish an assignment",
+      "phase": 3,
+      "capability": "learning.assignment.write / publish for own class",
+      "entry": "learning/new",
+      "steps": [
+        {
+          "title": "Task",
+          "help": "State what the learner should do and how it will be reviewed.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "title",
+              "label": "Assignment title",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "instructions",
+              "label": "Instructions",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Submission",
+          "help": "Use explicit deadline and accepted mode.",
+          "fields": [
+            {
+              "name": "due",
+              "label": "Due date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "mode",
+              "label": "Submission type",
+              "type": "select",
+              "options": [
+                "Text response",
+                "File upload",
+                "In-class work"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "late",
+              "label": "Late work",
+              "type": "select",
+              "options": [
+                "Accept and label late",
+                "Require teacher review"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Publication review",
+          "help": "Check audience, resources, accessibility and due date before publishing.",
+          "fields": [
+            {
+              "name": "publish",
+              "label": "I have reviewed the class-facing task.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The exact published assignment version is visible to the eligible class.",
+      "rule": "Publication requires current assignment and enrollment grants. Do not confuse Save draft with Publish.",
+      "recovery": "Changed deadline publishes a reviewed revision and notice; unknown publish outcome uses a receipt.",
+      "data": "Learning Assignment/Version and audience criteria; durable publication manifest/event; Communication notice is separate from published content.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-28",
+      "area": "learning",
+      "title": "Review submissions and late work",
+      "phase": 3,
+      "capability": "learning.submission.read for assigned class",
+      "entry": "learning/task/l1",
+      "steps": [
+        {
+          "title": "Worklist",
+          "help": "Submitted, missing, late and returned are separate states.",
+          "fields": [
+            {
+              "name": "task",
+              "label": "Assignment",
+              "type": "select",
+              "options": [
+                "Fractions in everyday life"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "filter",
+              "label": "Submission status",
+              "type": "select",
+              "options": [
+                "All",
+                "Submitted",
+                "Late",
+                "Missing",
+                "Returned"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review work",
+          "help": "Open only the current authorized submission revision.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "next",
+              "label": "Review action",
+              "type": "select",
+              "options": [
+                "Read submitted work",
+                "Request missing work follow-up"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher can act on each learner’s actual submission state.",
+      "rule": "Missing is not a numeric zero. Submission revisions and late policy are pinned; never leak one pupil’s work to another.",
+      "recovery": "Interrupted upload, withdrawn enrollment, missing file and malware rejection have distinct explanations.",
+      "data": "Learning SubmissionRevision + published Assignment version + enrollment grant; Documents enforces file readiness and download scope.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-29",
+      "area": "learning",
+      "title": "Draft feedback and return work",
+      "phase": 3,
+      "capability": "learning.feedback.write / return for own task",
+      "entry": "learning/review/s1",
+      "steps": [
+        {
+          "title": "Feedback",
+          "help": "Give actionable guidance on the selected work.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "strength",
+              "label": "What worked well",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "nextStep",
+              "label": "Next step for learning",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Return review",
+          "help": "Preview exactly what the learner and permitted guardian will see.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Save private feedback draft",
+                "Return reviewed feedback"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "review",
+              "label": "I have checked the audience and selected work revision.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A private draft remains private; returned feedback identifies its published revision.",
+      "rule": "Saving feedback is not result publication or automatic assessment grading. Family visibility needs separate purpose and module grants.",
+      "recovery": "Submission changed while grading requires comparison; missing authority stops publication.",
+      "data": "Learning Feedback revision pins SubmissionRevision; explicit return manifest + safe audit/outbox; no unintended result-table writes.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-30",
+      "area": "learning",
+      "title": "Allow resubmission or revise a deadline",
+      "phase": 3,
+      "capability": "learning.assignment.manage for own task",
+      "entry": "flow/TEA-30",
+      "steps": [
+        {
+          "title": "Change scope",
+          "help": "Choose whole class or one authorized learner.",
+          "fields": [
+            {
+              "name": "scope",
+              "label": "Scope",
+              "type": "select",
+              "options": [
+                "Whole assigned class",
+                "Selected learner"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "due",
+              "label": "New deadline",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Explain change",
+          "help": "Keep previous deadlines and submissions in history.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "review",
+              "label": "I have reviewed who is affected and which version remains visible.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The revised policy and optional resubmission path are explicit to affected learners.",
+      "rule": "No silent retrospective penalty changes; preserve already published feedback and submission history.",
+      "recovery": "Concurrent publication, offline upload and revoked enrollment reconcile against the pinned policy.",
+      "data": "Assignment revision / per-learner exception and SubmissionRevision lineage; authorized notice event.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-31",
+      "area": "learning",
+      "title": "Review learning progress and plan support",
+      "phase": 3,
+      "capability": "learning.progress.read for assigned scope",
+      "entry": "learning/progress",
+      "steps": [
+        {
+          "title": "Review evidence",
+          "help": "Use visible source tasks and transparent completeness.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Work completion",
+                "Feedback follow-up",
+                "Topic evidence"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Plan next action",
+          "help": "Support decisions remain human and role-scoped.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "action",
+              "label": "Teaching follow-up",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher can explain a support action from permitted learning evidence.",
+      "rule": "No opaque risk scores, permanent labels or inference from missing data. A confidential support case needs a separate grant.",
+      "recovery": "Sparse evidence and changed enrollment limit conclusions; never turn unavailable data into poor performance.",
+      "data": "Learning read projection of assignments, submissions and returned feedback; proposed support task references sources and minimizes pupil notes.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-32",
+      "area": "assessments",
+      "title": "Prepare an assessment within an approved scheme",
+      "phase": 4,
+      "capability": "assessment.plan.write for assigned subject",
+      "entry": "assessments",
+      "steps": [
+        {
+          "title": "Assessment context",
+          "help": "Use the approved scheme version, boundaries and rounding rules.",
+          "fields": [
+            {
+              "name": "class",
+              "label": "Assigned class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A · Mathematics",
+                "Grade 6 · B · Mathematics",
+                "Grade 7 · A · Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "name",
+              "label": "Assessment name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "scheme",
+              "label": "Scheme",
+              "type": "select",
+              "options": [
+                "Approved term scheme · v1"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Assessment details",
+          "help": "Make expectations clear before marks entry.",
+          "fields": [
+            {
+              "name": "date",
+              "label": "Assessment date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "max",
+              "label": "Maximum score",
+              "type": "number",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "instructions",
+              "label": "Assessment instructions",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A scoped assessment is prepared under a pinned scheme.",
+      "rule": "Teachers do not change the institution’s grading policy by editing a screen. Approved publication authority remains separate.",
+      "recovery": "Scheme revision, invalid max score, conflicting dates and lost subject assignment require review.",
+      "data": "Assessment with SchemeVersion reference; no marks or published result created at plan save.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-33",
+      "area": "assessments",
+      "title": "Enter and validate marks",
+      "phase": 4,
+      "capability": "assessment.mark.write for exact assigned assessment",
+      "entry": "assessments/gradebook/as1",
+      "steps": [
+        {
+          "title": "Student outcome",
+          "help": "Not entered, scored, absent and exempt are distinct.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "outcome",
+              "label": "Outcome",
+              "type": "select",
+              "options": [
+                "Scored",
+                "Absent",
+                "Exempt",
+                "Not entered"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "score",
+              "label": "Score if scored",
+              "type": "number",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review before saving",
+          "help": "Validate bounds and completeness using the pinned scheme.",
+          "fields": [
+            {
+              "name": "review",
+              "label": "I have reviewed the marks and explicit non-score states.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A draft mark revision is saved without publishing results to families.",
+      "rule": "Exact validated score scale; zero is a legitimate score, not a stand-in for missing. Exemption authority may be separately required.",
+      "recovery": "Two-editor conflict, changed scheme, missing evidence and withdrawn enrollment do not silently overwrite.",
+      "data": "Assessment MarkRevision with state, exact score and expected version; draft save receipt/audit, no ResultPublication change.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-34",
+      "area": "assessments",
+      "title": "Submit marks for moderation",
+      "phase": 4,
+      "capability": "assessment.submit for owned marks; moderator action separately delegated",
+      "entry": "flow/TEA-34",
+      "steps": [
+        {
+          "title": "Readiness",
+          "help": "Check required marks and unresolved exceptions.",
+          "fields": [
+            {
+              "name": "assessment",
+              "label": "Assessment",
+              "type": "select",
+              "options": [
+                "Fractions check · Grade 6 A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "ready",
+              "label": "The configured readiness checks are satisfied.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Submit reviewed revision",
+          "help": "Moderators see the exact submitted version.",
+          "fields": [
+            {
+              "name": "comment",
+              "label": "Message to moderator",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The selected revision is awaiting moderation or returned with a reason.",
+      "rule": "Teacher submission does not approve its own marks by default. Explicit delegation governs moderator actions.",
+      "recovery": "Any changed marks invalidate the previous approval scope; returned marks keep review history.",
+      "data": "Assessment moderation/approval request pins MarkRevisions; owner transaction prevents stale submit/approve races.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-35",
+      "area": "assessments",
+      "title": "Review result publication and correct an error",
+      "phase": 4,
+      "capability": "own-subject result preview; correction request, not default publish",
+      "entry": "flow/TEA-35",
+      "steps": [
+        {
+          "title": "Published version",
+          "help": "Read the approved result and its provenance.",
+          "fields": [
+            {
+              "name": "publication",
+              "label": "Publication",
+              "type": "select",
+              "options": [
+                "Grade 6 · Term 1 · Approved version"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Error handoff",
+          "help": "A published result is corrected through reviewed republication.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "Result reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Correction request reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An authorized publisher reviews any correction; the teacher sees the linked disposition.",
+      "rule": "No editing a published PDF or overwriting published mark history. Guardian access remains separately permitted.",
+      "recovery": "Withdrawn approval or changed underlying marks blocks publication until reconciled.",
+      "data": "ResultPublicationManifest references approved revisions; proposed correction request routes to assessment owner, preserving original publication.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-36",
+      "area": "wellbeing",
+      "title": "Refer a student concern safely",
+      "phase": 6,
+      "capability": "restricted referral.create; assigned pupil context",
+      "entry": "wellbeing",
+      "steps": [
+        {
+          "title": "Minimal referral",
+          "help": "Use the school’s approved reporting protocol. Do not include clinical detail in shared notes.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student in assigned class",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "urgency",
+              "label": "Urgency",
+              "type": "select",
+              "options": [
+                "Routine specialist review",
+                "Urgent: follow school emergency procedure"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Restricted handoff",
+          "help": "Only the authorized specialist receives sensitive details through the approved channel.",
+          "fields": [
+            {
+              "name": "recipient",
+              "label": "Team",
+              "type": "select",
+              "options": [
+                "School health lead",
+                "Safeguarding lead"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "Restricted handoff reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A minimal referral is handed to an authorized specialist with accountable status.",
+      "rule": "Teacher role gives no full clinical, custody or safeguarding case access. No automatic parent notification for a sensitive concern.",
+      "recovery": "Unavailable recipient or urgent danger uses the approved human escalation protocol; do not leave an urgent case in a generic queue.",
+      "data": "Restricted referral metadata and purpose grant; specialist case remains owned by Health/Safeguarding. General audit carries only safe references.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-37",
+      "area": "self-service",
+      "title": "Request leave and arrange a handoff",
+      "phase": 6,
+      "capability": "own leave.request; no approval power",
+      "entry": "self-service",
+      "steps": [
+        {
+          "title": "Leave request",
+          "help": "Only your own balances and requests are shown.",
+          "fields": [
+            {
+              "name": "from",
+              "label": "From date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "Until date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "type",
+              "label": "Leave type",
+              "type": "select",
+              "options": [
+                "Approved personal leave category",
+                "School-approved leave category"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Teaching impact",
+          "help": "Requesting leave does not automatically cancel class sessions.",
+          "fields": [
+            {
+              "name": "handoff",
+              "label": "Teaching handoff reference",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "submit",
+              "label": "Submit for the authorized approver.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The request is pending, approved, returned or declined with a clear reason.",
+      "rule": "Coverage belongs to the timetable owner; pupil and staff attendance are different domains. Sensitive leave evidence is restricted.",
+      "recovery": "Insufficient balance, overlapping request or changed approval authority blocks/returns appropriately.",
+      "data": "People operations LeaveRequest and versioned balance policy; ledger debit on approved transition; Academics cover handoff is separate.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-38",
+      "area": "self-service",
+      "title": "Review my staff record and request a correction",
+      "phase": 6,
+      "capability": "own staff.read / correction request",
+      "entry": "flow/TEA-38",
+      "steps": [
+        {
+          "title": "My details",
+          "help": "Employment records are separate from login identity.",
+          "fields": [
+            {
+              "name": "field",
+              "label": "Field to review",
+              "type": "select",
+              "options": [
+                "Work contact",
+                "Qualification record",
+                "Employment detail"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Correction request",
+          "help": "Only the record owner can approve controlled changes.",
+          "fields": [
+            {
+              "name": "change",
+              "label": "Requested correction",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "evidence",
+              "label": "Non-sensitive evidence reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An own-record request has a traceable decision.",
+      "rule": "No view of colleagues’ personal records or payroll; bank/salary changes require a separately designed sensitive process.",
+      "recovery": "Revoked employment, disputed evidence and duplicate requests route to the authorized HR owner.",
+      "data": "Employee safe self projection and proposed StaffCorrectionRequest; approved changes use People operations owner commands.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-39",
+      "area": "resources",
+      "title": "Borrow, reserve or renew a resource",
+      "phase": 6,
+      "capability": "library.self_service for own borrower identity",
+      "entry": "resources",
+      "steps": [
+        {
+          "title": "Find resource",
+          "help": "Search permitted catalog items, not other borrowers’ history.",
+          "fields": [
+            {
+              "name": "title",
+              "label": "Title or copy reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Request",
+          "help": "Current eligibility and hold policy determine availability.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Request checkout",
+                "Reserve available title",
+                "Request renewal"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher sees their own loan/reservation and due date.",
+      "rule": "A request is not a confirmed checkout until the circulation owner records it. No authority to waive fines or edit another borrower.",
+      "recovery": "Already loaned copy, hold queue, renewal limit and lost item have explicit outcomes.",
+      "data": "Library CatalogItem/Copy/Loan/Reservation read contracts; teacher requests are scoped to own borrower identity.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-40",
+      "area": "resources",
+      "title": "Request materials or book a teaching space",
+      "phase": 6,
+      "capability": "resource.request / facility.book within granted scope",
+      "entry": "flow/TEA-40",
+      "steps": [
+        {
+          "title": "Request",
+          "help": "Choose a teaching need and time.",
+          "fields": [
+            {
+              "name": "resource",
+              "label": "Resource",
+              "type": "select",
+              "options": [
+                "Science lab",
+                "Projector kit",
+                "Classroom materials"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "fromTime",
+              "label": "Start time",
+              "type": "time",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "toTime",
+              "label": "End time",
+              "type": "time",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Purpose",
+          "help": "Inventory custody and room scheduling remain explicit.",
+          "fields": [
+            {
+              "name": "purpose",
+              "label": "Teaching purpose",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The request is confirmed only after availability and approval checks.",
+      "rule": "No direct stock adjustment or room double-booking; timetable commitments and maintenance blocks apply.",
+      "recovery": "Concurrent booking, unavailable quantity, overdue return and changed class schedule need reviewed alternatives.",
+      "data": "Facilities booking range and Inventory request/custody references; authorized owner commands append movements and reservations.",
+      "proposal": false
+    },
+    {
+      "id": "TEA-41",
+      "area": "duties",
+      "title": "Carry out an assigned school duty",
+      "phase": 6,
+      "capability": "explicit dated duty / minimal roster grant (proposed)",
+      "entry": "duties",
+      "steps": [
+        {
+          "title": "Duty scope",
+          "help": "An event or transport duty does not grant full student access.",
+          "fields": [
+            {
+              "name": "duty",
+              "label": "Assignment",
+              "type": "select",
+              "options": [
+                "Assembly supervision",
+                "Approved trip support",
+                "Pickup duty"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Record accountable handoff",
+          "help": "Follow the approved duty-specific procedure.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Duty / handoff reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "status",
+              "label": "Status",
+              "type": "select",
+              "options": [
+                "Completed assigned check",
+                "Escalated to duty lead"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The assigned duty records a minimal outcome and responsible handoff.",
+      "rule": "Proposed extension: explicit activity-specific grant, dates and authorized pickup/handoff rules must precede implementation. No unrestricted live child location.",
+      "recovery": "Wrong-child handoff, missing pickup authority or offline uncertainty uses the approved human fallback.",
+      "data": "Proposed DutyAssignment/Outcome; Transport or activity owner supplies minimal authorized manifest and records domain-specific effects.",
+      "proposal": true
+    },
+    {
+      "id": "TEA-42",
+      "area": "assistant",
+      "title": "Use a teaching draft with source evidence",
+      "phase": 7,
+      "capability": "assistant.use + each source capability",
+      "entry": "assistant",
+      "steps": [
+        {
+          "title": "Choose an allowed task",
+          "help": "Use authorized curriculum/resources and minimal permitted learner data.",
+          "fields": [
+            {
+              "name": "task",
+              "label": "Task",
+              "type": "select",
+              "options": [
+                "Draft a lesson outline",
+                "Draft feedback from reviewed work",
+                "Explain my class attendance summary"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "request",
+              "label": "Request",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review evidence",
+          "help": "Sources, as-of time and uncertainty remain visible.",
+          "fields": [
+            {
+              "name": "sources",
+              "label": "I have checked the sources and factual claims.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Human action",
+          "help": "Open the normal workflow to edit and publish anything.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next step",
+              "type": "select",
+              "options": [
+                "Keep private draft",
+                "Open the normal lesson/feedback form"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A reviewed draft supports the teacher without independently changing school records.",
+      "rule": "No autonomous attendance marking, grading, discipline, diagnosis or guardian messaging. No unrestricted student SQL or sensitive-case retrieval.",
+      "recovery": "Missing evidence, prompt injection, stale content and provider failure cause abstention or an explicit safe fallback.",
+      "data": "AssistantSession/EvidenceReference/ActionProposal; permission-filtered owner read contracts, deterministic calculations and normal publication use cases.",
+      "proposal": false
+    }
+  ],
+  "timetable_revision": "TT-01"
+}

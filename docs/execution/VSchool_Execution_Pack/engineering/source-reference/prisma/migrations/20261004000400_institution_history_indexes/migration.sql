@@ -1,0 +1,4 @@
+BEGIN;
+CREATE INDEX vs_tenancy_configuration_change_actor_idx ON vs_tenancy_configuration_change(actor_account_id);
+CREATE INDEX vs_tenancy_tenant_command_receipt_actor_idx ON vs_tenancy_tenant_command_receipt(actor_account_id);
+COMMIT;

@@ -1,0 +1,181 @@
+[
+  {
+    "id": "EX-00",
+    "title": "Reconcile the live checkout and pin the approved reference",
+    "depends_on": [],
+    "status": "VERIFIED",
+    "design": "READY",
+    "human_review": "PENDING",
+    "evidence": "docs/modules/design-system/CURRENT_STATE.md#ex-00-live-reconciliation--9-october-2026"
+  },
+  {
+    "id": "EX-01",
+    "title": "Capture representative page states and freeze visual targets",
+    "depends_on": [
+      "EX-00"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-02",
+    "title": "Implement the approved shared left navigation",
+    "depends_on": [
+      "EX-01"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-03",
+    "title": "Build reusable search/filter/sort and action-state recipes",
+    "depends_on": [
+      "EX-02"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-04",
+    "title": "Align real school sign-in and account entry",
+    "depends_on": [
+      "EX-03"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-05",
+    "title": "Adopt Today, school settings and branding screens",
+    "depends_on": [
+      "EX-04"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-06",
+    "title": "Adopt staff profile, access and teacher readiness screens",
+    "depends_on": [
+      "EX-05"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-07",
+    "title": "Adopt academic setup and class assignment screens",
+    "depends_on": [
+      "EX-05"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-08",
+    "title": "Adopt student directory, enrollment and history",
+    "depends_on": [
+      "EX-07"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-09",
+    "title": "Adopt import preview and recovery screens",
+    "depends_on": [
+      "EX-08"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-10",
+    "title": "Adopt administrator attendance and correction screens",
+    "depends_on": [
+      "EX-07",
+      "EX-08"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-11",
+    "title": "Adopt teacher day and roll-call experience",
+    "depends_on": [
+      "EX-10",
+      "EX-04"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-12",
+    "title": "Adopt attendance report and export experience",
+    "depends_on": [
+      "EX-10"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-13",
+    "title": "Complete incremental demo fixtures and cross-page coherence",
+    "depends_on": [
+      "EX-06",
+      "EX-09",
+      "EX-11",
+      "EX-12"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-14",
+    "title": "Run consolidated visual, functional and regression gate",
+    "depends_on": [
+      "EX-13"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  },
+  {
+    "id": "EX-15",
+    "title": "Checkpoint the delivery and publish the next owner-ready queue",
+    "depends_on": [
+      "EX-14"
+    ],
+    "status": "NOT_STARTED",
+    "design": "READY_SUBJECT_TO_EX00",
+    "human_review": "NOT_REQUESTED",
+    "evidence": null
+  }
+]

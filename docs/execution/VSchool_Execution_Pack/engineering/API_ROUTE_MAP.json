@@ -1,0 +1,826 @@
+[
+  {
+    "path": "/api/auth/[...nextauth]",
+    "source": "app/api/auth/[...nextauth]/route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "imports": [
+      "next-auth",
+      "next/server",
+      "@/lib/server/auth"
+    ],
+    "source_sha256": "0ed997dc566beecbe2f3aa53617ea8fd6d55fe412f0791956f812d42e00f5905"
+  },
+  {
+    "path": "/api/health/live",
+    "source": "app/api/health/live/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [],
+    "source_sha256": "5f26225971c66171ad33b99da2d7eb43ea0540ffc802423bd5ac75e4b6b76936"
+  },
+  {
+    "path": "/api/health",
+    "source": "app/api/health/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/platform"
+    ],
+    "source_sha256": "8ed507fd8aef99e56a94b39cd489c003a6acd75843ec04d963845ac728f333fe"
+  },
+  {
+    "path": "/api/v1/academics/calendars/[id]/evaluate",
+    "source": "app/api/v1/academics/calendars/[id]/evaluate/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "9b57dd4e228863ca13686612a30a14e1149715180c312aa80117d9ac53ad2558"
+  },
+  {
+    "path": "/api/v1/academics/calendars/[id]/publish",
+    "source": "app/api/v1/academics/calendars/[id]/publish/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "2a27c80d6bd0d7b7c3f1aba469fd8290f369a62a9ad58c1d7670c27a8173e56a"
+  },
+  {
+    "path": "/api/v1/academics/grades",
+    "source": "app/api/v1/academics/grades/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "3f1743b9dacf5da3799d673551b28a3567a17f07546d87c9c00b154582151cc2"
+  },
+  {
+    "path": "/api/v1/academics",
+    "source": "app/api/v1/academics/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "18ce2c1140edfb8ea6ed57480bd9a84b56d9737af7c6329c5d49d35f5f8ef78a"
+  },
+  {
+    "path": "/api/v1/academics/sections",
+    "source": "app/api/v1/academics/sections/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "274692367c07cdf601caa90c0ecc2248f05e76e2c785aea5132f4ff9b13637bd"
+  },
+  {
+    "path": "/api/v1/academics/subjects",
+    "source": "app/api/v1/academics/subjects/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "3e480bb23403250db00f5868f79eeac9dbdb6f3a98d65819265a2bf6809e2393"
+  },
+  {
+    "path": "/api/v1/academics/years/[id]/close",
+    "source": "app/api/v1/academics/years/[id]/close/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "471354b95d2f2c0010c1f172c4685de8001b6477f2df539279811360eed6d10d"
+  },
+  {
+    "path": "/api/v1/academics/years/[id]/open",
+    "source": "app/api/v1/academics/years/[id]/open/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "69bc6ee7986d9b68ff7047fedf2a4ad7e5060d2515a6f7bab11ef78348a74f92"
+  },
+  {
+    "path": "/api/v1/academics/years/[id]/terms",
+    "source": "app/api/v1/academics/years/[id]/terms/route.ts",
+    "methods": [
+      "PUT"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "7da44414b95fefe472cd595286b27c225930d93981b860cbeca7dabf284842c1"
+  },
+  {
+    "path": "/api/v1/academics/years",
+    "source": "app/api/v1/academics/years/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "350e19b0ecefaa1d322e7849556bebe98841af9e877102c486c117fbfbcaafcb"
+  },
+  {
+    "path": "/api/v1/activate",
+    "source": "app/api/v1/activate/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/activation-http"
+    ],
+    "source_sha256": "fc3490dc50dac78f5968349d234672fad279110b1a19bfed652bacaa29efa049"
+  },
+  {
+    "path": "/api/v1/audit",
+    "source": "app/api/v1/audit/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/reporting-http"
+    ],
+    "source_sha256": "25e8e84b91cc9e5f15ba444eea7a3f27bd018d41ba2ae8a5a7b3fb96120dc1e6"
+  },
+  {
+    "path": "/api/v1/branding/assets",
+    "source": "app/api/v1/branding/assets/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "3e34764c41c3252b64477ae1c01dbe38d2860568b6c435da758887652a61c7e6"
+  },
+  {
+    "path": "/api/v1/branding/draft",
+    "source": "app/api/v1/branding/draft/route.ts",
+    "methods": [
+      "PUT"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "ffa6735f96f916c9ec390c4b616653a8b97f34df710e8021b47cb77249c255a3"
+  },
+  {
+    "path": "/api/v1/branding/hosts/start",
+    "source": "app/api/v1/branding/hosts/start/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "6a01fb4d270ee8f8c04e15dc045cc90b67ee5a6f03d046fdac38c5880ed3572b"
+  },
+  {
+    "path": "/api/v1/branding/hosts/verify",
+    "source": "app/api/v1/branding/hosts/verify/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "cb80298ba84a408f7463ff4bb85c7f8320a5a833e9358905f84d713d303396c8"
+  },
+  {
+    "path": "/api/v1/branding/preview",
+    "source": "app/api/v1/branding/preview/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "cf1f5abb9d6c5dd888c507e035d12690975ee0e15b49e3b29c54e610655211da"
+  },
+  {
+    "path": "/api/v1/branding/profile",
+    "source": "app/api/v1/branding/profile/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "f823d4d542e0432b8c8be46c36cd5b5a46f7eaf5779a9a5462a5d327329b6764"
+  },
+  {
+    "path": "/api/v1/branding/publish",
+    "source": "app/api/v1/branding/publish/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "dd4739259bfda6499f4f0f3bc2d2d44047b6a267d2518aab344e3282e7d37dff"
+  },
+  {
+    "path": "/api/v1/branding/rollback",
+    "source": "app/api/v1/branding/rollback/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "9230a6cfd039cfea87ee208e27f842f83db98fa65cb6f8fd934d0edf273b0f2b"
+  },
+  {
+    "path": "/api/v1/branding",
+    "source": "app/api/v1/branding/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "9ef73135ac89ca90a83691672fb5ef23b34691e4dd1b3cbc22de33be2bb377fa"
+  },
+  {
+    "path": "/api/v1/campuses",
+    "source": "app/api/v1/campuses/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/management-http"
+    ],
+    "source_sha256": "71cf097a53ec584eca94d96e2b6d516c22b737ad53b833c3d02656781aeb26de"
+  },
+  {
+    "path": "/api/v1/commands/[command]/key/[key]",
+    "source": "app/api/v1/commands/[command]/key/[key]/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "d0e816180d3dbdab2cf755eb0e1ab101477330aa7b3386286f4d9baff208e174"
+  },
+  {
+    "path": "/api/v1/context",
+    "source": "app/api/v1/context/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/context-http"
+    ],
+    "source_sha256": "b57dac66a1416a5e93b919a6011bda1dd4881031999806b00a5cbd5eebf20b64"
+  },
+  {
+    "path": "/api/v1/context/switch",
+    "source": "app/api/v1/context/switch/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/context-http"
+    ],
+    "source_sha256": "d2004e44eefe69b6e6caecab9c849373ba670fc657344a4502191b73e9f574e2"
+  },
+  {
+    "path": "/api/v1/employees/[id]/account-binding",
+    "source": "app/api/v1/employees/[id]/account-binding/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/people-http"
+    ],
+    "source_sha256": "b6e2fc4ba59ee339fc9e946734484f64cec8a5b829350f7367fce5e0c7be1998"
+  },
+  {
+    "path": "/api/v1/employees/[id]/end",
+    "source": "app/api/v1/employees/[id]/end/route.ts",
+    "methods": [
+      "PATCH"
+    ],
+    "imports": [
+      "@/lib/server/people-http"
+    ],
+    "source_sha256": "161451dcb176b24e776b6b9df8dc5e3c809878e070725a04f8c8939bb2c6f704"
+  },
+  {
+    "path": "/api/v1/employees/[id]/teacher-profile",
+    "source": "app/api/v1/employees/[id]/teacher-profile/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/people-http"
+    ],
+    "source_sha256": "c5d7a3d3c560b753484b1d40d3fa57bcdb0c292f61aff43376f6c98d7b7d4862"
+  },
+  {
+    "path": "/api/v1/employees",
+    "source": "app/api/v1/employees/route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/people-http"
+    ],
+    "source_sha256": "b4a11298058fc5efd9e4f1dc315aceffc5b356c43e44eaf58859597f6ec61149"
+  },
+  {
+    "path": "/api/v1/enrollments/[id]/transfer",
+    "source": "app/api/v1/enrollments/[id]/transfer/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/student-http"
+    ],
+    "source_sha256": "cc0e1bc3afb38ec579082edb3fbb11dfa57555a3da54a00f8754bac8a7608660"
+  },
+  {
+    "path": "/api/v1/enrollments/options",
+    "source": "app/api/v1/enrollments/options/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/student-http"
+    ],
+    "source_sha256": "6c402e3a47379e335cef63e2e54bb06a7863a4cce6ef44b27c3c3fe58c067419"
+  },
+  {
+    "path": "/api/v1/enrollments",
+    "source": "app/api/v1/enrollments/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/student-http"
+    ],
+    "source_sha256": "0215716ef5064c2719baeaee6b49ca49d6a81eaa22b79894af6d008b88b2f628"
+  },
+  {
+    "path": "/api/v1/imports/[id]/cancel",
+    "source": "app/api/v1/imports/[id]/cancel/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "f05bc9ac0bc91d90d3cb89f1a7cb13da450a0e91285c7b997bc6811d1b0a4b40"
+  },
+  {
+    "path": "/api/v1/imports/[id]/confirm",
+    "source": "app/api/v1/imports/[id]/confirm/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "366f53531b958003c85fd5fe49cbc7b73dac2e97b4a9827bb233e0efaa497b90"
+  },
+  {
+    "path": "/api/v1/imports/[id]/errors.csv",
+    "source": "app/api/v1/imports/[id]/errors.csv/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "0c2b9ed2fed3be2076d8882792e4c5d790c13e40ddec8a5d30f10066c862b817"
+  },
+  {
+    "path": "/api/v1/imports/[id]/process",
+    "source": "app/api/v1/imports/[id]/process/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "4c9215e0072369b604472dbb31d303fd045082e37ba1097163ed4a53d889e02c"
+  },
+  {
+    "path": "/api/v1/imports/[id]",
+    "source": "app/api/v1/imports/[id]/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "e07814503aa8179d30e2941ec19217c1e5d52d4fba1ec7fca36c460255a7e7e4"
+  },
+  {
+    "path": "/api/v1/imports/[id]/rows",
+    "source": "app/api/v1/imports/[id]/rows/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "b2af519d90d4779e90b2dbbb388d54f6bee961669771fb066e5a1a747a42b976"
+  },
+  {
+    "path": "/api/v1/imports/options",
+    "source": "app/api/v1/imports/options/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "0228ef3c69e65f7fa0013d3c519dd7b8f3270f7c59d5094b643bd673d83d9151"
+  },
+  {
+    "path": "/api/v1/imports/preview",
+    "source": "app/api/v1/imports/preview/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/import-http"
+    ],
+    "source_sha256": "ad07aed201193125cd92a3bba0c17e86958252288f2f4c8d0cc4802f2ad5dbd0"
+  },
+  {
+    "path": "/api/v1/institutions/[id]/branches",
+    "source": "app/api/v1/institutions/[id]/branches/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/context-http"
+    ],
+    "source_sha256": "8172499e796092c2eacd2cf1dcf72ab8c2619a58aa11428d08d2c466ea189780"
+  },
+  {
+    "path": "/api/v1/invitations/accept",
+    "source": "app/api/v1/invitations/accept/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/staff-invite-acceptance-http"
+    ],
+    "source_sha256": "7618bca4cb789a5f3da5e17212b12208ccabc6a25d93020d6e55802c7d2b3ce9"
+  },
+  {
+    "path": "/api/v1/invitations",
+    "source": "app/api/v1/invitations/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/staff-invite-http"
+    ],
+    "source_sha256": "d929de51ce668b5c08360f4311a8d38a04963b1544c6b81dd743a00f9dd73dee"
+  },
+  {
+    "path": "/api/v1/me",
+    "source": "app/api/v1/me/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/management-http"
+    ],
+    "source_sha256": "c1d52bf7812c624da329f4c36ec919b54546cd5aad9fe47322a61daf864b9467"
+  },
+  {
+    "path": "/api/v1/memberships/[id]",
+    "source": "app/api/v1/memberships/[id]/route.ts",
+    "methods": [
+      "PATCH"
+    ],
+    "imports": [
+      "@/lib/server/management-http"
+    ],
+    "source_sha256": "d05b22b7c99e74e3a2f2450bb02b6e560935a36591564937408221e79c57b6c9"
+  },
+  {
+    "path": "/api/v1/memberships",
+    "source": "app/api/v1/memberships/route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/management-http"
+    ],
+    "source_sha256": "c0496c4a4dcf609a18675c90d9d4c567542ec7f260b3fbf592e66053fe26d08f"
+  },
+  {
+    "path": "/api/v1/modules/confirm",
+    "source": "app/api/v1/modules/confirm/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/tenancy-module-http"
+    ],
+    "source_sha256": "fe45f8fa15cd38564f89a2e06f821048519a4e0dba34ec0fa1893c23cbc58d5d"
+  },
+  {
+    "path": "/api/v1/modules",
+    "source": "app/api/v1/modules/route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/tenancy-module-http"
+    ],
+    "source_sha256": "cef9fe5af72f650b322712d360e3bd8795c3476ce25e063fa50f60109cc71506"
+  },
+  {
+    "path": "/api/v1/offerings",
+    "source": "app/api/v1/offerings/route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "d9c491526fb367bc4e1e36cd4b058d2d558f9be20eacb8fe637918fb888eb51f"
+  },
+  {
+    "path": "/api/v1/password-reset/accept",
+    "source": "app/api/v1/password-reset/accept/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/password-reset-http"
+    ],
+    "source_sha256": "e493c9e426d43ed8c3da2108f4a9ca9616bc3702af422645dc894b561e0eb874"
+  },
+  {
+    "path": "/api/v1/password-reset",
+    "source": "app/api/v1/password-reset/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/password-reset-http"
+    ],
+    "source_sha256": "55bff04accd9a344b74806d061bac2d4db7ccb8bb6a1afb842c0fe44ae2a7365"
+  },
+  {
+    "path": "/api/v1/people/selection",
+    "source": "app/api/v1/people/selection/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/student-http"
+    ],
+    "source_sha256": "0f9b67bfdcb054f6cd0452cc5c6227607c4e395591d89aacacde43e42992d592"
+  },
+  {
+    "path": "/api/v1/public/branding/[slug]",
+    "source": "app/api/v1/public/branding/[slug]/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "2d5e459f4da14291845a55a2f24a11eee53f5a24669944b0915e9536dd32d276"
+  },
+  {
+    "path": "/api/v1/public/branding/assets/[asset]/[file]",
+    "source": "app/api/v1/public/branding/assets/[asset]/[file]/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/branding-http"
+    ],
+    "source_sha256": "e653a0d36d2205f07d2aebc84f39afdbdf417856747e9ea9b9de5665c306ec97"
+  },
+  {
+    "path": "/api/v1/reports/attendance",
+    "source": "app/api/v1/reports/attendance/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/reporting-http"
+    ],
+    "source_sha256": "62bf7963ef93c728a6c540f76b059a9a94e010f1b6391779433078ce6eb8d08a"
+  },
+  {
+    "path": "/api/v1/reports/attendance/sessions",
+    "source": "app/api/v1/reports/attendance/sessions/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/reporting-http"
+    ],
+    "source_sha256": "553db982299af8e842d271f48a68e986399d524ab47e66e5daaf81bf20e46937"
+  },
+  {
+    "path": "/api/v1/reports/attendance.csv",
+    "source": "app/api/v1/reports/attendance.csv/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/reporting-http"
+    ],
+    "source_sha256": "7d73559d9296d3bacf0aaaf7e456d65c8751de2ab05971fba5ad7d54ddaf1811"
+  },
+  {
+    "path": "/api/v1/school",
+    "source": "app/api/v1/school/route.ts",
+    "methods": [
+      "GET",
+      "PATCH"
+    ],
+    "imports": [
+      "@/lib/server/auth",
+      "@/lib/server/access",
+      "@/backend/modules/access/contracts",
+      "@/lib/server/management-http"
+    ],
+    "source_sha256": "4d575e4010791c6ee86f89e518a1fbea510451cce289509948cadecdc8520174"
+  },
+  {
+    "path": "/api/v1/sessions/[id]/cancel",
+    "source": "app/api/v1/sessions/[id]/cancel/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "f31b7404c18bd82b89aff6f6e8df7cdf4795f1583320dbae92137b6003634c15"
+  },
+  {
+    "path": "/api/v1/sessions/[id]/corrections",
+    "source": "app/api/v1/sessions/[id]/corrections/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "9e2e0f3c4296980718c6149c6afdf9a7e26c3bc0dd6dfe1d50ab13b62584f398"
+  },
+  {
+    "path": "/api/v1/sessions/[id]/history",
+    "source": "app/api/v1/sessions/[id]/history/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "fea0cbf9eb9a4bc8c05ed42ddd93dee9e382c25d5a491bed21e1887d9fa4c37b"
+  },
+  {
+    "path": "/api/v1/sessions/[id]/open",
+    "source": "app/api/v1/sessions/[id]/open/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "b7f7b78c3bfa18077837605e2ba62a3c83caa806f21f3ba6fba66aadf429654c"
+  },
+  {
+    "path": "/api/v1/sessions/[id]",
+    "source": "app/api/v1/sessions/[id]/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "0c24fc861bd7063dda48ca1a712a4d66020a73596b28a3c9f39b1358147b0b27"
+  },
+  {
+    "path": "/api/v1/sessions/[id]/submit",
+    "source": "app/api/v1/sessions/[id]/submit/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "1778522ea8ca66233db1f0f57a224dd24cfd4df042445267366b92d2e162f46d"
+  },
+  {
+    "path": "/api/v1/sessions",
+    "source": "app/api/v1/sessions/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "c4b96c13af595b5ae3b76f1f9d9a0394934f9a66865e21b025b824a2a7c1bcb9"
+  },
+  {
+    "path": "/api/v1/students/[id]/archive",
+    "source": "app/api/v1/students/[id]/archive/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/student-http"
+    ],
+    "source_sha256": "fed0b6a2922dbf8ed3627c0670a04913a208351a54cc7765ae84dcfc39abd11a"
+  },
+  {
+    "path": "/api/v1/students/[id]",
+    "source": "app/api/v1/students/[id]/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/student-http"
+    ],
+    "source_sha256": "c0f276f91b5618e6c3436eaa00398997f18f62f8111ee3dbaed04858c4b39ed5"
+  },
+  {
+    "path": "/api/v1/students",
+    "source": "app/api/v1/students/route.ts",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/student-http"
+    ],
+    "source_sha256": "be8ba5cf2a6ab89279df9f6b15f65a536f90b86eca8dc843a5897cf80e413352"
+  },
+  {
+    "path": "/api/v1/teacher/sessions",
+    "source": "app/api/v1/teacher/sessions/route.ts",
+    "methods": [
+      "GET"
+    ],
+    "imports": [
+      "@/lib/server/attendance-http"
+    ],
+    "source_sha256": "3bfef6b80fdcae1958a7a52676fad17d98a72a0e7ae2a73eb83a80d99232c812"
+  },
+  {
+    "path": "/api/v1/teacher-assignments/[id]/end",
+    "source": "app/api/v1/teacher-assignments/[id]/end/route.ts",
+    "methods": [
+      "PATCH"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "91196468b8c6cb234fcc1b36481da562217833853d0e576ac0bdfebb1ff46153"
+  },
+  {
+    "path": "/api/v1/teacher-assignments",
+    "source": "app/api/v1/teacher-assignments/route.ts",
+    "methods": [
+      "POST"
+    ],
+    "imports": [
+      "@/lib/server/academic-http"
+    ],
+    "source_sha256": "f83e294331bf0db919ea7551125abf314ad750f4ba9bafaa5a8db6863dee48da"
+  }
+]

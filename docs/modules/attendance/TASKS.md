@@ -38,6 +38,10 @@ Run `pnpm demo:seed` first. It preserves existing local records, prepares one id
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## Experience overlay consumption
+
+EX-10 adopts administrator schedule/detail/correction/cancellation; EX-11 adopts assigned teacher day and roll call. Current assignment/resource checks, pinned roster, UUID intent keys, tenant receipt scope and unknown-result recovery remain unchanged. Timetable planning and teacher school-wide history remain separate missing owner contracts.
+
 ## ATT-02 — Open the exact roster and submit attendance
 
 Depends on: ATT-01

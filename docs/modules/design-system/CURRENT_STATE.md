@@ -21,6 +21,16 @@ DS-02 remains BLOCKED pending true native 200% zoom, VoiceOver and NVDA sessions
 
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.
 
+### EX-00 live reconciliation — 9 October 2026
+
+EX-00 is implementation VERIFIED; human review is PENDING. Baseline executable source is `61f619e58093925bb20433e839f6ac375654b659` on `work/stu-01-after-per02-wip`; the focused documentation/tooling checkpoint is the commit containing this record. The working tree initially had no modified tracked files and preserved untracked `.puku-cli/`, `docs/references/`, the supplied `docs/execution/` pack and `readiness-review.diff`.
+
+The live schema has 51 models and matches the pack hash `26780ff92ebfcc9a84ea44207730027ecd1eace07eaa5b50ad569d38d033eed4`. All 255 historical source-reference files match live counterparts. The migration head is `20261006008000_verified_invite_context_table_name`; read-only `pnpm exec prisma migrate status` reported all 31 migrations applied. No migration, seed, database write, dependency or product behavior changed.
+
+[Contract reconciliation](../../execution/CONTRACT_DIFF.md) maps actual facades, endpoints, DTOs, owners, actors and gaps. [Route/reference map](../../execution/ROUTE_REFERENCE_MAP.md) pins all six approved HTML hashes and limits Wave A to current administrator/teacher identities. BE-01 and BE-02 are confirmed for the first implementation batch; existing-Person selection and teacher student-read scope remain isolated later gates.
+
+Verification executed now: `pnpm check:docs` passed after the live-doc checker excluded the immutable historical source-reference subtree; `pnpm check:boundaries` passed; `git diff --check` passed. The local database status command passed without applying migrations. The live development server at `http://127.0.0.1:3400` returned `{ready:true,state:"ready"}` and `/sign-in` returned 200. This checkpoint did not rerun prior functional, E2E or build evidence. EX-01 is next; DS-02 native VoiceOver/NVDA and TEN-03 security proof remain open.
+
 ### Production portal layout correction — 6 October 2026
 
 The portal-wide integration correction is implementation-complete and human visual review remains PENDING. Shared production compositions now govern admin and teacher titles, page/section gaps, settings forms, directory splits, table containment, compact toolbars, state panels and role-specific navigation. The desktop administrator shell uses a 248px grouped sidebar with consistent outline icons and selected/focus states. Its mobile menu retains keyboard open, first-link focus, Escape close and trigger focus return; the account action now remains in the first header row while branch context occupies its own row.

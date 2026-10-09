@@ -1,0 +1,2771 @@
+{
+  "edition": "01",
+  "status": "UX_DESIGN_PROPOSAL",
+  "baseline": "Operator 03.9, School Administrator 01, Teacher 01",
+  "modules": [
+    {
+      "id": "access",
+      "title": "Family access",
+      "icon": "shield",
+      "phase": 2,
+      "description": "Accept school-verified access and recover it safely.",
+      "owner": "Access, Guardians"
+    },
+    {
+      "id": "home",
+      "title": "Home & my children",
+      "icon": "home",
+      "phase": 2,
+      "description": "Know which child needs an action without comparing siblings.",
+      "owner": "Guardians, authorized owner read models"
+    },
+    {
+      "id": "attendance",
+      "title": "Attendance",
+      "icon": "check",
+      "phase": 2,
+      "description": "Understand recorded sessions and submit explanations without changing the register.",
+      "owner": "Attendance, Family requests"
+    },
+    {
+      "id": "communication",
+      "title": "Messages",
+      "icon": "mail",
+      "phase": 2,
+      "description": "Read, acknowledge and reply within permitted school conversations.",
+      "owner": "Communication, Guardians"
+    },
+    {
+      "id": "calendar",
+      "title": "Calendar & events",
+      "icon": "calendar",
+      "phase": 2,
+      "description": "Plan around published school events and explicit responses.",
+      "owner": "Academics, Events"
+    },
+    {
+      "id": "learning",
+      "title": "Learning",
+      "icon": "book",
+      "phase": 3,
+      "description": "Support the child using published tasks and returned feedback.",
+      "owner": "Learning, Documents"
+    },
+    {
+      "id": "results",
+      "title": "Results",
+      "icon": "chart",
+      "phase": 4,
+      "description": "Read only published result versions and raise a clarification.",
+      "owner": "Assessments"
+    },
+    {
+      "id": "finance",
+      "title": "Fees & payments",
+      "icon": "wallet",
+      "phase": 5,
+      "description": "Review authorized invoices and know the exact payment outcome.",
+      "owner": "Finance, Payments"
+    },
+    {
+      "id": "requests",
+      "title": "Requests & forms",
+      "icon": "file",
+      "phase": 2,
+      "description": "Send a request or consent and track the school’s decision.",
+      "owner": "Family requests, Documents, Consent"
+    },
+    {
+      "id": "admissions",
+      "title": "Applications",
+      "icon": "students",
+      "phase": 3,
+      "description": "Manage applicant records separately from enrolled-child access.",
+      "owner": "Admissions"
+    },
+    {
+      "id": "services",
+      "title": "School services",
+      "icon": "bus",
+      "phase": 6,
+      "description": "Use enabled transport, pickup, library and activity services.",
+      "owner": "Transport, Library, Activities"
+    },
+    {
+      "id": "wellbeing",
+      "title": "Care & wellbeing",
+      "icon": "heart",
+      "phase": 6,
+      "description": "Share relevant updates through restricted school channels.",
+      "owner": "Health, Student support"
+    },
+    {
+      "id": "account",
+      "title": "My account",
+      "icon": "people",
+      "phase": 2,
+      "description": "Manage your own contact, access and privacy requests.",
+      "owner": "Access, Privacy"
+    },
+    {
+      "id": "assistant",
+      "title": "School assistant",
+      "icon": "spark",
+      "phase": 7,
+      "description": "Get source-linked explanations without delegating consequential decisions.",
+      "owner": "Assistant, authorized domain owners"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "PAR-01",
+      "area": "access",
+      "title": "Accept a school invitation",
+      "phase": 2,
+      "purpose": "school-verified relationship + account binding",
+      "steps": [
+        {
+          "title": "School invitation",
+          "help": "The public invitation identifies the school; child details appear only after the required identity checks.",
+          "fields": [
+            {
+              "name": "channel",
+              "label": "I am using the school’s verified invitation channel.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review permitted access",
+          "help": "The school has already verified the relationship and its allowed purposes.",
+          "fields": [
+            {
+              "name": "identity",
+              "label": "The invited identity has been verified through the school’s required process.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "access",
+              "label": "I have reviewed the child and permitted purposes.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The verified child link becomes active for this account, with its exact permitted purposes.",
+      "invariant": "Email possession alone cannot prove a guardian relationship. Bind a single-use invitation to the verified relationship and intended account; never let the parent choose a child or expand grants.",
+      "recovery": "Expired, wrong-account, revoked and delivery-failed invitations show safe help. Replaying a completed acceptance returns the existing outcome.",
+      "data": "Guardians owns relationship verification/purpose grant; Access owns account and invitation token hash. Atomic acceptance rechecks both before activation.",
+      "extension": false
+    },
+    {
+      "id": "PAR-02",
+      "area": "access",
+      "title": "Sign in through the school page",
+      "phase": 2,
+      "purpose": "active account; child-purpose authorization after sign-in",
+      "steps": [
+        {
+          "title": "Sign in",
+          "help": "Published school branding gives context, not access.",
+          "fields": [
+            {
+              "name": "email",
+              "label": "Email address",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "password",
+              "label": "Password",
+              "type": "password",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Choose a workspace",
+          "help": "Only currently permitted family contexts appear.",
+          "fields": [
+            {
+              "name": "destination",
+              "label": "Start with",
+              "type": "select",
+              "options": [
+                "My family overview",
+                "My selected child"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent enters an authorized family workspace and sees the current child context.",
+      "invariant": "No admission-number plus birth-date public child lookup. Account identity and relationship authority remain separate. Safe internal return URLs only.",
+      "recovery": "Use generic credential rejection. Empty links lead to school contact; suspended access does not reveal child names.",
+      "data": "Access session → active GuardianRelationship/PurposeGrant → minimal permitted child summaries.",
+      "extension": false
+    },
+    {
+      "id": "PAR-03",
+      "area": "access",
+      "title": "Activate or recover account access",
+      "phase": 2,
+      "purpose": "institution trust mode + account-wide recovery policy",
+      "steps": [
+        {
+          "title": "Account help",
+          "help": "Use the recovery channel allowed by the school and every relevant stricter membership.",
+          "fields": [
+            {
+              "name": "email",
+              "label": "Account email",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "need",
+              "label": "Help needed",
+              "type": "select",
+              "options": [
+                "Activate invited account",
+                "Recover password",
+                "Mailbox no longer safe"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next step",
+          "help": "A generic acknowledgement protects account existence.",
+          "fields": [
+            {
+              "name": "understood",
+              "label": "I will follow the verified instructions from the school.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent receives a safe acknowledgement or verified support route.",
+      "invariant": "Global account recovery must not bypass a stricter institution. Recheck policy when issuing and consuming a token. Compromised-inbox recovery uses the verified owner route.",
+      "recovery": "Expired/revoked/consumed/failed-delivery tokens fail safely. Do not send a second identity’s invitation to a newly entered mailbox.",
+      "data": "Access token hash, delivery state, session invalidation and policy evidence; no secrets or raw tokens in logs.",
+      "extension": false
+    },
+    {
+      "id": "PAR-04",
+      "area": "access",
+      "title": "Review my verified child links",
+      "phase": 2,
+      "purpose": "relationship self-read with purpose-filtered child summary",
+      "steps": [
+        {
+          "title": "My children",
+          "help": "A separate grant exists for each child, school and purpose.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "Review",
+              "type": "select",
+              "options": [
+                "Active linked children",
+                "Access purposes for selected child"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Access question",
+          "help": "A relationship label does not imply every capability.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next step",
+              "type": "select",
+              "options": [
+                "Open permitted child dashboard",
+                "Ask the school about access"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent understands the children and purposes they can access.",
+      "invariant": "No unrestricted household or co-guardian directory. Do not reveal private reasons for restrictions or compare children.",
+      "recovery": "Revoked/ended links disappear from protected lists; old deep links fail without leaking details.",
+      "data": "GuardianRelationship → effective PurposeGrant → child/enrollment summary, constrained by institution and branch.",
+      "extension": false
+    },
+    {
+      "id": "PAR-05",
+      "area": "access",
+      "title": "Ask about a missing child link",
+      "phase": 2,
+      "purpose": "authenticated support request; no child-record access",
+      "steps": [
+        {
+          "title": "Contact the school",
+          "help": "Submit a claim for verification, not a search across school records.",
+          "fields": [
+            {
+              "name": "school",
+              "label": "School name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "School-issued reference",
+              "type": "text",
+              "options": [],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "issue",
+              "label": "Issue",
+              "type": "select",
+              "options": [
+                "My child is missing",
+                "My access looks incorrect",
+                "Invitation has not arrived"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review request",
+          "help": "Use the school’s approved identity-verification process.",
+          "fields": [
+            {
+              "name": "message",
+              "label": "Brief description",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "safe",
+              "label": "I have not included passwords, identity documents or private custody details.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A support request is pending verification; no child access is added automatically.",
+      "invariant": "Do not confirm whether a named child exists. Only a designated school verifier can establish the relationship and purpose grants.",
+      "recovery": "Duplicate request shows prior reference. Missing proof uses a private school channel; an ordinary request is not evidence.",
+      "data": "Support claim is owned by Family requests; verified relationship remains a separate Guardians command.",
+      "extension": false
+    },
+    {
+      "id": "PAR-06",
+      "area": "access",
+      "title": "Handle changed or withdrawn access",
+      "phase": 2,
+      "purpose": "live relationship and purpose check",
+      "steps": [
+        {
+          "title": "Access changed",
+          "help": "Show only a safe message and support reference.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next step",
+              "type": "select",
+              "options": [
+                "Return to permitted children",
+                "Contact the school"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Leave safely",
+          "help": "Clear protected screen state when access changes.",
+          "fields": [
+            {
+              "name": "ack",
+              "label": "I understand that previous access may no longer be available.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Protected child data is cleared and the parent receives a safe next step.",
+      "invariant": "Recheck on reads, writes, downloads and delivery. Child-switch caches, search results and back navigation must not retain revoked data.",
+      "recovery": "Never expose the private restriction reason, another guardian’s details or a previously authorized attachment.",
+      "data": "Access/Guardians revocation event invalidates purpose caches; owner queries enforce current grants independently.",
+      "extension": false
+    },
+    {
+      "id": "PAR-07",
+      "area": "home",
+      "title": "Review my family overview",
+      "phase": 2,
+      "purpose": "current minimal summary for each active relationship",
+      "steps": [
+        {
+          "title": "Family overview",
+          "help": "Summaries are limited to currently permitted children and sources.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "Show",
+              "type": "select",
+              "options": [
+                "Actions needing me",
+                "My linked children"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next action",
+          "help": "Every item names its child and school.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Open",
+              "type": "select",
+              "options": [
+                "Selected child dashboard",
+                "A school request",
+                "An unread school notice"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent reaches a relevant action without a school-wide dashboard or sibling comparisons.",
+      "invariant": "No combined attendance percentage, combined cross-school payment basket or hidden child counts. Avoid labeling a child as at risk from incomplete data.",
+      "recovery": "Partial module failure identifies the unavailable source and last-updated time without inventing a zero.",
+      "data": "Compose authorized owner summaries per relationship; all-school counts never enter the parent read model.",
+      "extension": false
+    },
+    {
+      "id": "PAR-08",
+      "area": "home",
+      "title": "Switch child and school context",
+      "phase": 2,
+      "purpose": "active destination relationship and specific purposes",
+      "steps": [
+        {
+          "title": "Select a child",
+          "help": "The child card includes school, branch and class to avoid mistakes.",
+          "fields": [
+            {
+              "name": "destination",
+              "label": "Destination",
+              "type": "select",
+              "options": [
+                "Aarav · Greenwood · Whitefield",
+                "Nila · Greenwood · Indiranagar",
+                "Mira · Westbridge · North campus"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review unsaved work",
+          "help": "Records remain attached to their original child.",
+          "fields": [
+            {
+              "name": "leave",
+              "label": "I have reviewed any unsent work before switching.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The entire workspace switches to the selected child and re-evaluates modules and permissions.",
+      "invariant": "No independent branch switch that leaves the previous child selected. Cancel or confirm dirty input; clear prior child view state. Persisted pending payments stay tied to their original invoice.",
+      "recovery": "If a destination grant changes, leave the parent in a safe permitted context. Never carry messages, attachments or request drafts across children.",
+      "data": "Relationship/child/context DTO drives owner calls. Draft and pending-intent keys include actor, institution, child and purpose.",
+      "extension": false
+    },
+    {
+      "id": "PAR-09",
+      "area": "home",
+      "title": "Manage school notification preferences",
+      "phase": 2,
+      "purpose": "self preferences by child/purpose",
+      "steps": [
+        {
+          "title": "Choose updates",
+          "help": "Preferences do not change the underlying access grant.",
+          "fields": [
+            {
+              "name": "category",
+              "label": "Update category",
+              "type": "select",
+              "options": [
+                "School notices",
+                "Attendance updates",
+                "Learning updates",
+                "Payment updates"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Choose channel",
+          "help": "Show any school-required service notices separately.",
+          "fields": [
+            {
+              "name": "channel",
+              "label": "Preferred channel",
+              "type": "select",
+              "options": [
+                "In-app only",
+                "In-app and verified email"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "review",
+              "label": "I have reviewed which service notices remain required.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Preferences are saved for the selected permitted category and verified channel.",
+      "invariant": "An opt-in is not a guardian grant; an opt-out cannot erase an outstanding request or legal/service notice. No sensitive content in push previews.",
+      "recovery": "Unverified contact details cannot receive private updates. Record a delivery failure without marking a notice read.",
+      "data": "Preferences keyed by actor, child/purpose/category; Communication resolves verified channels and current recipient grants.",
+      "extension": false
+    },
+    {
+      "id": "PAR-10",
+      "area": "attendance",
+      "title": "Read my child’s attendance",
+      "phase": 2,
+      "purpose": "attendance.read_child",
+      "steps": [
+        {
+          "title": "Attendance period",
+          "help": "Read submitted session outcomes in school-local time.",
+          "fields": [
+            {
+              "name": "from",
+              "label": "From date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "Until date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Inspect a session",
+          "help": "Unsubmitted and unavailable are not absence.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Submitted session detail",
+                "Unsubmitted session explanation",
+                "Correction history when permitted"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent understands the exact session status and source of the recorded outcome.",
+      "invariant": "Show session granularity and exclude unsubmitted/cancelled sessions from any policy-defined attendance denominator. Do not invent a daily status or percentage.",
+      "recovery": "Pending data and revised records display honestly. Parent cannot edit marks.",
+      "data": "Submitted AttendanceSession → child frozen roster entry → effective AttendanceRecord/revision, scoped to current child purpose.",
+      "extension": false
+    },
+    {
+      "id": "PAR-11",
+      "area": "attendance",
+      "title": "Submit an absence explanation",
+      "phase": 2,
+      "purpose": "attendance.explanation.submit for selected child",
+      "steps": [
+        {
+          "title": "Absence details",
+          "help": "This is an explanation for school review, not an attendance mark.",
+          "fields": [
+            {
+              "name": "from",
+              "label": "From date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "Until date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason category",
+              "type": "select",
+              "options": [
+                "Health-related absence",
+                "Family commitment",
+                "School-approved activity",
+                "Other"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "School note",
+          "help": "Share only what the office needs; use restricted channels for sensitive evidence.",
+          "fields": [
+            {
+              "name": "note",
+              "label": "Brief explanation",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "confirm",
+              "label": "I understand that the school reviews this explanation separately from attendance.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The explanation receives a reference and Pending review status; attendance remains unchanged.",
+      "invariant": "Same-day date ranges are valid. Live grant and date/policy bounds apply at submit; duplicate intent is idempotent. No automatic Excused status.",
+      "recovery": "Failed save preserves draft. Lost response checks the same request reference. Sensitive documents need the separately approved upload route.",
+      "data": "FamilyRequest/AbsenceExplanation references child and dates; Attendance is read-only here. School disposition/correction is a separate owner command.",
+      "extension": false
+    },
+    {
+      "id": "PAR-12",
+      "area": "attendance",
+      "title": "Track or withdraw an explanation",
+      "phase": 2,
+      "purpose": "own explanation read/withdraw with current child grant",
+      "steps": [
+        {
+          "title": "Request status",
+          "help": "Pending, reviewed and withdrawn have different meaning.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Explanation reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next action",
+          "help": "The school’s disposition is not automatically an attendance correction.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Read the school’s response",
+                "Withdraw a pending explanation"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent sees a traceable request status or withdrawal outcome.",
+      "invariant": "Only an eligible pending request can be withdrawn; use its current version. Never delete the evidence of a reviewed decision.",
+      "recovery": "Concurrent school review wins by version; show the new state and safe next action.",
+      "data": "Explanation version/status and owner decision reference; append safe audit event, not destructive deletion.",
+      "extension": false
+    },
+    {
+      "id": "PAR-13",
+      "area": "attendance",
+      "title": "Query an attendance discrepancy",
+      "phase": 2,
+      "purpose": "attendance.read_child + permitted school request",
+      "steps": [
+        {
+          "title": "Exact session",
+          "help": "Quote the session the school recorded.",
+          "fields": [
+            {
+              "name": "session",
+              "label": "Session reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "issue",
+              "label": "Issue",
+              "type": "select",
+              "options": [
+                "Recorded status appears incorrect",
+                "Explanation not reflected",
+                "Session details need clarification"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Explain the concern",
+          "help": "The authorized school administrator decides any correction.",
+          "fields": [
+            {
+              "name": "note",
+              "label": "What should the school review?",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent receives a query reference; the submitted register remains unchanged.",
+      "invariant": "No parent attendance.correct grant. A query is not an approved correction or evidence that the teacher was wrong.",
+      "recovery": "If the record changed, show the permitted new revision and retain the original query reference.",
+      "data": "FamilyRequest references child/session/revision; Attendance correction owner links any accepted outcome.",
+      "extension": false
+    },
+    {
+      "id": "PAR-14",
+      "area": "communication",
+      "title": "Read and acknowledge a school notice",
+      "phase": 2,
+      "purpose": "notice audience grant for this account/child",
+      "steps": [
+        {
+          "title": "Read the notice",
+          "help": "Show the published version and the child/school audience.",
+          "fields": [
+            {
+              "name": "notice",
+              "label": "Notice",
+              "type": "select",
+              "options": [
+                "Term planning meeting",
+                "School calendar update"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Acknowledge",
+          "help": "Acknowledgement requires a deliberate action.",
+          "fields": [
+            {
+              "name": "acknowledge",
+              "label": "I acknowledge this notice.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The exact published notice version is acknowledged with a timestamp.",
+      "invariant": "Read, delivered and acknowledged are separate. Editing a notice may require a new acknowledgement; an open page is not consent.",
+      "recovery": "Withdrawn/changed notice or revoked audience cannot be silently acknowledged.",
+      "data": "Notice/version + audience snapshot + explicit AccountAcknowledgement; recheck current grant on attachment access.",
+      "extension": false
+    },
+    {
+      "id": "PAR-15",
+      "area": "communication",
+      "title": "Reply to a permitted conversation",
+      "phase": 2,
+      "purpose": "communication.reply_child + conversation grant",
+      "steps": [
+        {
+          "title": "Conversation",
+          "help": "Use the school-approved child-specific thread.",
+          "fields": [
+            {
+              "name": "topic",
+              "label": "Conversation",
+              "type": "select",
+              "options": [
+                "Fractions practice · Ananya Rao",
+                "School office query"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Reply",
+          "help": "Do not include other pupils or private family restrictions.",
+          "fields": [
+            {
+              "name": "message",
+              "label": "Your message",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The reply has its real sending/delivery state in the permitted thread.",
+      "invariant": "Recipient identities are server-resolved. No unrestricted teacher address book or co-guardian visibility. Parent cannot add participants.",
+      "recovery": "Access removed before send stops delivery. Failed or unknown send remains distinct from sent; reconcile before retry.",
+      "data": "ConversationGrant → Message → delivery attempt, bound to selected child and live participants.",
+      "extension": false
+    },
+    {
+      "id": "PAR-16",
+      "area": "communication",
+      "title": "Request a teacher meeting",
+      "phase": 2,
+      "purpose": "meeting.request for permitted teacher/child (proposed)",
+      "steps": [
+        {
+          "title": "Meeting purpose",
+          "help": "Choose a school-offered channel and participant.",
+          "fields": [
+            {
+              "name": "participant",
+              "label": "Meeting with",
+              "type": "select",
+              "options": [
+                "Assigned class teacher",
+                "School office"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "topic",
+              "label": "Brief topic",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Preferred time",
+          "help": "A request is not a confirmed calendar booking.",
+          "fields": [
+            {
+              "name": "date",
+              "label": "Preferred date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "slot",
+              "label": "Preferred slot",
+              "type": "select",
+              "options": [
+                "15:30–15:45",
+                "15:45–16:00"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The request is pending, then confirmed/rescheduled/declined by the school.",
+      "invariant": "Use offered availability only. Do not expose staff private calendars. Store school-local zone and an unambiguous instant after confirmation.",
+      "recovery": "Handle competing reservations, cancellation and removed guardian access.",
+      "data": "Proposed MeetingRequest/SlotReservation; Communication owns participant notifications. Requires scheduling LLD.",
+      "extension": true
+    },
+    {
+      "id": "PAR-17",
+      "area": "communication",
+      "title": "Resolve an undelivered message",
+      "phase": 2,
+      "purpose": "own message read + live conversation grant",
+      "steps": [
+        {
+          "title": "Delivery status",
+          "help": "A failed delivery does not become a sent message.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Message reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Recovery",
+          "help": "Recheck status before repeating an uncertain request.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Check current status",
+                "Retry a confirmed failed delivery",
+                "Contact the school through an approved channel"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent knows whether a message was accepted, failed or remains unknown.",
+      "invariant": "Keep one stable message identity; delivery attempts are separate and grant-checked. Never retry to a removed recipient.",
+      "recovery": "Provider acknowledgement is not human reading. Show a safe failure reason without delivery credentials.",
+      "data": "Message intent → DeliveryAttempt status, idempotent retry policy and current ConversationGrant.",
+      "extension": false
+    },
+    {
+      "id": "PAR-18",
+      "area": "calendar",
+      "title": "Plan with the school calendar",
+      "phase": 2,
+      "purpose": "published calendar audience for child",
+      "steps": [
+        {
+          "title": "Calendar",
+          "help": "See school-local dates and the source school.",
+          "fields": [
+            {
+              "name": "from",
+              "label": "From date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "category",
+              "label": "Category",
+              "type": "select",
+              "options": [
+                "All permitted events",
+                "Holidays",
+                "Meetings",
+                "Class events"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Event detail",
+          "help": "A dated event is not proof of attendance or a transport reservation.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Read event details",
+                "Review permitted calendar export"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent can plan using a readable agenda and current published event version.",
+      "invariant": "Calendar export contains only permitted minimal details. No other child or staff-private schedule.",
+      "recovery": "Changed/cancelled events show clear history; stale export does not override the live school record.",
+      "data": "Published calendar event/version + audience purpose; export generation reauthorizes each event.",
+      "extension": false,
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "timetable",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "PAR-19",
+      "area": "calendar",
+      "title": "Respond to a school event",
+      "phase": 3,
+      "purpose": "event.response for child (proposed)",
+      "steps": [
+        {
+          "title": "Event response",
+          "help": "Review the event and its response deadline.",
+          "fields": [
+            {
+              "name": "event",
+              "label": "Event reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "response",
+              "label": "Response",
+              "type": "select",
+              "options": [
+                "Attending",
+                "Not attending"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Confirm",
+          "help": "RSVP and permission consent are separate.",
+          "fields": [
+            {
+              "name": "confirm",
+              "label": "I have checked the selected child and event response.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An explicit response is recorded for this event version.",
+      "invariant": "RSVP does not grant excursion consent, pickup authority or paid-service enrollment. If a separate consent is needed, show it separately.",
+      "recovery": "Deadline passed, event version changed or capacity changed yields a clear outcome.",
+      "data": "Proposed EventResponse, event version and owner capacity policy; Consent and Finance remain separate owners.",
+      "extension": true
+    },
+    {
+      "id": "PAR-20",
+      "area": "learning",
+      "title": "Review published homework",
+      "phase": 3,
+      "purpose": "learning.read_child",
+      "steps": [
+        {
+          "title": "Assignment",
+          "help": "Read the teacher’s published task and deadline.",
+          "fields": [
+            {
+              "name": "task",
+              "label": "Assignment",
+              "type": "select",
+              "options": [
+                "Fractions in everyday life",
+                "Reading reflection"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Support the child",
+          "help": "The student remains the author of submitted work.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Read instructions",
+                "Review submission status",
+                "Ask an allowed learning question"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The guardian understands the task, deadline and current learner submission state.",
+      "invariant": "No submit-as-child or mark-as-complete shortcut unless a separately approved assisted-submission policy exists. Draft tasks are private.",
+      "recovery": "Missing and late are distinct; no submission is not proof of non-learning. Reauthorize attachments.",
+      "data": "Published Assignment/version → child audience/enrollment → minimal SubmissionStatus, with no unrelated classmates.",
+      "extension": false
+    },
+    {
+      "id": "PAR-21",
+      "area": "learning",
+      "title": "Read returned learning feedback",
+      "phase": 3,
+      "purpose": "feedback.read_child purpose + returned version",
+      "steps": [
+        {
+          "title": "Returned feedback",
+          "help": "Only feedback intentionally returned to the permitted audience appears.",
+          "fields": [
+            {
+              "name": "task",
+              "label": "Assignment",
+              "type": "select",
+              "options": [
+                "Fractions in everyday life"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Support next steps",
+          "help": "Separate the teacher’s feedback from automated interpretation.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Review strengths and next steps",
+                "Ask a learning question"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent sees the returned revision and can support its next step.",
+      "invariant": "Private draft feedback, moderation notes and unrelated student work never appear.",
+      "recovery": "Withdrawn/replaced feedback identifies the permitted current version; authorization applies to historical versions too.",
+      "data": "FeedbackRevision returned state + guardian learning purpose + submission/task references.",
+      "extension": false
+    },
+    {
+      "id": "PAR-22",
+      "area": "learning",
+      "title": "Ask a learning question",
+      "phase": 3,
+      "purpose": "learning read + approved communication grant",
+      "steps": [
+        {
+          "title": "Learning context",
+          "help": "Quote the relevant assignment, not a class-wide pupil list.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Assignment or feedback reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Question",
+          "help": "Use the permitted teacher conversation.",
+          "fields": [
+            {
+              "name": "question",
+              "label": "Your question",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The question is routed to a permitted conversation with the child context attached.",
+      "invariant": "No unrestricted new recipient selection or implicit result-appeal workflow.",
+      "recovery": "If the teacher’s assignment changes, the school resolves routing without exposing another private thread.",
+      "data": "Communication message references a permitted Learning resource/version; each owner rechecks its scope.",
+      "extension": false
+    },
+    {
+      "id": "PAR-23",
+      "area": "results",
+      "title": "Read published results",
+      "phase": 4,
+      "purpose": "results.read_child",
+      "steps": [
+        {
+          "title": "Published report",
+          "help": "Choose a published reporting period.",
+          "fields": [
+            {
+              "name": "period",
+              "label": "Reporting period",
+              "type": "select",
+              "options": [
+                "Term 1 · Published version 1"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Understand outcomes",
+          "help": "Show the scheme, scale and teacher comments that were approved for release.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Subject outcomes",
+                "Published comments",
+                "Scale explanation"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent understands the official published result version.",
+      "invariant": "Unentered, Absent and Exempt do not become zero. Draft marks/moderation are excluded. No sibling/class ranking by default.",
+      "recovery": "Withheld, unpublished, superseded and unavailable have different user messages without leaking private reasons.",
+      "data": "PublishedResultVersion → child’s approved outcomes + SchemeVersion and permitted comments.",
+      "extension": false
+    },
+    {
+      "id": "PAR-24",
+      "area": "results",
+      "title": "Download an authorized report",
+      "phase": 4,
+      "purpose": "results.download_child",
+      "steps": [
+        {
+          "title": "Report version",
+          "help": "Choose the exact published report.",
+          "fields": [
+            {
+              "name": "report",
+              "label": "Report",
+              "type": "select",
+              "options": [
+                "Term 1 report · Version 1"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Download",
+          "help": "Confirm the device and intended child.",
+          "fields": [
+            {
+              "name": "device",
+              "label": "I am using a device suitable for this child’s school records.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A permitted report download is issued and its version is clear.",
+      "invariant": "Authorize every download; use short-lived delivery links. URLs are not permanent authorization. No other child in filenames or shared caches.",
+      "recovery": "Revoked access or superseded report requires a fresh authorized request.",
+      "data": "Document owner references immutable published result version; audit only minimal download metadata.",
+      "extension": false
+    },
+    {
+      "id": "PAR-25",
+      "area": "results",
+      "title": "Request a result clarification",
+      "phase": 4,
+      "purpose": "published results read + permitted query",
+      "steps": [
+        {
+          "title": "Result context",
+          "help": "A clarification does not change a published mark.",
+          "fields": [
+            {
+              "name": "report",
+              "label": "Report reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "subject",
+              "label": "Subject",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Question",
+          "help": "The assessment owner follows the school’s review process.",
+          "fields": [
+            {
+              "name": "question",
+              "label": "What would you like clarified?",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A tracked clarification reaches the authorized school reviewer.",
+      "invariant": "No direct parent grade edits, guaranteed revaluation or automatic publication of revised results.",
+      "recovery": "Closed review window, duplicate query and a superseded result produce clear next steps.",
+      "data": "FamilyRequest references PublishedResultVersion/subject; Assessments owns any correction and republication.",
+      "extension": false
+    },
+    {
+      "id": "PAR-26",
+      "area": "finance",
+      "title": "Review a child’s fee invoice",
+      "phase": 5,
+      "purpose": "finance.read for explicit child/payer scope",
+      "steps": [
+        {
+          "title": "Invoice",
+          "help": "Review the issuing institution, invoice and currency.",
+          "fields": [
+            {
+              "name": "invoice",
+              "label": "Invoice",
+              "type": "select",
+              "options": [
+                "INV-GW-2026-104 · Tuition"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Breakdown",
+          "help": "Distinguish charges, adjustments, receipts and outstanding balance.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Review line items",
+                "Read payment history",
+                "Query the school office"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The payer understands the exact payable balance for one issuing institution.",
+      "invariant": "Guardian status alone does not grant fee or payer access. No cross-school combined basket. Never expose another payer’s private banking details.",
+      "recovery": "Disputed/adjusted invoice, stale balance or disabled online payment remains reviewable only under current grant.",
+      "data": "Finance Invoice/version → line items/adjustments → allocated settled payments. All money uses currency and exact minor units.",
+      "extension": false
+    },
+    {
+      "id": "PAR-27",
+      "area": "finance",
+      "title": "Pay an authorized invoice",
+      "phase": 5,
+      "purpose": "finance.pay + explicit payer mandate",
+      "steps": [
+        {
+          "title": "Payment review",
+          "help": "Confirm the invoice, child, merchant institution and exact amount.",
+          "fields": [
+            {
+              "name": "invoice",
+              "label": "Invoice",
+              "type": "select",
+              "options": [
+                "INV-GW-2026-104 · Tuition"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "amount",
+              "label": "I have checked the displayed currency and exact amount.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Payment handoff",
+          "help": "A provider redirect is not proof of settlement.",
+          "fields": [
+            {
+              "name": "provider",
+              "label": "I understand that the receipt is issued only after verified confirmation.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "One payment order is created; the result is Processing, Paid, Failed or Unknown until reconciled.",
+      "invariant": "Server computes amount and issuer from the current invoice. Stable idempotency key, invoice version and payable-state guard prevent duplicate orders. Never collect card details in this portal.",
+      "recovery": "Changed balance requires re-review. Interrupted redirect or pending provider outcome uses Check status before any new payment.",
+      "data": "PaymentOrder → PaymentAttempt → verified provider event/reconciliation → ledger allocation/receipt in Finance. Prototype never contacts a provider.",
+      "extension": false
+    },
+    {
+      "id": "PAR-28",
+      "area": "finance",
+      "title": "Resolve an uncertain payment",
+      "phase": 5,
+      "purpose": "own payment status + current payer/read purpose",
+      "steps": [
+        {
+          "title": "Payment status",
+          "help": "Do not ask the parent to pay again while the result is unknown.",
+          "fields": [
+            {
+              "name": "order",
+              "label": "Payment order reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Resolve",
+          "help": "Provider confirmation must be verified by the server.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Check payment status",
+                "Contact support with reference"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The existing order is resolved or remains visibly pending without another charge attempt.",
+      "invariant": "Client callback, screenshot or success query parameter cannot mark an invoice Paid. Only verified settlement evidence changes the ledger.",
+      "recovery": "A pending order persists across navigation. Repeated status reads are safe; retries only after a definitive owner-approved failure state.",
+      "data": "PaymentAttempt status and provider event deduplication; Finance ledger allocation is atomic and idempotent.",
+      "extension": false
+    },
+    {
+      "id": "PAR-29",
+      "area": "finance",
+      "title": "Read receipts and payment history",
+      "phase": 5,
+      "purpose": "finance.receipt.read for explicit payer scope",
+      "steps": [
+        {
+          "title": "Payment history",
+          "help": "Filter by the permitted child and issuing school.",
+          "fields": [
+            {
+              "name": "state",
+              "label": "Payment state",
+              "type": "select",
+              "options": [
+                "Settled payments",
+                "Pending attempts",
+                "Failed attempts"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Receipt",
+          "help": "A receipt belongs to a confirmed payment allocation.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Receipt or order reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent can reconcile the invoice and a verified receipt.",
+      "invariant": "Pending orders do not produce settled receipts. A receipt identifies currency, issuer, amount, date and masked references only.",
+      "recovery": "Refunds/adjustments show a linked traceable event; a PDF download failure does not repeat the payment.",
+      "data": "Settled PaymentAllocation → Receipt/version plus safe PaymentAttempt history; downloads reauthorize.",
+      "extension": false
+    },
+    {
+      "id": "PAR-30",
+      "area": "finance",
+      "title": "Raise a fee or refund query",
+      "phase": 5,
+      "purpose": "finance.query within payer scope",
+      "steps": [
+        {
+          "title": "Query context",
+          "help": "A request is not an approved refund or adjustment.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Invoice or receipt reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "kind",
+              "label": "Query type",
+              "type": "select",
+              "options": [
+                "Charge clarification",
+                "Possible duplicate payment",
+                "Refund request"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Explain",
+          "help": "Share only the transaction reference the school needs.",
+          "fields": [
+            {
+              "name": "note",
+              "label": "Query details",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A financial query is tracked separately from settlement and approval.",
+      "invariant": "No parent refund execution, auto-writeoff or trusted uploaded payment screenshot. Authorized finance review controls any ledger effect.",
+      "recovery": "Duplicate queries link to existing case. Keep Pending review distinct from Refund initiated and Refunded.",
+      "data": "FinanceCase references invoice/payment; approval, provider refund event and ledger adjustment are separate owner transactions.",
+      "extension": false
+    },
+    {
+      "id": "PAR-31",
+      "area": "finance",
+      "title": "Ask about payer access",
+      "phase": 5,
+      "purpose": "support claim; no self-grant of finance authority",
+      "steps": [
+        {
+          "title": "Payer access",
+          "help": "An emergency contact or guardian is not automatically a payer.",
+          "fields": [
+            {
+              "name": "issue",
+              "label": "Issue",
+              "type": "select",
+              "options": [
+                "I cannot see the invoice",
+                "The payer relationship needs review",
+                "Payment access should be removed"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "School verification",
+          "help": "Use the school’s verified payer process.",
+          "fields": [
+            {
+              "name": "note",
+              "label": "Brief request",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The finance/relationship owner reviews a purpose-specific access request.",
+      "invariant": "A payer-only contact must not gain academic or health access. No parent can add another payer or inherit their banking records.",
+      "recovery": "Changed mandate invalidates pending payer actions and rechecks owner-controlled in-flight obligations.",
+      "data": "PayerMandate/PurposeGrant remains owner controlled; FamilyRequest stores the claim and decision reference.",
+      "extension": false
+    },
+    {
+      "id": "PAR-32",
+      "area": "requests",
+      "title": "Submit a school request",
+      "phase": 2,
+      "purpose": "request.create for permitted child/category",
+      "steps": [
+        {
+          "title": "Request category",
+          "help": "Show only school-enabled categories.",
+          "fields": [
+            {
+              "name": "category",
+              "label": "Category",
+              "type": "select",
+              "options": [
+                "School office query",
+                "Attendance query",
+                "Access question"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "subject",
+              "label": "Subject",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Details",
+          "help": "Avoid private evidence in a general request.",
+          "fields": [
+            {
+              "name": "message",
+              "label": "Request details",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "safe",
+              "label": "I have kept sensitive evidence out of this general request.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A reference and Pending review state make the next step clear.",
+      "invariant": "Submission is not approval, a correction or a service booking. Category routing and visibility are school configured.",
+      "recovery": "Save failure keeps input; duplicate intent returns the existing reference; unknown outcome checks the same request.",
+      "data": "FamilyRequest with actor/child/category/version/status and private owner routing; minimal audit metadata.",
+      "extension": false
+    },
+    {
+      "id": "PAR-33",
+      "area": "requests",
+      "title": "Track or withdraw a school request",
+      "phase": 2,
+      "purpose": "own request read/withdraw + live purpose",
+      "steps": [
+        {
+          "title": "Request history",
+          "help": "Read only requests this account may see.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Request reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Action",
+          "help": "Withdrawing a request is not deleting its history.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Read status and school response",
+                "Withdraw if still pending"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent sees the current owner decision and eligible next actions.",
+      "invariant": "A co-guardian does not automatically see another guardian’s private request. Use originator plus purpose policy, not household equality.",
+      "recovery": "Concurrent review, completed request or removed authority returns a safe conflict instead of overwriting the decision.",
+      "data": "FamilyRequest/version + eligible actor visibility; append a transition and preserve owner response.",
+      "extension": false
+    },
+    {
+      "id": "PAR-34",
+      "area": "requests",
+      "title": "Request a child-record update",
+      "phase": 3,
+      "purpose": "record-change request; no direct master-data write",
+      "steps": [
+        {
+          "title": "What changed?",
+          "help": "The school verifies changes to official records.",
+          "fields": [
+            {
+              "name": "category",
+              "label": "Update category",
+              "type": "select",
+              "options": [
+                "Preferred contact arrangement",
+                "Student name correction",
+                "Address correction"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Request details",
+          "help": "Identity evidence uses the school’s restricted verification route.",
+          "fields": [
+            {
+              "name": "note",
+              "label": "Requested change",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "verify",
+              "label": "I understand that the school will verify the change.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A pending change request is linked to the student record, without editing it directly.",
+      "invariant": "No direct legal-name, custody, enrollment or guardian-grant edits. Account contact and child master data are different workflows.",
+      "recovery": "Reject stale/disallowed edits safely; approved change has its own owner event/version.",
+      "data": "ChangeRequest references Student/Person field category; Students/Guardians owner applies verified changes.",
+      "extension": false
+    },
+    {
+      "id": "PAR-35",
+      "area": "requests",
+      "title": "Request a school document",
+      "phase": 3,
+      "purpose": "document.request for allowed child purpose",
+      "steps": [
+        {
+          "title": "Document type",
+          "help": "Only school-offered documents appear.",
+          "fields": [
+            {
+              "name": "kind",
+              "label": "Document",
+              "type": "select",
+              "options": [
+                "Enrollment confirmation",
+                "Attendance statement",
+                "School-issued certificate"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Purpose",
+          "help": "The school verifies eligibility and any approval requirement.",
+          "fields": [
+            {
+              "name": "purpose",
+              "label": "Purpose of request",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The request progresses to approved/declined/issued, then an authorized download.",
+      "invariant": "Request receipt is not an issued certificate. Templates, signatory authority, retention and any fee depend on the document owner.",
+      "recovery": "Expired/revoked links require reauthorization. Keep approval and document-generation failures distinct.",
+      "data": "DocumentRequest → approved versioned artifact; explicit child/purpose access at generation and download.",
+      "extension": false
+    },
+    {
+      "id": "PAR-36",
+      "area": "requests",
+      "title": "Respond to a permission or consent form",
+      "phase": 3,
+      "purpose": "consent.respond for verified authorized signer",
+      "steps": [
+        {
+          "title": "Read the request",
+          "help": "Review the exact purpose, scope, dates and document version.",
+          "fields": [
+            {
+              "name": "form",
+              "label": "Form",
+              "type": "select",
+              "options": [
+                "Science museum visit · Version 1"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Your decision",
+          "help": "Choices are unselected until a deliberate decision.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Decision",
+              "type": "select",
+              "options": [
+                "Consent",
+                "Do not consent"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "read",
+              "label": "I have read this version of the information.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An explicit decision records signer, child, purpose, document version and time.",
+      "invariant": "No preselected consent, bundled unrelated purposes or assumption that every guardian may sign alone. School policy defines required signers and withdrawal effects.",
+      "recovery": "Changed form, deadline passed or signer grant removed requires a safe re-review. Withdrawal is a separate traceable decision when policy allows.",
+      "data": "ConsentRequest/version + SignerPolicy + immutable ConsentDecision; one guardian’s response cannot satisfy an unfulfilled second-signature requirement.",
+      "extension": false
+    },
+    {
+      "id": "PAR-37",
+      "area": "admissions",
+      "title": "Start or resume an application",
+      "phase": 3,
+      "purpose": "applicant self-scope; separate from enrolled child grant",
+      "steps": [
+        {
+          "title": "Application",
+          "help": "Use the school’s offered intake and a minimal applicant record.",
+          "fields": [
+            {
+              "name": "applicant",
+              "label": "Applicant name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "intake",
+              "label": "Intake",
+              "type": "select",
+              "options": [
+                "2027–28 · School-offered entry"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Save or submit",
+          "help": "A submitted application is not enrollment or portal access.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Save application draft",
+                "Submit for school review"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "truth",
+              "label": "I have reviewed the information for accuracy.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An applicant-scoped draft or submitted application has a reference.",
+      "invariant": "An applicant is not matched to an existing pupil by email/DOB alone. Keep evidence, fee and relationship verification separate.",
+      "recovery": "Duplicate claims, withdrawal, document failure and intake closure do not create student records automatically.",
+      "data": "Admissions Application/version/owner actor; approved admission later invokes verified Students/Guardians onboarding.",
+      "extension": false
+    },
+    {
+      "id": "PAR-38",
+      "area": "admissions",
+      "title": "Track application requirements",
+      "phase": 3,
+      "purpose": "own application read + allowed evidence upload",
+      "steps": [
+        {
+          "title": "Application checklist",
+          "help": "See only school-requested items and status.",
+          "fields": [
+            {
+              "name": "application",
+              "label": "Application reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Respond",
+          "help": "Use restricted evidence handling and retain a clear receipt.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Review outstanding requirement",
+                "Respond to school query",
+                "Withdraw the application"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The applicant understands what remains outstanding and the school’s next decision.",
+      "invariant": "Evidence is not a public attachment or ordinary message. File size/type/scan policy and review access must be defined before implementation.",
+      "recovery": "Rejected evidence has a safe reason and resubmission path; do not erase previously reviewed versions.",
+      "data": "ApplicationRequirement → evidence artifact/version → school disposition; object access is purpose scoped.",
+      "extension": false
+    },
+    {
+      "id": "PAR-39",
+      "area": "admissions",
+      "title": "Respond to an admission offer",
+      "phase": 3,
+      "purpose": "intended offer recipient + current version",
+      "steps": [
+        {
+          "title": "Offer",
+          "help": "Review the school, intake, conditions and response deadline.",
+          "fields": [
+            {
+              "name": "offer",
+              "label": "Offer reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Decision",
+          "help": "Acceptance is distinct from enrollment completion.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Response",
+              "type": "select",
+              "options": [
+                "Accept offer",
+                "Decline offer"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "terms",
+              "label": "I have reviewed the offer conditions.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The response is recorded and remaining enrollment steps are visible.",
+      "invariant": "Offer acceptance cannot independently create a verified guardian relationship, settle a fee or assign a class.",
+      "recovery": "Expired/superseded offer, pending payment or missing evidence leads to a precise incomplete state.",
+      "data": "Offer/version → response; admission completion orchestrates separate approved enrollment and guardian commands.",
+      "extension": false
+    },
+    {
+      "id": "PAR-40",
+      "area": "services",
+      "title": "Review transport assignment",
+      "phase": 6,
+      "purpose": "transport.read_child",
+      "steps": [
+        {
+          "title": "Route assignment",
+          "help": "Only the child’s active route and stop are visible.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Assigned route and stop",
+                "Service dates and school contact"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Service question",
+          "help": "A request does not change the transport route.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Read current assignment",
+                "Request a stop or service change"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent knows the currently assigned route and how to request a change.",
+      "invariant": "No full passenger list, unrelated stops, driver private contact or other child location.",
+      "recovery": "Unassigned/suspended service, route change and service disruption are distinct.",
+      "data": "TransportAssignment/effective dates → Route/Stop minimal projection; transport owner decides capacity and change.",
+      "extension": false
+    },
+    {
+      "id": "PAR-41",
+      "area": "services",
+      "title": "Request an authorized pickup change",
+      "phase": 6,
+      "purpose": "pickup.request + child-specific authority (proposed)",
+      "steps": [
+        {
+          "title": "Pickup request",
+          "help": "The school verifies temporary collection authority.",
+          "fields": [
+            {
+              "name": "date",
+              "label": "Pickup date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "collector",
+              "label": "Proposed collector name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "School-approved verification reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Confirm request",
+          "help": "This is not an immediate gate pass.",
+          "fields": [
+            {
+              "name": "confirm",
+              "label": "I understand that school verification and approval are required.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A pending pickup request has a dated approval/decline outcome.",
+      "invariant": "No reusable public QR credential or unverified household delegation. Emergency contacts are not automatically authorized collectors.",
+      "recovery": "Cutoff, revocation, conflicting requests and identity failure require school resolution; follow local emergency procedures.",
+      "data": "Proposed PickupRequest/dated authorization with restricted evidence; operational handover logs actual authorized collection.",
+      "extension": true
+    },
+    {
+      "id": "PAR-42",
+      "area": "services",
+      "title": "Read transport service updates",
+      "phase": 6,
+      "purpose": "transport update audience for assigned child",
+      "steps": [
+        {
+          "title": "Service update",
+          "help": "Read only the assigned service and current freshness.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "School-issued delay notice",
+                "Authorized boarding status"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next action",
+          "help": "Unknown or stale status is not a safety guarantee.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Refresh status",
+                "Use the school’s official transport contact"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent sees a time-stamped, source-labelled service update.",
+      "invariant": "Live vehicle location is a separate approved capability, not assumed here. No precise other-child location or full vehicle movement history.",
+      "recovery": "Provider outage, stale event or missing boarding confirmation shows Unknown with a school contact.",
+      "data": "Transport event/audience read model with event time, received time and retention/freshness contract.",
+      "extension": false
+    },
+    {
+      "id": "PAR-43",
+      "area": "services",
+      "title": "Review child library loans",
+      "phase": 6,
+      "purpose": "library.read_child; renewal request if granted",
+      "steps": [
+        {
+          "title": "Loans",
+          "help": "View only this child’s lending records.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Current loans",
+                "Due dates and return status"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next action",
+          "help": "Renewal depends on library policy and availability.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Request renewal",
+                "Ask about a return discrepancy"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent sees loan status and the owner’s renewal/query outcome.",
+      "invariant": "Do not infer permission to pay or adjust a fine from loan visibility. No other borrower history.",
+      "recovery": "Concurrent return/hold/renewal limit is a clear conflict, not a silently extended date.",
+      "data": "LibraryLoan/version → copy/title plus own RenewalRequest; Finance handles authorized charges separately.",
+      "extension": false
+    },
+    {
+      "id": "PAR-44",
+      "area": "services",
+      "title": "Request an extracurricular place",
+      "phase": 6,
+      "purpose": "activity.enroll_request for child (proposed)",
+      "steps": [
+        {
+          "title": "Activity",
+          "help": "Review eligibility, schedule and any fee separately.",
+          "fields": [
+            {
+              "name": "activity",
+              "label": "Activity",
+              "type": "select",
+              "options": [
+                "School science club",
+                "School music group"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Request place",
+          "help": "A request can be waitlisted; consent/payment are separate.",
+          "fields": [
+            {
+              "name": "confirm",
+              "label": "I have checked the child’s schedule and activity requirements.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The request becomes pending, waitlisted, confirmed or declined.",
+      "invariant": "No overbooking under concurrent requests. A guardian request does not itself satisfy consent or settle a charge.",
+      "recovery": "Capacity changed, withdrawal, schedule conflict and expired offer have owner-controlled outcomes.",
+      "data": "Proposed ActivityOffering/CapacityReservation/ParticipationRequest; Consent and Finance stay independent.",
+      "extension": true
+    },
+    {
+      "id": "PAR-45",
+      "area": "services",
+      "title": "Manage an enabled meal preference",
+      "phase": 6,
+      "purpose": "meal.preference for child (proposed)",
+      "steps": [
+        {
+          "title": "Meal service",
+          "help": "This optional service appears only when offered by the school.",
+          "fields": [
+            {
+              "name": "preference",
+              "label": "School-offered choice",
+              "type": "select",
+              "options": [
+                "Standard school meal",
+                "School-approved alternative"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Confirm",
+          "help": "Health-related restrictions use the verified care workflow.",
+          "fields": [
+            {
+              "name": "confirm",
+              "label": "I understand that this preference does not update medical records.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A dated service preference is submitted under the school’s cutoff policy.",
+      "invariant": "This is a scope extension, not a current Bible guarantee. No diagnosis, allergen safety promise or automatic billing adjustment from a preference.",
+      "recovery": "Cutoff passed, service unavailable or required care verification shows a safe next step.",
+      "data": "Proposed MealPreference/version/effective date; Health and Finance own their separate approved effects.",
+      "extension": true
+    },
+    {
+      "id": "PAR-46",
+      "area": "wellbeing",
+      "title": "Submit a care or emergency-contact update",
+      "phase": 6,
+      "purpose": "restricted care.update_request for authorized guardian",
+      "steps": [
+        {
+          "title": "Update category",
+          "help": "Send sensitive details only through the school’s restricted process.",
+          "fields": [
+            {
+              "name": "category",
+              "label": "Category",
+              "type": "select",
+              "options": [
+                "Emergency contact needs review",
+                "Care information needs updating"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "Private school verification reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Handoff",
+          "help": "A general portal request does not confirm that staff have reviewed urgent information.",
+          "fields": [
+            {
+              "name": "ack",
+              "label": "I will use the school’s official urgent-contact process if immediate action is needed.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A restricted update request reaches the designated school team.",
+      "invariant": "No clinical/custody narrative in general audit, notification or teacher views. Updating a contact does not grant pickup or portal access.",
+      "recovery": "Unavailable restricted channel provides official contact instructions; never promise emergency monitoring.",
+      "data": "RestrictedCareRequest pointer and private owner record; safe receipt and narrow recipient ACL.",
+      "extension": false
+    },
+    {
+      "id": "PAR-47",
+      "area": "wellbeing",
+      "title": "Read an authorized school care note",
+      "phase": 6,
+      "purpose": "explicit care.read_child purpose and document audience",
+      "steps": [
+        {
+          "title": "Shared note",
+          "help": "Only information intentionally released to this signer/account appears.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "School-shared note reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next step",
+          "help": "Read the school’s instructions within the permitted scope.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Acknowledge receipt",
+                "Contact the designated school team"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent reads a specifically shared note and its requested response.",
+      "invariant": "No automatic access to internal safeguarding cases, third-party reports, private staff notes or another guardian’s restricted data.",
+      "recovery": "Withdrawn sharing, changed version or confidential follow-up uses a safe school handoff.",
+      "data": "Care owner supplies versioned shared artifact and audience grant, not a broad Student 360 join.",
+      "extension": false
+    },
+    {
+      "id": "PAR-48",
+      "area": "wellbeing",
+      "title": "Request a student-support discussion",
+      "phase": 6,
+      "purpose": "support.request for permitted child",
+      "steps": [
+        {
+          "title": "Request a conversation",
+          "help": "Keep initial details minimal.",
+          "fields": [
+            {
+              "name": "topic",
+              "label": "Topic",
+              "type": "select",
+              "options": [
+                "Learning support discussion",
+                "Wellbeing conversation",
+                "Contact the school team"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Preferred contact",
+          "help": "A request is not an emergency service.",
+          "fields": [
+            {
+              "name": "channel",
+              "label": "Contact preference",
+              "type": "select",
+              "options": [
+                "Verified email",
+                "School-approved call"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "urgent",
+              "label": "I will use official urgent assistance channels if needed.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A restricted contact request is tracked without exposing internal case details.",
+      "invariant": "No automated diagnosis, safety score or medical recommendation. School specialist scope controls assessment and case access.",
+      "recovery": "Missed contact, unavailable service and revoked grant have a private follow-up route.",
+      "data": "StudentSupportRequest safe metadata → restricted specialist workflow; parent sees only approved status/response.",
+      "extension": false
+    },
+    {
+      "id": "PAR-49",
+      "area": "account",
+      "title": "Update my verified contact details",
+      "phase": 2,
+      "purpose": "account self-update with step-up verification",
+      "steps": [
+        {
+          "title": "New contact",
+          "help": "Change your own account contact, not the child’s guardian relationship.",
+          "fields": [
+            {
+              "name": "email",
+              "label": "New email address",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Verification",
+          "help": "Private delivery must not move to an unverified destination.",
+          "fields": [
+            {
+              "name": "verify",
+              "label": "I will complete the school-approved verification and recovery checks.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A pending contact change becomes effective only after the required verification.",
+      "invariant": "Do not overwrite identity binding or relationship evidence from a contact edit. Existing compromise controls and account-wide recovery policy remain active.",
+      "recovery": "Failed verification/expired token preserves the current verified contact; suspicious change uses the verified support route.",
+      "data": "Access PendingContactChange/token hash and verified contact; Communication uses only approved effective channels.",
+      "extension": false
+    },
+    {
+      "id": "PAR-50",
+      "area": "account",
+      "title": "Review sessions and sign out",
+      "phase": 2,
+      "purpose": "own session management",
+      "steps": [
+        {
+          "title": "My account",
+          "help": "Review safe account and current session information.",
+          "fields": [
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Account details",
+                "Current session",
+                "Other sessions if supported"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "End access",
+          "help": "Keep Sign out separate from identity details.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Sign out of this session",
+                "Use verified account recovery"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent can end the current session and understand permitted security actions.",
+      "invariant": "Other-session revocation is an extension unless already supported. Clear protected child view state; browser back must not reveal private data after real sign-out.",
+      "recovery": "Unsent drafts require a clear decision. Persisted pending requests/payments retain their owner references without exposing them signed out.",
+      "data": "Access session revoke + authenticated cache invalidation; no token material in the UI.",
+      "extension": false
+    },
+    {
+      "id": "PAR-51",
+      "area": "account",
+      "title": "Request access, correction or privacy support",
+      "phase": 2,
+      "purpose": "own privacy request; school verification required",
+      "steps": [
+        {
+          "title": "Privacy request",
+          "help": "The school determines permitted records and identity verification.",
+          "fields": [
+            {
+              "name": "type",
+              "label": "Request type",
+              "type": "select",
+              "options": [
+                "Ask about my data",
+                "Request a correction",
+                "Request access or deletion review"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Scope",
+          "help": "Use safe references, not private evidence attachments.",
+          "fields": [
+            {
+              "name": "note",
+              "label": "Brief request",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A privacy request is acknowledged and routed for verified review.",
+      "invariant": "Do not promise a legal deadline, automatic deletion of school records or another guardian’s data. Retention and child rights require jurisdiction-specific design.",
+      "recovery": "Identity not established, shared record restrictions or retained obligations produce a reasoned owner response.",
+      "data": "PrivacyRequest actor/scope/reference; audited owner review across modules with governed exports, no arbitrary SQL download.",
+      "extension": false
+    },
+    {
+      "id": "PAR-52",
+      "area": "assistant",
+      "title": "Ask the school assistant",
+      "phase": 7,
+      "purpose": "permission-filtered evidence for selected child/purpose",
+      "steps": [
+        {
+          "title": "Question",
+          "help": "Ask about published school information and permitted records.",
+          "fields": [
+            {
+              "name": "topic",
+              "label": "Topic",
+              "type": "select",
+              "options": [
+                "Explain a published school notice",
+                "Explain an attendance label",
+                "Find an approved next step"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "question",
+              "label": "Your question",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review evidence",
+          "help": "Check the source and date before relying on a response.",
+          "fields": [
+            {
+              "name": "sources",
+              "label": "I have reviewed the cited school sources and any uncertainty.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The parent receives a source-linked explanation or a clear cannot-answer state.",
+      "invariant": "No autonomous payments, consent, messages, medical advice or attendance/result changes. Child content stays isolated; retrieved text cannot override access rules.",
+      "recovery": "Missing/stale/conflicting evidence is disclosed; provide the correct human school contact. Reauthorize sources at retrieval and action.",
+      "data": "Assistant retrieves minimal purpose-filtered owner DTOs; provenance and draft disposition exclude raw sensitive content from general analytics.",
+      "extension": false
+    }
+  ],
+  "timetable_revision": "TT-01"
+}

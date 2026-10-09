@@ -35,6 +35,10 @@ Open a day with submitted and pending sessions; explain numerator/denominator; d
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## Experience overlay consumption
+
+EX-12 adopts the existing attendance overview, server-filtered detail and authorized CSV export. Preserve owner denominator/as-of semantics, formula-safe export and ExportRun audit; never compute school totals from one cursor page or export rendered DOM rows.
+
 ## RPT-02 — Export a scoped report and review audit history
 
 Depends on: RPT-01, ATT-04

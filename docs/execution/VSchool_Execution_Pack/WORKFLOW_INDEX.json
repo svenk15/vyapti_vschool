@@ -1,0 +1,2682 @@
+[
+  {
+    "id": "WF-OP-J01",
+    "source_workflow": "OP-J01",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Find and open an institution",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J02",
+    "source_workflow": "OP-J02",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Review an institution",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J03",
+    "source_workflow": "OP-J03",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Update institution details",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J04",
+    "source_workflow": "OP-J04",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Start and complete onboarding",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J05",
+    "source_workflow": "OP-J05",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Save and resume a draft",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J06",
+    "source_workflow": "OP-J06",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Discard or finish a draft",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J07",
+    "source_workflow": "OP-J07",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Leave or sign out during editing",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J08",
+    "source_workflow": "OP-J08",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Deactivate an institution",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J09",
+    "source_workflow": "OP-J09",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Reactivate an institution",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J10",
+    "source_workflow": "OP-J10",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Manage branches",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J11",
+    "source_workflow": "OP-J11",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Manage licensed modules",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J12",
+    "source_workflow": "OP-J12",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Review branch activation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J13",
+    "source_workflow": "OP-J13",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Add verified administrator access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J14",
+    "source_workflow": "OP-J14",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Check administrator activation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J15",
+    "source_workflow": "OP-J15",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Change or revoke administrator access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J16",
+    "source_workflow": "OP-J16",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Inspect activity",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J17",
+    "source_workflow": "OP-J17",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Recover from failure or a stale edit",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-OP-J18",
+    "source_workflow": "OP-J18",
+    "workspace": "VSchool_Operator_Design",
+    "area": "operator",
+    "catalog_phase": "UNNUMBERED",
+    "title": "Navigate with limited access or on mobile",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Operator_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-01",
+    "source_workflow": "PAR-01",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Accept a school invitation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-02",
+    "source_workflow": "PAR-02",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Sign in through the school page",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-03",
+    "source_workflow": "PAR-03",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Activate or recover account access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-04",
+    "source_workflow": "PAR-04",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Review my verified child links",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-05",
+    "source_workflow": "PAR-05",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Ask about a missing child link",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-06",
+    "source_workflow": "PAR-06",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Handle changed or withdrawn access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-07",
+    "source_workflow": "PAR-07",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "home",
+    "catalog_phase": 2,
+    "title": "Review my family overview",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-08",
+    "source_workflow": "PAR-08",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "home",
+    "catalog_phase": 2,
+    "title": "Switch child and school context",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-09",
+    "source_workflow": "PAR-09",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "home",
+    "catalog_phase": 2,
+    "title": "Manage school notification preferences",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-10",
+    "source_workflow": "PAR-10",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Read my child\u2019s attendance",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-11",
+    "source_workflow": "PAR-11",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Submit an absence explanation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-12",
+    "source_workflow": "PAR-12",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Track or withdraw an explanation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-13",
+    "source_workflow": "PAR-13",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Query an attendance discrepancy",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-14",
+    "source_workflow": "PAR-14",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Read and acknowledge a school notice",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-15",
+    "source_workflow": "PAR-15",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Reply to a permitted conversation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-16",
+    "source_workflow": "PAR-16",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Request a teacher meeting",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-17",
+    "source_workflow": "PAR-17",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Resolve an undelivered message",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-18",
+    "source_workflow": "PAR-18",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "calendar",
+    "catalog_phase": 2,
+    "title": "Plan with the school calendar",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-19",
+    "source_workflow": "PAR-19",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "calendar",
+    "catalog_phase": 3,
+    "title": "Respond to a school event",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-20",
+    "source_workflow": "PAR-20",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Review published homework",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-21",
+    "source_workflow": "PAR-21",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Read returned learning feedback",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-22",
+    "source_workflow": "PAR-22",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Ask a learning question",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-23",
+    "source_workflow": "PAR-23",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "results",
+    "catalog_phase": 4,
+    "title": "Read published results",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-24",
+    "source_workflow": "PAR-24",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "results",
+    "catalog_phase": 4,
+    "title": "Download an authorized report",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-25",
+    "source_workflow": "PAR-25",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "results",
+    "catalog_phase": 4,
+    "title": "Request a result clarification",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-26",
+    "source_workflow": "PAR-26",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Review a child\u2019s fee invoice",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-27",
+    "source_workflow": "PAR-27",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Pay an authorized invoice",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-28",
+    "source_workflow": "PAR-28",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Resolve an uncertain payment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-29",
+    "source_workflow": "PAR-29",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Read receipts and payment history",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-30",
+    "source_workflow": "PAR-30",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Raise a fee or refund query",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-31",
+    "source_workflow": "PAR-31",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Ask about payer access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-32",
+    "source_workflow": "PAR-32",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "requests",
+    "catalog_phase": 2,
+    "title": "Submit a school request",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-33",
+    "source_workflow": "PAR-33",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "requests",
+    "catalog_phase": 2,
+    "title": "Track or withdraw a school request",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-34",
+    "source_workflow": "PAR-34",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "requests",
+    "catalog_phase": 3,
+    "title": "Request a child-record update",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-35",
+    "source_workflow": "PAR-35",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "requests",
+    "catalog_phase": 3,
+    "title": "Request a school document",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-36",
+    "source_workflow": "PAR-36",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "requests",
+    "catalog_phase": 3,
+    "title": "Respond to a permission or consent form",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-37",
+    "source_workflow": "PAR-37",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "admissions",
+    "catalog_phase": 3,
+    "title": "Start or resume an application",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-38",
+    "source_workflow": "PAR-38",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "admissions",
+    "catalog_phase": 3,
+    "title": "Track application requirements",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-39",
+    "source_workflow": "PAR-39",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "admissions",
+    "catalog_phase": 3,
+    "title": "Respond to an admission offer",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-40",
+    "source_workflow": "PAR-40",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Review transport assignment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-41",
+    "source_workflow": "PAR-41",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Request an authorized pickup change",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-42",
+    "source_workflow": "PAR-42",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Read transport service updates",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-43",
+    "source_workflow": "PAR-43",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Review child library loans",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-44",
+    "source_workflow": "PAR-44",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Request an extracurricular place",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-45",
+    "source_workflow": "PAR-45",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Manage an enabled meal preference",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-46",
+    "source_workflow": "PAR-46",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "wellbeing",
+    "catalog_phase": 6,
+    "title": "Submit a care or emergency-contact update",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-47",
+    "source_workflow": "PAR-47",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "wellbeing",
+    "catalog_phase": 6,
+    "title": "Read an authorized school care note",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-48",
+    "source_workflow": "PAR-48",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "wellbeing",
+    "catalog_phase": 6,
+    "title": "Request a student-support discussion",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-49",
+    "source_workflow": "PAR-49",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "account",
+    "catalog_phase": 2,
+    "title": "Update my verified contact details",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-50",
+    "source_workflow": "PAR-50",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "account",
+    "catalog_phase": 2,
+    "title": "Review sessions and sign out",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-51",
+    "source_workflow": "PAR-51",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "account",
+    "catalog_phase": 2,
+    "title": "Request access, correction or privacy support",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-PAR-52",
+    "source_workflow": "PAR-52",
+    "workspace": "VSchool_Parent_Guardian_Design",
+    "area": "assistant",
+    "catalog_phase": 7,
+    "title": "Ask the school assistant",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-01",
+    "source_workflow": "LEA-01",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "access",
+    "catalog_phase": 1,
+    "title": "Enter the correct leadership workspace",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-02",
+    "source_workflow": "LEA-02",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "access",
+    "catalog_phase": 1,
+    "title": "Switch branches without losing context",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-03",
+    "source_workflow": "LEA-03",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Work under a temporary leadership delegation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-04",
+    "source_workflow": "LEA-04",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "access",
+    "catalog_phase": 1,
+    "title": "Handle access changes during a leadership action",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-05",
+    "source_workflow": "LEA-05",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "daily",
+    "catalog_phase": 1,
+    "title": "Review my school today",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-06",
+    "source_workflow": "LEA-06",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "daily",
+    "catalog_phase": 1,
+    "title": "Recognize stale, incomplete or unavailable information",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-07",
+    "source_workflow": "LEA-07",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "daily",
+    "catalog_phase": 2,
+    "title": "Run the weekly leadership review",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-08",
+    "source_workflow": "LEA-08",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Inspect register submission coverage",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-09",
+    "source_workflow": "LEA-09",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Create an accountable missing-register follow-up",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-10",
+    "source_workflow": "LEA-10",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Follow up multiple missing registers safely",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-11",
+    "source_workflow": "LEA-11",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Verify, close or reopen a follow-up",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-12",
+    "source_workflow": "LEA-12",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Review factual pupil attendance patterns",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-13",
+    "source_workflow": "LEA-13",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Review an absence explanation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-14",
+    "source_workflow": "LEA-14",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Review an attendance correction request",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-15",
+    "source_workflow": "LEA-15",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Resolve an incorrect or duplicate scheduled session",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-16",
+    "source_workflow": "LEA-16",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "academics",
+    "catalog_phase": 3,
+    "title": "Review timetable conflicts and uncovered classes",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-17",
+    "source_workflow": "LEA-17",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "academics",
+    "catalog_phase": 3,
+    "title": "Review assignment completion with the right denominator",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-18",
+    "source_workflow": "LEA-18",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "academics",
+    "catalog_phase": 3,
+    "title": "Review feedback awaiting return",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-19",
+    "source_workflow": "LEA-19",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "academics",
+    "catalog_phase": 3,
+    "title": "Coordinate an evidence-based learning concern",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-20",
+    "source_workflow": "LEA-20",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "academics",
+    "catalog_phase": 4,
+    "title": "Check assessment and report readiness",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-21",
+    "source_workflow": "LEA-21",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "academics",
+    "catalog_phase": 4,
+    "title": "Perform an explicitly delegated moderation decision",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-22",
+    "source_workflow": "LEA-22",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "academics",
+    "catalog_phase": 4,
+    "title": "Authorize or hand off report publication",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-23",
+    "source_workflow": "LEA-23",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "staff",
+    "catalog_phase": 3,
+    "title": "Review staffing availability without private reasons",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-24",
+    "source_workflow": "LEA-24",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "staff",
+    "catalog_phase": 3,
+    "title": "Approve temporary cover when delegated",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-25",
+    "source_workflow": "LEA-25",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "staff",
+    "catalog_phase": 6,
+    "title": "Decide an assigned staff request",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-26",
+    "source_workflow": "LEA-26",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "staff",
+    "catalog_phase": 2,
+    "title": "Hand over open work when leadership changes",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-27",
+    "source_workflow": "LEA-27",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "decisions",
+    "catalog_phase": 2,
+    "title": "Work from a purpose-scoped decision inbox",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-28",
+    "source_workflow": "LEA-28",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "decisions",
+    "catalog_phase": 2,
+    "title": "Request information before deciding",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-29",
+    "source_workflow": "LEA-29",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "decisions",
+    "catalog_phase": 2,
+    "title": "Approve, reject or return an assigned item",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-30",
+    "source_workflow": "LEA-30",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "decisions",
+    "catalog_phase": 2,
+    "title": "Recuse and route a conflict of interest",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-31",
+    "source_workflow": "LEA-31",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "decisions",
+    "catalog_phase": 2,
+    "title": "Recover an uncertain or outdated decision",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-32",
+    "source_workflow": "LEA-32",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Prepare a targeted school notice",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-33",
+    "source_workflow": "LEA-33",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Approve or return a proposed communication",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-34",
+    "source_workflow": "LEA-34",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Follow up delivery or acknowledgement gaps",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-35",
+    "source_workflow": "LEA-35",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Handle an escalated family concern or complaint",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-36",
+    "source_workflow": "LEA-36",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "communication",
+    "catalog_phase": 3,
+    "title": "Run a family or staff meeting with follow-up actions",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-37",
+    "source_workflow": "LEA-37",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "support",
+    "catalog_phase": 6,
+    "title": "Refer a concern to an authorized specialist",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-38",
+    "source_workflow": "LEA-38",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "support",
+    "catalog_phase": 6,
+    "title": "Follow the school\u2019s urgent safety escalation procedure",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-39",
+    "source_workflow": "LEA-39",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "reports",
+    "catalog_phase": 1,
+    "title": "Drill into a metric and export permitted evidence",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-40",
+    "source_workflow": "LEA-40",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "reports",
+    "catalog_phase": 2,
+    "title": "Compare branches responsibly",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-41",
+    "source_workflow": "LEA-41",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "reports",
+    "catalog_phase": 2,
+    "title": "Prepare a leadership review brief",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-42",
+    "source_workflow": "LEA-42",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "reports",
+    "catalog_phase": 2,
+    "title": "Review decision and follow-up history",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-43",
+    "source_workflow": "LEA-43",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "services",
+    "catalog_phase": 5,
+    "title": "Review financial exceptions under a separate grant",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-44",
+    "source_workflow": "LEA-44",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Coordinate a school service interruption",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-45",
+    "source_workflow": "LEA-45",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "assistant",
+    "catalog_phase": 7,
+    "title": "Review a source-linked leadership draft",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-LEA-46",
+    "source_workflow": "LEA-46",
+    "workspace": "VSchool_Principal_Leadership_Workflows",
+    "area": "account",
+    "catalog_phase": 1,
+    "title": "Manage sessions, preferences and school support",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-01",
+    "source_workflow": "SA-01",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "home",
+    "catalog_phase": 1,
+    "title": "Sign in and choose a branch",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-02",
+    "source_workflow": "SA-02",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "home",
+    "catalog_phase": 1,
+    "title": "Activate or recover an account",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-03",
+    "source_workflow": "SA-03",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "home",
+    "catalog_phase": 1,
+    "title": "Switch branch or sign out",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-04",
+    "source_workflow": "SA-04",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "home",
+    "catalog_phase": 1,
+    "title": "Complete first-use setup",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-05",
+    "source_workflow": "SA-05",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "home",
+    "catalog_phase": 1,
+    "title": "Resolve a daily exception",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-06",
+    "source_workflow": "SA-06",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "settings",
+    "catalog_phase": 1,
+    "title": "Edit branch information",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-07",
+    "source_workflow": "SA-07",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "settings",
+    "catalog_phase": 1,
+    "title": "Review branding and school sign-in",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-08",
+    "source_workflow": "SA-08",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "settings",
+    "catalog_phase": 1,
+    "title": "Review modules and request a capability",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-09",
+    "source_workflow": "SA-09",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "academics",
+    "catalog_phase": 1,
+    "title": "Create an academic year and calendar",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-10",
+    "source_workflow": "SA-10",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "academics",
+    "catalog_phase": 1,
+    "title": "Configure grades, sections and subjects",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-11",
+    "source_workflow": "SA-11",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "academics",
+    "catalog_phase": 1,
+    "title": "Create an offering and assign a teacher",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-12",
+    "source_workflow": "SA-12",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "academics",
+    "catalog_phase": 1,
+    "title": "Change calendar or teaching assignment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-13",
+    "source_workflow": "SA-13",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "staff",
+    "catalog_phase": 1,
+    "title": "Create a staff profile",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-14",
+    "source_workflow": "SA-14",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "staff",
+    "catalog_phase": 1,
+    "title": "Grant staff sign-in access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-15",
+    "source_workflow": "SA-15",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "staff",
+    "catalog_phase": 1,
+    "title": "Review invitation or resend access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-16",
+    "source_workflow": "SA-16",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "staff",
+    "catalog_phase": 1,
+    "title": "Verify a staff identity and teacher eligibility",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-17",
+    "source_workflow": "SA-17",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "staff",
+    "catalog_phase": 1,
+    "title": "Change or revoke staff access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-18",
+    "source_workflow": "SA-18",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "students",
+    "catalog_phase": 1,
+    "title": "Register a student manually",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-19",
+    "source_workflow": "SA-19",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "students",
+    "catalog_phase": 1,
+    "title": "Enroll and place a student",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-20",
+    "source_workflow": "SA-20",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "students",
+    "catalog_phase": 1,
+    "title": "Review or update a student record",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-21",
+    "source_workflow": "SA-21",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "students",
+    "catalog_phase": 1,
+    "title": "Move a student to another section",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-22",
+    "source_workflow": "SA-22",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "students",
+    "catalog_phase": 3,
+    "title": "Promote, transfer or leave school",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-23",
+    "source_workflow": "SA-23",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "imports",
+    "catalog_phase": 1,
+    "title": "Preview a roster import",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-24",
+    "source_workflow": "SA-24",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "imports",
+    "catalog_phase": 1,
+    "title": "Confirm, resume and reconcile an import",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-25",
+    "source_workflow": "SA-25",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Schedule attendance sessions",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-26",
+    "source_workflow": "SA-26",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Monitor and inspect attendance",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-27",
+    "source_workflow": "SA-27",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Correct submitted attendance",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-28",
+    "source_workflow": "SA-28",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Cancel or review a session change",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-29",
+    "source_workflow": "SA-29",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Review an absence explanation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-30",
+    "source_workflow": "SA-30",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "reports",
+    "catalog_phase": 1,
+    "title": "Review and export attendance",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-31",
+    "source_workflow": "SA-31",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "reports",
+    "catalog_phase": 2,
+    "title": "Compare trends and assign follow-up",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-32",
+    "source_workflow": "SA-32",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "families",
+    "catalog_phase": 2,
+    "title": "Verify and link a parent or guardian",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-33",
+    "source_workflow": "SA-33",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "families",
+    "catalog_phase": 2,
+    "title": "Invite a verified guardian",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-34",
+    "source_workflow": "SA-34",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "families",
+    "catalog_phase": 2,
+    "title": "Change, restrict or revoke a guardian link",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-35",
+    "source_workflow": "SA-35",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Compose and send a school message",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-36",
+    "source_workflow": "SA-36",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Resolve failed delivery or missing acknowledgement",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-37",
+    "source_workflow": "SA-37",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Review a family request",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-38",
+    "source_workflow": "SA-38",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "admissions",
+    "catalog_phase": 3,
+    "title": "Capture inquiry and start an application",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-39",
+    "source_workflow": "SA-39",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "admissions",
+    "catalog_phase": 3,
+    "title": "Review application and make a decision",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-40",
+    "source_workflow": "SA-40",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "admissions",
+    "catalog_phase": 3,
+    "title": "Accept an offer and enroll once",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-41",
+    "source_workflow": "SA-41",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "planning",
+    "catalog_phase": 3,
+    "title": "Build and publish a timetable",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-42",
+    "source_workflow": "SA-42",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "planning",
+    "catalog_phase": 3,
+    "title": "Arrange cover or a timetable exception",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-43",
+    "source_workflow": "SA-43",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "planning",
+    "catalog_phase": 3,
+    "title": "Review learning readiness and follow-up",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-44",
+    "source_workflow": "SA-44",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "documents",
+    "catalog_phase": 3,
+    "title": "Collect and review a document",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-45",
+    "source_workflow": "SA-45",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "documents",
+    "catalog_phase": 3,
+    "title": "Issue a certificate or publish a form",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-46",
+    "source_workflow": "SA-46",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "assessments",
+    "catalog_phase": 4,
+    "title": "Coordinate assessment setup and marks readiness",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-47",
+    "source_workflow": "SA-47",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "assessments",
+    "catalog_phase": 4,
+    "title": "Approve, publish or correct results",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-48",
+    "source_workflow": "SA-48",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Configure fees and concessions",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-49",
+    "source_workflow": "SA-49",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Generate invoices and collect payment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-50",
+    "source_workflow": "SA-50",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "finance",
+    "catalog_phase": 5,
+    "title": "Resolve reconciliation, adjustment or refund",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-51",
+    "source_workflow": "SA-51",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "transport",
+    "catalog_phase": 6,
+    "title": "Prepare routes and allocate students",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-52",
+    "source_workflow": "SA-52",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "transport",
+    "catalog_phase": 6,
+    "title": "Resolve a trip or handoff exception",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-53",
+    "source_workflow": "SA-53",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "people-ops",
+    "catalog_phase": 6,
+    "title": "Review leave and staffing coverage",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-54",
+    "source_workflow": "SA-54",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "people-ops",
+    "catalog_phase": 6,
+    "title": "Review payroll inputs and hand off",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-55",
+    "source_workflow": "SA-55",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "library",
+    "catalog_phase": 6,
+    "title": "Catalog and circulate library items",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-56",
+    "source_workflow": "SA-56",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "library",
+    "catalog_phase": 6,
+    "title": "Resolve overdue, lost or inventory discrepancies",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-57",
+    "source_workflow": "SA-57",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "facilities",
+    "catalog_phase": 6,
+    "title": "Receive, issue or return stock and assets",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-58",
+    "source_workflow": "SA-58",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "facilities",
+    "catalog_phase": 6,
+    "title": "Book a facility or request maintenance",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-59",
+    "source_workflow": "SA-59",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "health",
+    "catalog_phase": 6,
+    "title": "Refer a health or safeguarding concern",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-60",
+    "source_workflow": "SA-60",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "health",
+    "catalog_phase": 6,
+    "title": "Review emergency access and restricted case handling",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-61",
+    "source_workflow": "SA-61",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "integrations",
+    "catalog_phase": 3,
+    "title": "Review connection status and reconcile a sync",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-62",
+    "source_workflow": "SA-62",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "settings",
+    "catalog_phase": 1,
+    "title": "Review activity, privacy or support access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-SA-63",
+    "source_workflow": "SA-63",
+    "workspace": "VSchool_School_Admin_Design",
+    "area": "assistant",
+    "catalog_phase": 7,
+    "title": "Review an AI-assisted explanation or draft",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_School_Admin_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-01",
+    "source_workflow": "STW-01",
+    "workspace": "VSchool_Student_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Find the correct school sign-in",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-02",
+    "source_workflow": "STW-02",
+    "workspace": "VSchool_Student_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Activate an issued student account",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-03",
+    "source_workflow": "STW-03",
+    "workspace": "VSchool_Student_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Recover access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-04",
+    "source_workflow": "STW-04",
+    "workspace": "VSchool_Student_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Switch enrollment context",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-05",
+    "source_workflow": "STW-05",
+    "workspace": "VSchool_Student_Design",
+    "area": "access",
+    "catalog_phase": 2,
+    "title": "Handle expired or withdrawn access",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-06",
+    "source_workflow": "STW-06",
+    "workspace": "VSchool_Student_Design",
+    "area": "day",
+    "catalog_phase": 3,
+    "title": "Plan my school day",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-07",
+    "source_workflow": "STW-07",
+    "workspace": "VSchool_Student_Design",
+    "area": "day",
+    "catalog_phase": 3,
+    "title": "Read my timetable",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-08",
+    "source_workflow": "STW-08",
+    "workspace": "VSchool_Student_Design",
+    "area": "day",
+    "catalog_phase": 3,
+    "title": "Respond to a changed class",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-09",
+    "source_workflow": "STW-09",
+    "workspace": "VSchool_Student_Design",
+    "area": "day",
+    "catalog_phase": 3,
+    "title": "Open an assigned class space",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-10",
+    "source_workflow": "STW-10",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Find and organize assignments",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-11",
+    "source_workflow": "STW-11",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Understand an assignment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-12",
+    "source_workflow": "STW-12",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Open learning resources",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-13",
+    "source_workflow": "STW-13",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Save and resume my draft",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-14",
+    "source_workflow": "STW-14",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Attach and check a file",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-15",
+    "source_workflow": "STW-15",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Review and submit work",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-16",
+    "source_workflow": "STW-16",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Recover an uncertain submission",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-17",
+    "source_workflow": "STW-17",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Submit under late or extended rules",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-18",
+    "source_workflow": "STW-18",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Revise and resubmit returned work",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-19",
+    "source_workflow": "STW-19",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Withdraw a submission when allowed",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-20",
+    "source_workflow": "STW-20",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Request more time",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-21",
+    "source_workflow": "STW-21",
+    "workspace": "VSchool_Student_Design",
+    "area": "assignments",
+    "catalog_phase": 3,
+    "title": "Continue safely on a poor connection",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-22",
+    "source_workflow": "STW-22",
+    "workspace": "VSchool_Student_Design",
+    "area": "feedback",
+    "catalog_phase": 3,
+    "title": "Read returned teacher feedback",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-23",
+    "source_workflow": "STW-23",
+    "workspace": "VSchool_Student_Design",
+    "area": "feedback",
+    "catalog_phase": 3,
+    "title": "Understand criteria and subject progress",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-24",
+    "source_workflow": "STW-24",
+    "workspace": "VSchool_Student_Design",
+    "area": "feedback",
+    "catalog_phase": 3,
+    "title": "Ask about feedback",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-25",
+    "source_workflow": "STW-25",
+    "workspace": "VSchool_Student_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "View my recorded attendance",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-26",
+    "source_workflow": "STW-26",
+    "workspace": "VSchool_Student_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Query an attendance discrepancy",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-27",
+    "source_workflow": "STW-27",
+    "workspace": "VSchool_Student_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Read a school notice",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-28",
+    "source_workflow": "STW-28",
+    "workspace": "VSchool_Student_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Acknowledge a notice",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-29",
+    "source_workflow": "STW-29",
+    "workspace": "VSchool_Student_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Message a permitted teacher",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-30",
+    "source_workflow": "STW-30",
+    "workspace": "VSchool_Student_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Recover a message delivery problem",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-31",
+    "source_workflow": "STW-31",
+    "workspace": "VSchool_Student_Design",
+    "area": "calendar",
+    "catalog_phase": 3,
+    "title": "Review published events and assessments",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-32",
+    "source_workflow": "STW-32",
+    "workspace": "VSchool_Student_Design",
+    "area": "calendar",
+    "catalog_phase": 3,
+    "title": "Express event interest",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-33",
+    "source_workflow": "STW-33",
+    "workspace": "VSchool_Student_Design",
+    "area": "results",
+    "catalog_phase": 4,
+    "title": "View my published report",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-34",
+    "source_workflow": "STW-34",
+    "workspace": "VSchool_Student_Design",
+    "area": "results",
+    "catalog_phase": 4,
+    "title": "Download a published report",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-35",
+    "source_workflow": "STW-35",
+    "workspace": "VSchool_Student_Design",
+    "area": "results",
+    "catalog_phase": 4,
+    "title": "Ask about a result",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-36",
+    "source_workflow": "STW-36",
+    "workspace": "VSchool_Student_Design",
+    "area": "requests",
+    "catalog_phase": 2,
+    "title": "Create a school support request",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-37",
+    "source_workflow": "STW-37",
+    "workspace": "VSchool_Student_Design",
+    "area": "requests",
+    "catalog_phase": 2,
+    "title": "Track or withdraw my request",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-38",
+    "source_workflow": "STW-38",
+    "workspace": "VSchool_Student_Design",
+    "area": "requests",
+    "catalog_phase": 2,
+    "title": "Request a profile correction",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-39",
+    "source_workflow": "STW-39",
+    "workspace": "VSchool_Student_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Review my library loans",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-40",
+    "source_workflow": "STW-40",
+    "workspace": "VSchool_Student_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Request a library renewal",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-41",
+    "source_workflow": "STW-41",
+    "workspace": "VSchool_Student_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Join an enabled activity",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-42",
+    "source_workflow": "STW-42",
+    "workspace": "VSchool_Student_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Read my transport assignment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-43",
+    "source_workflow": "STW-43",
+    "workspace": "VSchool_Student_Design",
+    "area": "services",
+    "catalog_phase": 6,
+    "title": "Request student wellbeing support",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-44",
+    "source_workflow": "STW-44",
+    "workspace": "VSchool_Student_Design",
+    "area": "account",
+    "catalog_phase": 2,
+    "title": "Manage my sessions",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-45",
+    "source_workflow": "STW-45",
+    "workspace": "VSchool_Student_Design",
+    "area": "account",
+    "catalog_phase": 2,
+    "title": "Set preferences or request contact change",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-46",
+    "source_workflow": "STW-46",
+    "workspace": "VSchool_Student_Design",
+    "area": "account",
+    "catalog_phase": 2,
+    "title": "Get help with privacy or accessibility",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-STW-47",
+    "source_workflow": "STW-47",
+    "workspace": "VSchool_Student_Design",
+    "area": "assistant",
+    "catalog_phase": 7,
+    "title": "Ask a learning question with sources",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Student_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-01",
+    "source_workflow": "TEA-01",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "access",
+    "catalog_phase": 1,
+    "title": "Sign in to the school workspace",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-02",
+    "source_workflow": "TEA-02",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "access",
+    "catalog_phase": 1,
+    "title": "Activate or recover a teacher account",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-03",
+    "source_workflow": "TEA-03",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "access",
+    "catalog_phase": 1,
+    "title": "Switch branch or leave the workspace",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-04",
+    "source_workflow": "TEA-04",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "access",
+    "catalog_phase": 1,
+    "title": "Review my account and sessions",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-05",
+    "source_workflow": "TEA-05",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "today",
+    "catalog_phase": 1,
+    "title": "Plan my teaching day",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-06",
+    "source_workflow": "TEA-06",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "today",
+    "catalog_phase": 1,
+    "title": "Resolve a missing or changed assignment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-07",
+    "source_workflow": "TEA-07",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "classes",
+    "catalog_phase": 1,
+    "title": "Review my assigned classes",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-08",
+    "source_workflow": "TEA-08",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "classes",
+    "catalog_phase": 1,
+    "title": "Review a minimal class roster",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-09",
+    "source_workflow": "TEA-09",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Open an assigned attendance session",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-10",
+    "source_workflow": "TEA-10",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Mark attendance and review exceptions",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-11",
+    "source_workflow": "TEA-11",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Submit attendance and keep the receipt",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-12",
+    "source_workflow": "TEA-12",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Recover an uncertain submission",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-13",
+    "source_workflow": "TEA-13",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Handle a stale register or lost permission",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-14",
+    "source_workflow": "TEA-14",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 1,
+    "title": "Review history and hand off a correction",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-15",
+    "source_workflow": "TEA-15",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Use offline-assisted attendance",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-16",
+    "source_workflow": "TEA-16",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "attendance",
+    "catalog_phase": 2,
+    "title": "Request an attendance correction",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-17",
+    "source_workflow": "TEA-17",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Read school notices and acknowledge",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-18",
+    "source_workflow": "TEA-18",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Prepare a class message",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-19",
+    "source_workflow": "TEA-19",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Reply in a permitted family conversation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-20",
+    "source_workflow": "TEA-20",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Arrange a family meeting",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-21",
+    "source_workflow": "TEA-21",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "communication",
+    "catalog_phase": 2,
+    "title": "Review permitted absence context",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-22",
+    "source_workflow": "TEA-22",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "planning",
+    "catalog_phase": 3,
+    "title": "Review my published timetable",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-23",
+    "source_workflow": "TEA-23",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "planning",
+    "catalog_phase": 3,
+    "title": "Accept and perform a cover assignment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-24",
+    "source_workflow": "TEA-24",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "planning",
+    "catalog_phase": 3,
+    "title": "Hand over a lesson or request a schedule change",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-25",
+    "source_workflow": "TEA-25",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Plan a lesson",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-26",
+    "source_workflow": "TEA-26",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Add and reuse teaching resources",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-27",
+    "source_workflow": "TEA-27",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Create and publish an assignment",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-28",
+    "source_workflow": "TEA-28",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Review submissions and late work",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-29",
+    "source_workflow": "TEA-29",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Draft feedback and return work",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-30",
+    "source_workflow": "TEA-30",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Allow resubmission or revise a deadline",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-31",
+    "source_workflow": "TEA-31",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "learning",
+    "catalog_phase": 3,
+    "title": "Review learning progress and plan support",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-32",
+    "source_workflow": "TEA-32",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "assessments",
+    "catalog_phase": 4,
+    "title": "Prepare an assessment within an approved scheme",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-33",
+    "source_workflow": "TEA-33",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "assessments",
+    "catalog_phase": 4,
+    "title": "Enter and validate marks",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-34",
+    "source_workflow": "TEA-34",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "assessments",
+    "catalog_phase": 4,
+    "title": "Submit marks for moderation",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-35",
+    "source_workflow": "TEA-35",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "assessments",
+    "catalog_phase": 4,
+    "title": "Review result publication and correct an error",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-36",
+    "source_workflow": "TEA-36",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "wellbeing",
+    "catalog_phase": 6,
+    "title": "Refer a student concern safely",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-37",
+    "source_workflow": "TEA-37",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "self-service",
+    "catalog_phase": 6,
+    "title": "Request leave and arrange a handoff",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-38",
+    "source_workflow": "TEA-38",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "self-service",
+    "catalog_phase": 6,
+    "title": "Review my staff record and request a correction",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-39",
+    "source_workflow": "TEA-39",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "resources",
+    "catalog_phase": 6,
+    "title": "Borrow, reserve or renew a resource",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-40",
+    "source_workflow": "TEA-40",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "resources",
+    "catalog_phase": 6,
+    "title": "Request materials or book a teaching space",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-41",
+    "source_workflow": "TEA-41",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "duties",
+    "catalog_phase": 6,
+    "title": "Carry out an assigned school duty",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  },
+  {
+    "id": "WF-TEA-42",
+    "source_workflow": "TEA-42",
+    "workspace": "VSchool_Teacher_Design",
+    "area": "assistant",
+    "catalog_phase": 7,
+    "title": "Use a teaching draft with source evidence",
+    "status": "DESIGN_RECONCILIATION_REQUIRED",
+    "source": "packs/VSchool_Teacher_Design/workflow-catalog.json"
+  }
+]

@@ -1,0 +1,269 @@
+id,source_workflow,workspace,area,catalog_phase,title,status,source
+WF-OP-J01,OP-J01,VSchool_Operator_Design,operator,UNNUMBERED,Find and open an institution,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J02,OP-J02,VSchool_Operator_Design,operator,UNNUMBERED,Review an institution,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J03,OP-J03,VSchool_Operator_Design,operator,UNNUMBERED,Update institution details,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J04,OP-J04,VSchool_Operator_Design,operator,UNNUMBERED,Start and complete onboarding,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J05,OP-J05,VSchool_Operator_Design,operator,UNNUMBERED,Save and resume a draft,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J06,OP-J06,VSchool_Operator_Design,operator,UNNUMBERED,Discard or finish a draft,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J07,OP-J07,VSchool_Operator_Design,operator,UNNUMBERED,Leave or sign out during editing,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J08,OP-J08,VSchool_Operator_Design,operator,UNNUMBERED,Deactivate an institution,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J09,OP-J09,VSchool_Operator_Design,operator,UNNUMBERED,Reactivate an institution,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J10,OP-J10,VSchool_Operator_Design,operator,UNNUMBERED,Manage branches,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J11,OP-J11,VSchool_Operator_Design,operator,UNNUMBERED,Manage licensed modules,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J12,OP-J12,VSchool_Operator_Design,operator,UNNUMBERED,Review branch activation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J13,OP-J13,VSchool_Operator_Design,operator,UNNUMBERED,Add verified administrator access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J14,OP-J14,VSchool_Operator_Design,operator,UNNUMBERED,Check administrator activation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J15,OP-J15,VSchool_Operator_Design,operator,UNNUMBERED,Change or revoke administrator access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J16,OP-J16,VSchool_Operator_Design,operator,UNNUMBERED,Inspect activity,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J17,OP-J17,VSchool_Operator_Design,operator,UNNUMBERED,Recover from failure or a stale edit,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-OP-J18,OP-J18,VSchool_Operator_Design,operator,UNNUMBERED,Navigate with limited access or on mobile,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Operator_Design/workflow-catalog.json
+WF-PAR-01,PAR-01,VSchool_Parent_Guardian_Design,access,2,Accept a school invitation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-02,PAR-02,VSchool_Parent_Guardian_Design,access,2,Sign in through the school page,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-03,PAR-03,VSchool_Parent_Guardian_Design,access,2,Activate or recover account access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-04,PAR-04,VSchool_Parent_Guardian_Design,access,2,Review my verified child links,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-05,PAR-05,VSchool_Parent_Guardian_Design,access,2,Ask about a missing child link,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-06,PAR-06,VSchool_Parent_Guardian_Design,access,2,Handle changed or withdrawn access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-07,PAR-07,VSchool_Parent_Guardian_Design,home,2,Review my family overview,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-08,PAR-08,VSchool_Parent_Guardian_Design,home,2,Switch child and school context,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-09,PAR-09,VSchool_Parent_Guardian_Design,home,2,Manage school notification preferences,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-10,PAR-10,VSchool_Parent_Guardian_Design,attendance,2,Read my child’s attendance,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-11,PAR-11,VSchool_Parent_Guardian_Design,attendance,2,Submit an absence explanation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-12,PAR-12,VSchool_Parent_Guardian_Design,attendance,2,Track or withdraw an explanation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-13,PAR-13,VSchool_Parent_Guardian_Design,attendance,2,Query an attendance discrepancy,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-14,PAR-14,VSchool_Parent_Guardian_Design,communication,2,Read and acknowledge a school notice,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-15,PAR-15,VSchool_Parent_Guardian_Design,communication,2,Reply to a permitted conversation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-16,PAR-16,VSchool_Parent_Guardian_Design,communication,2,Request a teacher meeting,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-17,PAR-17,VSchool_Parent_Guardian_Design,communication,2,Resolve an undelivered message,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-18,PAR-18,VSchool_Parent_Guardian_Design,calendar,2,Plan with the school calendar,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-19,PAR-19,VSchool_Parent_Guardian_Design,calendar,3,Respond to a school event,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-20,PAR-20,VSchool_Parent_Guardian_Design,learning,3,Review published homework,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-21,PAR-21,VSchool_Parent_Guardian_Design,learning,3,Read returned learning feedback,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-22,PAR-22,VSchool_Parent_Guardian_Design,learning,3,Ask a learning question,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-23,PAR-23,VSchool_Parent_Guardian_Design,results,4,Read published results,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-24,PAR-24,VSchool_Parent_Guardian_Design,results,4,Download an authorized report,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-25,PAR-25,VSchool_Parent_Guardian_Design,results,4,Request a result clarification,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-26,PAR-26,VSchool_Parent_Guardian_Design,finance,5,Review a child’s fee invoice,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-27,PAR-27,VSchool_Parent_Guardian_Design,finance,5,Pay an authorized invoice,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-28,PAR-28,VSchool_Parent_Guardian_Design,finance,5,Resolve an uncertain payment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-29,PAR-29,VSchool_Parent_Guardian_Design,finance,5,Read receipts and payment history,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-30,PAR-30,VSchool_Parent_Guardian_Design,finance,5,Raise a fee or refund query,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-31,PAR-31,VSchool_Parent_Guardian_Design,finance,5,Ask about payer access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-32,PAR-32,VSchool_Parent_Guardian_Design,requests,2,Submit a school request,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-33,PAR-33,VSchool_Parent_Guardian_Design,requests,2,Track or withdraw a school request,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-34,PAR-34,VSchool_Parent_Guardian_Design,requests,3,Request a child-record update,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-35,PAR-35,VSchool_Parent_Guardian_Design,requests,3,Request a school document,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-36,PAR-36,VSchool_Parent_Guardian_Design,requests,3,Respond to a permission or consent form,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-37,PAR-37,VSchool_Parent_Guardian_Design,admissions,3,Start or resume an application,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-38,PAR-38,VSchool_Parent_Guardian_Design,admissions,3,Track application requirements,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-39,PAR-39,VSchool_Parent_Guardian_Design,admissions,3,Respond to an admission offer,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-40,PAR-40,VSchool_Parent_Guardian_Design,services,6,Review transport assignment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-41,PAR-41,VSchool_Parent_Guardian_Design,services,6,Request an authorized pickup change,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-42,PAR-42,VSchool_Parent_Guardian_Design,services,6,Read transport service updates,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-43,PAR-43,VSchool_Parent_Guardian_Design,services,6,Review child library loans,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-44,PAR-44,VSchool_Parent_Guardian_Design,services,6,Request an extracurricular place,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-45,PAR-45,VSchool_Parent_Guardian_Design,services,6,Manage an enabled meal preference,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-46,PAR-46,VSchool_Parent_Guardian_Design,wellbeing,6,Submit a care or emergency-contact update,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-47,PAR-47,VSchool_Parent_Guardian_Design,wellbeing,6,Read an authorized school care note,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-48,PAR-48,VSchool_Parent_Guardian_Design,wellbeing,6,Request a student-support discussion,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-49,PAR-49,VSchool_Parent_Guardian_Design,account,2,Update my verified contact details,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-50,PAR-50,VSchool_Parent_Guardian_Design,account,2,Review sessions and sign out,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-51,PAR-51,VSchool_Parent_Guardian_Design,account,2,"Request access, correction or privacy support",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-PAR-52,PAR-52,VSchool_Parent_Guardian_Design,assistant,7,Ask the school assistant,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Parent_Guardian_Design/workflow-catalog.json
+WF-LEA-01,LEA-01,VSchool_Principal_Leadership_Workflows,access,1,Enter the correct leadership workspace,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-02,LEA-02,VSchool_Principal_Leadership_Workflows,access,1,Switch branches without losing context,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-03,LEA-03,VSchool_Principal_Leadership_Workflows,access,2,Work under a temporary leadership delegation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-04,LEA-04,VSchool_Principal_Leadership_Workflows,access,1,Handle access changes during a leadership action,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-05,LEA-05,VSchool_Principal_Leadership_Workflows,daily,1,Review my school today,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-06,LEA-06,VSchool_Principal_Leadership_Workflows,daily,1,"Recognize stale, incomplete or unavailable information",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-07,LEA-07,VSchool_Principal_Leadership_Workflows,daily,2,Run the weekly leadership review,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-08,LEA-08,VSchool_Principal_Leadership_Workflows,attendance,1,Inspect register submission coverage,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-09,LEA-09,VSchool_Principal_Leadership_Workflows,attendance,2,Create an accountable missing-register follow-up,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-10,LEA-10,VSchool_Principal_Leadership_Workflows,attendance,2,Follow up multiple missing registers safely,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-11,LEA-11,VSchool_Principal_Leadership_Workflows,attendance,2,"Verify, close or reopen a follow-up",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-12,LEA-12,VSchool_Principal_Leadership_Workflows,attendance,2,Review factual pupil attendance patterns,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-13,LEA-13,VSchool_Principal_Leadership_Workflows,attendance,2,Review an absence explanation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-14,LEA-14,VSchool_Principal_Leadership_Workflows,attendance,2,Review an attendance correction request,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-15,LEA-15,VSchool_Principal_Leadership_Workflows,attendance,1,Resolve an incorrect or duplicate scheduled session,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-16,LEA-16,VSchool_Principal_Leadership_Workflows,academics,3,Review timetable conflicts and uncovered classes,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-17,LEA-17,VSchool_Principal_Leadership_Workflows,academics,3,Review assignment completion with the right denominator,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-18,LEA-18,VSchool_Principal_Leadership_Workflows,academics,3,Review feedback awaiting return,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-19,LEA-19,VSchool_Principal_Leadership_Workflows,academics,3,Coordinate an evidence-based learning concern,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-20,LEA-20,VSchool_Principal_Leadership_Workflows,academics,4,Check assessment and report readiness,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-21,LEA-21,VSchool_Principal_Leadership_Workflows,academics,4,Perform an explicitly delegated moderation decision,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-22,LEA-22,VSchool_Principal_Leadership_Workflows,academics,4,Authorize or hand off report publication,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-23,LEA-23,VSchool_Principal_Leadership_Workflows,staff,3,Review staffing availability without private reasons,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-24,LEA-24,VSchool_Principal_Leadership_Workflows,staff,3,Approve temporary cover when delegated,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-25,LEA-25,VSchool_Principal_Leadership_Workflows,staff,6,Decide an assigned staff request,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-26,LEA-26,VSchool_Principal_Leadership_Workflows,staff,2,Hand over open work when leadership changes,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-27,LEA-27,VSchool_Principal_Leadership_Workflows,decisions,2,Work from a purpose-scoped decision inbox,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-28,LEA-28,VSchool_Principal_Leadership_Workflows,decisions,2,Request information before deciding,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-29,LEA-29,VSchool_Principal_Leadership_Workflows,decisions,2,"Approve, reject or return an assigned item",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-30,LEA-30,VSchool_Principal_Leadership_Workflows,decisions,2,Recuse and route a conflict of interest,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-31,LEA-31,VSchool_Principal_Leadership_Workflows,decisions,2,Recover an uncertain or outdated decision,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-32,LEA-32,VSchool_Principal_Leadership_Workflows,communication,2,Prepare a targeted school notice,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-33,LEA-33,VSchool_Principal_Leadership_Workflows,communication,2,Approve or return a proposed communication,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-34,LEA-34,VSchool_Principal_Leadership_Workflows,communication,2,Follow up delivery or acknowledgement gaps,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-35,LEA-35,VSchool_Principal_Leadership_Workflows,communication,2,Handle an escalated family concern or complaint,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-36,LEA-36,VSchool_Principal_Leadership_Workflows,communication,3,Run a family or staff meeting with follow-up actions,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-37,LEA-37,VSchool_Principal_Leadership_Workflows,support,6,Refer a concern to an authorized specialist,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-38,LEA-38,VSchool_Principal_Leadership_Workflows,support,6,Follow the school’s urgent safety escalation procedure,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-39,LEA-39,VSchool_Principal_Leadership_Workflows,reports,1,Drill into a metric and export permitted evidence,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-40,LEA-40,VSchool_Principal_Leadership_Workflows,reports,2,Compare branches responsibly,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-41,LEA-41,VSchool_Principal_Leadership_Workflows,reports,2,Prepare a leadership review brief,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-42,LEA-42,VSchool_Principal_Leadership_Workflows,reports,2,Review decision and follow-up history,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-43,LEA-43,VSchool_Principal_Leadership_Workflows,services,5,Review financial exceptions under a separate grant,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-44,LEA-44,VSchool_Principal_Leadership_Workflows,services,6,Coordinate a school service interruption,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-45,LEA-45,VSchool_Principal_Leadership_Workflows,assistant,7,Review a source-linked leadership draft,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-LEA-46,LEA-46,VSchool_Principal_Leadership_Workflows,account,1,"Manage sessions, preferences and school support",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json
+WF-SA-01,SA-01,VSchool_School_Admin_Design,home,1,Sign in and choose a branch,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-02,SA-02,VSchool_School_Admin_Design,home,1,Activate or recover an account,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-03,SA-03,VSchool_School_Admin_Design,home,1,Switch branch or sign out,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-04,SA-04,VSchool_School_Admin_Design,home,1,Complete first-use setup,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-05,SA-05,VSchool_School_Admin_Design,home,1,Resolve a daily exception,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-06,SA-06,VSchool_School_Admin_Design,settings,1,Edit branch information,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-07,SA-07,VSchool_School_Admin_Design,settings,1,Review branding and school sign-in,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-08,SA-08,VSchool_School_Admin_Design,settings,1,Review modules and request a capability,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-09,SA-09,VSchool_School_Admin_Design,academics,1,Create an academic year and calendar,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-10,SA-10,VSchool_School_Admin_Design,academics,1,"Configure grades, sections and subjects",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-11,SA-11,VSchool_School_Admin_Design,academics,1,Create an offering and assign a teacher,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-12,SA-12,VSchool_School_Admin_Design,academics,1,Change calendar or teaching assignment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-13,SA-13,VSchool_School_Admin_Design,staff,1,Create a staff profile,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-14,SA-14,VSchool_School_Admin_Design,staff,1,Grant staff sign-in access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-15,SA-15,VSchool_School_Admin_Design,staff,1,Review invitation or resend access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-16,SA-16,VSchool_School_Admin_Design,staff,1,Verify a staff identity and teacher eligibility,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-17,SA-17,VSchool_School_Admin_Design,staff,1,Change or revoke staff access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-18,SA-18,VSchool_School_Admin_Design,students,1,Register a student manually,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-19,SA-19,VSchool_School_Admin_Design,students,1,Enroll and place a student,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-20,SA-20,VSchool_School_Admin_Design,students,1,Review or update a student record,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-21,SA-21,VSchool_School_Admin_Design,students,1,Move a student to another section,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-22,SA-22,VSchool_School_Admin_Design,students,3,"Promote, transfer or leave school",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-23,SA-23,VSchool_School_Admin_Design,imports,1,Preview a roster import,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-24,SA-24,VSchool_School_Admin_Design,imports,1,"Confirm, resume and reconcile an import",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-25,SA-25,VSchool_School_Admin_Design,attendance,1,Schedule attendance sessions,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-26,SA-26,VSchool_School_Admin_Design,attendance,1,Monitor and inspect attendance,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-27,SA-27,VSchool_School_Admin_Design,attendance,1,Correct submitted attendance,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-28,SA-28,VSchool_School_Admin_Design,attendance,1,Cancel or review a session change,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-29,SA-29,VSchool_School_Admin_Design,attendance,2,Review an absence explanation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-30,SA-30,VSchool_School_Admin_Design,reports,1,Review and export attendance,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-31,SA-31,VSchool_School_Admin_Design,reports,2,Compare trends and assign follow-up,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-32,SA-32,VSchool_School_Admin_Design,families,2,Verify and link a parent or guardian,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-33,SA-33,VSchool_School_Admin_Design,families,2,Invite a verified guardian,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-34,SA-34,VSchool_School_Admin_Design,families,2,"Change, restrict or revoke a guardian link",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-35,SA-35,VSchool_School_Admin_Design,communication,2,Compose and send a school message,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-36,SA-36,VSchool_School_Admin_Design,communication,2,Resolve failed delivery or missing acknowledgement,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-37,SA-37,VSchool_School_Admin_Design,communication,2,Review a family request,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-38,SA-38,VSchool_School_Admin_Design,admissions,3,Capture inquiry and start an application,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-39,SA-39,VSchool_School_Admin_Design,admissions,3,Review application and make a decision,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-40,SA-40,VSchool_School_Admin_Design,admissions,3,Accept an offer and enroll once,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-41,SA-41,VSchool_School_Admin_Design,planning,3,Build and publish a timetable,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-42,SA-42,VSchool_School_Admin_Design,planning,3,Arrange cover or a timetable exception,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-43,SA-43,VSchool_School_Admin_Design,planning,3,Review learning readiness and follow-up,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-44,SA-44,VSchool_School_Admin_Design,documents,3,Collect and review a document,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-45,SA-45,VSchool_School_Admin_Design,documents,3,Issue a certificate or publish a form,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-46,SA-46,VSchool_School_Admin_Design,assessments,4,Coordinate assessment setup and marks readiness,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-47,SA-47,VSchool_School_Admin_Design,assessments,4,"Approve, publish or correct results",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-48,SA-48,VSchool_School_Admin_Design,finance,5,Configure fees and concessions,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-49,SA-49,VSchool_School_Admin_Design,finance,5,Generate invoices and collect payment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-50,SA-50,VSchool_School_Admin_Design,finance,5,"Resolve reconciliation, adjustment or refund",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-51,SA-51,VSchool_School_Admin_Design,transport,6,Prepare routes and allocate students,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-52,SA-52,VSchool_School_Admin_Design,transport,6,Resolve a trip or handoff exception,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-53,SA-53,VSchool_School_Admin_Design,people-ops,6,Review leave and staffing coverage,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-54,SA-54,VSchool_School_Admin_Design,people-ops,6,Review payroll inputs and hand off,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-55,SA-55,VSchool_School_Admin_Design,library,6,Catalog and circulate library items,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-56,SA-56,VSchool_School_Admin_Design,library,6,"Resolve overdue, lost or inventory discrepancies",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-57,SA-57,VSchool_School_Admin_Design,facilities,6,"Receive, issue or return stock and assets",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-58,SA-58,VSchool_School_Admin_Design,facilities,6,Book a facility or request maintenance,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-59,SA-59,VSchool_School_Admin_Design,health,6,Refer a health or safeguarding concern,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-60,SA-60,VSchool_School_Admin_Design,health,6,Review emergency access and restricted case handling,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-61,SA-61,VSchool_School_Admin_Design,integrations,3,Review connection status and reconcile a sync,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-62,SA-62,VSchool_School_Admin_Design,settings,1,"Review activity, privacy or support access",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-SA-63,SA-63,VSchool_School_Admin_Design,assistant,7,Review an AI-assisted explanation or draft,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_School_Admin_Design/workflow-catalog.json
+WF-STW-01,STW-01,VSchool_Student_Design,access,2,Find the correct school sign-in,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-02,STW-02,VSchool_Student_Design,access,2,Activate an issued student account,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-03,STW-03,VSchool_Student_Design,access,2,Recover access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-04,STW-04,VSchool_Student_Design,access,2,Switch enrollment context,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-05,STW-05,VSchool_Student_Design,access,2,Handle expired or withdrawn access,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-06,STW-06,VSchool_Student_Design,day,3,Plan my school day,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-07,STW-07,VSchool_Student_Design,day,3,Read my timetable,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-08,STW-08,VSchool_Student_Design,day,3,Respond to a changed class,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-09,STW-09,VSchool_Student_Design,day,3,Open an assigned class space,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-10,STW-10,VSchool_Student_Design,assignments,3,Find and organize assignments,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-11,STW-11,VSchool_Student_Design,assignments,3,Understand an assignment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-12,STW-12,VSchool_Student_Design,assignments,3,Open learning resources,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-13,STW-13,VSchool_Student_Design,assignments,3,Save and resume my draft,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-14,STW-14,VSchool_Student_Design,assignments,3,Attach and check a file,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-15,STW-15,VSchool_Student_Design,assignments,3,Review and submit work,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-16,STW-16,VSchool_Student_Design,assignments,3,Recover an uncertain submission,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-17,STW-17,VSchool_Student_Design,assignments,3,Submit under late or extended rules,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-18,STW-18,VSchool_Student_Design,assignments,3,Revise and resubmit returned work,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-19,STW-19,VSchool_Student_Design,assignments,3,Withdraw a submission when allowed,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-20,STW-20,VSchool_Student_Design,assignments,3,Request more time,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-21,STW-21,VSchool_Student_Design,assignments,3,Continue safely on a poor connection,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-22,STW-22,VSchool_Student_Design,feedback,3,Read returned teacher feedback,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-23,STW-23,VSchool_Student_Design,feedback,3,Understand criteria and subject progress,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-24,STW-24,VSchool_Student_Design,feedback,3,Ask about feedback,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-25,STW-25,VSchool_Student_Design,attendance,2,View my recorded attendance,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-26,STW-26,VSchool_Student_Design,attendance,2,Query an attendance discrepancy,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-27,STW-27,VSchool_Student_Design,communication,2,Read a school notice,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-28,STW-28,VSchool_Student_Design,communication,2,Acknowledge a notice,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-29,STW-29,VSchool_Student_Design,communication,2,Message a permitted teacher,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-30,STW-30,VSchool_Student_Design,communication,2,Recover a message delivery problem,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-31,STW-31,VSchool_Student_Design,calendar,3,Review published events and assessments,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-32,STW-32,VSchool_Student_Design,calendar,3,Express event interest,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-33,STW-33,VSchool_Student_Design,results,4,View my published report,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-34,STW-34,VSchool_Student_Design,results,4,Download a published report,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-35,STW-35,VSchool_Student_Design,results,4,Ask about a result,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-36,STW-36,VSchool_Student_Design,requests,2,Create a school support request,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-37,STW-37,VSchool_Student_Design,requests,2,Track or withdraw my request,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-38,STW-38,VSchool_Student_Design,requests,2,Request a profile correction,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-39,STW-39,VSchool_Student_Design,services,6,Review my library loans,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-40,STW-40,VSchool_Student_Design,services,6,Request a library renewal,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-41,STW-41,VSchool_Student_Design,services,6,Join an enabled activity,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-42,STW-42,VSchool_Student_Design,services,6,Read my transport assignment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-43,STW-43,VSchool_Student_Design,services,6,Request student wellbeing support,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-44,STW-44,VSchool_Student_Design,account,2,Manage my sessions,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-45,STW-45,VSchool_Student_Design,account,2,Set preferences or request contact change,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-46,STW-46,VSchool_Student_Design,account,2,Get help with privacy or accessibility,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-STW-47,STW-47,VSchool_Student_Design,assistant,7,Ask a learning question with sources,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Student_Design/workflow-catalog.json
+WF-TEA-01,TEA-01,VSchool_Teacher_Design,access,1,Sign in to the school workspace,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-02,TEA-02,VSchool_Teacher_Design,access,1,Activate or recover a teacher account,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-03,TEA-03,VSchool_Teacher_Design,access,1,Switch branch or leave the workspace,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-04,TEA-04,VSchool_Teacher_Design,access,1,Review my account and sessions,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-05,TEA-05,VSchool_Teacher_Design,today,1,Plan my teaching day,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-06,TEA-06,VSchool_Teacher_Design,today,1,Resolve a missing or changed assignment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-07,TEA-07,VSchool_Teacher_Design,classes,1,Review my assigned classes,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-08,TEA-08,VSchool_Teacher_Design,classes,1,Review a minimal class roster,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-09,TEA-09,VSchool_Teacher_Design,attendance,1,Open an assigned attendance session,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-10,TEA-10,VSchool_Teacher_Design,attendance,1,Mark attendance and review exceptions,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-11,TEA-11,VSchool_Teacher_Design,attendance,1,Submit attendance and keep the receipt,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-12,TEA-12,VSchool_Teacher_Design,attendance,1,Recover an uncertain submission,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-13,TEA-13,VSchool_Teacher_Design,attendance,1,Handle a stale register or lost permission,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-14,TEA-14,VSchool_Teacher_Design,attendance,1,Review history and hand off a correction,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-15,TEA-15,VSchool_Teacher_Design,attendance,2,Use offline-assisted attendance,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-16,TEA-16,VSchool_Teacher_Design,attendance,2,Request an attendance correction,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-17,TEA-17,VSchool_Teacher_Design,communication,2,Read school notices and acknowledge,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-18,TEA-18,VSchool_Teacher_Design,communication,2,Prepare a class message,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-19,TEA-19,VSchool_Teacher_Design,communication,2,Reply in a permitted family conversation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-20,TEA-20,VSchool_Teacher_Design,communication,2,Arrange a family meeting,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-21,TEA-21,VSchool_Teacher_Design,communication,2,Review permitted absence context,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-22,TEA-22,VSchool_Teacher_Design,planning,3,Review my published timetable,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-23,TEA-23,VSchool_Teacher_Design,planning,3,Accept and perform a cover assignment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-24,TEA-24,VSchool_Teacher_Design,planning,3,Hand over a lesson or request a schedule change,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-25,TEA-25,VSchool_Teacher_Design,learning,3,Plan a lesson,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-26,TEA-26,VSchool_Teacher_Design,learning,3,Add and reuse teaching resources,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-27,TEA-27,VSchool_Teacher_Design,learning,3,Create and publish an assignment,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-28,TEA-28,VSchool_Teacher_Design,learning,3,Review submissions and late work,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-29,TEA-29,VSchool_Teacher_Design,learning,3,Draft feedback and return work,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-30,TEA-30,VSchool_Teacher_Design,learning,3,Allow resubmission or revise a deadline,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-31,TEA-31,VSchool_Teacher_Design,learning,3,Review learning progress and plan support,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-32,TEA-32,VSchool_Teacher_Design,assessments,4,Prepare an assessment within an approved scheme,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-33,TEA-33,VSchool_Teacher_Design,assessments,4,Enter and validate marks,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-34,TEA-34,VSchool_Teacher_Design,assessments,4,Submit marks for moderation,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-35,TEA-35,VSchool_Teacher_Design,assessments,4,Review result publication and correct an error,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-36,TEA-36,VSchool_Teacher_Design,wellbeing,6,Refer a student concern safely,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-37,TEA-37,VSchool_Teacher_Design,self-service,6,Request leave and arrange a handoff,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-38,TEA-38,VSchool_Teacher_Design,self-service,6,Review my staff record and request a correction,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-39,TEA-39,VSchool_Teacher_Design,resources,6,"Borrow, reserve or renew a resource",DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-40,TEA-40,VSchool_Teacher_Design,resources,6,Request materials or book a teaching space,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-41,TEA-41,VSchool_Teacher_Design,duties,6,Carry out an assigned school duty,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json
+WF-TEA-42,TEA-42,VSchool_Teacher_Design,assistant,7,Use a teaching draft with source evidence,DESIGN_RECONCILIATION_REQUIRED,packs/VSchool_Teacher_Design/workflow-catalog.json

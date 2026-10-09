@@ -1,0 +1,17 @@
+{
+  "task_dependencies_valid": true,
+  "wave_a_tasks": 16,
+  "workflow_cards": 268,
+  "approved_reference_hashes_match": true,
+  "existing_models": 51,
+  "production_tests_run": false,
+  "queue_first_task": "EX-00",
+  "qualification": "Source inspection and handoff consistency checks only; local repository reconciliation and production verification are execution tasks.",
+  "revision": 2,
+  "owner_engineering_guides": 10,
+  "physical_table_specs": 51,
+  "route_sources": 74,
+  "source_reference_hashes_verified": 244,
+  "prompt_words": 2238,
+  "migration_sql_files": 31
+}

@@ -31,6 +31,11 @@ for (const id of ids) visit(id);
 function walk(dir) {
   for (const entry of fs.readdirSync(dir, {withFileTypes:true})) {
     const file = path.join(dir, entry.name);
+    // The execution pack carries a byte-for-byte historical source snapshot.
+    // Its relative links belong to the original repository root, so validate
+    // the live canonical docs and pack instructions without rewriting that
+    // read-only evidence tree.
+    if (file === path.join("docs", "execution", "VSchool_Execution_Pack", "engineering", "source-reference")) continue;
     if (entry.isDirectory()) walk(file);
     else if (file.endsWith(".md")) {
       const text = fs.readFileSync(file,"utf8");

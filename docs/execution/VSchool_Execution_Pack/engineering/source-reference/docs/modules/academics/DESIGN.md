@@ -1,0 +1,227 @@
+# Academic setup and teaching context — design
+
+Phase 1 · Design revision 3 · 5 October 2026. ACA-01 and ACA-02 are implementation-verified; ACA-03 is in progress. CourseOffering and TeacherAssignment are installed by forward migration `20261005001900_academic_offerings`. Review unresolved deployment choices in FND-02 before real-data use.
+
+## Database naming and physical mapping
+
+All physical objects follow [the VS database contract](../../DATABASE_DESIGN.md). Table names and columns below are physical SQL names; workflow prose uses logical domain names. `organizationId` maps to `organization_id`, `schoolId` to `school_id`, and `scope` expands to both columns. Models retain PascalCase through Prisma `@@map`; camelCase fields use `@map`. Planned schemas are implemented only through their named tasks and reviewed migrations.
+
+## Ownership, aggregates and values
+
+AcademicYear aggregate owns term entities and DRAFT→OPEN→CLOSED transitions. Calendar aggregate owns immutable published revisions and exception values. GradeLevel and Subject are school roots; Section belongs to year/grade/campus. Teacher references People.Employee. CourseOffering means a subject taught to a section in a year; TeacherAssignment is a dated root. Values: half-open civil DateRange, Code(1–40; trimmed, uppercased, ASCII `A-Z`, digits, `_` or `-`, beginning with a letter/digit), Name(1–160 NFC characters), Weekday(1..7), CampusScope, CalendarRevisionNumber. Year and term form APIs accept exclusive end dates; screens ask for the last included civil date and add one day once at the boundary. Events: AcademicYearCreated/Opened/Closed.v1, CalendarPublished.v1, OfferingCreated.v1, TeacherAssigned.v1. No full timetable engine.
+
+## Module decisions
+
+ACA-ADR-001: half-open civil intervals and immutable calendar revisions. Alternative mutable calendar reused by historical sessions rejected. Publication changes future uncreated sessions only; if a change would affect an existing noncancelled future session, Phase 1 rejects publication until admin explicitly cancels/replans the affected unsubmitted sessions. Submitted sessions are never retroactively reinterpreted.
+
+ACA-ADR-002: one primary dated teacher per offering at a time for pilot simplicity; co-teaching/substitution policy needs a later explicit design. Overlap validation happens under School guard; SQL CHECK alone does not enforce cross-row ranges.
+
+ACA-ADR-003: academic setup is available only when the trusted server release manifest exposes `academic_core`, the institution entitlement is ACTIVE, the branch activation is ACTIVE, and the current scoped permission allows the operation. The default manifest releases no product modules. The ACA-01 local demo/test server may explicitly release only `academic_core`; this value is passed by its command/server process, never read from a browser or the private `.env`. The repository rechecks release, entitlement, activation, membership and capability inside the same guarded transaction. A closed year is historical: terms cannot be replaced and new sections cannot be added; existing grade/subject catalogs remain school-wide references.
+
+## Physical data contract
+
+ACA-01 installs the six setup tables; ACA-02 adds the immutable calendar revision and exception tables listed here; PER-02 installs Academics-owned Teacher eligibility because that task first enables and revokes the profile. Remaining academic tables are installed only by their named tasks. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+
+| Table | Fields and data stored | Meaning | Keys / constraints / query support |
+|---|---|---|---|
+| `vs_academics_academic_year` (AcademicYear) | id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date; status DRAFT/OPEN/CLOSED; version int | Half-open year; terms are editable only while DRAFT. Multiple OPEN years are allowed; the active school year remains an explicit selection. | UNIQUE(scope,id); UNIQUE(scope,code); CHECK dates, status, version, code and name |
+| `vs_academics_academic_term` (AcademicTerm) | id uuid PK; organization_id uuid; school_id uuid; year_id uuid; code varchar(40); name varchar(160); starts_on date; ends_on date | Half-open interval owned by year; terms do not overlap and remain within the year. | FK(scope,year_id); UNIQUE(scope,year_id,code); CHECK starts_on<ends_on; index(scope,year_id,starts_on) |
+| `vs_academics_grade_level` (GradeLevel) | id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); sort_order int; active boolean; version int | School-wide grade catalog. No cross-school shared write. Sort order is assigned under the School guard. | UNIQUE(scope,id); UNIQUE(scope,code) |
+| `vs_academics_subject` (Subject) | id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); active boolean; version int | School-wide subject catalog. | UNIQUE(scope,id); UNIQUE(scope,code) |
+| `vs_academics_section` (Section) | id uuid PK; organization_id uuid; school_id uuid; year_id uuid; grade_id uuid; campus_id uuid nullable; code varchar(40); name varchar(160); active boolean; version int | Section in one year/grade/campus, including school-wide no-campus scope. New sections are allowed in DRAFT/OPEN years and denied in CLOSED years. | Scoped FKs year/grade/campus; UNIQUE(scope,id,year_id); two partial UNIQUE indexes (scope,year_id,grade_id,code) WHERE campus_id IS NULL and (scope,year_id,grade_id,campus_id,code) WHERE NOT NULL |
+| `vs_academics_school_calendar` (SchoolCalendar) | id uuid PK; organization_id uuid; school_id uuid; year_id uuid; current_revision_id uuid nullable; version int | One calendar root per school year; no current pointer until publication. | UNIQUE(scope,year_id); UNIQUE(scope,id); FK year; deferred current_revision scoped FK added in SQL |
+| `vs_academics_calendar_revision` (CalendarRevision) | id uuid PK; organization_id uuid; school_id uuid; calendar_id uuid; number int; teaching_weekdays int[]; published_at timestamptz(3); published_by uuid | Immutable full policy snapshot. No generic mutable JSON calendar. | UNIQUE(scope,calendar_id,number); UNIQUE(scope,calendar_id,id); FK calendar; published_by account; append-only guard |
+| `vs_academics_calendar_exception` (CalendarException) | id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; campus_id uuid nullable; on_date date; is_teaching_day boolean; label varchar(160) | Date exception; campus beats school beats weekly rule. Dates inside year. | Scoped revision/campus FKs; two NULL/non-NULL partial unique indexes(scope,revision_id,on_date[,campus_id]); immutable |
+| `vs_academics_teacher` (Teacher) | id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int | Academic teacher profile, not a login identity. | UNIQUE(scope,employee_id); UNIQUE(scope,id); scoped Employee FK |
+| `vs_academics_course_offering` (CourseOffering) | id uuid PK; organization_id uuid; school_id uuid; year_id uuid; section_id uuid; subject_id uuid; code varchar(40); version int; active boolean | One section subject offering in year. | UNIQUE(scope,year_id,code); UNIQUE(scope,year_id,section_id,subject_id); scoped year, section/year and subject composite FKs; UNIQUE(scope,id); CHECK version>0 and code format |
+| `vs_academics_teacher_assignment` (TeacherAssignment) | id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; teacher_id uuid; valid_from date; valid_to date; version int | Primary attendance duty only in Phase 1; one eligible teacher per offering/date. | Scoped offering/teacher FKs; CHECK valid_from<valid_to and version>0; overlap guarded by School lock/application predicate; indexes(scope,offering_id,valid_from,valid_to) and (scope,teacher_id,valid_from,valid_to) |
+
+## Read workflows and joins
+
+Setup page reads scoped Year → Terms, Year → Sections → Grade/Campus, Subjects, and Calendar → currentRevision → Exceptions. Reference selectors return code/name/ID/version. Class list joins Offering→Section→Grade and Subject; current assignments join Teacher→Employee→Person for display name. All joins include scope, except Person joins organizationId+personId behind People contract. No account credentials appear.
+
+Teacher Today is an Attendance read contract, not an Academics write. It uses dated TeacherAssignment to Offering and Session. The eligibility predicate is `organization_id=? AND school_id=? AND teacher_id=? AND valid_from<=school_date AND valid_to>school_date`; assignment-overlap validation uses `organization_id=? AND school_id=? AND offering_id=? AND valid_from<requested_valid_to AND valid_to>requested_valid_from`. Default lists are keyset-paged 50; calendar exception payload max 500. DB DATE maps to YYYY-MM-DD at adapter boundary; never parse civil dates with local-machine timezone assumptions.
+
+## Screen contract
+
+/admin/academics tabs Year & calendar, Grades & sections, Subjects; /admin/classes for offerings/assignments. Dependent selectors show friendly names, never require hand-entered UUIDs. Forms show exclusive end-date explanation as "last included day" input converted once to exclusive end in API. Preview that conversion. Calendar UI shows revision and unsaved changes. Offerings show teacher effective dates; no assignment is a clear warning, not a fake timetable.
+
+All screens additionally follow Bible §8: loading, empty, validation, permission, stale/conflict, temporary failure and acknowledged success; semantic labels, focus and mobile layout. No future-module navigation.
+
+## Application ports and transaction boundary
+
+Each named flow below is an application use case. Inputs/outputs are plain DTOs; adapters implement owned repositories and public cross-module facades. Use SchoolCommand, ActorResolver, Clock, IdGenerator and transactional envelope writers from the shared contract. Do not pass Prisma.TransactionClient into application/domain code. Generic `save(any)` is not a replacement for named commands. Domain factories create new roots/events; rehydration restores without events.
+
+Mutations use the account → Organization → School guard protocol in Bible §7. Every protected read and write reauthorizes current scope and resource permission. Read-only flows do not acquire write locks. Bootstrap/auth-only commands use their documented account/provisioning transaction. Scoped school uniqueness/range checks run after locks. Reauthorize before mutation receipt replay and commit; only a successful transaction stores a receipt. Aggregate version, audit, outbox and response commit together. Exact flow-specific reads and writes below refine this shared behavior.
+
+## ACA-01 — Configure academic year, terms, grades and sections
+
+**Success response contract:** Created/updated root `{id,version,code,name}` plus relevant `{yearId,gradeId,campusId,startsOn,endsOn,status}`; terms response `{yearId,version,terms:[{id,code,name,startsOn,endsOn}]}`.
+
+**Transport:** POST /api/v1/academics/years; PUT /api/v1/academics/years/:id/terms; POST /api/v1/academics/grades|subjects|sections
+
+**Input:** Year code/name/startsOn/endsOn; terms <=24 {code,name,startsOn,endsOn}; grade/subject code/name; section yearId/gradeId/campusId?/code/name. Each command has key; updates expectedVersion.
+
+**Workflow:**
+
+1. Require the trusted `academic_core` release, active institution entitlement, active branch activation, and current `school.manage` for year/terms or `class.manage` for catalogs.
+2. Lock account → Organization → School; recheck the release/configuration, membership and capability before receipt replay and commit.
+3. Create DRAFT year and unpublished calendar atomically; terms replace only while DRAFT, within year and nonoverlapping.
+4. Create school grade/subject and section after validating active references and matching year/campus; reject a CLOSED year. Derive grade sort order from the school catalog under the guard.
+5. Return joined display DTO; audit/outbox/receipt commit with version change.
+
+**Database writes / atomicity:** AcademicYear + SchoolCalendar on create; AcademicTerm replacement under year; GradeLevel, Subject, Section; transactional envelopes.
+
+**Errors and recovery:** Duplicate code/section →409; invalid range/overlap→422; terms after OPEN or a new section in CLOSED year→409; foreign/inactive references→404/409; absent release/contract/branch activation→409; revoked permission→403.
+
+```mermaid
+sequenceDiagram
+  actor U as User
+  participant W as Delivery adapter
+  participant A as ACA-01 use case
+  participant P as Owner ports
+  participant D as PostgreSQL
+  U->>W: Request named flow
+  W->>A: Validated input and verified session
+  A->>P: Lock account then School
+  P->>D: Scoped reads and transaction guards
+  D-->>P: Current authorized facts
+  A->>P: Create DRAFT year and unpublished calendar atomically
+  alt Preconditions hold
+    P->>D: Apply documented writes atomically
+    D-->>P: Committed result
+    P-->>A: Safe result DTO
+    A-->>W: Acknowledged outcome
+    W-->>U: Updated view and next action
+  else Conflict or denied access
+    P-->>A: Typed failure, no partial business writes
+    A-->>W: Safe error with request ID
+    W-->>U: Explain recovery, keep permitted inputs
+  end
+```
+
+**Verification:** Unit — Civil dates, term overlap, state rules, code normalization. Functional PostgreSQL — Parallel no-campus duplicates: exactly one; cross-year/scope FK rejection; atomic year+calendar creation. E2E — Create year/terms/grade/subject/section then refresh; actionable duplicate and overlap errors.
+
+## ACA-02 — Publish calendar and open or close the year
+
+**Success response contract:** Publication `{calendarId,version,revisionId,revisionNumber}`; evaluation `{date,campusId,isTeachingDay,source,revisionId}`; year state `{yearId,version,status}`.
+
+**Transport:** POST /api/v1/academics/calendars/:id/publish; POST /api/v1/academics/years/:id/open|close; GET /api/v1/academics/calendars/:id/evaluate?date=
+
+**Input:** Publish expectedVersion, teachingWeekdays unique 1..7, exceptions <=500 {date,campusId?,isTeachingDay,label}, reason. Open/close expectedVersion and reason.
+
+**Workflow:**
+
+1. Require the trusted `academic_core` release, active institution entitlement, active branch activation, and current `school.manage`; lock account → Organization → School and recheck authorization before receipt replay and commit.
+2. Publish only for a DRAFT or OPEN year. Validate expected calendar version, unique weekdays 1..7, at most 500 unique (date,campus) exceptions inside the year, active campus scope and normalized labels.
+3. Evaluate an in-year civil date against the immutable current revision: exact campus exception first, school-wide exception second, weekday policy last. No current revision or a date outside the year is a typed failure.
+4. Ask Attendance's CalendarImpact port whether publication changes any existing noncancelled future session. Append a new immutable revision and exceptions, then update the current pointer/version atomically. Existing submissions are never reinterpreted.
+5. Open only DRAFT→OPEN after a calendar is published. Close only OPEN→CLOSED and only when the CalendarImpact port reports no noncancelled SCHEDULED/OPEN session on or after the school-local current date. Every mutation checks expected year/calendar version and writes audit/outbox/receipt atomically.
+
+**Attendance integration boundary:** No AttendanceSession table or session-creation use case exists in ACA-02. Until those owned tables exist, composition supplies an explicit zero-impact adapter. This adapter is safe only while no sessions can be created; ATT-01 must replace it before session workflows are released and must add the real close-versus-schedule shared-School-guard concurrency test. ACA-02 tests the nonzero-impact rejection branch using the port and does not claim the absent session race was exercised.
+
+**Database writes / atomicity:** CalendarRevision, CalendarException, SchoolCalendar pointer/version; AcademicYear state/version; envelopes. No editing old revisions.
+
+**Errors and recovery:** Affected existing future session→409 CALENDAR_IN_USE; no current revision on evaluate or no published calendar on open→409; pending future sessions on close→409; CLOSED-year publication or invalid state transition→409; foreign/inactive campus→404; date/weekday/exception validation→422; stale revision→409. Reapply against a refreshed version; never edit or delete a published revision.
+
+```mermaid
+sequenceDiagram
+  actor U as User
+  participant W as Delivery adapter
+  participant A as ACA-02 use case
+  participant P as Owner ports
+  participant D as PostgreSQL
+  U->>W: Request named flow
+  W->>A: Validated input and verified session
+  A->>P: Validate complete policy, dates/campuses and expected calendar/year version
+  P->>D: Scoped reads and transaction guards
+  D-->>P: Current authorized facts
+  A->>P: Compare affected existing sessions through attendance CalendarImpact port
+  alt Preconditions hold
+    P->>D: Apply documented writes atomically
+    D-->>P: Committed result
+    P-->>A: Safe result DTO
+    A-->>W: Acknowledged outcome
+    W-->>U: Updated view and next action
+  else Conflict or denied access
+    P-->>A: Typed failure, no partial business writes
+    A-->>W: Safe error with request ID
+    W-->>U: Explain recovery, keep permitted inputs
+  end
+```
+
+**Verification:** Unit — Campus-over-school precedence; all weekdays validation; date boundaries; state transitions. Functional PostgreSQL — Publication failure leaves pointer unchanged; deferred scoped pointer FK; immutable records; nonzero CalendarImpact rejects publication/close without partial writes. E2E — Publish holiday/campus exception and evaluate dates; open year; term edit denied; close empty disposable year. The session-creation race is explicitly deferred to ATT-01 because Attendance owns no session table yet.
+
+## ACA-03 — Create offerings and assign teachers
+
+**Success response contract:** `{offeringId,version,code,yearId,section:{id,code,name},subject:{id,code,name}}`; assignment `{assignmentId,version,teacherId,offeringId,validFrom,validTo}`.
+
+**Transport:** GET /api/v1/offerings?yearId=; POST /api/v1/offerings; POST /api/v1/teacher-assignments; PATCH /api/v1/teacher-assignments/:id/end. Admin screen `/admin/classes`.
+
+**Input:** Read yearId required and page cursor optional. Offering yearId/sectionId/subjectId/code; assignment offeringId/teacherId/validFrom/validTo; end expectedVersion/endDate/reason. All assignment ranges are half-open civil dates `[validFrom,validTo)`; `validTo` and `endDate` are exclusive API dates. The UI asks for the last included day and adds one day at its boundary. Key required for each mutation.
+
+**Workflow:**
+
+1. Require the trusted `academic_core` release, active institution entitlement, active branch activation and current `class.manage` for every read/write. Mutations lock account → Organization → School and recheck scope/permission before replay and commit; reads reauthorize without write locks.
+2. Create an offering only in an OPEN scoped year, for an active section belonging to that same year and an active same-school subject. A scoped unique key prevents duplicate section/subject offerings in a year.
+3. Assign only an active Academics Teacher whose People Employee is active for the full requested interval. The interval must lie inside the OPEN year and Employee's half-open employment interval. Do not require AccountPersonBinding for the teaching assignment; account access is separate from instructional eligibility.
+4. Permit one primary assignment per offering at a time. Under the shared School guard, reject a same-offering overlap using `organization_id=? AND school_id=? AND offering_id=? AND valid_from<requested_valid_to AND valid_to>requested_valid_from`. Do not impose cross-offering time/room clashes; ATT-01 owns session timing.
+5. End an assignment with expected-version CAS by shortening `valid_to`; reject an empty/reversed range, an extension beyond the current `valid_to`, or future sessions that would have no eligible teacher. The assignment's Employee offboarding path also rejects an end date that would leave any assignment beyond the Employee's new exclusive `employed_to`.
+6. Read the selected year's offering list scoped by organization/school/year, joining Section→GradeLevel and Subject, with the date-effective primary assignment joined to Teacher→Employee→Person. Derive `school_date` from the server-owned school timezone. Return no credentials; portal access remains a separate badge.
+7. Persist offering/assignment and shared evidence in the same guarded transaction. Exact replay returns the recorded result only after current actor/resource authorization.
+
+**Database writes / atomicity:** Academics owns CourseOffering and TeacherAssignment. Employee and Person remain People-owned; Teacher eligibility is read/disabled through its Academics owner facade and Access owns AccountPersonBinding. Create Offering/Assignment, update assignment end/version, School configuration revision and audit/outbox/receipt atomically; no cross-owner table writes.
+
+**Errors and recovery:** Same-offering overlap, stale version, inactive teacher/employee, closed year, or impacted future session→409; section/year mismatch→422; foreign/out-of-scope references→404; current permission denied→403; invalid civil dates or interval bounds→422; unavailable release/entitlement/branch activation→409. Refresh the class list and effective dates before retrying.
+
+**Attendance boundary:** AttendanceSession does not exist yet. ACA-03 uses an explicit `NO_ATTENDANCE_SESSIONS` assignment-impact port, safe only while session scheduling/submission is absent. ATT-01 replaces it with Attendance-owned future-session impact checks before scheduling is released. Assignment end versus actual teacher-submit reauthorization is verified in ATT-02, when submission exists; ACA-03 verifies that the assignment mutation and People offboarding use current versions and the shared School guard. Do not report the absent session race as tested here.
+
+```mermaid
+sequenceDiagram
+  actor U as User
+  participant W as Delivery adapter
+  participant A as ACA-03 use case
+  participant P as Owner ports
+  participant D as PostgreSQL
+  U->>W: Request named flow
+  W->>A: Validated input and verified session
+  A->>P: Validate section/year identity, subject active, Teacher→Employee eligibility and current account binding only when portal access needed
+  P->>D: Scoped reads and transaction guards
+  D-->>P: Current authorized facts
+  A->>P: Check assignment interval inside year and nonoverlap for offering
+  alt Preconditions hold
+    P->>D: Apply documented writes atomically
+    D-->>P: Committed result
+    P-->>A: Safe result DTO
+    A-->>W: Acknowledged outcome
+    W-->>U: Updated view and next action
+  else Conflict or denied access
+    P-->>A: Typed failure, no partial business writes
+    A-->>W: Safe error with request ID
+    W-->>U: Explain recovery, keep permitted inputs
+  end
+```
+
+**Verification:** Unit — Half-open civil-date endpoints, Employee eligibility and assignment state transitions. Functional PostgreSQL — Offering/assignment uniqueness and scoped FKs; concurrent same-offering assignments serialize; assignment end CAS; Teacher/Employee offboarding rejects surviving assignments and rolls back; current authorization and exact replay. Capture `EXPLAIN (ANALYZE, BUFFERS)` for both documented predicates at the Bible §20 initial-pilot profile (20 branches across multiple institutions, at least 5,000 pupils per branch and realistic concurrent teacher activity); record actual rows, plan and timing. The plan check is evidence, not a new latency gate. Do not apply TEN-03's larger dataset or thresholds as the pilot gate. E2E — Create an offering, assign an eligible employee, inspect joined effective dates; reject an overlap and an assignment past employment; end/reassign before offboarding.
+
+**Design-readiness note (4 October 2026):** Dependency links are satisfied by VERIFIED implementation even when human review is PENDING, unless a task explicitly declares an acceptance gate. Academics owns offerings, teacher eligibility and dated assignments; People owns Employee and Access owns bindings. Existing physical contracts define scoped uniqueness/FKs; use teacher/date lookup index `(organization_id,school_id,teacher_id,valid_from,valid_to)` beside offering overlap index. School guard serializes cross-row overlap checks; versioned commands and receipts make retries exact. Portal binding is required only for portal access, never teaching eligibility. ATT-01 owns time-slot clash enforcement; until then ACA-03 prevents overlapping effective assignments for the same offering and does not invent room/timetable allocation. Protected reads/writes reauthorize current scope/resource permission; only mutations lock. Path A records classification/policy intent in the registry and defers enforcement to TEN-03.
+
+**Design-readiness note (5 October 2026):** Dated dependency snapshot: ACA-02 VERIFIED/PENDING and PER-02 VERIFIED/PENDING. Their task files declare no human-acceptance gate, so both are eligible dependencies while review remains pending. The registry records both new table contracts as Academics-owned BRANCH rows with `(organization_id,school_id)`, composite constraints, the offering/date and teacher/date indexes, intended scoped policies and TEN-03 closure. No account binding is required to assign an eligible Teacher; it only controls portal access. Date intervals and API end values are exclusive at `valid_to`. There are no attendance session rows yet: use an explicit zero-impact port until ATT-01 replaces it, then test teacher-submit reauthorization in ATT-02. Existing locks remain account→Organization→School for mutations; scoped reads remain unlocked. The Bible §20 pilot load profile informs plan capture; TEN-03's separate large scale profile and acceptance thresholds are not imported. No remaining product decision blocks implementation.
+
+**Implementation evidence (5 October 2026):** Forward migration `20261005001900_academic_offerings` installs the scoped tables, composite foreign keys, checks and date indexes; Path A RLS remains deferred to TEN-03. App authorization remains checked on every read/write. Employee offboarding asks the Academics owner port to reject any assignment ending after the exclusive employment cutoff, inside the same transaction. `EXPLAIN (ANALYZE, BUFFERS)` was captured on 100,000 temporary synthetic assignment rows across 20 branches/5 institutions (5,000 rows per branch). The offering/date index scan returned 5 rows in 0.041 ms; the teacher/date index scan returned 3 rows in 0.018 ms. This is predicate plan evidence only: no concurrent teacher-submit load or pilot latency target was exercised because session submit does not exist until ATT-02.
+
+## Migration, retention and handoff
+
+Implement tables only in the task that first uses them; migrate from empty database and the previous task checkpoint. Add scoped unique indexes before composite FKs; detect existing duplicates before adding constraints. SQL append-only/null-campus/range safeguards must appear in reviewed migrations and real-DB tests. No seed may erase prior data. Use synthetic fixtures and clean only owned test records. Preserve schema-compatible app rollback; use a reviewed forward migration when incompatible. Retention changes must preserve required immutable evidence and legal holds under the school-approved policy, not an ad hoc DELETE.
+
+Real dates/leap years, adjacent terms, reversed ranges, nullable-campus duplicates, cross-year section reference, calendar precedence/publishing conflicts, immutable revisions, teacher eligibility and overlap races. Year closing rejects future scheduled/open noncancelled sessions to avoid stranded work; past submitted history remains readable.
+
+See [tasks](TASKS.md), [current state](CURRENT_STATE.md), [Bible](../../VSchool_Bible.md) and [agent runbook](../../AGENT_RUNBOOK.md).
+
+## v4.1 integration requirements
+
+School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.
+
+## Portable backend integration
+
+Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.

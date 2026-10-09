@@ -84,3 +84,11 @@ Verify async unknown/conflict/success states and authorized routes, keyboard ord
 ## Portable backend integration
 
 Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.
+
+## Approved experience adoption overlay — revision 2
+
+The Wave A experience overlay is defined by [the execution pack](../../execution/VSchool_Execution_Pack/START_HERE.md), [the live contract reconciliation](../../execution/CONTRACT_DIFF.md), and [the pinned route/reference map](../../execution/ROUTE_REFERENCE_MAP.md). It adopts the approved page bodies and enhanced left navigation for existing school-administrator and teacher routes. The six reference HTML files are immutable visual inputs; their fictional stores, role switches, counts and success states are excluded from production behavior.
+
+EX-ADR-001 through EX-ADR-010 apply as a presentation overlay to existing owner modules. Shared UI owns the shell, controlled list toolbar, drawers and command feedback. Module screens map current browser-safe DTOs. Portable application/domain code and guarded repositories retain authorization, transaction, receipt, version and failure contracts. No initial presentation task adds a table. A missing owner operation is shown as unavailable or omitted and recorded in the contract diff rather than replaced by a dead control.
+
+This overlay does not close DS-02. Native 200% zoom, VoiceOver, NVDA and owner visual review remain outstanding even when Wave A browser checks pass.

@@ -20,6 +20,10 @@ Provision two institutions, two branches in one; sign in with a multi-branch use
 
 Start/check the server, give URL and steps, request user review, and mark review PENDING. Do not mark human acceptance until actual feedback.
 
+## Experience overlay consumption
+
+EX-02 reuses the current server-authorized context directory and branch switch flow inside the shared shell. Candidate browser scope and menu visibility remain non-authoritative. TEN-03 RLS/context proof stays an independent production gate.
+
 ## TEN-02 — Persist and enforce module entitlements and activation
 
 Depends on: TEN-01

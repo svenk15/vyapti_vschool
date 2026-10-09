@@ -1,0 +1,4536 @@
+{
+  "edition": "03",
+  "status": "DESIGN_PROPOSAL",
+  "basis": "Operator Edition 03.9 + local Bible 4.4 product phase snapshot; actual repository status not verified",
+  "modules": [
+    {
+      "id": "home",
+      "title": "Today",
+      "icon": "home",
+      "phase": 1,
+      "description": "Resolve school-day exceptions and complete setup.",
+      "owner": "access, reporting"
+    },
+    {
+      "id": "settings",
+      "title": "School settings",
+      "icon": "school",
+      "phase": 1,
+      "description": "Maintain the branch identity and permitted preferences.",
+      "owner": "access, branding, tenancy"
+    },
+    {
+      "id": "academics",
+      "title": "Academics",
+      "icon": "book",
+      "phase": 1,
+      "description": "Prepare years, classes, subjects and teaching assignments.",
+      "owner": "academics"
+    },
+    {
+      "id": "staff",
+      "title": "Staff & access",
+      "icon": "people",
+      "phase": 1,
+      "description": "Maintain staff records, verified identities and scoped access.",
+      "owner": "people, access, academics"
+    },
+    {
+      "id": "students",
+      "title": "Students",
+      "icon": "students",
+      "phase": 1,
+      "description": "Register, enroll and maintain each student’s dated school record.",
+      "owner": "people, students"
+    },
+    {
+      "id": "imports",
+      "title": "Imports",
+      "icon": "upload",
+      "phase": 1,
+      "description": "Preview, confirm and reconcile roster imports.",
+      "owner": "imports, students"
+    },
+    {
+      "id": "attendance",
+      "title": "Attendance",
+      "icon": "check",
+      "phase": 1,
+      "description": "Schedule sessions, monitor submissions and correct with evidence.",
+      "owner": "attendance, reporting"
+    },
+    {
+      "id": "reports",
+      "title": "Reports",
+      "icon": "chart",
+      "phase": 1,
+      "description": "Understand complete, scoped and explainable operational data.",
+      "owner": "reporting"
+    },
+    {
+      "id": "families",
+      "title": "Families",
+      "icon": "link",
+      "phase": 2,
+      "description": "Verify guardian relationships and control child-specific access.",
+      "owner": "guardians, access"
+    },
+    {
+      "id": "communication",
+      "title": "Communication",
+      "icon": "mail",
+      "phase": 2,
+      "description": "Reach the right recipients and resolve delivery failures.",
+      "owner": "communication"
+    },
+    {
+      "id": "admissions",
+      "title": "Admissions",
+      "icon": "school",
+      "phase": 3,
+      "description": "Move an application from inquiry to an enrolled student.",
+      "owner": "admissions, students"
+    },
+    {
+      "id": "planning",
+      "title": "Timetable & learning",
+      "icon": "calendar",
+      "phase": 3,
+      "description": "Publish conflict-free plans and follow up on learning activity.",
+      "owner": "academics, learning"
+    },
+    {
+      "id": "documents",
+      "title": "Documents & forms",
+      "icon": "file",
+      "phase": 3,
+      "description": "Review controlled documents and issue approved records.",
+      "owner": "documents"
+    },
+    {
+      "id": "assessments",
+      "title": "Assessments",
+      "icon": "book",
+      "phase": 4,
+      "description": "Coordinate assessment readiness, approval and publication.",
+      "owner": "assessments"
+    },
+    {
+      "id": "finance",
+      "title": "Fees & payments",
+      "icon": "wallet",
+      "phase": 5,
+      "description": "Coordinate accountable billing through delegated finance authority.",
+      "owner": "finance"
+    },
+    {
+      "id": "transport",
+      "title": "Transport",
+      "icon": "bus",
+      "phase": 6,
+      "description": "Coordinate safe routes, allocations and trip exceptions.",
+      "owner": "transport"
+    },
+    {
+      "id": "people-ops",
+      "title": "People operations",
+      "icon": "people",
+      "phase": 6,
+      "description": "Coordinate leave and staffing without exposing restricted pay data.",
+      "owner": "people-operations"
+    },
+    {
+      "id": "library",
+      "title": "Library",
+      "icon": "book",
+      "phase": 6,
+      "description": "Manage catalog, circulation and overdue work.",
+      "owner": "library"
+    },
+    {
+      "id": "facilities",
+      "title": "Assets & facilities",
+      "icon": "gear",
+      "phase": 6,
+      "description": "Track custody, stock and facility availability.",
+      "owner": "inventory, facilities"
+    },
+    {
+      "id": "health",
+      "title": "Health & safeguarding",
+      "icon": "heart",
+      "phase": 6,
+      "description": "Route concerns to authorized specialists with minimal disclosure.",
+      "owner": "health, safeguarding"
+    },
+    {
+      "id": "integrations",
+      "title": "Integrations",
+      "icon": "link",
+      "phase": 3,
+      "description": "Review permitted connections and reconcile synchronization.",
+      "owner": "integrations, tenancy"
+    },
+    {
+      "id": "assistant",
+      "title": "AI assistance",
+      "icon": "spark",
+      "phase": 7,
+      "description": "Review source-backed suggestions within existing permissions.",
+      "owner": "assistant"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "SA-01",
+      "module": "home",
+      "title": "Sign in and choose a branch",
+      "phase": 1,
+      "capability": "authenticated identity + active branch grant",
+      "steps": [
+        {
+          "title": "School sign-in",
+          "help": "Use the school’s published entry. Its branding does not grant access.",
+          "fields": [
+            {
+              "name": "email",
+              "label": "Email address",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "password",
+              "label": "Password",
+              "type": "password",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Choose your workspace",
+          "help": "Only authorized branches appear. Skip this step when there is only one.",
+          "fields": [
+            {
+              "name": "branch",
+              "label": "Branch",
+              "type": "select",
+              "options": [
+                "Whitefield",
+                "Indiranagar"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The administrator lands on Today in the chosen branch.",
+      "rule": "Recheck institution, branch, membership and module state; return URLs must be allowlisted.",
+      "edge": "Invalid credentials use a generic message; suspended access shows a support route, never another branch’s data.",
+      "data": "UserAccount → SchoolMembership → RoleGrant → Organization / School. Read only; session issuance is owned by Access."
+    },
+    {
+      "id": "SA-02",
+      "module": "home",
+      "title": "Activate or recover an account",
+      "phase": 1,
+      "capability": "access activation / recovery policy",
+      "steps": [
+        {
+          "title": "Request access help",
+          "help": "The available recovery path follows the institution and account-wide trust policy.",
+          "fields": [
+            {
+              "name": "email",
+              "label": "Email address",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "help",
+              "label": "What do you need?",
+              "type": "select",
+              "options": [
+                "Activate invited account",
+                "Reset password"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Next steps",
+          "help": "The public response must not reveal account existence or which institution restricts recovery.",
+          "fields": [
+            {
+              "name": "ack",
+              "label": "I understand that the verified recovery channel must be used.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A generic acknowledgement and permitted recovery instructions are shown.",
+      "rule": "Email resets must satisfy every active institution membership at issue and consume time; operator recovery remains supported.",
+      "edge": "Expired, revoked, failed-delivery and previously consumed tokens cannot be accepted; resend rotates the token.",
+      "data": "Access owns invitation/activation/reset tokens, consumption transaction, audit and delivery outcome. Never put secrets in audit."
+    },
+    {
+      "id": "SA-03",
+      "module": "home",
+      "title": "Switch branch or sign out",
+      "phase": 1,
+      "capability": "active target-branch grant",
+      "steps": [
+        {
+          "title": "Destination",
+          "help": "Your current branch remains active until you confirm.",
+          "fields": [
+            {
+              "name": "destination",
+              "label": "Destination",
+              "type": "select",
+              "options": [
+                "Indiranagar",
+                "Whitefield",
+                "Sign out"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Leave this workspace",
+          "help": "Unsaved changes must be saved or explicitly discarded before continuing.",
+          "fields": [
+            {
+              "name": "leave",
+              "label": "I have reviewed any unsaved work.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "New context is resolved on the server, or the session is signed out.",
+      "rule": "Clear scoped caches and protected drafts; reauthorize the destination and never reuse the previous branch’s data.",
+      "edge": "If the target grant was revoked, keep the old context if still authorized and show a safe explanation.",
+      "data": "Access session/context read; revoke session on sign-out. No business table writes."
+    },
+    {
+      "id": "SA-04",
+      "module": "home",
+      "title": "Complete first-use setup",
+      "phase": 1,
+      "capability": "school.manage + relevant setup capabilities",
+      "steps": [
+        {
+          "title": "Review readiness",
+          "help": "Only prerequisites for your enabled modules belong in this checklist.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next setup area",
+              "type": "select",
+              "options": [
+                "School settings",
+                "Academic year and calendar",
+                "Classes and subjects",
+                "Staff and assignments",
+                "Students and enrollment",
+                "Attendance sessions"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Assign the next action",
+          "help": "The checklist reflects saved records, not a manually checked completion flag.",
+          "fields": [
+            {
+              "name": "owner",
+              "label": "Responsible role",
+              "type": "select",
+              "options": [
+                "School administrator",
+                "Institution administrator",
+                "Assigned teacher"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The next incomplete dependency opens in its owning module.",
+      "rule": "Setup completion is derived from authoritative data; adding Fees later must not invalidate Attendance readiness.",
+      "edge": "Show blocked dependencies with a route to the responsible role; a hidden module is never a missing step.",
+      "data": "Read model joins authorized School configuration, academic readiness, membership, enrollment and session counts."
+    },
+    {
+      "id": "SA-05",
+      "module": "home",
+      "title": "Resolve a daily exception",
+      "phase": 1,
+      "capability": "capability of the underlying action",
+      "steps": [
+        {
+          "title": "Choose an issue",
+          "help": "Each item links to evidence and the action that resolves it.",
+          "fields": [
+            {
+              "name": "issue",
+              "label": "Issue",
+              "type": "select",
+              "options": [
+                "Grade 6 A register not submitted",
+                "Roster import needs review",
+                "Staff activation pending"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review ownership",
+          "help": "An exception does not disappear until its underlying record changes.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Open source record",
+                "Review blocked dependency"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The source record opens with its branch and status intact.",
+      "rule": "Never turn a pending register into an absence; the dashboard is a read model.",
+      "edge": "An already resolved or revoked item refreshes safely and explains why it is no longer actionable.",
+      "data": "Read AttendanceSession, ImportJob and permitted access status; no separate shadow business state."
+    },
+    {
+      "id": "SA-06",
+      "module": "settings",
+      "title": "Edit branch information",
+      "phase": 1,
+      "capability": "school.manage",
+      "steps": [
+        {
+          "title": "School information",
+          "help": "Maintain operational contact details for this branch.",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Branch display name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "Greenwood · Whitefield"
+            },
+            {
+              "name": "email",
+              "label": "School office email",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": "office@greenwood.example"
+            },
+            {
+              "name": "phone",
+              "label": "School office phone",
+              "type": "tel",
+              "options": [],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "address",
+              "label": "Address",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": "Whitefield, Bengaluru"
+            }
+          ]
+        },
+        {
+          "title": "Review changes",
+          "help": "The institution identity, branch code and existing time zone are controlled separately.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Permitted details are saved with a revision and activity entry.",
+      "rule": "Time zone Asia/Kolkata is read-only after branch creation. Reject a forged change server-side.",
+      "edge": "A stale edit shows the latest saved values and a comparison; never overwrite automatically.",
+      "data": "Access owns School changes; Branding/contact read models read the saved revision. Compare expected version under the guard."
+    },
+    {
+      "id": "SA-07",
+      "module": "settings",
+      "title": "Review branding and school sign-in",
+      "phase": 1,
+      "capability": "branding.read; branding.write requires explicit delegation",
+      "steps": [
+        {
+          "title": "Preview school identity",
+          "help": "Use constrained tokens so accessibility and layout remain consistent.",
+          "fields": [
+            {
+              "name": "palette",
+              "label": "Palette",
+              "type": "select",
+              "options": [
+                "Forest",
+                "Indigo",
+                "Clay"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "display",
+              "label": "School display name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "Greenwood Schools"
+            },
+            {
+              "name": "welcome",
+              "label": "Welcome message",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "A clear start to every school day."
+            }
+          ]
+        },
+        {
+          "title": "Review before publication",
+          "help": "Preview desktop and mobile. Publication requires the institution’s branding permission.",
+          "fields": [
+            {
+              "name": "review",
+              "label": "I have reviewed the school name, sign-in URL and palette.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A delegated publisher can publish; other school administrators can request a branding update.",
+      "rule": "Branding never changes authorization, status semantics, layout or external redirect destinations.",
+      "edge": "Reject unsafe assets, unreadable colors and an already claimed public slug; keep the published revision unchanged.",
+      "data": "BrandProfile / revision owned by Branding, linked to Organization and authorized School. Public projection contains no private settings."
+    },
+    {
+      "id": "SA-08",
+      "module": "settings",
+      "title": "Review modules and request a capability",
+      "phase": 1,
+      "capability": "module status read; commercial changes are institution/operator authority",
+      "steps": [
+        {
+          "title": "Choose a module",
+          "help": "See enabled modules and dependencies without exposing unlicensed operational screens.",
+          "fields": [
+            {
+              "name": "module",
+              "label": "Capability",
+              "type": "select",
+              "options": [
+                "Attendance",
+                "Family portal",
+                "Fees & payments",
+                "Transport"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Request a change",
+          "help": "Commercial and branch activation approvals stay with the authorized owner.",
+          "fields": [
+            {
+              "name": "need",
+              "label": "What does your school need?",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The administrator gets a clear handoff to the institution contact.",
+      "rule": "Licensed, released, branch-enabled and authorized are four separate checks. No self-service license escalation.",
+      "edge": "Disabling a module retains data and must respect open obligations; request submission alone changes nothing.",
+      "data": "Tenancy read model for entitlement and branch activation. Proposed change request only if an approved request contract exists; otherwise display contact instructions."
+    },
+    {
+      "id": "SA-09",
+      "module": "academics",
+      "title": "Create an academic year and calendar",
+      "phase": 1,
+      "capability": "school.manage",
+      "steps": [
+        {
+          "title": "Academic year",
+          "help": "Use the school’s civil dates.",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Year name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "2026–27"
+            },
+            {
+              "name": "from",
+              "label": "Start date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "End date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Teaching days",
+          "help": "Calendar changes create a reviewed revision.",
+          "fields": [
+            {
+              "name": "week",
+              "label": "Teaching week",
+              "type": "select",
+              "options": [
+                "Monday–Friday",
+                "Monday–Saturday"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "holidays",
+              "label": "Holiday dates and descriptions",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review impact",
+          "help": "Check date bounds and existing scheduled sessions before saving.",
+          "fields": [
+            {
+              "name": "impact",
+              "label": "I have reviewed calendar conflicts.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A valid year and immutable calendar revision are available.",
+      "rule": "Reject invalid/reversed ranges and incompatible scheduled dates; existing sessions keep their pinned calendar revision.",
+      "edge": "A concurrent calendar update requires reload and impact review.",
+      "data": "Academics owns AcademicYear and CalendarRevision; sessions reference the selected calendar version."
+    },
+    {
+      "id": "SA-10",
+      "module": "academics",
+      "title": "Configure grades, sections and subjects",
+      "phase": 1,
+      "capability": "class.manage",
+      "steps": [
+        {
+          "title": "Class structure",
+          "help": "Codes are unique within the documented branch/year scope.",
+          "fields": [
+            {
+              "name": "grade",
+              "label": "Grade",
+              "type": "select",
+              "options": [
+                "Grade 6",
+                "Grade 7",
+                "Grade 8"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "section",
+              "label": "Section code",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "C"
+            },
+            {
+              "name": "subject",
+              "label": "Subject name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "Science"
+            }
+          ]
+        },
+        {
+          "title": "Review dependencies",
+          "help": "Referenced records can be retired prospectively, never deleted from history.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The class and subject are available for offering setup.",
+      "rule": "Do not silently merge duplicate names; enforce scoped code constraints.",
+      "edge": "An in-use record shows dependency counts and a supported retirement path.",
+      "data": "Academics owns Grade, Section and Subject; enrollment placements and offerings reference their identities."
+    },
+    {
+      "id": "SA-11",
+      "module": "academics",
+      "title": "Create an offering and assign a teacher",
+      "phase": 1,
+      "capability": "class.manage",
+      "steps": [
+        {
+          "title": "Teaching context",
+          "help": "An offering connects class, subject and academic year.",
+          "fields": [
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "subject",
+              "label": "Subject",
+              "type": "select",
+              "options": [
+                "Mathematics",
+                "English",
+                "Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "year",
+              "label": "Academic year",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "2026–27"
+            }
+          ]
+        },
+        {
+          "title": "Teacher and dates",
+          "help": "Only verified, eligible teachers appear.",
+          "fields": [
+            {
+              "name": "teacher",
+              "label": "Teacher",
+              "type": "select",
+              "options": [
+                "Ananya Rao · EMP-001",
+                "Rohan Das · EMP-002"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "Effective from",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "Effective until",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review assignment",
+          "help": "Check teacher eligibility and schedule clashes.",
+          "fields": [
+            {
+              "name": "confirmed",
+              "label": "I have reviewed the assignment period.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A dated teaching assignment is saved.",
+      "rule": "Identity binding and teacher eligibility are separate from account activation; enforce non-overlap under the documented guard.",
+      "edge": "A teacher becoming ineligible before save rejects the command and retains safe form input.",
+      "data": "Academics owns Offering and Assignment; published People/Access contracts verify Employee, Person binding and membership."
+    },
+    {
+      "id": "SA-12",
+      "module": "academics",
+      "title": "Change calendar or teaching assignment",
+      "phase": 1,
+      "capability": "class.manage / school.manage",
+      "steps": [
+        {
+          "title": "Choose the change",
+          "help": "Show the effective date and affected future sessions.",
+          "fields": [
+            {
+              "name": "change",
+              "label": "Change",
+              "type": "select",
+              "options": [
+                "Calendar revision",
+                "Teacher assignment end date"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "effective",
+              "label": "Effective date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review affected sessions",
+          "help": "Open and submitted sessions cannot be silently rewritten.",
+          "fields": [
+            {
+              "name": "impact",
+              "label": "Reviewed impact reference",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A supported future-dated change preserves historical references.",
+      "rule": "Block changes affecting frozen/submitted roster history in the first release; substitutions are a later explicit workflow.",
+      "edge": "List conflicting sessions and let the administrator resolve them before retrying.",
+      "data": "Owner use case reads dependent AttendanceSession references; new academic revision/dates plus transactional audit."
+    },
+    {
+      "id": "SA-13",
+      "module": "staff",
+      "title": "Create a staff profile",
+      "phase": 1,
+      "capability": "people.manage / current repository equivalent",
+      "steps": [
+        {
+          "title": "Staff details",
+          "help": "A staff record can exist without a login.",
+          "fields": [
+            {
+              "name": "first",
+              "label": "First name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "last",
+              "label": "Last name",
+              "type": "text",
+              "options": [],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "code",
+              "label": "Employee code",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "email",
+              "label": "Work email",
+              "type": "email",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Employment",
+          "help": "Choose a role label and effective employment dates.",
+          "fields": [
+            {
+              "name": "type",
+              "label": "Staff category",
+              "type": "select",
+              "options": [
+                "Teaching",
+                "Administration",
+                "Support"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "Start date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An organization Person and branch Employee profile are linked deliberately.",
+      "rule": "Email/name matches are not proof of identity or authority to merge people.",
+      "edge": "Exact identity candidates need an explicit review; duplicate employee codes are rejected.",
+      "data": "People owns Person and Employee with scoped uniqueness and explicit links. No account is automatically created."
+    },
+    {
+      "id": "SA-14",
+      "module": "staff",
+      "title": "Grant staff sign-in access",
+      "phase": 1,
+      "capability": "user.manage",
+      "steps": [
+        {
+          "title": "Select staff",
+          "help": "Access is a separate operation from creating an employee.",
+          "fields": [
+            {
+              "name": "employee",
+              "label": "Employee",
+              "type": "select",
+              "options": [
+                "Ananya Rao · EMP-001",
+                "Rohan Das · EMP-002",
+                "Meera Iyer · EMP-003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "email",
+              "label": "Account email",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Verify and scope",
+          "help": "A non-sensitive reference records the out-of-band verification.",
+          "fields": [
+            {
+              "name": "verification",
+              "label": "Identity verification reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "role",
+              "label": "Branch role",
+              "type": "select",
+              "options": [
+                "Teacher",
+                "School administrator"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Issue access",
+          "help": "The trust mode selects the allowed invitation path.",
+          "fields": [
+            {
+              "name": "grant",
+              "label": "I confirm the verified identity and selected branch role.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A pending membership/grant is created and the permitted activation path is shown.",
+      "rule": "Preserve operator-issued IAM paths; invite email does not prove employee identity. Last-admin safeguards remain.",
+      "edge": "A failed delivery is visible to the authorized manager; resend revokes the old token.",
+      "data": "Access owns UserAccount, SchoolMembership, RoleGrant and Invite/AccountActivation; People binding is checked through its published contract."
+    },
+    {
+      "id": "SA-15",
+      "module": "staff",
+      "title": "Review invitation or resend access",
+      "phase": 1,
+      "capability": "user.manage",
+      "steps": [
+        {
+          "title": "Review access state",
+          "help": "Separate membership state from delivery and activation.",
+          "fields": [
+            {
+              "name": "staff",
+              "label": "Staff member",
+              "type": "select",
+              "options": [
+                "Nikhil Menon · Pending activation",
+                "Nikhil Menon · Delivery-failure scenario"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Retry safely",
+          "help": "Revoke the previous invitation before issuing a replacement.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The new invitation attempt has an expiry and an honest delivery outcome.",
+      "rule": "Do not activate on send, silently retry in a worker, expose tokens or reuse a failed token.",
+      "edge": "Policy tightened, account blocked or expired grant explains why resend is unavailable.",
+      "data": "Access token revoke + fresh issue + audit commit before email seam; sanitized delivery failure recorded afterward."
+    },
+    {
+      "id": "SA-16",
+      "module": "staff",
+      "title": "Verify a staff identity and teacher eligibility",
+      "phase": 1,
+      "capability": "user.manage + class.manage",
+      "steps": [
+        {
+          "title": "Identity evidence",
+          "help": "Record a non-sensitive reference to the school’s verification process.",
+          "fields": [
+            {
+              "name": "employee",
+              "label": "Employee",
+              "type": "select",
+              "options": [
+                "Ananya Rao · EMP-001",
+                "Rohan Das · EMP-002"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "Verification reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Teacher eligibility",
+          "help": "A teaching profile needs an active eligible employee and permitted account binding.",
+          "fields": [
+            {
+              "name": "from",
+              "label": "Eligible from",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "Eligible until",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "verified",
+              "label": "The school has verified this identity outside email activation.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The teacher can be selected for dated assignments when all requirements are met.",
+      "rule": "No auto-binding by email equality; explicit IAM-03 acceptance gates in the actual repository must be preserved.",
+      "edge": "Changing eligibility lists affected assignments; a conflicting effective date is blocked.",
+      "data": "People/Access own verified binding; Academics owns Teacher eligibility. Mutations use published contracts, not foreign table writes."
+    },
+    {
+      "id": "SA-17",
+      "module": "staff",
+      "title": "Change or revoke staff access",
+      "phase": 1,
+      "capability": "user.manage",
+      "steps": [
+        {
+          "title": "Select the access change",
+          "help": "Only this branch’s grant changes.",
+          "fields": [
+            {
+              "name": "employee",
+              "label": "Employee",
+              "type": "select",
+              "options": [
+                "Rohan Das · EMP-002",
+                "Meera Iyer · EMP-003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "change",
+              "label": "Change",
+              "type": "select",
+              "options": [
+                "Suspend membership",
+                "Revoke teacher role",
+                "Restore eligible membership"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review impact",
+          "help": "Assignments, sessions and the last active administrator require review.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "confirm",
+              "label": "I have reviewed affected work and access.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The next protected request rechecks the changed grant.",
+      "rule": "Do not disable a global identity for a local branch action; prevent removal of the last active administrator.",
+      "edge": "Concurrent revocations serialize; insufficient replacement/admin coverage blocks the action.",
+      "data": "Access membership/grant transaction and audit; related assignment reads show impact without rewriting history."
+    },
+    {
+      "id": "SA-18",
+      "module": "students",
+      "title": "Register a student manually",
+      "phase": 1,
+      "capability": "student.manage",
+      "steps": [
+        {
+          "title": "Identity",
+          "help": "Create a person or explicitly select an exact existing identity.",
+          "fields": [
+            {
+              "name": "match",
+              "label": "Identity selection",
+              "type": "select",
+              "options": [
+                "Create new Person",
+                "Exact person ID",
+                "Exact admission number"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "lookup",
+              "label": "Exact reference if selecting existing",
+              "type": "text",
+              "options": [],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "first",
+              "label": "First name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "last",
+              "label": "Last name",
+              "type": "text",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "School record",
+          "help": "Admission number stays stable in this branch.",
+          "fields": [
+            {
+              "name": "admission",
+              "label": "Admission number",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "joined",
+              "label": "Admission date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review identity",
+          "help": "Review a single exact candidate; do not match by email, name similarity or ranked results.",
+          "fields": [
+            {
+              "name": "identity",
+              "label": "I have verified that this is the intended student.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A Student profile references the deliberately selected organization Person.",
+      "rule": "Same-institution identity lookup is exact admission number or person ID only; no broad person discovery.",
+      "edge": "Duplicate/racing admission numbers show the existing permitted record or a conflict; no automatic merge.",
+      "data": "People Person and Students Student are created through the owner contracts in the documented transaction."
+    },
+    {
+      "id": "SA-19",
+      "module": "students",
+      "title": "Enroll and place a student",
+      "phase": 1,
+      "capability": "student.manage",
+      "steps": [
+        {
+          "title": "Enrollment",
+          "help": "Choose the student and year.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "year",
+              "label": "Academic year",
+              "type": "select",
+              "options": [
+                "2026–27"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Class placement",
+          "help": "Dates determine which class roster the pupil belongs to.",
+          "fields": [
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "Effective from",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "Effective until",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "roll",
+              "label": "Roll number",
+              "type": "text",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review placement",
+          "help": "Check overlapping placements and any frozen attendance sessions.",
+          "fields": [
+            {
+              "name": "review",
+              "label": "I have reviewed roster impact.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The enrollment and effective placement are saved.",
+      "rule": "One enrollment per student/year and non-overlapping placement intervals; no rewriting frozen rosters.",
+      "edge": "A conflicting placement or open session is shown with a recovery link.",
+      "data": "Students owns Enrollment and SectionPlacement; authorized academics references and attendance impact query are checked."
+    },
+    {
+      "id": "SA-20",
+      "module": "students",
+      "title": "Review or update a student record",
+      "phase": 1,
+      "capability": "student.read / student.manage",
+      "steps": [
+        {
+          "title": "Student record",
+          "help": "The student detail page groups identity, enrollment and permitted module panels.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "name",
+              "label": "Correct display name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review correction",
+          "help": "Identity corrections preserve a change history.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The permitted correction is saved with a reason and revision.",
+      "rule": "Student 360 panels are separately entitled and authorized; a student view is not authority to edit Fees or Health.",
+      "edge": "Concurrent edits show a comparison; a restricted panel is omitted rather than partially leaking its data.",
+      "data": "People owns name facts, Students owns school identity/enrollment; compose reads through approved scoped joins."
+    },
+    {
+      "id": "SA-21",
+      "module": "students",
+      "title": "Move a student to another section",
+      "phase": 1,
+      "capability": "student.manage",
+      "steps": [
+        {
+          "title": "New placement",
+          "help": "This is a dated move within the same branch.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "effective",
+              "label": "Effective from",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review roster changes",
+          "help": "The current placement closes at the new placement boundary.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "impact",
+              "label": "No frozen or submitted session is being rewritten.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Current and new placement intervals remain contiguous and explainable.",
+      "rule": "Reject unsupported backdated changes; already frozen/submitted rosters remain unchanged.",
+      "edge": "Offer a future valid date when historical attendance conflicts; do not delete and recreate enrollment.",
+      "data": "Students closes old SectionPlacement and appends new placement atomically after Attendance impact checks."
+    },
+    {
+      "id": "SA-22",
+      "module": "students",
+      "title": "Promote, transfer or leave school",
+      "phase": 3,
+      "capability": "student.lifecycle.manage",
+      "steps": [
+        {
+          "title": "Lifecycle action",
+          "help": "Keep prior enrollment and attendance history intact.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Promote to next year",
+                "Transfer to another branch",
+                "Record withdrawal"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "effective",
+              "label": "Effective date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Destination and obligations",
+          "help": "Destination access and open obligations are reviewed independently.",
+          "fields": [
+            {
+              "name": "destination",
+              "label": "Destination / receiving school",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "review",
+              "label": "Reviewed obligations and handoff",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Confirm lifecycle change",
+          "help": "A cross-branch move creates a destination profile under that branch’s authority.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A dated lifecycle case records the outcome and preserves source history.",
+      "rule": "Bulk promotion requires preview and per-student results; financial balances do not transfer by moving a student row.",
+      "edge": "Partial results, destination rejection, changed capacity and duplicate confirmation require recoverable receipts.",
+      "data": "Students owns LifecycleCase and enrollment changes; Finance/Documents/Guardians use explicit follow-up contracts."
+    },
+    {
+      "id": "SA-23",
+      "module": "imports",
+      "title": "Preview a roster import",
+      "phase": 1,
+      "capability": "import.upload · school administrator only",
+      "steps": [
+        {
+          "title": "Target and template",
+          "help": "Context is supplied separately from STUDENT_ROSTER_V1 rows.",
+          "fields": [
+            {
+              "name": "year",
+              "label": "Academic year",
+              "type": "select",
+              "options": [
+                "2026–27"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "namespace",
+              "label": "Source namespace",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": "school-sis"
+            },
+            {
+              "name": "effective",
+              "label": "Placement effective from",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Choose file",
+          "help": "UTF-8 CSV; production limits and per-request chunk bounds follow the Imports LLD.",
+          "fields": [
+            {
+              "name": "file",
+              "label": "CSV file",
+              "type": "file",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review preview",
+          "help": "Inspect creates, no-change rows, conflicts and errors before confirming.",
+          "fields": [
+            {
+              "name": "preview",
+              "label": "I have reviewed the synthetic preview: 3 creates, 1 unchanged, 1 error.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A preview is available; no student records are written.",
+      "rule": "No guardian columns in the Phase 1 roster contract; no raw rows, file bytes or hashes in audit.",
+      "edge": "Invalid encoding/header/size fails clearly; schema error gives the correct template; no silent truncation.",
+      "data": "Imports owns immutable source hash in ImportJob, versioned preview and bounded rows. Preview reads authorized academic/student facts only."
+    },
+    {
+      "id": "SA-24",
+      "module": "imports",
+      "title": "Confirm, resume and reconcile an import",
+      "phase": 1,
+      "capability": "import.upload",
+      "steps": [
+        {
+          "title": "Confirm preview",
+          "help": "Confirmation pins source hash, context, preview revision and referenced versions.",
+          "fields": [
+            {
+              "name": "job",
+              "label": "Import",
+              "type": "select",
+              "options": [
+                "IMP-1042 · 5 rows"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review partial results",
+          "help": "Successful rows stay committed; failed rows keep their row number and reason.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Confirm valid preview",
+                "Resume unprocessed rows",
+                "Download redacted error report"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Each row reports created, unchanged, failed or remaining with durable receipts.",
+      "rule": "Create-only plus exact no-change re-import in Phase 1; corrections and transfers use explicit workflows.",
+      "edge": "Stale previews require re-preview; lost responses query receipts before retry; avoid replaying successes.",
+      "data": "Per-row transaction: Person, Student, Enrollment/Placement, external mapping, row receipt, audit and outbox. Bounded batch processing, no assumed worker."
+    },
+    {
+      "id": "SA-25",
+      "module": "attendance",
+      "title": "Schedule attendance sessions",
+      "phase": 1,
+      "capability": "class.manage",
+      "steps": [
+        {
+          "title": "Session",
+          "help": "Attendance belongs to a class session, not an editable daily register.",
+          "fields": [
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "subject",
+              "label": "Subject",
+              "type": "select",
+              "options": [
+                "Mathematics",
+                "English",
+                "Science"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "day",
+              "label": "Session date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Time and teacher",
+          "help": "Use the branch time zone. The teacher needs a dated eligible assignment.",
+          "fields": [
+            {
+              "name": "start",
+              "label": "Start time",
+              "type": "time",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "end",
+              "label": "End time",
+              "type": "time",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "teacher",
+              "label": "Teacher",
+              "type": "select",
+              "options": [
+                "Ananya Rao",
+                "Rohan Das"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review schedule",
+          "help": "Check calendar, offering/date overlap and teacher/date clashes.",
+          "fields": [
+            {
+              "name": "clash",
+              "label": "I have reviewed the conflict check.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The session appears in the assigned teacher’s teaching day.",
+      "rule": "Reject overlapping scheduled sessions for the same primary teacher; roster freezes only when the session opens.",
+      "edge": "Calendar conflict or teacher change explains the exact blocked interval.",
+      "data": "Attendance owns AttendanceSession; Academics supplies Offering, Assignment and pinned CalendarRevision. Index both overlap query shapes."
+    },
+    {
+      "id": "SA-26",
+      "module": "attendance",
+      "title": "Monitor and inspect attendance",
+      "phase": 1,
+      "capability": "attendance.read_school / attendance.read_class",
+      "steps": [
+        {
+          "title": "Choose the scope",
+          "help": "Completeness and attendance rate are separate metrics.",
+          "fields": [
+            {
+              "name": "day",
+              "label": "School date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Open a register",
+          "help": "Read its roster, submission state and revision history.",
+          "fields": [
+            {
+              "name": "session",
+              "label": "Session",
+              "type": "select",
+              "options": [
+                "Mathematics · 09:00 · Submitted",
+                "English · 10:00 · Not submitted",
+                "Science · 11:15 · Scheduled"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The exact session and its submission evidence are shown.",
+      "rule": "School admin is not granted attendance.mark by default; link to assigned teacher, never impersonate them.",
+      "edge": "Cancelled and unsubmitted sessions are distinct from absent pupils; missing denominator displays unavailable.",
+      "data": "Read scoped Session → frozen roster → records/revisions, with current authorization and data-as-of timestamp."
+    },
+    {
+      "id": "SA-27",
+      "module": "attendance",
+      "title": "Correct submitted attendance",
+      "phase": 1,
+      "capability": "attendance.correct",
+      "steps": [
+        {
+          "title": "Select the record",
+          "help": "Corrections preserve the original submission.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "session",
+              "label": "Session",
+              "type": "select",
+              "options": [
+                "Mathematics · 8 Oct · 09:00"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "status",
+              "label": "Corrected status",
+              "type": "select",
+              "options": [
+                "Present",
+                "Absent",
+                "Late",
+                "Excused"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Record evidence",
+          "help": "A meaningful reason is mandatory.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "correct",
+              "label": "I have reviewed the original and corrected status.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A new correction revision appears with actor, reason and time.",
+      "rule": "Only submitted attendance is correctable; compare the expected revision in the same authorized transaction.",
+      "edge": "Another editor’s correction shows a conflict and comparison; unknown result uses the same request receipt.",
+      "data": "Attendance appends immutable record/correction revision, audit and outbox; reporting reads the effective revision without destroying the original."
+    },
+    {
+      "id": "SA-28",
+      "module": "attendance",
+      "title": "Cancel or review a session change",
+      "phase": 1,
+      "capability": "class.manage",
+      "steps": [
+        {
+          "title": "Session and reason",
+          "help": "Show current state before offering allowed cancellation.",
+          "fields": [
+            {
+              "name": "session",
+              "label": "Session",
+              "type": "select",
+              "options": [
+                "Science · 8 Oct · 11:15 · Scheduled"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review consequences",
+          "help": "Cancellation keeps history and affects completeness transparently.",
+          "fields": [
+            {
+              "name": "cancel",
+              "label": "I have reviewed the session state and report impact.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A supported cancellation records its reason and preserved history.",
+      "rule": "Do not silently reschedule an open/submitted session; use the supported state transition contract.",
+      "edge": "Changed session state may block cancellation; refresh the current record before retry.",
+      "data": "Attendance session state transition under version/guard, with audit/outbox and reporting status change."
+    },
+    {
+      "id": "SA-29",
+      "module": "attendance",
+      "title": "Review an absence explanation",
+      "phase": 2,
+      "capability": "attendance.explanation.review",
+      "steps": [
+        {
+          "title": "Parent request",
+          "help": "A family explanation is not an attendance correction.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "request",
+              "label": "Request",
+              "type": "select",
+              "options": [
+                "8 Oct · Medical appointment · Pending"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review disposition",
+          "help": "A separate authorized correction is needed if attendance itself changes.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Decision",
+              "type": "select",
+              "options": [
+                "Accept explanation",
+                "Ask for more information",
+                "Reject with explanation"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reply",
+              "label": "School response",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The family receives a permitted disposition; attendance changes only through correction.",
+      "rule": "Recheck guardian relationship at request/read/delivery; do not expose restricted notes.",
+      "edge": "Late submission, duplicate explanation and revoked guardian access have separate outcomes.",
+      "data": "Guardian/request owner records case; Attendance correction facade optional; Communication delivers under current grants."
+    },
+    {
+      "id": "SA-30",
+      "module": "reports",
+      "title": "Review and export attendance",
+      "phase": 1,
+      "capability": "attendance.read_school + attendance.export",
+      "steps": [
+        {
+          "title": "Report scope",
+          "help": "Start with one authorized branch and an explicit period.",
+          "fields": [
+            {
+              "name": "from",
+              "label": "From date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "To date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Session completeness",
+                "Student attendance",
+                "Class summary"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review export",
+          "help": "Show columns, row count, completeness and the data timestamp.",
+          "fields": [
+            {
+              "name": "export",
+              "label": "I have reviewed the scope and permitted columns.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A scoped report and bounded export match the underlying session records.",
+      "rule": "Rate = (Present + Late) / (Present + Late + Absent); Excused excluded. Zero denominator is unavailable.",
+      "edge": "Unsubmitted data remains missing; revoked access is rechecked at export generation/download.",
+      "data": "Reporting joins scoped sessions, effective records, frozen roster and student identifiers; export reads only allowed columns."
+    },
+    {
+      "id": "SA-31",
+      "module": "reports",
+      "title": "Compare trends and assign follow-up",
+      "phase": 2,
+      "capability": "report.read + followup.manage (proposed)",
+      "steps": [
+        {
+          "title": "Review the metric",
+          "help": "Compare compatible periods with definition, denominator and freshness.",
+          "fields": [
+            {
+              "name": "metric",
+              "label": "Metric",
+              "type": "select",
+              "options": [
+                "Submission completeness",
+                "Unexplained absence follow-up"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "From date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "To date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Follow up",
+          "help": "Create a purpose-limited action for an authorized colleague.",
+          "fields": [
+            {
+              "name": "owner",
+              "label": "Owner",
+              "type": "select",
+              "options": [
+                "School office",
+                "Class teacher"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "action",
+              "label": "Follow-up action",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The concern has an owner, due date and source evidence.",
+      "rule": "Structured follow-up is a proposed extension, not claimed Phase 2 implementation; no punitive automated scoring.",
+      "edge": "Low sample sizes, partial data and changed permissions limit drilldowns.",
+      "data": "Reporting read model; proposed FollowUpCase stores references and minimal notes, with separate module design before implementation."
+    },
+    {
+      "id": "SA-32",
+      "module": "families",
+      "title": "Verify and link a parent or guardian",
+      "phase": 2,
+      "capability": "guardian.relationship.manage",
+      "steps": [
+        {
+          "title": "Student & adult",
+          "help": "Select a student from the authorized branch and the independently verified adult.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Branch student by exact authorized ID"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "relationship",
+              "label": "Relationship",
+              "type": "select",
+              "options": [
+                "Parent",
+                "Legal guardian",
+                "Authorized caregiver"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "adult",
+              "label": "Adult’s full name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "email",
+              "label": "Verified email address",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Verify & choose access",
+          "help": "Mailbox possession is not proof. Record school verification and dates; select at least one independent purpose.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "School verification reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "Access starts",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "Last day of access (inclusive)",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "verified",
+              "label": "I have verified the relationship and checked restrictions.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "attendance",
+              "label": "Attendance · read only",
+              "type": "checkbox",
+              "options": [],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "notices",
+              "label": "School notices · independently selected",
+              "type": "checkbox",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review",
+          "help": "Review child, adult, purpose and dates before approval. Approval creates an inactive grant.",
+          "fields": [
+            {
+              "name": "confirm",
+              "label": "Approve connection",
+              "type": "confirmation",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A verified child-specific relationship and inactive selected purpose grants are approved. Intended-account acceptance activates only those approved purposes.",
+      "rule": "No mailbox-only or sibling-inherited authorization. Each child-purpose link has verified identity, scope and dates; a draft never grants access.",
+      "edge": "Invalid dates, duplicates, disputed identity, lost authorization and unfinished drafts have explicit recovery. Contact, fee, pickup and consent permissions remain separate.",
+      "data": "Guardians owns Guardian and dated StudentGuardianGrant; references organization Person/Student and optional global UserAccount binding.",
+      "subjourneys": [
+        "new connection",
+        "student-record entry",
+        "save/resume draft",
+        "school access-request review"
+      ]
+    },
+    {
+      "id": "SA-33",
+      "module": "families",
+      "title": "Invite a verified guardian",
+      "phase": 2,
+      "capability": "guardian.invite",
+      "steps": [
+        {
+          "title": "Choose approved connection",
+          "help": "Open the exact verified relationship; use its verified contact, never enter an arbitrary replacement recipient.",
+          "fields": [
+            {
+              "name": "connection",
+              "label": "Connection",
+              "type": "select",
+              "options": [
+                "Authorized active relationship"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review recipient and send",
+          "help": "Trust policy selects email or the existing operator-assisted path. Review actual delivery state.",
+          "fields": [
+            {
+              "name": "recipient",
+              "label": "I checked the intended recipient.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An invitation has a visible delivery and acceptance state. Only intended-account acceptance activates the exact child’s approved grant.",
+      "rule": "Recheck identity, trust mode, current policy, grant dates, purpose, restrictions and expected versions at acceptance; never treat parents as staff.",
+      "edge": "Failed delivery cannot be consumed. Explicit resend replaces the old invitation. Expired, replaced, revoked and wrong-account links fail without exposing child data.",
+      "data": "Guardians relationship and Access account binding; invite issue/consume with single-use hash, audit and delivery status.",
+      "subjourneys": [
+        "send",
+        "delivery failure",
+        "resend",
+        "expiry",
+        "intended-account acceptance",
+        "my children",
+        "attendance read"
+      ]
+    },
+    {
+      "id": "SA-34",
+      "module": "families",
+      "title": "Change, restrict or revoke a guardian link",
+      "phase": 2,
+      "capability": "guardian.relationship.manage",
+      "steps": [
+        {
+          "title": "Choose connection and change",
+          "help": "The scope and impact stay visible; other children remain unaffected.",
+          "fields": [
+            {
+              "name": "connection",
+              "label": "Connection",
+              "type": "select",
+              "options": [
+                "Authorized child connection"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "change",
+              "label": "Manage access",
+              "type": "select",
+              "options": [
+                "Change access dates",
+                "Remove portal access",
+                "End relationship"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Confirm the intended effect",
+          "help": "Date changes require fresh acceptance. Portal removal does not determine legal guardianship. Ending the school record requires a verified decision reference.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Bounded reason or school decision reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "confirm",
+              "label": "Confirm the selected action",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The exact child grant or school relationship changes with history preserved; old invitations and protected views recheck current access.",
+      "rule": "Keep portal revocation, relationship end and purpose changes separate. Preserve sibling and other-institution grants and source attendance.",
+      "edge": "If a record is disputed, escalate privately and avoid notifying an unsafe recipient automatically.",
+      "data": "Guardians grant revision/revocation, binding read and cancellation/suppression contracts for queued delivery.",
+      "subjourneys": [
+        "change dates",
+        "remove portal access",
+        "end school relationship",
+        "safe audit history",
+        "old-link denial"
+      ]
+    },
+    {
+      "id": "SA-35",
+      "module": "communication",
+      "title": "Compose and send a school message",
+      "phase": 2,
+      "capability": "communication.send",
+      "steps": [
+        {
+          "title": "Message",
+          "help": "Write a clear text notice. Acknowledgement is deliberate receipt, not consent.",
+          "fields": [
+            {
+              "name": "title",
+              "label": "Subject (up to 120 characters)",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "body",
+              "label": "Message (up to 5,000 characters)",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "ack",
+              "label": "Ask recipients to acknowledge",
+              "type": "checkbox",
+              "options": [],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "due",
+              "label": "Acknowledge by (required when requested)",
+              "type": "date",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Recipients",
+          "help": "Resolve accounts from live approved purpose grants or staff membership; attendance alone is insufficient.",
+          "fields": [
+            {
+              "name": "audience",
+              "label": "Audience",
+              "type": "select",
+              "options": [
+                "Parents / guardians of a class",
+                "Parents / guardians in this branch",
+                "Active staff in this branch"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "className",
+              "label": "Class (when class audience chosen)",
+              "type": "select",
+              "options": [
+                "Authorized branch class"
+              ],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "email",
+              "label": "Also send a verified-email notification",
+              "type": "checkbox",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review",
+          "help": "Teacher submits for approval; an authorized school publisher confirms current draft and audience.",
+          "fields": [
+            {
+              "name": "when",
+              "label": "Publish",
+              "type": "select",
+              "options": [
+                "Now",
+                "At a scheduled time"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "scheduled",
+              "label": "School-local scheduled date/time (when scheduled)",
+              "type": "datetime-local",
+              "options": [],
+              "required": false,
+              "value": ""
+            },
+            {
+              "name": "reviewed",
+              "label": "I reviewed the message, audience, timing and acknowledgement.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A draft is approved, published or scheduled with a stable notice identity and exact immutable version. Recipients read and explicitly acknowledge through their own workspace.",
+      "rule": "Explicit school-notice purpose and current scope control the audience. Teacher role has no blanket send authority. Read, provider acceptance and acknowledgement remain separate.",
+      "edge": "Changed audience/draft requires renewed review. Lost publication response uses the existing receipt. Scheduled delivery rechecks the approved manifest without silently adding accounts.",
+      "data": "Communication Notice/Draft/Version/Recipient/Binding, transaction receipt and initial outbox; Guardians/Access/Students resolve current account/purpose/enrollment.",
+      "subjourneys": [
+        "draft/resume",
+        "audience preview",
+        "publish",
+        "schedule/cancel",
+        "teacher approval",
+        "parent/staff inbox",
+        "version-specific acknowledgement"
+      ]
+    },
+    {
+      "id": "SA-36",
+      "module": "communication",
+      "title": "Resolve failed delivery or missing acknowledgement",
+      "phase": 2,
+      "capability": "communication.manage",
+      "steps": [
+        {
+          "title": "Choose the notice or recipient",
+          "help": "Inspect distinct publication, notification, reading and acknowledgement evidence.",
+          "fields": [
+            {
+              "name": "notice",
+              "label": "Notice",
+              "type": "select",
+              "options": [
+                "Authorized current branch notice"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review the effect",
+          "help": "Only the exact eligible recipient/version can be changed.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Retry confirmed failure",
+                "Check unknown notification",
+                "Remind pending recipients",
+                "Record verified offline response",
+                "Publish correction",
+                "Withdraw notice"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "Safe reason or verification reference (when required)",
+              "type": "text",
+              "options": [],
+              "required": false,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A permitted delivery attempt, reminder, version, withdrawal or verified offline response is recorded while previous evidence remains intact.",
+      "rule": "Never infer acknowledgement, silently overwrite a published notice or blindly retry Unknown. Current recipient grants and independent offline-response authority are checked.",
+      "edge": "Withdrawal/revocation/version change blocks stale reads and acknowledgements; already-sent email cannot be recalled. Correction retains the same NoticeId and asks for current-version acknowledgement.",
+      "data": "Immutable NoticeVersion, append-only DeliveryAttempt and exact-version Acknowledgement with recipient and actual actor/method; scoped current grant queries and safe receipts.",
+      "subjourneys": [
+        "delivery failure",
+        "unknown reconciliation",
+        "reminder",
+        "offline response",
+        "correction",
+        "previous versions",
+        "withdrawal"
+      ]
+    },
+    {
+      "id": "SA-37",
+      "module": "communication",
+      "title": "Review a family request",
+      "phase": 2,
+      "capability": "family.request.review",
+      "steps": [
+        {
+          "title": "Open request",
+          "help": "Limit each request to the relevant student and authorized office team.",
+          "fields": [
+            {
+              "name": "request",
+              "label": "Request",
+              "type": "select",
+              "options": [
+                "Contact detail change",
+                "Meeting request",
+                "Student document request"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Respond",
+          "help": "An approved request invokes the owning module’s use case.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Decision",
+              "type": "select",
+              "options": [
+                "Approve supported change",
+                "Request more information",
+                "Decline"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reply",
+              "label": "Response",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The family sees the decision and any next step.",
+      "rule": "Do not let a general message edit attendance, identity or financial records directly.",
+      "edge": "Revoked child relationship blocks further disclosure; keep an internal audit of the decision.",
+      "data": "Request owner records decision; Students/Documents/People execute permitted changes via explicit contracts."
+    },
+    {
+      "id": "SA-38",
+      "module": "admissions",
+      "title": "Capture inquiry and start an application",
+      "phase": 3,
+      "capability": "admissions.manage",
+      "steps": [
+        {
+          "title": "Applicant",
+          "help": "An applicant is distinct from an enrolled student.",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Applicant name",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "grade",
+              "label": "Applying for",
+              "type": "select",
+              "options": [
+                "Grade 6",
+                "Grade 7"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "contact",
+              "label": "Applicant contact email",
+              "type": "email",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Cycle and checklist",
+          "help": "Choose the relevant intake and required evidence.",
+          "fields": [
+            {
+              "name": "cycle",
+              "label": "Admission cycle",
+              "type": "select",
+              "options": [
+                "2027–28"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "notice",
+              "label": "The approved collection notice has been provided.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An application has a reference, checklist and next action.",
+      "rule": "Admission must work without Fees; collect only information needed for the current stage.",
+      "edge": "Duplicate candidate suggests deliberate review; do not auto-merge applicants or existing pupils.",
+      "data": "Admissions owns Applicant, Application, Cycle and checklist; no Student row until accepted conversion."
+    },
+    {
+      "id": "SA-39",
+      "module": "admissions",
+      "title": "Review application and make a decision",
+      "phase": 3,
+      "capability": "admissions.review / decision delegation",
+      "steps": [
+        {
+          "title": "Review evidence",
+          "help": "Review only the documents within your assigned role.",
+          "fields": [
+            {
+              "name": "application",
+              "label": "Application",
+              "type": "select",
+              "options": [
+                "APP-2712 · Nisha Patel"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "review",
+              "label": "Review stage",
+              "type": "select",
+              "options": [
+                "Checklist review",
+                "Interview",
+                "Decision review"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Decision",
+          "help": "Separate reviewer recommendation from authorized decision.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Decision",
+              "type": "select",
+              "options": [
+                "Recommend offer",
+                "Waitlist",
+                "Decline",
+                "Request information"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The decision revision and next action are recorded.",
+      "rule": "Seat reservation and offer expiry must be atomic; subjective notes remain restricted.",
+      "edge": "Last-seat conflicts and expired decision authority require refreshed capacity and delegation.",
+      "data": "Admissions decision revision, capacity/offer reservation and audit; document download reauthorizes."
+    },
+    {
+      "id": "SA-40",
+      "module": "admissions",
+      "title": "Accept an offer and enroll once",
+      "phase": 3,
+      "capability": "admissions.convert + student.manage",
+      "steps": [
+        {
+          "title": "Accepted offer",
+          "help": "Conversion follows verified acceptance and required evidence.",
+          "fields": [
+            {
+              "name": "application",
+              "label": "Application",
+              "type": "select",
+              "options": [
+                "APP-2712 · Accepted"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "start",
+              "label": "Enrollment start",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Student handoff",
+          "help": "Preview the new student, placement and guardian verification work.",
+          "fields": [
+            {
+              "name": "admission",
+              "label": "Admission number",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "convert",
+              "label": "I have reviewed identity and enrollment details.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "One student conversion receipt links the application to enrollment.",
+      "rule": "A repeated request returns the same conversion; do not create duplicate students or automatic guardian grants.",
+      "edge": "Invalid capacity, changed acceptance or incomplete identity evidence pauses conversion safely.",
+      "data": "Admissions conversion intent and Students owner transaction produce durable linkage; optional Finance/Documents handoffs are explicit."
+    },
+    {
+      "id": "SA-41",
+      "module": "planning",
+      "title": "Build and publish a timetable",
+      "phase": 3,
+      "capability": "timetable.manage",
+      "steps": [
+        {
+          "title": "Draft schedule",
+          "help": "Keep draft separate from the published timetable.",
+          "fields": [
+            {
+              "name": "week",
+              "label": "Cycle",
+              "type": "select",
+              "options": [
+                "Weekly cycle",
+                "Two-week cycle"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "Effective from",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Resolve conflicts",
+          "help": "Validate teacher, room and calendar conflicts.",
+          "fields": [
+            {
+              "name": "resolution",
+              "label": "Conflict review reference",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Publish revision",
+          "help": "Preview generated session changes before confirmation.",
+          "fields": [
+            {
+              "name": "publish",
+              "label": "I have reviewed the published revision and future session impact.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A published timetable version drives idempotent future session generation.",
+      "rule": "Existing open/submitted attendance stays pinned; recurring plan is not the Phase 1 manual-session contract.",
+      "edge": "Clash races and repeated generation cannot produce double sessions.",
+      "data": "Academics owns TimetableVersion/slots, room and teacher constraints; Attendance consumes versioned generation commands.",
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "planning",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "SA-42",
+      "module": "planning",
+      "title": "Arrange cover or a timetable exception",
+      "phase": 3,
+      "capability": "timetable.cover.manage",
+      "steps": [
+        {
+          "title": "Affected session",
+          "help": "Choose a dated exception, not a permanent identity reassignment.",
+          "fields": [
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "teacher",
+              "label": "Cover teacher",
+              "type": "select",
+              "options": [
+                "Ananya Rao",
+                "Rohan Das"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review access and notice",
+          "help": "The cover teacher receives only the required dated scope.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "cover",
+              "label": "Eligibility and clashes have been reviewed.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The supported substitution is visible to the affected staff.",
+      "rule": "Never use shared logins; do not replace historical assignment attribution.",
+      "edge": "Unavailable cover or an already opened session invokes the defined review path.",
+      "data": "Academics owns Substitution with effective period; Attendance assignment-resolution contract and Communication notification request.",
+      "timetable_contract": {
+        "release": "TT-01",
+        "owner": "academics / timetable",
+        "entry": "planning",
+        "specification": "docs/timetable/README.md",
+        "phase": 3,
+        "implementation": "NOT_ASSESSED"
+      }
+    },
+    {
+      "id": "SA-43",
+      "module": "planning",
+      "title": "Review learning readiness and follow-up",
+      "phase": 3,
+      "capability": "learning.overview; content authority delegated",
+      "steps": [
+        {
+          "title": "Choose the class",
+          "help": "Show completion and workload within explicit school authority.",
+          "fields": [
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "view",
+              "label": "View",
+              "type": "select",
+              "options": [
+                "Upcoming assignments",
+                "Unpublished feedback",
+                "Student follow-up"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Coordinate support",
+          "help": "Teachers remain authors of lesson content and feedback.",
+          "fields": [
+            {
+              "name": "owner",
+              "label": "Responsible teacher",
+              "type": "select",
+              "options": [
+                "Ananya Rao",
+                "Rohan Das"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "request",
+              "label": "Requested follow-up",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An authorized follow-up points to the owning learning record.",
+      "rule": "Do not reveal draft feedback to guardians or auto-score missing work as zero.",
+      "edge": "Revoked enrollment or assignment restricts content; attachments remain private and scanned.",
+      "data": "Learning read projection of Assignment/SubmissionRevision/Feedback; follow-up command does not publish teacher drafts."
+    },
+    {
+      "id": "SA-44",
+      "module": "documents",
+      "title": "Collect and review a document",
+      "phase": 3,
+      "capability": "document.review + owning module capability",
+      "steps": [
+        {
+          "title": "Request context",
+          "help": "A document needs a purpose, owner and permitted audience.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "type",
+              "label": "Document type",
+              "type": "select",
+              "options": [
+                "Enrollment evidence",
+                "Transfer document",
+                "Consent form"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Upload and review",
+          "help": "Uploads stay unavailable until their safety checks complete.",
+          "fields": [
+            {
+              "name": "file",
+              "label": "Document",
+              "type": "file",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "decision",
+              "label": "Review decision",
+              "type": "select",
+              "options": [
+                "Pending checks",
+                "Accept verified document",
+                "Request replacement"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The document version and review state are visible to authorized users.",
+      "rule": "No public object URLs; scan failure never becomes a successful upload; expiry and retention follow approved policy.",
+      "edge": "Interrupted upload resumes or retries safely; expired access links reauthorize.",
+      "data": "Documents owns FileAsset, ScanResult, DocumentVersion and grant. Owning module references the immutable approved version."
+    },
+    {
+      "id": "SA-45",
+      "module": "documents",
+      "title": "Issue a certificate or publish a form",
+      "phase": 3,
+      "capability": "document.issue / form.publish",
+      "steps": [
+        {
+          "title": "Template and audience",
+          "help": "Use a versioned approved template.",
+          "fields": [
+            {
+              "name": "type",
+              "label": "Type",
+              "type": "select",
+              "options": [
+                "Enrollment certificate",
+                "Transfer certificate",
+                "School form"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review generated content",
+          "help": "Validate source fields and intended recipient.",
+          "fields": [
+            {
+              "name": "review",
+              "label": "I have reviewed the exact document preview.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An issued revision has a reference and controlled download.",
+      "rule": "Do not overwrite issued documents; corrections issue a new linked version.",
+      "edge": "Unavailable source data and revoked recipient grants prevent issue/download.",
+      "data": "DocumentTemplateVersion → immutable issue snapshot or FormSchemaVersion/FormResponse, with signed-download authorization."
+    },
+    {
+      "id": "SA-46",
+      "module": "assessments",
+      "title": "Coordinate assessment setup and marks readiness",
+      "phase": 4,
+      "capability": "assessment.coordinate",
+      "steps": [
+        {
+          "title": "Assessment plan",
+          "help": "Choose versioned grading and rounding rules.",
+          "fields": [
+            {
+              "name": "assessment",
+              "label": "Assessment",
+              "type": "select",
+              "options": [
+                "Term 1 · 2026–27"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "section",
+              "label": "Class",
+              "type": "select",
+              "options": [
+                "Grade 6 · A",
+                "Grade 6 · B",
+                "Grade 7 · A"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "scheme",
+              "label": "Scheme",
+              "type": "select",
+              "options": [
+                "Approved term scheme"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Readiness",
+          "help": "Review missing marks, absent and exempt states independently.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Open readiness list",
+                "Request teacher completion",
+                "Send for moderation"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The assessment moves only when its defined prerequisites are met.",
+      "rule": "School coordination does not imply permission to edit teachers’ marks.",
+      "edge": "Not-entered, absent and exempt are separate; no automatic numeric zero.",
+      "data": "Assessment scheme/version and read model of MarkRevision/Moderation; owner use cases enforce role-specific actions."
+    },
+    {
+      "id": "SA-47",
+      "module": "assessments",
+      "title": "Approve, publish or correct results",
+      "phase": 4,
+      "capability": "assessment.approve / results.publish (explicit)",
+      "steps": [
+        {
+          "title": "Review approved revision",
+          "help": "Publication pins exact mark and approval revisions.",
+          "fields": [
+            {
+              "name": "publication",
+              "label": "Publication",
+              "type": "select",
+              "options": [
+                "Grade 6 · Term 1"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Review publication",
+                "Publish approved results",
+                "Correct a published result"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Audience and confirmation",
+          "help": "Only entitled, authorized family panels can receive the release.",
+          "fields": [
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "publish",
+              "label": "The approved content and audience have been reviewed.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Published results or a linked correction are available with a timestamp.",
+      "rule": "Draft edits never leak; approval and publication cannot race past changed marks.",
+      "edge": "Changed revision requires reapproval; partial delivery does not unpublish the valid result.",
+      "data": "ResultPublicationManifest references approved immutable MarkRevisions; Communication queues minimal notices."
+    },
+    {
+      "id": "SA-48",
+      "module": "finance",
+      "title": "Configure fees and concessions",
+      "phase": 5,
+      "capability": "finance.plan.manage / concession.approve (delegated)",
+      "steps": [
+        {
+          "title": "Plan scope",
+          "help": "Finance is independent of Attendance.",
+          "fields": [
+            {
+              "name": "plan",
+              "label": "Plan",
+              "type": "select",
+              "options": [
+                "2026–27 annual tuition"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "currency",
+              "label": "Currency",
+              "type": "select",
+              "options": [
+                "INR"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "amount",
+              "label": "Amount in major units",
+              "type": "number",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Concession review",
+          "help": "Approval authority is separate from requesting a concession.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "basis",
+              "label": "Concession request / approval reference",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An approved plan revision can be used to generate invoice snapshots.",
+      "rule": "General school administrators have coordination access only unless explicitly granted finance authority.",
+      "edge": "In-use fee plans version forward; negative/invalid money and unsupported currency are rejected.",
+      "data": "Finance owns FeePlanVersion and Concession decision. Store money in exact minor units with currency; no floats."
+    },
+    {
+      "id": "SA-49",
+      "module": "finance",
+      "title": "Generate invoices and collect payment",
+      "phase": 5,
+      "capability": "finance.invoice / finance.collect (delegated)",
+      "steps": [
+        {
+          "title": "Invoice preview",
+          "help": "Review payer, lines, currency and due date.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "due",
+              "label": "Due date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "plan",
+              "label": "Fee plan",
+              "type": "select",
+              "options": [
+                "Approved tuition plan"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Collection",
+          "help": "Show actual payment evidence and allocation.",
+          "fields": [
+            {
+              "name": "method",
+              "label": "Method",
+              "type": "select",
+              "options": [
+                "Record verified bank transfer",
+                "Record cash with receipt authority",
+                "Hosted payment link"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reference",
+              "label": "Payment reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Posted invoice, verified payment and receipt retain separate states.",
+      "rule": "A browser success return is not proof of payment; callbacks authenticate and deduplicate.",
+      "edge": "Unknown outcomes are reconciled before retrying; partial payment leaves an explicit balance.",
+      "data": "Finance Invoice/Line snapshots, Payment, Allocation and Receipt, with unique provider/reference constraints and audit."
+    },
+    {
+      "id": "SA-50",
+      "module": "finance",
+      "title": "Resolve reconciliation, adjustment or refund",
+      "phase": 5,
+      "capability": "finance.reconcile / refund.approve (delegated)",
+      "steps": [
+        {
+          "title": "Exception",
+          "help": "Open the exact ledger and provider evidence.",
+          "fields": [
+            {
+              "name": "case",
+              "label": "Case",
+              "type": "select",
+              "options": [
+                "Unmatched settlement",
+                "Credit adjustment",
+                "Refund request"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review approval",
+          "help": "Posted history is immutable; refunds reserve available value.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Approval / settlement reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An authorized adjustment or reconciled outcome appends to the ledger.",
+      "rule": "Do not edit posted amounts or double-refund an uncertain provider request.",
+      "edge": "Timeout, duplicate callback, insufficient refundable balance and rejected approval have explicit outcomes.",
+      "data": "Finance CreditNote, RefundReservation, Settlement and append-only ledger entries; idempotent provider seam."
+    },
+    {
+      "id": "SA-51",
+      "module": "transport",
+      "title": "Prepare routes and allocate students",
+      "phase": 6,
+      "capability": "transport.manage (delegated)",
+      "steps": [
+        {
+          "title": "Route and capacity",
+          "help": "Use eligible vehicles and drivers.",
+          "fields": [
+            {
+              "name": "route",
+              "label": "Route",
+              "type": "select",
+              "options": [
+                "Route 4 · Whitefield"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "vehicle",
+              "label": "Vehicle",
+              "type": "select",
+              "options": [
+                "Bus 12 · 40 seats"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "driver",
+              "label": "Verified driver reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Student allocation",
+          "help": "Confirm approved stop and handoff arrangements.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "stop",
+              "label": "Stop",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "Effective from",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A dated allocation contributes to the next trip manifest.",
+      "rule": "Transport consent, pickup authority and guardian portal grant are separate.",
+      "edge": "Full vehicle, expired qualification or unavailable stop blocks the allocation.",
+      "data": "Transport RouteVersion, Stop, Vehicle/DriverQualification, Allocation and trip manifest snapshot."
+    },
+    {
+      "id": "SA-52",
+      "module": "transport",
+      "title": "Resolve a trip or handoff exception",
+      "phase": 6,
+      "capability": "transport.trip.manage (delegated)",
+      "steps": [
+        {
+          "title": "Trip event",
+          "help": "Protect live child location and identity.",
+          "fields": [
+            {
+              "name": "trip",
+              "label": "Trip",
+              "type": "select",
+              "options": [
+                "Route 4 · Afternoon"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "event",
+              "label": "Exception",
+              "type": "select",
+              "options": [
+                "Missed boarding",
+                "Unverified pickup",
+                "Vehicle change"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Safe resolution",
+          "help": "Follow the school’s approved emergency protocol.",
+          "fields": [
+            {
+              "name": "resolution",
+              "label": "Resolution and verified handoff reference",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An accountable trip exception is recorded and escalated where needed.",
+      "rule": "Never confirm an unverified handoff; minimize live location exposure.",
+      "edge": "Disconnected device or uncertain event preserves pending status and uses the approved human fallback.",
+      "data": "Trip and BoardingEvent append; route/vehicle changes reviewed; Communication uses minimal authorized notices."
+    },
+    {
+      "id": "SA-53",
+      "module": "people-ops",
+      "title": "Review leave and staffing coverage",
+      "phase": 6,
+      "capability": "leave.approve (delegated)",
+      "steps": [
+        {
+          "title": "Leave request",
+          "help": "Show dates and staffing impact; keep sensitive attachments restricted.",
+          "fields": [
+            {
+              "name": "request",
+              "label": "Request",
+              "type": "select",
+              "options": [
+                "Rohan Das · 12–13 Oct"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "decision",
+              "label": "Decision",
+              "type": "select",
+              "options": [
+                "Approve",
+                "Request information",
+                "Decline"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Coverage",
+          "help": "Coordinate cover through Timetable; no attendance auto-edit.",
+          "fields": [
+            {
+              "name": "coverage",
+              "label": "Coverage plan and response",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The leave balance and coverage decisions are recorded separately.",
+      "rule": "Pupil attendance and staff attendance are different domains; serialize concurrent leave debits.",
+      "edge": "Insufficient balance or changed approver authority blocks approval.",
+      "data": "People operations owns LeaveRequest/BalanceLedger; Academics owns cover; Employee identity read via People contract."
+    },
+    {
+      "id": "SA-54",
+      "module": "people-ops",
+      "title": "Review payroll inputs and hand off",
+      "phase": 6,
+      "capability": "payroll.input / payroll.approve (restricted)",
+      "steps": [
+        {
+          "title": "Pay period",
+          "help": "Only authorized payroll staff see salary figures.",
+          "fields": [
+            {
+              "name": "period",
+              "label": "Period",
+              "type": "select",
+              "options": [
+                "October 2026"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Review input completeness",
+                "Handoff to payroll approver"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Approval evidence",
+          "help": "Use jurisdiction-specific versioned rules.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Approved payroll review reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Authorized payroll review proceeds with immutable approved run history.",
+      "rule": "A School Administrator role grants no salary access; no payroll formula is assumed in this design.",
+      "edge": "Rule change, missing input or revoked approval stops the run; corrections create a new linked revision.",
+      "data": "Restricted PayrollRun, rule version and input references; immutable approval/export evidence. Separate regulatory design required."
+    },
+    {
+      "id": "SA-55",
+      "module": "library",
+      "title": "Catalog and circulate library items",
+      "phase": 6,
+      "capability": "library.circulate (delegated)",
+      "steps": [
+        {
+          "title": "Identify the copy",
+          "help": "Barcode identifies a physical copy, not only the title.",
+          "fields": [
+            {
+              "name": "barcode",
+              "label": "Copy barcode",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Circulation",
+          "help": "Check eligibility and active hold policy.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Check out",
+                "Return",
+                "Renew",
+                "Reserve"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The loan or reservation is recorded with a clear due date.",
+      "rule": "Only one active loan per physical copy; fines are optional Finance integration.",
+      "edge": "Already loaned, hold queue conflict, lost item and duplicate scan have explicit outcomes.",
+      "data": "CatalogItem, PhysicalCopy, Loan, Reservation and versioned policy. Lock copy/hold state in circulation transaction."
+    },
+    {
+      "id": "SA-56",
+      "module": "library",
+      "title": "Resolve overdue, lost or inventory discrepancies",
+      "phase": 6,
+      "capability": "library.manage (delegated)",
+      "steps": [
+        {
+          "title": "Exception",
+          "help": "Review loan and item history.",
+          "fields": [
+            {
+              "name": "case",
+              "label": "Case",
+              "type": "select",
+              "options": [
+                "Overdue copy",
+                "Reported lost",
+                "Inventory discrepancy"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Disposition",
+          "help": "Use a reasoned adjustment rather than deleting history.",
+          "fields": [
+            {
+              "name": "decision",
+              "label": "Decision",
+              "type": "select",
+              "options": [
+                "Extend with approval",
+                "Record loss",
+                "Reconcile return"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "The item and borrower record show the reasoned outcome.",
+      "rule": "Loss/recovery preserves circulation history; no automatic guardian billing without the Finance contract.",
+      "edge": "Concurrent return and loss adjustment reconcile under the copy guard.",
+      "data": "PhysicalCopy state, Loan closure/revision, inventory evidence and optional FineCharge event."
+    },
+    {
+      "id": "SA-57",
+      "module": "facilities",
+      "title": "Receive, issue or return stock and assets",
+      "phase": 6,
+      "capability": "inventory.manage (delegated)",
+      "steps": [
+        {
+          "title": "Item and movement",
+          "help": "Separate quantity stock from individually tracked assets.",
+          "fields": [
+            {
+              "name": "item",
+              "label": "Item / asset reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "movement",
+              "label": "Movement",
+              "type": "select",
+              "options": [
+                "Receive",
+                "Issue",
+                "Return",
+                "Custody transfer"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "quantity",
+              "label": "Quantity",
+              "type": "number",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Custody evidence",
+          "help": "Track who received it and why.",
+          "fields": [
+            {
+              "name": "custodian",
+              "label": "Authorized custodian",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An append-only movement and current custody state are available.",
+      "rule": "No negative stock unless explicitly approved by a versioned policy; cross-branch transfer requires both scopes.",
+      "edge": "Concurrent issue or missing custody acknowledgement leaves a reviewable exception.",
+      "data": "Inventory StockMovement ledger and Asset/CustodyAssignment; owner transaction controls available stock."
+    },
+    {
+      "id": "SA-58",
+      "module": "facilities",
+      "title": "Book a facility or request maintenance",
+      "phase": 6,
+      "capability": "facilities.manage (delegated)",
+      "steps": [
+        {
+          "title": "Facility",
+          "help": "Choose an available resource and date.",
+          "fields": [
+            {
+              "name": "facility",
+              "label": "Facility",
+              "type": "select",
+              "options": [
+                "Science lab",
+                "Assembly hall"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "date",
+              "label": "Date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "start",
+              "label": "Start time",
+              "type": "time",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "end",
+              "label": "End time",
+              "type": "time",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Purpose",
+          "help": "A maintenance closure blocks conflicting use.",
+          "fields": [
+            {
+              "name": "type",
+              "label": "Request type",
+              "type": "select",
+              "options": [
+                "Booking",
+                "Maintenance closure"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "reason",
+              "label": "Reason",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A conflict-free booking or owned maintenance order is recorded.",
+      "rule": "Enforce overlapping reservation constraints and clear unavailable periods.",
+      "edge": "Concurrent booking or changed maintenance status shows alternatives instead of double-booking.",
+      "data": "FacilityBooking range constraint and MaintenanceOrder; published timetable room use checked through Academics contract."
+    },
+    {
+      "id": "SA-59",
+      "module": "health",
+      "title": "Refer a health or safeguarding concern",
+      "phase": 6,
+      "capability": "restricted referral.create; case read requires explicit specialist grant",
+      "steps": [
+        {
+          "title": "Minimal referral",
+          "help": "Avoid sensitive details in shared dashboards and notifications.",
+          "fields": [
+            {
+              "name": "student",
+              "label": "Student",
+              "type": "select",
+              "options": [
+                "Aarav Mehta · GW-26001",
+                "Diya Rao · GW-26002",
+                "Kabir Shah · GW-26003"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "urgency",
+              "label": "Urgency",
+              "type": "select",
+              "options": [
+                "Routine specialist review",
+                "Urgent: follow approved school emergency protocol"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Restricted handoff",
+          "help": "This review prototype stores no clinical narrative.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Restricted handoff reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "team",
+              "label": "Authorized team",
+              "type": "select",
+              "options": [
+                "School health lead",
+                "Safeguarding lead"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "An authorized specialist receives a minimal referral; general admins see only permitted handoff status.",
+      "rule": "No diagnosis or clinical advice in the general school workspace; emergency action follows the approved local protocol.",
+      "edge": "If the recipient lacks authority, route privately to the approved escalation contact; never broadcast.",
+      "data": "Restricted referral and purpose grant; HealthProfile/Visit/Incident remain specialist-owned and separately access controlled."
+    },
+    {
+      "id": "SA-60",
+      "module": "health",
+      "title": "Review emergency access and restricted case handling",
+      "phase": 6,
+      "capability": "health.break_glass / safeguarding.review (restricted)",
+      "steps": [
+        {
+          "title": "Exceptional access",
+          "help": "Available only to explicitly authorized emergency roles.",
+          "fields": [
+            {
+              "name": "case",
+              "label": "Restricted case reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "justification",
+              "label": "Emergency access justification",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Accountable review",
+          "help": "Access is time bounded and independently reviewed.",
+          "fields": [
+            {
+              "name": "ack",
+              "label": "The approved emergency access procedure applies.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "Authorized emergency access has an expiry, audit and independent review.",
+      "rule": "No blanket administrator access; this workflow requires a separate sensitive-data design and deployment approval.",
+      "edge": "Denied or expired emergency authority must not reveal case contents.",
+      "data": "RestrictedNoteGrant/break-glass event and specialist record access audit; no details in general activity."
+    },
+    {
+      "id": "SA-61",
+      "module": "integrations",
+      "title": "Review connection status and reconcile a sync",
+      "phase": 3,
+      "capability": "integration.read / integration.manage (delegated)",
+      "steps": [
+        {
+          "title": "Connection",
+          "help": "Credentials remain in a secure store and never in the screen or audit.",
+          "fields": [
+            {
+              "name": "connection",
+              "label": "Connection",
+              "type": "select",
+              "options": [
+                "Roster source",
+                "Approved email provider"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "Review status",
+                "Preview sync",
+                "Reconcile failed records"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Review effects",
+          "help": "Map source IDs and preview changes before committing.",
+          "fields": [
+            {
+              "name": "reference",
+              "label": "Reviewed sync reference",
+              "type": "text",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "scope",
+              "label": "The target branch and permitted changes are correct.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A scoped synchronization run has reconciled per-record outcomes.",
+      "rule": "No unreviewed source overwrites; authenticated webhooks deduplicate and reauthorize.",
+      "edge": "Unknown provider outcome, duplicate webhook and mapping conflict stay visible.",
+      "data": "IntegrationCredentialRef, SyncRun, WebhookReceipt and owner module commands. No direct writes to another module’s tables."
+    },
+    {
+      "id": "SA-62",
+      "module": "settings",
+      "title": "Review activity, privacy or support access",
+      "phase": 1,
+      "capability": "school.audit.read; privacy/support actions need separate authority",
+      "steps": [
+        {
+          "title": "Find activity",
+          "help": "Show only safe events in this branch.",
+          "fields": [
+            {
+              "name": "category",
+              "label": "Category",
+              "type": "select",
+              "options": [
+                "School settings",
+                "Staff access",
+                "Student change",
+                "Attendance correction"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "from",
+              "label": "From date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "to",
+              "label": "To date",
+              "type": "date",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Inspect evidence",
+          "help": "Use a request reference for support; do not expose credentials or raw imported data.",
+          "fields": [
+            {
+              "name": "action",
+              "label": "Action",
+              "type": "select",
+              "options": [
+                "View safe event detail",
+                "Copy support reference"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A safe branch-scoped event is available for review.",
+      "rule": "The administrator cannot delete audit history, grant operator impersonation or run an unrestricted data export.",
+      "edge": "Restricted events show permitted metadata only; unsupported privacy requests route to the designated authority.",
+      "data": "Append-only audit read model scoped by branch and capability; safe diff and request IDs only."
+    },
+    {
+      "id": "SA-63",
+      "module": "assistant",
+      "title": "Review an AI-assisted explanation or draft",
+      "phase": 7,
+      "capability": "assistant.use + every source capability",
+      "steps": [
+        {
+          "title": "Choose an allowed task",
+          "help": "The assistant retrieves only evidence already permitted to you.",
+          "fields": [
+            {
+              "name": "task",
+              "label": "Task",
+              "type": "select",
+              "options": [
+                "Explain a permitted attendance report",
+                "Draft a school notice"
+              ],
+              "required": true,
+              "value": ""
+            },
+            {
+              "name": "question",
+              "label": "Question / draft request",
+              "type": "textarea",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Check sources",
+          "help": "The answer must carry source references and an as-of time.",
+          "fields": [
+            {
+              "name": "sources",
+              "label": "I have checked the cited evidence and any uncertainty.",
+              "type": "checkbox",
+              "options": [],
+              "required": true,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "Use a reviewed draft",
+          "help": "Business changes still use normal authorized forms.",
+          "fields": [
+            {
+              "name": "next",
+              "label": "Next action",
+              "type": "select",
+              "options": [
+                "Keep as a draft",
+                "Open the normal action form"
+              ],
+              "required": true,
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "outcome": "A reviewed draft or explanation can support a human decision.",
+      "rule": "No unrestricted SQL, autonomous record changes or sensitive health/disciplinary inference.",
+      "edge": "Missing evidence, provider outage and suspicious retrieved instructions trigger abstention or a safe fallback.",
+      "data": "AssistantSession, scoped EvidenceReference and ActionProposal; deterministic calculations from owner read contracts."
+    }
+  ],
+  "family_integration": {
+    "journeys": [
+      "SA-32",
+      "SA-33",
+      "SA-34"
+    ],
+    "parent_handoff": [
+      "PAR-01",
+      "PAR-04",
+      "PAR-05",
+      "PAR-06"
+    ],
+    "phase": 2,
+    "prototype_purposes": [
+      "attendance.read",
+      "communication.notice.read"
+    ],
+    "future_purposes": [
+      "fees",
+      "pickup",
+      "consent"
+    ],
+    "entry": "#/families",
+    "status": "DESIGNED_FOR_REVIEW"
+  },
+  "communication_integration": {
+    "journeys": [
+      "SA-35",
+      "SA-36"
+    ],
+    "teacher": [
+      "TEA-17",
+      "TEA-18"
+    ],
+    "parent": [
+      "PAR-09",
+      "PAR-14"
+    ],
+    "entry": "#/communication",
+    "phase": 2,
+    "first_slice": "Text notices, approval, scheduling, versioned acknowledgement and delivery follow-up",
+    "later": [
+      "secure attachments",
+      "private conversations",
+      "meeting scheduling",
+      "full family-request owner APIs"
+    ]
+  },
+  "timetable_revision": "TT-01"
+}

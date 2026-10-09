@@ -1,0 +1,180 @@
+[
+  {
+    "id": "OP-J01",
+    "name": "Find and open an institution",
+    "entry": "Institutions directory",
+    "steps": "Choose Institution name or Institution code, type a value and press Enter. Open Filters for status, school setup, license and access policy; apply, clear, sort and paginate. Open the name link or row; use the sliders-icon Manage action.",
+    "outcome": "The selected institution’s own data is shown. Returning preserves search, filters and page.",
+    "alternate_states": "Empty directory, no matches, loading, load failure and inaccessible record.",
+    "implementation_contract": "Directory fields and filter values must be validated server-side; never retrieve other operators’ unauthorized scopes."
+  },
+  {
+    "id": "OP-J02",
+    "name": "Review an institution",
+    "entry": "Directory or an institution link",
+    "steps": "Inspect Overview, Branches, Modules, Administrators and Activity. Review access, active branches, administrator handover, licensing and recent configuration changes. School-owned readiness is a secondary summary.",
+    "outcome": "Availability, setup readiness and administrator activation remain distinct.",
+    "alternate_states": "Inactive institution banner; branch readiness pending; administrator activation pending.",
+    "implementation_contract": "Configuration metadata only; operator or institution-admin status does not automatically allow operational student, financial or health records."
+  },
+  {
+    "id": "OP-J03",
+    "name": "Update institution details",
+    "entry": "Institution Manage → Edit details",
+    "steps": "Edit name, contact and notes. Record a reason; review before saving. The institution code is stable.",
+    "outcome": "Save current-version data and an audit event.",
+    "alternate_states": "Invalid email/name, duplicate name warning, failed save and concurrent edit.",
+    "implementation_contract": "Do not mutate another institution. Reject stale versions; keep values in the editor until the user explicitly reloads the latest record."
+  },
+  {
+    "id": "OP-J04",
+    "name": "Start and complete onboarding",
+    "entry": "Create institution",
+    "steps": "Start empty; complete Institution → First branch → Modules → Administrator → Review. Verify identity independently. Submit once.",
+    "outcome": "One institution and first branch are created; the verified administrator’s access follows the account’s actual activation state. New branches start setup-required with Attendance inactive.",
+    "alternate_states": "Required-field errors, duplicate code/name, reused account, unverified identity, forbidden action and uncertain submit result.",
+    "implementation_contract": "Email equality is not identity proof. Reuse existing Access/Tenancy use cases and lock order. Resolve the original command receipt before retrying. Prototype-local atomicity does not establish production transaction boundaries."
+  },
+  {
+    "id": "OP-J05",
+    "name": "Save and resume a draft",
+    "entry": "Onboarding or Institutions → My drafts",
+    "steps": "Save partial values; return later to My drafts; Resume returns to the saved step and restores values.",
+    "outcome": "Draft data, step, owner, version and last-saved time persist; no institution exists until successful submission.",
+    "alternate_states": "Empty draft disabled; storage/save failure; draft unavailable; other owner; completed or discarded draft; stale draft version.",
+    "implementation_contract": "Draft owner is the default editor. Approved reassignment is a separate workflow; do not infer shared visibility from operator status. Reauthorize on read, resume and submit."
+  },
+  {
+    "id": "OP-J06",
+    "name": "Discard or finish a draft",
+    "entry": "My drafts → Discard, or final submission",
+    "steps": "Confirm discarding unfinished setup. On successful creation, mark the source draft completed and link its institution.",
+    "outcome": "Discarded/completed drafts leave the active drafts list; existing institutions never change on draft discard.",
+    "alternate_states": "Double discard, concurrent submission, stale version and permission denial.",
+    "implementation_contract": "Soft lifecycle transitions with metadata-only evidence. Do not use draft deletion as a cascade into production records."
+  },
+  {
+    "id": "OP-J07",
+    "name": "Leave or sign out during editing",
+    "entry": "Sidebar, browser Back, leave utility or Sign out",
+    "steps": "Prompt only for unsaved changes. Save and leave, keep working or explicitly discard unsaved edits. If unchanged, leave directly.",
+    "outcome": "A failed save keeps the user and edits on the page. Discard keeps any previously saved draft. Sign-out occurs only after a requested save succeeds.",
+    "alternate_states": "Failed save, session expiry, browser reload and storage unavailable.",
+    "implementation_contract": "Real sign-out must invalidate the current server session. Protected views reauthorize on browser Back. Retention of unsaved edits across reauthentication is a policy decision, not permission to persist credentials."
+  },
+  {
+    "id": "OP-J08",
+    "name": "Deactivate an institution",
+    "entry": "Institution Manage → Deactivate",
+    "steps": "Review named institution and affected branches, provide a reason, acknowledge impact and confirm.",
+    "outcome": "Institution status becomes Inactive. Protected school access is denied here; configuration and records are retained.",
+    "alternate_states": "Cancel, failed save, stale status/version, unauthorized operation and repeated request.",
+    "implementation_contract": "Server guards must deny new protected requests from existing sessions. Do not disable global accounts or other institution memberships. Drain/cancel tenant jobs per documented policy; define in-flight mutation locking before implementation."
+  },
+  {
+    "id": "OP-J09",
+    "name": "Reactivate an institution",
+    "entry": "Inactive institution → Review reactivation",
+    "steps": "Review remaining restrictions, provide a reason and confirm.",
+    "outcome": "Institution becomes Active. Individually inactive branches, revoked memberships, setup requirements and license restrictions remain.",
+    "alternate_states": "Changed prerequisites, conflicting operator action and failed save.",
+    "implementation_contract": "Do not mass-enable branches, users or modules. Re-evaluate effective availability; no data restoration is needed because deactivation did not delete it."
+  },
+  {
+    "id": "OP-J10",
+    "name": "Manage branches",
+    "entry": "Institution → Branches",
+    "steps": "Add or edit branch configuration. Review readiness. Deactivate/reactivate one branch with a reason.",
+    "outcome": "New branch has no implicit school-record grants, requires setup and starts with Attendance inactive. Changes affect only that branch.",
+    "alternate_states": "Duplicate code, inactive institution, last/only active branch notice, invalid time zone, stale update and failure.",
+    "implementation_contract": "Choose a supported time zone at branch creation. Existing branch time zones are read-only; reject changed values in the application use case, even if the client is modified. A future exceptional migration requires separate impact analysis and authorization. Last-branch deactivation can leave the institution Active but with no available school workspace; show that consequence."
+  },
+  {
+    "id": "OP-J11",
+    "name": "Manage licensed modules",
+    "entry": "Institution → Modules → Manage licenses",
+    "steps": "Review approved agreement, change Attendance licensing, add approval reference and reason. Foundations remain included.",
+    "outcome": "Removing a license makes Attendance unavailable across branches and clears activation; records remain. Adding a license does not activate branches.",
+    "alternate_states": "Unreleased module, invalid approval, stale configuration and failed save.",
+    "implementation_contract": "Separate platform commercial entitlement from branch activation. Preserve module ownership and existing TEN-02 checks. Adding other products later requires their actual release/dependency contracts.",
+    "timetable_contract": {
+      "release": "TT-01",
+      "owner": "academics / timetable",
+      "entry": "Institution > Modules > Timetable",
+      "specification": "docs/timetable/README.md",
+      "phase": 3,
+      "implementation": "NOT_ASSESSED"
+    }
+  },
+  {
+    "id": "OP-J12",
+    "name": "Review branch activation",
+    "entry": "Institution → Modules → Review activation",
+    "steps": "Check institution active, branch active, module licensed and school setup ready. Activate or deactivate with reason if authorized.",
+    "outcome": "Only the selected branch’s Attendance availability changes.",
+    "alternate_states": "Unmet prerequisites, lost capability, changed license and failed save.",
+    "implementation_contract": "Require explicit branch-module configuration capability; platform role alone is insufficient. Recheck all prerequisites in the write transaction.",
+    "timetable_contract": {
+      "release": "TT-01",
+      "owner": "academics / timetable",
+      "entry": "Institution > Modules > Timetable",
+      "specification": "docs/timetable/README.md",
+      "phase": 3,
+      "implementation": "NOT_ASSESSED"
+    }
+  },
+  {
+    "id": "OP-J13",
+    "name": "Add verified administrator access",
+    "entry": "Institution → Administrators → Add administrator",
+    "steps": "Enter identity, independent verification reference and branch setup scope; review account reuse before confirming.",
+    "outcome": "Grant institution configuration access. Existing account credentials/memberships remain. New accounts await the approved activation path.",
+    "alternate_states": "Duplicate membership, existing account ownership not confirmed, institution inactive, no verification and save failure.",
+    "implementation_contract": "Preserve IAM-02/03 operator-assisted bootstrap and account-wide trust constraints. Do not grant student-record roles, reset credentials or send arbitrary invitations from this console."
+  },
+  {
+    "id": "OP-J14",
+    "name": "Check administrator activation",
+    "entry": "Pending administrator → Activation instructions",
+    "steps": "Complete the approved external/operator-assisted process, then Check activation status.",
+    "outcome": "Only a verified activation result updates status. Pending remains pending until a real result arrives.",
+    "alternate_states": "Still pending, unavailable identity service, expired request and revoked access.",
+    "implementation_contract": "Never make an operator checkbox or email match an activation proof. The review toolbar can simulate the external result; production must query the owning Access contract."
+  },
+  {
+    "id": "OP-J15",
+    "name": "Change or revoke administrator access",
+    "entry": "Administrator → Manage branch access / Revoke access",
+    "steps": "Review institution-specific scope and reason. Prevent revoking the last active administrator until a replacement is active.",
+    "outcome": "Only this institution’s configuration grants change. Other institutions and the global identity remain.",
+    "alternate_states": "Last active admin, replacement still pending, expired operator session, conflict and failure.",
+    "implementation_contract": "Last-admin check must be transactionally serialized to prevent two concurrent revocations leaving no administrator. Operator recovery remains a separately controlled path."
+  },
+  {
+    "id": "OP-J16",
+    "name": "Inspect activity",
+    "entry": "Global Audit trail or institution Activity",
+    "steps": "Filter by institution, action, actor and date; open event detail. Return to the appropriate institution.",
+    "outcome": "Global navigation is truly cross-institution metadata within permission scope; institution activity is scoped.",
+    "alternate_states": "No events, no matches, unavailable event and permission denial.",
+    "implementation_contract": "Write audit metadata atomically with configuration changes when ownership permits; otherwise durable outbox. Exclude passwords, raw tokens, raw identity evidence and draft field contents. Times display Asia/Kolkata; store UTC."
+  },
+  {
+    "id": "OP-J17",
+    "name": "Recover from failure or a stale edit",
+    "entry": "Any protected change",
+    "steps": "Keep entered values after failure. Retry transient saves. For conflicts, review current stored values; explicitly reload and reapply edits.",
+    "outcome": "No silent overwrite or false success. Unknown onboarding outcome uses the original request reference.",
+    "alternate_states": "Save failure, load failure, conflict, record missing, unknown submission and status-check failure.",
+    "implementation_contract": "Retry create only with the same idempotency key and payload contract. Expected versions must be checked server-side; UI disabling is not a concurrency control."
+  },
+  {
+    "id": "OP-J18",
+    "name": "Navigate with limited access or on mobile",
+    "entry": "Any view",
+    "steps": "Use the mobile menu and explicit sign-out; navigate name links and actions by keyboard. Review as read-only; recover from session expiry.",
+    "outcome": "Read-only users inspect allowed metadata but cannot change it. Mobile menu and dialogs maintain a clear navigation path.",
+    "alternate_states": "Access denied, direct protected URL, expired session, keyboard focus, narrow viewport and reduced motion.",
+    "implementation_contract": "Production authentication, authorization, CSRF, tenant isolation and audit enforcement remain server-owned. Native assistive-technology and browser verification are required before claiming conformance."
+  }
+]
