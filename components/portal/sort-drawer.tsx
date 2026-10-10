@@ -14,6 +14,6 @@ export function SortDrawer({open,onClose,options,applied,onApply}:{open:boolean;
    <details className="drawer-attribute" open><summary>Sort by</summary><RadioGroup label="Sort by" name="sort-by" options={[...options]} value={draft.by} onChange={by=>setDraft(current=>({...current,by}))}/></details>
    <details className="drawer-attribute" open><summary>Order by</summary><RadioGroup label="Order by" name="sort-order" options={[{value:'ascending',label:'Ascending'},{value:'descending',label:'Descending'}]} value={draft.order} onChange={order=>setDraft(current=>({...current,order:order as SortSelection['order']}))}/></details>
   </div>
-  <div className="dialog-actions drawer-footer"><Button variant="secondary" onClick={close}>Cancel</Button><Button onClick={()=>{onApply(draft);onClose();}}>Apply sort</Button></div>
+  <div className="dialog-actions drawer-footer"><Button variant="secondary" onClick={close}>Cancel</Button><Button onClick={()=>{onApply(draft);onClose();}}>Apply</Button></div>
  </Dialog>;
 }

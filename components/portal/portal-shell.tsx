@@ -22,6 +22,7 @@ const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),i
 
 export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,children,contentClassName}:PortalShellProps){
  const pathname=usePathname(),[openOnPath,setOpenOnPath]=useState<string|null>(null),toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
+ const currentItem=groups.flatMap(group=>group.items).find(item=>item.href===homeHref?pathname===homeHref:pathname===item.href||pathname.startsWith(`${item.href}/`));
  const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>toggle.current?.focus());},[]);
  useEffect(()=>{
   if(!open)return;
@@ -45,7 +46,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,chil
   <header className="portal-topbar">
    <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls="portal-navigation" aria-expanded={open} onClick={()=>open?close(true):setOpenOnPath(pathname)}><span aria-hidden="true">{open?'×':'☰'}</span><span className="sr-only">{open?'Close navigation':'Open navigation'}</span></button>
    <Link className="portal-mobile-brand" href={homeHref}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
-   <span className="portal-workspace-label">{roleLabel}</span>
+   <span className="portal-workspace-label">{currentItem?.label??roleLabel}</span>
    <div className="portal-top-context"><BranchSwitcher home={home}/></div>
   </header>
   {open&&<div className="portal-sidebar-backdrop" aria-hidden="true" onClick={()=>close(true)}/>}
@@ -54,6 +55,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,chil
     <Link className="portal-brand" href={homeHref} aria-label={`VSchool ${roleLabel.toLowerCase()}`}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
     <button type="button" className="portal-sidebar-close" onClick={()=>close(true)}><span aria-hidden="true">×</span><span className="sr-only">Close menu panel</span></button>
    </div>
+   <div className="portal-school-identity"><strong>{home.institutionName}</strong><span>{home.schoolName} · School workspace</span></div>
    <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.map((group,index)=><PortalNavigationGroup key={group.label} group={group} pathname={pathname} onNavigate={()=>close()} firstItemRef={index===0?firstItem:undefined}/>)}</nav></div>
    <footer className="portal-sidebar-footer">
     <Link className="portal-identity" href="/account" aria-label={`${roleLabel} account`} onClick={()=>close()}>

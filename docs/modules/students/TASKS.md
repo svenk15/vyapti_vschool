@@ -24,6 +24,7 @@ Files: extend `backend/modules/students/domain`, `application`, `contracts` and 
 - Real PostgreSQL: Rollback Person on Student failure; concurrent admission number uniqueness.
 - Browser: Create student, search, refresh detail and denied foreign profile.
 - Directory query: explicit Student name/admission search attributes remain isolated; Name/Admission number/Status sorting is performed in PostgreSQL in both directions with a stable UUID tie-breaker and query-bound cursor.
+- Directory Class projection: use one scoped read for the page and the existing half-open Enrollment/Placement predicates as of school-local today; show Grade/Section, distinguish Not enrolled from No current class, and hide Academic-owned labels when `academic_core` is unavailable.
 - Browser directory: Enter commits search, Back/Forward restores applied URL state, Sort and Filter draft state applies or cancels accessibly, and Manage links reach enrollment history, permitted name correction, enrollment/placement and same-branch class move without duplicating forms.
 - Failure contract: Duplicate admission→409; foreign Person→404; malformed name→422.
 - Required DB effect: Person via People owner and Student; audit/outbox/receipt.

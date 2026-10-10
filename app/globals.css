@@ -11,6 +11,39 @@
 @media(max-width:460px){.container{padding-left:20px;padding-right:20px}.site-header{padding:18px 20px;gap:15px}.site-header nav a:first-child{display:none}.site-header nav{gap:10px}.site-header nav .nav-signin{border:0;padding:8px 0}.hero-copy h1{font-size:50px;letter-spacing:-1.8px}.hero-description{font-size:14px}.workspace-example{padding:16px}.example-top>.badge{font-size:7px}.example-school{min-height:135px}.example-school p{font-size:14px}.floating-note{padding:12px 15px;bottom:-16px}.page-heading{flex-direction:column;gap:15px}.header-actions{width:100%}.gallery-section .section-heading h2{font-size:22px}.padded{padding:20px}.stat-grid{grid-template-columns:1fr}.stat-card{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}.stat-value{font-size:24px}.module-options{grid-template-columns:1fr}.dialog{padding:22px}.dialog-actions{flex-direction:column-reverse}.stepper{gap:12px;font-size:10px}.table-toolbar{padding:18px}.pagination{padding:14px 16px}.login-story-heading{max-width:75%}.login-story h1{font-size:28px}.login-form-inner>h2{font-size:30px}.login-help{align-items:start}.toast{right:20px;bottom:16px}.tooltip{left:auto;right:0;transform:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 
+/* Approved Administrator Students composition. */
+.portal-school-identity{flex:none;margin:0 18px 14px;padding:13px 6px 17px;border-bottom:1px solid #ffffff24;line-height:1.4}
+.portal-school-identity strong,.portal-school-identity span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.portal-school-identity strong{font-size:13px}.portal-school-identity span{margin-top:3px;color:var(--portal-nav-muted);font-size:11px}
+.drawer{width:min(420px,100vw);height:100dvh;max-height:100dvh;padding:0;overflow:hidden;border:0;border-left:1px solid var(--line);border-radius:0}
+.drawer::backdrop{background:#18352d66;backdrop-filter:none}
+.drawer-layout{display:flex;flex-direction:column;height:100%;min-height:0}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;flex:none;min-height:84px;padding:20px 24px;border-bottom:1px solid var(--line)}
+.drawer-header h2{font-size:21px}.drawer-close{width:36px;min-height:36px;padding:4px;font-size:20px;font-weight:400}
+.drawer-body{display:flex;flex:1;min-height:0;flex-direction:column}
+.drawer-attributes{flex:1;min-height:0;margin:0;padding:14px 24px;overflow-y:auto;border-top:0}
+.drawer-attribute>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:48px;padding:13px 0;list-style:none;font-size:13px;font-weight:700;cursor:pointer}
+.drawer-attribute>summary::-webkit-details-marker{display:none}.drawer-attribute>summary::after{content:"⌄";font-size:17px;font-weight:400;line-height:1}.drawer-attribute[open]>summary::after{content:"⌃"}
+.drawer-options,.drawer-attribute>.radio-group{display:grid;gap:0;padding:0 0 14px}
+.drawer-attribute .check-control{min-height:38px;gap:11px}
+.drawer-footer{position:static;flex:none;flex-direction:row;margin:auto 0 0;padding:16px 24px;background:var(--surface);border-top:1px solid var(--line)}
+.toolbar-icon,.action-icon{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.list-search-composition>.toolbar-icon{margin-left:12px;color:var(--muted)}
+.students-directory .list-search-composition select{width:144px;max-width:144px;padding-inline:12px 30px;font-size:12px}
+.students-directory .list-search-composition input{padding-left:10px;font-size:13px}
+.students-directory .list-toolbar{gap:8px}.students-directory .list-toolbar-actions{gap:8px}
+.students-directory .list-toolbar-actions .btn{min-height:40px;padding:8px 14px;border-color:var(--line);font-size:13px;font-weight:600}
+.students-directory-table .data-table{table-layout:fixed}
+.students-directory-table .data-table th:nth-child(1),.students-directory-table .data-table td:nth-child(1){width:49%}
+.students-directory-table .data-table th:nth-child(2),.students-directory-table .data-table td:nth-child(2){width:27%}
+.students-directory-table .data-table th:nth-child(3),.students-directory-table .data-table td:nth-child(3){width:12%}
+.students-directory-table .data-table th:nth-child(4),.students-directory-table .data-table td:nth-child(4){width:12%}
+.students-directory-table .data-table tbody th,.students-directory-table .data-table tbody td{padding:16px 18px;border-top:1px solid var(--line);vertical-align:middle}
+.students-directory-table .data-table tbody th{font-weight:400;text-align:left}
+.students-directory-table .badge{border-radius:999px;padding:3px 9px;white-space:nowrap}
+.student-row-action{gap:7px;font-weight:500}.student-row-action .action-icon{width:15px;height:15px}
+@media(max-width:760px){.portal-school-identity{margin-inline:16px}.drawer-header{min-height:72px;padding:16px 20px}.drawer-attributes{padding:12px 20px}.drawer-footer{justify-content:flex-end;padding:14px 20px}.drawer-footer .btn{width:auto}.students-directory .list-search-composition select{width:140px;max-width:140px}.students-directory-table .data-table{table-layout:auto}.students-directory-table .data-table th:nth-child(n),.students-directory-table .data-table td:nth-child(n){width:auto}}
+
 /* Comfortable operational controls; illustrative artwork keeps its own scale. */
 .btn{font-size:14px}.field>label,legend{font-size:13px}.field input:not([type=checkbox]):not([type=radio]),.field select,.field textarea{font-size:14px}.data-table{font-size:14px}.data-table th{font-size:12px}.person-cell strong{font-size:14px}
 
@@ -465,3 +498,10 @@ body{font-family:var(--font-ui)}
 @media(max-width:460px){.report-stat-grid .stat-card{display:block}.report-stat-grid .stat-value{margin-block:6px}}
 @media(max-width:760px){.setup-readiness-card{align-items:flex-start;flex-direction:column;gap:16px}.setup-readiness-card .btn{width:100%}.dashboard-exception-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:760px){.academic-catalog-row{grid-template-columns:minmax(0,1fr)}.academic-catalog-row>.btn{justify-self:start}.academic-retire-confirm{grid-column:1}.academic-retire-confirm .form-actions{align-items:stretch;flex-direction:column}.academic-retire-confirm .btn{width:100%}}
+
+/* Keep drawer layout rules after legacy responsive recipes in the cascade. */
+.drawer-attributes{margin:0;padding:14px 24px}
+.drawer-attribute>summary{padding:13px 0}
+.drawer-options,.drawer-attribute>.radio-group{padding:0 0 14px}
+.drawer-footer{position:static;bottom:auto;flex-direction:row;justify-content:flex-end;margin:auto 0 0;padding:16px 24px}
+@media(max-width:760px){.drawer-attributes{margin:0;padding:12px 20px}.drawer-attribute>summary{padding:13px 0}.drawer-options,.drawer-attribute>.radio-group{padding:0 0 14px}.drawer-footer{margin:auto 0 0;padding:14px 20px}.drawer-footer .btn{width:auto}}

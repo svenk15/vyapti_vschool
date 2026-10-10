@@ -13,7 +13,7 @@ export function Dialog({open,onClose,title,description,children,drawer=false}:{o
   if(!first){e.preventDefault();node.focus();return;}
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
- }}><div className="spread"><h2 id={`${id}-title`}>{title}</h2><Button variant="ghost" onClick={onClose} aria-label={`Close ${title}`}>×</Button></div>{description&&<p id={`${id}-description`} className="muted">{description}</p>}{children}</dialog>;
+ }}>{drawer?<div className="drawer-layout"><header className="drawer-header"><h2 id={`${id}-title`}>{title}</h2><Button className="drawer-close" variant="ghost" onClick={onClose} aria-label={`Close ${title}`}><span aria-hidden="true">×</span></Button></header>{description&&<p id={`${id}-description`} className="sr-only">{description}</p>}<div className="drawer-body">{children}</div></div>:<><div className="spread"><h2 id={`${id}-title`}>{title}</h2><Button variant="ghost" onClick={onClose} aria-label={`Close ${title}`}>×</Button></div>{description&&<p id={`${id}-description`} className="muted">{description}</p>}{children}</>}</dialog>;
 }
 export function Tabs({items}:{items:{id:string;label:string;content:ReactNode}[]}) {
  const [active,setActive]=useState(0),id=useId();

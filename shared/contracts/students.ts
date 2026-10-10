@@ -1,4 +1,5 @@
-export type StudentEnrollmentSummary = Readonly<{ enrollmentId:string;yearId:string;yearCode:string;yearName:string }>;
+export type StudentClassSummary = Readonly<{ placementId:string;sectionId:string;sectionCode:string;sectionName:string;gradeName:string }>;
+export type StudentEnrollmentSummary = Readonly<{ enrollmentId:string;yearId:string;yearCode:string;yearName:string;currentClass:StudentClassSummary|null }>;
 export type StudentPlacementRecord = Readonly<{ placementId:string;sectionId:string;sectionCode:string;sectionName:string;gradeName:string;validFrom:string;validTo:string;rollNumber:string|null;activeRosterCount:number }>;
 export type StudentEnrollmentHistory = Readonly<{ enrollmentId:string;version:number;yearId:string;yearCode:string;yearName:string;validFrom:string;validTo:string;placements:readonly StudentPlacementRecord[] }>;
 export type EnrollmentOptions = Readonly<{ today:string;enrolledYearIds:readonly string[];years:readonly Readonly<{yearId:string;code:string;name:string;startsOn:string;endsOn:string;sections:readonly Readonly<{sectionId:string;code:string;name:string;gradeName:string}>[]}>[] }>;
