@@ -166,7 +166,7 @@ Dependencies: EX-08. Implementation status: VERIFIED. Human review: PENDING.
 
 ## EX-10 — Adopt administrator attendance and correction screens
 
-Dependencies: EX-07, EX-08. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-07, EX-08. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/admin/attendance/sessions; components/attendance-admin-list.tsx; attendance-scheduler.tsx; attendance-cancel.tsx; attendance-corrections.tsx; lib/server/attendance.ts.
 

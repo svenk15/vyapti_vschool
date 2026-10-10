@@ -71,6 +71,13 @@ The portal UX review reproduced the reported empty-day discrepancy without chang
 
 No product completion is assumed. Pilot deployment/provider, staff activation delivery procedure, backup targets and school retention requirements must be resolved in FND-02 before real-data release. Module-specific risks are listed in DESIGN.md.
 
+### 10 October 2026 — EX-10 administrator experience adoption
+
+- **Source:** `91fcb6ce4b7eb3506016a1f6e80ec741c3801444`; human visual review PENDING.
+- **Implemented:** The existing administrator schedule/list/detail/correct/cancel operations now use shared production page layouts, constrained forms, compact status rows, scoped register facts, explicit revision history and a separated destructive-action panel.
+- **Contracts/schema:** No owner API, authorization rule, table, migration, transaction, lock, version or receipt changed. Application authorization remains active and TEN-03 remains the consolidated production RLS gate.
+- **Evidence:** `pnpm check` passed with 113/113 unit tests; final focused real-PostgreSQL Attendance passed 9/9; final desktop/mobile Playwright passed 2/2 with production builds; six captures were inspected. `pnpm demo:seed` preserved connected fixtures and truthfully reported the current date is not a teaching day. Detailed evidence: `docs/evidence/ex-10/README.md`.
+
 ## Evidence history
 
 ### ATT-04 implementation checkpoint — 5 October 2026

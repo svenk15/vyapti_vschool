@@ -1,6 +1,6 @@
 # Experience implementation state
 
-EX-00 through EX-09 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-10 is the next eligible slice. EX-10–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
+EX-00 through EX-10 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-11 is the next eligible slice. EX-11–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
 
 Authoritative implementation evidence belongs to the live repository module CURRENT_STATE files after EX-00. queue.json starts with no evidence; it is a scheduling projection. Do not copy historical snapshot test counts into a new VERIFIED claim.
 
@@ -50,7 +50,7 @@ No owner API, write behavior, schema, migration, transaction or persisted record
 
 ## Workflow coverage matrix — 10 October 2026
 
-The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-09 evidence it conservatively records 18 implemented-and-verified workflows, 13 existing operations awaiting approved-page alignment, 12 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
+The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-10 evidence it conservatively records 22 implemented-and-verified workflows, 9 existing operations awaiting approved-page alignment, 12 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
 
 ## EX-04 — 10 October 2026
 
@@ -97,3 +97,9 @@ The BE-04 audit confirmed that a generic list/detail query has no assignment res
 EX-09 is VERIFIED with human review PENDING at implementation source `624d5b0b795229c85d85ac7c13d7a19441ec9bf1`. Roster import now presents file selection, immutable server preview and explicit confirmation, and bounded processing/recovery as three clear stages. It displays exact preview and result counts, requires explicit handling of invalid rows, restores durable state after reload, permits cancellation of pending rows and retains the safe error export. Existing upload limits, authorization, owner transactions, replay receipts, retention and cross-scope denial remain unchanged.
 
 `pnpm check` passed all repository gates and 113/113 unit tests. The focused Imports PostgreSQL suite passed 11/11 with all 31 migrations current. The mixed-validity and multi-batch-cancellation Playwright journeys passed 4/4 across desktop/mobile. Four captures were inspected for hierarchy, action placement and overflow. `pnpm demo:seed` passed and preserved both fictional CSV fixtures and private credentials. No schema or migration changed. Evidence: `docs/evidence/ex-09/README.md`. EX-10 is next. TEN-03, production provider/retention policy and native accessibility remain open gates.
+
+## EX-10 — 10 October 2026
+
+EX-10 is VERIFIED with human review PENDING at implementation source `91fcb6ce4b7eb3506016a1f6e80ec741c3801444`. Administrator attendance now uses the shared production hierarchy for its constrained schedule form, compact session directory, scoped session facts, submitted-record correction, immutable revision history and destructive cancellation panel. SCHEDULED, OPEN, SUBMITTED and CANCELLED remain distinct; missing records are never rendered as pupil absence.
+
+`pnpm check` passed all repository gates and 113/113 unit tests. The final focused Attendance PostgreSQL suite passed 9/9 with all 31 migrations current; an earlier run recorded an existing serialization loss in the concurrent enrollment test and is not counted as passing evidence. Final desktop/mobile Playwright passed 2/2 and completed a production build. Six captures were inspected. `pnpm demo:seed` passed and preserved connected fixtures; it truthfully reports that the current date is not a teaching day in the existing demo calendar, with final cross-role date coherence assigned to EX-14. No schema, migration or backend contract changed. Evidence: `docs/evidence/ex-10/README.md`. EX-11 is next. TEN-03 and native accessibility remain open gates.
