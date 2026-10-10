@@ -20,7 +20,7 @@ test.beforeAll(async()=>{
   const student=await students.create(identity,school.organizationId,school.schoolId,{firstName:'Jordan',lastName:'Learner',admissionNumber:`E2E-${randomUUID().slice(0,8).toUpperCase()}`,existingPersonId:null,key:randomUUID()});studentId=student.studentId;
 });
 test.afterAll(async()=>{await students.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();});
-async function signIn(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email',exact:true}).fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/admin$/,{timeout:15000});}
+async function signIn(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email address',exact:true}).fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/admin$/,{timeout:15000});}
 
 test('enrolls once into an open year, refreshes history and class roster count, and rejects duplicate/year mismatch',async({page})=>{
   await signIn(page);await page.goto(`/admin/students/${studentId}`);await expect(page.getByRole('heading',{name:'Enroll in an academic year'})).toBeVisible();

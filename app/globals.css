@@ -38,6 +38,7 @@
 .auth-form-card .field{margin-bottom:0}
 .auth-form-card .btn{align-self:flex-start;min-width:148px}
 .auth-support{margin:18px 2px 0;color:var(--muted);font-size:11px}
+.access-login-password{position:relative}.access-login-password input{padding-right:72px}.access-login-password>.btn{position:absolute;right:4px;top:29px;min-width:auto;min-height:38px;padding-inline:12px}.access-login-help{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:-4px}.access-login-help a{text-align:right}
 .portal-sidebar{width:252px}
 .portal-page-content .container{max-width:1320px;padding-inline:clamp(20px,2.4vw,34px)}
 .portal-page-content .page-space{padding-top:28px}

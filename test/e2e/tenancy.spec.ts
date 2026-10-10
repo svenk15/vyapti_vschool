@@ -19,7 +19,7 @@ test.beforeAll(async()=>{
  foreignBranch=(await db.school.create({data:{id:randomUUID(),organizationId:tenant.organizationId,code:'SECRET',name:'Synthetic ungranted branch',timezone:'Asia/Kolkata',status:'ACTIVE',version:1,createdAt:new Date()}})).id;
 });
 test.afterAll(async()=>{await service.disconnect();await tenancy.disconnect();await db.$disconnect();});
-async function login(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email',exact:true}).fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/admin$/,{timeout:15000});}
+async function login(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email address',exact:true}).fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/admin$/,{timeout:15000});}
 test('context lists grants, switches with a reload, clears selected identity scope, and rejects foreign/ungranted branches',async({page})=>{
  await login(page);const listing=await page.request.get('/api/v1/context');expect(listing.status()).toBe(200);const directory=await listing.json(),org=directory.institutions.find((i:{id:string})=>i.id===primary.organizationId);expect(org.canManage).toBe(true);expect(org.branches.filter((b:{selectable:boolean})=>b.selectable)).toHaveLength(2);expect(org.branches.some((b:{id:string})=>b.id===foreignBranch)).toBe(false);
  const home=await page.request.get('/api/v1/school');expect(home.status()).toBe(200);const first=await home.json();expect(first.organizationId).toBe(primary.organizationId);

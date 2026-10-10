@@ -12,9 +12,10 @@ const input=fixture(),foreign=fixture(),disabled=fixture(),locked=fixture();
 let ids:Awaited<ReturnType<typeof service.provisionSchool>>,foreignIds:typeof ids,disabledIds:typeof ids;
 test.beforeAll(async()=>{const operator={operatorId:randomUUID(),verified:true as const};ids=await service.provisionSchool(input,operator);foreignIds=await service.provisionSchool(foreign,operator);disabledIds=await service.provisionSchool(disabled,operator);await db.userAccount.update({where:{id:disabledIds.accountId},data:{status:"DISABLED",version:{increment:1}}});await service.provisionSchool(locked,operator);for(let i=0;i<5;i++)await service.authenticate(locked.adminEmail,randomBytes(24).toString("hex"));});
 test.afterAll(async()=>{await service.disconnect();await db.$disconnect();});
-async function login(page:Page,email=input.adminEmail,password=input.password){await page.goto("/sign-in");await page.getByRole("textbox",{name:"Email",exact:true}).fill(email);await page.getByLabel(/^Password/).fill(password);await page.getByRole("button",{name:"Sign in",exact:true}).click();}
+async function login(page:Page,email=input.adminEmail,password=input.password){await page.goto("/sign-in");await page.getByRole("textbox",{name:"Email address",exact:true}).fill(email);await page.getByLabel(/^Password/).fill(password);await page.getByRole("button",{name:"Sign in",exact:true}).click();}
 test("logged-out home and setup redirect; API returns private 401",async({page})=>{
  for(const path of ["/admin","/admin/setup"]){await page.goto(path);await expect(page).toHaveURL(/\/sign-in$/);await expect(page.getByRole("heading",{name:"A thoughtful space for your school.",level:1})).toBeVisible();}
+ await page.setViewportSize(test.info().project.name==="mobile"?{width:390,height:844}:{width:1440,height:1000});await page.screenshot({path:`docs/evidence/ex-04/generic-sign-in-${test.info().project.name}.png`,fullPage:true});
  const response=await page.request.get("/api/v1/school");expect(response.status()).toBe(401);expect(response.headers()["cache-control"]).toContain("no-store");
 });
 test("administrator signs in, sees current scope and setup, rejects foreign school, signs out",async({page})=>{

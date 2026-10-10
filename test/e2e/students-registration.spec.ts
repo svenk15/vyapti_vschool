@@ -31,7 +31,7 @@ test.beforeAll(async()=>{
 });
 test.afterAll(async()=>{await db.$disconnect();await students.disconnect();await tenancy.disconnect();await access.disconnect();});
 
-async function signIn(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email',exact:true}).fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/admin$/,{timeout:15000});}
+async function signIn(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email address',exact:true}).fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/admin$/,{timeout:15000});}
 
 test('registers and searches a student, shows un-enrolled detail, rejects duplicate without orphan Person, and hides foreign profile',async({page})=>{
   await signIn(page);await page.goto('/admin/students');
