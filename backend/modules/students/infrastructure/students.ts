@@ -1,7 +1,7 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 import type { Prisma, PrismaClient } from "../../../../generated/prisma/client";
 import type { Identity } from "../../../../shared/contracts/access";
-import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentArchiveResult, StudentDetail, StudentEnrollmentHistory, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
+import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentArchiveResult, StudentDetail, StudentEnrollmentHistory, StudentNameCorrectionResult, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, capabilitiesFor } from "../../access/contracts/index";
 import type { PersonIdentityPort } from "../../people/contracts/person-identity";
 import type { CommandEvidenceWriter } from "../../platform/contracts/command-evidence";
@@ -30,9 +30,9 @@ function decodeCursor(cursor: string | null, expected: Omit<Cursor,"after">, sec
   try { const value=JSON.parse(Buffer.from(payload,"base64url").toString("utf8")) as Cursor;if(value.organizationId!==expected.organizationId||value.schoolId!==expected.schoolId||value.accountId!==expected.accountId||value.searchHash!==expected.searchHash||value.status!==expected.status||typeof value.after!=="string"||!/^[0-9a-f-]{36}$/i.test(value.after))throw new Error();return value.after; }
   catch { throw new AccessError("INVALID_CURSOR"); }
 }
-function profile(row: {id:string;personId:string;version:number;admissionNumber:string;status:string;person:{firstName:string;lastName:string};enrollments?:{id:string;yearId:string;year:{code:string;name:string}}[]}): StudentProfile {
+function profile(row: {id:string;personId:string;version:number;admissionNumber:string;status:string;person:{firstName:string;lastName:string;version:number};enrollments?:{id:string;yearId:string;year:{code:string;name:string}}[]}): StudentProfile {
   const latest=row.enrollments?.[0];
-  return { studentId:row.id,personId:row.personId,version:row.version,admissionNumber:row.admissionNumber,displayName:displayStudentName(row.person.firstName,row.person.lastName),status:row.status as "ACTIVE"|"ARCHIVED",enrollment:latest?{enrollmentId:latest.id,yearId:latest.yearId,yearCode:latest.year.code,yearName:latest.year.name}:null };
+  return { studentId:row.id,personId:row.personId,version:row.version,admissionNumber:row.admissionNumber,displayName:displayStudentName(row.person.firstName,row.person.lastName),firstName:row.person.firstName,lastName:row.person.lastName,personVersion:row.person.version,status:row.status as "ACTIVE"|"ARCHIVED",enrollment:latest?{enrollmentId:latest.id,yearId:latest.yearId,yearCode:latest.year.code,yearName:latest.year.name}:null };
 }
 function civilDate(date:Date){return date.toISOString().slice(0,10);}
 function schoolToday(now:Date,timezone:string){const parts=new Intl.DateTimeFormat("en-US",{timeZone:timezone,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(now),values=Object.fromEntries(parts.map(part=>[part.type,part.value]));return `${values.year}-${values.month}-${values.day}`;}
@@ -92,18 +92,19 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
     if(this.cursorSecret.length<32) throw new AccessError("UNAVAILABLE");
     const searchHash=sha(query.search),scope={organizationId,schoolId,accountId:actor.accountId,searchHash,status:query.status},after=decodeCursor(query.cursor,scope,this.cursorSecret);
     const where:Prisma.StudentWhereInput={organizationId,schoolId,...(query.status!=="ALL"?{status:query.status}:{}),...(after?{id:{gt:after}}:{}),...(query.search?{OR:[{admissionNumber:{contains:query.search,mode:"insensitive"}},{person:{firstName:{contains:query.search,mode:"insensitive"}}},{person:{lastName:{contains:query.search,mode:"insensitive"}}}]}:{})};
-    const rows=await tx.student.findMany({where,orderBy:{id:"asc"},take:query.limit+1,include:{person:{select:{firstName:true,lastName:true}}}}),hasMore=rows.length>query.limit,items=rows.slice(0,query.limit),academicActive=await this.moduleActive(tx,organizationId,schoolId,"academic_core"),enrollments=academicActive&&items.length?await tx.enrollment.findMany({where:{organizationId,schoolId,studentId:{in:items.map(item=>item.id)}},orderBy:{validFrom:"desc"},include:{year:{select:{code:true,name:true}}}}):[],latest=new Map<string,typeof enrollments[number]>();for(const enrollment of enrollments)if(!latest.has(enrollment.studentId))latest.set(enrollment.studentId,enrollment);
+    const rows=await tx.student.findMany({where,orderBy:{id:"asc"},take:query.limit+1,include:{person:{select:{firstName:true,lastName:true,version:true}}}}),hasMore=rows.length>query.limit,items=rows.slice(0,query.limit),academicActive=await this.moduleActive(tx,organizationId,schoolId,"academic_core"),enrollments=academicActive&&items.length?await tx.enrollment.findMany({where:{organizationId,schoolId,studentId:{in:items.map(item=>item.id)}},orderBy:{validFrom:"desc"},include:{year:{select:{code:true,name:true}}}}):[],latest=new Map<string,typeof enrollments[number]>();for(const enrollment of enrollments)if(!latest.has(enrollment.studentId))latest.set(enrollment.studentId,enrollment);
     const nextCursor=hasMore&&items.length?encodeCursor({...scope,after:items.at(-1)!.id},this.cursorSecret):null;
     return {items:items.map(item=>profile({...item,enrollments:latest.has(item.id)?[latest.get(item.id)!]:[]})),nextCursor};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
   async get(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<StudentDetail>{try{return await this.db.$transaction(async tx=>{
     const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",false);
-    const row=await tx.student.findFirst({where:{id:studentId,organizationId,schoolId},include:{person:{select:{firstName:true,lastName:true}}}});
+    const row=await tx.student.findFirst({where:{id:studentId,organizationId,schoolId},include:{person:{select:{firstName:true,lastName:true,version:true}}}});
     if(!row) throw new AccessError("NOT_FOUND");
-    if(!await this.moduleActive(tx,organizationId,schoolId,"academic_core"))return {...profile(row),history:[]};
+    const personContext=await this.people.correctionContext(tx,organizationId,row.personId),studentReferences=await tx.student.count({where:{organizationId,personId:row.personId}}),nameFields={nameCorrectionAllowed:studentReferences===1&&!personContext.hasEmployee,nameHistory:personContext.history.map(item=>({id:item.id,version:item.version,previousDisplayName:displayStudentName(item.previousFirstName,item.previousLastName),correctedDisplayName:displayStudentName(item.correctedFirstName,item.correctedLastName),reason:item.reason,occurredAt:item.occurredAt}))};
+    if(!await this.moduleActive(tx,organizationId,schoolId,"academic_core"))return {...profile(row),history:[],...nameFields};
     const enrollments=await tx.enrollment.findMany({where:{organizationId,schoolId,studentId},orderBy:{validFrom:"desc"},include:{year:{select:{code:true,name:true}},placements:{where:{organizationId,schoolId},orderBy:{validFrom:"asc"},include:{section:{select:{code:true,name:true,grade:{select:{name:true}}}}}}}}),today=schoolToday(this.now(),guard.timezone),todayDate=new Date(`${today}T00:00:00.000Z`),counts=await tx.sectionPlacement.groupBy({by:["sectionId"],where:{organizationId,schoolId,validFrom:{lte:todayDate},validTo:{gt:todayDate},enrollment:{is:{year:{is:{status:"OPEN"}}}}},_count:{_all:true}}),rosterCounts=new Map(counts.map(count=>[count.sectionId,count._count._all]));
-    return {...profile({...row,enrollments}),history:enrollmentHistory(enrollments,rosterCounts)};
+    return {...profile({...row,enrollments}),history:enrollmentHistory(enrollments,rosterCounts),...nameFields};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
   async findExistingPeople(actor:Identity,organizationId:string,schoolId:string,exactName:string):Promise<readonly ExistingPersonChoice[]>{try{return await this.db.$transaction(async tx=>{
@@ -161,18 +162,32 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
   async create(actor:Identity,organizationId:string,schoolId:string,input:StudentInput&{key:string}):Promise<StudentProfile&{replayed:boolean}>{try{return await this.db.$transaction(async tx=>{
     const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true),command="StudentRegistered",hash=inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,...input});
     const prior=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:{organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key}}});
-    if(prior){if(prior.inputHash!==hash)throw new AccessError("IDEMPOTENCY_CONFLICT");const id=(prior.response as {studentId?:unknown}).studentId;if(typeof id!=="string")throw new AccessError("UNAVAILABLE");const row=await tx.student.findFirst({where:{id,organizationId,schoolId},include:{person:{select:{firstName:true,lastName:true}}}});if(!row)throw new AccessError("NOT_FOUND");return {...profile(row),replayed:true};}
+    if(prior){if(prior.inputHash!==hash)throw new AccessError("IDEMPOTENCY_CONFLICT");const id=(prior.response as {studentId?:unknown}).studentId;if(typeof id!=="string")throw new AccessError("UNAVAILABLE");const row=await tx.student.findFirst({where:{id,organizationId,schoolId},include:{person:{select:{firstName:true,lastName:true,version:true}}}});if(!row)throw new AccessError("NOT_FOUND");return {...profile(row),replayed:true};}
     if(await tx.student.findFirst({where:{organizationId,schoolId,admissionNumber:input.admissionNumber},select:{id:true}}))throw new AccessError("CONFLICT");
     const person=input.existingPersonId?await this.people.findById(tx,organizationId,input.existingPersonId):await this.people.create(tx,{organizationId,firstName:input.firstName,lastName:input.lastName});
     if(!person)throw new AccessError("NOT_FOUND");
     if(await tx.student.findFirst({where:{organizationId,schoolId,personId:person.id},select:{id:true}}))throw new AccessError("CONFLICT");
     const now=this.now(),id=randomUUID();
-    const row=await tx.student.create({data:{id,organizationId,schoolId,personId:person.id,admissionNumber:input.admissionNumber,status:"ACTIVE",version:1,createdAt:now},include:{person:{select:{firstName:true,lastName:true}}}});
+    const row=await tx.student.create({data:{id,organizationId,schoolId,personId:person.id,admissionNumber:input.admissionNumber,status:"ACTIVE",version:1,createdAt:now},include:{person:{select:{firstName:true,lastName:true,version:true}}}});
     const result=profile(row),safeReceipt={studentId:id,version:1,status:"ACTIVE"},next=guard.configurationVersion+1,changed=await tx.school.updateMany({where:{organizationId,id:schoolId,configurationVersion:guard.configurationVersion},data:{configurationVersion:next,version:{increment:1}}});
     if(changed.count!==1)throw new AccessError("STALE_VERSION");
     const occurredAt=now.toISOString(),requestId=randomUUID();
     await this.evidence(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response:{...safeReceipt,resourceId:id},before:{},after:{version:1,status:"ACTIVE"},reason:"Student registration",requestId,occurredAt:occurredAt,resourceType:"Student",module:"students"});
     return {...result,replayed:false};
+  },{isolationLevel:"Serializable",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
+
+  async correctName(actor:Identity,organizationId:string,schoolId:string,studentId:string,input:{expectedPersonVersion:number;firstName:unknown;lastName?:unknown;reason:string;key:string}):Promise<StudentNameCorrectionResult>{try{return await this.db.$transaction(async tx=>{
+    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true),command="StudentPersonNameCorrected",hash=inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,studentId,...input}),scope={organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key};
+    const prior=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:scope}});
+    if(prior){if(prior.inputHash!==hash)throw new AccessError("IDEMPOTENCY_CONFLICT");const value=prior.response as {studentId?:unknown;personVersion?:unknown;revisionId?:unknown};if(value.studentId!==studentId||typeof value.personVersion!=="number"||typeof value.revisionId!=="string")throw new AccessError("UNAVAILABLE");return {studentId,personVersion:value.personVersion,revisionId:value.revisionId,replayed:true};}
+    const student=await tx.student.findFirst({where:{id:studentId,organizationId,schoolId},select:{id:true,personId:true}});if(!student)throw new AccessError("NOT_FOUND");
+    const person=await this.people.findById(tx,organizationId,student.personId);if(!person)throw new AccessError("NOT_FOUND");if(person.version!==input.expectedPersonVersion)throw new AccessError("STALE_VERSION");
+    const references=await tx.student.findMany({where:{organizationId,personId:student.personId},select:{id:true,schoolId:true},take:2});if(references.length!==1||references[0]!.id!==student.id||references[0]!.schoolId!==schoolId)throw new AccessError("PERSON_SHARED");
+    const corrected=await this.people.correctName(tx,{organizationId,schoolId,personId:student.personId,actorAccountId:actor.accountId,expectedVersion:input.expectedPersonVersion,firstName:input.firstName,lastName:input.lastName,reason:input.reason});
+    const schoolUpdated=await tx.school.updateMany({where:{organizationId,id:schoolId,configurationVersion:guard.configurationVersion},data:{configurationVersion:{increment:1},version:{increment:1}}});if(schoolUpdated.count!==1)throw new AccessError("STALE_VERSION");
+    const response={studentId,personVersion:corrected.personVersion,revisionId:corrected.revisionId},occurredAt=this.now().toISOString();
+    await this.evidence(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response:{...response,resourceId:studentId,version:corrected.personVersion,status:"CORRECTED"},before:{personVersion:input.expectedPersonVersion},after:{personVersion:corrected.personVersion},reason:"Student identity correction",requestId:randomUUID(),occurredAt,resourceType:"Student",module:"students"});
+    return {...response,replayed:false};
   },{isolationLevel:"Serializable",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
 
   async transfer(actor:Identity,organizationId:string,schoolId:string,enrollmentId:string,input:{expectedVersion:number;toSectionId:string;effectiveDate:string;rollNumber?:string;reason:string;key:string}):Promise<StudentTransferResult>{try{return await this.db.$transaction(async tx=>{

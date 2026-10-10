@@ -1,5 +1,5 @@
 {
-  "revision": "4.3",
+  "revision": "4.4",
   "prefix": "vs_",
   "tables": [
     {
@@ -760,6 +760,26 @@
           "organization_id"
         ],
         "intendedPolicy": "Require verified organization scope and current institution authorization; application resource permission remains required.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "people",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "PersonNameRevision",
+      "owner": "people",
+      "table": "vs_people_person_name_revision",
+      "status": "MIGRATED",
+      "design": "docs/modules/people/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; person_id uuid; version int; previous_first_name varchar(100); previous_last_name varchar(100); corrected_first_name varchar(100); corrected_last_name varchar(100); reason varchar(500); actor_account_id uuid; school_id uuid; occurred_at timestamptz(3)",
+      "responsibility": "Append-only People-owned identity correction history. Names and reason stay in this owned storage and are excluded from receipts/outbox/audit diffs.",
+      "constraints": "FK(organization_id,person_id)\u2192Person; FK actor account; scoped School context FK; UNIQUE(organization_id,person_id,version); index(organization_id,person_id,version desc); CHECK version>=2, bounded names/reason; append-only trigger",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization context; application authorization must additionally prove the selected branch Student and exclusive Person ownership.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "people",
         "closureGate": "TEN-03"

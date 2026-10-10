@@ -20,4 +20,5 @@ export const studentsGateway={
   async enroll(identity:Identity|null,input:Parameters<StudentsFacade["enroll"]>[3]){const current=await scope(identity);return service().enroll(identity,current.organizationId,current.schoolId,input);},
   async transfer(identity:Identity|null,enrollmentId:string,input:Parameters<StudentsFacade["transfer"]>[4]){const current=await scope(identity);return service().transfer(identity,current.organizationId,current.schoolId,enrollmentId,input);},
   async archive(identity:Identity|null,studentId:string,input:Parameters<StudentsFacade["archive"]>[4]){const current=await scope(identity);return service().archive(identity,current.organizationId,current.schoolId,studentId,input);},
+  async correctName(identity:Identity|null,studentId:string,input:Parameters<StudentsFacade["correctName"]>[4]){const current=await scope(identity);return service().correctName(identity,current.organizationId,current.schoolId,studentId,input);},
 };

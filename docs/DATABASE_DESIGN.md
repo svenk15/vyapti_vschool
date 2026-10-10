@@ -80,6 +80,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SourceStudentMap | `vs_imports_source_student_map` | imports | MIGRATED | [imports LLD](modules/imports/DESIGN.md) |
 | Employee | `vs_people_employee` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | Person | `vs_people_person` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
+| PersonNameRevision | `vs_people_person_name_revision` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | AuditEntry | `vs_platform_audit_entry` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | CommandReceipt | `vs_platform_command_receipt` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | OperatorAuditEntry | `vs_platform_operator_audit` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |

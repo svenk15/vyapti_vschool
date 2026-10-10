@@ -51,3 +51,13 @@ test('registers and searches a student, shows un-enrolled detail, rejects duplic
   const foreign=await page.request.get(`/api/v1/students/${foreignStudentId}`);expect(foreign.status()).toBe(404);await page.goto(`/admin/students/${foreignStudentId}`);await expect(page).toHaveURL(/not-found|admin\/students/i);await expect(page.getByText('FOREIGN-1')).toHaveCount(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
+
+test('corrects an exclusive student name and compares a stale browser attempt with the current Person',async({page})=>{
+  const identity={accountId:school.accountId,tokenVersion:1},created=await students.create(identity,school.organizationId,school.schoolId,{firstName:'Asha',lastName:'Exampel',admissionNumber:`NAME-${randomUUID().slice(0,8)}`,existingPersonId:null,key:randomUUID()});
+  await signIn(page);await page.goto(`/admin/students/${created.studentId}`);await expect(page.getByRole('heading',{name:'Correct student name'})).toBeVisible();
+  await page.getByLabel('Last name').fill('Example');await page.getByLabel('Reason for correction').fill('Correct surname spelling');await page.getByRole('button',{name:'Save name correction'}).click();await expect(page.getByRole('status').filter({hasText:'Correction saved'})).toBeVisible();await expect(page.getByRole('table',{name:'Recent name correction history'})).toContainText('Asha Exampel → Asha Example');
+  await page.screenshot({path:`docs/evidence/sa-comp-04/name-correction-${test.info().project.name}.png`,fullPage:true});
+  const current=await db.person.findUniqueOrThrow({where:{id:created.personId},select:{version:true}});await db.person.update({where:{id:created.personId},data:{firstName:'Asha',lastName:'Current',version:current.version+1}});
+  await page.getByLabel('Last name').fill('Attempted');await page.getByLabel('Reason for correction').fill('Verify stale comparison');await page.getByRole('button',{name:'Save name correction'}).click();await expect(page.getByRole('status').filter({hasText:'Person changed since this page loaded'})).toContainText('Attempted: Asha Attempted. Current: Asha Current');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});

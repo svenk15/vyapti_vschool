@@ -1,6 +1,8 @@
 import {describe,expect,it,vi} from 'vitest';
 import {employeeInput,displayName} from '../../backend/modules/people/domain/employee';
 import {createPeopleUseCases,type PeopleRepository} from '../../backend/modules/people/application/employees';
+import {createPersonIdentityUseCases} from '../../backend/modules/people/application/person-identity';
+import type {PersonIdentityRepository} from '../../backend/modules/people/contracts/person-identity';
 
 describe('employee profile rules',()=>{
  it('normalizes bounded names and validates optional contact and civil dates',()=>{
@@ -11,5 +13,14 @@ describe('employee profile rules',()=>{
   const listEmployees=vi.fn(async()=>({employees:[],nextCursor:null})),repository={listEmployees,createEmployee:vi.fn()} as unknown as PeopleRepository,service=createPeopleUseCases(repository),identity={accountId:'00000000-0000-4000-8000-000000000001',tokenVersion:1},organization='00000000-0000-4000-8000-000000000002',school='00000000-0000-4000-8000-000000000003';
   await service.workspace(identity,organization,school,{search:' Ada ',limit:'25',cursor:'signed-token'});expect(listEmployees).toHaveBeenCalledWith(identity,organization,school,{search:'Ada',limit:25,cursor:'signed-token'});
   expect(()=>service.workspace(identity,organization,school,{limit:101})).toThrow('VALIDATION');expect(()=>service.workspace(identity,organization,school,{cursor:'x'.repeat(2049)})).toThrow('INVALID_CURSOR');
+ });
+});
+
+describe('person name correction rules',()=>{
+ it('normalizes the owned name and reason before invoking persistence',async()=>{
+  const correctName=vi.fn(async()=>({personVersion:2,revisionId:'00000000-0000-4000-8000-000000000009'})),repository={correctName} as unknown as PersonIdentityRepository,service=createPersonIdentityUseCases(repository),transaction={};
+  await service.correctName(transaction,{organizationId:'00000000-0000-4000-8000-000000000001',schoolId:'00000000-0000-4000-8000-000000000002',personId:'00000000-0000-4000-8000-000000000003',actorAccountId:'00000000-0000-4000-8000-000000000004',expectedVersion:1,firstName:'  Áda ',lastName:' Lovelace ',reason:'  Correct spelling  '});
+  expect(correctName).toHaveBeenCalledWith(transaction,expect.objectContaining({firstName:'Áda',lastName:'Lovelace',reason:'Correct spelling',expectedVersion:1}));
+  expect(()=>service.correctName(transaction,{organizationId:'bad',schoolId:'bad',personId:'bad',actorAccountId:'bad',expectedVersion:0,firstName:'',reason:'no'})).toThrow('VALIDATION');
  });
 });

@@ -35,6 +35,18 @@ Add student 0007, refresh and search by admission number; see Not enrolled; atte
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## SA-COMP-04 / SA-20 — Correct an exclusive student identity
+
+Depends on: STU-01
+
+1. Reuse the scoped Student detail selection and require current `student.manage` plus active `student_core` availability.
+2. Lock through the existing mutation guard and selected Person; reject if another institution Student or any Employee references that Person.
+3. Invoke the People-owned correction port in the same transaction. CAS Person.version and append immutable PersonNameRevision; preserve Student/enrollment/attendance rows.
+4. Persist PII-free receipt/audit/outbox evidence and show bounded People history on Student detail.
+5. On stale write, refetch the authorized detail and compare attempted/current names; on shared identity, explain identity-steward recovery without leaking another profile.
+
+Acceptance: unit name/version/reason validation; real PostgreSQL success, rollback, replay, shared/cross-scope denial and registration race; desktop/mobile correction, reload history, validation and stale recovery. Add only the People history migration and its Path A registry contract.
+
 ## Experience overlay consumption
 
 EX-08 adopts directory, detail, registration, enrollment, transfer and archive. BE-04 must first verify the live teacher read policy. Existing-Person selection remains suppressed in the adopted UI until its exact authorized identifier contract is reconciled; this does not remove ordinary Student list search.

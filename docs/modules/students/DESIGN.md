@@ -203,6 +203,16 @@ sequenceDiagram
 
 **Design-readiness note (5 October 2026):** All core ownership, scoped predicates, guard ordering, version/idempotency behavior, date boundaries, roster impact query, permission/module checks and safe failure outcomes are defined above. No new table or migration is required; current Student/Enrollment/Placement constraints and the migrated AttendanceSession status/School lock are sufficient. The one permitted cross-owner read is the Attendance PlacementImpact facade enlisted on the Student transaction; neither module writes the other's rows. Automated acceptance does not require STU-02 or ATT-01 human reviews to pass. No unresolved product decision blocks STU-03.
 
+## SA-COMP-04 / SA-20 — Review and correct a student identity
+
+The detail route retains its established branch-scoped Student read and adds the People-owned name version/history projection defined in [People DESIGN](../people/DESIGN.md#sa-comp-04--correct-an-exclusive-student-person-name). A School administrator needs `student.manage`, active `student_core` release/entitlement/branch activation and an exact Student in the current branch. Viewing this record grants no Fees, Health, staff or other module permission.
+
+The mutation is `POST /api/v1/students/:id/name-correction` with `expectedPersonVersion`, `firstName`, `lastName?`, `reason` and a header/body-equal key. Students rechecks the selected Student and requires its Person to have exactly one Student reference in the institution. It then calls the enlisted People name port, which blocks Employee/shared identity, owns the Person CAS and appends immutable history. Student, enrollment and attendance history never change. Receipt/audit/outbox carry IDs, versions and outcome only; corrected and previous names live solely in Person and PersonNameRevision.
+
+The detail form preserves safe attempted values on validation/stale failure. On `STALE_VERSION`, it refetches the same authorized detail and presents attempted versus current display name and version before allowing another deliberate submit. `PERSON_SHARED` explains that an identity steward must handle the shared record without disclosing where else it is used. Success refreshes the page and shows the new revision, reason and time.
+
+Verification covers authorization, cross-scope selection, exclusive-reference race, shared Employee denial, exact replay, changed-key input, version CAS, rollback and persisted history in real PostgreSQL. Playwright covers correction/reload and an independently introduced stale edit on desktop/mobile. The history migration is People-owned, INSTITUTION-scoped Path A metadata with TEN-03 closure.
+
 ## Migration, retention and handoff
 
 Implement tables only in the task that first uses them; migrate from empty database and the previous task checkpoint. Add scoped unique indexes before composite FKs; detect existing duplicates before adding constraints. SQL append-only/null-campus/range safeguards must appear in reviewed migrations and real-DB tests. No seed may erase prior data. Use synthetic fixtures and clean only owned test records. Preserve schema-compatible app rollback; use a reviewed forward migration when incompatible. Retention changes must preserve required immutable evidence and legal holds under the school-approved policy, not an ad hoc DELETE.

@@ -1,9 +1,9 @@
 import type { Identity } from "../../../../shared/contracts/access";
-import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentArchiveResult, StudentDetail, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
+import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentArchiveResult, StudentDetail, StudentNameCorrectionResult, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, uuidPattern } from "../../access/contracts/index";
 import type { EnlistedStudentRegistrationPort } from "../contracts/enlisted-student-registration";
 import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
-import { archiveInput, enrollmentInput, exactSelectionName, studentInput, studentListQuery, transferInput } from "../domain/student";
+import { archiveInput, enrollmentInput, exactSelectionName, nameCorrectionInput, studentInput, studentListQuery, transferInput } from "../domain/student";
 
 export interface AttendanceStudentImpactPort {
   hasFrozenSessions(transaction:object,input:{organizationId:string;schoolId:string;sectionIds:readonly string[];fromDate:string;toDate:string}):Promise<boolean>;
@@ -18,6 +18,7 @@ export interface StudentRepository {
   enroll(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof enrollmentInput>&{key:string}):Promise<EnrollmentResult>;
   transfer(actor:Identity,organizationId:string,schoolId:string,enrollmentId:string,input:ReturnType<typeof transferInput>&{key:string}):Promise<StudentTransferResult>;
   archive(actor:Identity,organizationId:string,schoolId:string,studentId:string,input:ReturnType<typeof archiveInput>&{key:string}):Promise<StudentArchiveResult>;
+  correctName(actor:Identity,organizationId:string,schoolId:string,studentId:string,input:ReturnType<typeof nameCorrectionInput>&{key:string}):Promise<StudentNameCorrectionResult>;
 }
 
 export type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort};
@@ -46,6 +47,7 @@ export function createStudentUseCases(repository: StudentRepository) {
     enroll(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{studentId:unknown;yearId:unknown;sectionId:unknown;startsOn:unknown;lastDay:unknown;rollNumber?:unknown;key:unknown}){return repository.enroll(actor(identity),id(organizationId),id(schoolId),{...enrollmentInput(input),key:key(input.key)});},
     transfer(identity:Identity|null,organizationId:unknown,schoolId:unknown,enrollmentId:unknown,input:{expectedVersion:unknown;toSectionId:unknown;effectiveDate:unknown;rollNumber?:unknown;reason:unknown;key:unknown}){return repository.transfer(actor(identity),id(organizationId),id(schoolId),id(enrollmentId),{...transferInput(input),key:key(input.key)});},
     archive(identity:Identity|null,organizationId:unknown,schoolId:unknown,studentId:unknown,input:{expectedVersion:unknown;reason:unknown;key:unknown}){return repository.archive(actor(identity),id(organizationId),id(schoolId),id(studentId),{...archiveInput(input),key:key(input.key)});},
+    correctName(identity:Identity|null,organizationId:unknown,schoolId:unknown,studentId:unknown,input:{expectedPersonVersion:unknown;firstName:unknown;lastName?:unknown;reason:unknown;key:unknown}){return repository.correctName(actor(identity),id(organizationId),id(schoolId),id(studentId),{...nameCorrectionInput(input),key:key(input.key)});},
   };
 }
 

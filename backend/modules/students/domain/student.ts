@@ -69,6 +69,7 @@ export function transferInput(input:{expectedVersion:unknown;toSectionId:unknown
   return {expectedVersion:expectedVersion(input.expectedVersion),toSectionId:uuid(input.toSectionId),effectiveDate:civilDate(input.effectiveDate),rollNumber,reason:reasonText(input.reason)};
 }
 export function archiveInput(input:{expectedVersion:unknown;reason:unknown}){return {expectedVersion:expectedVersion(input.expectedVersion),reason:reasonText(input.reason)};}
+export function nameCorrectionInput(input:{expectedPersonVersion:unknown;firstName:unknown;lastName?:unknown;reason:unknown}){return {expectedPersonVersion:expectedVersion(input.expectedPersonVersion),firstName:input.firstName,lastName:input.lastName,reason:reasonText(input.reason)};}
 function uuid(value:unknown){if(typeof value!=="string"||!uuidPattern.test(value))throw new AccessError("VALIDATION");return value.toLowerCase();}
 
 export function displayStudentName(firstName: string, lastName: string): string { return `${firstName} ${lastName}`.trim(); }

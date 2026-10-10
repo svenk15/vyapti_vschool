@@ -14,7 +14,7 @@ Person aggregate owns organization-local display identity. Employee is a school 
 
 PER-ADR-001: stable person identity and separate school profiles. Creating similarly named people is permitted, while suggested matches need explicit human resolution. Alternative uniqueness on contact email rejected because families share addresses.
 
-PER-ADR-002: organization-wide person corrections are restricted operator maintenance in Phase 1; ordinary admins cannot mutate shared identity across schools. This narrows scope without weakening cross-school isolation.
+PER-ADR-002: organization-wide or shared-profile Person corrections are restricted identity-steward maintenance in Phase 1. SA-COMP-04 permits a narrower school-administrator correction only when the selected Person is referenced by exactly one Student in the institution and by no Employee. The Students owner proves the exact current-branch Student selection and institution-wide Student exclusivity under the Person lock; People proves no Employee reference and owns the name transition/history. Shared identities fail closed with `PERSON_SHARED`. This exception cannot rename another branch's pupil or a staff/account-bound identity.
 
 ## Physical data contract
 
@@ -23,12 +23,15 @@ PER-01 installs Person, Employee and the Access-owned AccountPersonBinding table
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
 | `vs_people_person` (Person) | id uuid PK; organization_id uuid; first_name varchar(100); last_name varchar(100) default empty; contact_email varchar(254) nullable; version int; created_at timestamptz(3) | Canonical name/contact; email contact is not verified login ownership. Minimal pilot PII, no health/document fields. | FK organization; UNIQUE(organization_id,id); index(organization_id,last_name,id); no email/name uniqueness |
+| `vs_people_person_name_revision` (PersonNameRevision) | id uuid PK; organization_id uuid; person_id uuid; version int; previous_first_name varchar(100); previous_last_name varchar(100); corrected_first_name varchar(100); corrected_last_name varchar(100); reason varchar(500); actor_account_id uuid; school_id uuid; occurred_at timestamptz(3) | Append-only People-owned identity correction history. Names and reason stay in this owned storage and are excluded from receipts/outbox/audit diffs. | FK(organization_id,person_id)→Person; FK actor account; scoped School context FK; UNIQUE(organization_id,person_id,version); index(organization_id,person_id,version desc); CHECK version>=2, bounded names/reason; append-only trigger |
 | `vs_people_employee` (Employee) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int | School institutional profile; links rather than duplicates identity. | Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end |
 | `vs_academics_teacher` (Teacher) | id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int | Academics-owned teacher eligibility, not an account or login. | Scoped FK(scope,employee_id)→Employee(scope,id); UNIQUE(scope,employee_id); UNIQUE(scope,id); index(scope,active,employee_id); Path A RLS metadata; TEN-03 enforcement gate |
 
 ## Read workflows and joins
 
-Staff list: Employee filtered by selected school → Person on organization/id → optional Teacher on scope/employeeId → AccountPersonBinding on organization/personId → current SchoolMembership for that account. Return staff name/number/status and portal-access badge, never password/token. A Person is viewable only through an authorized same-school profile. Organization-wide contact/name edits must lock every school in which that Person has a profile in sorted order and require explicit organization identity-steward operator authority; Phase 1 admin UI only creates people and manages school Employee, so it cannot silently change another school's shared identity.
+Staff list: Employee filtered by selected school → Person on organization/id → optional Teacher on scope/employeeId → AccountPersonBinding on organization/personId → current SchoolMembership for that account. Return staff name/number/status and portal-access badge, never password/token. A Person is viewable only through an authorized same-school profile. Organization-wide contact/name edits must lock every school in which that Person has a profile in sorted order and require explicit organization identity-steward operator authority; the school-admin exception below cannot change a shared identity.
+
+SA-COMP-04's deliberately narrow read is Student detail → exact scoped Student → organization Person → PersonNameRevision ordered by version descending, bounded to 20. It runs only after `student.manage` authorization. The administrator path is absent when any other institution Student or any Employee references the Person. AccountPersonBinding is currently created only for an Employee Person, so the Employee exclusion also blocks bound login identities. Future Person consumers must join the exclusivity contract before this command can remain enabled.
 
 ## Screen contract
 
@@ -139,6 +142,43 @@ sequenceDiagram
 **Verification:** Unit — Input validation and safe errors. Functional PostgreSQL — Scoped Teacher FK/uniqueness, verified same-school binding, wrong-account/foreign-membership rejection, binding uniqueness race, atomic cross-owner rollback and same-day offboarding CAS. E2E — Enable eligibility, bind the intended synthetic active teacher account, refresh, reject a second binding; end employment and confirm eligibility becomes disabled. Assignment/session impact race evidence belongs to ACA-03/ATT-01 when those tables exist.
 
 **Design-readiness note (4 October 2026):** Schema ownership is settled: People owns Employee lifecycle; Academics owns Teacher eligibility; Access owns the existing organization-local AccountPersonBinding keyed uniquely by `(organization_id,account_id)` and `(organization_id,person_id)`. A `user.manage` school administrator may bind only after an explicit out-of-band identity check and records a non-sensitive verification reference/reason; email equality, activation, or possession of a login alone never proves person identity. The operation enlists Access and Academics in one account→Organization→School guarded transaction; binding races roll back all owners. Dated dependency snapshot on 4 October: PER-01 VERIFIED/PENDING, IAM-03 VERIFIED/PENDING, ACA-01 VERIFIED/PENDING. PER-01 and ACA-01 pending reviews do not block PER-02; IAM-03 has the explicit owner-acceptance gate recorded in Access CURRENT_STATE and must be PASSED before PER-02 begins. CURRENT_STATE tables remain authoritative. No new binding schema is required. Path A defers database enforcement to TEN-03 while application authorization remains active.
+
+## SA-COMP-04 — Correct an exclusive student Person name
+
+**Owner contract:** Students owns exact branch Student selection and current `student.manage` authorization. People owns Person name validation, the version transition and immutable correction history. Students invokes the People `correctName` port with the same opaque transaction; neither application layer imports Prisma or the other owner's repository. The protected detail query composes the People history port after the scoped Student read.
+
+**Input / output:** `studentId`, `expectedPersonVersion`, `firstName`, optional `lastName`, `reason` (5–500), stable key. Success returns only `{studentId,personVersion,revisionId,replayed}`; names are omitted from receipt, audit and outbox payloads. Detail adds current `personVersion`, `nameCorrectionAllowed` and at most 20 authorized People history entries. Transport is `POST /api/v1/students/:id/name-correction` through the Students gateway because the exact selected Student is the resource authority.
+
+**Transaction and concurrency:** acquire the existing account→Organization SHARE→School UPDATE guards, then lock Person `FOR UPDATE` before the exclusivity query and CAS. Existing-Person Student registration also locks the selected Person, so a correction cannot race another branch attaching that identity. Under the lock, Students requires exactly one institution Student reference and that it is the selected scoped record; People requires no Employee reference. People inserts revision `expectedPersonVersion+1` and updates Person by `(organization_id,id,version)`. School revision, PII-free command receipt, platform audit/outbox and owner rows commit atomically at SERIALIZABLE isolation. Same key/same input reauthorizes and returns the original IDs/version; changed input conflicts.
+
+**Failures and recovery:** foreign/missing Student→404; shared Student/Employee identity→409 `PERSON_SHARED` with identity-steward guidance; same normalized name→409; stale Person version→409 and the browser refetches the authorized detail to compare attempted and current names; malformed names/reason→422; permission/session/module failures retain existing safe mappings; evidence/database failure→503 with same-key retry. No route exposes contact email, other branches, foreign usage counts, tokens, or raw database errors.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant H as Students HTTP/gateway
+  participant S as Students use case/repository
+  participant P as People name port
+  participant D as PostgreSQL
+  A->>H: Correct selected student's name, version, reason, key
+  H->>S: Verified session and current branch
+  S->>D: Lock account, organization, school, then Person
+  S->>D: Re-read exact scoped Student and institution Student references
+  S->>P: correctName in the same opaque transaction
+  P->>D: Reject Employee use; CAS Person; append PersonNameRevision
+  alt permitted and current
+    S->>D: Commit school revision and PII-free evidence/receipt
+    S-->>H: studentId, personVersion, revisionId
+    H-->>A: Refresh current name and history
+  else shared or stale
+    P-->>S: Typed conflict; no partial write
+    H-->>A: Guidance or current-versus-attempted comparison
+  end
+```
+
+**Verification:** unit validation and unchanged-name rejection; populated migration from existing Person rows; real PostgreSQL success/history/replay/CAS, evidence rollback, cross-branch/shared Employee denial and correction-versus-existing-Person registration serialization; desktop/mobile browser success, reload persistence, reason validation and stale comparison. Path A class is INSTITUTION with `organization_id`; application resource authorization remains mandatory and TEN-03 is the enforcement gate.
+
+**Design-readiness note (10 October 2026):** The approved SA-20 workflow and the former blanket PER-ADR-002 wording are reconciled through the exclusive-identity rule above. This resolves owner boundaries, exact Student selection, physical schema, authorized joins, lock order, idempotency, stale recovery, privacy exclusions and verification. No unresolved product decision remains for the narrow Phase 1 slice. Shared identities remain blocked rather than widened.
 
 ## Migration, retention and handoff
 

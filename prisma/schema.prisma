@@ -75,6 +75,7 @@ model School {
   accessInvites AccessInvite[]
   students Student[]
   importJobs ImportJob[]
+  personNameRevisions PersonNameRevision[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -113,6 +114,7 @@ model UserAccount {
   verifiedPersonBindings AccountPersonBinding[] @relation("PersonBindingVerifier")
   createdImportJobs ImportJob[] @relation("ImportJobActor")
   attendanceRevisions AttendanceRevision[] @relation("AttendanceRevisionActor")
+  personNameRevisions PersonNameRevision[] @relation("PersonNameRevisionActor")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -147,9 +149,31 @@ model Person {
  employees Employee[]
  students Student[]
  accountBinding AccountPersonBinding?
+ nameRevisions PersonNameRevision[]
  @@unique([organizationId,id],map:"vs_people_person_organization_id_key")
  @@index([organizationId,lastName,id],map:"vs_people_person_name_idx")
  @@map("vs_people_person")
+}
+
+model PersonNameRevision {
+ id String @id(map:"vs_people_person_name_revision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ personId String @map("person_id") @db.Uuid
+ version Int
+ previousFirstName String @map("previous_first_name") @db.VarChar(100)
+ previousLastName String @map("previous_last_name") @db.VarChar(100)
+ correctedFirstName String @map("corrected_first_name") @db.VarChar(100)
+ correctedLastName String @map("corrected_last_name") @db.VarChar(100)
+ reason String @db.VarChar(500)
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_person_name_revision_person_fkey")
+ actor UserAccount @relation("PersonNameRevisionActor",fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_person_name_revision_actor_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_person_name_revision_school_fkey")
+ @@unique([organizationId,personId,version],map:"vs_people_person_name_revision_version_key")
+ @@index([organizationId,personId,version(sort: Desc)],map:"vs_people_person_name_revision_history_idx")
+ @@map("vs_people_person_name_revision")
 }
 
 model Employee {
