@@ -662,6 +662,27 @@
       }
     },
     {
+      "model": "BrandingPublicationDelegation",
+      "owner": "branding",
+      "table": "vs_branding_publication_delegation",
+      "status": "MIGRATED",
+      "design": "docs/modules/branding/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; status varchar(20) ACTIVE/REVOKED; version int; granted_at timestamptz(3); granted_by uuid; revoked_at timestamptz(3) nullable; revoked_by uuid nullable",
+      "responsibility": "Explicit branch-scoped branding publication authority for an eligible active school administrator; no onward delegation or unrelated role capability.",
+      "constraints": "Scoped School and exact SchoolMembership/account FKs; grantor/revoker account FKs; UNIQUE(organization_id,school_id,account_id); status/version/revocation checks; scope/status and account/status indexes",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; only current institution administrators may grant/revoke and publication requires current delegated authority.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "branding",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
       "model": "ImportJob",
       "owner": "imports",
       "table": "vs_imports_import_job",

@@ -41,3 +41,11 @@ Run pnpm check, applicable PostgreSQL functional and Playwright suites, and prod
 Edit a branch logo/palette/welcome, preview and publish; open canonical sign-in; unauthorized branch edit denied; rollback produces a new version and actual sign-in reaches only permitted branches.
 
 Start/check the server, give URL and steps, request user review, and mark review PENDING. Do not mark human acceptance until actual feedback.
+
+## SA-07 — Delegate branch branding publication
+
+Depends on: BRD-02, TEN-01, IAM-02
+
+Keep existing branding read/edit access on `branding.manage`. Add Branding-owned branch publication delegation managed only by a current institution administrator, restricted to eligible active SCHOOL_ADMIN memberships. Recheck publication authority at command time, including after revocation, and commit delegation evidence atomically. Delegates cannot change roles, widen scope or delegate onward.
+
+Acceptance: authorized scoped grant/revoke and replay; target eligibility; unauthorized, self-escalating, cross-institution and cross-branch denial; delegated publish; stale open-page publish denied after revocation; draft remains private; rollback requires the same current publisher authority. Real PostgreSQL verifies constraints, transactions and revocation. Playwright verifies the delegation controls, delegate experience and current-page revocation failure. Human review remains PENDING.

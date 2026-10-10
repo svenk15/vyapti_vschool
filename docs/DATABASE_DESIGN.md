@@ -75,6 +75,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandRevision | `vs_branding_brand_revision` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | VerifiedBrandHost | `vs_branding_verified_brand_host` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
+| BrandingPublicationDelegation | `vs_branding_publication_delegation` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | ImportJob | `vs_imports_import_job` | imports | MIGRATED | [imports LLD](modules/imports/DESIGN.md) |
 | ImportRow | `vs_imports_import_row` | imports | MIGRATED | [imports LLD](modules/imports/DESIGN.md) |
 | SourceStudentMap | `vs_imports_source_student_map` | imports | MIGRATED | [imports LLD](modules/imports/DESIGN.md) |

@@ -34,6 +34,7 @@ model Organization {
   brandProfiles BrandProfile[]
   brandAssets BrandAsset[]
   verifiedBrandHosts VerifiedBrandHost[]
+  brandingPublicationDelegations BrandingPublicationDelegation[]
   academicYears AcademicYear[]
   academicGrades GradeLevel[]
   academicSubjects Subject[]
@@ -71,6 +72,7 @@ model School {
   brandProfiles BrandProfile[]
   brandAssets BrandAsset[]
   verifiedBrandHosts VerifiedBrandHost[]
+  brandingPublicationDelegations BrandingPublicationDelegation[]
   academicYears AcademicYear[]
   academicGrades GradeLevel[]
   academicSubjects Subject[]
@@ -121,6 +123,9 @@ model UserAccount {
   createdImportJobs ImportJob[] @relation("ImportJobActor")
   attendanceRevisions AttendanceRevision[] @relation("AttendanceRevisionActor")
   personNameRevisions PersonNameRevision[] @relation("PersonNameRevisionActor")
+  brandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationDelegate")
+  grantedBrandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationGrantor")
+  revokedBrandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationRevoker")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -253,6 +258,7 @@ model SchoolMembership {
   school         School      @relation(fields: [organizationId, schoolId], references: [organizationId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_membership_r1_fkey")
   account        UserAccount @relation(fields: [accountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_membership_r2_fkey")
   grants         RoleGrant[]
+  brandingPublicationDelegations BrandingPublicationDelegation[]
   activationIntents AccountActivationMembership[]
 
   @@unique([organizationId, schoolId, id], map: "vs_access_school_membership_u0_key")
@@ -677,6 +683,30 @@ model VerifiedBrandHost {
  profile BrandProfile @relation(fields:[profileId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_verified_brand_host_profile_fkey")
  @@index([hostname,state],map:"vs_branding_verified_brand_host_lookup_idx")
  @@map("vs_branding_verified_brand_host")
+}
+
+model BrandingPublicationDelegation {
+ id String @id(map:"vs_branding_publication_delegation_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ status String @db.VarChar(20)
+ version Int
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ grantedBy String @map("granted_by") @db.Uuid
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ revokedBy String? @map("revoked_by") @db.Uuid
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_publication_delegation_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_publication_delegation_school_fkey")
+ membership SchoolMembership @relation(fields:[organizationId,schoolId,membershipId,accountId],references:[organizationId,schoolId,id,accountId],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_publication_delegation_membership_fkey")
+ delegate UserAccount @relation("BrandingPublicationDelegate",fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_publication_delegation_account_fkey")
+ grantor UserAccount @relation("BrandingPublicationGrantor",fields:[grantedBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_publication_delegation_grantor_fkey")
+ revoker UserAccount? @relation("BrandingPublicationRevoker",fields:[revokedBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_branding_publication_delegation_revoker_fkey")
+ @@unique([organizationId,schoolId,accountId],map:"vs_branding_publication_delegation_scope_account_key")
+ @@index([accountId,status,organizationId,schoolId],map:"vs_branding_publication_delegation_account_idx")
+ @@index([organizationId,schoolId,status,accountId],map:"vs_branding_publication_delegation_scope_idx")
+ @@map("vs_branding_publication_delegation")
 }
 
 model AcademicYear {
