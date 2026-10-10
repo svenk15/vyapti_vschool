@@ -1,6 +1,6 @@
 # Experience implementation state
 
-EX-00 through EX-10 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-11 is the next eligible slice. EX-11–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
+EX-00 through EX-11 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-12 is the next eligible slice. EX-12–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
 
 Authoritative implementation evidence belongs to the live repository module CURRENT_STATE files after EX-00. queue.json starts with no evidence; it is a scheduling projection. Do not copy historical snapshot test counts into a new VERIFIED claim.
 
@@ -50,7 +50,7 @@ No owner API, write behavior, schema, migration, transaction or persisted record
 
 ## Workflow coverage matrix — 10 October 2026
 
-The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-10 evidence it conservatively records 22 implemented-and-verified workflows, 9 existing operations awaiting approved-page alignment, 12 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
+The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-11 evidence it conservatively records 28 implemented-and-verified workflows, 3 existing operations awaiting approved-page alignment, 12 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
 
 ## EX-04 — 10 October 2026
 
@@ -103,3 +103,9 @@ EX-09 is VERIFIED with human review PENDING at implementation source `624d5b0b79
 EX-10 is VERIFIED with human review PENDING at implementation source `91fcb6ce4b7eb3506016a1f6e80ec741c3801444`. Administrator attendance now uses the shared production hierarchy for its constrained schedule form, compact session directory, scoped session facts, submitted-record correction, immutable revision history and destructive cancellation panel. SCHEDULED, OPEN, SUBMITTED and CANCELLED remain distinct; missing records are never rendered as pupil absence.
 
 `pnpm check` passed all repository gates and 113/113 unit tests. The final focused Attendance PostgreSQL suite passed 9/9 with all 31 migrations current; an earlier run recorded an existing serialization loss in the concurrent enrollment test and is not counted as passing evidence. Final desktop/mobile Playwright passed 2/2 and completed a production build. Six captures were inspected. `pnpm demo:seed` passed and preserved connected fixtures; it truthfully reports that the current date is not a teaching day in the existing demo calendar, with final cross-role date coherence assigned to EX-14. No schema, migration or backend contract changed. Evidence: `docs/evidence/ex-10/README.md`. EX-11 is next. TEN-03 and native accessibility remain open gates.
+
+## EX-11 — 10 October 2026
+
+EX-11 is VERIFIED with human review PENDING at implementation source `f218084`. Teacher Today retains the compact date toolbar, assigned-session rows and teacher-only navigation. Session detail now uses shared summary and register compositions. A newly opened roster begins with every pupil unmarked; Review remains disabled until the teacher explicitly chooses each status or uses Mark all present. Review totals, retained-key unknown-result recovery and submitted read-only state are visually distinct.
+
+`pnpm check` passed all gates and 113/113 unit tests. Final desktop/mobile Attendance Playwright passed 2/2 against real PostgreSQL and completed production builds. The journey verifies current assignment, another-teacher denial, explicit marks, late minutes, recovery, persistence, teacher correction denial and cancellation removal. Six captures were inspected. The unchanged PostgreSQL owner suite and seed had passed at EX-10 and were not repeated for this client composition slice. No backend, schema, migration, transaction or authorization contract changed. Evidence: `docs/evidence/ex-11/README.md`. EX-12 is next. Teacher-wide class/history and correction-request operations, TEN-03 and native accessibility remain open.

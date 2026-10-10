@@ -126,10 +126,10 @@
       "EX-10",
       "EX-04"
     ],
-    "status": "NOT_STARTED",
-    "design": "READY_SUBJECT_TO_EX00",
-    "human_review": "NOT_REQUESTED",
-    "evidence": null
+    "status": "VERIFIED",
+    "design": "READY",
+    "human_review": "PENDING",
+    "evidence": "docs/evidence/ex-11/README.md"
   },
   {
     "id": "EX-12",

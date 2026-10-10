@@ -182,7 +182,7 @@ Dependencies: EX-07, EX-08. Implementation status: VERIFIED. Human review: PENDI
 
 ## EX-11 — Adopt teacher day and roll-call experience
 
-Dependencies: EX-10, EX-04. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-10, EX-04. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/teacher/today/page.tsx; app/teacher/sessions/[id]/page.tsx; app/account/page.tsx; components/teacher-sessions.tsx; attendance-roll-call.tsx; components/teacher-portal-frame.tsx.
 

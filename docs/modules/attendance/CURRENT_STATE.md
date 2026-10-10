@@ -78,6 +78,13 @@ No product completion is assumed. Pilot deployment/provider, staff activation de
 - **Contracts/schema:** No owner API, authorization rule, table, migration, transaction, lock, version or receipt changed. Application authorization remains active and TEN-03 remains the consolidated production RLS gate.
 - **Evidence:** `pnpm check` passed with 113/113 unit tests; final focused real-PostgreSQL Attendance passed 9/9; final desktop/mobile Playwright passed 2/2 with production builds; six captures were inspected. `pnpm demo:seed` preserved connected fixtures and truthfully reported the current date is not a teaching day. Detailed evidence: `docs/evidence/ex-10/README.md`.
 
+### 10 October 2026 — EX-11 teacher experience adoption
+
+- **Source:** `f218084`; human visual review PENDING.
+- **Implemented:** Teacher Today and session detail use the shared teacher workspace. Newly opened rosters begin unmarked, explicit bulk/per-pupil marking gates review, review totals precede submit, exact-key recovery handles an uncertain result, and submitted registers are read-only.
+- **Contracts/schema:** Current live teacher identity, assignment, scope, module and permission checks remain active. No backend, table, migration, transaction, lock, roster hash, version or receipt changed. Separate My classes/history and correction requests remain owner gaps.
+- **Evidence:** `pnpm check` passed with 113/113 unit tests; final real-PostgreSQL-backed desktop/mobile Playwright passed 2/2 and completed production builds; six captures were inspected. The unchanged focused PostgreSQL owner suite and seed passed at EX-10 and were not repeated. Detailed evidence: `docs/evidence/ex-11/README.md`.
+
 ## Evidence history
 
 ### ATT-04 implementation checkpoint — 5 October 2026
