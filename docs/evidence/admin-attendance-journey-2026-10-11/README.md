@@ -28,6 +28,7 @@ Chromium's platform-font inspection on macOS reported `.SF NS` for reference and
 
 - Reference: `reference-today-desktop.png`, `reference-sa-26-desktop.png`, `reference-sa-27-desktop.png`, `reference-sa-27-mobile.png`.
 - Application: `application-today-desktop.png`, `application-register-before-desktop.png`, `application-correction-draft-desktop.png`, `application-correction-unknown-desktop.png`, `application-saved-history-unavailable-desktop.png`, `application-correction-stale-desktop.png`, `application-register-final-desktop.png`, `application-cancellation-unknown-desktop.png`, `application-today-after-desktop.png`, `application-today-mobile-navigation.png`, `application-register-final-mobile.png`, and `application-register-200-percent.png`.
+- Enhanced register composition: `application-register-table-enhanced-desktop.png`, `application-register-table-enhanced-mobile.png`, and `application-register-table-enhanced-mobile-late.png`.
 - Comparison: `reference-application-overlay.png` and `reference-application-diff.png`. These compare equal 1440 × 1000 captures without masks. They diagnose composition differences; their aggregate pixels are not treated as acceptance.
 
 ## Discrepancy record
@@ -55,3 +56,5 @@ Remaining deviations: the live page represents the complete real register rather
 - `git diff --check` — passed before checkpoint review.
 
 The CTA/dismiss-control follow-up passed focused ESLint, TypeScript, and Playwright verification. The browser measured 40 px desktop primary/secondary CTAs, a 40 px dismiss target, and a 44 px mobile primary target. The correction response was mocked for this presentation-only check, so no attendance record or revision was written.
+
+The submitted-register follow-up replaces the visually heavy row-header block with a balanced 29/18/37/16% desktop grid, continuous dividers, student initials and roll numbers, semantic submitted-status pills, and clearly labelled correction controls. At 390 px, each semantic table row becomes a structured student card; unused late-minute controls are omitted and appear immediately when Late is selected. Focused Playwright verified keyboard focus, the conditional Late editor, three rendered roster rows, and no desktop/mobile page overflow. No request was submitted and no attendance data changed.
