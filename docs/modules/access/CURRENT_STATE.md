@@ -1,6 +1,6 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-05. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
+Last updated: 2026-10-10. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -10,6 +10,8 @@ Last updated: 2026-10-05. IAM-01 locally verified and accepted; IAM-02 locally v
 | IAM-04 | VERIFIED | PENDING | [Local evidence](../../evidence/iam-04-local/); tested source recorded after focused commit. PostgreSQL test cluster at temporary local port 5433; development DB was not migrated for this task. |
 
 ## Current checkpoint
+
+**EX-06 staff-access presentation adoption (10 October 2026):** Implementation VERIFIED at `42dd2db48ecbe80ee908f167d00d60aeb662bcd1`; human review PENDING. `/admin/users` now groups staff issuance, delivery failures/retry and the membership directory while keeping membership, employee identity and teacher eligibility distinct. Existing trust-mode, invitation, role/lifecycle, current authorization, version, receipt, last-admin and revocation behavior is unchanged. Focused People/Access PostgreSQL tests passed 16/16; final Staff Access desktop/mobile browser journeys passed 4/4 and the preceding combined Access/IAM-04 run passed 10/10. No schema, migration or seed changed. Evidence: `docs/evidence/ex-06/README.md`.
 
 IAM-01 through IAM-03 remain verified; IAM-01, IAM-02 and IAM-03 human reviews are PASSED. IAM-03 acceptance is limited to the restored local demo/source `e0f262a78d7e020919cd36be80d508c9032d1e07` at `http://127.0.0.1:3411`; it does not accept later IAM changes. IAM-04 implements operator-preserving trust modes, school-admin invitations with sanitized delivery state/resend, exact-address invitation acceptance without Person/Employee binding, account-wide verified-address password recovery, cross-institution policy rechecks, tokenVersion session revocation, and platform-operator trust transitions with atomic Access invalidation. No real email is sent; only the development-only private local sink is configured. Migration 012 adds trust/recovery schema and migration 013 narrows the append-only AuthSecurityEvent exception to a one-time NULL account association for a resolved reset denial.
 

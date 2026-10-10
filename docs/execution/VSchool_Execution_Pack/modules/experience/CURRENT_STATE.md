@@ -1,6 +1,6 @@
 # Experience implementation state
 
-EX-00 through EX-05 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-06 and EX-07 are the next eligible slices. EX-06–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
+EX-00 through EX-06 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-07 is the next eligible slice. EX-07–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
 
 Authoritative implementation evidence belongs to the live repository module CURRENT_STATE files after EX-00. queue.json starts with no evidence; it is a scheduling projection. Do not copy historical snapshot test counts into a new VERIFIED claim.
 
@@ -50,7 +50,7 @@ No owner API, write behavior, schema, migration, transaction or persisted record
 
 ## Workflow coverage matrix — 10 October 2026
 
-The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-04/EX-05 evidence it conservatively records 6 implemented-and-verified workflows, 25 existing operations awaiting approved-page alignment, 12 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
+The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-06 evidence it conservatively records 10 implemented-and-verified workflows, 22 existing operations awaiting approved-page alignment, 11 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
 
 ## EX-04 — 10 October 2026
 
@@ -67,3 +67,11 @@ The branding workspace now uses one constrained identity editor, explicit public
 Verification: `pnpm check` passed all repository gates and 111/111 unit tests. Focused real-PostgreSQL Access management passed 7/7. Playwright passed 6/6 affected administrator/branding journeys across desktop and mobile, and the final branding-only capture rerun passed 2/2. All 31 test migrations were current. The root `pnpm build` passed with build ID `MMrxiLdHnnKBzy-N3V_AQ`. Desktop/mobile screenshots were inspected for hierarchy, form width, long-name containment and overflow. The guarded `pnpm demo:seed` passed on an approved local-database run and preserved existing data; an initial sandboxed attempt could not access the development database and is not counted as a pass.
 
 The committed production demo is healthy at `http://127.0.0.1:3400`; local browser smoke verified administrator entry, published branding, teacher entry and teacher day with zero page errors. Private credentials remain in ignored `artifacts/iam-01/private-demo.json` and `artifacts/people-02/private-demo.json`. Missing school contact fields/revision comparison and commercial module-request operations remain explicit owner gaps. TEN-03 and native accessibility remain release gates. Evidence: `docs/evidence/ex-05/README.md`. EX-06 and EX-07 are now eligible.
+
+## EX-06 — 10 October 2026
+
+EX-06 is VERIFIED with human review PENDING at implementation source `42dd2db48ecbe80ee908f167d00d60aeb662bcd1`. Staff access and staff profiles now use the shared page header, constrained settings form, compact directory controls, responsive data table, explicit action dialogs and shared feedback states. Membership, portal account, employee identity and teacher eligibility remain separate owner records. Contact email is labelled as contact data and never treated as identity proof; verified binding keeps its out-of-band reference requirement.
+
+No owner facade, authorization policy, transaction, table, migration or seed contract changed. The selected People and Access PostgreSQL suites passed 16/16 with all 31 migrations current. Final Staff Profiles Playwright passed 2/2 desktop/mobile; final Staff Access Playwright passed 4/4 desktop/mobile, while the preceding combined Access/invitation/recovery run passed 10/10. `pnpm check` passed all repository gates and 111/111 unit tests. Desktop/mobile captures were inspected; wide staff directories remain contained in their horizontal table viewport.
+
+Invitation provider review remains FND-02, failed-delivery/resend remains conservatively partial in the workflow matrix, and TEN-03/native accessibility remain release gates. Evidence: `docs/evidence/ex-06/README.md`. EX-07 is next.

@@ -102,7 +102,7 @@ Dependencies: EX-04. Implementation status: VERIFIED. Human review: PENDING.
 
 ## EX-06 — Adopt staff profile, access and teacher readiness screens
 
-Dependencies: EX-05. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-05. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/admin/users/page.tsx; app/admin/teachers/page.tsx; components/access-management.tsx; people-workspace.tsx; lib/server/people.ts; lib/server/access.ts.
 

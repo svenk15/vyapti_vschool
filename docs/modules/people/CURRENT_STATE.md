@@ -1,6 +1,6 @@
 # People and staff identity — current state
 
-Last updated: 2026-10-05. Human review is tracked separately from implementation evidence. No imported completion or active execution timer.
+Last updated: 2026-10-10. Human review is tracked separately from implementation evidence. No imported completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -8,6 +8,8 @@ Last updated: 2026-10-05. Human review is tracked separately from implementation
 | PER-02 | VERIFIED | PENDING | [Local verification](../../evidence/people-02-local/verification.json), JUnit reports, tested source `e72125d` |
 
 ## Current checkpoint
+
+**EX-06 presentation adoption (10 October 2026):** Implementation VERIFIED at `42dd2db48ecbe80ee908f167d00d60aeb662bcd1`; human review PENDING. `/admin/teachers` now separates profile creation from the full-width staff directory and uses per-record dialogs for verified account binding and employment end. Existing People/Academics/Access ownership, out-of-band identity verification, scoped authorization, locking, versions and idempotency are unchanged. Focused People/Access PostgreSQL tests passed 16/16; final desktop/mobile People browser journeys passed 2/2. No schema, migration or seed changed. Evidence: `docs/evidence/ex-06/README.md`.
 
 **Design readiness (4 October 2026):** PER-02 LLD/task clarify owner-enlisted Teacher/AccountPersonBinding writes, scoped uniqueness, account→Organization→School locking and explicit out-of-band school-admin verification reference; account email or activation alone is not proof. At that review, the dated dependency snapshot was PER-01 VERIFIED/PENDING, IAM-03 VERIFIED/PENDING, ACA-01 VERIFIED/PENDING. PER-01 and ACA-01 review may remain PENDING. The implementation status table remains authoritative.
 
