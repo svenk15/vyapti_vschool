@@ -1,0 +1,80 @@
+{
+  "capturedAt": "2026-10-10T21:03:15.782Z",
+  "refs": {
+    "SA-25": {
+      "heading": "Schedule attendance sessions",
+      "bodyFont": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "content": {
+        "width": 1200,
+        "x": 240,
+        "padding": "32px"
+      }
+    },
+    "SA-26": {
+      "heading": "Monitor and inspect attendance",
+      "bodyFont": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "content": {
+        "width": 1200,
+        "x": 240,
+        "padding": "32px"
+      }
+    },
+    "SA-28": {
+      "heading": "Cancel or review a session change",
+      "bodyFont": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "content": {
+        "width": 1200,
+        "x": 240,
+        "padding": "32px"
+      }
+    }
+  },
+  "application": {
+    "bodyFont": "Arial, Helvetica, sans-serif",
+    "heading": {
+      "text": "Schedule class session",
+      "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "size": "30px",
+      "weight": "600",
+      "lineHeight": "35.4px",
+      "width": 631.71875
+    },
+    "scheduleCard": {
+      "width": 1136,
+      "x": 272,
+      "padding": "26px"
+    },
+    "overflow": false,
+    "list": [
+      {
+        "status": "SUBMITTED",
+        "href": "/admin/attendance/sessions/7c3a79f4-1225-4579-b243-35dd190dcdb6",
+        "text": "12:00 AMto 12:45 AMMathematics Demo · Demo Section A2026-10-11SUBMITTEDReview or correct"
+      },
+      {
+        "status": "SCHEDULED",
+        "href": "/admin/attendance/sessions/7470d3e4-efb5-4954-b095-3a0736637dbd",
+        "text": "06:30 AMto 07:15 AMMathematics Demo · Demo Section A2026-10-11SCHEDULEDReview or cancel"
+      },
+      {
+        "status": "SCHEDULED",
+        "href": "/admin/attendance/sessions/8aa43d98-9402-46ed-93e4-2633d7499fff",
+        "text": "09:00 AMto 09:45 AMMathematics Demo · Demo Section A2026-10-11SCHEDULEDReview or cancel"
+      },
+      {
+        "status": "SCHEDULED",
+        "href": "/admin/attendance/sessions/0b239a74-c53f-4d45-bf9b-5ab5bb15b8c9",
+        "text": "10:00 AMto 10:45 AMMathematics Demo · Demo Section A2026-10-11SCHEDULEDReview or cancel"
+      },
+      {
+        "status": "SCHEDULED",
+        "href": "/admin/attendance/sessions/6818eb45-fb21-41da-948a-17a8ee0c3a18",
+        "text": "11:15 PMto 11:55 PMMathematics Demo · Demo Section A2026-10-11SCHEDULEDReview or cancel"
+      }
+    ],
+    "mobile": {
+      "overflow": false,
+      "scheduleWidth": 354
+    }
+  }
+}

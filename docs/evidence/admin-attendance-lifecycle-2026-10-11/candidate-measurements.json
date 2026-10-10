@@ -1,0 +1,72 @@
+{
+  "capturedAt": "2026-10-10T21:09:26.408Z",
+  "metrics": {
+    "heading": {
+      "x": 272,
+      "y": 92,
+      "width": 414.796875,
+      "height": 35,
+      "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "28px",
+      "fontWeight": "650",
+      "padding": "0px",
+      "gap": "normal"
+    },
+    "stepper": {
+      "x": 272,
+      "y": 182.25,
+      "width": 1136,
+      "height": 26,
+      "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "padding": "0px",
+      "gap": "20px"
+    },
+    "grid": {
+      "x": 272,
+      "y": 232.25,
+      "width": 1136,
+      "height": 454.5,
+      "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "padding": "0px",
+      "gap": "24px"
+    },
+    "card": {
+      "x": 272,
+      "y": 232.25,
+      "width": 760,
+      "height": 454.5,
+      "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "padding": "23px",
+      "gap": "normal"
+    },
+    "aside": {
+      "x": 1056,
+      "y": 232.25,
+      "width": 352,
+      "height": 451.1875,
+      "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "padding": "0px",
+      "gap": "20px"
+    },
+    "overflow": false
+  },
+  "filter": {
+    "date": "2026-10-11",
+    "sectionApplied": true,
+    "filteredRows": 5,
+    "backRestored": true
+  },
+  "mobile": {
+    "overflow": false,
+    "stepperColumns": "173px 173px",
+    "focused": true
+  }
+}

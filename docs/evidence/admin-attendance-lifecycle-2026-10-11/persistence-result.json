@@ -1,0 +1,10 @@
+{
+  "capturedAt": "2026-10-10T21:10:06.983Z",
+  "route": "/admin/attendance/sessions/5d0ad3de-e6f1-43e9-9f5b-265e645d638b",
+  "scheduled": true,
+  "canceled": true,
+  "reloadPersisted": true,
+  "historyCount": 1,
+  "monitorShowsCanceled": true,
+  "mobileOverflow": false
+}
