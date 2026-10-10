@@ -7,11 +7,13 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 | TEN-01 | VERIFIED | PENDING | Source `c09519ca10bddd6286aba242d21aa9a5000ff0ae`; production build `fGxMmBd-8b7ScLU7mVhug`; local verification report and JUnit evidence below |
 | TEN-02 | VERIFIED | PENDING | Source/build/test evidence: `docs/evidence/tenancy-02-local/`; owner review remains pending |
 | TEN-03 | IN_PROGRESS | NOT_REQUESTED | Restricted roles and branch/account/recovery/invitation context helpers exist; protected transaction paths establish context; RLS remains disabled pending a non-forgeable context contract |
-| SA-COMP-06 / SA-08 | IMPLEMENTED | PENDING | Branch activation remains the implemented authority; the commercial-request alternative is explicitly blocked pending an approved owner contract |
+| SA-COMP-09 / SA-08 | VERIFIED | PENDING | Non-binding capability interest, authorized institution inbox, stable replay and zero entitlement/activation effect; [evidence](../../evidence/sa-comp-09/README.md) |
 
 ## Implemented now
 
 TEN-01 delivers persisted institution/branch setup, operator-issued institution and membership grants, institution-admin metadata-only branch creation, bounded authorized context listing and switching, protected request reauthorization, context-change cache/draft clearing, and immutable transactional receipts/audit/outbox evidence. TEN-02 adds organization entitlements, branch activations, transactional configuration and evidence, current permission and release gates, module configuration API/screen, and local operator tooling. The Phase 1 demo release includes Student Core, Academic Core, Staff Core and Attendance; later product modules remain unreleased and fail closed.
+
+SA-COMP-09 adds the separately authorized capability-interest path. A current branch School Administrator can submit Attendance, Family portal, Fees & payments or Transport plus a bounded need; institution-authorized reviewers see recent institution submissions. CapabilityInterest, a minimal receipt and safe outbox commit atomically. Submission does not change a contract, payment obligation, release, entitlement or branch activation. Migration `20261010012000_capability_interest` is applied to both designated local databases; RLS is registered under Path A and remains a TEN-03 production gate. Human review is PENDING.
 
 ## Next action
 
@@ -24,6 +26,8 @@ TEN-03 remains IN_PROGRESS. Restricted local runtime roles exist with no table D
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.
 
 ### SA-COMP-06 / SA-08 module-access handoff — 10 October 2026
+
+**Historical presentation checkpoint; superseded for request submission by SA-COMP-09 above.** Its activation and release-gate evidence remains valid.
 
 The administrator module page continues to edit branch activation only for capabilities that are already contracted, released and approved. Its presentation now states that unavailable or uncontracted selections produce a blocked preview and do not create a commercial request. School administrators are directed to their authorized institution administrator or platform operator. The denied state provides the same truthful handoff. No request record, API, audit event or success state was invented because no approved request owner, authorization policy, lifecycle or persistence contract exists.
 

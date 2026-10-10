@@ -30,6 +30,7 @@ model Organization {
   tenantOutbox TenantOutbox[]
   entitlements OrganizationEntitlement[]
   branchActivations BranchActivation[]
+  capabilityInterests CapabilityInterest[]
   brandProfiles BrandProfile[]
   brandAssets BrandAsset[]
   verifiedBrandHosts VerifiedBrandHost[]
@@ -66,6 +67,7 @@ model School {
   outboxEvents         OutboxEvent[]
   commandReceipts      CommandReceipt[]
   moduleActivations BranchActivation[]
+  capabilityInterests CapabilityInterest[]
   brandProfiles BrandProfile[]
   brandAssets BrandAsset[]
   verifiedBrandHosts VerifiedBrandHost[]
@@ -100,6 +102,7 @@ model UserAccount {
   institutionGrants InstitutionGrant[]
   configurationChanges ConfigurationChange[]
   tenantReceipts TenantCommandReceipt[]
+  submittedCapabilityInterests CapabilityInterest[]
   memberships         SchoolMembership[]
   securityEvents      AuthSecurityEvent[] @relation("SecuritySubject")
   actorSecurityEvents AuthSecurityEvent[] @relation("SecurityActor")
@@ -574,6 +577,24 @@ model BranchActivation {
  @@unique([organizationId,schoolId,moduleId],map:"vs_tenancy_branch_activation_scope_module_key")
  @@index([organizationId,schoolId,state,moduleId],map:"vs_tenancy_branch_activation_status_idx")
  @@map("vs_tenancy_branch_activation")
+}
+model CapabilityInterest {
+ id String @id(map:"vs_tenancy_capability_interest_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ moduleId String @map("module_id") @db.VarChar(40)
+ need String @db.VarChar(1000)
+ status String @db.VarChar(20)
+ submittedByAccountId String @map("submitted_by_account_id") @db.Uuid
+ submittedAt DateTime @map("submitted_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_capability_interest_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_capability_interest_school_fkey")
+ submittedBy UserAccount @relation(fields:[submittedByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_tenancy_capability_interest_submitter_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_tenancy_capability_interest_scope_id_key")
+ @@index([organizationId,schoolId,submittedAt(sort: Desc),id],map:"vs_tenancy_capability_interest_branch_history_idx")
+ @@index([organizationId,status,submittedAt(sort: Desc),id],map:"vs_tenancy_capability_interest_review_idx")
+ @@index([submittedByAccountId],map:"vs_tenancy_capability_interest_submitter_idx")
+ @@map("vs_tenancy_capability_interest")
 }
 model BrandProfile {
  id String @id(map:"vs_branding_brand_profile_pkey") @db.Uuid

@@ -64,8 +64,8 @@ Run two institutions side by side; deny wrong-branch direct API and runtime SQL;
 
 Start/check the server, give URL and steps, request user review, and mark review PENDING. Do not mark human acceptance until actual feedback.
 
-## SA-COMP-06 / SA-08 — Honest module-request handoff
+## SA-COMP-09 / SA-08 — Non-binding capability interest
 
-Keep the existing institution-authorized entitlement and branch-activation workflow. Reconcile the production copy and labels so a released/contracted branch selection cannot be confused with a commercial request. An unauthorized school administrator receives an explicit institution-authority handoff; an unavailable selection produces only a blocked preview. No request persistence or success acknowledgement exists until its product/authority contract is approved.
+Keep the existing institution-authorized entitlement and branch-activation workflow. Add a durable, immutable capability-interest submission for the four approved choices. Require current SCHOOL_ADMIN scope, bounded free text and stable-key replay. Institution reviewers see authorized institution submissions; school administrators see their current branch. Submission must not change contracts, activation, release status, purchase or payment state. No review outcome, withdrawal or automatic activation is added.
 
-Acceptance: focused lint/type checks and the Tenancy browser journey prove current status, blocked preview, no activation write, explicit no-request copy, keyboard access and mobile containment. No migration or seed extension is required.
+Acceptance: unit validation plus real PostgreSQL tests prove atomic request/receipt/outbox persistence, replay/conflict behavior, reviewer scope, revoked/cross-branch denial and zero entitlement/activation writes. Desktop/mobile Playwright proves the exact fields, explicit non-binding outcome, persisted history and institution inbox. Apply the forward migration and update the RLS registry under Path A; human review remains PENDING.

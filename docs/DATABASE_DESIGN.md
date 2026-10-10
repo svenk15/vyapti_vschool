@@ -92,6 +92,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SectionPlacement | `vs_students_section_placement` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |
 | Student | `vs_students_student` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |
 | BranchActivation | `vs_tenancy_branch_activation` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
+| CapabilityInterest | `vs_tenancy_capability_interest` | tenancy | MIGRATED | [tenancy LLD](modules/tenancy/DESIGN.md) |
 | ConfigurationChange | `vs_tenancy_configuration_change` | tenancy | MIGRATED | [tenancy LLD](modules/tenancy/DESIGN.md) |
 | OrganizationEntitlement | `vs_tenancy_organization_entitlement` | tenancy | PLANNED | [tenancy LLD](modules/tenancy/DESIGN.md) |
 | TenantCommandReceipt | `vs_tenancy_tenant_command_receipt` | tenancy | MIGRATED | [tenancy LLD](modules/tenancy/DESIGN.md) |

@@ -12,7 +12,7 @@ async function main(){
  const user=JSON.parse(readFileSync('artifacts/iam-01/private-demo.json','utf8')) as {accountId:string;email:string;password:string};
  if(!uuidPattern.test(tenant.organizationId)||!uuidPattern.test(user.accountId)||!tenant.originalBranchId||!uuidPattern.test(tenant.originalBranchId)||typeof user.email!=='string'||typeof user.password!=='string')throw new Error('SYNTHETIC_PROFILE_REQUIRED');
  stage='local-connection';
- const config=localAccessConfig(),services=createTenancyServices(config),path='artifacts/tenancy-02/private-command.json';
+ const config=localAccessConfig(),services=createTenancyServices(config),path='artifacts/tenancy-02/private-command.json',interestPath='artifacts/tenancy-02/private-interest.json';
  try{
   // This control-plane fixture is replayed by its verified local operator.
   // It does not depend on a preserved administrator password that IAM-03 may
@@ -28,6 +28,11 @@ async function main(){
   stage='set-entitlement';
   const result=await services.setEntitlement(config.operator,command);
   console.log(`Recorded a synthetic Attendance contract${result.replayed?' (same-key replay)':''}. Current release remains unavailable; no branch was activated. Revision ${result.revision}.`);
+  stage='capability-interest';let interest;
+  if(existsSync(interestPath))interest=JSON.parse(readFileSync(interestPath,'utf8'));
+  else{interest={moduleId:'transport',need:'Evaluate safe route coordination for the next school term.',key:randomUUID()};writeFileSync(interestPath,JSON.stringify(interest,null,2)+'\n',{flag:'wx',mode:0o600});}
+  const submitted=await services.submitCapabilityInterest({accountId:user.accountId,tokenVersion:1},tenant.organizationId,tenant.originalBranchId,interest);
+  console.log(`Recorded synthetic Transport capability interest${submitted.replayed?' (same-key replay)':''}; no contract or activation changed. Private command: ${interestPath}`);
  }finally{await services.disconnect();}
 }
 

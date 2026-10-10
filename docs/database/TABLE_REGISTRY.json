@@ -993,6 +993,27 @@
       }
     },
     {
+      "model": "CapabilityInterest",
+      "owner": "tenancy",
+      "table": "vs_tenancy_capability_interest",
+      "status": "MIGRATED",
+      "design": "docs/modules/tenancy/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; module_id varchar(40); need varchar(1000); status SUBMITTED; submitted_by_account_id uuid; submitted_at timestamptz(3)",
+      "responsibility": "Immutable, non-binding branch capability-interest submission for institution review; it has no entitlement, activation, purchase or payment effect.",
+      "constraints": "FK organization; composite scoped School FK; FK submitter account; module_id limited to attendance/family/fees/transport; need 5–1000; status SUBMITTED; UNIQUE(scope,id); branch-history, institution-review and submitter indexes",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch membership for submission/branch history; institution reviewers use a separately authorized institution-scoped read path. WITH CHECK binds both branch keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "tenancy",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
       "model": "OrganizationEntitlement",
       "owner": "tenancy",
       "table": "vs_tenancy_organization_entitlement",

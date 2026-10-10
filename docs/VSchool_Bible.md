@@ -207,6 +207,8 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 
 ## 13. Change log
 
+2026-10-10 / SA-08 capability interest: branch School Administrators may record an immutable, non-binding interest in Attendance, Family portal, Fees & payments or Transport for authorized institution review. Submission has no purchase, payment, entitlement, release or activation effect. Review decisions and withdrawal are separate future contracts; TEN-03 remains the RLS production gate.
+
 2026-10-10 / Phase 1 experience checkpoint: EX-00–EX-15 align the implemented administrator and teacher portal with the approved shared navigation and page compositions, add a non-destructive connected seed, and verify the integrated local candidate. This does not widen Phase 1, complete all 268 catalog workflows, pass human acceptance, or close TEN-03/native accessibility/production-operation gates.
 
 2026-10-05 / Portal UX: shared protected shells consume the published branch palette with institution-default inheritance after current-member authorization; isolated previews use production primitives and do not publish. Generic account activation/recovery/sign-in share AuthLayout. Route-family visual evidence is tracked separately; native assistive technology and human visual acceptance remain outstanding.
