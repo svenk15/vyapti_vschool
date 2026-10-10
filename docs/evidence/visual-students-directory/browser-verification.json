@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-10-10T12:11:45.934Z",
+  "sourceBase": "f76aa93 plus intended visual diff",
+  "baseURL": "http://127.0.0.1:3450",
+  "credentialsSource": "artifacts/people-02/private-demo.json",
+  "checks": [
+    {
+      "name": "populated directory",
+      "pass": true,
+      "detail": "five seeded rows visible"
+    },
+    {
+      "name": "search result",
+      "pass": true,
+      "detail": "real filtered row visible"
+    },
+    {
+      "name": "Back restores unapplied route",
+      "pass": true,
+      "detail": "search cleared"
+    },
+    {
+      "name": "Forward restores search state",
+      "pass": true,
+      "detail": "search restored"
+    },
+    {
+      "name": "filter cancel preserves URL",
+      "pass": true,
+      "detail": "no status query committed"
+    },
+    {
+      "name": "filter cancel restores focus",
+      "pass": true,
+      "detail": "focus returned to Filters"
+    },
+    {
+      "name": "filter apply commits",
+      "pass": true,
+      "detail": "status=ALL in URL"
+    },
+    {
+      "name": "manage dialog restores focus",
+      "pass": true,
+      "detail": "focus returned to row action"
+    },
+    {
+      "name": "mobile no page overflow",
+      "pass": true,
+      "detail": "390px viewport has no horizontal overflow"
+    },
+    {
+      "name": "mobile card rows",
+      "pass": true,
+      "detail": "rows use card grid"
+    },
+    {
+      "name": "200 percent layout equivalent",
+      "pass": true,
+      "detail": "720px CSS viewport has no page overflow"
+    }
+  ]
+}

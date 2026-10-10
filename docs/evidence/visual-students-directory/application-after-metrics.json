@@ -1,0 +1,110 @@
+{
+  "desktop": {
+    "bodyFont": "15px",
+    "shell": "248px 1192px",
+    "heading": "30px",
+    "toolbar": {
+      "x": 291.1875,
+      "y": 255.4375,
+      "width": 1105.625,
+      "height": 40,
+      "top": 255.4375,
+      "right": 1396.8125,
+      "bottom": 295.4375,
+      "left": 291.1875
+    },
+    "table": {
+      "x": 291.1875,
+      "y": 311.4375,
+      "width": 1105.625,
+      "height": 393.140625,
+      "top": 311.4375,
+      "right": 1396.8125,
+      "bottom": 704.578125,
+      "left": 291.1875
+    },
+    "rows": 5,
+    "overflow": false
+  },
+  "manage": {
+    "bodyFont": "15px",
+    "shell": "248px 1192px",
+    "heading": "30px",
+    "toolbar": {
+      "x": 291.1875,
+      "y": 255.4375,
+      "width": 1105.625,
+      "height": 40,
+      "top": 255.4375,
+      "right": 1396.8125,
+      "bottom": 295.4375,
+      "left": 291.1875
+    },
+    "table": {
+      "x": 291.1875,
+      "y": 311.4375,
+      "width": 1105.625,
+      "height": 393.140625,
+      "top": 311.4375,
+      "right": 1396.8125,
+      "bottom": 704.578125,
+      "left": 291.1875
+    },
+    "rows": 5,
+    "overflow": false
+  },
+  "filter": {
+    "bodyFont": "15px",
+    "shell": "248px 1192px",
+    "heading": "30px",
+    "toolbar": {
+      "x": 291.1875,
+      "y": 255.4375,
+      "width": 1105.625,
+      "height": 40,
+      "top": 255.4375,
+      "right": 1396.8125,
+      "bottom": 295.4375,
+      "left": 291.1875
+    },
+    "table": {
+      "x": 291.1875,
+      "y": 311.4375,
+      "width": 1105.625,
+      "height": 393.140625,
+      "top": 311.4375,
+      "right": 1396.8125,
+      "bottom": 704.578125,
+      "left": 291.1875
+    },
+    "rows": 5,
+    "overflow": false
+  },
+  "mobile": {
+    "bodyFont": "15px",
+    "shell": "224px minmax(0px, 1fr)",
+    "heading": "28px",
+    "toolbar": {
+      "x": 18,
+      "y": 399.625,
+      "width": 354,
+      "height": 138,
+      "top": 399.625,
+      "right": 372,
+      "bottom": 537.625,
+      "left": 18
+    },
+    "table": {
+      "x": 18,
+      "y": 553.625,
+      "width": 354,
+      "height": 1105.4375,
+      "top": 553.625,
+      "right": 372,
+      "bottom": 1659.0625,
+      "left": 18
+    },
+    "rows": 5,
+    "overflow": false
+  }
+}

@@ -13,16 +13,18 @@ export function ServerTable<Row>({
   rows,
   columns,
   rowKey,
+  className = "",
 }: {
   caption: string;
   rows: readonly Row[];
   columns: readonly ServerTableColumn<Row>[];
   rowKey: (row: Row) => string;
+  className?: string;
 }) {
   const captionId = useId();
 
   return (
-    <div className="table-scroll" tabIndex={0} role="region" aria-labelledby={captionId}>
+    <div className={`table-scroll ${className}`} tabIndex={0} role="region" aria-labelledby={captionId}>
       <table className="data-table">
         <caption id={captionId}>{caption}</caption>
         <thead>

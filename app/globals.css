@@ -232,7 +232,32 @@ body{font-family:var(--font-ui)}
 .delivery-failure-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;border-top:1px solid var(--line)}
 .delivery-failure-row:first-of-type{border-top:0}
 .delivery-failure-row p{margin:3px 0 0}
-.students-page .directory-card{box-shadow:var(--elevation-card)}
+.students-page{gap:0}
+.students-page>.page-heading{margin-bottom:25px}
+.students-page>.alert,.students-page>div>.alert{margin-bottom:18px}
+.students-directory-tabs{display:flex;gap:24px;margin-bottom:22px;border-bottom:1px solid var(--line)}
+.students-directory-tabs>span{display:inline-flex;align-items:center;gap:8px;padding:10px 0 12px;border-bottom:2px solid var(--primary);color:var(--primary);font-size:13px;font-weight:700}
+.students-directory-tabs .badge{border:0;border-radius:999px;padding:2px 8px}
+.students-directory{min-width:0}
+.students-directory .list-toolbar{padding:0;border:0;background:transparent}
+.students-directory .list-search-composition{height:40px;border-color:var(--line)}
+.students-directory .list-toolbar-actions .btn{min-height:40px;padding:8px 14px}
+.students-directory-table{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.students-directory-table .data-table caption{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.students-directory-table .data-table th,.students-directory-table .data-table td{padding:15px 18px}
+.students-directory-table .data-table tbody th{background:transparent}
+.students-directory-table .data-table tr:hover th{background:#fafcf7}
+.students-directory-table .data-table th:last-child,.students-directory-table .data-table td:last-child{text-align:right;width:96px}
+.students-directory-table .person-cell{min-width:190px}
+.students-directory-table .person-cell strong{color:var(--primary);font-weight:700}
+.students-directory-table .person-cell a{text-decoration:none}
+.students-directory-table .person-cell a:hover{text-decoration:underline}
+.student-row-action{min-height:32px;padding:5px 0}
+.student-manage-links{margin:22px -12px 0}
+.student-manage-link{display:flex;align-items:center;gap:14px;padding:13px 12px;border-radius:8px;color:var(--ink);text-decoration:none}
+.student-manage-link:hover{background:var(--brand-soft)}
+.student-manage-link>span:last-child{display:grid;gap:2px}
+.student-manage-link small{color:var(--muted)}
 .student-registration-form{display:grid;margin-top:22px}
 .student-registration-form>.alert{margin:0 0 18px}
 .student-registration-form .advanced-settings{margin:2px 0 18px}
@@ -410,6 +435,7 @@ body{font-family:var(--font-ui)}
 .command-key code{overflow-wrap:anywhere}
 .feedback-fields{margin:8px 0 0;padding-left:20px}
 @media(max-width:760px){.list-toolbar{align-items:stretch;flex-direction:column;padding:14px 18px}.list-search-composition{width:100%;min-width:0}.list-toolbar-actions{width:100%}.list-toolbar-actions .btn{flex:1}.directory-heading{padding:18px}.drawer-attributes{margin-inline:-22px}.drawer-attribute>summary{padding-inline:22px}.drawer-options,.drawer-attribute>.radio-group{padding-inline:22px}.drawer-footer{bottom:-22px;margin:20px -22px -22px;padding:14px 22px}}
+@media(max-width:760px){.students-page>.page-heading{margin-bottom:20px}.students-directory-tabs{margin-bottom:22px}.students-directory .list-toolbar{padding:0}.students-directory-table{margin-top:16px;overflow:visible}.students-directory-table .data-table,.students-directory-table .data-table tbody,.students-directory-table .data-table tr{display:block;width:100%;white-space:normal}.students-directory-table .data-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.students-directory-table .data-table tbody tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:15px 22px;padding:18px 16px;border-top:1px solid var(--line)}.students-directory-table .data-table tbody tr:first-child{border-top:0}.students-directory-table .data-table tbody th,.students-directory-table .data-table tbody td{display:block;width:100%;padding:0;border:0;overflow-wrap:anywhere;text-align:left}.students-directory-table .data-table tbody th{grid-column:1/-1}.students-directory-table .data-table tbody th:before,.students-directory-table .data-table tbody td:before{content:attr(data-label);display:block;margin-bottom:5px;color:var(--muted);font-size:11px;font-weight:600}.students-directory-table .data-table tbody th:before{display:none}.students-directory-table .data-table tbody td:last-child{grid-column:1/-1;width:100%;padding-top:10px;border-top:1px solid var(--line);text-align:right}.students-directory-table .data-table tbody td:last-child:before{display:none}.students-directory-table .person-cell{min-width:0}.student-row-action{width:auto}.students-directory .directory-footer{padding-inline:0;border:0}.students-directory .directory-footer .btn{width:100%}}
 @media(max-width:760px){.activity-directory .data-table,.activity-directory .data-table tbody,.activity-directory .data-table tr,.activity-directory .data-table caption{display:block;width:100%;box-sizing:border-box;white-space:normal}.activity-directory .data-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.activity-directory .data-table tbody tr{padding:14px 18px;border-top:1px solid var(--line)}.activity-directory .data-table tbody th,.activity-directory .data-table tbody td{display:block;width:100%;padding:7px 0;border:0;overflow-wrap:anywhere}.activity-directory .data-table tbody th:before,.activity-directory .data-table tbody td:before{content:attr(data-label);display:block;margin-bottom:4px;color:var(--muted);font-size:11px;font-weight:600}.activity-directory .button-row{align-items:flex-start;flex-wrap:wrap}.activity-directory .button-row .btn{width:auto}.activity-directory code{font-size:11px}}
 @media(max-width:460px){.list-search-composition{height:auto;min-height:44px;flex-wrap:wrap;overflow:visible}.list-search-composition select{flex:1 0 100%;height:40px;max-width:none;border-right:0;border-bottom:1px solid var(--line)}.list-search-composition input{height:44px}.list-search-composition .btn{margin-right:3px}.directory-heading{flex-direction:column}.drawer-footer .btn{width:100%}}
 
