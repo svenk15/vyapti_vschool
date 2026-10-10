@@ -793,7 +793,7 @@
       "design": "docs/modules/platform/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; module varchar(40); command varchar(80); resource_type varchar(80); resource_id uuid; before jsonb; after jsonb; reason varchar(500) nullable; request_id uuid; occurred_at timestamptz(3)",
       "responsibility": "Redacted business changes only; immutable. before/after are small allowlisted diffs, never password/token/CSV bodies.",
-      "constraints": "FK school scope; actor account FK; index(scope,module,resource_id,occurred_at,id); DB trigger denies UPDATE/DELETE to app role",
+      "constraints": "FK school scope; actor account FK; index(scope,module,resource_id,occurred_at,id); index(scope,occurred_at DESC,id DESC); DB trigger denies UPDATE/DELETE to app role",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

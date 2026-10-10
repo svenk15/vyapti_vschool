@@ -23,7 +23,7 @@ SetupCheck and the IAM-01 audit/outbox/receipt envelopes are installed; other pl
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
 | `vs_platform_setup_check` (SetupCheck — implemented) | id text PK; created_at timestamptz(3) default now | id=starter is the idempotently seeded readiness marker. No school data. | PK(id) |
-| `vs_platform_audit_entry` (AuditEntry — installed IAM-01) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; module varchar(40); command varchar(80); resource_type varchar(80); resource_id uuid; before jsonb; after jsonb; reason varchar(500) nullable; request_id uuid; occurred_at timestamptz(3) | Redacted business changes only; immutable. before/after are small allowlisted diffs, never password/token/CSV bodies. | FK school scope; actor account FK; index(scope,module,resource_id,occurred_at,id); DB trigger denies UPDATE/DELETE to app role |
+| `vs_platform_audit_entry` (AuditEntry — installed IAM-01) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; module varchar(40); command varchar(80); resource_type varchar(80); resource_id uuid; before jsonb; after jsonb; reason varchar(500) nullable; request_id uuid; occurred_at timestamptz(3) | Redacted business changes only; immutable. before/after are small allowlisted diffs, never password/token/CSV bodies. | FK school scope; actor account FK; index(scope,module,resource_id,occurred_at,id); index(scope,occurred_at DESC,id DESC); DB trigger denies UPDATE/DELETE to app role |
 | `vs_platform_outbox_event` (OutboxEvent — installed IAM-01) | id uuid PK; organization_id uuid; school_id uuid; module varchar(40); type varchar(100); schema_version int; aggregate_id uuid; aggregate_version int; occurred_at timestamptz(3); payload jsonb; state varchar(20) default PENDING; attempts int default 0; available_at timestamptz(3); delivered_at timestamptz(3) nullable | Internal domain fact. Phase 1 only persists; no external delivery is claimed. Future dispatcher uses an explicit lease and receipt migration. | FK school scope; CHECK schema_version>0, aggregate_version>0, attempts>=0, state in PENDING/DELIVERED/EXHAUSTED; index(state,available_at,id) |
 | `vs_platform_command_receipt` (CommandReceipt — installed IAM-01) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; command varchar(80); key varchar(100); input_hash char(64); response jsonb; created_at timestamptz(3) | Only committed safe success response; all fields immutable. Unsuccessful transaction writes no receipt. | UNIQUE(scope,actor_account_id,command,key); FK school and account; hash/key format checks; immutable trigger |
 | `vs_platform_operator_audit` (OperatorAuditEntry — IMP-03 retention) | id uuid PK; operator_id uuid; command varchar(80); resource_type varchar(80); resource_id uuid; occurred_at timestamptz(3); details jsonb | Append-only global platform-operator audit; aggregate technical outcomes only, no tenant/student/source identifiers. | CHECK bounded command and details object; index(operator_id,occurred_at,id); UPDATE/DELETE rejected by trigger |
@@ -134,6 +134,64 @@ sequenceDiagram
 ```
 
 **Verification:** Unit — only risk-specific regressions for integration defects. Real PostgreSQL — full functional suite at this coherent checkpoint, including auth, scope, transactions, migrations and seed idempotency. Playwright desktop/mobile — admin setup → brand preview/publish → staff/teacher assignment → student import/enrolment → teacher attendance → admin correction/report/export, plus denied/unknown-result recovery. Production build from the exact source commit. Release-only evidence remains explicitly open.
+
+## SA-COMP-05 / SA-62 — Review safe branch activity
+
+**Design readiness (10 October 2026):** resolved. Phase 1 implements only the activity-review subset of SA-62. Privacy requests, support impersonation, unrestricted export and audit deletion require separate authority and remain blocked. The live fixed-role model has no `school.audit.read` grant; for this release the exact authorized actor is a current `SCHOOL_ADMIN`, enforced through its existing `school.manage` capability. This does not create an audit wildcard for teachers or institution-only administrators.
+
+### Workflow and ownership
+
+Platform owns the append-only `AuditEntry` projection and this safe read model. The administrator enters at `/admin/activity`, chooses one of `SCHOOL_SETTINGS`, `STAFF_ACCESS`, `STUDENT_CHANGE` or `ATTENDANCE_CORRECTION`, and supplies an inclusive school-local date range of at most 93 days. Default UI dates cover the prior 30 days through today. Each request rechecks live account token, active Organization, active School, active branch membership and `school.manage`. It returns only allowlisted commands in the selected branch. Unknown/restricted commands never enter the DTO.
+
+List rows expose event ID, category, a fixed human-readable action, resource type, occurrence time and request ID as the support reference. Detail repeats those fields and may expose only allowlisted `status` and numeric `version` values from the redacted audit diff. It never returns `before`/`after` JSON, arbitrary reason text, actor account ID, names, email, admission number, imported row content, token, credentials or another branch's event. The UI labels the actor generically as `School administrator`. No mutation exists; retry is a fresh safe read and reads acquire no write locks.
+
+`shared/contracts/activity.ts` owns browser DTOs. `backend/modules/platform/application/activity.ts` owns `ActivityRepository.list/detail` and the transport-neutral facade. `backend/modules/platform/domain/activity.ts` owns filter/date/cursor bounds and the allowlisted command/category/action mapping. `backend/modules/platform/infrastructure/activity.ts` implements live authorization plus PostgreSQL reads. `backend/composition/activity.ts` supplies database URL, cursor secret and clock. `lib/server/activity.ts` reads host configuration and current branch context; `/api/v1/activity` and `/api/v1/activity/:id` are thin GET adapters.
+
+```ts
+type ActivityCategory = "SCHOOL_SETTINGS" | "STAFF_ACCESS" | "STUDENT_CHANGE" | "ATTENDANCE_CORRECTION";
+type ActivityQuery = Readonly<{category:ActivityCategory;from:string;to:string;cursor:string|null;limit:number}>;
+type ActivityItem = Readonly<{eventId:string;category:ActivityCategory;action:string;resourceType:string;supportReference:string;occurredAt:string}>;
+type ActivityPage = Readonly<{items:readonly ActivityItem[];nextCursor:string|null}>;
+type ActivityDetail = ActivityItem & Readonly<{actorLabel:"School administrator";changes:readonly {label:"Status"|"Version";before:string|null;after:string|null}[]}>;
+interface ActivityRepository {
+ list(actor:Identity,organizationId:string,schoolId:string,query:ActivityQuery):Promise<ActivityPage>;
+ detail(actor:Identity,organizationId:string,schoolId:string,eventId:string):Promise<ActivityDetail>;
+}
+```
+
+Validation failures return `VALIDATION`; malformed or scope-mismatched cursors return `INVALID_CURSOR`; an absent, restricted or foreign event returns `NOT_FOUND`; revoked identity returns `UNAUTHENTICATED`; missing current administrator authority returns `FORBIDDEN`; database/configuration failures return `UNAVAILABLE`. There is no idempotency key or transaction receipt because the workflow is read-only.
+
+### Query, index and UI contract
+
+`vs_platform_audit_entry` drives both reads. List predicate is exact `organization_id`, `school_id`, allowlisted `command IN (...)`, `occurred_at >= from` and `< to + 1 day`, plus keyset `(occurred_at,id) < cursor`; ordering is `occurred_at DESC,id DESC`, bounded to 101 rows. Detail adds exact `id`. The existing `(scope,module,resource_id,occurred_at,id)` index cannot support branch-wide time ordering across modules/resources, so forward migration `20261010010000_platform_activity_index` adds `(organization_id,school_id,occurred_at DESC,id DESC)`. No row or table contract changes.
+
+The production page uses the shared portal shell, PageHeader, compact filter toolbar, Card, Badge, table and Alert states. Filter submission uses validated URL fields; changing category/date clears the cursor. Each row has a keyboard-operable `View safe detail` disclosure and a `Copy support reference` button whose acknowledged state is local presentation only. Empty, denied and unavailable states state what can be done next. A visible authority note explains that privacy requests and support access must go to the designated authorized team and that this screen cannot delete history, impersonate an account or export unrestricted data.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant W as Activity page / GET API
+  participant U as Platform activity use case
+  participant R as PrismaActivityRepository
+  participant D as PostgreSQL
+  A->>W: Filter category and inclusive dates
+  W->>U: Identity + current branch + bounded query
+  U->>R: list(actor, scope, query)
+  R->>D: Verify account, organization, school, membership and SCHOOL_ADMIN
+  R->>D: Read allowlisted branch events by time keyset
+  D-->>R: Redacted AuditEntry columns only
+  R-->>U: Safe ActivityPage
+  U-->>W: JSON-safe page
+  W-->>A: Activity rows and support references
+  A->>W: View safe event detail
+  W->>U: detail(actor, scope, eventId)
+  U->>R: Authorized exact lookup
+  R->>D: Same live checks + scoped allowlisted event
+  D-->>R: Redacted event
+  R-->>A: Fixed action and allowlisted status/version only
+```
+
+Verification requires unit validation/allowlist/cursor tests; real PostgreSQL list/detail, branch isolation, revoked permission, unknown-command suppression, bounded pagination and index-plan evidence; desktop/mobile Playwright for populated, empty, validation, detail, copy acknowledgement, permission denial, keyboard reachability and overflow. Existing synthetic audit events from `pnpm demo:seed` are reused; no new fixture table or destructive seed is required.
 
 ## Migration, retention and handoff
 

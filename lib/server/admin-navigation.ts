@@ -15,6 +15,7 @@ const routes:readonly Route[]=[
  {label:'School settings',href:'/admin/school',icon:'settings',permission:'school.manage'},
  {label:'Branch module access',href:'/admin/modules',icon:'modules',permission:'module.configure',institutionAdmin:true},
  {label:'Sign-in branding',href:'/admin/branding',icon:'branding',permission:'branding.manage'},
+ {label:'Branch activity',href:'/admin/activity',icon:'activity',permission:'school.manage'},
  {label:'Staff access',href:'/admin/users',icon:'staff',permission:'user.manage'},
  {label:'Staff profiles',href:'/admin/teachers',icon:'people',permission:'class.manage',modules:['staff_core']},
  {label:'Students',href:'/admin/students',icon:'students',permission:'student.read',modules:['student_core']},
@@ -26,7 +27,7 @@ const routes:readonly Route[]=[
 ];
 const sections:readonly Readonly<{label:string;hrefs:readonly string[]}>[]=[
  {label:'Overview',hrefs:['/admin']},
- {label:'School',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding']},
+ {label:'School',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
  {label:'People and students',hrefs:['/admin/users','/admin/teachers','/admin/students','/admin/imports']},
  {label:'Academics',hrefs:['/admin/academics','/admin/classes']},
  {label:'Attendance',hrefs:['/admin/attendance/sessions','/admin/reports/attendance']},

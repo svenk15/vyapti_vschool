@@ -6,6 +6,7 @@ Last updated: 2026-10-10. FND-01 locally verified and accepted on the owner’s 
 |---|---|---|---|
 | FND-01 | VERIFIED | PASSED | [Local verification](../../evidence/fnd-01-local/verification.json); source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff |
 | FND-02 | VERIFIED | PENDING | [Demo verification](../../evidence/fnd-02-demo/verification.json); executable checkpoint and evidence commit recorded there |
+| SA-COMP-05 / SA-62 activity subset | VERIFIED | PENDING | [Safe activity evidence](../../evidence/sa-comp-05/README.md); exact implementation source recorded in the follow-up checkpoint |
 
 ## Current checkpoint
 
@@ -14,6 +15,12 @@ Foundation source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff passed local checks, 
 ## Next action
 
 Keep the stable FND-02 local demo available for consolidated owner review. Address any reported defect before subsequent authorized work. Native 200% zoom, VoiceOver and NVDA evidence remains outstanding. TEN-03 remains IN_PROGRESS and blocks production release and real-client data; its deferred RLS/context-proof work is still unverified.
+
+### SA-COMP-05 safe branch activity — 10 October 2026
+
+Implementation VERIFIED; human review PENDING. `/admin/activity` now provides a bounded, signed-cursor, branch-scoped read projection for allowlisted school-setting, staff-access, student-change and attendance-correction commands. The projection returns fixed action/resource labels, generic actor text, request ID and only safe status/version diffs. It suppresses unknown commands and never returns actor IDs, arbitrary reasons or stored audit JSON. Current administrator authorization remains active on every list/detail read.
+
+Migration `20261010010000_platform_activity_index` was applied forward to both guarded local databases; no existing data was reset and both have 33 migrations. `pnpm check` passed with 120 unit tests; the final focused real-PostgreSQL suite passed 4/4 after the complete 115-test run showed one test-only tiny-dataset plan-choice assertion; final desktop/mobile Playwright passed 4/4 and its production build. Detailed truthful evidence and screenshots are in [SA-COMP-05 evidence](../../evidence/sa-comp-05/README.md). Existing connected `pnpm demo:seed` audit events supply the demo data; no seed-only table or privileged synthetic activity was added. Privacy/support authority and TEN-03 enforcement remain outstanding. Next: SA-COMP-06 integrated administrator reconciliation and checkpoint.
 
 ### EX-15 current consolidated demo — 10 October 2026
 

@@ -385,6 +385,7 @@ body{font-family:var(--font-ui)}
 
 /* Controlled list, drawer and command-feedback recipes. */
 .directory-card{overflow:hidden}
+.activity-filter-card>.section-header{padding:22px 22px 0;margin-bottom:0}.activity-filter-card .compact-toolbar{border-bottom:0}.activity-filter-card .field{width:min(220px,100%)}.activity-directory code,.activity-detail code{font-size:12px;overflow-wrap:anywhere}.activity-directory>.alert{margin:16px 22px}.activity-detail{max-width:880px}.activity-detail .record-facts{margin-top:8px}
 .directory-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:22px}
 .directory-heading h2,.directory-heading h3{margin-bottom:5px}
 .directory-heading p{margin:0}
@@ -409,6 +410,7 @@ body{font-family:var(--font-ui)}
 .command-key code{overflow-wrap:anywhere}
 .feedback-fields{margin:8px 0 0;padding-left:20px}
 @media(max-width:760px){.list-toolbar{align-items:stretch;flex-direction:column;padding:14px 18px}.list-search-composition{width:100%;min-width:0}.list-toolbar-actions{width:100%}.list-toolbar-actions .btn{flex:1}.directory-heading{padding:18px}.drawer-attributes{margin-inline:-22px}.drawer-attribute>summary{padding-inline:22px}.drawer-options,.drawer-attribute>.radio-group{padding-inline:22px}.drawer-footer{bottom:-22px;margin:20px -22px -22px;padding:14px 22px}}
+@media(max-width:760px){.activity-directory .data-table,.activity-directory .data-table tbody,.activity-directory .data-table tr,.activity-directory .data-table caption{display:block;width:100%;box-sizing:border-box;white-space:normal}.activity-directory .data-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.activity-directory .data-table tbody tr{padding:14px 18px;border-top:1px solid var(--line)}.activity-directory .data-table tbody th,.activity-directory .data-table tbody td{display:block;width:100%;padding:7px 0;border:0;overflow-wrap:anywhere}.activity-directory .data-table tbody th:before,.activity-directory .data-table tbody td:before{content:attr(data-label);display:block;margin-bottom:4px;color:var(--muted);font-size:11px;font-weight:600}.activity-directory .button-row{align-items:flex-start;flex-wrap:wrap}.activity-directory .button-row .btn{width:auto}.activity-directory code{font-size:11px}}
 @media(max-width:460px){.list-search-composition{height:auto;min-height:44px;flex-wrap:wrap;overflow:visible}.list-search-composition select{flex:1 0 100%;height:40px;max-width:none;border-right:0;border-bottom:1px solid var(--line)}.list-search-composition input{height:44px}.list-search-composition .btn{margin-right:3px}.directory-heading{flex-direction:column}.drawer-footer .btn{width:100%}}
 
 /* Attendance report composition. */

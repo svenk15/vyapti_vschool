@@ -38,8 +38,8 @@ export function ServerTable<Row>({
               {columns.map((column) => {
                 const value = column.render(row);
                 return column.rowHeader
-                  ? <th key={column.key} scope="row">{value}</th>
-                  : <td key={column.key}>{value}</td>;
+                  ? <th key={column.key} scope="row" data-label={column.label}>{value}</th>
+                  : <td key={column.key} data-label={column.label}>{value}</td>;
               })}
             </tr>
           ))}

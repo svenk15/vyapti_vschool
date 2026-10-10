@@ -70,3 +70,11 @@ Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm 
 Use the local candidate and synthetic admin/teacher personas to complete the documented school day, including a failed import row, attendance correction and report export. Verify published branding at the institution's school-branded sign-in URL.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
+
+## SA-COMP-05 / SA-62 — Review safe branch activity
+
+Depends on: IAM-02, DS-02 and the installed Platform audit envelope. Their implementations must be VERIFIED; human review may remain PENDING under the current batch policy.
+
+Implement the bounded read-only activity projection in DESIGN. Use current `school.manage` as the exact Phase 1 fixed-role authorization. Return only allowlisted commands and safe DTO fields; arbitrary audit reason/diffs, actor IDs and unknown commands never cross the owner boundary. Add the branch/time index by forward migration, signed scope-bound keyset cursor, protected list/detail APIs and the approved Activity page with filters, safe detail and support reference copy acknowledgement. Keep privacy/support authority handoff visible and non-operational.
+
+Acceptance: unit validation and allowlist mapping; real PostgreSQL branch isolation, current authorization, unknown suppression, date bounds, pagination and plan evidence; desktop/mobile populated/empty/detail/copy/denied/error states with keyboard and overflow checks. Run the guarded seed without replacing fixtures. Record human review PENDING and continue to SA-COMP-06.

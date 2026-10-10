@@ -1,0 +1,7 @@
+import {describe,expect,it} from 'vitest';
+import {activityDescriptor,activityQuery,commandsForCategory,safeActivityChanges} from '../../backend/modules/platform/domain/activity';
+describe('safe branch activity contract',()=>{
+ it('defaults to a bounded student-change window and validates explicit filters',()=>{expect(activityQuery({},'2026-10-10')).toEqual({category:'STUDENT_CHANGE',from:'2026-09-11',to:'2026-10-10',cursor:null,limit:50});expect(activityQuery({category:'STAFF_ACCESS',from:'2026-07-10',to:'2026-10-10',limit:'100'},'2026-10-10')).toMatchObject({category:'STAFF_ACCESS',limit:100});expect(()=>activityQuery({from:'2026-07-09',to:'2026-10-10'},'2026-10-10')).toThrow('VALIDATION');expect(()=>activityQuery({category:'ALL'},'2026-10-10')).toThrow('VALIDATION');});
+ it('maps only allowlisted commands to fixed safe labels',()=>{expect(commandsForCategory('ATTENDANCE_CORRECTION')).toEqual(['AttendanceSessionCorrected']);expect(activityDescriptor('StudentPersonNameCorrected')).toMatchObject({category:'STUDENT_CHANGE',resourceType:'Student'});expect(activityDescriptor('AccountActivated')).toBeNull();});
+ it('projects only uppercase status and positive version changes',()=>{expect(safeActivityChanges({status:'ACTIVE',version:1,email:'secret@example.test'},{status:'ARCHIVED',version:2,name:'Private'})).toEqual([{label:'Status',before:'ACTIVE',after:'ARCHIVED'},{label:'Version',before:'1',after:'2'}]);expect(safeActivityChanges({status:'contains private text',version:0},{reason:'hidden'})).toEqual([]);});
+});

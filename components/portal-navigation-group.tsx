@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type {Ref} from 'react';
-export type PortalIconName='overview'|'setup'|'settings'|'modules'|'branding'|'staff'|'people'|'students'|'import'|'academics'|'classes'|'calendar'|'report';
+export type PortalIconName='overview'|'setup'|'settings'|'modules'|'branding'|'staff'|'people'|'students'|'import'|'academics'|'classes'|'calendar'|'report'|'activity';
 export type PortalNavigationItem=Readonly<{href:string;label:string;icon?:PortalIconName}>;
 export type PortalNavigationGroupData=Readonly<{label:string;items:readonly PortalNavigationItem[]}>;
 function PortalIcon({name='overview'}:{name?:PortalIconName}){
@@ -17,6 +17,7 @@ function PortalIcon({name='overview'}:{name?:PortalIconName}){
  if(name==='classes')return <svg {...common}><path d="M4 5h16v14H4zM4 9h16M9 9v10"/></svg>;
  if(name==='calendar')return <svg {...common}><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z"/></svg>;
  if(name==='report')return <svg {...common}><path d="M5 3h14v18H5zM8 16v-3M12 16V8M16 16v-6"/></svg>;
+ if(name==='activity')return <svg {...common}><path d="M4 4h16v16H4zM8 9h8M8 13h5M8 17h7M8 4v3M16 4v3"/></svg>;
  return null;
 }
 export function PortalNavigationGroup({group,pathname,onNavigate,firstItemRef}:{group:PortalNavigationGroupData;pathname:string;onNavigate?:()=>void;firstItemRef?:Ref<HTMLAnchorElement>}){

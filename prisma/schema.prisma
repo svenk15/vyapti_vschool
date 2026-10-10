@@ -352,6 +352,7 @@ model AuditEntry {
   @@index([organizationId, schoolId], map: "vs_platform_audit_entry_r6_idx")
   @@index([actorAccountId], map: "vs_platform_audit_entry_r7_idx")
   @@index([organizationId, schoolId, module, resourceId, occurredAt, id], map: "vs_platform_audit_entry_q0_idx")
+  @@index([organizationId, schoolId, occurredAt(sort: Desc), id(sort: Desc)], map: "vs_platform_audit_entry_activity_idx")
   @@map("vs_platform_audit_entry")
 }
 
