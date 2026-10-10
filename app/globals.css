@@ -216,6 +216,12 @@ body{font-family:var(--font-ui)}
 .branding-host-row{display:grid;grid-template-columns:minmax(260px,1fr) auto;align-items:end;gap:12px}
 .branding-host-row .btn{margin-bottom:18px}
 .dns-challenge{margin-top:18px;padding:18px;border-radius:var(--radius);background:var(--brand-soft)}
+.staff-profile-layout{display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:24px}
+.staff-profile-layout>.card{min-width:0}
+.staff-profile-layout .compact-toolbar .field{width:min(360px,100%)}
+.delivery-failure-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;border-top:1px solid var(--line)}
+.delivery-failure-row:first-of-type{border-top:0}
+.delivery-failure-row p{margin:3px 0 0}
 .portal-page-content fieldset.control-stack{min-width:0;margin:0;padding:0;border:0}
 .compact-toolbar{display:flex;align-items:flex-end;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line);background:#fbfcf9}
 .compact-toolbar .field{margin:0}
@@ -245,9 +251,9 @@ body{font-family:var(--font-ui)}
 .teacher-session-summary h2{margin:0 0 3px;font-size:17px;letter-spacing:-.15px}
 .teacher-session-summary p{margin:0;font-size:13px;overflow-wrap:anywhere}
 .teacher-session-card>.btn{min-width:138px}
-@media(max-width:900px){.portal-page-content main>.two-columns.section-space{grid-template-columns:minmax(0,1fr)}.teacher-session-card{grid-template-columns:90px minmax(180px,1fr) auto}.teacher-session-card>.btn{grid-column:2/4;justify-self:start}}
+@media(max-width:900px){.portal-page-content main>.two-columns.section-space,.staff-profile-layout{grid-template-columns:minmax(0,1fr)}.teacher-session-card{grid-template-columns:90px minmax(180px,1fr) auto}.teacher-session-card>.btn{grid-column:2/4;justify-self:start}}
 @media(max-width:760px){.portal-top-context{grid-row:2}.portal-topbar>.portal-account{grid-column:3;grid-row:1}.portal-page-content .page-space,.teacher-portal-content .page-space{padding-top:24px;padding-bottom:48px}.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{font-size:28px}.page-stack{gap:18px}.section-header{margin-bottom:16px}.settings-panel{padding:20px}.setup-action-grid{grid-template-columns:minmax(0,1fr);gap:18px}.setup-action-card{min-height:0}.compact-toolbar{align-items:flex-start;flex-direction:column;padding:18px}.compact-toolbar .field{width:100%}.compact-toolbar .btn{margin:0}.branding-host-row{grid-template-columns:minmax(0,1fr)}.branding-host-row .btn{justify-self:start;margin:0}.teacher-day-state{padding:10px 18px}.teacher-session-card{grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;padding:18px}.teacher-session-time{grid-column:1}.teacher-session-summary{grid-column:1/-1;grid-row:2}.teacher-session-card>.badge{grid-column:2;grid-row:1}.teacher-session-card>.btn{grid-column:1/-1;grid-row:3;justify-self:start}.portal-nav-icon{width:22px}.portal-nav-icon svg{width:19px;height:19px}}
-@media(max-width:460px){.section-header{flex-direction:column}.settings-panel{padding:18px}.settings-form .form-grid{gap:0}.form-actions .btn{width:100%}.teacher-session-card>.btn{width:100%}}
+@media(max-width:460px){.section-header{flex-direction:column}.settings-panel{padding:18px}.settings-form .form-grid{gap:0}.form-actions .btn{width:100%}.delivery-failure-row{align-items:flex-start;flex-direction:column}.teacher-session-card>.btn{width:100%}}
 
 /* Controlled list, drawer and command-feedback recipes. */
 .directory-card{overflow:hidden}
