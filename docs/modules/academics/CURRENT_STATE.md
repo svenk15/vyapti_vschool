@@ -1,6 +1,6 @@
 # Academic setup and teaching context — current state
 
-Last updated: 2026-10-05. Task state is local to this checkout; no imported task completion. Design revision 3. No active execution timer.
+Last updated: 2026-10-10. Task state is local to this checkout; no imported task completion. Design revision 4. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -9,6 +9,12 @@ Last updated: 2026-10-05. Task state is local to this checkout; no imported task
 | ACA-03 | VERIFIED | PENDING | [Local verification](../../evidence/academics-03-local/verification.json); 84 unit, 17 real-PostgreSQL functional and 2 desktop/mobile browser tests passed |
 
 ## Current checkpoint
+
+**SA-COMP-02 / SA-10 completion (10 October 2026):** Implementation VERIFIED on the current tested worktree; human review PENDING. `/admin/academics` now lists active and retired grades, sections and subjects with scoped dependency counts. A current administrator with `class.manage` can retire an eligible item after reviewing impact and entering a reason. The Academics owner rechecks live account, organization, branch, membership, release, entitlement and activation inside its existing account→Organization→School lock transaction. It locks the selected catalog row, uses exact idempotency receipts and a version CAS, retires active child sections/offerings prospectively, and preserves historical rows. Current/future student placements and unresolved scheduled/open attendance sessions block retirement with no partial write. Reads remain repeatable-read projections and do not acquire mutation locks.
+
+No schema or migration changed: the established `active` and `version` columns express this transition. `pnpm check` passed with 116 unit tests and all documentation, database-design, boundary and backend checks. The first broad PostgreSQL run exposed a test setup error because an offering was created before opening its year; no product assertion was weakened. After correcting the fixture, the focused suite passed 9/9 and the final broad real PostgreSQL suite passed 108/108, proving dependency aggregation without row multiplication, successful cascades, exact replay, changed-input conflict, unresolved-session rollback and historical row preservation. The focused Playwright run passed 4/4 across desktop and 390px mobile, including reason validation, persistent retired state and no viewport overflow. Rendered evidence was inspected for hierarchy, wrapping and mobile fit in [SA-COMP-02 evidence](../../evidence/sa-comp-02/README.md). The guarded `pnpm demo:seed` completed without overwriting existing data or credentials; its existing academic fixture already supplies populated grade/section/subject records.
+
+Manual review (PENDING): sign in with the administrator persona, open `/admin/academics`, add a uniquely named subject, choose **Retire**, confirm the dependency summary and reason requirement, then retire it. Expect the row to remain visible as retired after refresh and disappear from active selectors. Records with current/future placements or scheduled/open attendance sessions show their counts and cannot be confirmed until the owner workflow resolves those dependencies.
 
 **EX-07 presentation and composition checkpoint (10 October 2026):** Implementation VERIFIED at `61ffda2a8e51571b93e19780a4c85dcea75b8d4a`; human review PENDING. `/admin/academics` and `/admin/classes` now use the approved shared page, constrained-form, calendar, directory, empty and feedback compositions. Inclusive UI dates still convert once to exclusive owner dates. The portable Academics factory receives its database URL, release manifest and clock from `lib/server` and no longer reads environment configuration or supplies a release fallback. Existing authorization, scope, guards, versions, receipts, impact checks, tables and migrations are unchanged. `pnpm check` passed with 113 unit tests; Academics PostgreSQL passed 8/8; final setup and offering browser runs passed 2/2 each across desktop/mobile. The guarded seed reused the existing academic fixture. Evidence: `docs/evidence/ex-07/README.md`.
 
@@ -52,7 +58,7 @@ Human review remains PENDING until owner feedback is received. Automated verific
 
 ## Next action
 
-ACA-03 implementation verification is complete; human review remains PENDING. Keep the ACA-03 snapshot stable and continue only with the next task selected by `pnpm next-task`, honoring explicit acceptance gates. ACA-02 calendar and ACA-03 assignment impact adapters are valid only while Attendance session storage/creation is absent; ATT-01 replaces them before session workflows are released.
+SA-COMP-02 implementation verification is complete; human review remains PENDING. Continue SA-COMP-03 invitation delivery recovery. TEN-03, native accessibility, provider and other production gates remain unchanged.
 
 ## Pending decisions / limitations
 

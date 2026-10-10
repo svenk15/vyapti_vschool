@@ -328,6 +328,12 @@ body{font-family:var(--font-ui)}
 .academic-summary-list{display:grid;margin-bottom:20px;border-top:1px solid var(--line)}
 .academic-summary-list p{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:0;padding:11px 0;border-bottom:1px solid var(--line)}
 .academic-summary-list span{text-align:right;color:var(--muted)}
+.academic-catalog-list{display:grid;gap:0}
+.academic-catalog-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px 18px;padding:14px 0;border-top:1px solid var(--line)}
+.academic-catalog-row:first-child{border-top:0}
+.academic-catalog-row>div:first-child{display:grid;gap:4px}
+.academic-retire-confirm{grid-column:1/-1;display:grid;gap:14px;padding:16px;border:1px solid var(--line);border-radius:var(--radius-control);background:var(--surface-muted)}
+.academic-retire-confirm .field{max-width:680px}
 .academic-calendar-form{width:min(100%,720px);min-width:0;margin:0;padding:0;border:0}
 .academic-calendar-form>legend{margin-bottom:10px}
 .weekday-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px 14px;margin-bottom:18px}
@@ -425,3 +431,4 @@ body{font-family:var(--font-ui)}
 @media(max-width:760px){.report-filter-toolbar{grid-template-columns:minmax(0,1fr);padding:16px 18px 20px}.report-filter-toolbar .btn{width:100%;margin:0}.report-filter-card>.section-header{padding:18px 18px 0}.report-export-action{justify-items:stretch;width:100%}.report-export-action .btn{width:100%}.report-session-directory .directory-footer{flex-direction:column}.report-session-directory .directory-footer .btn{width:100%}}
 @media(max-width:460px){.report-stat-grid .stat-card{display:block}.report-stat-grid .stat-value{margin-block:6px}}
 @media(max-width:760px){.setup-readiness-card{align-items:flex-start;flex-direction:column;gap:16px}.setup-readiness-card .btn{width:100%}.dashboard-exception-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.academic-catalog-row{grid-template-columns:minmax(0,1fr)}.academic-catalog-row>.btn{justify-self:start}.academic-retire-confirm{grid-column:1}.academic-retire-confirm .form-actions{align-items:stretch;flex-direction:column}.academic-retire-confirm .btn{width:100%}}

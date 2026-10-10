@@ -2,6 +2,14 @@
 
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
+## SA-COMP-02 — Review dependencies and retire academic catalog records
+
+Workflow: SA-10. Depends on the verified ACA-01/02/03, STU-03 and ATT-04 owner behavior.
+
+Outcome: a School Administrator sees complete dependency counts for grades, sections and subjects, confirms a prospective retirement with a reason, and retains all historical references. Current/future student placements and unresolved attendance sessions block the affected retirement with a direct recovery path; safe related sections/offerings retire atomically.
+
+Acceptance: current scope, `class.manage`, academic release/license/activation and expected version are rechecked inside the existing School-guard transaction; replay is actor/scoped/input exact; no row is deleted; cross-branch IDs are hidden; PostgreSQL proves blocker/cascade/history/concurrency; desktop/mobile browser evidence proves explicit confirmation and useful dependency feedback. No schema migration is planned.
+
 ## ACA-01 — Configure academic year, terms, grades and sections
 
 Depends on: IAM-02, TEN-02

@@ -2,6 +2,8 @@ import {describe,expect,it} from 'vitest';
 import {civilDate,code,name,validateRange,validateTerms} from '../../backend/modules/academics/domain/setup';
 import {capabilityReleaseManifest,releasedModuleIds} from '../../backend/modules/tenancy/domain/entitlements';
 import {calendarExceptions,evaluateCalendar,weekdays} from '../../backend/modules/academics/domain/calendar';
+import {createAcademicSetupUseCases,type AcademicSetupRepository} from '../../backend/modules/academics/application/setup';
+import {randomUUID} from 'node:crypto';
 
 describe('academic setup domain',()=>{
  it('validates real Gregorian civil dates without local timezone conversion',()=>{
@@ -36,5 +38,18 @@ describe('trusted module release configuration',()=>{
  it('defaults deny-all and accepts only explicit server module IDs',()=>{
   expect(Object.values(capabilityReleaseManifest()).some(Boolean)).toBe(false);expect(capabilityReleaseManifest(releasedModuleIds('academic_core')).academic_core).toBe(true);expect(capabilityReleaseManifest(releasedModuleIds('academic_core')).attendance).toBe(false);
   expect(()=>releasedModuleIds('unknown')).toThrow('INVALID_RELEASE_MANIFEST');expect(()=>releasedModuleIds('academic_core,academic_core')).toThrow('INVALID_RELEASE_MANIFEST');
+ });
+});
+
+describe('academic catalog retirement input',()=>{
+ it('validates type, identity, version and reason before delegating the normalized command',async()=>{
+  const accountId=randomUUID(),organizationId=randomUUID(),schoolId=randomUUID(),id=randomUUID(),key=randomUUID(),calls:unknown[]=[];
+  const repository={retireCatalogItem:async(...args:unknown[])=>{calls.push(args);return {id,type:'subject' as const,version:2,active:false,retiredSections:0,retiredOfferings:0,replayed:false};}} as unknown as AcademicSetupRepository;
+  const useCases=createAcademicSetupUseCases(repository),identity={accountId,tokenVersion:1};
+  await expect(useCases.retireCatalogItem(identity,organizationId,schoolId,'subject',id,{expectedVersion:1,key,reason:'  Retire unused subject  '})).resolves.toMatchObject({id,active:false});
+  expect(calls[0]).toEqual([identity,organizationId,schoolId,'subject',id,{expectedVersion:1,key,reason:'Retire unused subject'}]);
+  expect(()=>useCases.retireCatalogItem(identity,organizationId,schoolId,'course',id,{expectedVersion:1,key,reason:'Valid reason'})).toThrow();
+  expect(()=>useCases.retireCatalogItem(identity,organizationId,schoolId,'subject',id,{expectedVersion:0,key,reason:'Valid reason'})).toThrow();
+  expect(()=>useCases.retireCatalogItem(identity,organizationId,schoolId,'subject',id,{expectedVersion:1,key,reason:'no'})).toThrow();
  });
 });

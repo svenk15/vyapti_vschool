@@ -1,7 +1,7 @@
 import {createHash,randomUUID} from 'node:crypto';
 import type {Prisma,PrismaClient} from '../../../../generated/prisma/client';
 import type {Identity} from '../../../../shared/contracts/access';
-import type {AcademicCommandResult,AcademicSectionRecord,AcademicYearRecord,AcademicsWorkspace} from '../../../../shared/contracts/academics';
+import type {AcademicCatalogDependencies,AcademicCatalogRetirement,AcademicCatalogType,AcademicCommandResult,AcademicSectionRecord,AcademicYearRecord,AcademicsWorkspace} from '../../../../shared/contracts/academics';
 import type {AcademicSetupRepository,AcademicCapability,CalendarImpactPort} from '../application/setup';
 import {validateTerms} from '../domain/setup';
 import {schoolCivilDate} from '../domain/calendar';
@@ -12,6 +12,9 @@ import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/index';
 
 type Scope={organizationId:string;schoolId:string};
 type Guard={scope:Scope;configurationVersion:number;timezone:string};
+type DependencyRow={id:string;activeSections:number;activeOfferings:number;currentOrFuturePlacements:number;unresolvedSessions:number};
+const emptyDependencies:AcademicCatalogDependencies={activeSections:0,activeOfferings:0,currentOrFuturePlacements:0,unresolvedSessions:0};
+const dependencyMap=(rows:DependencyRow[])=>new Map(rows.map(row=>[row.id,{activeSections:row.activeSections,activeOfferings:row.activeOfferings,currentOrFuturePlacements:row.currentOrFuturePlacements,unresolvedSessions:row.unresolvedSessions}]));
 const canonical=(v:unknown):string=>Array.isArray(v)?`[${v.map(canonical).join(',')}]`:v&&typeof v==='object'?`{${Object.entries(v).sort(([a],[b])=>a.localeCompare(b)).map(([k,x])=>`${JSON.stringify(k)}:${canonical(x)}`).join(',')}}`:JSON.stringify(v);
 const hash=(value:unknown)=>createHash('sha256').update(canonical(value)).digest('hex');
 const dateText=(value:Date)=>value.toISOString().slice(0,10);
@@ -44,17 +47,24 @@ export class PrismaAcademicSetupRepository implements AcademicSetupRepository{
   const next=guard.configurationVersion+1,changed=await tx.school.updateMany({where:{organizationId:guard.scope.organizationId,id:guard.scope.schoolId,configurationVersion:guard.configurationVersion},data:{configurationVersion:next,version:{increment:1}}});if(changed.count!==1)throw new AccessError('STALE_VERSION');
   const occurredAt=this.now().toISOString();await this.evidence(tx).append({organizationId:guard.scope.organizationId,schoolId:guard.scope.schoolId,actorAccountId:actor.accountId,command,key,inputHash,response:result,expectedRevision:guard.configurationVersion,newRevision:next,reason,requestId:randomUUID(),occurredAt,changes:{schemaVersion:1,principalKind:'ACCOUNT',resourceId,version,status}});
  }
+ private async catalogDependencies(tx:Prisma.TransactionClient,scope:Scope,today:string,type?:AcademicCatalogType,id?:string){
+  const gradeRows=!type||type==='grade'?await tx.$queryRaw<DependencyRow[]>`SELECT g.id::text AS id,COUNT(DISTINCT sec.id) FILTER(WHERE sec.active)::int AS "activeSections",COUNT(DISTINCT o.id) FILTER(WHERE o.active)::int AS "activeOfferings",COUNT(DISTINCT p.id) FILTER(WHERE p.valid_to>${today}::date)::int AS "currentOrFuturePlacements",COUNT(DISTINCT ses.id) FILTER(WHERE ses.status IN ('SCHEDULED','OPEN'))::int AS "unresolvedSessions" FROM vs_academics_grade_level g LEFT JOIN vs_academics_section sec ON sec.organization_id=g.organization_id AND sec.school_id=g.school_id AND sec.grade_id=g.id LEFT JOIN vs_academics_course_offering o ON o.organization_id=sec.organization_id AND o.school_id=sec.school_id AND o.section_id=sec.id LEFT JOIN vs_students_section_placement p ON p.organization_id=sec.organization_id AND p.school_id=sec.school_id AND p.section_id=sec.id LEFT JOIN vs_attendance_session ses ON ses.organization_id=o.organization_id AND ses.school_id=o.school_id AND ses.offering_id=o.id WHERE g.organization_id=${scope.organizationId}::uuid AND g.school_id=${scope.schoolId}::uuid AND (${id??null}::uuid IS NULL OR g.id=${id??null}::uuid) GROUP BY g.id`:[];
+  const subjectRows=!type||type==='subject'?await tx.$queryRaw<DependencyRow[]>`SELECT sub.id::text AS id,0::int AS "activeSections",COUNT(DISTINCT o.id) FILTER(WHERE o.active)::int AS "activeOfferings",0::int AS "currentOrFuturePlacements",COUNT(DISTINCT ses.id) FILTER(WHERE ses.status IN ('SCHEDULED','OPEN'))::int AS "unresolvedSessions" FROM vs_academics_subject sub LEFT JOIN vs_academics_course_offering o ON o.organization_id=sub.organization_id AND o.school_id=sub.school_id AND o.subject_id=sub.id LEFT JOIN vs_attendance_session ses ON ses.organization_id=o.organization_id AND ses.school_id=o.school_id AND ses.offering_id=o.id WHERE sub.organization_id=${scope.organizationId}::uuid AND sub.school_id=${scope.schoolId}::uuid AND (${id??null}::uuid IS NULL OR sub.id=${id??null}::uuid) GROUP BY sub.id`:[];
+  const sectionRows=!type||type==='section'?await tx.$queryRaw<DependencyRow[]>`SELECT sec.id::text AS id,0::int AS "activeSections",COUNT(DISTINCT o.id) FILTER(WHERE o.active)::int AS "activeOfferings",COUNT(DISTINCT p.id) FILTER(WHERE p.valid_to>${today}::date)::int AS "currentOrFuturePlacements",COUNT(DISTINCT ses.id) FILTER(WHERE ses.status IN ('SCHEDULED','OPEN'))::int AS "unresolvedSessions" FROM vs_academics_section sec LEFT JOIN vs_academics_course_offering o ON o.organization_id=sec.organization_id AND o.school_id=sec.school_id AND o.section_id=sec.id LEFT JOIN vs_students_section_placement p ON p.organization_id=sec.organization_id AND p.school_id=sec.school_id AND p.section_id=sec.id LEFT JOIN vs_attendance_session ses ON ses.organization_id=o.organization_id AND ses.school_id=o.school_id AND ses.offering_id=o.id WHERE sec.organization_id=${scope.organizationId}::uuid AND sec.school_id=${scope.schoolId}::uuid AND (${id??null}::uuid IS NULL OR sec.id=${id??null}::uuid) GROUP BY sec.id`:[];
+  return {grades:dependencyMap(gradeRows),subjects:dependencyMap(subjectRows),sections:dependencyMap(sectionRows)};
+ }
  async workspace(actor:Identity,organizationId:string,schoolId:string):Promise<AcademicsWorkspace>{try{return await this.db.$transaction(async tx=>{
-  await this.guard(tx,actor,organizationId,schoolId);
-  const [years,grades,subjects,campuses,sections]=await Promise.all([
+  const guard=await this.guard(tx,actor,organizationId,schoolId),today=schoolCivilDate(this.now(),guard.timezone);
+  const [years,grades,subjects,campuses,sections,dependencies]=await Promise.all([
    tx.academicYear.findMany({where:{organizationId,schoolId},orderBy:[{startsOn:'desc'},{code:'asc'}],include:{terms:{orderBy:[{startsOn:'asc'},{code:'asc'}]},calendar:{include:{revisions:{orderBy:{number:'desc'},include:{exceptions:{orderBy:{onDate:'asc'},include:{campus:{select:{name:true}}}}}}}}}}),
-   tx.gradeLevel.findMany({where:{organizationId,schoolId,active:true},orderBy:[{sortOrder:'asc'},{code:'asc'}],select:{id:true,code:true,name:true,active:true}}),
-   tx.subject.findMany({where:{organizationId,schoolId,active:true},orderBy:{code:'asc'},select:{id:true,code:true,name:true,active:true}}),
+   tx.gradeLevel.findMany({where:{organizationId,schoolId},orderBy:[{sortOrder:'asc'},{code:'asc'}],select:{id:true,version:true,code:true,name:true,active:true}}),
+   tx.subject.findMany({where:{organizationId,schoolId},orderBy:{code:'asc'},select:{id:true,version:true,code:true,name:true,active:true}}),
    tx.campus.findMany({where:{organizationId,schoolId,status:'ACTIVE'},orderBy:{code:'asc'},select:{id:true,code:true,name:true,status:true}}),
    tx.section.findMany({where:{organizationId,schoolId},orderBy:[{year:{startsOn:'desc'}},{grade:{sortOrder:'asc'}},{code:'asc'}],include:{year:{select:{id:true}},grade:{select:{name:true}},campus:{select:{name:true}}}}),
+   this.catalogDependencies(tx,{organizationId,schoolId},today),
   ]);
-  const sectionRecords:AcademicSectionRecord[]=sections.map(s=>({id:s.id,code:s.code,name:s.name,yearId:s.yearId,gradeId:s.gradeId,gradeName:s.grade.name,campusId:s.campusId,campusName:s.campus?.name??null,active:s.active}));
-  return {years:years.map(yearDto),grades,subjects,campuses:campuses.map(c=>({id:c.id,code:c.code,name:c.name,active:true})),sections:sectionRecords};
+  const sectionRecords:AcademicSectionRecord[]=sections.map(s=>({id:s.id,version:s.version,code:s.code,name:s.name,yearId:s.yearId,gradeId:s.gradeId,gradeName:s.grade.name,campusId:s.campusId,campusName:s.campus?.name??null,active:s.active,dependencies:dependencies.sections.get(s.id)??emptyDependencies}));
+  return {years:years.map(yearDto),grades:grades.map(row=>({...row,dependencies:dependencies.grades.get(row.id)??emptyDependencies})),subjects:subjects.map(row=>({...row,dependencies:dependencies.subjects.get(row.id)??emptyDependencies})),campuses:campuses.map(c=>({id:c.id,code:c.code,name:c.name,active:true})),sections:sectionRecords};
  },{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});}catch(e){return fail(e);}}
  async createYear(actor:Identity,organizationId:string,schoolId:string,input:{code:string;name:string;startsOn:string;endsOn:string;key:string;reason:string}){try{return await this.db.$transaction(async tx=>{
   const guard=await this.guard(tx,actor,organizationId,schoolId,['school.manage']),command='AcademicYearCreated',inputHash=hash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,...input});
@@ -84,6 +94,24 @@ export class PrismaAcademicSetupRepository implements AcademicSetupRepository{
   if(year.status==='CLOSED')throw new AccessError('CONFLICT');
   const id=randomUUID(),row=await tx.section.create({data:{id,organizationId,schoolId,yearId:year.id,gradeId:grade.id,campusId:campus?.id??null,code:input.code,name:input.name,active:true,version:1}}),result={id:row.id,version:row.version,code:row.code,name:row.name,replayed:false,yearId:row.yearId,gradeId:row.gradeId,campusId:row.campusId};await this.revision(tx,actor,command,input.key,inputHash,result,guard,id,1,'ACTIVE',input.reason);return result;
  },{isolationLevel:'Serializable',timeout:10000,maxWait:10000});}catch(e){return fail(e);}}
+ async retireCatalogItem(actor:Identity,organizationId:string,schoolId:string,type:AcademicCatalogType,id:string,input:{expectedVersion:number;key:string;reason:string}):Promise<AcademicCatalogRetirement>{try{return await this.db.$transaction(async tx=>{
+  const guard=await this.guard(tx,actor,organizationId,schoolId,['class.manage']),command='AcademicCatalogRetired',inputHash=hash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,type,id,...input}),prior=await this.receipt(tx,actor,organizationId,command,input.key,inputHash);if(prior)return {...prior,replayed:true} as AcademicCatalogRetirement;
+  if(type==='grade')await tx.$queryRaw`SELECT id FROM vs_academics_grade_level WHERE organization_id=${organizationId}::uuid AND school_id=${schoolId}::uuid AND id=${id}::uuid FOR UPDATE`;
+  else if(type==='subject')await tx.$queryRaw`SELECT id FROM vs_academics_subject WHERE organization_id=${organizationId}::uuid AND school_id=${schoolId}::uuid AND id=${id}::uuid FOR UPDATE`;
+  else await tx.$queryRaw`SELECT id FROM vs_academics_section WHERE organization_id=${organizationId}::uuid AND school_id=${schoolId}::uuid AND id=${id}::uuid FOR UPDATE`;
+  const record=type==='grade'?await tx.gradeLevel.findFirst({where:{id,organizationId,schoolId},select:{id:true,version:true,active:true}}):type==='subject'?await tx.subject.findFirst({where:{id,organizationId,schoolId},select:{id:true,version:true,active:true}}):await tx.section.findFirst({where:{id,organizationId,schoolId},select:{id:true,version:true,active:true}});
+  if(!record||!record.active)throw new AccessError('NOT_FOUND');if(record.version!==input.expectedVersion)throw new AccessError('STALE_VERSION');
+  const today=schoolCivilDate(this.now(),guard.timezone),maps=await this.catalogDependencies(tx,{organizationId,schoolId},today,type,id),dependencies=(type==='grade'?maps.grades:type==='subject'?maps.subjects:maps.sections).get(id)??emptyDependencies;
+  if(dependencies.currentOrFuturePlacements>0||dependencies.unresolvedSessions>0)throw new AccessError('CONFLICT');
+  const sectionIds=type==='grade'?(await tx.section.findMany({where:{organizationId,schoolId,gradeId:id,active:true},select:{id:true}})).map(row=>row.id):type==='section'?[id]:[];
+  const offeringWhere=type==='subject'?{organizationId,schoolId,subjectId:id,active:true}:{organizationId,schoolId,sectionId:{in:sectionIds},active:true};
+  const retiredOfferings=(await tx.courseOffering.updateMany({where:offeringWhere,data:{active:false,version:{increment:1}}})).count;
+  let retiredSections=0,changed=0;
+  if(type==='grade'){retiredSections=(await tx.section.updateMany({where:{organizationId,schoolId,gradeId:id,active:true},data:{active:false,version:{increment:1}}})).count;changed=(await tx.gradeLevel.updateMany({where:{id,organizationId,schoolId,active:true,version:input.expectedVersion},data:{active:false,version:{increment:1}}})).count;}
+  else if(type==='subject')changed=(await tx.subject.updateMany({where:{id,organizationId,schoolId,active:true,version:input.expectedVersion},data:{active:false,version:{increment:1}}})).count;
+  else{changed=(await tx.section.updateMany({where:{id,organizationId,schoolId,active:true,version:input.expectedVersion},data:{active:false,version:{increment:1}}})).count;retiredSections=changed;}
+  if(changed!==1)throw new AccessError('STALE_VERSION');const version=input.expectedVersion+1,result:AcademicCatalogRetirement={id,type,version,active:false,retiredSections,retiredOfferings,replayed:false};await this.revision(tx,actor,command,input.key,inputHash,result,guard,id,version,'RETIRED',input.reason);return result;
+ },{isolationLevel:'Serializable',timeout:15000,maxWait:10000});}catch(e){return fail(e);}}
  async calendarBounds(actor:Identity,organizationId:string,schoolId:string,calendarId:string){try{return await this.db.$transaction(async tx=>{
   await this.guard(tx,actor,organizationId,schoolId,['school.manage']);const calendar=await tx.schoolCalendar.findFirst({where:{id:calendarId,organizationId,schoolId},select:{year:{select:{startsOn:true,endsOn:true}}}});if(!calendar)throw new AccessError('NOT_FOUND');return {startsOn:dateText(calendar.year.startsOn),endsOn:dateText(calendar.year.endsOn)};
  },{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});}catch(e){return fail(e);}}

@@ -56,6 +56,39 @@ Mutations use the account → Organization → School guard protocol in Bible §
 
 ## ACA-01 — Configure academic year, terms, grades and sections
 
+### SA-COMP-02 catalog dependency review and prospective retirement
+
+This delta completes SA-10's retirement alternative without deleting or rewriting history. `workspace` returns every scoped GradeLevel, Subject and Section with `version`, `active` and dependency counts: active sections, active offerings, current/future placements (`valid_to > school-local today`) and unresolved AttendanceSession rows in `SCHEDULED` or `OPEN`. Selectors continue to offer active records only; inactive rows remain visible as history. Stable ordering remains grade `sort_order,code`, subject `code`, and section `year.starts_on DESC,grade.sort_order,code`. Counts are complete scoped aggregates, never derived from a page.
+
+The mutation contract is `retireCatalogItem(actor, organizationId, schoolId, type, id, {expectedVersion,key,reason})`, where type is `grade|subject|section`. Transport is `POST /api/v1/academics/catalog/:type/:id/retire`, same-origin JSON <=256 KiB with matching `Idempotency-Key`. It requires current `class.manage`, released/licensed/enabled `academic_core`, expected version and a 5–500 character reason. Errors are validation 422, hidden foreign/inactive record 404, stale 409, dependency conflict 409, current permission 403 and unknown service result 503; the UI retains the reason for retry and refreshes stale dependency counts.
+
+The existing account → Organization → School lock order and Serializable transaction apply. The repository reauthorizes before receipt replay, locks the selected row after the School lock, recalculates dependencies, then changes only `active` and `version`. Grade retirement also retires its active Sections and their active CourseOfferings; Section retirement retires its active CourseOfferings; Subject retirement retires its active CourseOfferings. Existing rows, TeacherAssignments, enrollments, attendance sessions and roster history remain. Retirement is blocked while an affected Section has any current/future placement or an affected Offering has an unresolved SCHEDULED/OPEN session. The supported recovery is to transfer/archive/end the affected placement and cancel or complete the attendance session, then refresh and retry. Active offering counts are shown as impact but are retired atomically after those blockers clear.
+
+Writes are scoped updates to `vs_academics_grade_level`, `vs_academics_subject`, `vs_academics_section` and `vs_academics_course_offering`, plus the existing School revision, audit, outbox and tenant receipt envelope. Existing scope-leading unique/index contracts and `vs_students_placement_roster_idx` / `vs_attendance_session_school_day_idx` support the bounded pilot query; the integrated checkpoint records EXPLAIN evidence before adding an index. No migration or backfill is required. TEN-03 continues to require RLS on every tenant table independently.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant W as Academics screen
+  participant U as Academics use case
+  participant R as Academics repository
+  participant D as PostgreSQL
+  A->>W: Review dependency counts and enter reason
+  W->>U: retire type/id/version/key/reason
+  U->>R: Validated command and verified session scope
+  R->>D: Set tenant context; lock account, organization, school, selected item
+  R->>D: Reauthorize and recalculate scoped dependencies
+  alt Current/future placement or unresolved session
+    R-->>W: CONFLICT with refreshed recovery guidance
+  else Safe prospective retirement
+    R->>D: Deactivate item and affected section/offering rows
+    R->>D: Commit revision, audit, outbox and receipt
+    R-->>W: Retired result and impact counts
+  end
+```
+
+Verification adds domain/application input tests; real PostgreSQL no-delete/history, cascade, dependency-block, stale/replay, revoked permission and cross-scope tests; and desktop/mobile browser confirmation, reason validation, blocked counts, successful retirement, focus/overflow and refresh evidence.
+
 **Success response contract:** Created/updated root `{id,version,code,name}` plus relevant `{yearId,gradeId,campusId,startsOn,endsOn,status}`; terms response `{yearId,version,terms:[{id,code,name,startsOn,endsOn}]}`.
 
 **Transport:** POST /api/v1/academics/years; PUT /api/v1/academics/years/:id/terms; POST /api/v1/academics/grades|subjects|sections
