@@ -1,6 +1,6 @@
 # SA-COMP-02 verification
 
-Workflow SA-10 is implementation VERIFIED on the current tested worktree; human review is PENDING. The Academics workspace now shows dependency counts and supports prospective, versioned retirement of grades, sections and subjects. Historical catalog, offering, placement and attendance rows remain in place. No schema or migration changed.
+Workflow SA-10 is implementation VERIFIED at `caadf9d8c2b83a46a838877d1e8ace9cc3bb7ae5`; human review is PENDING. The Academics workspace now shows dependency counts and supports prospective, versioned retirement of grades, sections and subjects. Historical catalog, offering, placement and attendance rows remain in place. No schema or migration changed.
 
 Executed evidence:
 
@@ -17,3 +17,5 @@ Rendered inspection:
 The desktop composition keeps the wider grade/section workspace beside a compact subject catalog. Mobile stacks every control and catalog row without page-level horizontal overflow. Full-page capture can visually repeat fixed navigation chrome; this is a screenshot artifact rather than content overlap in the tested viewport.
 
 Manual review remains PENDING. Sign in with the existing synthetic school administrator, open `/admin/academics`, create a uniquely named subject, choose **Retire**, enter a reason of at least five characters, and confirm. Expect the record to remain visible as retired after reload and to be absent from active selectors. A catalog item with current/future placements or a scheduled/open attendance session must show counts and prevent confirmation until the dependent workflow is resolved.
+
+Demo: http://127.0.0.1:3443 using the production build tested from the implementation commit. Health reported ready and `/sign-in/vschool-demo-69a6f7fe` returned 200. Private administrator/teacher credentials remain in ignored `artifacts/people-02/private-demo.json`.
