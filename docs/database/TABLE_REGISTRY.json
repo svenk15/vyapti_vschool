@@ -437,9 +437,9 @@
       "table": "vs_access_school",
       "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
+      "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); office_email varchar(254) nullable; office_phone varchar(40) nullable; office_address varchar(500) nullable; status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
       "responsibility": "Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1.",
-      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); CHECK configuration_version>0",
+      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); contact normalization/bounds checks; CHECK configuration_version>0",
       "rls": {
         "classification": "BRANCH_DIRECTORY",
         "scopeColumns": [

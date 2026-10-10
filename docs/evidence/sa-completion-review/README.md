@@ -2,7 +2,7 @@
 
 Review date: 10 October 2026. Human review: **PENDING**.
 
-> Superseding corrective evidence: [SA-COMP-07](../sa-comp-07/README.md) closes the SA-18 exact-identifier gap after this review. The historical findings below remain the baseline as observed at commit `7f4cb033f52866691953f782515b4e662ab95982`.
+> Superseding corrective evidence: [SA-COMP-07](../sa-comp-07/README.md) closes the SA-18 exact-identifier gap (full SA-18 remains partial on admission date), and [SA-COMP-08](../sa-comp-08/README.md) closes SA-06 after this review. The historical findings below remain the baseline as observed at commit `7f4cb033f52866691953f782515b4e662ab95982`.
 
 ## Executive status
 

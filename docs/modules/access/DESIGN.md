@@ -27,7 +27,7 @@ IAM-01 installs Organization, School, UserAccount, SchoolMembership, RoleGrant a
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
 | `vs_access_organization` (Organization) | id uuid PK; name varchar(160); status ACTIVE/SUSPENDED; trust_mode OPERATOR_CLI/HYBRID/EMAIL varchar(20) default OPERATOR_CLI; version int; created_at timestamptz(3); configuration_version int default 1 | Contractual tenant; Tenancy owns provisioning/recovery policy; no implicit access to schools. Existing rows backfilled conservatively. | CHECK trust_mode allowed; CHECK version>0; UNIQUE(id); CHECK configuration_version>0 |
-| `vs_access_school` (School) | id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1 | Operational scope and serialization guard. Timezone is immutable after branch creation in Phase 1. | FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); CHECK configuration_version>0 |
+| `vs_access_school` (School) | id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); office_email varchar(254) nullable; office_phone varchar(40) nullable; office_address varchar(500) nullable; status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1 | Operational scope, office contact projection and serialization guard. Legacy contact nulls mean unrecorded; new profile edits require email/address. Timezone is immutable after branch creation in Phase 1. | FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); contact normalization/bounds checks; CHECK configuration_version>0 |
 | `vs_access_campus` (Campus) | id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int | Optional subordinate site; no campus-level grants in first release. | FK(scope)→School; UNIQUE(scope,id); UNIQUE(scope,code) |
 | `vs_access_user_account` (UserAccount) | id uuid PK; normalized_email varchar(254); email_verified_at timestamptz(3) nullable; password_hash text nullable; status PENDING/ACTIVE/DISABLED; token_version int; failed_attempts int; locked_until timestamptz(3) nullable; version int; created_at timestamptz(3) | Globally unique login; recovery only to an already verified address; no school access without membership. Never return hash/counters. | UNIQUE(normalized_email); counters>=0; index(status,id) |
 | `vs_access_school_membership` (SchoolMembership) | id uuid PK; organization_id uuid; school_id uuid; account_id uuid; status PENDING/ACTIVE/SUSPENDED/REVOKED; version int | School access root; granting role does not prove teacher eligibility. | FK school; FK account; UNIQUE(scope,id); UNIQUE(scope,account_id) |
@@ -310,6 +310,34 @@ Both token tables constrain purpose/channel/status labels, hash format, timestam
 
 ## SA-06 and SA-14 completion-review deltas
 
-SA-06 currently persists School name/version and Campus records; it has no office email, phone or address columns, reason input or stale attempted/current comparison. Completion requires an Access-owned `updateSchoolProfile(actor,{name,officeEmail,officePhone,address,reason,expectedVersion,key})` command returning `SchoolSettings`, with `VALIDATION | FORBIDDEN | NOT_FOUND | CONFLICT | REPLAY_MISMATCH | UNAVAILABLE`. It must recheck current account/organization/school/membership/`school.manage`, lock the existing School guard, update a forward-only extension of `vs_access_school`, and append receipt/audit/outbox atomically. Define normalized nullable contact formats and address bounds before migration. UI must preserve safe attempted values and show stale/current comparison. PostgreSQL evidence must cover cross-branch denial, replay, concurrency, rollback and legacy-row compatibility.
+### SA-06 branch office profile corrective contract
+
+The Edition 03 SA-06 field set and `school.manage` authority are `EXISTING_ACCEPTED_CONTRACT`: branch display name, required office email, optional office phone, required address, mandatory reason, read-only existing timezone, revisioned activity and stale comparison. Keeping legacy rows nullable while requiring complete values on every new update is a `ROUTINE_ENGINEERING_CHOICE` needed for a forward-only migration; no historical contact values are guessed.
+
+Access owns `updateSchoolProfile(actor,{name,timezone,officeEmail,officePhone,officeAddress,reason,expectedVersion,key})`. Email is NFC/trim/lowercase, 3–254 and basic address-shaped; phone is absent/empty or 5–40 characters from digits, spaces and `+().-`; address is NFC/trim 1–500; reason is non-sensitive NFC/trim 1–500. Office details are operational public contact data for authorized branch readers and may later feed approved school contact projections; the reason is internal evidence only. School code, institution and timezone are not editable here.
+
+The forward migration adds nullable `office_email varchar(254)`, `office_phone varchar(40)` and `office_address varchar(500)` to `vs_access_school`, with bounds/normalization checks. Existing `(organization_id,id)` keys and the primary-key lookup support the guarded read/write; no index is added. GET joins the exact authorized School and returns empty strings for legacy nulls. PATCH uses the existing 16 KiB same-origin transport and command key. It reauthorizes, takes the recovery advisory guard plus account → Organization → School locks, compares `expectedVersion`, rejects any timezone change, and updates only normalized profile fields with `version+1`. No-op input returns the current version without evidence. A real change commits School plus Platform audit/outbox/receipt atomically. Audit stores actor/scope, reason, version and changed field identifiers, excluding contact/address values; source hashes remain in the receipt owner.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant H as PATCH /api/v1/school
+  participant U as Access management use case
+  participant D as PostgreSQL
+  A->>H: Profile, reason, expectedVersion, stable key
+  H->>U: Verified session and bounded normalized command
+  U->>D: Lock account, organization and school; reauthorize school.manage
+  D-->>U: Current School and version
+  alt Version and immutable timezone match
+    U->>D: Update changed fields and append redacted evidence atomically
+    D-->>A: Saved revision
+  else Stale version
+    D-->>A: 409 STALE_VERSION; no writes
+    A->>H: Read latest authorized settings
+    H-->>A: Current values beside preserved attempted inputs
+  end
+```
+
+The settings card uses the approved grouping and shared form controls. On stale conflict it preserves attempted values, fetches current authorized settings only after the user asks to compare, shows the current revision, and lets the user adopt that revision before an explicit retry. Verification covers normalization, validation, no-op, immutable timezone, redacted audit, replay, stale conflict, rollback, unauthorized scope, persistence/readback, desktop/mobile keyboard flow and visual inspection.
 
 SA-14 currently creates a membership/invitation from email or account ID independently of Employee. The approved journey starts from a selected Employee and independent verification reference. Completion requires an Access input contract such as `grantEmployeeAccess(actor,{employeeId,targetAccountIdOrEmail,verificationReference,roles,key})`, backed by a narrow People verification port; email equality remains insufficient. Access owns the transaction and membership/invite evidence, while People supplies the scoped Employee/Person identity fact without foreign repository access. Required failures include unverified/mismatched Employee, foreign scope, duplicate grant, last-admin constraints, delivery failure and replay conflict. The verification reference must be non-sensitive and retained only in allowlisted evidence. Exact atomic enlistment must be designed before code.

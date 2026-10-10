@@ -181,4 +181,8 @@ Focused PostgreSQL verification passed 7/7 Access-management cases, including im
 
 ### Administrator completion review — 10 October 2026
 
-Existing Access settings and invitation evidence remains valid. SA-06 is PARTIALLY_IMPLEMENTED for missing office contact/address/reason/stale-comparison behavior, and SA-14 is PARTIALLY_IMPLEMENTED because access grant is not anchored to a verified Employee selection. See [the completion review](../../evidence/sa-completion-review/README.md). No schema or runtime behavior changed.
+Existing Access settings and invitation evidence remains valid. SA-14 remains PARTIALLY_IMPLEMENTED because access grant is not anchored to a verified Employee selection. SA-COMP-08 closes SA-06 through the approved office profile, reasoned revision and stale comparison workflow; see [its evidence](../../evidence/sa-comp-08/README.md). Human review remains PENDING.
+
+### SA-COMP-08 / SA-06 branch office profile — 10 October 2026
+
+Implementation VERIFIED in the focused checkpoint; human review PENDING. Access now owns nullable legacy-compatible School office email/phone/address columns, while every new profile edit requires email, address and non-sensitive reason. Existing timezone remains immutable. The locked command compares the current version, treats a no-op as no write, and commits School plus redacted evidence atomically. Audit records changed field identifiers/revisions/reason without contact or address values. The UI preserves attempted values after stale conflict, reads the latest authorized values on demand and requires an explicit retry. Migration `20261010011000_school_office_details` is applied to both designated local databases without reset. Evidence: [SA-COMP-08](../../evidence/sa-comp-08/README.md).

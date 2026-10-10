@@ -50,6 +50,9 @@ model School {
   code                 String             @db.VarChar(40)
   name                 String             @db.VarChar(160)
   timezone             String             @db.VarChar(64)
+  officeEmail          String?            @map("office_email") @db.VarChar(254)
+  officePhone          String?            @map("office_phone") @db.VarChar(40)
+  officeAddress        String?            @map("office_address") @db.VarChar(500)
   status               String             @db.VarChar(20)
   version              Int
   createdAt            DateTime           @map("created_at") @db.Timestamptz(3)

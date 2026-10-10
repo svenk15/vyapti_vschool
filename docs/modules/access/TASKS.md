@@ -106,6 +106,14 @@ Create a synthetic teacher membership and inspect Pending. Change its roles/stat
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## SA-COMP-08 / SA-06 — Complete branch office information
+
+Depends on: IAM-02
+
+Outcome: an authorized School Administrator edits the approved branch name, office email, optional phone and address with a required reason; timezone stays read-only. A stale save preserves attempted values and supports current-value comparison before retry.
+
+Contract: [SA-06 branch office profile corrective contract](DESIGN.md#sa-06-branch-office-profile-corrective-contract). Extend `vs_access_school` only through the forward migration; preserve legacy rows as unrecorded rather than guessing values. Audit changed field identifiers and reason without copying office contact/address data. Tests: unit normalization/validation; real PostgreSQL persistence, replay, no-op, stale/unauthorized/rollback and redacted evidence; desktop/mobile save and conflict recovery. Evidence: `docs/evidence/sa-comp-08/README.md`; human review PENDING.
+
 ## IAM-03 — Activate and recover staff accounts safely
 
 Depends on: IAM-02

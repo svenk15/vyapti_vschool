@@ -17,6 +17,7 @@ type Demo = ProvisionInput & ProvisionResult & {
   grantKey: string; entitlementKey: string; branchActivationKey: string;
   startsAt: string; profileKeys: [string, string];
   employeeIds?: [string, string]; teacherAccountId?: string;
+  schoolProfileKey?: string;
 };
 function save(value: Demo) {
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -69,6 +70,13 @@ async function main() {
     if (!demo.organizationId || !demo.schoolId || !demo.accountId || !demo.membershipId) {
       const home = await access.getAccountHome(admin);
       demo = { ...demo, organizationId: home.scope.organizationId, schoolId: home.scope.schoolId, accountId: home.accountId, membershipId: home.membershipId }; save(demo);
+    }
+    if (!demo.schoolProfileKey) { demo = { ...demo, schoolProfileKey: randomUUID() }; save(demo); }
+    const schoolProfileKey = demo.schoolProfileKey;
+    if (!schoolProfileKey) throw new Error('SYNTHETIC_SCHOOL_PROFILE_KEY_REQUIRED');
+    const settings = await access.getSettings(admin, demo.schoolId);
+    if (!settings.officeEmail && !settings.officePhone && !settings.officeAddress) {
+      await access.command(admin, 'UpdateSchool', { payload: { name: settings.name, timezone: settings.timezone, officeEmail: 'office@vschool.example', officePhone: '+91 80 5555 0101', officeAddress: '1 Fictional Learning Road, Bengaluru', reason: 'Prepare fictional branch office demo details' }, expectedVersion: settings.version }, schoolProfileKey, demo.schoolId);
     }
     await access.institutionOperation({ kind: 'SetInstitutionGrant', organizationId: demo.organizationId, accountId: demo.accountId, status: 'ACTIVE', expectedVersion: 0, key: demo.grantKey, reason: 'Synthetic PER-02 demo authority' }, local.operator);
     const current = await access.getAccountHome(admin, demo.schoolId);
