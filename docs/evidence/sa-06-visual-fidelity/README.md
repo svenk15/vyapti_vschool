@@ -1,5 +1,7 @@
 # SA-06 branch information visual fidelity
 
+> Superseded for visual comparison by the owner-requested [SA-06 visual recheck](../sa-06-visual-recheck/README.md). The owner did not accept this earlier comparison.
+
 Date: 10 October 2026. Human visual acceptance: **PENDING**.
 
 ## Comparison
@@ -8,7 +10,7 @@ Date: 10 October 2026. Human visual acceptance: **PENDING**.
 - Application route: `/admin/school`.
 - Captures: [reference desktop](reference-desktop.png), [reference mobile](reference-mobile.png), [application desktop](application-desktop.png), [application review desktop](application-review-desktop.png), and [application mobile](application-mobile.png).
 
-The application now follows the approved three-stage information, review and confirmation composition. It uses the same compact step progress, two-column desktop field grouping, address span, action placement and explanatory rail. Mobile stacks the fields and support cards without horizontal overflow. The review step shows the entered values, immutable timezone and mandatory reason before the existing guarded write.
+This was the first comparison checkpoint. It was subsequently found to retain visible composition differences and is preserved only as historical evidence. See the recheck above for the corrected implementation and current captures.
 
 ## Preserved behavior and deviations
 
