@@ -38,6 +38,17 @@ Run `pnpm demo:seed` first. It preserves existing local records, prepares one id
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+### Administrator daily-attendance checkpoint — 11 October 2026
+
+- [ ] Today shows either authoritative current-day sessions, a genuine empty result, or a distinct unavailable/capability state.
+- [ ] A submitted session shows branch-local context, current records and immutable history without exposing internal concurrency versions.
+- [ ] Correction success persists after reload; history-refresh failure remains a separate recoverable read error.
+- [ ] Lost-response retry reuses the exact correction payload/key and creates no duplicate revision.
+- [ ] Stale correction preserves the attempted edit, loads authoritative data and requires review before a new command.
+- [ ] Correction and cancellation cannot be submitted concurrently; cancellation retains an exact unknown payload/key and confirmed cancellation remains successful if history refresh fails.
+- [ ] Approved `#/home`, `#/flow/SA-26` and `#/flow/SA-27` states are compared at desktop/mobile sizes with measured styles under `docs/evidence/admin-attendance-journey-2026-10-11/`.
+- [ ] Focused authorization, PostgreSQL, browser, accessibility/layout and production-build gates pass; human acceptance remains PENDING.
+
 ## Experience overlay consumption
 
 EX-10 adopts administrator schedule/detail/correction/cancellation; EX-11 adopts assigned teacher day and roll call. Current assignment/resource checks, pinned roster, UUID intent keys, tenant receipt scope and unknown-result recovery remain unchanged. Timetable planning and teacher school-wide history remain separate missing owner contracts.
