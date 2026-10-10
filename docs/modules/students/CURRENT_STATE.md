@@ -67,3 +67,7 @@ TEN-03 must implement and verify RLS before multi-client production release. Mig
 ## Evidence history
 
 Append later task records without deleting this checkpoint. Human review remains PENDING until explicit owner feedback.
+
+### Administrator completion review — 10 October 2026
+
+New-Person student registration evidence remains valid. SA-18 is PARTIALLY_IMPLEMENTED because the live existing-Person selector uses exact display name rather than approved exact person-ID or branch-owned admission resolution. See [the completion review](../../evidence/sa-completion-review/README.md). No schema or runtime behavior changed.

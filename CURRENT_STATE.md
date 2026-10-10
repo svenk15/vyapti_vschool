@@ -1,6 +1,6 @@
 # VSchool current state — navigation only
 
-The authorized EX-00–EX-15 Phase 1 experience overlay and the eligible School Administrator completion batch are implementation-complete for the local synthetic administrator/teacher demo. Human review remains PENDING. The latest verified application candidate, startup configuration, personas, manual walkthrough, test evidence and limitations are in [the School Administrator consolidated handoff](docs/evidence/sa-comp-06/README.md); the preceding EX checkpoint remains in [EX-15 evidence](docs/evidence/ex-15/README.md).
+The authorized EX-00–EX-15 experience overlay and SA-COMP integrated candidate are verified for their implemented operations. The evidence-based Administrator review records 22 Phase 1 workflows implemented/verified, six partial and SA-08 blocked; human review remains PENDING. Use [the completion review](docs/evidence/sa-completion-review/README.md) as the current workflow status and [SA-COMP-06](docs/evidence/sa-comp-06/README.md) for the executable integration evidence.
 
 Authoritative owner task status and evidence remain in `docs/modules/<module>/CURRENT_STATE.md`; the [execution index](docs/EXECUTION_INDEX.md) defines scope. Do not maintain a second task-status table here.
 

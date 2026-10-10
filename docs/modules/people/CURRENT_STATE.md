@@ -73,3 +73,7 @@ The browser smoke already used two clearly synthetic names/numbers in the develo
 ## Limitations and next action
 
 PER-01 does not create a login or account binding and does not make the employee eligible to teach. PER-02 implementation is VERIFIED; its human review remains PENDING for source `e72125d4545e48c4b5c69c4ba3c9a646f7eea5d1`. IAM-03 human acceptance was recorded on 5 October for the exact reviewed source `e0f262a78d7e020919cd36be80d508c9032d1e07`; this satisfies PER-02's explicit acceptance gate. ACA-03 and ATT-01 now provide assignment/session impact guards; restricted runtime RLS enforcement remains TEN-03. PER-01 and ACA-01 human reviews remain PENDING and are not PER-02 acceptance gates. Next action is `pnpm next-task` after ATT-01's implementation checkpoint.
+
+### Administrator completion review — 10 October 2026
+
+Person/Employee creation evidence remains valid. SA-13 is PARTIALLY_IMPLEMENTED because the approved staff category and lifecycle semantics are absent. See [the completion review](../../evidence/sa-completion-review/README.md). No schema or runtime behavior changed.

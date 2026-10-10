@@ -199,3 +199,7 @@ School means operational Branch and Organization means client Institution. Every
 ## Portable backend integration
 
 Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.
+
+## SA-13 completion-review delta
+
+The approved staff-profile workflow includes a staff category; the live `createEmployee` contract has no such field or domain vocabulary. Completion requires a product-approved closed category set and lifecycle meaning before extending `CreateEmployeeInput`, Employee DTOs and `vs_people_employee`. The People use case must validate category, recheck current branch and `class.manage`/approved People capability, and retain current Person+Employee atomicity, replay and evidence. A forward migration must define existing-row backfill and index need from an actual category query. UI needs validation, duplicate-code and stale/replay recovery; PostgreSQL tests must cover backfill, scope, rollback and category constraints. Free-form or UI-only categories are prohibited.

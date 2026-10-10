@@ -192,3 +192,7 @@ School means operational Branch and Organization means client Institution. Every
 ## Portable backend integration
 
 Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.
+
+## SA-04 completion-review delta
+
+The approved workflow selects a responsible role; the live `schoolAdminOverview` DTO exposes only derived readiness and destination links. No owner, due date, lifecycle, permission or persistence contract exists, so SA-04 remains partial and the UI must not imply assignment. Before implementation, decide whether responsibility is derived display-only or persisted. A persisted design must add a transport-neutral `assignSetupAction(actor,{readinessId,responsibleRole,expectedVersion,key})` use case, current `school.manage` and target-role scope checks, validation/replay/stale errors, a scoped Reporting-owned table with a forward migration, and an atomic receipt/audit/outbox write. UI and PostgreSQL evidence must cover assigned, stale, revoked-target, replay, rollback and cross-branch denial. No schema change is authorized until that product choice is resolved.

@@ -2,6 +2,8 @@
 
 Verified 10 October 2026 on source `6f8983b1927d84380d727ec48185a9c0877f52e0` (application behavior commit `31a40ba458bac8a4201c60e8ddc9626791a4227c`). Human review is **PENDING**.
 
+> Status correction, 10 October 2026: the [evidence-based completion review](../sa-completion-review/README.md) preserves these executed integration results but supersedes the earlier claim that 28 complete approved workflows were proved. Six approved workflow bodies are partial and SA-08 remains blocked.
+
 ## Demonstrable outcome
 
 The connected synthetic Phase 1 demo provides the authorized School Administrator workspaces for overview/readiness, settings, branch metadata and activation, branding, staff access and profiles, academics, classes and teachers, students, roster import, attendance scheduling/reporting and privacy-safe branch activity. Teacher sign-in provides the assigned-day and roll-call journey. The commercial request portion of SA-08 remains `BLOCKED_BY_PRODUCT_DECISION`; `/admin/modules` truthfully manages approved branch activation and explains that blocked selections do not create a request.

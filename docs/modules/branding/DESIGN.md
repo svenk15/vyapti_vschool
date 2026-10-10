@@ -88,3 +88,7 @@ BrandProfile.public_slug is globally unique, lowercase 3–80 characters and exa
 ## Portable backend integration
 
 Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.
+
+## SA-07 completion-review delta
+
+The approved workflow separates `branding.read`, delegated publication and a non-publisher update request. The current fixed SCHOOL_ADMIN capability set grants `branding.manage` to every administrator and has no requester state, so SA-07 remains partial. Before code, decide whether Phase 1 retains universal fixed-role publication or introduces explicit branch branding grants. The latter needs separate `getBrandWorkspace` read authorization and `publishBrand` write authorization; a durable request additionally needs an owner, recipient, states and withdrawal/decision policy. Do not infer these from a hidden button. Direct API/deep-link denial, revoked delegation, stale publication, unsafe asset and cross-branch tests are required. No new request table is authorized without that product decision.
