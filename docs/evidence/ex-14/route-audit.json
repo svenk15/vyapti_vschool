@@ -1,0 +1,479 @@
+{
+  "checkedAt": "2026-10-10T03:51:41.381Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "method": "Read-only Chromium route rendering at 1440x1000, 390x844, and a 720px CSS viewport as the layout equivalent of 200% zoom on 1440px. Native browser zoom and assistive technology were not executed.",
+  "routeObservations": [
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/",
+      "status": 200,
+      "title": "One platform.Every school’sown rhythm.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/sign-in",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/sign-in/vschool-demo-69a6f7fe",
+      "status": 200,
+      "title": "Welcome to your school",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/forgot-password",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/activate",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/invite",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/reset-password",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/configure",
+      "status": 200,
+      "title": "Built around your institution.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "desktop",
+      "route": "/design-system",
+      "status": 200,
+      "title": "Familiar on every page.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin",
+      "status": 200,
+      "title": "VSchool People db1f722b",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/setup",
+      "status": 200,
+      "title": "School setup",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/school",
+      "status": 200,
+      "title": "School settings",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/modules",
+      "status": 200,
+      "title": "Branch module access",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/branding",
+      "status": 200,
+      "title": "School sign-in branding",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/users",
+      "status": 200,
+      "title": "Staff access",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/teachers",
+      "status": 200,
+      "title": "Staff profiles",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/academics",
+      "status": 200,
+      "title": "Academic setup",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/classes",
+      "status": 200,
+      "title": "Classes and teachers",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/students",
+      "status": 200,
+      "title": "Students",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/students/5c5eedd0-bcdc-42b0-96a7-a6e5dff3b6da",
+      "status": 200,
+      "title": "Casey Learner",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/imports",
+      "status": 200,
+      "title": "Roster import",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/attendance/sessions",
+      "status": 200,
+      "title": "Schedule class session",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/attendance/sessions/3b018a47-1fd2-46a2-97e8-6935ae3cf695",
+      "status": 200,
+      "title": "Attendance review",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/admin/reports/attendance?fromDate=2026-10-06&toDate=2026-10-07",
+      "status": 200,
+      "title": "Attendance report",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "desktop",
+      "route": "/institutions",
+      "status": 200,
+      "title": "Institutions",
+      "documentOverflow": false
+    },
+    {
+      "persona": "teacher",
+      "viewport": "desktop",
+      "route": "/account",
+      "status": 200,
+      "title": "Your school account",
+      "documentOverflow": false
+    },
+    {
+      "persona": "teacher",
+      "viewport": "desktop",
+      "route": "/teacher/today",
+      "status": 200,
+      "title": "My teaching day",
+      "documentOverflow": false
+    },
+    {
+      "persona": "teacher",
+      "viewport": "desktop",
+      "route": "/teacher/sessions/3b018a47-1fd2-46a2-97e8-6935ae3cf695",
+      "status": 200,
+      "title": "Session details",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/",
+      "status": 200,
+      "title": "One platform.Every school’sown rhythm.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/sign-in",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/sign-in/vschool-demo-69a6f7fe",
+      "status": 200,
+      "title": "Welcome to your school",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/forgot-password",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/activate",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/invite",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/reset-password",
+      "status": 200,
+      "title": "A thoughtful space for your school.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/configure",
+      "status": 200,
+      "title": "Built around your institution.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "public",
+      "viewport": "mobile",
+      "route": "/design-system",
+      "status": 200,
+      "title": "Familiar on every page.",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin",
+      "status": 200,
+      "title": "VSchool People db1f722b",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/setup",
+      "status": 200,
+      "title": "School setup",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/school",
+      "status": 200,
+      "title": "School settings",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/modules",
+      "status": 200,
+      "title": "Branch module access",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/branding",
+      "status": 200,
+      "title": "School sign-in branding",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/users",
+      "status": 200,
+      "title": "Staff access",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/teachers",
+      "status": 200,
+      "title": "Staff profiles",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/academics",
+      "status": 200,
+      "title": "Academic setup",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/classes",
+      "status": 200,
+      "title": "Classes and teachers",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/students",
+      "status": 200,
+      "title": "Students",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/students/5c5eedd0-bcdc-42b0-96a7-a6e5dff3b6da",
+      "status": 200,
+      "title": "Casey Learner",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/imports",
+      "status": 200,
+      "title": "Roster import",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/attendance/sessions",
+      "status": 200,
+      "title": "Schedule class session",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/attendance/sessions/3b018a47-1fd2-46a2-97e8-6935ae3cf695",
+      "status": 200,
+      "title": "Attendance review",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/admin/reports/attendance?fromDate=2026-10-06&toDate=2026-10-07",
+      "status": 200,
+      "title": "Attendance report",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "mobile",
+      "route": "/institutions",
+      "status": 200,
+      "title": "Institutions",
+      "documentOverflow": false
+    },
+    {
+      "persona": "teacher",
+      "viewport": "mobile",
+      "route": "/account",
+      "status": 200,
+      "title": "Your school account",
+      "documentOverflow": false
+    },
+    {
+      "persona": "teacher",
+      "viewport": "mobile",
+      "route": "/teacher/today",
+      "status": 200,
+      "title": "My teaching day",
+      "documentOverflow": false
+    },
+    {
+      "persona": "teacher",
+      "viewport": "mobile",
+      "route": "/teacher/sessions/3b018a47-1fd2-46a2-97e8-6935ae3cf695",
+      "status": 200,
+      "title": "Session details",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "200%-layout-equivalent",
+      "route": "/admin/school",
+      "status": 200,
+      "title": "School settings",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "200%-layout-equivalent",
+      "route": "/admin/students",
+      "status": 200,
+      "title": "Students",
+      "documentOverflow": false
+    },
+    {
+      "persona": "administrator",
+      "viewport": "200%-layout-equivalent",
+      "route": "/admin/reports/attendance?fromDate=2026-10-06&toDate=2026-10-07",
+      "status": 200,
+      "title": "Attendance report",
+      "documentOverflow": false
+    }
+  ]
+}
