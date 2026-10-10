@@ -2,6 +2,10 @@
 
 Last updated: 2026-10-10. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
+## SA-06 approved workflow composition — 10 October 2026
+
+The implementation-verified branch-information operation now uses the approved three-stage information, review and confirmation composition at `/admin/school`. Its existing `school.manage` authorization, scoped write, expected version, idempotent retry, immutable timezone check, stale comparison and safe activity evidence are unchanged. Existing campus management remains available in a collapsed secondary disclosure and retains its guarded operation. Direct desktop/mobile comparison and focused browser evidence are recorded in [sa-06-visual-fidelity](../../evidence/sa-06-visual-fidelity/README.md). No schema, migration, backend contract, seed or development data changed. Human visual review remains PENDING; the reference’s draft control remains design-gated rather than simulated.
+
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | IAM-01 | VERIFIED | PASSED | [Local verification](../../evidence/iam-01-local/verification.json); source 56ba5f7 |
