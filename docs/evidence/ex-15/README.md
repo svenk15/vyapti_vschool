@@ -8,7 +8,7 @@ Human review: **PENDING**. This is a synthetic local demo candidate, not a produ
 - Consolidated gate checkpoint: `c1ee480`; status checkpoint: `0dab12e`.
 - Production build ID: `dWV3Ax1JW4dqFc20_6qqb`.
 - Entry URL: `http://127.0.0.1:3400/sign-in`.
-- Published synthetic school sign-in example: `http://127.0.0.1:3400/sign-in/vschool-demo-e237b10c`.
+- Published synthetic school sign-in example: `http://127.0.0.1:3400/sign-in/vschool-demo-69a6f7fe`.
 - Seed command: `pnpm demo:seed`.
 - Primary administrator and assigned-teacher credentials: ignored private file `artifacts/people-02/private-demo.json`.
 - Institution administrator credentials: ignored private file `artifacts/iam-01/private-demo.json`.
