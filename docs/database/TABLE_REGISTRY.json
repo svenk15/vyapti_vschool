@@ -935,9 +935,9 @@
       "table": "vs_students_student",
       "status": "MIGRATED",
       "design": "docs/modules/students/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); status ACTIVE/ARCHIVED; version int; created_at timestamptz(3)",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); admitted_on date nullable; admission_date_verified_at timestamptz(3) nullable; admission_date_verified_by uuid nullable; admission_date_verification_reason varchar(500) nullable; status ACTIVE/ARCHIVED; version int; created_at timestamptz(3)",
       "responsibility": "Students-owned branch identity and admission number; the Person remains People-owned and is never inferred by name or email.",
-      "constraints": "FK(scope)\u2192School; FK(organization_id,person_id)\u2192Person; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number; index(scope,status,id)",
+      "constraints": "FK(scope)\u2192School; FK(organization_id,person_id)\u2192Person; FK admission_date_verified_by\u2192UserAccount; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number and coherent date evidence; index(scope,status,id)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

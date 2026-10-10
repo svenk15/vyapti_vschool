@@ -1,9 +1,9 @@
-export type RosterFields=Readonly<{externalStudentId:string;firstName:string;lastName:string;admissionNumber:string;gradeCode:string;sectionCode:string;rollNumber:string|null}>;
+export type RosterFields=Readonly<{externalStudentId:string;firstName:string;lastName:string;admissionNumber:string;admittedOn:string;gradeCode:string;sectionCode:string;rollNumber:string|null}>;
 export type ParsedRosterRow=Readonly<{rowNumber:number;fields:RosterFields;errors:readonly {column:string;code:string;message:string}[]}>;
 export type CsvErrorCode='FILE_TOO_LARGE'|'EMPTY_FILE'|'INVALID_UTF8'|'MALFORMED_CSV'|'INVALID_HEADERS'|'TOO_MANY_ROWS'|'CELL_TOO_LARGE';
 export class CsvInputError extends Error{constructor(readonly code:CsvErrorCode,readonly rowNumber?:number,readonly column?:string){super(code);this.name='CsvInputError';}}
 export const MAX_CSV_BYTES=2*1024*1024,MAX_DATA_ROWS=1000,MAX_CELL_BYTES=4096;
-const required=['external_student_id','student_first_name','admission_number','grade','section'] as const;
+const required=['external_student_id','student_first_name','admission_number','admitted_on','grade','section'] as const;
 const allowed=new Set([...required,'student_last_name','roll_number']);
 const enc=new TextEncoder();
 function parseRecords(text:string):string[][]{
@@ -27,11 +27,12 @@ function parseRecords(text:string):string[][]{
 const clean=(value:string)=>value.normalize('NFC').trim();
 function rowFields(values:Record<string,string>,rowNumber:number):ParsedRosterRow{
  const errors:{column:string;code:string;message:string}[]=[],field=(column:string,code:string,label:string,requiredField=false,max=160)=>{const value=clean(values[column]??'');if((requiredField&&!value)||value.length>max||/[\u0000-\u001f\u007f]/.test(value)){errors.push({column,code,message:label});return '';}return value;};
- const externalStudentId=field('external_student_id','INVALID_EXTERNAL_ID','Enter a source ID up to 100 characters.',true,100),firstName=field('student_first_name','INVALID_FIRST_NAME','Enter a first name up to 100 characters.',true,100),lastName=field('student_last_name','INVALID_LAST_NAME','Enter a last name up to 100 characters.',false,100),admissionNumber=field('admission_number','INVALID_ADMISSION','Enter an admission number up to 40 characters.',true,40),gradeCode=field('grade','INVALID_GRADE','Enter a configured grade code.',true,40),sectionCode=field('section','INVALID_SECTION','Enter a configured section code.',true,40),rawRoll=clean(values.roll_number??'');
+ const externalStudentId=field('external_student_id','INVALID_EXTERNAL_ID','Enter a source ID up to 100 characters.',true,100),firstName=field('student_first_name','INVALID_FIRST_NAME','Enter a first name up to 100 characters.',true,100),lastName=field('student_last_name','INVALID_LAST_NAME','Enter a last name up to 100 characters.',false,100),admissionNumber=field('admission_number','INVALID_ADMISSION','Enter an admission number up to 40 characters.',true,40),admittedOn=field('admitted_on','INVALID_ADMISSION_DATE','Enter the verified branch admission date as YYYY-MM-DD.',true,10),gradeCode=field('grade','INVALID_GRADE','Enter a configured grade code.',true,40),sectionCode=field('section','INVALID_SECTION','Enter a configured section code.',true,40),rawRoll=clean(values.roll_number??'');
+ if(admittedOn&&!validCivilDate(admittedOn))errors.push({column:'admitted_on',code:'INVALID_ADMISSION_DATE',message:'Enter a real civil date as YYYY-MM-DD.'});
  if(gradeCode&&!/^[A-Z0-9][A-Z0-9_-]{0,39}$/.test(gradeCode))errors.push({column:'grade',code:'INVALID_GRADE_CODE',message:'Use the exact configured grade code.'});
  if(sectionCode&&!/^[A-Z0-9][A-Z0-9_-]{0,39}$/.test(sectionCode))errors.push({column:'section',code:'INVALID_SECTION_CODE',message:'Use the exact configured section code.'});
  if(rawRoll.length>30||/[\u0000-\u001f\u007f]/.test(rawRoll))errors.push({column:'roll_number',code:'INVALID_ROLL_NUMBER',message:'Roll number must be at most 30 characters.'});
- return {rowNumber,fields:{externalStudentId,firstName,lastName,admissionNumber,gradeCode,sectionCode,rollNumber:rawRoll||null},errors};
+ return {rowNumber,fields:{externalStudentId,firstName,lastName,admissionNumber,admittedOn,gradeCode,sectionCode,rollNumber:rawRoll||null},errors};
 }
 export function parseRosterCsv(bytes:Uint8Array):ParsedRosterRow[]{
  if(bytes.byteLength>MAX_CSV_BYTES)throw new CsvInputError('FILE_TOO_LARGE');

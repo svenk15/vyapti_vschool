@@ -224,6 +224,10 @@ model Student {
  schoolId String @map("school_id") @db.Uuid
  personId String @map("person_id") @db.Uuid
  admissionNumber String @map("admission_number") @db.VarChar(40)
+ admittedOn DateTime? @map("admitted_on") @db.Date
+ admissionDateVerifiedAt DateTime? @map("admission_date_verified_at") @db.Timestamptz(3)
+ admissionDateVerifiedBy String? @map("admission_date_verified_by") @db.Uuid
+ admissionDateVerificationReason String? @map("admission_date_verification_reason") @db.VarChar(500)
  status String @db.VarChar(20)
  version Int
  createdAt DateTime @map("created_at") @db.Timestamptz(3)

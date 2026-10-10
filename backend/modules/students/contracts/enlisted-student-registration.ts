@@ -8,6 +8,7 @@ export type EnlistedRegistrationInput = Readonly<{
   firstName: string;
   lastName: string;
   admissionNumber: string;
+  admittedOn: string;
   existingPersonId?: string;
   yearId: string;
   sectionId: string;

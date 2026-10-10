@@ -21,8 +21,8 @@ const demos = [
 
 function prepareImportSample(): void {
   const fixturePath = "artifacts/imports-01/private-demo.json";
-  const samplePath = "artifacts/imports-01/sample-roster.csv";
-  const partialPath = "artifacts/imports-01/sample-roster-partial.csv";
+  const samplePath = "artifacts/imports-01/sample-roster-v2.csv";
+  const partialPath = "artifacts/imports-01/sample-roster-partial-v2.csv";
   if (!existsSync(fixturePath)) {
     console.log("IMP-01 sample skipped; its private local academic fixture is not present.");
     return;
@@ -40,9 +40,9 @@ function prepareImportSample(): void {
   }
   mkdirSync("artifacts/imports-01", { recursive: true, mode: 0o700 });
   const csv = [
-    "external_student_id,student_first_name,admission_number,grade,section,student_last_name,roll_number",
-    `SAMPLE-NEW-01,Casey,DEMO-ROSTER-001,${fixture.gradeCode},${fixture.sectionCode},Example,0007`,
-    `SAMPLE-INVALID-02,Riley,DEMO-ROSTER-002,${fixture.gradeCode},NO-SUCH-SECTION,Example,`,
+    "external_student_id,student_first_name,admission_number,admitted_on,grade,section,student_last_name,roll_number",
+    `SAMPLE-NEW-01,Casey,DEMO-ROSTER-001,2026-04-01,${fixture.gradeCode},${fixture.sectionCode},Example,0007`,
+    `SAMPLE-INVALID-02,Riley,DEMO-ROSTER-002,2026-04-01,${fixture.gradeCode},NO-SUCH-SECTION,Example,`,
   ].join("\n") + "\n";
   if (!existsSync(samplePath)) {
     writeFileSync(samplePath, csv, { flag: "wx", mode: 0o600 });
@@ -51,9 +51,9 @@ function prepareImportSample(): void {
   if (!existsSync(partialPath)) {
     const rows = Array.from({ length: 28 }, (_, index) => {
       const number = String(index + 1).padStart(3, "0");
-      return `PARTIAL-${number},Taylor,DEMO-PARTIAL-${number},${fixture.gradeCode},${fixture.sectionCode},Sample,${number}`;
+      return `PARTIAL-${number},Taylor,DEMO-PARTIAL-${number},2026-04-01,${fixture.gradeCode},${fixture.sectionCode},Sample,${number}`;
     });
-    writeFileSync(partialPath, ["external_student_id,student_first_name,admission_number,grade,section,student_last_name,roll_number", ...rows].join("\n") + "\n", { flag: "wx", mode: 0o600 });
+    writeFileSync(partialPath, ["external_student_id,student_first_name,admission_number,admitted_on,grade,section,student_last_name,roll_number", ...rows].join("\n") + "\n", { flag: "wx", mode: 0o600 });
     console.log(`Created fictional multi-batch cancellation sample: ${partialPath}`);
   } else console.log(`Existing synthetic partial-import sample preserved: ${partialPath}`);
 }
@@ -91,8 +91,8 @@ function main(): void {
   console.log("- artifacts/academics-03/private-demo.json");
   console.log("- artifacts/attendance-01/private-demo.json");
   console.log("- artifacts/students-03/private-demo.json");
-  if (existsSync("artifacts/imports-01/sample-roster.csv")) console.log("- artifacts/imports-01/sample-roster.csv");
-  if (existsSync("artifacts/imports-01/sample-roster-partial.csv")) console.log("- artifacts/imports-01/sample-roster-partial.csv");
+  if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
+  if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");
   console.log(`\nPrimary administrator/teacher credentials: artifacts/people-02/private-demo.json`);
   console.log(`Connected attendance walkthrough date: ${attendance.recommendedDate} (${attendance.recommendedSessionIds.length} assigned sessions)`);
   console.log("Other feature command receipts and synthetic IDs remain in their ignored artifacts/<task>/ files.");

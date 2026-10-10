@@ -1,6 +1,6 @@
 import { AccessError, uuidPattern } from "../../access/contracts/index";
 
-export type StudentInput = Readonly<{ firstName: string; lastName: string; admissionNumber: string; existingPersonId: string | null }>;
+export type StudentInput = Readonly<{ firstName: string; lastName: string; admissionNumber: string; admittedOn:string; existingPersonId: string | null }>;
 
 function personName(value: unknown, required: boolean): string {
   if (typeof value !== "string") throw new AccessError("VALIDATION");
@@ -9,14 +9,14 @@ function personName(value: unknown, required: boolean): string {
   return normalized;
 }
 
-export function studentInput(input: { firstName: unknown; lastName?: unknown; admissionNumber: unknown; existingPersonId?: unknown }): StudentInput {
+export function studentInput(input: { firstName: unknown; lastName?: unknown; admissionNumber: unknown; admittedOn:unknown; existingPersonId?: unknown }): StudentInput {
   const firstName = personName(input.firstName, true), lastName = personName(input.lastName ?? "", false);
   if (typeof input.admissionNumber !== "string") throw new AccessError("VALIDATION");
   const admissionNumber = input.admissionNumber.normalize("NFC").trim();
   if (!admissionNumber || admissionNumber.length > 40 || /[\u0000-\u001f\u007f]/.test(admissionNumber)) throw new AccessError("VALIDATION");
   const existingPersonId = input.existingPersonId == null || input.existingPersonId === "" ? null : input.existingPersonId;
   if (existingPersonId !== null && (typeof existingPersonId !== "string" || !uuidPattern.test(existingPersonId))) throw new AccessError("VALIDATION");
-  return { firstName, lastName, admissionNumber, existingPersonId: existingPersonId?.toLowerCase() ?? null };
+  return { firstName, lastName, admissionNumber, admittedOn:civilDate(input.admittedOn), existingPersonId: existingPersonId?.toLowerCase() ?? null };
 }
 
 export function studentListQuery(input: { search?: unknown; cursor?: unknown; limit?: unknown; status?: unknown }) {
@@ -80,6 +80,7 @@ export function transferInput(input:{expectedVersion:unknown;toSectionId:unknown
 }
 export function archiveInput(input:{expectedVersion:unknown;reason:unknown}){return {expectedVersion:expectedVersion(input.expectedVersion),reason:reasonText(input.reason)};}
 export function nameCorrectionInput(input:{expectedPersonVersion:unknown;firstName:unknown;lastName?:unknown;reason:unknown}){return {expectedPersonVersion:expectedVersion(input.expectedPersonVersion),firstName:input.firstName,lastName:input.lastName,reason:reasonText(input.reason)};}
+export function admissionDateCorrectionInput(input:{expectedVersion:unknown;admittedOn:unknown;reason:unknown}){return {expectedVersion:expectedVersion(input.expectedVersion),admittedOn:civilDate(input.admittedOn),reason:reasonText(input.reason)};}
 function uuid(value:unknown){if(typeof value!=="string"||!uuidPattern.test(value))throw new AccessError("VALIDATION");return value.toLowerCase();}
 
 export function displayStudentName(firstName: string, lastName: string): string { return `${firstName} ${lastName}`.trim(); }

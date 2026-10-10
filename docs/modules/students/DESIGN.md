@@ -22,7 +22,7 @@ Student is installed by STU-01; Enrollment and SectionPlacement are installed by
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
-| `vs_students_student` (Student) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); status ACTIVE/ARCHIVED; version int; created_at timestamptz(3) | Institutional student identity; admission number never recycled after archive. | FK(scope)→School; FK(organization_id,person_id)→Person; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number; index(scope,status,id) |
+| `vs_students_student` (Student) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); admitted_on date nullable; admission_date_verified_at timestamptz(3) nullable; admission_date_verified_by uuid nullable; admission_date_verification_reason varchar(500) nullable; status ACTIVE/ARCHIVED; version int; created_at timestamptz(3) | Institutional student identity; admission number never recycled after archive. Admission date is entry into this branch and has explicit verification evidence. | FK(scope)→School; FK(organization_id,person_id)→Person; FK admission_date_verified_by→UserAccount; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number and coherent date evidence; index(scope,status,id) |
 | `vs_students_enrollment` (Enrollment) | id uuid PK; organization_id uuid; school_id uuid; student_id uuid; year_id uuid; valid_from date; valid_to date; version int | One yearly root per Student and AcademicYear; retains the enrolled date range. | UNIQUE(scope,student_id,year_id); UNIQUE(scope,id,year_id); scoped Student/Year FKs; CHECK from<to and version>=1; index(scope,student_id,year_id) via unique key |
 | `vs_students_section_placement` (SectionPlacement) | id uuid PK; organization_id uuid; school_id uuid; enrollment_id uuid; year_id uuid; section_id uuid; valid_from date; valid_to date; roll_number varchar(30) nullable | Section membership intervals; no duplicated year/student roots per transfer. Roll is optional display text (including leading zeroes), not a globally unique identity. | Scoped FK(enrollment_id,year_id) and FK(section_id,year_id); CHECK from<to; index(scope,section_id,valid_from,valid_to,enrollment_id) for roster; index(scope,enrollment_id,valid_from) for timeline; interval nonoverlap guarded by School serialization and verified PostgreSQL concurrency tests |
 
@@ -239,7 +239,7 @@ The approved existing-Person step uses exact person ID or admission reference; t
 
 ### SA-18 corrective implementation contract
 
-**Authority and classification.** The Edition 03 SA-18 workflow, its `student.manage` capability and its exact person-ID/admission rule are `EXISTING_ACCEPTED_CONTRACT`. Reusing the current STU-01 route, guard, Person/Student transaction and error vocabulary is a `ROUTINE_ENGINEERING_CHOICE`. This slice adds no new identity authority, fuzzy discovery or cross-branch search. The approved admission-date field has no accepted Student storage/lifecycle contract and remains separately unresolved; it is not silently mapped to `created_at`.
+**Authority and classification.** The Edition 03 SA-18 workflow, its `student.manage` capability and its exact person-ID/admission rule are `EXISTING_ACCEPTED_CONTRACT`. Reusing the current STU-01 route, guard, Person/Student transaction and error vocabulary is a `ROUTINE_ENGINEERING_CHOICE`. This slice adds no new identity authority, fuzzy discovery or cross-branch search. The admission-date lifecycle is defined separately below and never maps `created_at`, enrollment start, academic-year start or a section-transfer date into branch admission.
 
 **Interfaces and reads.** `ExistingPersonReference` is `{kind:'PERSON_ID';personId:string}|{kind:'ADMISSION_NUMBER';admissionNumber:string}`. `StudentRepository.resolveExistingPerson(actor,organizationId,schoolId,reference): Promise<ExistingPersonChoice>` returns `{personId,displayName,source,eligibleForRegistration,existingStudentId}`. `PERSON_ID` reads `vs_people_person` by `(organization_id,id)` and checks for an existing `vs_students_student` in the current branch. `ADMISSION_NUMBER` reads Student by `(organization_id,school_id,admission_number)` and joins its organization-qualified Person. The existing unique keys support both reads; no index or migration changes. A foreign or missing reference is the same `NOT_FOUND` response and reveals no other scope.
 
@@ -270,3 +270,34 @@ sequenceDiagram
 ```
 
 **Delivery and verification.** The registration dialog separates identity reference type from its value, preserves entered Student fields on lookup failure, never accepts names/emails, and provides an “Open existing student” recovery for admission/current-branch Person matches. Unit tests cover strict reference parsing and leading zeros. Real PostgreSQL tests cover authorized Person ID, branch admission, already-linked Person, foreign organization, missing admission and revoked/cross-scope actor. Playwright covers selectable Person-ID registration plus exact-admission recovery at desktop and mobile widths. Human and native assistive-technology review remain separate gates.
+
+### SA-18 admission-date implementation contract
+
+**Invariant and ownership.** Students owns `admitted_on`: the school-local civil date on which the person first entered this branch. It is required for every new manual or imported Student. It is independent of Person creation, yearly Enrollment, SectionPlacement transfer, Attendance roster eligibility and report date ranges. A later section transfer does not change it. Existing rows created before this contract remain nullable and explicitly unverified until an authorized administrator uses source-backed verification; no automatic derivation is permitted.
+
+**Physical schema and reads.** `vs_students_student` adds nullable `admitted_on date`, `admission_date_verified_at timestamptz(3)`, `admission_date_verified_by uuid` and `admission_date_verification_reason varchar(500)`. A coherent-evidence check permits either all four legacy fields to be null, or requires date, verifier, timestamp and a 5–500-character reason together. The verifier references global `vs_access_user_account(id)` with RESTRICT. Existing scoped list/index contracts stay unchanged because detail reads use the Student primary/scoped identity keys and imports resolve by the existing branch admission/source-map indexes. Detail returns a browser-safe `{value,verified,verifiedAt,verificationReason}` projection. Path A BRANCH classification and future RLS policy remain registered for TEN-03; current application authorization stays mandatory.
+
+**Creation, correction and concurrency.** Manual registration accepts a required ISO civil `admittedOn` no later than the current branch-local date and records the current account as verifier in the existing serializable account → Organization → School transaction. Enlisted import registration requires the explicit `admitted_on` CSV column, rejects a date after the import enrollment start, and commits Student, Enrollment, placement, source map and evidence in its existing transaction. `POST /api/v1/students/:id/admission-date` accepts `{expectedVersion,admittedOn,reason,key}`. It reauthorizes current `student.manage`, release, institution/branch and module state; locks in the documented order; rejects future dates; compares `Student.version`; updates the four fields and Student/School versions; and appends receipt/audit/outbox evidence atomically. Same-key same-input replay returns the original result, changed replay conflicts, stale versions fail, and a no-op verified date conflicts. Reads do not acquire mutation locks.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant H as Student HTTP adapter
+  participant U as Students use case
+  participant D as PostgreSQL
+  A->>H: POST admission-date with expected version, date, reason, key
+  H->>U: Verified session plus untrusted command
+  U->>D: Establish tenant context; lock account, organization, school
+  U->>D: Recheck student.manage and scoped Student version
+  alt authorized current command
+    U->>D: Update admission evidence and versions
+    U->>D: Append safe receipt, audit and outbox
+    D-->>U: Commit one atomic result
+    U-->>A: Verified date and new version
+  else replay, stale, foreign or future date
+    D-->>U: Original result or stable failure; no partial write
+    U-->>A: Scoped response
+  end
+```
+
+**Failure and verification contract.** Validation covers missing/malformed/future dates and bounded reasons. PostgreSQL evidence covers verified creation, nullable legacy preservation, manual population/correction, exact replay, changed/stale/cross-scope rejection, coherent database constraints, import persistence and rollback. Enrollment and Attendance row counts must remain unchanged by correction. Browser evidence covers required registration input, verified detail, reasoned correction, refresh persistence, keyboard-visible controls and desktop/mobile layout. Migration `20261010014000_student_admission_date` is forward-only and performs no backfill. Human visual/accessibility review and TEN-03 restricted-role enforcement remain separate pending gates.

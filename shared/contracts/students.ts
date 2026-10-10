@@ -7,11 +7,13 @@ export type StudentTransferResult=Readonly<{enrollmentId:string;version:number;s
 export type StudentArchiveResult=Readonly<{studentId:string;version:number;status:"ARCHIVED";replayed:boolean}>;
 export type PersonNameRevisionRecord=Readonly<{id:string;version:number;previousDisplayName:string;correctedDisplayName:string;reason:string;occurredAt:string}>;
 export type StudentNameCorrectionResult=Readonly<{studentId:string;personVersion:number;revisionId:string;replayed:boolean}>;
+export type StudentAdmissionDateResult=Readonly<{studentId:string;version:number;admittedOn:string;verifiedAt:string;replayed:boolean}>;
 export type StudentProfile = Readonly<{
   studentId: string;
   personId: string;
   version: number;
   admissionNumber: string;
+  admissionDate:Readonly<{value:string|null;verified:boolean;verifiedAt:string|null;verificationReason:string|null}>;
   displayName: string;
   firstName:string;
   lastName:string;

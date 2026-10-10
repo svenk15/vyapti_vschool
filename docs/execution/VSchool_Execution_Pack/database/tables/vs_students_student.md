@@ -4,7 +4,7 @@ Observed source schema, not a new migration. Owner: students.
 
 **Responsibility:** Students-owned branch identity and admission number; the Person remains People-owned and is never inferred by name or email.
 
-**Registry constraint summary:** FK(scope)→School; FK(organization_id,person_id)→Person; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number; index(scope,status,id)
+**Registry constraint summary:** FK(scope)→School; FK(organization_id,person_id)→Person; FK admission_date_verified_by→UserAccount; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number and coherent date evidence; index(scope,status,id)
 
 **Tenant classification / intended RLS:** `{"classification": "BRANCH", "scopeColumns": ["organization_id", "school_id"], "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.", "enforcement": "PATH_A_DEFERRED_TEN_03", "owner": "students", "closureGate": "TEN-03"}`
 
@@ -16,6 +16,10 @@ Observed source schema, not a new migration. Owner: students.
 | `schoolId` | `school_id` | `Uuid` | `no` | `@map("school_id") @db.Uuid` |
 | `personId` | `person_id` | `Uuid` | `no` | `@map("person_id") @db.Uuid` |
 | `admissionNumber` | `admission_number` | `VarChar(40)` | `no` | `@map("admission_number") @db.VarChar(40)` |
+| `admittedOn` | `admitted_on` | `Date` | `yes` | `@map("admitted_on") @db.Date` |
+| `admissionDateVerifiedAt` | `admission_date_verified_at` | `Timestamptz(3)` | `yes` | `@map("admission_date_verified_at") @db.Timestamptz(3)` |
+| `admissionDateVerifiedBy` | `admission_date_verified_by` | `Uuid` | `yes` | `@map("admission_date_verified_by") @db.Uuid` |
+| `admissionDateVerificationReason` | `admission_date_verification_reason` | `VarChar(500)` | `yes` | `@map("admission_date_verification_reason") @db.VarChar(500)` |
 | `status` | `status` | `VarChar(20)` | `no` | `@db.VarChar(20)` |
 | `version` | `version` | `integer` | `no` | `—` |
 | `createdAt` | `created_at` | `Timestamptz(3)` | `no` | `@map("created_at") @db.Timestamptz(3)` |

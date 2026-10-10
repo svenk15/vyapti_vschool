@@ -1,17 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { archiveInput, enrollmentInput, existingPersonReference, studentInput, studentListQuery, transferInput } from "../../backend/modules/students/domain/student";
+import { admissionDateCorrectionInput, archiveInput, enrollmentInput, existingPersonReference, studentInput, studentListQuery, transferInput } from "../../backend/modules/students/domain/student";
 
 describe("student registration inputs",()=>{
   it("preserves admission-number zeros and treats a selected Person as an explicit reference",()=>{
-    const input=studentInput({firstName:"  Synthetic  ",lastName:" Learner ",admissionNumber:" 0007 ",existingPersonId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
-    expect(input).toEqual({firstName:"Synthetic",lastName:"Learner",admissionNumber:"0007",existingPersonId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
-    expect(studentInput({firstName:"Synthetic",admissionNumber:"0007"}).existingPersonId).toBeNull();
+    const input=studentInput({firstName:"  Synthetic  ",lastName:" Learner ",admissionNumber:" 0007 ",admittedOn:"2026-04-01",existingPersonId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
+    expect(input).toEqual({firstName:"Synthetic",lastName:"Learner",admissionNumber:"0007",admittedOn:"2026-04-01",existingPersonId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
+    expect(studentInput({firstName:"Synthetic",admissionNumber:"0007",admittedOn:"2026-04-01"}).existingPersonId).toBeNull();
   });
 
   it("rejects malformed identity and bounds exact-Person lookup separately from list search",()=>{
-    expect(()=>studentInput({firstName:"\n",admissionNumber:"0007"})).toThrow("VALIDATION");
-    expect(()=>studentInput({firstName:"Synthetic",admissionNumber:" ".repeat(3)})).toThrow("VALIDATION");
-    expect(()=>studentInput({firstName:"Synthetic",admissionNumber:"0007",existingPersonId:"foreign"})).toThrow("VALIDATION");
+    expect(()=>studentInput({firstName:"\n",admissionNumber:"0007",admittedOn:"2026-04-01"})).toThrow("VALIDATION");
+    expect(()=>studentInput({firstName:"Synthetic",admissionNumber:" ".repeat(3),admittedOn:"2026-04-01"})).toThrow("VALIDATION");
+    expect(()=>studentInput({firstName:"Synthetic",admissionNumber:"0007",admittedOn:"2026-04-01",existingPersonId:"foreign"})).toThrow("VALIDATION");
+    expect(()=>studentInput({firstName:"Synthetic",admissionNumber:"0007",admittedOn:""})).toThrow("VALIDATION");
+    expect(()=>studentInput({firstName:"Synthetic",admissionNumber:"0007",admittedOn:"2026-02-30"})).toThrow("VALIDATION");
     expect(existingPersonReference("PERSON_ID","D7E5B2A2-09C3-4B2B-9B02-C29E01ADDF12")).toEqual({kind:"PERSON_ID",personId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
     expect(existingPersonReference("ADMISSION_NUMBER"," 0007 ")).toEqual({kind:"ADMISSION_NUMBER",admissionNumber:"0007"});
     expect(()=>existingPersonReference("PERSON_ID","x")).toThrow("VALIDATION");
@@ -41,5 +43,12 @@ describe("student registration inputs",()=>{
     expect(archiveInput({expectedVersion:1,reason:"Graduated"})).toEqual({expectedVersion:1,reason:"Graduated"});
     expect(()=>archiveInput({expectedVersion:-1,reason:"Graduated"})).toThrow("VALIDATION");
     expect(()=>archiveInput({expectedVersion:1,reason:"\n"})).toThrow("VALIDATION");
+  });
+
+  it("validates a versioned, reasoned admission-date correction",()=>{
+    expect(admissionDateCorrectionInput({expectedVersion:2,admittedOn:"2025-06-12",reason:" Verified against signed register "})).toEqual({expectedVersion:2,admittedOn:"2025-06-12",reason:"Verified against signed register"});
+    expect(()=>admissionDateCorrectionInput({expectedVersion:0,admittedOn:"2025-06-12",reason:"Valid reason"})).toThrow("VALIDATION");
+    expect(()=>admissionDateCorrectionInput({expectedVersion:1,admittedOn:"2025-02-30",reason:"Valid reason"})).toThrow("VALIDATION");
+    expect(()=>admissionDateCorrectionInput({expectedVersion:1,admittedOn:"2025-06-12",reason:"no"})).toThrow("VALIDATION");
   });
 });

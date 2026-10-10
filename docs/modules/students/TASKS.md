@@ -57,6 +57,16 @@ Contract delta: replace exact display-name selection with the discriminated `PER
 
 Acceptance: strict unit validation; real PostgreSQL Person/admission resolution, missing/foreign/cross-scope denial and registration readback; desktop/mobile explicit selection and existing-Student recovery. Extend no seed tables; the existing fictional Person and Student fixtures provide both cases. Evidence: `docs/evidence/sa-comp-07/README.md`. Human review remains PENDING.
 
+## SA-COMP-12 / SA-18 — Persist and verify branch admission date
+
+Depends on: STU-01, SA-COMP-07
+
+Outcome: every new manual or imported Student records an explicit verified branch-entry date, while legacy records remain visibly unverified until an authorized reasoned correction supplies source-backed evidence.
+
+Contract: implement [the SA-18 admission-date contract](DESIGN.md#sa-18-admission-date-implementation-contract). Add only the forward Student columns/check/FK; require `admittedOn` on registration and `admitted_on` in roster CSV; expose a versioned idempotent correction command and detail UI. Do not derive dates or change Person, Enrollment, Placement, Attendance or report history.
+
+Acceptance: focused unit civil-date/CSV tests; real PostgreSQL verified creation, legacy null, correction, replay, stale/future/cross-scope failures, import persistence and unchanged enrollment/attendance counts; desktop/mobile registration and reasoned correction with reload. Apply migration to guarded development/test databases, extend deterministic seed samples without overwriting the earlier CSV files, update CURRENT_STATE/evidence and keep human review PENDING.
+
 ## Experience overlay consumption
 
 EX-08 adopts directory, detail, registration, enrollment, transfer and archive. BE-04 must first verify the live teacher read policy. SA-COMP-07 reconciles existing-Person selection to exact authorized Person-ID/current-branch-admission paths; ordinary Student list search remains separate.
