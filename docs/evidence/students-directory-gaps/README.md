@@ -35,7 +35,7 @@ The final application captures were visually inspected. Desktop and mobile retai
 - **Drafts remains incomplete.** Its durable ownership, persistence, validation, retention and resume lifecycle still needs an accepted contract. No fake or browser-only draft tab was added.
 - **Link guardian remains Phase 2 SA-32 work.** The Families owner, verified relationship, purpose grant and invitation dependencies are not implemented.
 - **Lifecycle action remains Phase 3 SA-22 work.** Current archive and same-branch transfer do not implement promotion, cross-branch transfer or withdrawal cases.
-- The reference Sort drawer says “Reference”; the application names the accepted concrete field “Admission number.” The application also retains the approved enhanced navigation and real institution/branch context rather than the prototype review chrome.
+- The visible Sort label was subsequently corrected to “Reference” without changing the concrete `admissionNumber` query field; see the [embedded-spec checkpoint](../students-implementation-spec/README.md). The application retains the approved enhanced navigation and real institution/branch context rather than the prototype review chrome.
 - Application rows show real Enrollment summaries rather than copying the prototype’s fictional Class values. Counts and names therefore differ intentionally.
 
 These are tracked implementation/dependency gaps. Their absence is not accepted functionality or workflow completion. Layout and visual acceptance remain PENDING.
