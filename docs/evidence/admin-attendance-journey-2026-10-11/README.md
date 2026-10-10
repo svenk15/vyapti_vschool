@@ -40,6 +40,8 @@ Chromium's platform-font inspection on macOS reported `.SF NS` for reference and
 | Saved mutation distinct from history read | History failure could make save appear unconfirmed | Separate history alert and read-only refresh | Browser verified |
 | Destructive action separated from correction | Competing commands could remain actionable | Draft/in-flight/unknown states mutually lock actions; retry remains usable | Browser verified |
 | Mobile register remains within page | Table descendants propagated document overflow | Paint-contained card retains its own horizontal scroller | 390 × 844 measured |
+| 40 px desktop primary action | Attendance inherited the shared 44 px action height | Attendance CTAs now measure 40 px with 8 × 14 px padding; mobile retains a 44 px target | Computed desktop/mobile bounds |
+| Saved confirmation can be dismissed | Confirmation had no close action | Added a 40 px accessible close control labelled “Close correction saved message” | Focused Playwright open/close check and `application-correction-saved-dismissible.png` |
 
 Remaining deviations: the live page represents the complete real register rather than the prototype's three-step simulated form; it therefore shows summary, all frozen students, current values, history, and cancellation together. This is required by the accepted attendance contract. Nimbus Sans is not copied into production. Native VoiceOver/NVDA evidence remains outstanding.
 
@@ -51,3 +53,5 @@ Remaining deviations: the live page represents the complete real register rather
 - `pnpm check` — passed: lint, generated route types, TypeScript, documentation (30 tasks), 54 database contracts, boundaries, portable backend compilation, and 128/128 unit tests.
 - `pnpm build` — passed with Next.js 16.3.8 using the repository's webpack production build.
 - `git diff --check` — passed before checkpoint review.
+
+The CTA/dismiss-control follow-up passed focused ESLint, TypeScript, and Playwright verification. The browser measured 40 px desktop primary/secondary CTAs, a 40 px dismiss target, and a 44 px mobile primary target. The correction response was mocked for this presentation-only check, so no attendance record or revision was written.
