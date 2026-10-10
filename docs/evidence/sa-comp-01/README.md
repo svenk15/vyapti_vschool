@@ -1,6 +1,6 @@
 # SA-COMP-01 verification
 
-Workflows SA-04 and SA-05 are implementation VERIFIED on the 10 October 2026 working tree; human visual review is PENDING. The administrator dashboard now shows current attendance/import/staff exceptions, and School setup shows derived readiness for each effective Phase 1 module. Both use one Reporting-owned, read-only projection over existing owner tables. No schema or migration changed.
+Workflows SA-04 and SA-05 are implementation VERIFIED at commit `6be69d6dcb096f3a24971422d6e84050780b790e`; human visual review is PENDING. The administrator dashboard now shows current attendance/import/staff exceptions, and School setup shows derived readiness for each effective Phase 1 module. Both use one Reporting-owned, read-only projection over existing owner tables. No schema or migration changed.
 
 Executed evidence:
 

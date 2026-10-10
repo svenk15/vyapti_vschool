@@ -12,7 +12,7 @@ Last updated: 2026-10-10. No active execution timer.
 
 Reporting now exposes a transport-neutral, browser-safe School Administrator projection that rechecks active account/token, organization, branch, membership and `school.manage`, establishes transaction-local verified context, and reads a repeatable snapshot of effective-module setup facts plus attendance/import/staff exceptions. `/admin/setup` renders derived progress and the next incomplete owner workspace; `/admin` renders current exceptions with source actions. No table or migration was added, and source owners remain unchanged.
 
-Evidence: 115/115 unit tests, 107/107 guarded real-PostgreSQL functional tests and 84/84 Playwright journeys across desktop/mobile passed; lint, typecheck, backend compile and documentation checks passed, and Playwright's production build passed. `pnpm demo:seed` completed against the guarded development database without replacing existing data or credentials. Screenshots and exact verification notes are linked above. Source commit will be recorded after the focused checkpoint is created. Next action: SA-COMP-02 Academics retirement/dependency-count LLD and implementation.
+Evidence: implementation commit `6be69d6dcb096f3a24971422d6e84050780b790e`; 115/115 unit tests, 107/107 guarded real-PostgreSQL functional tests and 84/84 Playwright journeys across desktop/mobile passed; lint, typecheck, backend compile and documentation checks passed, and Playwright's production build passed. `pnpm demo:seed` completed against the guarded development database without replacing existing data or credentials. Screenshots and exact verification notes are linked above. Next action: SA-COMP-02 Academics retirement/dependency-count LLD and implementation.
 
 ## Current checkpoint
 
