@@ -6,13 +6,17 @@ Last updated: 2026-10-10. No active execution timer.
 |---|---|---|---|
 | RPT-01 | VERIFIED | PENDING | Source `370c7d703a9e4209ca5db406c22400f4eccf5519`; entitlement test follow-up `a92501b048160673a40771ee5ddd3d11305fa5cf`; live build `LCX3HkLL1u3jYJ1THM-GR` at port 3428 |
 | RPT-02 | VERIFIED | PENDING | RPT-02 source `487b4050136570784bba403cf5acfdadc902a0d8`; verified demo source `d1e3bc7efbce0eb33eb95bc4b4e18a685b3c709e`; PostgreSQL, E2E and full check evidence below |
-| SA-COMP-01 | VERIFIED | PENDING | SA-04/SA-05 setup and exception projection; 115 unit, 107 PostgreSQL functional and 84 desktop/mobile browser journeys; [evidence](../../evidence/sa-comp-01/README.md) |
+| SA-COMP-01 / SA-COMP-10 | VERIFIED | PENDING | SA-04/SA-05 projection plus current-source SA-04 display-only responsibility closure; [evidence](../../evidence/sa-comp-10/README.md) |
 
 ## SA-COMP-01 administrator readiness and exceptions — 10 October 2026
 
 Reporting now exposes a transport-neutral, browser-safe School Administrator projection that rechecks active account/token, organization, branch, membership and `school.manage`, establishes transaction-local verified context, and reads a repeatable snapshot of effective-module setup facts plus attendance/import/staff exceptions. `/admin/setup` renders derived progress and the next incomplete owner workspace; `/admin` renders current exceptions with source actions. No table or migration was added, and source owners remain unchanged.
 
 Evidence: implementation commit `6be69d6dcb096f3a24971422d6e84050780b790e`; 115/115 unit tests, 107/107 guarded real-PostgreSQL functional tests and 84/84 Playwright journeys across desktop/mobile passed; lint, typecheck, backend compile and documentation checks passed, and Playwright's production build passed. `pnpm demo:seed` completed against the guarded development database without replacing existing data or credentials. Screenshots and exact verification notes are linked above. Next action: SA-COMP-02 Academics retirement/dependency-count LLD and implementation.
+
+## SA-COMP-10 / SA-04 responsibility closure — 10 October 2026
+
+SA-04 is implementation-VERIFIED with human review PENDING. The setup projection now returns an explicit role for every supported operation from a pure owner mapping, and the setup page identifies “Responsible role: School administrator.” It never names a person or supplies authorization; existing live `school.manage` and scope checks remain authoritative. An unknown future operation maps to null and an honest unavailable label. No schema, migration, seed or database write changed. Evidence and focused commands are in [SA-COMP-10](../../evidence/sa-comp-10/README.md).
 
 ## Current checkpoint
 
@@ -59,4 +63,4 @@ Manual review remains PENDING: (1) Sign in as the synthetic administrator and op
 
 ### Administrator completion review — 10 October 2026
 
-SA-COMP-01 projection evidence remains valid. The complete approved SA-04 workflow is PARTIALLY_IMPLEMENTED because responsible-role assignment has no owner contract or persistence; SA-05 remains implemented and verified. See [the completion review](../../evidence/sa-completion-review/README.md). Human review remains PENDING.
+SA-COMP-01 projection evidence remains valid. The authorized Phase 1 display-only responsibility amendment closes SA-04 without assignment persistence or authority side effects; SA-04 and SA-05 are implementation-VERIFIED. Human review remains PENDING.

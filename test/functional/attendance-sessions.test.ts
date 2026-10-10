@@ -55,6 +55,7 @@ describe('SA-COMP-01 PostgreSQL administrator projection',()=>{
   try{
    const overview=await reporting.schoolAdminOverview(identity,primary.organizationId,primary.schoolId);
    expect(overview.readiness.map(item=>item.id)).toEqual(['school','academics','staff','students','attendance']);
+   expect(overview.readiness.map(item=>item.responsibleRole)).toEqual(overview.readiness.map(()=>'SCHOOL_ADMIN'));
    expect(overview.readiness.find(item=>item.id==='academics')).toMatchObject({complete:true});
    expect(overview.readiness.find(item=>item.id==='students')!.count).toBeGreaterThanOrEqual(3);
    expect(overview.exceptions.every(item=>['attendance','imports','staff'].includes(item.id))).toBe(true);

@@ -10,6 +10,8 @@ Outcome: the School Administrator overview and setup pages show one consistent, 
 
 Acceptance: live `school.manage` and current branch scope are rechecked; ineffective modules are omitted; counts use complete scoped queries rather than paginated results; absent context, revoked access and cross-branch access fail closed; PostgreSQL and browser evidence passes; seed data yields a coherent populated demonstration. Human review remains PENDING.
 
+SA-04 completion amendment: every supported readiness operation exposes its explicit display-only responsible role, an unmapped operation is labelled honestly, and neither the DTO nor UI can assign a person or grant authority. Verify the role map in unit tests, its scoped PostgreSQL projection and the approved desktop/mobile setup composition. No migration or write is permitted.
+
 ## RPT-01 — Review school attendance with explainable totals
 
 Depends on: ATT-03
