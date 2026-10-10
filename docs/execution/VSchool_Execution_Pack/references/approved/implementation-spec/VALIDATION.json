@@ -1,0 +1,13 @@
+{
+  "originalEntriesUnchanged": 2368,
+  "administratorWorkflowCards": 63,
+  "referenceStates": 98,
+  "referencePageErrors": 0,
+  "workspacesWithSourceExtraction": 6,
+  "productionTestsRun": false,
+  "limits": [
+    "No pinned Administrator body font in original source",
+    "Later wizard steps are catalog-specified, not all browser-exercised",
+    "Other workspaces have source/token extraction, not complete measured screen contracts"
+  ]
+}

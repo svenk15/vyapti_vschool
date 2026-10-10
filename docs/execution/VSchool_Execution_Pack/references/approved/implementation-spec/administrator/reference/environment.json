@@ -1,0 +1,35 @@
+{
+  "browser": "153.0.8010.0",
+  "platform": "linux",
+  "deviceScaleFactor": 1,
+  "bodyFontAvailability": "platform dependent; inspect fonts below",
+  "actualFonts": {
+    "h1": [
+      {
+        "familyName": "DejaVu Sans",
+        "postScriptName": "DejaVuSans-Bold",
+        "isCustomFont": false,
+        "glyphCount": 8
+      }
+    ],
+    ".nav-item": [
+      {
+        "familyName": "Nimbus Sans",
+        "postScriptName": "NimbusSans-Regular",
+        "isCustomFont": true,
+        "glyphCount": 5
+      }
+    ],
+    ".personcell strong": [
+      {
+        "familyName": "DejaVu Sans",
+        "postScriptName": "DejaVuSans-Bold",
+        "isCustomFont": false,
+        "glyphCount": 11
+      }
+    ]
+  },
+  "pageErrors": [],
+  "records": 98,
+  "coverage": "module landings + workflow entry states + Students overlays/scenarios; later wizard states are specified from catalog, not all browser-exercised"
+}

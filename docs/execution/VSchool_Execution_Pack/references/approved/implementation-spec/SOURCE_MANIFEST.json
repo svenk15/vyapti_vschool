@@ -1,0 +1,62 @@
+{
+  "VSchool_Operator_Design": {
+    "html": "packs/VSchool_Operator_Design/VSchool_Operator_Review.html",
+    "catalog": "packs/VSchool_Operator_Design/workflow-catalog.json",
+    "workflows": 18,
+    "sourceSha256": "ac872485991c71d8466e5cbc964015c04a422d9ac1bf6a87d66eb9402d86c352",
+    "styles": [
+      "style-00.css",
+      "style-01.css"
+    ]
+  },
+  "VSchool_Student_Design": {
+    "html": "packs/VSchool_Student_Design/VSchool_Student_Review.html",
+    "catalog": "packs/VSchool_Student_Design/workflow-catalog.json",
+    "workflows": 47,
+    "sourceSha256": "74dc76af2e3b2000dfeb4b1258d49c6081aa255d6294f9ac6fe10ae59253cc9b",
+    "styles": [
+      "style-00.css",
+      "style-01.css"
+    ]
+  },
+  "VSchool_School_Admin_Design": {
+    "html": "packs/VSchool_School_Admin_Design/VSchool_School_Admin_Review.html",
+    "catalog": "packs/VSchool_School_Admin_Design/workflow-catalog.json",
+    "workflows": 63,
+    "sourceSha256": "c3d9b82941491abd83f7eff935ec099b310459d26da28a1be3dbedc317588d17",
+    "styles": [
+      "style-00.css",
+      "style-01.css"
+    ]
+  },
+  "VSchool_Parent_Guardian_Design": {
+    "html": "packs/VSchool_Parent_Guardian_Design/VSchool_Parent_Guardian_Review.html",
+    "catalog": "packs/VSchool_Parent_Guardian_Design/workflow-catalog.json",
+    "workflows": 52,
+    "sourceSha256": "3f5fdc44d4d48dbb794dfa9cef61b1f09adbafadb737d73cbc99cdb71cc21f9e",
+    "styles": [
+      "style-00.css",
+      "style-01.css"
+    ]
+  },
+  "VSchool_Teacher_Design": {
+    "html": "packs/VSchool_Teacher_Design/VSchool_Teacher_Review.html",
+    "catalog": "packs/VSchool_Teacher_Design/workflow-catalog.json",
+    "workflows": 42,
+    "sourceSha256": "b77fbdc757cd7f7b96bd4a065887e747d2d708a20cae5154f515c5d70241077c",
+    "styles": [
+      "style-00.css",
+      "style-01.css"
+    ]
+  },
+  "VSchool_Principal_Leadership_Workflows": {
+    "html": "packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html",
+    "catalog": "packs/VSchool_Principal_Leadership_Workflows/workflow-catalog.json",
+    "workflows": 46,
+    "sourceSha256": "c291eaa7542b609f4d67653e5f67880e4c21593e66137daade87c856ef458421",
+    "styles": [
+      "style-00.css",
+      "style-01.css"
+    ]
+  }
+}

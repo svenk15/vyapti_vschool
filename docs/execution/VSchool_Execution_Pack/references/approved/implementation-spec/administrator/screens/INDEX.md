@@ -1,0 +1,100 @@
+# Measured reference states
+
+- [students-1440](students-1440.md): `#/students` — Students
+- [students-sort-1440](students-sort-1440.md): `#/students` — Students
+- [students-filter-1440](students-filter-1440.md): `#/students` — Students
+- [students-manage-1440](students-manage-1440.md): `#/students` — Students
+- [students-390](students-390.md): `#/students` — Students
+- [students-sort-390](students-sort-390.md): `#/students` — Students
+- [students-filter-390](students-filter-390.md): `#/students` — Students
+- [students-manage-390](students-manage-390.md): `#/students` — Students
+- [module-home](module-home.md): `#/home` — A clear start to your school day
+- [module-settings](module-settings.md): `#/settings` — School settings
+- [module-academics](module-academics.md): `#/academics` — Academics
+- [module-staff](module-staff.md): `#/staff` — Staff & access
+- [module-students](module-students.md): `#/students` — Students
+- [module-imports](module-imports.md): `#/imports` — Imports
+- [module-attendance](module-attendance.md): `#/attendance` — Attendance
+- [module-reports](module-reports.md): `#/reports` — Attendance reports
+- [module-families](module-families.md): `#/families` — Families
+- [module-communication](module-communication.md): `#/communication` — Communication
+- [module-admissions](module-admissions.md): `#/admissions` — Admissions
+- [module-planning](module-planning.md): `#/planning` — Timetable & daily changes
+- [module-documents](module-documents.md): `#/documents` — Documents & forms
+- [module-assessments](module-assessments.md): `#/assessments` — Assessments
+- [module-finance](module-finance.md): `#/finance` — Fees & payments
+- [module-transport](module-transport.md): `#/transport` — Transport
+- [module-people-ops](module-people-ops.md): `#/people-ops` — People operations
+- [module-library](module-library.md): `#/library` — Library
+- [module-facilities](module-facilities.md): `#/facilities` — Assets & facilities
+- [module-health](module-health.md): `#/health` — Health & safeguarding
+- [module-integrations](module-integrations.md): `#/integrations` — Integrations
+- [module-assistant](module-assistant.md): `#/assistant` — AI assistance
+- [SA-01-entry](SA-01-entry.md): `#/flow/SA-01` — Sign in and choose a branch
+- [SA-02-entry](SA-02-entry.md): `#/flow/SA-02` — Activate or recover an account
+- [SA-03-entry](SA-03-entry.md): `#/flow/SA-03` — Switch branch or sign out
+- [SA-04-entry](SA-04-entry.md): `#/flow/SA-04` — Complete first-use setup
+- [SA-05-entry](SA-05-entry.md): `#/flow/SA-05` — Resolve a daily exception
+- [SA-06-entry](SA-06-entry.md): `#/flow/SA-06` — Edit branch information
+- [SA-07-entry](SA-07-entry.md): `#/flow/SA-07` — Review branding and school sign-in
+- [SA-08-entry](SA-08-entry.md): `#/flow/SA-08` — Review modules and request a capability
+- [SA-09-entry](SA-09-entry.md): `#/flow/SA-09` — Create an academic year and calendar
+- [SA-10-entry](SA-10-entry.md): `#/flow/SA-10` — Configure grades, sections and subjects
+- [SA-11-entry](SA-11-entry.md): `#/flow/SA-11` — Create an offering and assign a teacher
+- [SA-12-entry](SA-12-entry.md): `#/flow/SA-12` — Change calendar or teaching assignment
+- [SA-13-entry](SA-13-entry.md): `#/flow/SA-13` — Create a staff profile
+- [SA-14-entry](SA-14-entry.md): `#/flow/SA-14` — Grant staff sign-in access
+- [SA-15-entry](SA-15-entry.md): `#/flow/SA-15` — Review invitation or resend access
+- [SA-16-entry](SA-16-entry.md): `#/flow/SA-16` — Verify a staff identity and teacher eligibility
+- [SA-17-entry](SA-17-entry.md): `#/flow/SA-17` — Change or revoke staff access
+- [SA-18-entry](SA-18-entry.md): `#/flow/SA-18` — Register a student manually
+- [SA-19-entry](SA-19-entry.md): `#/flow/SA-19` — Enroll and place a student
+- [SA-20-entry](SA-20-entry.md): `#/flow/SA-20` — Review or update a student record
+- [SA-21-entry](SA-21-entry.md): `#/flow/SA-21` — Move a student to another section
+- [SA-22-entry](SA-22-entry.md): `#/flow/SA-22` — Promote, transfer or leave school
+- [SA-23-entry](SA-23-entry.md): `#/flow/SA-23` — Preview a roster import
+- [SA-24-entry](SA-24-entry.md): `#/flow/SA-24` — Confirm, resume and reconcile an import
+- [SA-25-entry](SA-25-entry.md): `#/flow/SA-25` — Schedule attendance sessions
+- [SA-26-entry](SA-26-entry.md): `#/flow/SA-26` — Monitor and inspect attendance
+- [SA-27-entry](SA-27-entry.md): `#/flow/SA-27` — Correct submitted attendance
+- [SA-28-entry](SA-28-entry.md): `#/flow/SA-28` — Cancel or review a session change
+- [SA-29-entry](SA-29-entry.md): `#/flow/SA-29` — Review an absence explanation
+- [SA-30-entry](SA-30-entry.md): `#/flow/SA-30` — Review and export attendance
+- [SA-31-entry](SA-31-entry.md): `#/flow/SA-31` — Compare trends and assign follow-up
+- [SA-32-entry](SA-32-entry.md): `#/flow/SA-32` — Connect a family
+- [SA-33-entry](SA-33-entry.md): `#/flow/SA-33` — Families
+- [SA-34-entry](SA-34-entry.md): `#/flow/SA-34` — Families
+- [SA-35-entry](SA-35-entry.md): `#/flow/SA-35` — Create notice
+- [SA-36-entry](SA-36-entry.md): `#/flow/SA-36` — Delivery & follow-up
+- [SA-37-entry](SA-37-entry.md): `#/flow/SA-37` — Review a family request
+- [SA-38-entry](SA-38-entry.md): `#/flow/SA-38` — Capture inquiry and start an application
+- [SA-39-entry](SA-39-entry.md): `#/flow/SA-39` — Review application and make a decision
+- [SA-40-entry](SA-40-entry.md): `#/flow/SA-40` — Accept an offer and enroll once
+- [SA-41-entry](SA-41-entry.md): `#/flow/SA-41` — Timetable & daily changes
+- [SA-42-entry](SA-42-entry.md): `#/flow/SA-42` — Timetable & daily changes
+- [SA-43-entry](SA-43-entry.md): `#/flow/SA-43` — Review learning readiness and follow-up
+- [SA-44-entry](SA-44-entry.md): `#/flow/SA-44` — Collect and review a document
+- [SA-45-entry](SA-45-entry.md): `#/flow/SA-45` — Issue a certificate or publish a form
+- [SA-46-entry](SA-46-entry.md): `#/flow/SA-46` — Coordinate assessment setup and marks readiness
+- [SA-47-entry](SA-47-entry.md): `#/flow/SA-47` — Approve, publish or correct results
+- [SA-48-entry](SA-48-entry.md): `#/flow/SA-48` — Configure fees and concessions
+- [SA-49-entry](SA-49-entry.md): `#/flow/SA-49` — Generate invoices and collect payment
+- [SA-50-entry](SA-50-entry.md): `#/flow/SA-50` — Resolve reconciliation, adjustment or refund
+- [SA-51-entry](SA-51-entry.md): `#/flow/SA-51` — Prepare routes and allocate students
+- [SA-52-entry](SA-52-entry.md): `#/flow/SA-52` — Resolve a trip or handoff exception
+- [SA-53-entry](SA-53-entry.md): `#/flow/SA-53` — Review leave and staffing coverage
+- [SA-54-entry](SA-54-entry.md): `#/flow/SA-54` — Review payroll inputs and hand off
+- [SA-55-entry](SA-55-entry.md): `#/flow/SA-55` — Catalog and circulate library items
+- [SA-56-entry](SA-56-entry.md): `#/flow/SA-56` — Resolve overdue, lost or inventory discrepancies
+- [SA-57-entry](SA-57-entry.md): `#/flow/SA-57` — Receive, issue or return stock and assets
+- [SA-58-entry](SA-58-entry.md): `#/flow/SA-58` — Book a facility or request maintenance
+- [SA-59-entry](SA-59-entry.md): `#/flow/SA-59` — Refer a health or safeguarding concern
+- [SA-60-entry](SA-60-entry.md): `#/flow/SA-60` — Review emergency access and restricted case handling
+- [SA-61-entry](SA-61-entry.md): `#/flow/SA-61` — Review connection status and reconcile a sync
+- [SA-62-entry](SA-62-entry.md): `#/flow/SA-62` — Review activity, privacy or support access
+- [SA-63-entry](SA-63-entry.md): `#/flow/SA-63` — Review an AI-assisted explanation or draft
+- [students-loading](students-loading.md): `#/students` — Loading workspace
+- [students-empty](students-empty.md): `#/students` — Students
+- [students-load-error](students-load-error.md): `#/students` — None
+- [students-denied](students-denied.md): `#/students` — None
+- [students-expired](students-expired.md): `#/students` — None

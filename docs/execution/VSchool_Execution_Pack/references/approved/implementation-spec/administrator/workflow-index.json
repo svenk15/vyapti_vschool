@@ -1,0 +1,506 @@
+[
+  {
+    "id": "SA-01",
+    "title": "Sign in and choose a branch",
+    "module": "home",
+    "route": "#/flow/SA-01",
+    "contract": "workflows/SA-01.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-02",
+    "title": "Activate or recover an account",
+    "module": "home",
+    "route": "#/flow/SA-02",
+    "contract": "workflows/SA-02.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-03",
+    "title": "Switch branch or sign out",
+    "module": "home",
+    "route": "#/flow/SA-03",
+    "contract": "workflows/SA-03.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-04",
+    "title": "Complete first-use setup",
+    "module": "home",
+    "route": "#/flow/SA-04",
+    "contract": "workflows/SA-04.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-05",
+    "title": "Resolve a daily exception",
+    "module": "home",
+    "route": "#/flow/SA-05",
+    "contract": "workflows/SA-05.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-06",
+    "title": "Edit branch information",
+    "module": "settings",
+    "route": "#/flow/SA-06",
+    "contract": "workflows/SA-06.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-07",
+    "title": "Review branding and school sign-in",
+    "module": "settings",
+    "route": "#/flow/SA-07",
+    "contract": "workflows/SA-07.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-08",
+    "title": "Review modules and request a capability",
+    "module": "settings",
+    "route": "#/flow/SA-08",
+    "contract": "workflows/SA-08.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-09",
+    "title": "Create an academic year and calendar",
+    "module": "academics",
+    "route": "#/flow/SA-09",
+    "contract": "workflows/SA-09.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-10",
+    "title": "Configure grades, sections and subjects",
+    "module": "academics",
+    "route": "#/flow/SA-10",
+    "contract": "workflows/SA-10.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-11",
+    "title": "Create an offering and assign a teacher",
+    "module": "academics",
+    "route": "#/flow/SA-11",
+    "contract": "workflows/SA-11.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-12",
+    "title": "Change calendar or teaching assignment",
+    "module": "academics",
+    "route": "#/flow/SA-12",
+    "contract": "workflows/SA-12.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-13",
+    "title": "Create a staff profile",
+    "module": "staff",
+    "route": "#/flow/SA-13",
+    "contract": "workflows/SA-13.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-14",
+    "title": "Grant staff sign-in access",
+    "module": "staff",
+    "route": "#/flow/SA-14",
+    "contract": "workflows/SA-14.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-15",
+    "title": "Review invitation or resend access",
+    "module": "staff",
+    "route": "#/flow/SA-15",
+    "contract": "workflows/SA-15.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-16",
+    "title": "Verify a staff identity and teacher eligibility",
+    "module": "staff",
+    "route": "#/flow/SA-16",
+    "contract": "workflows/SA-16.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-17",
+    "title": "Change or revoke staff access",
+    "module": "staff",
+    "route": "#/flow/SA-17",
+    "contract": "workflows/SA-17.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-18",
+    "title": "Register a student manually",
+    "module": "students",
+    "route": "#/flow/SA-18",
+    "contract": "workflows/SA-18.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-19",
+    "title": "Enroll and place a student",
+    "module": "students",
+    "route": "#/flow/SA-19",
+    "contract": "workflows/SA-19.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-20",
+    "title": "Review or update a student record",
+    "module": "students",
+    "route": "#/flow/SA-20",
+    "contract": "workflows/SA-20.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-21",
+    "title": "Move a student to another section",
+    "module": "students",
+    "route": "#/flow/SA-21",
+    "contract": "workflows/SA-21.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-22",
+    "title": "Promote, transfer or leave school",
+    "module": "students",
+    "route": "#/flow/SA-22",
+    "contract": "workflows/SA-22.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-23",
+    "title": "Preview a roster import",
+    "module": "imports",
+    "route": "#/flow/SA-23",
+    "contract": "workflows/SA-23.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-24",
+    "title": "Confirm, resume and reconcile an import",
+    "module": "imports",
+    "route": "#/flow/SA-24",
+    "contract": "workflows/SA-24.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-25",
+    "title": "Schedule attendance sessions",
+    "module": "attendance",
+    "route": "#/flow/SA-25",
+    "contract": "workflows/SA-25.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-26",
+    "title": "Monitor and inspect attendance",
+    "module": "attendance",
+    "route": "#/flow/SA-26",
+    "contract": "workflows/SA-26.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-27",
+    "title": "Correct submitted attendance",
+    "module": "attendance",
+    "route": "#/flow/SA-27",
+    "contract": "workflows/SA-27.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-28",
+    "title": "Cancel or review a session change",
+    "module": "attendance",
+    "route": "#/flow/SA-28",
+    "contract": "workflows/SA-28.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-29",
+    "title": "Review an absence explanation",
+    "module": "attendance",
+    "route": "#/flow/SA-29",
+    "contract": "workflows/SA-29.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-30",
+    "title": "Review and export attendance",
+    "module": "reports",
+    "route": "#/flow/SA-30",
+    "contract": "workflows/SA-30.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-31",
+    "title": "Compare trends and assign follow-up",
+    "module": "reports",
+    "route": "#/flow/SA-31",
+    "contract": "workflows/SA-31.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-32",
+    "title": "Verify and link a parent or guardian",
+    "module": "families",
+    "route": "#/flow/SA-32",
+    "contract": "workflows/SA-32.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-33",
+    "title": "Invite a verified guardian",
+    "module": "families",
+    "route": "#/flow/SA-33",
+    "contract": "workflows/SA-33.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-34",
+    "title": "Change, restrict or revoke a guardian link",
+    "module": "families",
+    "route": "#/flow/SA-34",
+    "contract": "workflows/SA-34.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-35",
+    "title": "Compose and send a school message",
+    "module": "communication",
+    "route": "#/flow/SA-35",
+    "contract": "workflows/SA-35.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-36",
+    "title": "Resolve failed delivery or missing acknowledgement",
+    "module": "communication",
+    "route": "#/flow/SA-36",
+    "contract": "workflows/SA-36.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-37",
+    "title": "Review a family request",
+    "module": "communication",
+    "route": "#/flow/SA-37",
+    "contract": "workflows/SA-37.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-38",
+    "title": "Capture inquiry and start an application",
+    "module": "admissions",
+    "route": "#/flow/SA-38",
+    "contract": "workflows/SA-38.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-39",
+    "title": "Review application and make a decision",
+    "module": "admissions",
+    "route": "#/flow/SA-39",
+    "contract": "workflows/SA-39.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-40",
+    "title": "Accept an offer and enroll once",
+    "module": "admissions",
+    "route": "#/flow/SA-40",
+    "contract": "workflows/SA-40.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-41",
+    "title": "Build and publish a timetable",
+    "module": "planning",
+    "route": "#/flow/SA-41",
+    "contract": "workflows/SA-41.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-42",
+    "title": "Arrange cover or a timetable exception",
+    "module": "planning",
+    "route": "#/flow/SA-42",
+    "contract": "workflows/SA-42.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-43",
+    "title": "Review learning readiness and follow-up",
+    "module": "planning",
+    "route": "#/flow/SA-43",
+    "contract": "workflows/SA-43.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-44",
+    "title": "Collect and review a document",
+    "module": "documents",
+    "route": "#/flow/SA-44",
+    "contract": "workflows/SA-44.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-45",
+    "title": "Issue a certificate or publish a form",
+    "module": "documents",
+    "route": "#/flow/SA-45",
+    "contract": "workflows/SA-45.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-46",
+    "title": "Coordinate assessment setup and marks readiness",
+    "module": "assessments",
+    "route": "#/flow/SA-46",
+    "contract": "workflows/SA-46.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-47",
+    "title": "Approve, publish or correct results",
+    "module": "assessments",
+    "route": "#/flow/SA-47",
+    "contract": "workflows/SA-47.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-48",
+    "title": "Configure fees and concessions",
+    "module": "finance",
+    "route": "#/flow/SA-48",
+    "contract": "workflows/SA-48.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-49",
+    "title": "Generate invoices and collect payment",
+    "module": "finance",
+    "route": "#/flow/SA-49",
+    "contract": "workflows/SA-49.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-50",
+    "title": "Resolve reconciliation, adjustment or refund",
+    "module": "finance",
+    "route": "#/flow/SA-50",
+    "contract": "workflows/SA-50.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-51",
+    "title": "Prepare routes and allocate students",
+    "module": "transport",
+    "route": "#/flow/SA-51",
+    "contract": "workflows/SA-51.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-52",
+    "title": "Resolve a trip or handoff exception",
+    "module": "transport",
+    "route": "#/flow/SA-52",
+    "contract": "workflows/SA-52.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-53",
+    "title": "Review leave and staffing coverage",
+    "module": "people-ops",
+    "route": "#/flow/SA-53",
+    "contract": "workflows/SA-53.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-54",
+    "title": "Review payroll inputs and hand off",
+    "module": "people-ops",
+    "route": "#/flow/SA-54",
+    "contract": "workflows/SA-54.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-55",
+    "title": "Catalog and circulate library items",
+    "module": "library",
+    "route": "#/flow/SA-55",
+    "contract": "workflows/SA-55.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-56",
+    "title": "Resolve overdue, lost or inventory discrepancies",
+    "module": "library",
+    "route": "#/flow/SA-56",
+    "contract": "workflows/SA-56.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-57",
+    "title": "Receive, issue or return stock and assets",
+    "module": "facilities",
+    "route": "#/flow/SA-57",
+    "contract": "workflows/SA-57.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-58",
+    "title": "Book a facility or request maintenance",
+    "module": "facilities",
+    "route": "#/flow/SA-58",
+    "contract": "workflows/SA-58.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-59",
+    "title": "Refer a health or safeguarding concern",
+    "module": "health",
+    "route": "#/flow/SA-59",
+    "contract": "workflows/SA-59.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-60",
+    "title": "Review emergency access and restricted case handling",
+    "module": "health",
+    "route": "#/flow/SA-60",
+    "contract": "workflows/SA-60.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-61",
+    "title": "Review connection status and reconcile a sync",
+    "module": "integrations",
+    "route": "#/flow/SA-61",
+    "contract": "workflows/SA-61.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-62",
+    "title": "Review activity, privacy or support access",
+    "module": "settings",
+    "route": "#/flow/SA-62",
+    "contract": "workflows/SA-62.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  },
+  {
+    "id": "SA-63",
+    "title": "Review an AI-assisted explanation or draft",
+    "module": "assistant",
+    "route": "#/flow/SA-63",
+    "contract": "workflows/SA-63.md",
+    "status": "SOURCE_EXTRACTED_NOT_IMPLEMENTATION_VERIFIED"
+  }
+]
