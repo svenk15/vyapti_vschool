@@ -8,6 +8,12 @@ Last updated: 2026-10-10. No active execution timer.
 | RPT-02 | VERIFIED | PENDING | RPT-02 source `487b4050136570784bba403cf5acfdadc902a0d8`; verified demo source `d1e3bc7efbce0eb33eb95bc4b4e18a685b3c709e`; PostgreSQL, E2E and full check evidence below |
 | SA-COMP-01 / SA-COMP-10 | VERIFIED | PENDING | SA-04/SA-05 projection plus current-source SA-04 display-only responsibility closure; [evidence](../../evidence/sa-comp-10/README.md) |
 
+## Administrator home visual fidelity — 10 October 2026
+
+The production `/admin` page now uses the approved Administrator `#/home` composition with real authorized readiness, exception and attendance projections: a compact title/action header, three summary metrics, attention worklist, setup progress, today-session list and quick actions. Empty states remain truthful for the current branch; prototype counts, school identity and academic-year text were not copied. No backend contract, permission, schema, migration, seed or database data changed.
+
+Direct desktop and mobile reference/application captures and the comparison record are in [admin-home-visual-fidelity](../../evidence/admin-home-visual-fidelity/README.md). Focused lint and type checking passed; the production build passed; and the scoped Administrator sign-in/dashboard Playwright journey passed 2/2 across desktop and mobile against guarded PostgreSQL. Human visual acceptance is PENDING. The next safe slice is direct reference comparison of the next already implemented Administrator workflow; later workflows remain governed by the canonical [63-workflow matrix](../../execution/SCHOOL_ADMIN_WORKFLOW_MATRIX.md).
+
 ## SA-COMP-01 administrator readiness and exceptions — 10 October 2026
 
 Reporting now exposes a transport-neutral, browser-safe School Administrator projection that rechecks active account/token, organization, branch, membership and `school.manage`, establishes transaction-local verified context, and reads a repeatable snapshot of effective-module setup facts plus attendance/import/staff exceptions. `/admin/setup` renders derived progress and the next incomplete owner workspace; `/admin` renders current exceptions with source actions. No table or migration was added, and source owners remain unchanged.

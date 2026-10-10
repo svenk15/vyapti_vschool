@@ -1,5 +1,11 @@
 # Phase 1 execution index — v4.6
 
+## Complete School Administrator directive (10 October 2026)
+
+The owner has authorized implementation of all 63 workflows in the approved School Administrator Edition 03 catalog. [SCHOOL_ADMIN_WORKFLOW_MATRIX](execution/SCHOOL_ADMIN_WORKFLOW_MATRIX.md) is the canonical Administrator inventory and records functional implementation, direct visual comparison, automated evidence, human review and blockers separately. The earlier Phase 1 and `SA-COMP` queues below remain historical sequencing and evidence; their former `OUT_OF_CURRENT_RELEASE` labels no longer exclude an Administrator workflow from implementation.
+
+Work still proceeds one design-ready vertical slice at a time. An approved prototype establishes the target experience but does not authorize invented identity, financial, safeguarding, communication or AI policy. Workflows whose owner contract is incomplete remain explicitly design-gated or blocked on the narrow recorded product decision while independent reference-comparison and implementation work continues. Human review remains PENDING throughout. TEN-03, native accessibility, provider, restore and load evidence remain production-release gates.
+
 ## School administrator completion batch (10 October 2026)
 
 The authorized post-EX queue is `SA-COMP-01` onward in [SCHOOL_ADMIN_COMPLETION](execution/SCHOOL_ADMIN_COMPLETION.md). It covers the 29 Phase 1 School Administrator workflows from the approved Edition 03 catalog. SA-COMP-07 closes SA-18's unsafe name-based identity selector while admission-date persistence remains in progress; SA-COMP-08 closes SA-06; SA-COMP-09 closes SA-08; SA-COMP-10 closes SA-04; SA-COMP-11 closes SA-13 with descriptive checked staff categories. The checked matrix records 26 complete and three partial Administrator workflows. Across all six original catalogs it contains 268 unique IDs: 33 verified, two implemented pending design alignment, eight partial and 225 out of current release. Later-phase workflows remain outside this release. Human review stays PENDING and TEN-03 remains a production gate.

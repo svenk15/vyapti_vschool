@@ -2,6 +2,8 @@
 
 Generated from the six approved workflow catalogs on 10 October 2026. This matrix inventories 268 workflows and does not widen the current release. Canonical module DESIGN/TASKS/CURRENT_STATE files remain authoritative for business readiness and evidence.
 
+The School Administrator owner directive later on 10 October 2026 authorized all 63 Administrator workflows for consecutive implementation. [SCHOOL_ADMIN_WORKFLOW_MATRIX](SCHOOL_ADMIN_WORKFLOW_MATRIX.md) is therefore authoritative for current SA functional, visual, evidence, human-review and blocker status. The SA classifications in this 268-row matrix remain a dated pre-directive cross-persona snapshot; they must not be used to exclude an Administrator workflow from the active queue.
+
 ## Classification rules
 
 - `IMPLEMENTED_AND_VERIFIED` requires complete normal, authorization, persistence, failure/recovery and current-source evidence. No workflow is promoted to this classification by this initial inventory alone.
