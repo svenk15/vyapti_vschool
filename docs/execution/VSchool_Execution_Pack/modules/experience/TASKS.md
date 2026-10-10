@@ -214,7 +214,7 @@ Dependencies: EX-10. Implementation status: VERIFIED. Human review: PENDING.
 
 ## EX-13 — Complete incremental demo fixtures and cross-page coherence
 
-Dependencies: EX-06, EX-09, EX-11, EX-12. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-06, EX-09, EX-11, EX-12. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** scripts/demo-seed.ts; feature-owned scripts/demo-*.ts; docs/modules/*/CURRENT_STATE.md; protected navigation consumers.
 

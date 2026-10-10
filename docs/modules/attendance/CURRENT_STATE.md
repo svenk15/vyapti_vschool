@@ -120,3 +120,6 @@ Manual review (PENDING):
 4. Sign in as the second teacher using `artifacts/attendance-01/private-demo.json` and open `/teacher/today`. Expect “No sessions on this date”; opening the assigned teacher's detail URL must not disclose the session.
 
 Human review: PENDING. No credentials or pupil PII belong in this document.
+### EX-13 connected demo fixture — 10 October 2026
+
+Implementation source `7c9c4cb` extends the existing feature-owned seed without changing Attendance tables or owner contracts. The ignored fixture now records a non-future walkthrough date and the seed-owned session IDs only after the administrator school-day and assigned-teacher day projections return the same sessions. A submitted session must also retain its pinned roster and records. Two guarded `pnpm demo:seed` runs reused the same three-session scenario and preserved existing outcomes. The production-browser check verified the same IDs in administrator reporting and Teacher Today. Evidence: [EX-13](../../evidence/ex-13/README.md). Human review remains PENDING; EX-14 is next.
