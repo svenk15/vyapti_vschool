@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-10-10T21:00:35.099Z",
+  "origin": "http://127.0.0.1:3400",
+  "route": "/admin/attendance/sessions/7c3a79f4-1225-4579-b243-35dd190dcdb6",
+  "desktop": {
+    "card": {
+      "width": 1136,
+      "height": 629,
+      "x": 272,
+      "y": 487.75
+    },
+    "table": {
+      "width": 1086,
+      "height": 239.5,
+      "x": 273,
+      "y": 584.25
+    },
+    "select": {
+      "width": 240,
+      "height": 40,
+      "x": 848.84375,
+      "y": 636.75
+    },
+    "correctedCell": {
+      "width": 358.375,
+      "height": 67,
+      "x": 826.84375,
+      "y": 623.25
+    },
+    "font": "12px",
+    "pageOverflow": false
+  },
+  "mobile": {
+    "select": {
+      "width": 146.25,
+      "height": 40,
+      "x": 187.75,
+      "y": 273
+    },
+    "pageOverflow": false
+  },
+  "keyboardFocus": true
+}
