@@ -7,10 +7,11 @@ Fresh v4.1 extension. No active timer. Design is specified; production runtime i
 | TEN-01 | VERIFIED | PENDING | Source `c09519ca10bddd6286aba242d21aa9a5000ff0ae`; production build `fGxMmBd-8b7ScLU7mVhug`; local verification report and JUnit evidence below |
 | TEN-02 | VERIFIED | PENDING | Source/build/test evidence: `docs/evidence/tenancy-02-local/`; owner review remains pending |
 | TEN-03 | IN_PROGRESS | NOT_REQUESTED | Restricted roles and branch/account/recovery/invitation context helpers exist; protected transaction paths establish context; RLS remains disabled pending a non-forgeable context contract |
+| SA-COMP-06 / SA-08 | IMPLEMENTED | PENDING | Branch activation remains the implemented authority; the commercial-request alternative is explicitly blocked pending an approved owner contract |
 
 ## Implemented now
 
-TEN-01 delivers persisted institution/branch setup, operator-issued institution and membership grants, institution-admin metadata-only branch creation, bounded authorized context listing and switching, protected request reauthorization, context-change cache/draft clearing, and immutable transactional receipts/audit/outbox evidence. TEN-02 adds organization entitlements, branch activations, transactional configuration and evidence, current permission and release gates, module configuration API/screen, and local operator tooling. There are no released product modules in this checkout, so runtime activation correctly fails closed.
+TEN-01 delivers persisted institution/branch setup, operator-issued institution and membership grants, institution-admin metadata-only branch creation, bounded authorized context listing and switching, protected request reauthorization, context-change cache/draft clearing, and immutable transactional receipts/audit/outbox evidence. TEN-02 adds organization entitlements, branch activations, transactional configuration and evidence, current permission and release gates, module configuration API/screen, and local operator tooling. The Phase 1 demo release includes Student Core, Academic Core, Staff Core and Attendance; later product modules remain unreleased and fail closed.
 
 ## Next action
 
@@ -21,6 +22,12 @@ TEN-03 remains IN_PROGRESS. Restricted local runtime roles exist with no table D
 ## Evidence and feedback
 
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.
+
+### SA-COMP-06 / SA-08 module-access handoff — 10 October 2026
+
+The administrator module page continues to edit branch activation only for capabilities that are already contracted, released and approved. Its presentation now states that unavailable or uncontracted selections produce a blocked preview and do not create a commercial request. School administrators are directed to their authorized institution administrator or platform operator. The denied state provides the same truthful handoff. No request record, API, audit event or success state was invented because no approved request owner, authorization policy, lifecycle or persistence contract exists.
+
+This is a presentation and contract-reconciliation change only. It adds no schema, migration, seed record, permission, business transaction or backend fallback. Application authorization, current membership, entitlement, release and branch-activation checks remain active. Focused lint and TypeScript checks passed, and the final focused tenancy browser run passed 6/6 across desktop and mobile. An earlier chained browser invocation stopped before tests when the local Prisma schema engine terminated transiently; the standalone rerun passed without weakening assertions. Commercial request submission remains `BLOCKED_BY_PRODUCT_DECISION`; implemented activation management is ready for the SA-COMP-06 integrated gate. Human review remains PENDING.
 
 ### TEN-03 Access recovery and invitation context — 6 October 2026
 

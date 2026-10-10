@@ -63,3 +63,9 @@ Run pnpm check, restricted-role real-PostgreSQL functional tests, the measurable
 Run two institutions side by side; deny wrong-branch direct API and runtime SQL; disable a branch module and demonstrate safe in-flight behavior plus reactivation preserving data.
 
 Start/check the server, give URL and steps, request user review, and mark review PENDING. Do not mark human acceptance until actual feedback.
+
+## SA-COMP-06 / SA-08 — Honest module-request handoff
+
+Keep the existing institution-authorized entitlement and branch-activation workflow. Reconcile the production copy and labels so a released/contracted branch selection cannot be confused with a commercial request. An unauthorized school administrator receives an explicit institution-authority handoff; an unavailable selection produces only a blocked preview. No request persistence or success acknowledgement exists until its product/authority contract is approved.
+
+Acceptance: focused lint/type checks and the Tenancy browser journey prove current status, blocked preview, no activation write, explicit no-request copy, keyboard access and mobile containment. No migration or seed extension is required.
