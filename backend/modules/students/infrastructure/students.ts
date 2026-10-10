@@ -88,7 +88,7 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
   }
 
   async list(actor:Identity,organizationId:string,schoolId:string,query:{search:string;cursor:string|null;limit:number;status:"ACTIVE"|"ARCHIVED"|"ALL"}):Promise<StudentWorkspace>{try{return await this.db.$transaction(async tx=>{
-    await this.guard(tx,actor,organizationId,schoolId,"student.read",false);
+    await this.guard(tx,actor,organizationId,schoolId,"student.manage",false);
     if(this.cursorSecret.length<32) throw new AccessError("UNAVAILABLE");
     const searchHash=sha(query.search),scope={organizationId,schoolId,accountId:actor.accountId,searchHash,status:query.status},after=decodeCursor(query.cursor,scope,this.cursorSecret);
     const where:Prisma.StudentWhereInput={organizationId,schoolId,...(query.status!=="ALL"?{status:query.status}:{}),...(after?{id:{gt:after}}:{}),...(query.search?{OR:[{admissionNumber:{contains:query.search,mode:"insensitive"}},{person:{firstName:{contains:query.search,mode:"insensitive"}}},{person:{lastName:{contains:query.search,mode:"insensitive"}}}]}:{})};
@@ -98,7 +98,7 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
   async get(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<StudentDetail>{try{return await this.db.$transaction(async tx=>{
-    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.read",false);
+    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",false);
     const row=await tx.student.findFirst({where:{id:studentId,organizationId,schoolId},include:{person:{select:{firstName:true,lastName:true}}}});
     if(!row) throw new AccessError("NOT_FOUND");
     if(!await this.moduleActive(tx,organizationId,schoolId,"academic_core"))return {...profile(row),history:[]};

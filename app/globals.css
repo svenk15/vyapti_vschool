@@ -222,6 +222,27 @@ body{font-family:var(--font-ui)}
 .delivery-failure-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;border-top:1px solid var(--line)}
 .delivery-failure-row:first-of-type{border-top:0}
 .delivery-failure-row p{margin:3px 0 0}
+.students-page .directory-card{box-shadow:var(--elevation-card)}
+.student-registration-form{display:grid;margin-top:22px}
+.student-registration-form>.alert{margin:0 0 18px}
+.student-registration-form .advanced-settings{margin:2px 0 18px}
+.student-registration-form .advanced-settings>div{padding-top:4px}
+.existing-person-choices{display:grid;gap:8px;min-width:0;margin:2px 0 0;padding:14px;border:1px solid var(--line);border-radius:8px}
+.existing-person-choices legend{padding-inline:5px}
+.student-summary-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);align-items:stretch;gap:24px}
+.student-summary-grid>.card{min-width:0}
+.record-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin:0}
+.record-facts>div{padding:14px 18px 14px 0;border-top:1px solid var(--line)}
+.record-facts dt{margin-bottom:4px;color:var(--muted);font-size:11px}
+.record-facts dd{margin:0;font-size:13px;font-weight:650;overflow-wrap:anywhere}
+.student-guidance h2{font-size:20px}
+.student-guidance p:last-child{margin-bottom:0}
+.student-history-card{box-shadow:var(--elevation-card)}
+.student-action-grid{display:grid;gap:24px}
+.student-command-form{margin-top:4px}
+.student-command-form>h3{margin:0 0 18px;font-size:16px}
+.student-command-form>.alert{margin:0 0 20px}
+.student-archive-action{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
 .academic-year-layout{display:grid;grid-template-columns:minmax(0,720px) minmax(260px,1fr);align-items:start;gap:28px}
 .saved-year-list{display:grid;gap:10px;min-width:0}
 .saved-year-list h3{margin:0 0 2px}
@@ -277,9 +298,9 @@ body{font-family:var(--font-ui)}
 .teacher-session-summary h2{margin:0 0 3px;font-size:17px;letter-spacing:-.15px}
 .teacher-session-summary p{margin:0;font-size:13px;overflow-wrap:anywhere}
 .teacher-session-card>.btn{min-width:138px}
-@media(max-width:900px){.portal-page-content main>.two-columns.section-space,.staff-profile-layout,.academic-year-layout,.academic-catalog-grid{grid-template-columns:minmax(0,1fr)}.assignment-toolbar{grid-template-columns:minmax(220px,1fr) 190px 190px}.offering-row{grid-template-columns:minmax(0,1fr) auto}.offering-actions{grid-column:1/-1;justify-content:flex-start}.teacher-session-card{grid-template-columns:90px minmax(180px,1fr) auto}.teacher-session-card>.btn{grid-column:2/4;justify-self:start}}
+@media(max-width:900px){.portal-page-content main>.two-columns.section-space,.staff-profile-layout,.academic-year-layout,.academic-catalog-grid,.student-summary-grid{grid-template-columns:minmax(0,1fr)}.assignment-toolbar{grid-template-columns:minmax(220px,1fr) 190px 190px}.offering-row{grid-template-columns:minmax(0,1fr) auto}.offering-actions{grid-column:1/-1;justify-content:flex-start}.teacher-session-card{grid-template-columns:90px minmax(180px,1fr) auto}.teacher-session-card>.btn{grid-column:2/4;justify-self:start}}
 @media(max-width:760px){.portal-top-context{grid-row:2}.portal-topbar>.portal-account{grid-column:3;grid-row:1}.portal-page-content .page-space,.teacher-portal-content .page-space{padding-top:24px;padding-bottom:48px}.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{font-size:28px}.page-stack{gap:18px}.section-header{margin-bottom:16px}.settings-panel{padding:20px}.setup-action-grid{grid-template-columns:minmax(0,1fr);gap:18px}.setup-action-card{min-height:0}.weekday-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.assignment-toolbar{grid-template-columns:minmax(0,1fr)}.offering-row{padding:18px}.compact-toolbar{align-items:flex-start;flex-direction:column;padding:18px}.compact-toolbar .field{width:100%}.compact-toolbar .btn{margin:0}.branding-host-row{grid-template-columns:minmax(0,1fr)}.branding-host-row .btn{justify-self:start;margin:0}.teacher-day-state{padding:10px 18px}.teacher-session-card{grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;padding:18px}.teacher-session-time{grid-column:1}.teacher-session-summary{grid-column:1/-1;grid-row:2}.teacher-session-card>.badge{grid-column:2;grid-row:1}.teacher-session-card>.btn{grid-column:1/-1;grid-row:3;justify-self:start}.portal-nav-icon{width:22px}.portal-nav-icon svg{width:19px;height:19px}}
-@media(max-width:460px){.section-header{flex-direction:column}.settings-panel{padding:18px}.settings-form .form-grid{gap:0}.form-actions .btn{width:100%}.delivery-failure-row{align-items:flex-start;flex-direction:column}.teacher-session-card>.btn{width:100%}}
+@media(max-width:460px){.section-header{flex-direction:column}.settings-panel{padding:18px}.settings-form .form-grid{gap:0}.form-actions{align-items:stretch;flex-direction:column}.form-actions .btn{width:100%}.delivery-failure-row{align-items:flex-start;flex-direction:column}.teacher-session-card>.btn{width:100%}.record-facts{grid-template-columns:minmax(0,1fr)}.record-facts>div{padding-right:0}}
 
 /* Controlled list, drawer and command-feedback recipes. */
 .directory-card{overflow:hidden}
