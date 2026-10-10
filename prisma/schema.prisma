@@ -188,6 +188,7 @@ model Employee {
  schoolId String @map("school_id") @db.Uuid
  personId String @map("person_id") @db.Uuid
  staffNumber String @map("staff_number") @db.VarChar(40)
+ category String @default("UNCLASSIFIED") @db.VarChar(20)
  employedFrom DateTime @map("employed_from") @db.Date
  employedTo DateTime? @map("employed_to") @db.Date
  status String @db.VarChar(20)

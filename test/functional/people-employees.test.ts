@@ -20,7 +20,7 @@ const access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServic
 let primary:Awaited<ReturnType<typeof access.provisionSchool>>,foreign:Awaited<ReturnType<typeof access.provisionSchool>>,identity:{accountId:string;tokenVersion:number};
 beforeAll(async()=>{primary=await access.provisionSchool(schoolInput(),{operatorId:randomUUID(),verified:true});foreign=await access.provisionSchool(schoolInput(),{operatorId:randomUUID(),verified:true});identity={accountId:primary.accountId,tokenVersion:1};const operator={operatorId:randomUUID(),verified:true as const};await access.institutionOperation({kind:'SetInstitutionGrant',organizationId:primary.organizationId,accountId:primary.accountId,status:'ACTIVE',expectedVersion:0,key:randomUUID(),reason:'Synthetic PER-02 entitlement authority'},operator);await tenancy.setEntitlement(operator,{kind:'SetOrganizationEntitlement',organizationId:primary.organizationId,actorAccountId:primary.accountId,moduleId:'academic_core',state:'ACTIVE',startsAt:new Date('2026-01-01T00:00:00Z').toISOString(),endsAt:null,expectedVersion:0,manifestVersion:1,limits:{},key:randomUUID(),reason:'Synthetic PER-02 contract'});const preview=await tenancy.preview(identity,primary.organizationId,primary.schoolId,['academic_core']);await tenancy.confirm(identity,primary.organizationId,primary.schoolId,{enabled:['academic_core'],expectedVersions:preview.expectedVersions,previewHash:preview.previewHash,expectedInstitutionRevision:preview.institutionRevision,expectedBranchRevision:preview.branchRevision,key:randomUUID(),reason:'Synthetic PER-02 branch activation'});});
 afterAll(async()=>{await people.disconnect();await access.disconnect();await tenancy.disconnect();await db.$disconnect();});
-function input(staffNumber:string,firstName='Synthetic',lastName='Teacher'){return {firstName,lastName,contactEmail:null,staffNumber,employedFrom:'2026-04-01',key:randomUUID()};}
+function input(staffNumber:string,firstName='Synthetic',lastName='Teacher'){return {firstName,lastName,contactEmail:null,staffNumber,category:'TEACHING',employedFrom:'2026-04-01',key:randomUUID()};}
 
 describe('PER-01 PostgreSQL employee profiles',()=>{
  it('creates distinct same-name People profiles, pages scoped staff, and leaves accounts unlinked',async()=>{
@@ -33,10 +33,26 @@ describe('PER-01 PostgreSQL employee profiles',()=>{
   await expect(people.workspace(identity,foreign.organizationId,foreign.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
  });
 
+ it('requires an approved category, preserves legacy UNCLASSIFIED, and changes category without authority side effects',async()=>{
+  const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,{...input('CATEGORY-01','Category','Teacher'),category:'TEACHING'});
+  const enabled=await people.enableTeacher(identity,primary.organizationId,primary.schoolId,employee.employeeId,{expectedVersion:employee.version,key:randomUUID()});
+  const intent={expectedVersion:enabled.version,category:'SUPPORT' as const,reason:'Correct descriptive staff category',key:randomUUID()},changed=await people.updateCategory(identity,primary.organizationId,primary.schoolId,employee.employeeId,intent);
+  expect(changed).toMatchObject({category:'SUPPORT',teachingEligibility:'ENABLED',portalAccess:'UNLINKED',replayed:false});
+  expect(await people.updateCategory(identity,primary.organizationId,primary.schoolId,employee.employeeId,intent)).toMatchObject({category:'SUPPORT',replayed:true});
+  await expect(people.updateCategory(identity,primary.organizationId,primary.schoolId,employee.employeeId,{...intent,key:randomUUID(),category:'ADMINISTRATION'})).rejects.toMatchObject({code:'STALE_VERSION'});
+  await expect(people.updateCategory(identity,foreign.organizationId,foreign.schoolId,employee.employeeId,{...intent,key:randomUUID()})).rejects.toMatchObject({code:'FORBIDDEN'});
+  expect(await db.teacher.findFirstOrThrow({where:{employeeId:employee.employeeId}})).toMatchObject({active:true,version:1});
+  expect(await db.auditEntry.findFirstOrThrow({where:{resourceId:employee.employeeId,command:'EmployeeCategoryChanged'}})).toMatchObject({reason:intent.reason,before:expect.objectContaining({category:'TEACHING'}),after:expect.objectContaining({category:'SUPPORT'})});
+  const legacyPerson=await db.person.create({data:{id:randomUUID(),organizationId:primary.organizationId,firstName:'Legacy',lastName:'Staff',contactEmail:null,version:1,createdAt:new Date()}}),legacy=await db.employee.create({data:{id:randomUUID(),organizationId:primary.organizationId,schoolId:primary.schoolId,personId:legacyPerson.id,staffNumber:`LEGACY-${randomUUID().slice(0,6)}`,employedFrom:new Date('2026-04-01T00:00:00Z'),employedTo:null,status:'ACTIVE',version:1}});
+  expect(legacy.category).toBe('UNCLASSIFIED');
+  const [column]=await db.$queryRaw<{column_default:string;is_nullable:string}[]>`SELECT column_default,is_nullable FROM information_schema.columns WHERE table_schema='public' AND table_name='vs_people_employee' AND column_name='category'`;
+  expect(column).toMatchObject({column_default:"'UNCLASSIFIED'::character varying",is_nullable:'NO'});
+ });
+
  it('serializes duplicate staff numbers and enforces the organization-scoped Person FK',async()=>{
   const attempts=await Promise.allSettled([people.createEmployee(identity,primary.organizationId,primary.schoolId,input('RACE-01')),people.createEmployee(identity,primary.organizationId,primary.schoolId,input('RACE-01'))]);expect(attempts.filter(value=>value.status==='fulfilled')).toHaveLength(1);expect(attempts.filter(value=>value.status==='rejected')).toHaveLength(1);expect(await db.employee.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,staffNumber:'RACE-01'}})).toBe(1);
   const foreignPerson=await db.person.create({data:{id:randomUUID(),organizationId:foreign.organizationId,firstName:'Foreign',lastName:'Person',contactEmail:null,version:1,createdAt:new Date()}});
-  await expect(db.employee.create({data:{id:randomUUID(),organizationId:primary.organizationId,schoolId:primary.schoolId,personId:foreignPerson.id,staffNumber:'FORGED',employedFrom:new Date('2026-01-01T00:00:00Z'),employedTo:null,status:'ACTIVE',version:1}})).rejects.toMatchObject({code:'P2003'});
+  await expect(db.employee.create({data:{id:randomUUID(),organizationId:primary.organizationId,schoolId:primary.schoolId,personId:foreignPerson.id,staffNumber:'FORGED',category:'TEACHING',employedFrom:new Date('2026-01-01T00:00:00Z'),employedTo:null,status:'ACTIVE',version:1}})).rejects.toMatchObject({code:'P2003'});
  });
 
  it('rolls back both Person and Employee with school revision, receipt and events if evidence fails',async()=>{

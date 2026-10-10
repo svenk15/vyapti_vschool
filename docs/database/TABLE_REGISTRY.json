@@ -730,9 +730,9 @@
       "table": "vs_people_employee",
       "status": "MIGRATED",
       "design": "docs/modules/people/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); category TEACHING/ADMINISTRATION/SUPPORT/UNCLASSIFIED default UNCLASSIFIED; employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int",
       "responsibility": "School institutional profile; links rather than duplicates identity.",
-      "constraints": "Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end",
+      "constraints": "Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK category vocabulary; CHECK end null or from<end",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

@@ -4,7 +4,7 @@ Observed source schema, not a new migration. Owner: people.
 
 **Responsibility:** School institutional profile; links rather than duplicates identity.
 
-**Registry constraint summary:** Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end
+**Registry constraint summary:** Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK category vocabulary; CHECK end null or from<end
 
 **Tenant classification / intended RLS:** `{"classification": "BRANCH", "scopeColumns": ["organization_id", "school_id"], "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.", "enforcement": "PATH_A_DEFERRED_TEN_03", "owner": "people", "closureGate": "TEN-03"}`
 
@@ -16,6 +16,7 @@ Observed source schema, not a new migration. Owner: people.
 | `schoolId` | `school_id` | `Uuid` | `no` | `@map("school_id") @db.Uuid` |
 | `personId` | `person_id` | `Uuid` | `no` | `@map("person_id") @db.Uuid` |
 | `staffNumber` | `staff_number` | `VarChar(40)` | `no` | `@map("staff_number") @db.VarChar(40)` |
+| `category` | `category` | `VarChar(20)` | `no` | `@default("UNCLASSIFIED") @db.VarChar(20)` |
 | `employedFrom` | `employed_from` | `Date` | `no` | `@map("employed_from") @db.Date` |
 | `employedTo` | `employed_to` | `Date` | `yes` | `@map("employed_to") @db.Date` |
 | `status` | `status` | `VarChar(20)` | `no` | `@db.VarChar(20)` |

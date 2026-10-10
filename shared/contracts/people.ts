@@ -2,6 +2,7 @@ export type EmployeeProfile = Readonly<{
  employeeId: string;
  version: number;
  staffNumber: string;
+ category: 'TEACHING' | 'ADMINISTRATION' | 'SUPPORT' | 'UNCLASSIFIED';
  person: Readonly<{ id: string; displayName: string }>;
  employment: Readonly<{ from: string; to: string | null; status: 'ACTIVE' | 'ENDED' }>;
  portalAccess: 'UNLINKED' | 'LINKED' | 'ACTIVE';

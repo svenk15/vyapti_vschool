@@ -2,6 +2,12 @@
 
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
+## SA-COMP-11 / SA-13 — Classify staff profiles descriptively
+
+Outcome: a School Administrator must choose Teaching, Administration or Support when creating an Employee, sees the saved category in the branch directory, and can make a reasoned versioned correction. Existing Employee rows remain usable as UNCLASSIFIED until explicitly reviewed. Category never changes account access, roles, membership, teaching eligibility or setup responsibility.
+
+Acceptance: People owns the checked field and command; create and correction reauthorize `class.manage` in current scope; invalid/UNCLASSIFIED client input, foreign Employee and stale versions fail closed; replay is stable; receipt/audit/outbox and Employee CAS are atomic; PostgreSQL proves the legacy default and unchanged Teacher/access state; desktop/mobile production pages cover create, display and correction. Add only the forward migration named in DESIGN and extend the non-destructive People demo fixture.
+
 ## PER-01 — Create and inspect staff profiles
 
 Depends on: IAM-02

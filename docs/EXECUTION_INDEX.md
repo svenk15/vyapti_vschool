@@ -2,7 +2,7 @@
 
 ## School administrator completion batch (10 October 2026)
 
-The authorized post-EX queue is `SA-COMP-01` onward in [SCHOOL_ADMIN_COMPLETION](execution/SCHOOL_ADMIN_COMPLETION.md). It covers the 29 Phase 1 School Administrator workflows from the approved Edition 03 catalog. SA-COMP-07 closes SA-18's unsafe name-based identity selector while admission-date persistence remains in progress; SA-COMP-08 closes SA-06; SA-COMP-09 closes SA-08; SA-COMP-10 closes SA-04 with the authorized display-only responsibility model. The checked matrix records 25 complete and four partial Administrator workflows. Across all six original catalogs it contains 268 unique IDs: 32 verified, two implemented pending design alignment, nine partial and 225 out of current release. Later-phase workflows remain outside this release. Human review stays PENDING and TEN-03 remains a production gate.
+The authorized post-EX queue is `SA-COMP-01` onward in [SCHOOL_ADMIN_COMPLETION](execution/SCHOOL_ADMIN_COMPLETION.md). It covers the 29 Phase 1 School Administrator workflows from the approved Edition 03 catalog. SA-COMP-07 closes SA-18's unsafe name-based identity selector while admission-date persistence remains in progress; SA-COMP-08 closes SA-06; SA-COMP-09 closes SA-08; SA-COMP-10 closes SA-04; SA-COMP-11 closes SA-13 with descriptive checked staff categories. The checked matrix records 26 complete and three partial Administrator workflows. Across all six original catalogs it contains 268 unique IDs: 33 verified, two implemented pending design alignment, eight partial and 225 out of current release. Later-phase workflows remain outside this release. Human review stays PENDING and TEN-03 remains a production gate.
 
 ## Approved experience overlay — revision 2 (9 October 2026)
 

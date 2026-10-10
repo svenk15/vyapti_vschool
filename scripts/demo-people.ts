@@ -17,6 +17,7 @@ type Demo = ProvisionInput & ProvisionResult & {
   grantKey: string; entitlementKey: string; branchActivationKey: string;
   startsAt: string; profileKeys: [string, string];
   employeeIds?: [string, string]; teacherAccountId?: string;
+  categoryProfileKey?: string; categoryEmployeeId?: string;
   schoolProfileKey?: string;
 };
 function save(value: Demo) {
@@ -110,16 +111,23 @@ async function main() {
 
   const people = createPeopleServices({ databaseUrl: local.databaseUrl, releasedModules: ['academic_core'] });
   try {
-    const profiles = [];
-    for (const [index, staffNumber] of ['DEMO-TEACHER-01', 'DEMO-TEACHER-02'].entries()) {
-      profiles.push(await people.createEmployee(admin!, demo.organizationId, demo.schoolId, {
-        firstName: index === 0 ? 'Avery' : 'Jordan', lastName: 'Example', contactEmail: null, staffNumber,
-        employedFrom: '2026-04-01', key: demo.profileKeys[index]!,
-      }));
+    if (!demo.employeeIds) {
+      const profiles = [];
+      for (const [index, staffNumber] of ['DEMO-TEACHER-01', 'DEMO-TEACHER-02'].entries()) {
+        profiles.push(await people.createEmployee(admin!, demo.organizationId, demo.schoolId, {
+          firstName: index === 0 ? 'Avery' : 'Jordan', lastName: 'Example', contactEmail: null, staffNumber, category: 'TEACHING',
+          employedFrom: '2026-04-01', key: demo.profileKeys[index]!,
+        }));
+      }
+      demo = { ...demo, employeeIds: [profiles[0]!.employeeId, profiles[1]!.employeeId] }; save(demo);
     }
-    demo = { ...demo, employeeIds: [profiles[0]!.employeeId, profiles[1]!.employeeId] }; save(demo);
+    if (!demo.categoryProfileKey) { demo = { ...demo, categoryProfileKey: randomUUID() }; save(demo); }
+    if (!demo.categoryEmployeeId) {
+      const support = await people.createEmployee(admin!, demo.organizationId, demo.schoolId, { firstName: 'Robin', lastName: 'Support', contactEmail: null, staffNumber: 'DEMO-SUPPORT-01', category: 'SUPPORT', employedFrom: '2026-04-01', key: demo.categoryProfileKey! });
+      demo = { ...demo, categoryEmployeeId: support.employeeId }; save(demo);
+    }
   } finally { await people.disconnect(); }
-  console.log(`Prepared an isolated synthetic People school, two unbound staff profiles and an active verified teacher account. Private credentials: ${path}`);
+  console.log(`Prepared an isolated synthetic People school, categorized staff profiles and an active verified teacher account. Private credentials: ${path}`);
 }
 main().catch(error => {
   const code = error instanceof Error && /^[A-Z_]+$/.test(error.message) ? error.message : 'LOCAL_DEMO_ERROR';

@@ -209,6 +209,7 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 
 2026-10-10 / SA-08 capability interest: branch School Administrators may record an immutable, non-binding interest in Attendance, Family portal, Fees & payments or Transport for authorized institution review. Submission has no purchase, payment, entitlement, release or activation effect. Review decisions and withdrawal are separate future contracts; TEN-03 remains the RLS production gate.
 2026-10-10 / SA-04 Phase 1 responsibility: setup responsibility is derived display-only role metadata from accepted owner authority contracts. It creates no named assignment, permission, due date or persistence. Unknown future operations display no defined responsible role rather than guessing.
+2026-10-10 / SA-13 staff category: Employee category is required descriptive metadata for new staff and uses Teaching, Administration or Support. Legacy rows remain UNCLASSIFIED until an authorized explicit correction. Category changes do not grant access, membership, roles, teaching eligibility or setup responsibility.
 
 2026-10-10 / Phase 1 experience checkpoint: EX-00–EX-15 align the implemented administrator and teacher portal with the approved shared navigation and page compositions, add a non-destructive connected seed, and verify the integrated local candidate. This does not widen Phase 1, complete all 268 catalog workflows, pass human acceptance, or close TEN-03/native accessibility/production-operation gates.
 

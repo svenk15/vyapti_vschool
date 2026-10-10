@@ -1,11 +1,11 @@
 # School administrator completion batch
 
-Batch `SA-COMP`, started and integrated 10 October 2026. The approved Edition 03 catalog contains 63 School Administrator workflows and admits 29 to Phase 1. After SA-COMP-10, 25 are implemented and engineering-verified and four remain partial against their complete approved workflow body. The other 34 are explicitly assigned to phases 2–7.
+Batch `SA-COMP`, started and integrated 10 October 2026. The approved Edition 03 catalog contains 63 School Administrator workflows and admits 29 to Phase 1. After SA-COMP-11, 26 are implemented and engineering-verified and three remain partial against their complete approved workflow body. The other 34 are explicitly assigned to phases 2–7.
 
 | Classification | Workflows | Current decision |
 |---|---|---|
-| `COMPLETE_AND_VERIFIED` | SA-01, SA-02, SA-03, SA-04, SA-05, SA-06, SA-08, SA-09, SA-10, SA-11, SA-12, SA-15, SA-16, SA-17, SA-19, SA-20, SA-21, SA-23, SA-24, SA-25, SA-26, SA-27, SA-28, SA-30, SA-62 | Owner and integrated evidence is current; human review remains pending. |
-| `NEEDS_FUNCTIONAL_COMPLETION` | SA-07, SA-13, SA-14, SA-18 | Product decisions are resolved; implementation proceeds through their owners. |
+| `COMPLETE_AND_VERIFIED` | SA-01, SA-02, SA-03, SA-04, SA-05, SA-06, SA-08, SA-09, SA-10, SA-11, SA-12, SA-13, SA-15, SA-16, SA-17, SA-19, SA-20, SA-21, SA-23, SA-24, SA-25, SA-26, SA-27, SA-28, SA-30, SA-62 | Owner and integrated evidence is current; human review remains pending. |
+| `NEEDS_FUNCTIONAL_COMPLETION` | SA-07, SA-14, SA-18 | Product decisions are resolved; implementation proceeds through their owners. |
 | `OUT_OF_RELEASE_SCOPE` | SA-22, SA-29, SA-31–SA-61, SA-63 | Preserve catalog records; no production route or speculative backend in this batch. |
 
 The authoritative per-workflow objective, reference, owner, route, persistence and prior evidence remain in [WORKFLOW_IMPLEMENTATION_MATRIX](WORKFLOW_IMPLEMENTATION_MATRIX.md). This batch adds the missing task/evidence links without replacing that matrix.
@@ -22,5 +22,6 @@ The authoritative per-workflow objective, reference, owner, route, persistence a
 | SA-COMP-08 | SA-06 | **VERIFIED; review PENDING.** Branch office details save with reason, immutable timezone, revision conflict comparison and redacted evidence. | Access; IAM-02. | Forward nullable legacy-compatible School contact columns; migration applied. | Unit, 7-case real PostgreSQL Access suite and 4 desktop/mobile browser cases; [evidence](../evidence/sa-comp-08/README.md). |
 | SA-COMP-09 | SA-08 | **VERIFIED; review PENDING.** School administrators submit durable non-binding capability interest; authorized institution reviewers see institution submissions. Entitlement and activation remain unchanged. | Tenancy; TEN-02 and current Access scope. | Forward CapabilityInterest table plus minimal receipt/outbox; migration applied. | 11-case real PostgreSQL Tenancy suite, 2 desktop/mobile browser cases, repository checks and visual inspection; [evidence](../evidence/sa-comp-09/README.md). |
 | SA-COMP-10 | SA-04 | **VERIFIED; review PENDING.** Setup actions show their explicit role responsibility without person assignment or authorization side effects. | Reporting read model; existing owner authority contracts. | Read only; no migration. | Pure mapping unit tests, scoped PostgreSQL projection and desktop/mobile browser; [evidence](../evidence/sa-comp-10/README.md). |
+| SA-COMP-11 | SA-13 | **VERIFIED; review PENDING.** Staff category is required descriptive Employee metadata with reasoned correction and legacy UNCLASSIFIED preservation. | People; existing Access/Academics states remain independent. | Forward checked Employee category migration applied. | Unit vocabulary, 10-case PostgreSQL People suite, desktop/mobile browser, double seed run; [evidence](../evidence/sa-comp-11/README.md). |
 
 Human review remains PENDING. TEN-03 restricted-role/RLS proof, native VoiceOver/NVDA, production mail/provider review, restore/load evidence and real-client onboarding remain separate release gates.

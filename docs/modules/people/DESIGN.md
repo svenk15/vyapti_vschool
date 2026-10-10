@@ -24,7 +24,7 @@ PER-01 installs Person, Employee and the Access-owned AccountPersonBinding table
 |---|---|---|---|
 | `vs_people_person` (Person) | id uuid PK; organization_id uuid; first_name varchar(100); last_name varchar(100) default empty; contact_email varchar(254) nullable; version int; created_at timestamptz(3) | Canonical name/contact; email contact is not verified login ownership. Minimal pilot PII, no health/document fields. | FK organization; UNIQUE(organization_id,id); index(organization_id,last_name,id); no email/name uniqueness |
 | `vs_people_person_name_revision` (PersonNameRevision) | id uuid PK; organization_id uuid; person_id uuid; version int; previous_first_name varchar(100); previous_last_name varchar(100); corrected_first_name varchar(100); corrected_last_name varchar(100); reason varchar(500); actor_account_id uuid; school_id uuid; occurred_at timestamptz(3) | Append-only People-owned identity correction history. Names and reason stay in this owned storage and are excluded from receipts/outbox/audit diffs. | FK(organization_id,person_id)→Person; FK actor account; scoped School context FK; UNIQUE(organization_id,person_id,version); index(organization_id,person_id,version desc); CHECK version>=2, bounded names/reason; append-only trigger |
-| `vs_people_employee` (Employee) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int | School institutional profile; links rather than duplicates identity. | Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK end null or from<end |
+| `vs_people_employee` (Employee) | id uuid PK; organization_id uuid; school_id uuid; person_id uuid; staff_number varchar(40); category TEACHING/ADMINISTRATION/SUPPORT/UNCLASSIFIED default UNCLASSIFIED; employed_from date; employed_to date nullable; status ACTIVE/ENDED; version int | School institutional profile; links rather than duplicates identity. Category is descriptive only. | Scoped School FK; FK(organization_id,person_id); UNIQUE(scope,staff_number); UNIQUE(scope,person_id); UNIQUE(scope,id); CHECK category vocabulary; CHECK end null or from<end |
 | `vs_academics_teacher` (Teacher) | id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int | Academics-owned teacher eligibility, not an account or login. | Scoped FK(scope,employee_id)→Employee(scope,id); UNIQUE(scope,employee_id); UNIQUE(scope,id); index(scope,active,employee_id); Path A RLS metadata; TEN-03 enforcement gate |
 
 ## Read workflows and joins
@@ -200,6 +200,29 @@ School means operational Branch and Organization means client Institution. Every
 
 Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server module code belongs in backend/modules; UI consumes shared/contracts and a module gateway. Next delivery adapters resolve transport/session and invoke portable use cases. Future Nest controllers and provider factories reuse those use cases. Framework-specific context/ORM results never enter domain or browser DTOs.
 
-## SA-13 completion-review delta
+## SA-13 — Descriptive staff category
 
-The approved staff-profile workflow includes a staff category; the live `createEmployee` contract has no such field or domain vocabulary. Completion requires a product-approved closed category set and lifecycle meaning before extending `CreateEmployeeInput`, Employee DTOs and `vs_people_employee`. The People use case must validate category, recheck current branch and `class.manage`/approved People capability, and retain current Person+Employee atomicity, replay and evidence. A forward migration must define existing-row backfill and index need from an actual category query. UI needs validation, duplicate-code and stale/replay recovery; PostgreSQL tests must cover backfill, scope, rollback and category constraints. Free-form or UI-only categories are prohibited.
+`Employee.category` is required descriptive metadata for new profiles. Accepted create/correction values are `TEACHING`, `ADMINISTRATION` and `SUPPORT`; `UNCLASSIFIED` is reserved for legacy rows whose category has not been explicitly verified. Category never changes account status, SchoolMembership, RoleGrant, Teacher eligibility, setup responsibility or any permission. Teaching eligibility remains the separate Academics-owned Teacher operation.
+
+Migration `20261010013000_employee_staff_category` adds `vs_people_employee.category varchar(20) NOT NULL DEFAULT 'UNCLASSIFIED'` with a closed CHECK. The default performs the explicit non-destructive legacy backfill and supports old compatible writers during rollout. No index is added because the Phase 1 reads list scoped staff in existing staff-number order and do not filter by category. The list joins and scope predicates are unchanged; Employee DTOs add the stored category.
+
+`createEmployee(actor,organizationId,schoolId,{...,category,key})` requires one of the three approved values and retains the existing serializable Person+Employee+evidence transaction. `updateCategory(actor,organizationId,schoolId,employeeId,{expectedVersion,category,reason,key})` requires current `class.manage`, the trusted session branch, reason 5–500, aggregate CAS and the existing account→Organization→School lock order. It writes Employee version/category plus command receipt, Platform audit with category before/after and safe outbox metadata atomically. Same key/same input reauthorizes and replays; changed input conflicts. A stale version conflicts without write. `UNCLASSIFIED` can only be replaced by an explicit authorized value and is never accepted from create/edit input.
+
+The staff form requires category, the directory displays it, and a reasoned correction dialog retains current server state on conflict. Invalid category/date/name/contact returns validation; duplicate staff number or unchanged category conflicts; foreign Employee is unavailable in scope. Application authorization remains mandatory on every read/write, Path A RLS metadata is unchanged, and TEN-03 remains the database enforcement gate.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant W as Staff workspace/gateway
+  participant U as People use case
+  participant R as People PostgreSQL adapter
+  A->>W: Create profile with category or correct category/version/reason/key
+  W->>U: Current identity and trusted branch
+  U->>R: Validated closed category command
+  R->>R: Lock account, Organization, School; reauthorize class.manage
+  R->>R: Resolve scoped Employee and receipt; CAS category/version
+  R->>R: Commit Employee, receipt, audit and outbox atomically
+  R-->>W: Employee profile with category and unchanged access/Teacher state
+```
+
+Verification covers closed vocabulary and `UNCLASSIFIED` denial in unit tests; real PostgreSQL default/backfill contract, CHECK, scope, replay, stale correction, audit and unchanged Teacher/access state; and desktop/mobile create, display, correction, refresh and safe failure journeys. No human acceptance is inferred.
