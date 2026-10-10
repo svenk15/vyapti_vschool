@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-10T21:30:11.955Z",
+  "sourceBuild": "68l10Hot-jYtqMsUIoKW9",
+  "results": [
+    {
+      "viewport": "desktop",
+      "entry": true,
+      "review": true,
+      "confirm": true,
+      "returnState": true,
+      "overflow": true
+    },
+    {
+      "viewport": "mobile",
+      "entry": true,
+      "review": true,
+      "confirm": true,
+      "returnState": true,
+      "overflow": true
+    }
+  ]
+}
