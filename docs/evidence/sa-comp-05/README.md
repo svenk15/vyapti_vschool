@@ -2,6 +2,8 @@
 
 Recorded 10 October 2026. Human review is **PENDING**.
 
+Implementation source: `2ac3f9c314674dd36819eb0ea0c8a5824dcb5120`. An exact-source `pnpm build` passed, and its loopback production server returned the expected liveness response at `http://127.0.0.1:3400`.
+
 ## Outcome
 
 The School administrator can open `/admin/activity`, filter an inclusive range of at most 93 days by one allowlisted category, review a branch-scoped keyset page, open a privacy-minimized detail and copy the request ID as a support reference. The server rechecks the current account, token version, active institution, active branch, current membership and `school.manage` on every list/detail read. Fixed command descriptors suppress unknown commands and prevent stored resource labels, actor identity, reasons or arbitrary audit JSON from entering browser DTOs.
