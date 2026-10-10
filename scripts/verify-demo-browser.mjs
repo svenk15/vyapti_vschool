@@ -37,13 +37,13 @@ try{
  }
  const reportPath=`/admin/reports/attendance?fromDate=${recommendedDate}&toDate=${toDate}`;
  const reportResponse=await admin.goto(`${baseURL}${reportPath}`);if(!reportResponse?.ok())throw new Error(`Attendance report returned ${reportResponse?.status()}.`);
- await admin.getByRole('heading',{name:'Attendance report'}).waitFor();
+ await admin.getByRole('heading',{name:'Review and export attendance'}).waitFor();
  const reportLinks=await admin.getByRole('link',{name:'Review session'}).evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
  const reportIds=reportLinks.map(href=>href?.split('/').pop()).filter(Boolean);
  for(const id of recommendedSessionIds)if(!reportIds.includes(id))throw new Error(`Recommended session ${id} is missing from administrator report.`);
  mkdirSync('docs/evidence/ex-13',{recursive:true});
  await admin.screenshot({path:'docs/evidence/ex-13/connected-admin-report.png',fullPage:true});
- observations.push({persona:'administrator',path:reportPath,title:'Attendance report',status:reportResponse.status(),recommendedSessionsFound:recommendedSessionIds.length});
+ observations.push({persona:'administrator',path:reportPath,title:'Review and export attendance',status:reportResponse.status(),recommendedSessionsFound:recommendedSessionIds.length});
  await adminContext.close();
 
  const teacherContext=await browser.newContext({viewport:{width:1440,height:1000}}),teacher=await teacherContext.newPage();

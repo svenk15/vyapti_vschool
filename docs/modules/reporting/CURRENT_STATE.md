@@ -1,12 +1,18 @@
 # Attendance review, completeness and exports — current state
 
-Last updated: 2026-10-10. No active execution timer.
+Last updated: 2026-10-11. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | RPT-01 | VERIFIED | PENDING | Source `370c7d703a9e4209ca5db406c22400f4eccf5519`; entitlement test follow-up `a92501b048160673a40771ee5ddd3d11305fa5cf`; live build `LCX3HkLL1u3jYJ1THM-GR` at port 3428 |
 | RPT-02 | VERIFIED | PENDING | RPT-02 source `487b4050136570784bba403cf5acfdadc902a0d8`; verified demo source `d1e3bc7efbce0eb33eb95bc4b4e18a685b3c709e`; PostgreSQL, E2E and full check evidence below |
 | SA-COMP-01 / SA-COMP-10 | VERIFIED | PENDING | SA-04/SA-05 projection plus current-source SA-04 display-only responsibility closure; [evidence](../../evidence/sa-comp-10/README.md) |
+
+## SA-30 direct workflow comparison — 11 October 2026
+
+The production report now follows the approved Report scope → Review export → Confirm composition at desktop and mobile widths. The review acknowledgement gates confirmation and CSV generation; the real Reporting owner remains responsible for scoped totals, session rows and server-authorized export. Browser evidence covers the entry, review/confirm sequence, download, invalid-range recovery, history navigation and mobile overflow. No backend contract, database row, schema, migration or seed changed. [Comparison evidence](../../evidence/admin-attendance-reporting-2026-10-11/README.md).
+
+SA-30 remains human-review PENDING. Session completeness is the only live view. Student attendance and Class summary need new bounded owner projections, and draft persistence/resume remains unspecified. TEN-03 and native accessibility gates are unchanged.
 
 ## Administrator home visual fidelity and connected demo — 10 October 2026
 

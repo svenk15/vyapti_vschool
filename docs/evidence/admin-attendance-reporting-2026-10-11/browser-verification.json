@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-10T21:22:12.517Z",
+  "sourceBuild": "PfwVWTuFp7Lh9VzGQPLco",
+  "evidence": [
+    {
+      "viewport": "desktop",
+      "entry": true,
+      "review": true,
+      "confirmation": true,
+      "download": true,
+      "history": true,
+      "invalidRange": true
+    },
+    {
+      "viewport": "mobile",
+      "entry": true,
+      "overflow": true
+    }
+  ]
+}
