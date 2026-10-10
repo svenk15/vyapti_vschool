@@ -1,6 +1,6 @@
 # Experience implementation state
 
-EX-00 through EX-06 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-07 is the next eligible slice. EX-07–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
+EX-00 through EX-07 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-08 is the next eligible slice. EX-08–EX-15 remain NOT_STARTED; the queue is a scheduling projection until their live evidence is recorded.
 
 Authoritative implementation evidence belongs to the live repository module CURRENT_STATE files after EX-00. queue.json starts with no evidence; it is a scheduling projection. Do not copy historical snapshot test counts into a new VERIFIED claim.
 
@@ -50,7 +50,7 @@ No owner API, write behavior, schema, migration, transaction or persisted record
 
 ## Workflow coverage matrix — 10 October 2026
 
-The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-06 evidence it conservatively records 10 implemented-and-verified workflows, 22 existing operations awaiting approved-page alignment, 11 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
+The canonical [workflow implementation matrix](../../../WORKFLOW_IMPLEMENTATION_MATRIX.md) inventories all 268 approved catalog workflows. After EX-07 evidence it conservatively records 13 implemented-and-verified workflows, 18 existing operations awaiting approved-page alignment, 12 partial workflows and 225 later-workspace/phase workflows outside the current release. The matrix maps every workflow to its approved reference, actor/scope, current route/application/persistence support, target task, dependencies and evidence. It does not authorize parent, student, principal or browser-operator identities. The initial inventory checkpoint was `838e186`; later task checkpoints update classifications only with current-source evidence.
 
 ## EX-04 — 10 October 2026
 
@@ -75,3 +75,11 @@ EX-06 is VERIFIED with human review PENDING at implementation source `42dd2db48e
 No owner facade, authorization policy, transaction, table, migration or seed contract changed. The selected People and Access PostgreSQL suites passed 16/16 with all 31 migrations current. Final Staff Profiles Playwright passed 2/2 desktop/mobile; final Staff Access Playwright passed 4/4 desktop/mobile, while the preceding combined Access/invitation/recovery run passed 10/10. `pnpm check` passed all repository gates and 111/111 unit tests. Desktop/mobile captures were inspected; wide staff directories remain contained in their horizontal table viewport.
 
 Invitation provider review remains FND-02, failed-delivery/resend remains conservatively partial in the workflow matrix, and TEN-03/native accessibility remain release gates. Evidence: `docs/evidence/ex-06/README.md`. EX-07 is next.
+
+## EX-07 — 10 October 2026
+
+EX-07 is VERIFIED with human review PENDING at implementation source `61ffda2a8e51571b93e19780a4c85dcea75b8d4a`. Academic setup now separates year/terms, immutable calendar review, class catalogs and date evaluation. Classes and teachers separates offering creation from a responsive assignment directory with eligible-teacher and inclusive-date controls. The portable Academics composition factory now requires the database URL, release manifest and clock from the Next hosting layer; ambient environment fallbacks were removed.
+
+No owner operation, table or migration changed. Existing release, entitlement, branch activation, capability, scoped read, mutation lock, version, idempotency and Attendance impact checks remain active. `pnpm check` passed all repository gates and 113/113 unit tests. The focused Academics PostgreSQL suite passed 8/8 with all 31 migrations current. Final Academic setup and Classes Playwright runs each passed 2/2 desktop/mobile; they cover persistence, invalid dates, duplicates, overlap, year switching and stale assignment rejection. Desktop/mobile captures were inspected. `pnpm demo:seed` passed idempotently and preserved existing credentials/data.
+
+Catalog retirement/dependency counts remain a partial owner workflow. Recurring timetable/substitution, TEN-03 and native accessibility remain open gates. Evidence: `docs/evidence/ex-07/README.md`. EX-08 is next.

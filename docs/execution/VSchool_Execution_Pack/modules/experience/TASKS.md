@@ -118,7 +118,7 @@ Dependencies: EX-05. Implementation status: VERIFIED. Human review: PENDING.
 
 ## EX-07 — Adopt academic setup and class assignment screens
 
-Dependencies: EX-05. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-05. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/admin/academics/page.tsx; app/admin/classes/page.tsx; components/academics-workspace.tsx; classes-workspace.tsx; lib/server/academics.ts.
 
