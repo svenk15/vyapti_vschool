@@ -150,7 +150,7 @@ Dependencies: EX-07. Implementation status: VERIFIED. Human review: PENDING.
 
 ## EX-09 — Adopt import preview and recovery screens
 
-Dependencies: EX-08. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-08. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/admin/imports/page.tsx; components/import-preview-workspace.tsx; app/api/v1/imports; lib/server/imports.ts.
 

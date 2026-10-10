@@ -1,6 +1,6 @@
 # Previewed, resumable student roster import — current state
 
-Last updated: 2026-10-06. Existing task progress preserved; local owner acceptance is pending. No active execution timer.
+Last updated: 2026-10-10. Existing task progress preserved; local owner acceptance is pending. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -34,6 +34,13 @@ IMP-01, IMP-02 and IMP-03 human reviews remain PENDING. Address reported defects
 ## Pending decisions / limitations
 
 No product completion is assumed. Pilot deployment/provider, staff activation delivery procedure, backup targets and school retention requirements must be resolved in FND-02 before real-data release. Module-specific risks are listed in DESIGN.md.
+
+### 10 October 2026 — EX-09 experience adoption
+
+- **Source:** `624d5b0b795229c85d85ac7c13d7a19441ec9bf1`; human visual review PENDING.
+- **Implemented:** The production import route uses the shared page stack and a three-stage composition for file selection, server preview/approval and bounded processing/recovery. Exact preview/result counts, invalid-row consent, durable reload, cancellation and safe error download remain backed by the existing owner operations.
+- **Contracts/schema:** Authorization remains `student.manage`; the separate 2 MiB CSV, 8 KiB metadata and 16 KiB multipart-framing limits are unchanged. No browser storage or raw-content logging was added. No schema or migration changed; TEN-03 remains a production gate.
+- **Evidence:** `pnpm check` passed with 113/113 unit tests; focused real-PostgreSQL Imports passed 11/11; desktop/mobile Playwright passed 4/4; four captures were inspected. `pnpm demo:seed` preserved both ignored fictional CSV fixtures and private credentials. Detailed evidence: `docs/evidence/ex-09/README.md`.
 
 ## Evidence history
 
