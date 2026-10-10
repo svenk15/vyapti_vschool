@@ -78,6 +78,11 @@ function main(): void {
   }
   prepareImportSample();
 
+  const attendance = JSON.parse(readFileSync("artifacts/attendance-01/private-demo.json", "utf8")) as { recommendedDate?: unknown; recommendedSessionIds?: unknown };
+  if (typeof attendance.recommendedDate !== "string" || !Array.isArray(attendance.recommendedSessionIds) || attendance.recommendedSessionIds.length === 0) {
+    throw new Error("SYNTHETIC_CONNECTED_ATTENDANCE_SCENARIO_REQUIRED");
+  }
+
   console.log("\nPrivate demo file locations (credentials/tokens/sample; values are never printed):");
   console.log("- artifacts/iam-01/private-demo.json");
   console.log("- artifacts/iam-03/private-demo.json");
@@ -88,6 +93,8 @@ function main(): void {
   console.log("- artifacts/students-03/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster.csv")) console.log("- artifacts/imports-01/sample-roster.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial.csv")) console.log("- artifacts/imports-01/sample-roster-partial.csv");
+  console.log(`\nPrimary administrator/teacher credentials: artifacts/people-02/private-demo.json`);
+  console.log(`Connected attendance walkthrough date: ${attendance.recommendedDate} (${attendance.recommendedSessionIds.length} assigned sessions)`);
   console.log("Other feature command receipts and synthetic IDs remain in their ignored artifacts/<task>/ files.");
   console.log("Feature access is enabled only for implemented local demos; server release and human acceptance remain tracked per task and reviewed source.");
 }

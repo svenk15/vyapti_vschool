@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-10-10T03:40:23.948Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "credentialsSource": "artifacts/people-02/private-demo.json",
+  "scenarioSource": "artifacts/attendance-01/private-demo.json",
+  "observations": [
+    {
+      "persona": "administrator",
+      "path": "/admin",
+      "title": "VSchool People db1f722b",
+      "status": 200
+    },
+    {
+      "persona": "administrator",
+      "path": "/admin/teachers",
+      "title": "Staff profiles",
+      "status": 200
+    },
+    {
+      "persona": "administrator",
+      "path": "/admin/students",
+      "title": "Students",
+      "status": 200
+    },
+    {
+      "persona": "administrator",
+      "path": "/admin/classes",
+      "title": "Classes and teachers",
+      "status": 200
+    },
+    {
+      "persona": "administrator",
+      "path": "/admin/attendance/sessions",
+      "title": "Schedule class session",
+      "status": 200
+    },
+    {
+      "persona": "administrator",
+      "path": "/admin/reports/attendance?fromDate=2026-10-06&toDate=2026-10-07",
+      "title": "Attendance report",
+      "status": 200,
+      "recommendedSessionsFound": 3
+    },
+    {
+      "persona": "teacher",
+      "path": "/teacher/today",
+      "title": "My teaching day",
+      "status": 200,
+      "recommendedDate": "2026-10-06",
+      "recommendedSessionsFound": 3,
+      "detailStatus": 200
+    }
+  ]
+}
