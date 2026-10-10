@@ -16,6 +16,7 @@ const demos = [
   { name: "ACA-03 offerings and teacher assignments", script: "scripts/demo-academics-03.ts" },
   { name: "STU-03 placements and student archive", script: "scripts/demo-students-03.ts" },
   { name: "ATT-02 submitted attendance and correction base", script: "scripts/demo-attendance-01.ts" },
+  { name: "Administrator Today connected review queues", script: "scripts/demo-dashboard.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
 ] as const;
 
@@ -90,6 +91,7 @@ function main(): void {
   console.log("- artifacts/people-02/private-demo.json");
   console.log("- artifacts/academics-03/private-demo.json");
   console.log("- artifacts/attendance-01/private-demo.json");
+  console.log("- artifacts/dashboard-01/private-demo.json");
   console.log("- artifacts/students-03/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");

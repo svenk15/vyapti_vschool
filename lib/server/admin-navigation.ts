@@ -10,27 +10,24 @@ export type AdminNavigationGroup=Readonly<{label:string;items:readonly AdminNavi
 type Route={label:string;href:string;icon:PortalIconName;permission:string;modules?:readonly ModuleId[];institutionAdmin?:boolean};
 
 const routes:readonly Route[]=[
- {label:'School overview',href:'/admin',icon:'overview',permission:'school.manage'},
+ {label:'Today',href:'/admin',icon:'overview',permission:'school.manage'},
  {label:'School setup',href:'/admin/setup',icon:'setup',permission:'school.manage'},
  {label:'School settings',href:'/admin/school',icon:'settings',permission:'school.manage'},
  {label:'Branch module access',href:'/admin/modules',icon:'modules',permission:'module.configure',institutionAdmin:true},
  {label:'Sign-in branding',href:'/admin/branding',icon:'branding',permission:'branding.manage'},
  {label:'Branch activity',href:'/admin/activity',icon:'activity',permission:'school.manage'},
- {label:'Staff access',href:'/admin/users',icon:'staff',permission:'user.manage'},
+ {label:'Staff & access',href:'/admin/users',icon:'staff',permission:'user.manage'},
  {label:'Staff profiles',href:'/admin/teachers',icon:'people',permission:'class.manage',modules:['staff_core']},
  {label:'Students',href:'/admin/students',icon:'students',permission:'student.read',modules:['student_core']},
  {label:'Roster preview',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
- {label:'Academic setup',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
+ {label:'Academics',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
  {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
- {label:'Schedule sessions',href:'/admin/attendance/sessions',icon:'calendar',permission:'attendance.read_school',modules:['attendance']},
- {label:'Attendance report',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
+ {label:'Attendance',href:'/admin/attendance/sessions',icon:'calendar',permission:'attendance.read_school',modules:['attendance']},
+ {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
 const sections:readonly Readonly<{label:string;hrefs:readonly string[]}>[]=[
- {label:'Overview',hrefs:['/admin']},
- {label:'School',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
- {label:'People and students',hrefs:['/admin/users','/admin/teachers','/admin/students','/admin/imports']},
- {label:'Academics',hrefs:['/admin/academics','/admin/classes']},
- {label:'Attendance',hrefs:['/admin/attendance/sessions','/admin/reports/attendance']},
+ {label:'Operations',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/users','/admin/academics','/admin/reports/attendance']},
+ {label:'Management',hrefs:['/admin/teachers','/admin/imports','/admin/classes','/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
 ];
 
 export async function getAdminNavigation(identity:Identity,home:AdminHome):Promise<AdminNavigationGroup[]>{
@@ -47,5 +44,6 @@ export async function getAdminNavigation(identity:Identity,home:AdminHome):Promi
   return [route.href,true] as const;
  }));
  const visible=new Set(checks.filter(([,allowed])=>allowed).map(([href])=>href));
- return sections.map(section=>({label:section.label,items:routes.filter(route=>section.hrefs.includes(route.href)&&visible.has(route.href)).map(({label,href,icon})=>({label,href,icon}))})).filter(group=>group.items.length>0);
+ const routeByHref=new Map(routes.map(route=>[route.href,route]));
+ return sections.map(section=>({label:section.label,items:section.hrefs.flatMap(href=>{const route=routeByHref.get(href);return route&&visible.has(href)?[{label:route.label,href:route.href,icon:route.icon}]:[];})})).filter(group=>group.items.length>0);
 }

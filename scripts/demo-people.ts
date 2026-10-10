@@ -130,7 +130,15 @@ async function main() {
     if (!demo.employeeAccessEmail || !demo.employeeAccessVerificationReference || !demo.employeeAccessKey) {
       demo = { ...demo, employeeAccessEmail: `support-access-${demo.organizationId.slice(0,8)}@vschool.example`, employeeAccessVerificationReference: 'DEMO-SA14-VERIFY', employeeAccessKey: randomUUID() }; save(demo);
     }
+    // The accepted identity-binding contract requires a verified active
+    // Teacher membership. The school administrator is intentionally not
+    // given that role merely to populate the sidebar name.
   } finally { await people.disconnect(); }
+  const pendingAccess = createAccessServices({ ...local, emailSender: new DevelopmentMailSink('http://127.0.0.1:3400', join(process.cwd(), 'artifacts/mail-sink'), true) });
+  try {
+    const currentAdmin = await pendingAccess.authenticate(demo.adminEmail, demo.password); if (!currentAdmin || !demo.categoryEmployeeId) throw new Error('SYNTHETIC_ADMIN_UNAVAILABLE');
+    await pendingAccess.grantEmployeeAccess({ employeeId: demo.categoryEmployeeId, email: demo.employeeAccessEmail!, verificationReference: demo.employeeAccessVerificationReference!, confirmed: true, organizationId: demo.organizationId, schoolId: demo.schoolId, roles: ['TEACHER'], inviterAccountId: currentAdmin.accountId, inviterTokenVersion: currentAdmin.tokenVersion, requestId: randomUUID(), key: demo.employeeAccessKey! });
+  } finally { await pendingAccess.disconnect(); }
   console.log(`Prepared an isolated synthetic People school, categorized staff profiles and an active verified teacher account. Private credentials: ${path}`);
 }
 main().catch(error => {

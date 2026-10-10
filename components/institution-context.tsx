@@ -7,7 +7,7 @@ import { TextField,TextArea,SelectField } from '@/components/ui/forms';
 import { Dialog } from '@/components/ui/interactive';
 type Outcome={busy:boolean;error:string;success:string};
 async function send(url:string,body:unknown,key:string){return fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key},body:JSON.stringify(body),cache:'no-store'});}
-export function InstitutionContextSummary({institutionName,schoolName}:{institutionName:string;schoolName:string}){return <div className="portal-context-current"><span>{institutionName}</span><strong>{schoolName}</strong></div>;}
+export function InstitutionContextSummary({institutionName,schoolName}:{institutionName:string;schoolName:string}){return <div className="portal-context-current"><strong>{schoolName}</strong><span className="sr-only">Institution {institutionName}</span></div>;}
 export function BranchSwitcher({home}:{home:AdminHome}){
  const [directory,setDirectory]=useState<ContextDirectory|null>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false),[discard,setDiscard]=useState(false),[pending,setPending]=useState<{org:string;school:string}|null>(null),[selected,setSelected]=useState(home.scope.schoolId);
  useEffect(()=>{let live=true;fetch('/api/v1/context',{cache:'no-store'}).then(async r=>{if(!r.ok)throw new Error();const v=await r.json() as ContextDirectory;if(live)setDirectory(v);}).catch(()=>{if(live)setError('Authorized branches could not be loaded. Refresh to retry.');});return()=>{live=false;}},[]);

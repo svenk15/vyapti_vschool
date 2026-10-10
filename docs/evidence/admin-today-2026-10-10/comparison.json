@@ -1,0 +1,126 @@
+{
+  "capturedAt": "2026-10-10T17:06:15.059Z",
+  "application": "http://127.0.0.1:3400/admin",
+  "reference": "http://127.0.0.1:3410/VSchool_School_Admin_Review.html#/home",
+  "credentialPath": "artifacts/people-02/private-demo.json",
+  "viewports": {
+    "desktop": {
+      "reference": {
+        "body": {
+          "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "width": 1440,
+          "height": 1051.59375,
+          "padding": "0px"
+        },
+        "sidebar": {
+          "fontFamily": "\"VSchool Navigation\", system-ui, sans-serif",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "width": 240,
+          "height": 1000,
+          "padding": "0px"
+        },
+        "navItem": {
+          "fontFamily": "\"VSchool Navigation\", system-ui, sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "600",
+          "lineHeight": "19.5px",
+          "width": 208,
+          "height": 42,
+          "padding": "10px 12px"
+        },
+        "heading": {
+          "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontSize": "28px",
+          "fontWeight": "650",
+          "lineHeight": "35px",
+          "width": 374.734375,
+          "height": 35,
+          "padding": "0px"
+        },
+        "metric": {
+          "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "width": 368,
+          "height": 131,
+          "padding": "18px 20px"
+        }
+      },
+      "application": {
+        "body": {
+          "fontFamily": "Arial, Helvetica, sans-serif",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "width": 1440,
+          "height": 1087.03125,
+          "padding": "0px"
+        },
+        "sidebar": {
+          "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "width": 240,
+          "height": 1000,
+          "padding": "0px"
+        },
+        "navItem": {
+          "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontSize": "13px",
+          "fontWeight": "600",
+          "lineHeight": "19.5px",
+          "width": 211,
+          "height": 42,
+          "padding": "10px 12px"
+        },
+        "heading": {
+          "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontSize": "28px",
+          "fontWeight": "650",
+          "lineHeight": "35px",
+          "width": 374.734375,
+          "height": 35,
+          "padding": "0px"
+        },
+        "metric": {
+          "fontFamily": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "width": 368,
+          "height": 130,
+          "padding": "18px 20px"
+        },
+        "loadedFaces": [],
+        "overflow": false
+      },
+      "sessionRows": 3
+    },
+    "zoom200Equivalent": {
+      "cssViewport": {
+        "width": 720,
+        "height": 500
+      },
+      "overflow": false
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "keyboardFocusReturn": true,
+      "overflow": false
+    }
+  },
+  "journeys": {
+    "openRegister": "/admin/attendance/sessions/1936a6b8-3a8f-44f0-949d-f3f32e03ca76",
+    "reviewImport": "/admin/imports?jobId=33a1df0b-c5b5-4675-9c31-5f4e86d88f79",
+    "reviewAccess": "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c",
+    "viewAll": "/admin/reports/attendance?fromDate=2026-10-10&toDate=2026-10-11"
+  }
+}

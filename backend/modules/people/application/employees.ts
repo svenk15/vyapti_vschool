@@ -4,6 +4,7 @@ import {AccessError,uuidPattern} from '../../access/contracts/index';
 import {employeeInput,staffCategory,type EmployeeInput,type StaffCategory} from '../domain/employee';
 
 export interface PeopleRepository {
+ currentAccountDisplayName(actor:Identity,organizationId:string,schoolId:string):Promise<string|null>;
  listEmployees(actor:Identity,organizationId:string,schoolId:string,query:{search:string;cursor:string|null;limit:number}):Promise<PeopleWorkspace>;
  createEmployee(actor:Identity,organizationId:string,schoolId:string,input:EmployeeInput&{key:string}):Promise<EmployeeProfile&{replayed:boolean}>;
  enableTeacher(actor:Identity,organizationId:string,schoolId:string,employeeId:string,input:{expectedVersion:number;key:string}):Promise<EmployeeProfile&{replayed:boolean}>;
@@ -19,6 +20,7 @@ function version(value:unknown):number{if(!Number.isSafeInteger(value)||Number(v
 function scope(actorValue:Identity|null,organization:unknown,school:unknown){return {actor:currentActor(actorValue),organizationId:identifier(organization),schoolId:identifier(school)};}
 function listQuery(raw:{search?:unknown;cursor?:unknown;limit?:unknown}){if(raw.search!==undefined&&typeof raw.search!=='string')throw new AccessError('VALIDATION');const search=typeof raw.search==='string'?raw.search.normalize('NFC').trim():'';if(search.length>100||/[\u0000-\u001f]/.test(search))throw new AccessError('VALIDATION');const limit=raw.limit===undefined?50:Number(raw.limit);if(!Number.isInteger(limit)||limit<1||limit>100)throw new AccessError('VALIDATION');const cursor=raw.cursor==null||raw.cursor===''?null:raw.cursor;if(cursor!==null&&(typeof cursor!=='string'||cursor.length>2048))throw new AccessError('INVALID_CURSOR');return {search,cursor:cursor as string|null,limit};}
 export function createPeopleUseCases(repository:PeopleRepository){return {
+ currentAccountDisplayName(identity:Identity|null,organization:unknown,school:unknown){const s=scope(identity,organization,school);return repository.currentAccountDisplayName(s.actor,s.organizationId,s.schoolId);},
  workspace(identity:Identity|null,organization:unknown,school:unknown,query:{search?:unknown;cursor?:unknown;limit?:unknown}={}){const s=scope(identity,organization,school);return repository.listEmployees(s.actor,s.organizationId,s.schoolId,listQuery(query));},
  createEmployee(identity:Identity|null,organization:unknown,school:unknown,input:{firstName:unknown;lastName?:unknown;contactEmail?:unknown;staffNumber:unknown;category:unknown;employedFrom:unknown;key:unknown}){const s=scope(identity,organization,school),normalized=employeeInput(input),key=identifier(input.key);return repository.createEmployee(s.actor,s.organizationId,s.schoolId,{...normalized,key});},
  enableTeacher(identity:Identity|null,organization:unknown,school:unknown,employee:unknown,input:{expectedVersion:unknown;key:unknown}){const s=scope(identity,organization,school);return repository.enableTeacher(s.actor,s.organizationId,s.schoolId,identifier(employee),{expectedVersion:version(input.expectedVersion),key:identifier(input.key)});},

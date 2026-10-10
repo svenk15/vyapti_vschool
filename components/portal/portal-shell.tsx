@@ -14,13 +14,15 @@ type PortalShellProps={
  homeHref:string;
  navigationLabel:string;
  roleLabel:string;
+ academicYearLabel?:string|null;
+ accountDisplayName?:string|null;
  children:ReactNode;
  contentClassName?:string;
 };
 
 const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),input:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,children,contentClassName}:PortalShellProps){
+export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,children,contentClassName}:PortalShellProps){
  const pathname=usePathname(),[openOnPath,setOpenOnPath]=useState<string|null>(null),toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
  const currentItem=groups.flatMap(group=>group.items).find(item=>item.href===homeHref?pathname===homeHref:pathname===item.href||pathname.startsWith(`${item.href}/`));
  const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>toggle.current?.focus());},[]);
@@ -41,13 +43,13 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,chil
   requestAnimationFrame(()=>firstItem.current?.focus());
   return()=>{document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',onKeyDown);};
  },[close,open]);
- const initials=roleLabel.split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();
+ const identityLabel=accountDisplayName?.trim()||roleLabel,initials=identityLabel.split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();
  return <div className="portal-shell">
   <header className="portal-topbar">
    <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls="portal-navigation" aria-expanded={open} onClick={()=>open?close(true):setOpenOnPath(pathname)}><span aria-hidden="true">{open?'×':'☰'}</span><span className="sr-only">{open?'Close navigation':'Open navigation'}</span></button>
    <Link className="portal-mobile-brand" href={homeHref}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
    <span className="portal-workspace-label">{currentItem?.label??roleLabel}</span>
-   <div className="portal-top-context"><BranchSwitcher home={home}/></div>
+   <div className="portal-top-context"><BranchSwitcher home={home}/>{academicYearLabel&&<span className="portal-top-year" aria-label={`Academic year ${academicYearLabel}`}>{academicYearLabel}</span>}</div>
   </header>
   {open&&<div className="portal-sidebar-backdrop" aria-hidden="true" onClick={()=>close(true)}/>}
   <aside ref={sidebar} id="portal-navigation" className={`portal-sidebar${open?' portal-sidebar-open':''}`} aria-label={`${roleLabel} menu`}>
@@ -58,9 +60,9 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,chil
    <div className="portal-school-identity"><strong>{home.institutionName}</strong><span>{home.schoolName} · School workspace</span></div>
    <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.map((group,index)=><PortalNavigationGroup key={group.label} group={group} pathname={pathname} onNavigate={()=>close()} firstItemRef={index===0?firstItem:undefined}/>)}</nav></div>
    <footer className="portal-sidebar-footer">
-    <Link className="portal-identity" href="/account" aria-label={`${roleLabel} account`} onClick={()=>close()}>
+    <Link className="portal-identity" href="/account" aria-label={`${identityLabel}, ${roleLabel} account`} onClick={()=>close()}>
      <span className="portal-identity-avatar" aria-hidden="true">{initials}</span>
-     <span><strong>{roleLabel}</strong><small>{home.schoolName}</small></span>
+     <span><strong>{identityLabel}</strong><small>{roleLabel}</small></span>
     </Link>
     <div className="portal-sidebar-signout"><AccessSignOut/></div>
    </footer>

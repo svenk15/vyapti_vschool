@@ -44,6 +44,14 @@ export class PrismaPeopleRepository implements PeopleRepository{
   const membership=await tx.schoolMembership.findFirst({where:{accountId:actor.accountId,organizationId,schoolId,status:'ACTIVE'},select:{grants:{select:{code:true}}}});if(!membership)throw new AccessError('FORBIDDEN');
   if(!capabilitiesFor(membership.grants.map(grant=>grant.code as 'SCHOOL_ADMIN'|'TEACHER')).includes('class.manage'))throw new AccessError('FORBIDDEN');return {configurationVersion:school.configurationVersion,timezone:school.timezone};
  }
+ async currentAccountDisplayName(actor:Identity,organizationId:string,schoolId:string):Promise<string|null>{try{return await this.db.$transaction(async tx=>{
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');
+  await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
+  const [account,organization,school,membership]=await Promise.all([tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}}),tx.organization.findFirst({where:{id:organizationId,status:'ACTIVE'},select:{id:true}}),tx.school.findFirst({where:{organizationId,id:schoolId,status:'ACTIVE'},select:{id:true}}),tx.schoolMembership.findFirst({where:{organizationId,schoolId,accountId:actor.accountId,status:'ACTIVE'},select:{id:true}})]);
+  if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');if(!organization||!school)throw new AccessError('NOT_FOUND');if(!membership)throw new AccessError('FORBIDDEN');
+  const employee=await tx.employee.findFirst({where:{organizationId,schoolId,status:'ACTIVE',person:{accountBinding:{accountId:actor.accountId,organizationId}}},select:{person:{select:{firstName:true,lastName:true}}}});
+  return employee?displayName(employee.person.firstName,employee.person.lastName):null;
+ },{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
  async listEmployees(actor:Identity,organizationId:string,schoolId:string,query:{search:string;cursor:string|null;limit:number}):Promise<PeopleWorkspace>{try{return await this.db.$transaction(async tx=>{
   if(this.cursorSecret.length<32)throw new AccessError('UNAVAILABLE');
   const guard=await this.guard(tx,actor,organizationId,schoolId,false);

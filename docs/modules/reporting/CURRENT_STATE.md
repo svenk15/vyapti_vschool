@@ -8,11 +8,11 @@ Last updated: 2026-10-10. No active execution timer.
 | RPT-02 | VERIFIED | PENDING | RPT-02 source `487b4050136570784bba403cf5acfdadc902a0d8`; verified demo source `d1e3bc7efbce0eb33eb95bc4b4e18a685b3c709e`; PostgreSQL, E2E and full check evidence below |
 | SA-COMP-01 / SA-COMP-10 | VERIFIED | PENDING | SA-04/SA-05 projection plus current-source SA-04 display-only responsibility closure; [evidence](../../evidence/sa-comp-10/README.md) |
 
-## Administrator home visual fidelity — 10 October 2026
+## Administrator home visual fidelity and connected demo — 10 October 2026
 
-The production `/admin` page now uses the approved Administrator `#/home` composition with real authorized readiness, exception and attendance projections: a compact title/action header, three summary metrics, attention worklist, setup progress, today-session list and quick actions. Empty states remain truthful for the current branch; prototype counts, school identity and academic-year text were not copied. No backend contract, permission, schema, migration, seed or database data changed.
+The production `/admin` page uses the approved Administrator `#/home` composition with real authorized readiness, exception and attendance projections. The shared navigation presents daily work first; the header resolves the current branch and academic year; session rows include the effective teacher; and every attention action carries the exact scoped session, import or membership identifier. The `pnpm demo:seed` fixture provides current school-local submitted, attention and future-session states plus review-state import and staff-access records without rewriting historical sessions. Empty sessions and empty exceptions remain explicit states.
 
-Direct desktop and mobile reference/application captures and the comparison record are in [admin-home-visual-fidelity](../../evidence/admin-home-visual-fidelity/README.md). Focused lint and type checking passed; the production build passed; and the scoped Administrator sign-in/dashboard Playwright journey passed 2/2 across desktop and mobile against guarded PostgreSQL. Human visual acceptance is PENDING. The next safe slice is direct reference comparison of the next already implemented Administrator workflow; later workflows remain governed by the canonical [63-workflow matrix](../../execution/SCHOOL_ADMIN_WORKFLOW_MATRIX.md).
+The reporting read joins retain organization/branch scope and use a bounded lateral teacher-assignment lookup valid on the session date, avoiding count multiplication. No schema or migration changed. Direct desktop/mobile captures, reconciliation, focused PostgreSQL/browser/build evidence and remaining typography limitation are in [admin-today-2026-10-10](../../evidence/admin-today-2026-10-10/README.md). Human visual acceptance is PENDING. TEN-03 and native accessibility evidence remain release gates.
 
 ## SA-COMP-01 administrator readiness and exceptions — 10 October 2026
 
