@@ -198,7 +198,7 @@ Dependencies: EX-10, EX-04. Implementation status: VERIFIED. Human review: PENDI
 
 ## EX-12 — Adopt attendance report and export experience
 
-Dependencies: EX-10. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-10. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/admin/reports/attendance/page.tsx; components/ui/server-table.tsx; lib/server/reporting.ts; app/api/v1/reports/attendance*.
 

@@ -1,6 +1,6 @@
 # Attendance review, completeness and exports — current state
 
-Last updated: 2026-10-06. No active execution timer.
+Last updated: 2026-10-10. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -11,9 +11,11 @@ Last updated: 2026-10-06. No active execution timer.
 
 RPT-01 provides a scoped, repeatable-read attendance overview and bounded session drilldown with separate expected/submitted/pending/future/cancelled counts, P/L/A/E totals, transparent rate arithmetic and safe class labels. Every request rechecks account/token, active membership, current permission, organization/branch, release manifest, attendance entitlement and branch activation. No schema, migration, registry or write-path change was needed; application authorization remains active and RLS enforcement is deferred to TEN-03. `demo:seed` was run twice against the guarded development database and preserves the synthetic future scheduled session without replacing existing rows.
 
+EX-12 presentation adoption is VERIFIED at source `a3664df`, with human review PENDING. The production report now separates its authorized CSV action, compact server filters, current `asOf` summary, status-aware session table, empty/failure states and pagination. Inline export denial retains filters. Reporting composition receives release configuration from the Next hosting layer. No Reporting schema, DTO, permission, transaction or persistence contract changed.
+
 ## Next action
 
-RPT-02 is implementation-VERIFIED with human review PENDING. RPT-01 and ATT-04 reviews remain PENDING and do not block implementation. TEN-03 is next in the execution order; inspect its design, task criteria, current database roles and compatibility plan before schema/policy work. DS-02 remains technically BLOCKED pending actual native VoiceOver and NVDA evidence; FND-02 cannot claim release readiness without this and the other documented release gates. No acceptance is inferred from any demo.
+RPT-01, RPT-02 and their EX-12 production-page adoption are implementation-VERIFIED with human review PENDING. EX-13 demo fixture and cross-page coherence is the next execution slice. TEN-03 remains an incomplete production gate under the explicit demo sequencing decision. DS-02 remains technically BLOCKED pending actual native VoiceOver and NVDA evidence; FND-02 cannot claim release readiness without this and the other documented release gates. No acceptance is inferred from any demo.
 
 ## Pending decisions / limitations
 
