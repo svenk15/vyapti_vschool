@@ -34,6 +34,29 @@ describe("STU-01/STU-02 PostgreSQL student records",()=>{
     const firstPage=await students.list(identity,primary.organizationId,primary.schoolId,{search:"",limit:1});expect(firstPage.nextCursor).toBeTruthy();await expect(students.list(identity,primary.organizationId,primary.schoolId,{search:"",status:"ALL",cursor:firstPage.nextCursor,limit:1})).rejects.toMatchObject({code:"INVALID_CURSOR"});
   });
 
+  it("searches one approved attribute and keyset-paginates every server sort without cursor reuse",async()=>{
+    const token=randomUUID().slice(0,8),records=[
+      await students.create(identity,primary.organizationId,primary.schoolId,input(`DUP-${token}`,`Query${token}`,"Same")),
+      await students.create(identity,primary.organizationId,primary.schoolId,input(`dup-${token}`,`Query${token}`,"Same")),
+      await students.create(identity,primary.organizationId,primary.schoolId,input(`MID-${token}`,`Query${token}`,"Alpha")),
+      await students.create(identity,primary.organizationId,primary.schoolId,input(`ZZZ-${token}`,`Query${token}`,"Zulu")),
+    ];
+    await students.create(foreignIdentity,foreign.organizationId,foreign.schoolId,input(`FOREIGN-${token}`,`Query${token}`,"Foreign"));
+    await students.archive(identity,primary.organizationId,primary.schoolId,records[3]!.studentId,{expectedVersion:1,reason:"Create archived list-query evidence",key:randomUUID()});
+    expect((await students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"name",status:"ALL",limit:100})).items).toHaveLength(4);
+    expect((await students.list(identity,primary.organizationId,primary.schoolId,{search:`DUP-${token}`,by:"name",status:"ALL",limit:100})).items).toHaveLength(0);
+    expect((await students.list(identity,primary.organizationId,primary.schoolId,{search:`DUP-${token}`,by:"admissionNumber",status:"ALL",limit:100})).items.map(item=>item.studentId).sort()).toEqual([records[0]!.studentId,records[1]!.studentId].sort());
+    expect((await students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"admissionNumber",status:"ALL",limit:100})).items).toHaveLength(0);
+    const value=(item:(typeof records)[number],sort:"name"|"admissionNumber"|"status")=>sort==="name"?item.displayName.toLowerCase():sort==="admissionNumber"?item.admissionNumber.toLowerCase():item.studentId===records[3]!.studentId?"ARCHIVED":"ACTIVE";
+    for(const sort of ["name","admissionNumber","status"] as const)for(const order of ["asc","desc"] as const){
+      const expected=[...records].sort((a,b)=>{const av=value(a,sort),bv=value(b,sort),comparison=av<bv?-1:av>bv?1:a.studentId<b.studentId?-1:a.studentId>b.studentId?1:0;return order==="asc"?comparison:-comparison;}).map(item=>item.studentId),actual=(await students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"name",status:"ALL",sort,order,limit:100})).items.map(item=>item.studentId);expect(actual).toEqual(expected);
+    }
+    const paged:string[]=[];let cursor:string|null=null;do{const page=await students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"name",status:"ALL",sort:"name",order:"desc",limit:1,cursor});paged.push(...page.items.map(item=>item.studentId));cursor=page.nextCursor;}while(cursor);expect(paged).toEqual((await students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"name",status:"ALL",sort:"name",order:"desc",limit:100})).items.map(item=>item.studentId));expect(new Set(paged).size).toBe(4);
+    const first=await students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"name",status:"ALL",sort:"name",order:"asc",limit:1});expect(first.nextCursor).toBeTruthy();
+    for(const mismatch of [{by:"admissionNumber" as const},{sort:"status" as const},{order:"desc" as const},{search:`Query${token}x`},{status:"ACTIVE" as const}])await expect(students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"name",status:"ALL",sort:"name",order:"asc",limit:1,cursor:first.nextCursor,...mismatch})).rejects.toMatchObject({code:"INVALID_CURSOR"});
+    await expect(students.list(identity,primary.organizationId,primary.schoolId,{search:`Query${token}`,by:"name",status:"ALL",sort:"name",order:"asc",limit:1,cursor:`${first.nextCursor!.slice(0,-1)}x`})).rejects.toMatchObject({code:"INVALID_CURSOR"});
+  });
+
   it("requires a verified branch admission date and corrects a legacy-null record without changing enrollment or attendance history",async()=>{
     expect(()=>students.create(identity,primary.organizationId,primary.schoolId,{firstName:"Missing",lastName:"Date",admissionNumber:`MISS-${randomUUID().slice(0,8)}`,admittedOn:"",key:randomUUID()})).toThrow("VALIDATION");
     await expect(students.create(identity,primary.organizationId,primary.schoolId,{firstName:"Future",lastName:"Date",admissionNumber:`FUT-${randomUUID().slice(0,8)}`,admittedOn:"2099-01-01",key:randomUUID()})).rejects.toMatchObject({code:"VALIDATION"});

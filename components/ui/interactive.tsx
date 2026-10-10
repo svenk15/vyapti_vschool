@@ -2,10 +2,10 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Button, EmptyState } from "./primitives";
 
-export function Dialog({open,onClose,title,description,children,drawer=false}:{open:boolean;onClose:()=>void;title:string;description:string;children:ReactNode;drawer?:boolean}) {
+export function Dialog({open,onClose,title,description,children,drawer=false}:{open:boolean;onClose:()=>void;title:string;description?:string;children:ReactNode;drawer?:boolean}) {
  const ref=useRef<HTMLDialogElement>(null),id=useId();
  useEffect(()=>{const node=ref.current;if(!node)return;if(open&&!node.open)node.showModal();else if(!open&&node.open)node.close();},[open]);
- return <dialog ref={ref} className={drawer?"dialog drawer":"dialog"} aria-labelledby={`${id}-title`} aria-describedby={`${id}-description`} onCancel={onClose} onKeyDown={e=>{
+ return <dialog ref={ref} className={drawer?"dialog drawer":"dialog"} aria-labelledby={`${id}-title`} aria-describedby={description?`${id}-description`:undefined} onCancel={onClose} onKeyDown={e=>{
   if(e.key!=="Tab")return;
   const node=e.currentTarget;
   const controls=Array.from(node.querySelectorAll<HTMLElement>('a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]')).filter(control=>control.tabIndex>=0&&!control.matches(":disabled")&&control.getClientRects().length>0);
@@ -13,7 +13,7 @@ export function Dialog({open,onClose,title,description,children,drawer=false}:{o
   if(!first){e.preventDefault();node.focus();return;}
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
- }}><div className="spread"><h2 id={`${id}-title`}>{title}</h2><Button variant="ghost" onClick={onClose} aria-label={`Close ${title}`}>×</Button></div><p id={`${id}-description`} className="muted">{description}</p>{children}</dialog>;
+ }}><div className="spread"><h2 id={`${id}-title`}>{title}</h2><Button variant="ghost" onClick={onClose} aria-label={`Close ${title}`}>×</Button></div>{description&&<p id={`${id}-description`} className="muted">{description}</p>}{children}</dialog>;
 }
 export function Tabs({items}:{items:{id:string;label:string;content:ReactNode}[]}) {
  const [active,setActive]=useState(0),id=useId();

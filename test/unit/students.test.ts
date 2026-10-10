@@ -18,9 +18,13 @@ describe("student registration inputs",()=>{
     expect(existingPersonReference("ADMISSION_NUMBER"," 0007 ")).toEqual({kind:"ADMISSION_NUMBER",admissionNumber:"0007"});
     expect(()=>existingPersonReference("PERSON_ID","x")).toThrow("VALIDATION");
     expect(()=>existingPersonReference("NAME","Synthetic Learner")).toThrow("VALIDATION");
-    expect(studentListQuery({search:" 0007 "})).toMatchObject({search:"0007",status:"ACTIVE",limit:50});
+    expect(studentListQuery({search:" 0007 "})).toMatchObject({search:"0007",by:"combined",sort:"name",order:"asc",status:"ACTIVE",limit:50});
+    expect(studentListQuery({by:"name",sort:"admissionNumber",order:"desc"})).toMatchObject({by:"name",sort:"admissionNumber",order:"desc"});
     expect(studentListQuery({status:"ALL"}).status).toBe("ALL");
     expect(()=>studentListQuery({status:"PENDING"})).toThrow("VALIDATION");
+    expect(()=>studentListQuery({by:"email"})).toThrow("VALIDATION");
+    expect(()=>studentListQuery({sort:"createdAt"})).toThrow("VALIDATION");
+    expect(()=>studentListQuery({order:"sideways"})).toThrow("VALIDATION");
     expect(()=>studentListQuery({search:"x".repeat(101)})).toThrow("VALIDATION");
   });
 

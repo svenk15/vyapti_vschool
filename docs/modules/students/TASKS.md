@@ -23,6 +23,8 @@ Files: extend `backend/modules/students/domain`, `application`, `contracts` and 
 - Unit / application: Admission identifier preserves zeros; names not identifiers.
 - Real PostgreSQL: Rollback Person on Student failure; concurrent admission number uniqueness.
 - Browser: Create student, search, refresh detail and denied foreign profile.
+- Directory query: explicit Student name/admission search attributes remain isolated; Name/Admission number/Status sorting is performed in PostgreSQL in both directions with a stable UUID tie-breaker and query-bound cursor.
+- Browser directory: Enter commits search, Back/Forward restores applied URL state, Sort and Filter draft state applies or cancels accessibly, and Manage links reach enrollment history, permitted name correction, enrollment/placement and same-branch class move without duplicating forms.
 - Failure contract: Duplicate admission→409; foreign Person→404; malformed name→422.
 - Required DB effect: Person via People owner and Student; audit/outbox/receipt.
 - Persistence/security gate: retain scoped admission/person uniqueness and Person/School FKs; authorized same-institution Person lookup only; never infer identity from names/email. Under TEN-ADR-006 Path A, record class/scope/constraints/indexes/policy intent and TEN-03 closure; defer database enforcement to TEN-03 while application authorization stays active.

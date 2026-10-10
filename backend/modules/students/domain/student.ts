@@ -19,7 +19,12 @@ export function studentInput(input: { firstName: unknown; lastName?: unknown; ad
   return { firstName, lastName, admissionNumber, admittedOn:civilDate(input.admittedOn), existingPersonId: existingPersonId?.toLowerCase() ?? null };
 }
 
-export function studentListQuery(input: { search?: unknown; cursor?: unknown; limit?: unknown; status?: unknown }) {
+export type StudentSearchBy = "combined"|"name"|"admissionNumber";
+export type StudentSort = "name"|"admissionNumber"|"status";
+export type StudentSortOrder = "asc"|"desc";
+export type StudentListQuery = Readonly<{search:string;by:StudentSearchBy;sort:StudentSort;order:StudentSortOrder;cursor:string|null;limit:number;status:"ACTIVE"|"ARCHIVED"|"ALL"}>;
+
+export function studentListQuery(input: { search?: unknown; by?:unknown; sort?:unknown; order?:unknown; cursor?: unknown; limit?: unknown; status?: unknown }):StudentListQuery {
   if (input.search !== undefined && typeof input.search !== "string") throw new AccessError("VALIDATION");
   const search = typeof input.search === "string" ? input.search.normalize("NFC").trim() : "";
   if (search.length > 100 || /[\u0000-\u001f\u007f]/.test(search)) throw new AccessError("VALIDATION");
@@ -28,9 +33,15 @@ export function studentListQuery(input: { search?: unknown; cursor?: unknown; li
   const status = input.status === undefined ? "ACTIVE" : input.status;
   if (status !== "ACTIVE" && status !== "ARCHIVED" && status !== "ALL") throw new AccessError("VALIDATION");
   const checkedStatus = status as "ACTIVE"|"ARCHIVED"|"ALL";
+  const by=input.by===undefined?"combined":input.by;
+  if(by!=="combined"&&by!=="name"&&by!=="admissionNumber")throw new AccessError("VALIDATION");
+  const sort=input.sort===undefined?"name":input.sort;
+  if(sort!=="name"&&sort!=="admissionNumber"&&sort!=="status")throw new AccessError("VALIDATION");
+  const order=input.order===undefined?"asc":input.order;
+  if(order!=="asc"&&order!=="desc")throw new AccessError("VALIDATION");
   const cursor = input.cursor == null || input.cursor === "" ? null : input.cursor;
   if (cursor !== null && (typeof cursor !== "string" || cursor.length > 2048)) throw new AccessError("INVALID_CURSOR");
-  return { search, cursor: cursor as string | null, limit, status: checkedStatus };
+  return { search, by, sort, order, cursor: cursor as string | null, limit, status: checkedStatus };
 }
 
 export type ExistingPersonReference = Readonly<

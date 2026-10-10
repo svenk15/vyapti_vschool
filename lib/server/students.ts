@@ -12,7 +12,7 @@ try{students=createStudentsServices(studentRuntimeConfiguration());}catch{config
 function service(){if(!students)throw configurationFailure??new AccessError('UNAVAILABLE');return students;}
 async function scope(identity:Identity|null){return (await accountGateway.getHome(identity)).scope;}
 export const studentsGateway={
-  async list(identity:Identity|null,query:{search?:unknown;cursor?:unknown;limit?:unknown;status?:unknown}={}){const current=await scope(identity);return service().list(identity,current.organizationId,current.schoolId,query);},
+  async list(identity:Identity|null,query:{search?:unknown;by?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown;status?:unknown}={}){const current=await scope(identity);return service().list(identity,current.organizationId,current.schoolId,query);},
   async get(identity:Identity|null,studentId:string){const current=await scope(identity);return service().get(identity,current.organizationId,current.schoolId,studentId);},
   async create(identity:Identity|null,input:Parameters<StudentsFacade["create"]>[3]){const current=await scope(identity);return service().create(identity,current.organizationId,current.schoolId,input);},
   async resolveExistingPerson(identity:Identity|null,kind:unknown,value:unknown){const current=await scope(identity);return service().resolveExistingPerson(identity,current.organizationId,current.schoolId,kind,value);},

@@ -3,7 +3,7 @@ import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, Student
 import { AccessError, uuidPattern } from "../../access/contracts/index";
 import type { EnlistedStudentRegistrationPort } from "../contracts/enlisted-student-registration";
 import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
-import { admissionDateCorrectionInput, archiveInput, enrollmentInput, existingPersonReference, nameCorrectionInput, studentInput, studentListQuery, transferInput } from "../domain/student";
+import { admissionDateCorrectionInput, archiveInput, enrollmentInput, existingPersonReference, nameCorrectionInput, studentInput, studentListQuery, transferInput, type StudentListQuery } from "../domain/student";
 import type { ExistingPersonReference } from "../domain/student";
 
 export interface AttendanceStudentImpactPort {
@@ -11,7 +11,7 @@ export interface AttendanceStudentImpactPort {
 }
 
 export interface StudentRepository {
-  list(actor: Identity, organizationId: string, schoolId: string, query: { search: string; cursor: string | null; limit: number; status: "ACTIVE"|"ARCHIVED"|"ALL" }): Promise<StudentWorkspace>;
+  list(actor: Identity, organizationId: string, schoolId: string, query: StudentListQuery): Promise<StudentWorkspace>;
   get(actor: Identity, organizationId: string, schoolId: string, studentId: string): Promise<StudentDetail>;
   create(actor: Identity, organizationId: string, schoolId: string, input: ReturnType<typeof studentInput> & { key: string }): Promise<StudentProfile & { replayed: boolean }>;
   resolveExistingPerson(actor: Identity, organizationId: string, schoolId: string, reference: ExistingPersonReference): Promise<ExistingPersonChoice>;
@@ -33,7 +33,7 @@ function key(value: unknown): string { if (typeof value !== "string" || !/^[A-Za
 
 export function createStudentUseCases(repository: StudentRepository) {
   return {
-    list(identity: Identity | null, organizationId: unknown, schoolId: unknown, query: { search?: unknown; cursor?: unknown; limit?: unknown; status?: unknown } = {}) {
+    list(identity: Identity | null, organizationId: unknown, schoolId: unknown, query: { search?: unknown; by?:unknown; sort?:unknown; order?:unknown; cursor?: unknown; limit?: unknown; status?: unknown } = {}) {
       return repository.list(actor(identity), id(organizationId), id(schoolId), studentListQuery(query));
     },
     get(identity: Identity | null, organizationId: unknown, schoolId: unknown, studentId: unknown) {

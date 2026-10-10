@@ -1,5 +1,5 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from "node:crypto";
-import type { Prisma, PrismaClient } from "../../../../generated/prisma/client";
+import { Prisma, type PrismaClient } from "../../../../generated/prisma/client";
 import type { Identity } from "../../../../shared/contracts/access";
 import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentAdmissionDateResult, StudentArchiveResult, StudentDetail, StudentEnrollmentHistory, StudentNameCorrectionResult, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, capabilitiesFor } from "../../access/contracts/index";
@@ -13,22 +13,24 @@ import type { ExistingPersonReference } from "../domain/student";
 import { displayStudentName } from "../domain/student";
 import type { EnlistedRegistrationInput, EnlistedRegistrationResult, StudentRegistrationTransaction } from "../contracts/enlisted-student-registration";
 import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
+import type {StudentListQuery} from '../domain/student';
 
 type Guard = { configurationVersion: number; timezone:string };
 const NO_RELEASE: ReleaseManifest = { student_core:false,academic_core:false,staff_core:false,attendance:false,fees:false,admissions:false,assessments:false,family:false,communication:false,timetable:false,homework:false,transport:false,hr:false,library:false,inventory:false,health:false,analytics:false,ai:false };
 const canonical = (value: unknown): string => Array.isArray(value) ? `[${value.map(canonical).join(",")}]` : value && typeof value === "object" ? `{${Object.entries(value).sort(([a],[b])=>a.localeCompare(b)).map(([key,item])=>`${JSON.stringify(key)}:${canonical(item)}`).join(",")}}` : JSON.stringify(value);
 const sha = (value: string) => createHash("sha256").update(value).digest("hex");
 const inputHash = (value: unknown) => sha(canonical(value));
-type Cursor = { organizationId: string; schoolId: string; accountId: string; searchHash: string; status: string; after: string };
+type CursorScope={organizationId:string;schoolId:string;accountId:string;searchHash:string;by:string;status:string;sort:string;order:string};
+type Cursor = CursorScope&{v:2;value:string;after:string};
 function encodeCursor(value: Cursor, secret: string) { const payload=Buffer.from(JSON.stringify(value)).toString("base64url");return `${payload}.${createHmac("sha256",secret).update(payload).digest("base64url")}`; }
-function decodeCursor(cursor: string | null, expected: Omit<Cursor,"after">, secret: string): string | null {
+function decodeCursor(cursor: string | null, expected: CursorScope, secret: string):Pick<Cursor,"value"|"after">|null {
   if (!cursor) return null;
   if (secret.length < 32) throw new AccessError("UNAVAILABLE");
   const [payload,signature,...extra]=cursor.split(".");
   if (!payload || !signature || extra.length || !/^[A-Za-z0-9_-]{43}$/.test(signature)) throw new AccessError("INVALID_CURSOR");
   const expectedSignature=createHmac("sha256",secret).update(payload).digest("base64url");
   if (!timingSafeEqual(Buffer.from(signature),Buffer.from(expectedSignature))) throw new AccessError("INVALID_CURSOR");
-  try { const value=JSON.parse(Buffer.from(payload,"base64url").toString("utf8")) as Cursor;if(value.organizationId!==expected.organizationId||value.schoolId!==expected.schoolId||value.accountId!==expected.accountId||value.searchHash!==expected.searchHash||value.status!==expected.status||typeof value.after!=="string"||!/^[0-9a-f-]{36}$/i.test(value.after))throw new Error();return value.after; }
+  try { const value=JSON.parse(Buffer.from(payload,"base64url").toString("utf8")) as Cursor;if(value.v!==2||value.organizationId!==expected.organizationId||value.schoolId!==expected.schoolId||value.accountId!==expected.accountId||value.searchHash!==expected.searchHash||value.by!==expected.by||value.status!==expected.status||value.sort!==expected.sort||value.order!==expected.order||typeof value.value!=="string"||value.value.length>200||typeof value.after!=="string"||!/^[0-9a-f-]{36}$/i.test(value.after))throw new Error();return {value:value.value,after:value.after}; }
   catch { throw new AccessError("INVALID_CURSOR"); }
 }
 function profile(row: {id:string;personId:string;version:number;admissionNumber:string;admittedOn:Date|null;admissionDateVerifiedAt:Date|null;admissionDateVerificationReason:string|null;status:string;person:{firstName:string;lastName:string;version:number};enrollments?:{id:string;yearId:string;year:{code:string;name:string}}[]}): StudentProfile {
@@ -88,13 +90,17 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
     return enrollmentHistory(rows,new Map(counts.map(count=>[count.sectionId,count._count._all])));
   }
 
-  async list(actor:Identity,organizationId:string,schoolId:string,query:{search:string;cursor:string|null;limit:number;status:"ACTIVE"|"ARCHIVED"|"ALL"}):Promise<StudentWorkspace>{try{return await this.db.$transaction(async tx=>{
+  async list(actor:Identity,organizationId:string,schoolId:string,query:StudentListQuery):Promise<StudentWorkspace>{try{return await this.db.$transaction(async tx=>{
     await this.guard(tx,actor,organizationId,schoolId,"student.manage",false);
     if(this.cursorSecret.length<32) throw new AccessError("UNAVAILABLE");
-    const searchHash=sha(query.search),scope={organizationId,schoolId,accountId:actor.accountId,searchHash,status:query.status},after=decodeCursor(query.cursor,scope,this.cursorSecret);
-    const where:Prisma.StudentWhereInput={organizationId,schoolId,...(query.status!=="ALL"?{status:query.status}:{}),...(after?{id:{gt:after}}:{}),...(query.search?{OR:[{admissionNumber:{contains:query.search,mode:"insensitive"}},{person:{firstName:{contains:query.search,mode:"insensitive"}}},{person:{lastName:{contains:query.search,mode:"insensitive"}}}]}:{})};
-    const rows=await tx.student.findMany({where,orderBy:{id:"asc"},take:query.limit+1,include:{person:{select:{firstName:true,lastName:true,version:true}}}}),hasMore=rows.length>query.limit,items=rows.slice(0,query.limit),academicActive=await this.moduleActive(tx,organizationId,schoolId,"academic_core"),enrollments=academicActive&&items.length?await tx.enrollment.findMany({where:{organizationId,schoolId,studentId:{in:items.map(item=>item.id)}},orderBy:{validFrom:"desc"},include:{year:{select:{code:true,name:true}}}}):[],latest=new Map<string,typeof enrollments[number]>();for(const enrollment of enrollments)if(!latest.has(enrollment.studentId))latest.set(enrollment.studentId,enrollment);
-    const nextCursor=hasMore&&items.length?encodeCursor({...scope,after:items.at(-1)!.id},this.cursorSecret):null;
+    const searchHash=sha(query.search),scope={organizationId,schoolId,accountId:actor.accountId,searchHash,by:query.by,status:query.status,sort:query.sort,order:query.order},after=decodeCursor(query.cursor,scope,this.cursorSecret);
+    const displayName=Prisma.sql`lower(btrim(concat_ws(' ', p.first_name, nullif(p.last_name, '')))) COLLATE "C"`,admission=Prisma.sql`lower(s.admission_number) COLLATE "C"`,status=Prisma.sql`s.status COLLATE "C"`,sortExpression=query.sort==="name"?displayName:query.sort==="admissionNumber"?admission:status;
+    const statusWhere=query.status==="ALL"?Prisma.empty:Prisma.sql`AND s.status = ${query.status}`;
+    const searchWhere=!query.search?Prisma.empty:query.by==="name"?Prisma.sql`AND strpos(${displayName}, lower(${query.search}) COLLATE "C") > 0`:query.by==="admissionNumber"?Prisma.sql`AND strpos(${admission}, lower(${query.search}) COLLATE "C") > 0`:Prisma.sql`AND (strpos(${displayName}, lower(${query.search}) COLLATE "C") > 0 OR strpos(${admission}, lower(${query.search}) COLLATE "C") > 0)`;
+    const afterWhere=!after?Prisma.empty:query.order==="asc"?Prisma.sql`AND (${sortExpression}, s.id) > (${after.value}, ${after.after}::uuid)`:Prisma.sql`AND (${sortExpression}, s.id) < (${after.value}, ${after.after}::uuid)`;
+    const direction=Prisma.raw(query.order==="asc"?"ASC":"DESC"),ordered=await tx.$queryRaw<{id:string;sortValue:string}[]>`SELECT s.id, ${sortExpression} AS "sortValue" FROM vs_students_student s JOIN vs_people_person p ON p.organization_id=s.organization_id AND p.id=s.person_id WHERE s.organization_id=${organizationId}::uuid AND s.school_id=${schoolId}::uuid ${statusWhere} ${searchWhere} ${afterWhere} ORDER BY ${sortExpression} ${direction}, s.id ${direction} LIMIT ${query.limit+1}`;
+    const hasMore=ordered.length>query.limit,page=ordered.slice(0,query.limit),ids=page.map(item=>item.id),unordered=ids.length?await tx.student.findMany({where:{organizationId,schoolId,id:{in:ids}},include:{person:{select:{firstName:true,lastName:true,version:true}}}}):[],byId=new Map(unordered.map(item=>[item.id,item])),items=ids.map(id=>byId.get(id)).filter((item):item is NonNullable<typeof item>=>!!item),academicActive=await this.moduleActive(tx,organizationId,schoolId,"academic_core"),enrollments=academicActive&&items.length?await tx.enrollment.findMany({where:{organizationId,schoolId,studentId:{in:items.map(item=>item.id)}},orderBy:{validFrom:"desc"},include:{year:{select:{code:true,name:true}}}}):[],latest=new Map<string,typeof enrollments[number]>();for(const enrollment of enrollments)if(!latest.has(enrollment.studentId))latest.set(enrollment.studentId,enrollment);
+    const last=page.at(-1),nextCursor=hasMore&&last?encodeCursor({...scope,v:2,value:last.sortValue,after:last.id},this.cursorSecret):null;
     return {items:items.map(item=>profile({...item,enrollments:latest.has(item.id)?[latest.get(item.id)!]:[]})),nextCursor};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 

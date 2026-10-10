@@ -254,10 +254,15 @@ body{font-family:var(--font-ui)}
 .students-directory-table .person-cell a:hover{text-decoration:underline}
 .student-row-action{min-height:32px;padding:5px 0}
 .student-manage-links{margin:22px -12px 0}
+.student-manage-group{display:block;padding:14px 12px 4px;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.student-manage-group:not(:first-child){margin-top:8px;padding-top:18px;border-top:1px solid var(--line)}
 .student-manage-link{display:flex;align-items:center;gap:14px;padding:13px 12px;border-radius:8px;color:var(--ink);text-decoration:none}
 .student-manage-link:hover{background:var(--brand-soft)}
+.student-manage-link.unavailable{color:var(--muted);cursor:not-allowed}
+.student-manage-link.unavailable:hover{background:transparent}
 .student-manage-link>span:last-child{display:grid;gap:2px}
 .student-manage-link small{color:var(--muted)}
+.student-section-anchor{scroll-margin-top:24px}
 .student-registration-form{display:grid;margin-top:22px}
 .student-registration-form>.alert{margin:0 0 18px}
 .student-registration-form .advanced-settings{margin:2px 0 18px}
