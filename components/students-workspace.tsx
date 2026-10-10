@@ -28,7 +28,7 @@ export function StudentsWorkspace({initial,initialSearch,initialBy,initialStatus
  async function create(){setBusy(true);setMessage('');setFailed(false);try{const key=crypto.randomUUID(),response=await fetch('/api/v1/students',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key},body:JSON.stringify({firstName,lastName,admissionNumber,admittedOn,existingPersonId:selectedPersonId||null,key})}),result=await json<{studentId:string}>(response);router.push(`/admin/students/${result.studentId}`);router.refresh();}catch(error){setFailed(true);setMessage(error instanceof Error?error.message:'Student registration failed. Retry with a new request.');}finally{setBusy(false);}}
  function applyFilters(selection:FilterSelection){const candidate=selection.status?.[0],status:StudentStatus=candidate==='ARCHIVED'||candidate==='ALL'?candidate:'ACTIVE';navigateList({status});}
  function applySort(selection:SortSelection){const sort:StudentSort=selection.by==='admissionNumber'||selection.by==='status'?selection.by:'name',order:StudentOrder=selection.order==='descending'?'desc':'asc';navigateList({sort,order});}
- const sortLabel=initialSort==='admissionNumber'?'Admission number':initialSort==='status'?'Status':'Name';
+ const sortLabel=initialSort==='admissionNumber'?'Reference':initialSort==='status'?'Status':'Name';
  return <PageStack className="students-page">
   <PageHeader title="Students" description="Find a student, review enrollment and keep dated records clear." actions={<Button onClick={()=>{setMessage('');setFailed(false);setRegistrationOpen(true);}}><ActionIcon name="add"/>Register student</Button>}/>
   {message&&!registrationOpen&&<div role={failed?'alert':'status'} aria-live="polite" aria-label="Student feedback"><Alert tone={failed?'danger':'info'} title={failed?'Request not completed':'Student lookup'}>{message}</Alert></div>}
@@ -57,6 +57,6 @@ export function StudentsWorkspace({initial,initialSearch,initialBy,initialStatus
    </div>
   </Dialog>
   <FilterDrawer open={filterOpen} onClose={()=>setFilterOpen(false)} attributes={[{id:'status',label:'Student status',mode:'single',options:[{value:'ACTIVE',label:'Active students'},{value:'ARCHIVED',label:'Archived students'},{value:'ALL',label:'All statuses'}]}]} applied={{status:[initialStatus]}} onApply={applyFilters}/>
-  <SortDrawer open={sortOpen} onClose={()=>setSortOpen(false)} options={[{value:'name',label:'Name'},{value:'admissionNumber',label:'Admission number'},{value:'status',label:'Status'}]} applied={{by:initialSort,order:initialOrder==='asc'?'ascending':'descending'}} onApply={applySort}/>
+  <SortDrawer open={sortOpen} onClose={()=>setSortOpen(false)} options={[{value:'name',label:'Name'},{value:'admissionNumber',label:'Reference'},{value:'status',label:'Status'}]} applied={{by:initialSort,order:initialOrder==='asc'?'ascending':'descending'}} onApply={applySort}/>
  </PageStack>;
 }
