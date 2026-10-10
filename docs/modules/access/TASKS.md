@@ -145,3 +145,11 @@ Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm 
 Activate a new synthetic teacher; show successful sign-in; retry the same token and confirm failure; recover the account and verify the old session is rejected.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
+
+## SA-COMP-13 / SA-14 — Grant verified Employee sign-in access
+
+Depends on: SA-13 and the implemented Access invitation/People Employee contracts. Human review remains separate from engineering execution.
+
+Outcome: from Staff access, an authorized administrator selects an exact active Employee, supplies an account email and non-sensitive identity-verification reference, selects fixed branch roles, confirms the scope, and creates a verified Person binding plus pending membership/grants/invitation atomically. Email delivery occurs after commit and reports a sanitized `SENT` or `FAILED` result. Same-key replay cannot send a duplicate invitation.
+
+Contract: [SA-14 verified-Employee access grant contract](DESIGN.md#sa-14-verified-employee-access-grant-contract). No migration. Preserve the operator activation path, current invitation acceptance rules and last-admin safeguards. Test validation and confirmation; real PostgreSQL atomicity, scoped Employee checks, binding/grant conflicts, redacted evidence, replay and failed delivery; desktop/mobile selection, keyboard, empty/denied/error/reload behavior. Evidence: `docs/evidence/sa-comp-13/README.md`; human review PENDING.

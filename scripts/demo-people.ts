@@ -19,6 +19,7 @@ type Demo = ProvisionInput & ProvisionResult & {
   employeeIds?: [string, string]; teacherAccountId?: string;
   categoryProfileKey?: string; categoryEmployeeId?: string;
   schoolProfileKey?: string;
+  employeeAccessEmail?: string; employeeAccessVerificationReference?: string; employeeAccessKey?: string;
 };
 function save(value: Demo) {
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -125,6 +126,9 @@ async function main() {
     if (!demo.categoryEmployeeId) {
       const support = await people.createEmployee(admin!, demo.organizationId, demo.schoolId, { firstName: 'Robin', lastName: 'Support', contactEmail: null, staffNumber: 'DEMO-SUPPORT-01', category: 'SUPPORT', employedFrom: '2026-04-01', key: demo.categoryProfileKey! });
       demo = { ...demo, categoryEmployeeId: support.employeeId }; save(demo);
+    }
+    if (!demo.employeeAccessEmail || !demo.employeeAccessVerificationReference || !demo.employeeAccessKey) {
+      demo = { ...demo, employeeAccessEmail: `support-access-${demo.organizationId.slice(0,8)}@vschool.example`, employeeAccessVerificationReference: 'DEMO-SA14-VERIFY', employeeAccessKey: randomUUID() }; save(demo);
     }
   } finally { await people.disconnect(); }
   console.log(`Prepared an isolated synthetic People school, categorized staff profiles and an active verified teacher account. Private credentials: ${path}`);

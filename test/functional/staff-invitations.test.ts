@@ -9,11 +9,17 @@ import {PrismaVerifiedDatabaseContext} from "../../backend/modules/tenancy/infra
 import {OpaqueActivationTokens} from "../../backend/modules/access/infrastructure/activation-tokens";
 import {BcryptPasswords} from "../../backend/modules/access/infrastructure/passwords";
 import {schoolInput} from "../fixtures/access-management";
+import {PrismaEmployeeAccessVerification} from "../../backend/modules/people/infrastructure/employee-access";
+import {PrismaCommandEvidence} from "../../backend/modules/platform/infrastructure/command-evidence";
 
 const url=process.env.TEST_DATABASE_URL??"";if(new URL(url).pathname!=="/vyapti_vschool_test")throw new Error("Dedicated test DB required");
-const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),service=createAccessServices({databaseUrl:url}),operator={operatorId:randomUUID(),verified:true as const},repo=new PrismaStaffInviteRepository(db,new PrismaVerifiedDatabaseContext()),tokens=new OpaqueActivationTokens(),passwords=new BcryptPasswords();
+const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),service=createAccessServices({databaseUrl:url}),operator={operatorId:randomUUID(),verified:true as const},repo=new PrismaStaffInviteRepository(db,new PrismaVerifiedDatabaseContext(),new PrismaEmployeeAccessVerification(),tx=>new PrismaCommandEvidence(tx)),tokens=new OpaqueActivationTokens(),passwords=new BcryptPasswords();
 afterAll(async()=>{await service.disconnect();await db.$disconnect();});
 async function fixture(){const school=await service.provisionSchool(schoolInput(),operator);return {school,identity:{accountId:school.accountId,tokenVersion:1}};}
+async function employee(admin:Awaited<ReturnType<typeof fixture>>,suffix=randomUUID()){
+ const person=await db.person.create({data:{id:randomUUID(),organizationId:admin.school.organizationId,firstName:'Asha',lastName:'Demo',contactEmail:null,version:1,createdAt:new Date()}});
+ return db.employee.create({data:{id:randomUUID(),organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,personId:person.id,staffNumber:`SA14-${suffix}`.slice(0,40),category:'TEACHING',employedFrom:new Date('2025-01-01T00:00:00Z'),employedTo:null,status:'ACTIVE',version:1}});
+}
 function flow(sender:AccessEmailSender){return createStaffInviteUseCases(repo,sender,tokens,passwords,()=>new Date());}
 const sender=(send:AccessEmailSender["sendStaffInvite"]):AccessEmailSender=>({sendPasswordReset:async()=>({ok:true}),sendStaffInvite:send});
 async function issue(admin:Awaited<ReturnType<typeof fixture>>,email:string,send:AccessEmailSender["sendStaffInvite"]){return flow(sender(send)).inviteStaff({email,organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,roles:["TEACHER"],inviterAccountId:admin.identity.accountId,inviterTokenVersion:admin.identity.tokenVersion,requestId:randomUUID()});}
@@ -43,4 +49,31 @@ it("rechecks current inviter authority and refuses acceptance after it is revoke
  const membership=await db.schoolMembership.findUniqueOrThrow({where:{organizationId_schoolId_accountId:{organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,accountId:admin.identity.accountId}}});await db.schoolMembership.update({where:{id:membership.id},data:{status:"SUSPENDED",version:{increment:1}}});
  await expect(flow(sender(async()=>({ok:true}))).acceptStaffInvite({token,initialPassword:"long enough initial password",confirmation:"long enough initial password",requestId:randomUUID()})).rejects.toThrow("INVALID_INVITATION");
  const account=await db.userAccount.findUniqueOrThrow({where:{normalizedEmail:email}});expect(account.status).toBe("PENDING");
+});
+
+it("atomically anchors a pending invitation to an active Employee and replays without redelivery",async()=>{
+ const admin=await fixture(),selected=await employee(admin),email=`employee-grant-${randomUUID()}@example.test`,key=randomUUID();let sends=0;
+ const grant=()=>flow(sender(async()=>{sends++;return {ok:false,reason:'mail provider timeout'}})).grantEmployeeAccess({employeeId:selected.id,email,verificationReference:'VERIFY-SA14-001',confirmed:true,organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,roles:['TEACHER'],inviterAccountId:admin.identity.accountId,inviterTokenVersion:admin.identity.tokenVersion,requestId:randomUUID(),key});
+ const first=await grant();expect(first).toMatchObject({deliveryStatus:'FAILED',deliveryFailureReason:'Mail provider timed out',replayed:false});
+ const account=await db.userAccount.findUniqueOrThrow({where:{normalizedEmail:email}}),membership=await db.schoolMembership.findUniqueOrThrow({where:{organizationId_schoolId_accountId:{organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,accountId:account.id}},include:{grants:true}}),binding=await db.accountPersonBinding.findUniqueOrThrow({where:{organizationId_accountId:{organizationId:admin.school.organizationId,accountId:account.id}}});
+ expect({status:membership.status,roles:membership.grants.map(g=>g.code),personId:binding.personId}).toEqual({status:'PENDING',roles:['TEACHER'],personId:selected.personId});
+ expect(await db.commandReceipt.count({where:{organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,actorAccountId:admin.identity.accountId,command:'GrantEmployeeAccess',key}})).toBe(1);
+ const event=await db.authSecurityEvent.findFirstOrThrow({where:{accountId:account.id,kind:'PERSON_BINDING_VERIFIED'}});expect(JSON.stringify(event.policySnapshot)).toContain('VERIFY-SA14-001');
+ const unrestrictedEvidence=JSON.stringify(await Promise.all([db.auditEntry.findMany({where:{requestId:event.requestId}}),db.outboxEvent.findMany({where:{organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,aggregateId:membership.id}}),db.commandReceipt.findMany({where:{organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,command:'GrantEmployeeAccess',key}})]));expect(unrestrictedEvidence).not.toContain('VERIFY-SA14-001');expect(unrestrictedEvidence).not.toContain(email);
+ await expect(grant()).resolves.toMatchObject({invitationId:first.invitationId,deliveryStatus:'FAILED',replayed:true});expect(sends).toBe(1);
+ await expect(flow(sender(async()=>({ok:true}))).grantEmployeeAccess({employeeId:selected.id,email,verificationReference:'DIFFERENT-REFERENCE',confirmed:true,organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,roles:['TEACHER'],inviterAccountId:admin.identity.accountId,inviterTokenVersion:admin.identity.tokenVersion,requestId:randomUUID(),key})).rejects.toThrow('IDEMPOTENCY_CONFLICT');
+});
+
+it("rejects foreign Employees and binding or duplicate grant conflicts without partial rows",async()=>{
+ const admin=await fixture(),foreignAdmin=await fixture(),foreignEmployee=await employee(foreignAdmin),email=`foreign-${randomUUID()}@example.test`;
+ await expect(flow(sender(async()=>({ok:true}))).grantEmployeeAccess({employeeId:foreignEmployee.id,email,verificationReference:'VERIFY-FOREIGN',confirmed:true,organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,roles:['TEACHER'],inviterAccountId:admin.identity.accountId,inviterTokenVersion:admin.identity.tokenVersion,requestId:randomUUID(),key:randomUUID()})).rejects.toThrow('NOT_FOUND');expect(await db.userAccount.count({where:{normalizedEmail:email}})).toBe(0);
+ const selected=await employee(admin),firstEmail=`bound-${randomUUID()}@example.test`,grantInput={employeeId:selected.id,email:firstEmail,verificationReference:'VERIFY-BOUND',confirmed:true,organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,roles:['TEACHER'] as const,inviterAccountId:admin.identity.accountId,inviterTokenVersion:admin.identity.tokenVersion,requestId:randomUUID()};
+ await flow(sender(async()=>({ok:false,reason:'offline'}))).grantEmployeeAccess({...grantInput,key:randomUUID()});
+ await expect(flow(sender(async()=>({ok:true}))).grantEmployeeAccess({...grantInput,key:randomUUID()})).rejects.toThrow('CONFLICT');expect(await db.schoolMembership.count({where:{organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,account:{normalizedEmail:firstEmail}}})).toBe(1);
+});
+
+it("keeps the verified Employee link for OPERATOR_CLI without creating or sending an email invitation",async()=>{
+ const admin=await fixture(),selected=await employee(admin),email=`operator-grant-${randomUUID()}@example.test`;await db.organization.update({where:{id:admin.school.organizationId},data:{trustMode:'OPERATOR_CLI'}});let sends=0;
+ const result=await flow(sender(async()=>{sends++;return {ok:true}})).grantEmployeeAccess({employeeId:selected.id,email,verificationReference:'VERIFY-OPERATOR',confirmed:true,organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,roles:['TEACHER'],inviterAccountId:admin.identity.accountId,inviterTokenVersion:admin.identity.tokenVersion,requestId:randomUUID(),key:randomUUID()});
+ expect(result).toMatchObject({activationPath:'OPERATOR_ACTIVATION',deliveryStatus:'NOT_APPLICABLE',replayed:false});expect(sends).toBe(0);const account=await db.userAccount.findUniqueOrThrow({where:{normalizedEmail:email}});expect(await db.accountPersonBinding.count({where:{organizationId:admin.school.organizationId,accountId:account.id,personId:selected.personId}})).toBe(1);expect(await db.schoolMembership.count({where:{organizationId:admin.school.organizationId,schoolId:admin.school.schoolId,accountId:account.id,status:'PENDING'}})).toBe(1);expect(await db.accessInvite.count({where:{accountId:account.id}})).toBe(0);
 });

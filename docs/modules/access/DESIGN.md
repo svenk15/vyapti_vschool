@@ -340,4 +340,34 @@ sequenceDiagram
 
 The settings card uses the approved grouping and shared form controls. On stale conflict it preserves attempted values, fetches current authorized settings only after the user asks to compare, shows the current revision, and lets the user adopt that revision before an explicit retry. Verification covers normalization, validation, no-op, immutable timezone, redacted audit, replay, stale conflict, rollback, unauthorized scope, persistence/readback, desktop/mobile keyboard flow and visual inspection.
 
-SA-14 currently creates a membership/invitation from email or account ID independently of Employee. The approved journey starts from a selected Employee and independent verification reference. Completion requires an Access input contract such as `grantEmployeeAccess(actor,{employeeId,targetAccountIdOrEmail,verificationReference,roles,key})`, backed by a narrow People verification port; email equality remains insufficient. Access owns the transaction and membership/invite evidence, while People supplies the scoped Employee/Person identity fact without foreign repository access. Required failures include unverified/mismatched Employee, foreign scope, duplicate grant, last-admin constraints, delivery failure and replay conflict. The verification reference must be non-sensitive and retained only in allowlisted evidence. Exact atomic enlistment must be designed before code.
+### SA-14 verified-Employee access grant contract
+
+SA-14 starts from an exact active Employee selected from the authorized branch. `grantEmployeeAccess(actor,{employeeId,email,verificationReference,roles,confirmed,key})` never treats email equality as identity proof. The non-sensitive verification reference records the administrator's independent out-of-band check; the explicit confirmation binds that check to the selected role and branch. Existing independent membership and invitation operations remain available for their established recovery/operator uses, but they do not satisfy SA-14.
+
+Access owns the command and transaction. People publishes only `EmployeeAccessVerificationPort.findActiveEmployee(transaction,{organizationId,schoolId,employeeId,schoolDate})`, which reads the exact `vs_people_employee` row joined to its scoped `vs_people_person` and returns the employee/person identity fact. It requires `status='ACTIVE'`, `employed_from <= schoolDate`, and absent or exclusive `employed_to > schoolDate`. The Access transaction reads `vs_access_user_account` by normalized global email; `vs_access_account_person_binding` by both organization/account and organization/person; and any exact scoped `vs_access_school_membership`. It writes a missing account, verified binding, pending membership, role grants, invitation, redacted security events, platform audit/outbox and a command receipt. No schema or migration is added; existing unique constraints on global normalized email, organization/account and organization/person bindings, scoped memberships and receipt intent keys enforce races. Existing invitation delivery and expiry indexes cover the post-commit status view.
+
+The mutation supports all three trust modes while preserving one identity contract. `HYBRID` and `EMAIL` create the pending grant plus an email invitation. `OPERATOR_CLI` creates the same verified binding and pending grant but no invitation or delivery attempt; the UI names the required verified-operator activation. Every protected read and write still performs application authorization. The transaction takes the Access advisory serialization guard, inviter account `FOR UPDATE`, Organization `FOR SHARE`, School `FOR UPDATE`, then the Employee and Person `FOR SHARE`. It establishes verified transaction-local context, rechecks the live account token, active institution/branch, active administrator membership and `SCHOOL_ADMIN` grant, then verifies the Employee. A pre-existing binding is accepted only when both account and Person match; either side bound elsewhere conflicts. An existing scoped membership is a duplicate grant conflict. New membership status is `PENDING` regardless of target account status and becomes active only through the selected existing invitation or operator activation policy.
+
+`GrantEmployeeAccess` receipts are scoped by organization, school, actor, command and caller UUID key. Their SHA-256 input binds Employee, normalized email, verification reference and sorted roles. Same-key/same-input replay reauthorizes and re-verifies the Employee, then returns the current invitation delivery result without sending a second email; same-key/different-input fails. Verification reference is retained only in the restricted `PERSON_BINDING_VERIFIED` security snapshot and excluded from platform audit, outbox, HTTP messages and logs. Account email is likewise excluded from platform evidence. Issuance commits before development-sink delivery; `finishDelivery` compare-and-sets `PENDING_DELIVERY` to `SENT` or `FAILED`. A failed delivery leaves the verified pending grant visible and eligible for the existing authorized resend, which revokes the old token before issuing its replacement.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant H as POST /api/v1/invitations/employee
+  participant U as Access grant use case
+  participant P as People verification port
+  participant D as PostgreSQL
+  participant M as Development mail sink
+  A->>H: Employee, email, verification, role, confirmation, stable key
+  H->>U: Verified session and exact branch candidate
+  U->>D: Lock Access guard rows; reauthorize user.manage
+  U->>P: Verify exact active Employee in enlisted transaction
+  P->>D: Scoped Employee + Person read
+  U->>D: Bind Person; create pending membership, roles, invite, evidence and receipt
+  D-->>U: Committed invitation
+  U->>M: Send token after commit
+  U->>D: Compare-and-set SENT or FAILED
+  U-->>A: Pending access and permitted activation/delivery state
+```
+
+Validation failures cover missing confirmation, invalid email/UUID/key, duplicate/unknown roles, and a verification reference outside 3–80 safe characters. `NOT_FOUND` covers an absent, foreign, ended or not-yet-effective Employee without exposing foreign identity data. `CONFLICT` covers disabled/mismatched/bound accounts and duplicate grants. Permission or trust-mode loss denies the command; a receipt input mismatch returns `IDEMPOTENCY_CONFLICT`; provider failure returns a sanitized, visible failure while preserving the committed access grant. Verification requires application validation tests; real PostgreSQL proof of atomic rows/evidence, cross-scope denial, duplicate binding/grant rollback, redaction, replay and delivery failure; and desktop/mobile Playwright proof of selection, confirmation, persisted reload, keyboard flow and denied/empty/error states.
