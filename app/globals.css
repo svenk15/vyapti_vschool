@@ -243,6 +243,24 @@ body{font-family:var(--font-ui)}
 .student-command-form>h3{margin:0 0 18px;font-size:16px}
 .student-command-form>.alert{margin:0 0 20px}
 .student-archive-action{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.import-steps-card{padding-block:18px;box-shadow:none}
+.import-steps-card .stepper{margin:0;padding:0 0 12px}
+.import-steps-card>p{margin:0}
+.import-settings-form{width:min(100%,820px)}
+.import-heading-badges{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.import-preview-card,.import-process-card{box-shadow:var(--elevation-card)}
+.import-count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fbfcf9}
+.import-count-grid>div{display:grid;gap:3px;padding:15px 22px;border-right:1px solid var(--line)}
+.import-count-grid>div:last-child{border-right:0}
+.import-count-grid span{color:var(--muted);font-size:11px}
+.import-count-grid strong{font-size:20px;line-height:1.2}
+.import-review-actions{display:grid;gap:16px;padding:20px 22px}
+.import-review-actions>.alert{margin:0}
+.import-review-actions .check-control{width:fit-content}
+.import-confirmation-line{display:flex;align-items:center;gap:16px;margin-bottom:18px;padding:14px 16px;border-radius:8px;background:var(--brand-soft);font-size:12px}
+.import-confirmation-line span{color:var(--muted)}
+.import-process-card>.import-count-grid{margin:0 0 20px}
+.import-process-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
 .academic-year-layout{display:grid;grid-template-columns:minmax(0,720px) minmax(260px,1fr);align-items:start;gap:28px}
 .saved-year-list{display:grid;gap:10px;min-width:0}
 .saved-year-list h3{margin:0 0 2px}
@@ -299,7 +317,7 @@ body{font-family:var(--font-ui)}
 .teacher-session-summary p{margin:0;font-size:13px;overflow-wrap:anywhere}
 .teacher-session-card>.btn{min-width:138px}
 @media(max-width:900px){.portal-page-content main>.two-columns.section-space,.staff-profile-layout,.academic-year-layout,.academic-catalog-grid,.student-summary-grid{grid-template-columns:minmax(0,1fr)}.assignment-toolbar{grid-template-columns:minmax(220px,1fr) 190px 190px}.offering-row{grid-template-columns:minmax(0,1fr) auto}.offering-actions{grid-column:1/-1;justify-content:flex-start}.teacher-session-card{grid-template-columns:90px minmax(180px,1fr) auto}.teacher-session-card>.btn{grid-column:2/4;justify-self:start}}
-@media(max-width:760px){.portal-top-context{grid-row:2}.portal-topbar>.portal-account{grid-column:3;grid-row:1}.portal-page-content .page-space,.teacher-portal-content .page-space{padding-top:24px;padding-bottom:48px}.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{font-size:28px}.page-stack{gap:18px}.section-header{margin-bottom:16px}.settings-panel{padding:20px}.setup-action-grid{grid-template-columns:minmax(0,1fr);gap:18px}.setup-action-card{min-height:0}.weekday-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.assignment-toolbar{grid-template-columns:minmax(0,1fr)}.offering-row{padding:18px}.compact-toolbar{align-items:flex-start;flex-direction:column;padding:18px}.compact-toolbar .field{width:100%}.compact-toolbar .btn{margin:0}.branding-host-row{grid-template-columns:minmax(0,1fr)}.branding-host-row .btn{justify-self:start;margin:0}.teacher-day-state{padding:10px 18px}.teacher-session-card{grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;padding:18px}.teacher-session-time{grid-column:1}.teacher-session-summary{grid-column:1/-1;grid-row:2}.teacher-session-card>.badge{grid-column:2;grid-row:1}.teacher-session-card>.btn{grid-column:1/-1;grid-row:3;justify-self:start}.portal-nav-icon{width:22px}.portal-nav-icon svg{width:19px;height:19px}}
+@media(max-width:760px){.portal-top-context{grid-row:2}.portal-topbar>.portal-account{grid-column:3;grid-row:1}.portal-page-content .page-space,.teacher-portal-content .page-space{padding-top:24px;padding-bottom:48px}.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{font-size:28px}.page-stack{gap:18px}.section-header{margin-bottom:16px}.settings-panel{padding:20px}.setup-action-grid{grid-template-columns:minmax(0,1fr);gap:18px}.setup-action-card{min-height:0}.weekday-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.assignment-toolbar{grid-template-columns:minmax(0,1fr)}.offering-row{padding:18px}.compact-toolbar{align-items:flex-start;flex-direction:column;padding:18px}.compact-toolbar .field{width:100%}.compact-toolbar .btn{margin:0}.branding-host-row{grid-template-columns:minmax(0,1fr)}.branding-host-row .btn{justify-self:start;margin:0}.teacher-day-state{padding:10px 18px}.teacher-session-card{grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;padding:18px}.teacher-session-time{grid-column:1}.teacher-session-summary{grid-column:1/-1;grid-row:2}.teacher-session-card>.badge{grid-column:2;grid-row:1}.teacher-session-card>.btn{grid-column:1/-1;grid-row:3;justify-self:start}.portal-nav-icon{width:22px}.portal-nav-icon svg{width:19px;height:19px}.import-count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.import-count-grid>div:nth-child(2){border-right:0}.import-count-grid>div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
 @media(max-width:460px){.section-header{flex-direction:column}.settings-panel{padding:18px}.settings-form .form-grid{gap:0}.form-actions{align-items:stretch;flex-direction:column}.form-actions .btn{width:100%}.delivery-failure-row{align-items:flex-start;flex-direction:column}.teacher-session-card>.btn{width:100%}.record-facts{grid-template-columns:minmax(0,1fr)}.record-facts>div{padding-right:0}}
 
 /* Controlled list, drawer and command-feedback recipes. */
