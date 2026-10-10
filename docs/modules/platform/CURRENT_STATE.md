@@ -1,6 +1,6 @@
 # Development foundation and delivery — current state
 
-Last updated: 2026-10-06. FND-01 locally verified and accepted on the owner’s Mac. No active execution timer.
+Last updated: 2026-10-10. FND-01 locally verified and accepted on the owner’s Mac. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -14,6 +14,10 @@ Foundation source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff passed local checks, 
 ## Next action
 
 Keep the stable FND-02 local demo available for consolidated owner review. Address any reported defect before subsequent authorized work. Native 200% zoom, VoiceOver and NVDA evidence remains outstanding. TEN-03 remains IN_PROGRESS and blocks production release and real-client data; its deferred RLS/context-proof work is still unverified.
+
+### EX-15 current consolidated demo — 10 October 2026
+
+The current executable candidate is `3c3ba5de87bc24f08083714870f2701dded0ebce`, production build `dWV3Ax1JW4dqFc20_6qqb`, at `http://127.0.0.1:3400`. It supersedes the older port-3440 presentation source for consolidated review. EX-14 passed 113 unit, 106 real-PostgreSQL functional and 84 desktop/mobile browser tests, then audited 59 local demo route/view combinations. Seed, personas, startup and the complete manual journey are recorded in [EX-15 handoff](../../evidence/ex-15/README.md). Human review remains PENDING. No production gate status changes.
 
 ## Pending decisions / limitations
 

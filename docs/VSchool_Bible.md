@@ -2,7 +2,7 @@
 
 Version 4.4 · Configurable multi-institution platform baseline · 3 October 2026
 
-Status: comprehensive product blueprint with Phase 1 implementation contracts. The repository implements the local foundation, shared UI primitives, synthetic branding previews and BRD-02 authorized branding publication with real administrator sign-in; IAM-01 adds local operator bootstrap and current school authorization; IAM-02 adds local school settings, campuses and guarded staff administration; IAM-03 adds one-time operator-assisted activation and account-wide recovery. Operational school business modules remain planned until module evidence says otherwise. There is no active 24-hour run, no inherited completion claim and no production deployment.
+Status: comprehensive product blueprint with Phase 1 implementation contracts. The repository has a verified local synthetic administrator/teacher demo for the implemented Access, Tenancy, Branding, Academics, People, Students, Imports, Attendance and Reporting slices. Module CURRENT_STATE files and the workflow matrix define the exact supported subset. Human acceptance, TEN-03 RLS/context proof, native accessibility and production operations remain open; no production deployment or real-client readiness is claimed.
 
 ## 1. Product purpose
 
@@ -206,6 +206,8 @@ These baseline decisions are accepted for this fresh starter direction; owner re
 - [Reporting](modules/reporting/DESIGN.md) · [Tasks](modules/reporting/TASKS.md) · [State](modules/reporting/CURRENT_STATE.md)
 
 ## 13. Change log
+
+2026-10-10 / Phase 1 experience checkpoint: EX-00–EX-15 align the implemented administrator and teacher portal with the approved shared navigation and page compositions, add a non-destructive connected seed, and verify the integrated local candidate. This does not widen Phase 1, complete all 268 catalog workflows, pass human acceptance, or close TEN-03/native accessibility/production-operation gates.
 
 2026-10-05 / Portal UX: shared protected shells consume the published branch palette with institution-default inheritance after current-member authorization; isolated previews use production primitives and do not publish. Generic account activation/recovery/sign-in share AuthLayout. Route-family visual evidence is tracked separately; native assistive technology and human visual acceptance remain outstanding.
 

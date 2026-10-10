@@ -17,6 +17,10 @@ The shared administrator/teacher shells and the common AuthLayout now compose pr
 
 DS-02 remains BLOCKED pending true native 200% zoom, VoiceOver and NVDA sessions. The FND-02 final-source rendered route review is now complete, but it does not replace native assistive technology or owner visual acceptance. Do not call accessibility conformance or release readiness complete. ATT-02 and BRD-02 remain VERIFIED/PENDING; pending human acceptance does not block implementation under the current execution policy.
 
+### EX-14 rendered-route checkpoint — 10 October 2026
+
+The current candidate rendered 59 public, administrator and teacher route/view combinations at 1440×1000, 390×844 and a 720px 200%-layout-equivalent width without document-level overflow. Six representative captures were inspected. The complete 84-test Playwright gate also passed its keyboard/focus, mobile navigation, reduced-motion and simulated layout-zoom cases. Mobile data tables intentionally scroll inside their table viewport. Native browser 200% zoom, VoiceOver and NVDA were not run; DS-02 remains BLOCKED/PENDING. Evidence: [EX-14](../../evidence/ex-14/README.md).
+
 ## Evidence and feedback
 
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.

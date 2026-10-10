@@ -246,7 +246,7 @@ Dependencies: EX-13. Implementation status: VERIFIED. Human review: PENDING.
 
 ## EX-15 — Checkpoint the delivery and publish the next owner-ready queue
 
-Dependencies: EX-14. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-14. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** docs/EXECUTION_INDEX.md; docs/modules/*/CURRENT_STATE.md; docs/VSchool_Bible.md changelog; execution queue.
 

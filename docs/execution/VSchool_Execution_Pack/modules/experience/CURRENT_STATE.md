@@ -1,6 +1,6 @@
 # Experience implementation state
 
-EX-00 through EX-14 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. EX-15 is the next eligible slice. EX-15 remains NOT_STARTED; the queue is a scheduling projection until its live evidence is recorded.
+EX-00 through EX-15 are VERIFIED with human review PENDING. The prerequisite BE-01 configuration correction is also VERIFIED. The authorized experience overlay is implementation-complete; no later-phase implementation task is eligible from this queue. TEN-03, DS-02 and production-operation gates remain governed by their owner states.
 
 Authoritative implementation evidence belongs to the live repository module CURRENT_STATE files after EX-00. queue.json starts with no evidence; it is a scheduling projection. Do not copy historical snapshot test counts into a new VERIFIED claim.
 
@@ -127,3 +127,9 @@ EX-13 is VERIFIED with human review PENDING at implementation source `7c9c4cb`. 
 EX-14 is VERIFIED with human review PENDING. Integrated source `3c3ba5de87bc24f08083714870f2701dded0ebce` passed `pnpm check` with 113/113 unit tests, the complete 106/106 real-PostgreSQL functional suite, all 84/84 desktop/mobile Playwright journeys and an explicit production build (`dWV3Ax1JW4dqFc20_6qqb`). All 31 test migrations were current.
 
 The committed route-audit checkpoint is `c1ee480`. It rendered 59 public, administrator and teacher route/view combinations on the seeded development demo at desktop, mobile and 200%-layout-equivalent widths. Every page returned a usable heading without document-level overflow. Six representative captures were inspected directly; mobile semantic tables retain an internal horizontal scroll viewport. Native VoiceOver, NVDA and native browser zoom were not executed, so those gates remain open. A pg 9 deprecation warning and one harmless early-closed response-stream server diagnostic are recorded in the evidence rather than hidden. No application behavior, table, migration or seed changed in EX-14. Evidence: `docs/evidence/ex-14/README.md`. EX-15 is next; TEN-03 and production-only gates remain incomplete.
+
+## EX-15 — 10 October 2026
+
+EX-15 is VERIFIED with human review PENDING. The [durable handoff](../../../../evidence/ex-15/README.md) records the verified executable source `3c3ba5de87bc24f08083714870f2701dded0ebce`, build ID, stable loopback URL, release manifest, one seed command, private credential locations, administrator/teacher personas, ordered module walkthrough, automation results, workflow coverage and remaining gates. The current server uses the exact EX-14 application candidate; later commits change evidence/status only.
+
+The complete EX queue is now closed for implementation. No operator, family, communication or other later-phase feature was started. Next owner-ready work is limited to the already documented production closure: TEN-03 security enforcement/proof, DS-02 native accessibility sessions and FND-02 provider/restore/pilot evidence, each under its existing design and dependency gates. Human acceptance remains PENDING and no production readiness is claimed.
