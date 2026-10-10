@@ -2,7 +2,7 @@
 
 ## Approved experience overlay — revision 2 (9 October 2026)
 
-The current implementation overlay is EX-00–EX-15 in [the execution pack](execution/VSchool_Execution_Pack/modules/experience/TASKS.md). It reuses the Phase 1 owner slices below and does not change their historical verification or human-review evidence. [CONTRACT_DIFF](execution/CONTRACT_DIFF.md) is authoritative for existing, partial and missing operations; [ROUTE_REFERENCE_MAP](execution/ROUTE_REFERENCE_MAP.md) pins the six approved visual references.
+The current implementation overlay is EX-00–EX-15 in [the execution pack](execution/VSchool_Execution_Pack/modules/experience/TASKS.md). It reuses the Phase 1 owner slices below and does not change their historical verification or human-review evidence. [CONTRACT_DIFF](execution/CONTRACT_DIFF.md) is authoritative for existing, partial and missing operations; [ROUTE_REFERENCE_MAP](execution/ROUTE_REFERENCE_MAP.md) pins the six approved visual references; [WORKFLOW_IMPLEMENTATION_MATRIX](execution/WORKFLOW_IMPLEMENTATION_MATRIX.md) maps all 268 approved workflows without widening the current release.
 
 Execution begins with EX-00 reconciliation, then EX-01 visual capture and EX-02 shared navigation. Subsequent EX tasks consume only currently implemented owner operations. Pending human review does not block an otherwise verified EX dependency. TEN-03 restricted-role/RLS proof and DS-02 native accessibility remain production-release gates and are not absorbed into this visual queue.
 
