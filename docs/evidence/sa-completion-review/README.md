@@ -2,6 +2,8 @@
 
 Review date: 10 October 2026. Human review: **PENDING**.
 
+> Superseding corrective evidence: [SA-COMP-07](../sa-comp-07/README.md) closes the SA-18 exact-identifier gap after this review. The historical findings below remain the baseline as observed at commit `7f4cb033f52866691953f782515b4e662ab95982`.
+
 ## Executive status
 
 The approved Edition 03 catalog contains 63 unique School Administrator workflows, numbered SA-01 through SA-63 with no duplicate IDs. The catalog itself assigns 29 workflows to Phase 1. The Bible and approved PRODUCT_SCOPE explicitly defer the remaining 34 workflows to roadmap phases 2–7; those entries remain preserved rather than renumbered or treated as implementation tasks.

@@ -11,9 +11,3 @@ export function personIdentityInput(input: { organizationId: unknown; firstName:
   if (typeof input.organizationId !== "string" || !uuidPattern.test(input.organizationId)) throw new AccessError("VALIDATION");
   return { organizationId: input.organizationId.toLowerCase(), firstName: name(input.firstName, true), lastName: name(input.lastName ?? "", false) };
 }
-
-export function exactPersonName(value: unknown): string {
-  const normalized = name(value, true);
-  if (normalized.length < 2) throw new AccessError("VALIDATION");
-  return normalized;
-}

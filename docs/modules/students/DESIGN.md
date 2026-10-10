@@ -28,7 +28,7 @@ Student is installed by STU-01; Enrollment and SectionPlacement are installed by
 
 ## Read workflows and joins
 
-Student list filters current School scope/status and joins Student → Person on `organization_id,person_id`; after STU-02 it also joins the latest scoped Enrollment summary. Detail joins Student → Person → Enrollment → SectionPlacement → Academics-owned AcademicYear/Section using both scope columns and the year-qualified IDs. Roster reads filter Placement by `organization_id=? AND school_id=? AND section_id=? AND valid_from<=? AND valid_to>?`; student history orders placements by `valid_from` within each AcademicYear. Normal list search matches branch-owned admission numbers and Person first/last names with signed bounded pagination. Existing-Person selection is a separate exact full-display-name query over only the current organization; it requires `student.manage`, returns at most 20 `{personId,displayName}` choices, and never accepts admission-number matches or infers a match. The user must explicitly select an ID. Student ownership and admission-number uniqueness resolve against `vs_students_student` by `(organization_id,school_id,person_id)` and `(organization_id,school_id,admission_number)`; the same admission string in another branch is not a collision. No organization-wide unbounded Person search or contact fields are returned.
+Student list filters current School scope/status and joins Student → Person on `organization_id,person_id`; after STU-02 it also joins the latest scoped Enrollment summary. Detail joins Student → Person → Enrollment → SectionPlacement → Academics-owned AcademicYear/Section using both scope columns and the year-qualified IDs. Roster reads filter Placement by `organization_id=? AND school_id=? AND section_id=? AND valid_from<=? AND valid_to>?`; student history orders placements by `valid_from` within each AcademicYear. Normal list search matches branch-owned admission numbers and Person first/last names with signed bounded pagination. Existing-Person selection is a separate exact-reference query: immutable Person ID is organization-scoped and admission number is resolved through the current branch Student owner. It requires `student.manage`, returns one minimal identity, and never accepts name/email or infers a match. Student ownership and admission-number uniqueness resolve against `vs_students_student` by `(organization_id,school_id,person_id)` and `(organization_id,school_id,admission_number)`; the same admission string in another branch is not a collision. No organization-wide Person discovery or contact fields are returned.
 
 ## Screen contract
 
@@ -46,9 +46,9 @@ Mutations use the account → Organization → School guard protocol in Bible §
 
 **Success response contract:** `{studentId,personId,version,admissionNumber,displayName,status:"ACTIVE",enrollment:null,replayed}`. List returns `{items,nextCursor}` and detail returns the same profile with `history:[]` until STU-02. Receipts store only scoped resource ID/version/status; a replay reconstructs the response after current authorization, so names/admission data are not persisted in receipts.
 
-**Transport:** POST /api/v1/students; GET /api/v1/students; GET /api/v1/students/:id; GET /api/v1/people/selection?q= (student.manage, exact bounded existing-Person choices only)
+**Transport:** POST /api/v1/students; GET /api/v1/students; GET /api/v1/students/:id; GET /api/v1/people/selection?kind=PERSON_ID|ADMISSION_NUMBER&value= (student.manage, one exact scoped result only)
 
-**Input:** POST accepts `firstName`, optional `lastName`, `admissionNumber`, optional `existingPersonId`, and stable command key. A new organization-local Person is the default; existingPersonId is accepted only after the separate exact authorized choice flow and is rechecked in the write transaction. GET list accepts `search`≤100 chars, optional `status` (`ACTIVE` by default, `ARCHIVED` or `ALL`), `limit` 1–100 and signed cursor; exact Person selection accepts `q`≤100 chars and returns ≤20 minimal choices. Student-list search remains separate and searches admission number/name without selecting or linking a Person.
+**Input:** POST accepts `firstName`, optional `lastName`, `admissionNumber`, optional `existingPersonId`, and stable command key. A new organization-local Person is the default; existingPersonId is accepted only after the separate exact authorized choice flow and is rechecked in the write transaction. GET list accepts `search`≤100 chars, optional `status` (`ACTIVE` by default, `ARCHIVED` or `ALL`), `limit` 1–100 and signed cursor. Identity resolution accepts either a UUID Person ID or 1–40-character exact admission number and returns one minimal scoped result. Student-list search remains separate and searches admission number/name without selecting or linking a Person.
 
 **Workflow:**
 
@@ -236,3 +236,37 @@ Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server mo
 ## SA-18 completion-review delta
 
 The approved existing-Person step uses exact person ID or admission reference; the live selector queries exact display name. Completion replaces that ambiguous contract with `resolveExistingPerson(actor,{kind:'PERSON_ID',personId}|{kind:'ADMISSION_NUMBER',admissionNumber})`. Person-ID resolution is restricted to the current organization and returns only the minimal choice. Admission resolution drives from `vs_students_student` using `(organization_id,school_id,admission_number)` and joins Person on `(organization_id,person_id)`; it cannot be an organization-wide Person-name query. Both require current `student.manage`, student_core availability and verified transaction context. Failures are `VALIDATION | FORBIDDEN | NOT_FOUND | CONFLICT | UNAVAILABLE`; a found Student cannot be registered again as a new school Student. No write or receipt occurs during resolution. UI must label the two exact identifier modes and keep ordinary student-list search separate. PostgreSQL/browser evidence must cover foreign organization/branch, guessed IDs, duplicate admission in another branch, no match and explicit selection.
+
+### SA-18 corrective implementation contract
+
+**Authority and classification.** The Edition 03 SA-18 workflow, its `student.manage` capability and its exact person-ID/admission rule are `EXISTING_ACCEPTED_CONTRACT`. Reusing the current STU-01 route, guard, Person/Student transaction and error vocabulary is a `ROUTINE_ENGINEERING_CHOICE`. This slice adds no new identity authority, fuzzy discovery or cross-branch search. The approved admission-date field has no accepted Student storage/lifecycle contract and remains separately unresolved; it is not silently mapped to `created_at`.
+
+**Interfaces and reads.** `ExistingPersonReference` is `{kind:'PERSON_ID';personId:string}|{kind:'ADMISSION_NUMBER';admissionNumber:string}`. `StudentRepository.resolveExistingPerson(actor,organizationId,schoolId,reference): Promise<ExistingPersonChoice>` returns `{personId,displayName,source,eligibleForRegistration,existingStudentId}`. `PERSON_ID` reads `vs_people_person` by `(organization_id,id)` and checks for an existing `vs_students_student` in the current branch. `ADMISSION_NUMBER` reads Student by `(organization_id,school_id,admission_number)` and joins its organization-qualified Person. The existing unique keys support both reads; no index or migration changes. A foreign or missing reference is the same `NOT_FOUND` response and reveals no other scope.
+
+**Write and recovery.** Resolution is read-only under a repeatable-read transaction and performs the normal current account/membership/capability/module checks without write locks. Registration remains `POST /api/v1/students`; it re-reads an explicitly selected Person inside the existing serializable account → Organization → School transaction, then rechecks branch Person/admission uniqueness before Person/Student/evidence commit. An admission result always identifies an already registered branch Student, so the UI offers the authorized existing detail and never attempts a duplicate link. Person-ID results are selectable only when no current-branch Student owns the Person. Constraint races still return conflict without partial Person rows.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant H as Student HTTP adapter
+  participant U as Students use case
+  participant D as PostgreSQL
+  A->>H: GET selection?kind=PERSON_ID|ADMISSION_NUMBER&value=exact
+  H->>U: Verified session plus untrusted exact reference
+  U->>D: Reauthorize branch and student.manage
+  alt Person ID
+    U->>D: Person by organization + id; current-branch Student check
+  else Admission number
+    U->>D: Student by organization + school + admission; join Person
+  end
+  D-->>U: Minimal scoped identity or no match
+  U-->>A: Selectable Person or existing Student recovery
+  opt Explicit selectable Person submitted
+    A->>H: POST student with Person ID and stable key
+    H->>U: Validated registration command
+    U->>D: Lock guards; re-read Person; enforce uniqueness; commit evidence
+    D-->>A: New Student or safe conflict with no partial write
+  end
+```
+
+**Delivery and verification.** The registration dialog separates identity reference type from its value, preserves entered Student fields on lookup failure, never accepts names/emails, and provides an “Open existing student” recovery for admission/current-branch Person matches. Unit tests cover strict reference parsing and leading zeros. Real PostgreSQL tests cover authorized Person ID, branch admission, already-linked Person, foreign organization, missing admission and revoked/cross-scope actor. Playwright covers selectable Person-ID registration plus exact-admission recovery at desktop and mobile widths. Human and native assistive-technology review remain separate gates.

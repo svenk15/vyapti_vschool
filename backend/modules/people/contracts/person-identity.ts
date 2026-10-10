@@ -7,7 +7,6 @@ export type PersonNameCorrectionInput = Readonly<{organizationId:string;schoolId
 export interface PersonIdentityPort {
   create(transaction: PersonTransaction, input: { organizationId: unknown; firstName: unknown; lastName?: unknown }): Promise<PersonIdentity>;
   findById(transaction: PersonTransaction, organizationId: unknown, personId: unknown): Promise<PersonIdentity | null>;
-  findExactName(transaction: PersonTransaction, organizationId: unknown, exactName: unknown): Promise<readonly PersonIdentity[]>;
   correctionContext(transaction:PersonTransaction,organizationId:unknown,personId:unknown):Promise<Readonly<{hasEmployee:boolean;history:readonly PersonNameRevision[]}>>;
   correctName(transaction:PersonTransaction,input:{organizationId:unknown;schoolId:unknown;personId:unknown;actorAccountId:unknown;expectedVersion:unknown;firstName:unknown;lastName?:unknown;reason:unknown}):Promise<Readonly<{personVersion:number;revisionId:string}>>;
 }
@@ -15,7 +14,6 @@ export interface PersonIdentityPort {
 export interface PersonIdentityRepository {
   create(transaction: PersonTransaction, input: PersonIdentityInput): Promise<PersonIdentity>;
   findById(transaction: PersonTransaction, organizationId: string, personId: string): Promise<PersonIdentity | null>;
-  findExactName(transaction: PersonTransaction, organizationId: string, exactName: string): Promise<readonly PersonIdentity[]>;
   correctionContext(transaction:PersonTransaction,organizationId:string,personId:string):Promise<Readonly<{hasEmployee:boolean;history:readonly PersonNameRevision[]}>>;
   correctName(transaction:PersonTransaction,input:PersonNameCorrectionInput):Promise<Readonly<{personVersion:number;revisionId:string}>>;
 }

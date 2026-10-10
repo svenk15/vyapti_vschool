@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { archiveInput, enrollmentInput, exactSelectionName, studentInput, studentListQuery, transferInput } from "../../backend/modules/students/domain/student";
+import { archiveInput, enrollmentInput, existingPersonReference, studentInput, studentListQuery, transferInput } from "../../backend/modules/students/domain/student";
 
 describe("student registration inputs",()=>{
   it("preserves admission-number zeros and treats a selected Person as an explicit reference",()=>{
@@ -12,8 +12,10 @@ describe("student registration inputs",()=>{
     expect(()=>studentInput({firstName:"\n",admissionNumber:"0007"})).toThrow("VALIDATION");
     expect(()=>studentInput({firstName:"Synthetic",admissionNumber:" ".repeat(3)})).toThrow("VALIDATION");
     expect(()=>studentInput({firstName:"Synthetic",admissionNumber:"0007",existingPersonId:"foreign"})).toThrow("VALIDATION");
-    expect(exactSelectionName(" Synthetic Learner ")).toBe("Synthetic Learner");
-    expect(()=>exactSelectionName("x")).toThrow("VALIDATION");
+    expect(existingPersonReference("PERSON_ID","D7E5B2A2-09C3-4B2B-9B02-C29E01ADDF12")).toEqual({kind:"PERSON_ID",personId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
+    expect(existingPersonReference("ADMISSION_NUMBER"," 0007 ")).toEqual({kind:"ADMISSION_NUMBER",admissionNumber:"0007"});
+    expect(()=>existingPersonReference("PERSON_ID","x")).toThrow("VALIDATION");
+    expect(()=>existingPersonReference("NAME","Synthetic Learner")).toThrow("VALIDATION");
     expect(studentListQuery({search:" 0007 "})).toMatchObject({search:"0007",status:"ACTIVE",limit:50});
     expect(studentListQuery({status:"ALL"}).status).toBe("ALL");
     expect(()=>studentListQuery({status:"PENDING"})).toThrow("VALIDATION");

@@ -16,16 +16,6 @@ export class PrismaPersonIdentity implements PersonIdentityRepository {
     return rows[0]??null;
   }
 
-  async findExactName(transaction: PersonTransaction, organizationId: string, exactName: string): Promise<readonly PersonIdentity[]> {
-    return txOf(transaction).$queryRaw<PersonIdentity[]>`
-      SELECT id, first_name AS "firstName", last_name AS "lastName", version
-      FROM vs_people_person
-      WHERE organization_id = ${organizationId}::uuid
-        AND lower(btrim(concat_ws(' ', first_name, last_name))) = lower(${exactName})
-      ORDER BY last_name, first_name, id
-      LIMIT 20`;
-  }
-
   async correctionContext(transaction:PersonTransaction,organizationId:string,personId:string){
     const tx=txOf(transaction),[employeeCount,rows]=await Promise.all([
       tx.employee.count({where:{organizationId,personId}}),

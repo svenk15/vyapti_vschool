@@ -34,12 +34,16 @@ describe("STU-01/STU-02 PostgreSQL student records",()=>{
     const firstPage=await students.list(identity,primary.organizationId,primary.schoolId,{search:"",limit:1});expect(firstPage.nextCursor).toBeTruthy();await expect(students.list(identity,primary.organizationId,primary.schoolId,{search:"",status:"ALL",cursor:firstPage.nextCursor,limit:1})).rejects.toMatchObject({code:"INVALID_CURSOR"});
   });
 
-  it("allows only exact authorized same-institution Person selection and keeps list search separate",async()=>{
+  it("resolves only exact scoped Person IDs and branch admission numbers while keeping list search separate",async()=>{
     const person=await db.person.create({data:{id:randomUUID(),organizationId:primary.organizationId,firstName:"Exact",lastName:"Selection",contactEmail:null,version:1,createdAt:new Date()}}),foreignPerson=await db.person.create({data:{id:randomUUID(),organizationId:foreign.organizationId,firstName:"Exact",lastName:"Selection",contactEmail:null,version:1,createdAt:new Date()}});
-    const choices=await students.findExistingPeople(identity,primary.organizationId,primary.schoolId,"Exact Selection");expect(choices).toEqual([{personId:person.id,displayName:"Exact Selection"}]);expect(await students.findExistingPeople(identity,primary.organizationId,primary.schoolId,"Exact Sele")).toEqual([]);
+    const choice=await students.resolveExistingPerson(identity,primary.organizationId,primary.schoolId,"PERSON_ID",person.id);expect(choice).toEqual({personId:person.id,displayName:"Exact Selection",source:"PERSON_ID",eligibleForRegistration:true,existingStudentId:null});
+    await expect(students.resolveExistingPerson(identity,primary.organizationId,primary.schoolId,"PERSON_ID",foreignPerson.id)).rejects.toMatchObject({code:"NOT_FOUND"});
     const before=await db.person.count({where:{organizationId:primary.organizationId}}),created=await students.create(identity,primary.organizationId,primary.schoolId,{...input("EXIST-01","Exact","Selection"),existingPersonId:person.id});expect(created.personId).toBe(person.id);expect(await db.person.count({where:{organizationId:primary.organizationId}})).toBe(before);
+    expect(await students.resolveExistingPerson(identity,primary.organizationId,primary.schoolId,"ADMISSION_NUMBER","EXIST-01")).toEqual({personId:person.id,displayName:"Exact Selection",source:"ADMISSION_NUMBER",eligibleForRegistration:false,existingStudentId:created.studentId});
+    expect(await students.resolveExistingPerson(identity,primary.organizationId,primary.schoolId,"PERSON_ID",person.id)).toMatchObject({eligibleForRegistration:false,existingStudentId:created.studentId});
+    await expect(students.resolveExistingPerson(identity,primary.organizationId,primary.schoolId,"ADMISSION_NUMBER","missing")).rejects.toMatchObject({code:"NOT_FOUND"});
     await expect(students.create(identity,primary.organizationId,primary.schoolId,{...input("FOREIGN-PERSON"),existingPersonId:foreignPerson.id})).rejects.toMatchObject({code:"NOT_FOUND"});
-    await expect(students.findExistingPeople(foreignIdentity,primary.organizationId,primary.schoolId,"Exact Selection")).rejects.toMatchObject({code:"FORBIDDEN"});
+    await expect(students.resolveExistingPerson(foreignIdentity,primary.organizationId,primary.schoolId,"PERSON_ID",person.id)).rejects.toMatchObject({code:"FORBIDDEN"});
   });
 
   it("corrects an exclusive Student Person once, preserves immutable history and rejects stale, shared and unauthorized changes",async()=>{

@@ -22,4 +22,10 @@ export type StudentProfile = Readonly<{
 
 export type StudentWorkspace = Readonly<{ items: readonly StudentProfile[]; nextCursor: string | null }>;
 export type StudentDetail = StudentProfile & Readonly<{ history: readonly StudentEnrollmentHistory[];nameCorrectionAllowed:boolean;nameHistory:readonly PersonNameRevisionRecord[] }>;
-export type ExistingPersonChoice = Readonly<{ personId: string; displayName: string }>;
+export type ExistingPersonChoice = Readonly<{
+  personId: string;
+  displayName: string;
+  source: "PERSON_ID" | "ADMISSION_NUMBER";
+  eligibleForRegistration: boolean;
+  existingStudentId: string | null;
+}>;

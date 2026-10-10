@@ -9,6 +9,7 @@ import type { ReleaseManifest } from "../../tenancy/contracts/index";
 import type { VerifiedDatabaseContextPort } from "../../tenancy/contracts/index";
 import type { AttendanceStudentImpactPort, StudentRepository } from "../application/students";
 import type { StudentInput } from "../domain/student";
+import type { ExistingPersonReference } from "../domain/student";
 import { displayStudentName } from "../domain/student";
 import type { EnlistedRegistrationInput, EnlistedRegistrationResult, StudentRegistrationTransaction } from "../contracts/enlisted-student-registration";
 import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
@@ -107,9 +108,17 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
     return {...profile({...row,enrollments}),history:enrollmentHistory(enrollments,rosterCounts),...nameFields};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
-  async findExistingPeople(actor:Identity,organizationId:string,schoolId:string,exactName:string):Promise<readonly ExistingPersonChoice[]>{try{return await this.db.$transaction(async tx=>{
+  async resolveExistingPerson(actor:Identity,organizationId:string,schoolId:string,reference:ExistingPersonReference):Promise<ExistingPersonChoice>{try{return await this.db.$transaction(async tx=>{
     await this.guard(tx,actor,organizationId,schoolId,"student.manage",false);
-    return (await this.people.findExactName(tx,organizationId,exactName)).map(person=>({personId:person.id,displayName:displayStudentName(person.firstName,person.lastName)}));
+    if(reference.kind==="ADMISSION_NUMBER"){
+      const student=await tx.student.findFirst({where:{organizationId,schoolId,admissionNumber:reference.admissionNumber},include:{person:{select:{id:true,firstName:true,lastName:true}}}});
+      if(!student)throw new AccessError("NOT_FOUND");
+      return {personId:student.person.id,displayName:displayStudentName(student.person.firstName,student.person.lastName),source:reference.kind,eligibleForRegistration:false,existingStudentId:student.id};
+    }
+    const person=await tx.person.findFirst({where:{organizationId,id:reference.personId},select:{id:true,firstName:true,lastName:true,students:{where:{organizationId,schoolId},select:{id:true},take:1}}});
+    if(!person)throw new AccessError("NOT_FOUND");
+    const existingStudentId=person.students[0]?.id??null;
+    return {personId:person.id,displayName:displayStudentName(person.firstName,person.lastName),source:reference.kind,eligibleForRegistration:existingStudentId===null,existingStudentId};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
   async enrollmentOptions(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<EnrollmentOptions>{try{return await this.db.$transaction(async tx=>{

@@ -3,7 +3,8 @@ import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, Student
 import { AccessError, uuidPattern } from "../../access/contracts/index";
 import type { EnlistedStudentRegistrationPort } from "../contracts/enlisted-student-registration";
 import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
-import { archiveInput, enrollmentInput, exactSelectionName, nameCorrectionInput, studentInput, studentListQuery, transferInput } from "../domain/student";
+import { archiveInput, enrollmentInput, existingPersonReference, nameCorrectionInput, studentInput, studentListQuery, transferInput } from "../domain/student";
+import type { ExistingPersonReference } from "../domain/student";
 
 export interface AttendanceStudentImpactPort {
   hasFrozenSessions(transaction:object,input:{organizationId:string;schoolId:string;sectionIds:readonly string[];fromDate:string;toDate:string}):Promise<boolean>;
@@ -13,7 +14,7 @@ export interface StudentRepository {
   list(actor: Identity, organizationId: string, schoolId: string, query: { search: string; cursor: string | null; limit: number; status: "ACTIVE"|"ARCHIVED"|"ALL" }): Promise<StudentWorkspace>;
   get(actor: Identity, organizationId: string, schoolId: string, studentId: string): Promise<StudentDetail>;
   create(actor: Identity, organizationId: string, schoolId: string, input: ReturnType<typeof studentInput> & { key: string }): Promise<StudentProfile & { replayed: boolean }>;
-  findExistingPeople(actor: Identity, organizationId: string, schoolId: string, exactName: string): Promise<readonly ExistingPersonChoice[]>;
+  resolveExistingPerson(actor: Identity, organizationId: string, schoolId: string, reference: ExistingPersonReference): Promise<ExistingPersonChoice>;
   enrollmentOptions(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<EnrollmentOptions>;
   enroll(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof enrollmentInput>&{key:string}):Promise<EnrollmentResult>;
   transfer(actor:Identity,organizationId:string,schoolId:string,enrollmentId:string,input:ReturnType<typeof transferInput>&{key:string}):Promise<StudentTransferResult>;
@@ -40,8 +41,8 @@ export function createStudentUseCases(repository: StudentRepository) {
     create(identity: Identity | null, organizationId: unknown, schoolId: unknown, input: { firstName: unknown; lastName?: unknown; admissionNumber: unknown; existingPersonId?: unknown; key: unknown }) {
       return repository.create(actor(identity), id(organizationId), id(schoolId), { ...studentInput(input), key: key(input.key) });
     },
-    findExistingPeople(identity: Identity | null, organizationId: unknown, schoolId: unknown, exactName: unknown) {
-      return repository.findExistingPeople(actor(identity), id(organizationId), id(schoolId), exactSelectionName(exactName));
+    resolveExistingPerson(identity: Identity | null, organizationId: unknown, schoolId: unknown, kind: unknown, value: unknown) {
+      return repository.resolveExistingPerson(actor(identity), id(organizationId), id(schoolId), existingPersonReference(kind,value));
     },
     enrollmentOptions(identity:Identity|null,organizationId:unknown,schoolId:unknown,studentId:unknown){return repository.enrollmentOptions(actor(identity),id(organizationId),id(schoolId),id(studentId));},
     enroll(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{studentId:unknown;yearId:unknown;sectionId:unknown;startsOn:unknown;lastDay:unknown;rollNumber?:unknown;key:unknown}){return repository.enroll(actor(identity),id(organizationId),id(schoolId),{...enrollmentInput(input),key:key(input.key)});},

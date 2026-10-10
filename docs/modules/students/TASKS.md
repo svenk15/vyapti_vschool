@@ -47,9 +47,19 @@ Depends on: STU-01
 
 Acceptance: unit name/version/reason validation; real PostgreSQL success, rollback, replay, shared/cross-scope denial and registration race; desktop/mobile correction, reload history, validation and stale recovery. Add only the People history migration and its Path A registry contract.
 
+## SA-COMP-07 / SA-18 — Resolve an exact existing identity
+
+Depends on: STU-01
+
+Outcome: an administrator can resolve one exact institution Person ID for deliberate reuse, or one exact current-branch admission number to open its existing Student. Names and email never act as identity selectors; ordinary Student directory search remains available.
+
+Contract delta: replace exact display-name selection with the discriminated `PERSON_ID | ADMISSION_NUMBER` query in [SA-18 corrective implementation contract](DESIGN.md#sa-18-corrective-implementation-contract). Keep registration, guards, transaction, evidence and uniqueness behavior unchanged. No schema/migration change.
+
+Acceptance: strict unit validation; real PostgreSQL Person/admission resolution, missing/foreign/cross-scope denial and registration readback; desktop/mobile explicit selection and existing-Student recovery. Extend no seed tables; the existing fictional Person and Student fixtures provide both cases. Evidence: `docs/evidence/sa-comp-07/README.md`. Human review remains PENDING.
+
 ## Experience overlay consumption
 
-EX-08 adopts directory, detail, registration, enrollment, transfer and archive. BE-04 must first verify the live teacher read policy. Existing-Person selection remains suppressed in the adopted UI until its exact authorized identifier contract is reconciled; this does not remove ordinary Student list search.
+EX-08 adopts directory, detail, registration, enrollment, transfer and archive. BE-04 must first verify the live teacher read policy. SA-COMP-07 reconciles existing-Person selection to exact authorized Person-ID/current-branch-admission paths; ordinary Student list search remains separate.
 
 ## STU-02 — Enroll students into a dated section
 

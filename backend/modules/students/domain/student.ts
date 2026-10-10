@@ -33,10 +33,20 @@ export function studentListQuery(input: { search?: unknown; cursor?: unknown; li
   return { search, cursor: cursor as string | null, limit, status: checkedStatus };
 }
 
-export function exactSelectionName(value: unknown): string {
-  const name = personName(value, true);
-  if (name.length < 2) throw new AccessError("VALIDATION");
-  return name;
+export type ExistingPersonReference = Readonly<
+  | { kind: "PERSON_ID"; personId: string }
+  | { kind: "ADMISSION_NUMBER"; admissionNumber: string }
+>;
+
+export function existingPersonReference(kind: unknown, value: unknown): ExistingPersonReference {
+  if (kind === "PERSON_ID") return { kind, personId: uuid(value) };
+  if (kind === "ADMISSION_NUMBER") {
+    if (typeof value !== "string") throw new AccessError("VALIDATION");
+    const admissionNumber = value.normalize("NFC").trim();
+    if (!admissionNumber || admissionNumber.length > 40 || /[\u0000-\u001f\u007f]/.test(admissionNumber)) throw new AccessError("VALIDATION");
+    return { kind, admissionNumber };
+  }
+  throw new AccessError("VALIDATION");
 }
 
 function civilDate(value:unknown):string{
