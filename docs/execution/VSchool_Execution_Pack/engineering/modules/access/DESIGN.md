@@ -338,7 +338,7 @@ export interface AccessTrustModeInvalidator<TransactionScope>{
 ## Physical data
 
 - `vs_access_organization` — Contractual tenant; trust mode controls provisioning/recovery channels only; existing rows backfilled to OPERATOR_CLI.; see database/tables/vs_access_organization.md
-- `vs_access_school` — Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1.; see database/tables/vs_access_school.md
+- `vs_access_school` — Operational scope and serialization guard. Timezone immutable after branch creation in Phase 1.; see database/tables/vs_access_school.md
 - `vs_access_user_account` — Globally unique login; reset requires a previously verified address; no school access without membership. Never return hash/counters.; see database/tables/vs_access_user_account.md
 - `vs_access_account_person_binding` — Deliberate verified account-to-person link; People supplies scoped Person reference.; see database/tables/vs_access_account_person_binding.md
 - `vs_access_school_membership` — School access root; granting role does not prove teacher eligibility.; see database/tables/vs_access_school_membership.md

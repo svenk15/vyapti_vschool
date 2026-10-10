@@ -6,12 +6,11 @@ import type { ManagementRepository } from "../application/management";
 import { AccessError,uuidPattern } from "../domain/policy";
 import { guardLastAdmin,nextMembershipStatus } from "../domain/management";
 import type { CommandEvidenceWriter } from "../../platform/contracts/command-evidence";
-import type { ScheduledSessionQuery } from "../../attendance/contracts/scheduled-sessions";
 type Scope={organizationId:string;schoolId:string};
 type Reader=Pick<Prisma.TransactionClient,"userAccount"|"$queryRaw">;
 function canonical(value:unknown):string {if(Array.isArray(value))return "["+value.map(canonical).join(",")+"]";if(value&&typeof value==="object")return "{"+Object.entries(value).sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>JSON.stringify(k)+":"+canonical(v)).join(",")+"}";return JSON.stringify(value);}
 export class PrismaManagementRepository implements ManagementRepository {
- constructor(private readonly db:PrismaClient,private readonly writer:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly sessions:(tx:Prisma.TransactionClient)=>ScheduledSessionQuery,private readonly cursorSecret:string,private readonly now:()=>Date=()=>new Date()){}
+ constructor(private readonly db:PrismaClient,private readonly writer:(tx:Prisma.TransactionClient)=>CommandEvidenceWriter,private readonly cursorSecret:string,private readonly now:()=>Date=()=>new Date()){}
  private async scope(db:Reader,identity:Identity,schoolId?:string):Promise<Scope>{
   const account=await db.userAccount.findUnique({where:{id:identity.accountId},select:{status:true,tokenVersion:true}});
   if(!account||account.status!=="ACTIVE"||account.tokenVersion!==identity.tokenVersion)throw new AccessError("UNAUTHENTICATED");
@@ -53,7 +52,7 @@ export class PrismaManagementRepository implements ManagementRepository {
     const now=this.now(),requestId=randomUUID();let result:ManagementResult,before:Record<string,unknown>={},after:Record<string,unknown>={},reason:string|undefined;
     if(command.kind==="UpdateSchool"){
      const school=await tx.school.findUniqueOrThrow({where:{id:scope.schoolId}});if(school.version!==command.expectedVersion)throw new AccessError("STALE_VERSION");
-     if(school.timezone!==command.payload.timezone&&await this.sessions(tx).hasAny(scope.organizationId,scope.schoolId))throw new AccessError("TIMEZONE_IN_USE");
+     if(school.timezone!==command.payload.timezone)throw new AccessError("TIMEZONE_IN_USE");
      const updated=await tx.school.update({where:{id:school.id},data:{...command.payload,version:{increment:1}}});before={name:school.name,timezone:school.timezone,version:school.version};after={...command.payload,version:updated.version};result={resourceId:updated.id,version:updated.version,status:updated.status,schoolCode:updated.code,...command.payload};
     }else if(command.kind==="CreateCampus"){
      if(await tx.campus.count({where:scope})>=100)throw new AccessError("CONFLICT");const campus=await tx.campus.create({data:{id:randomUUID(),...scope,...command.payload,status:"ACTIVE",version:1}});after={code:campus.code,name:campus.name};result={resourceId:campus.id,version:1,status:"ACTIVE",name:campus.name};

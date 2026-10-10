@@ -8,7 +8,6 @@ import { PrismaAccessSecurityEvidence } from "../modules/platform/infrastructure
 import { createManagementUseCases } from "../modules/access/application/management";
 import { PrismaManagementRepository } from "../modules/access/infrastructure/management";
 import { PrismaCommandEvidence } from "../modules/platform/infrastructure/command-evidence";
-import { PrismaScheduledSessions } from "../modules/attendance/infrastructure/scheduled-sessions";
 import { randomUUID } from "node:crypto";
 import { PrismaClient } from "../../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -23,7 +22,7 @@ import {PrismaVerifiedDatabaseContext} from '../modules/tenancy/infrastructure/v
 export function createAccessServices(config:{databaseUrl:string;now?:()=>Date;cursorSecret?:string;emailSender?:AccessEmailSender}) {
  const db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]});
  const context=new PrismaVerifiedDatabaseContext(),repository=new PrismaAccessRepository(db,tx=>new PrismaProvisionEvidence(tx),context,config.now);
- const management=createManagementUseCases(new PrismaManagementRepository(db,tx=>new PrismaCommandEvidence(tx),tx=>new PrismaScheduledSessions(tx),config.cursorSecret??randomUUID(),config.now));
+ const management=createManagementUseCases(new PrismaManagementRepository(db,tx=>new PrismaCommandEvidence(tx),config.cursorSecret??randomUUID(),config.now));
  const activation=createActivationUseCases(new PrismaActivationRepository(db,tx=>new PrismaAccessSecurityEvidence(tx),config.now??(()=>new Date())),new BcryptPasswords(),new OpaqueActivationTokens(),config.now??(()=>new Date()));
  const passwords=new BcryptPasswords(),core=createAccessUseCases(repository,passwords,randomUUID);
  const emailSender=config.emailSender??{sendPasswordReset:async()=>({ok:false as const,reason:"Email delivery is not configured"}),sendStaffInvite:async()=>({ok:false as const,reason:"Email delivery is not configured"})};

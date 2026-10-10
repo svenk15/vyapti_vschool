@@ -6,20 +6,19 @@ import { createAccessServices } from "../../backend/composition/access";
 import { PrismaManagementRepository } from "../../backend/modules/access/infrastructure/management";
 import { createManagementUseCases } from "../../backend/modules/access/application/management";
 import { PrismaCommandEvidence } from "../../backend/modules/platform/infrastructure/command-evidence";
-import { PrismaScheduledSessions } from "../../backend/modules/attendance/infrastructure/scheduled-sessions";
 import { schoolInput,activeStaffFixture } from "../fixtures/access-management";
 const url=process.env.TEST_DATABASE_URL??"";if(new URL(url).pathname!=="/vyapti_vschool_test")throw new Error("Dedicated test DB required");
 const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),service=createAccessServices({databaseUrl:url,cursorSecret:randomUUID()});
 afterAll(async()=>{await service.disconnect();await db.$disconnect();});
 async function setup(){const input=schoolInput(),ids=await service.provisionSchool(input,{operatorId:randomUUID(),verified:true});return {input,ids,identity:{accountId:ids.accountId,tokenVersion:1}};}
 it("settings persist with atomic envelopes, identical replay and stale/changed-key conflicts",async()=>{
- const {ids,identity}=await setup(),key=randomUUID(),body={payload:{name:"Saved synthetic school",timezone:"Europe/London"},expectedVersion:1};const result=await service.command(identity,"UpdateSchool",body,key);
+ const {ids,identity,input}=await setup(),key=randomUUID(),body={payload:{name:"Saved synthetic school",timezone:input.timezone},expectedVersion:1};const result=await service.command(identity,"UpdateSchool",body,key);
  expect(result.version).toBe(2);expect((await service.command(identity,"UpdateSchool",body,key)).replayed).toBe(true);expect(await db.auditEntry.count({where:{resourceId:ids.schoolId,command:"UpdateSchool"}})).toBe(1);expect(await db.outboxEvent.count({where:{aggregateId:ids.schoolId,type:"UpdateSchool.v1"}})).toBe(1);
  await expect(service.command(identity,"UpdateSchool",{...body,payload:{...body.payload,name:"Different"}},key)).rejects.toThrow("IDEMPOTENCY_CONFLICT");await expect(service.command(identity,"UpdateSchool",body,randomUUID())).rejects.toThrow("STALE_VERSION");expect((await service.getSettings(identity)).name).toBe("Saved synthetic school");
 });
 it("rolls settings and all actual envelopes back after an enlisted evidence failure",async()=>{
  const {ids,identity}=await setup();let appended=false;
- const faulty=createManagementUseCases(new PrismaManagementRepository(db,tx=>({append:async e=>{await new PrismaCommandEvidence(tx).append(e);appended=true;throw new Error("injected");}}),tx=>new PrismaScheduledSessions(tx),randomUUID()));
+ const faulty=createManagementUseCases(new PrismaManagementRepository(db,tx=>({append:async e=>{await new PrismaCommandEvidence(tx).append(e);appended=true;throw new Error("injected");}}),randomUUID()));
  await expect(faulty.command(identity,"UpdateSchool",{payload:{name:"Never persisted",timezone:"Asia/Kolkata"},expectedVersion:1},randomUUID())).rejects.toThrow("UNAVAILABLE");expect(appended).toBe(true);expect((await service.getSettings(identity)).version).toBe(1);expect(await db.auditEntry.count({where:{resourceId:ids.schoolId,command:"UpdateSchool"}})).toBe(0);expect(await db.commandReceipt.count({where:{schoolId:ids.schoolId}})).toBe(0);
 });
 it("creates pending staff, campuses and duplicate-safe retries without hashes in DTO/evidence",async()=>{
@@ -44,10 +43,8 @@ it("current teacher membership/roles revoke immediately, replay reauthorizes and
  await expect(service.command(teacher.identity,"CreateCampus",{payload:{code:"NO",name:"Denied"}},randomUUID())).rejects.toThrow("NOT_FOUND");
  await db.schoolMembership.update({where:{id:ids.membershipId},data:{status:"SUSPENDED",version:{increment:1}}});await expect(service.command(identity,"UpdateMembership",{payload:{action:"SUSPEND",reason:"Synthetic access check"},expectedVersion:1},key,ids.schoolId,teacher.membershipId)).rejects.toThrow("NOT_FOUND");
 });
-it("timezone decision calls the scoped owner port and fails closed",async()=>{
- const {identity,ids}=await setup();const guarded=createManagementUseCases(new PrismaManagementRepository(db,tx=>new PrismaCommandEvidence(tx),()=>({hasAny:async(org,school)=>{expect(org).toBe(ids.organizationId);expect(school).toBe(ids.schoolId);return true;}}),randomUUID()));
- await expect(guarded.command(identity,"UpdateSchool",{payload:{name:"Synthetic school",timezone:"Europe/London"},expectedVersion:1},randomUUID())).rejects.toThrow("TIMEZONE_IN_USE");expect((await service.getSettings(identity)).version).toBe(1);
- const unavailable=createManagementUseCases(new PrismaManagementRepository(db,tx=>new PrismaCommandEvidence(tx),()=>({hasAny:async()=>{throw new Error("injected owner read failure");}}),randomUUID()));await expect(unavailable.command(identity,"UpdateSchool",{payload:{name:"Never persisted",timezone:"Europe/London"},expectedVersion:1},randomUUID())).rejects.toThrow("UNAVAILABLE");expect((await service.getSettings(identity)).version).toBe(1);
+it("rejects every existing-branch timezone change before writing evidence",async()=>{
+ const {identity,ids}=await setup();await expect(service.command(identity,"UpdateSchool",{payload:{name:"Synthetic school",timezone:"Europe/London"},expectedVersion:1},randomUUID())).rejects.toThrow("TIMEZONE_IN_USE");expect((await service.getSettings(identity)).version).toBe(1);expect(await db.auditEntry.count({where:{schoolId:ids.schoolId,command:"UpdateSchool"}})).toBe(0);
 });
 it("opaque staff cursors are scoped, signed and bounded at 50 records",async()=>{
  const {identity,ids}=await setup();await db.$transaction(async tx=>{for(let i=0;i<51;i++){const accountId=randomUUID();await tx.userAccount.create({data:{id:accountId,normalizedEmail:`page-${accountId}@vschool.example`,status:"PENDING",tokenVersion:1,failedAttempts:0,version:1,createdAt:new Date()}});await tx.schoolMembership.create({data:{id:randomUUID(),organizationId:ids.organizationId,schoolId:ids.schoolId,accountId,status:"PENDING",version:1}});}});

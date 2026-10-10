@@ -330,4 +330,4 @@ Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server mo
 
 ## IAM-02 owner read seam
 
-`ScheduledSessionQuery.hasAny(organizationId, schoolId)` is an enlisted, scope-bound read used by Access timezone changes under the shared School guard. It returns true for any session regardless of lifecycle. Before ATT-01 installs the session relation, the owner adapter verifies its absence and returns false; any database failure propagates and blocks the settings transaction. ATT-01 scheduling retains the same School guard so scheduling and timezone changes serialize. This read seam does not implement an attendance workflow or install speculative tables.
+`ScheduledSessionQuery` remains the Attendance-owned impact seam for academic calendar, assignment and student-history operations. Access no longer queries Attendance when editing school settings because the Phase 1 branch timezone is immutable after creation; the Access guard rejects every changed timezone value before any write. Attendance scheduling continues to use the stored branch timezone and its existing School guard.

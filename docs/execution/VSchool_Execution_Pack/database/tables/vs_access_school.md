@@ -2,7 +2,7 @@
 
 Observed source schema, not a new migration. Owner: access.
 
-**Responsibility:** Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1.
+**Responsibility:** Operational scope and serialization guard. Timezone immutable after branch creation in Phase 1.
 
 **Registry constraint summary:** FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); CHECK configuration_version>0
 

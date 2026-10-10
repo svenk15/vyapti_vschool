@@ -88,10 +88,10 @@ Files: extend `backend/modules/access/domain`, `application`, `contracts` and `i
 
 ### Acceptance and test strategy
 
-- Unit / application: Last admin transition; fixed roles; timezone policy.
+- Unit / application: Last admin transition; fixed roles; immutable existing-branch timezone policy.
 - Real PostgreSQL: Two admin revocations serialize; forged cross-school grants fail constraints; failed audit rolls settings back.
 - Browser: Create staff access, suspend/reinstate; verify protected request denied immediately.
-- Failure contract: Last admin removal → 409 LAST_ADMIN; stale update → 409; changing timezone after any session → 409 TIMEZONE_IN_USE; foreign target → 404.
+- Failure contract: Last admin removal → 409 LAST_ADMIN; stale update → 409; changing an existing branch timezone → 409 TIMEZONE_IN_USE; foreign target → 404.
 - Required DB effect: School/Campus or SchoolMembership/RoleGrant/UserAccount(PENDING); audit/outbox/receipt; activation belongs to IAM-03 through an explicit operator command, never automatic message send.
 
 Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
