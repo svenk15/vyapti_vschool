@@ -134,7 +134,7 @@ Dependencies: EX-05. Implementation status: VERIFIED. Human review: PENDING.
 
 ## EX-08 — Adopt student directory, enrollment and history
 
-Dependencies: EX-07. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-07. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/admin/students/page.tsx; app/admin/students/[id]/page.tsx; components/students-workspace.tsx; student-enrollment-form.tsx; student-history-actions.tsx; lib/server/students.ts.
 

@@ -1,6 +1,6 @@
 # Students, enrollment and placement history — current state
 
-Last updated: 2026-10-09. This is an independent project checkpoint; no completion was imported.
+Last updated: 2026-10-10. This is an independent project checkpoint; no completion was imported.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -54,7 +54,9 @@ Mutations serialize through account → Organization → School guards and commi
 
 ## Next action
 
-Keep ports 3412 (STU-01), 3413 (STU-02), 3423 (ATT-01), and 3424 (STU-03) available for review. STU-03's STU-02 and ATT-01 dependencies are implementation-verified/PENDING review and do not require human PASSED. PER-02's IAM-03 acceptance gate is cleared, but PER-02 itself remains human-review PENDING.
+**EX-08 presentation adoption (10 October 2026):** implementation source `b1286a2e1a478401350e848f96651ee853291d3c`. The shared directory, registration dialog and student-detail compositions now cover the implemented registration, enrollment, dated history, transfer and archive operations. Exact Person selection remains an explicit authorized lookup separate from normal student search. BE-04 is closed for this release: the school-wide list/detail endpoints require `student.manage`; a teacher's `student.read` is consumed only through the Attendance assigned-session roster path. No table, migration or seed contract changed. `pnpm check` passed 113/113 unit tests; focused PostgreSQL passed 9/9; browser checkpoints passed 6/6 plus the final 4/4 teacher-denial rerun. The idempotent development seed passed and preserved `artifacts/students-03/private-demo.json` and administrator credentials in `artifacts/people-02/private-demo.json`. Human review remains PENDING.
+
+Proceed to EX-09 import preview and recovery adoption. Preserve the verified Students owner contracts and use the existing enlisted registration port.
 
 ## Pending decisions / limitations
 
