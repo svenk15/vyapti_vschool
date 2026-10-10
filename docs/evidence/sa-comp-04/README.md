@@ -1,6 +1,6 @@
 # SA-COMP-04 verification
 
-Workflow SA-20 is implementation VERIFIED at the implementation commit recorded in the People and Students current-state files; human review is PENDING.
+Workflow SA-20 is implementation VERIFIED at `d3059ada9f82efe289dc0dcfe02fdc2825195796`; human review is PENDING.
 
 The school administrator can correct the display name of a Student's exclusive institution Person from the protected Student detail page. People owns normalized name validation, the Person version compare-and-swap and immutable `PersonNameRevision`; Students owns the selected branch Student, current `student.manage` authorization, exclusivity proof and command evidence. A Person referenced by any Employee or another institution Student fails with `PERSON_SHARED`. The command retains the account → Organization → School → Person lock sequence, uses SERIALIZABLE isolation, supports exact replay, and records no names or user reason in receipt, audit diff or outbox.
 
