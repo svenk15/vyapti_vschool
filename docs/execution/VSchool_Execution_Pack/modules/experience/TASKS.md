@@ -230,7 +230,7 @@ Dependencies: EX-06, EX-09, EX-11, EX-12. Implementation status: VERIFIED. Human
 
 ## EX-14 — Run consolidated visual, functional and regression gate
 
-Dependencies: EX-13. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-13. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** test/e2e; module evidence; scripts/database.mjs existing harness; app route inventory.
 
