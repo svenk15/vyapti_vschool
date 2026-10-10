@@ -2,6 +2,35 @@
 
 Phase 1 · Design revision 1 · 5 October 2026. RPT-01 is implemented; RPT-02 remains specified for its gated task. Review unresolved deployment choices in FND-02 before real-data use.
 
+## SA-COMP-01 — School setup readiness and daily exceptions
+
+This read-only Reporting projection completes SA-04 and SA-05 without moving ownership of source facts. A current School Administrator with live `school.manage` authority requests the current session's institution/branch; client scope is never accepted. The query establishes transaction-local verified database context, rechecks active account/token, organization, school, membership and role grants, then reads one `REPEATABLE READ` snapshot. Disabled or unreleased product modules are omitted rather than shown as missing setup. Failures are `UNAUTHENTICATED`, `FORBIDDEN`, `NOT_FOUND` or `UNAVAILABLE`; a successful empty result is distinct from failure.
+
+The transport-neutral signature is `schoolAdminOverview(actor, organizationId, schoolId): Promise<SchoolAdminOverview>`. `SchoolAdminOverviewRepository.get` is implemented in `backend/modules/reporting/infrastructure/school-admin-overview.ts`, composed in `backend/composition/reporting.ts`, and exposed to server-rendered pages by `lib/server/reporting.ts`. The browser-safe DTO is in `shared/contracts/reporting.ts`. No mutation, idempotency key, lock or write receipt applies.
+
+Readiness facts and stable links are: active School plus Campus → `/admin/school`; open/draft AcademicYear with a published CalendarRevision plus active GradeLevel, Subject and Section → `/admin/academics`; active SchoolMembership plus active Employee/TeacherAssignment → `/admin/users`; active Student with a current Enrollment/SectionPlacement → `/admin/students`; any AttendanceSession → `/admin/attendance/sessions`. Module-effective predicates use current `vs_tenancy_organization_entitlement` dates/state, `vs_tenancy_branch_activation` state and the injected release manifest. Staff is included only for effective `staff_core`, academics only for `academic_core`, students only for `student_core`, and attendance only for `attendance`.
+
+Actionable exceptions are counts, never paginated-list totals: started SCHEDULED/OPEN attendance sessions for the current school-local date; ImportJob in `REVIEW`, `CONFIRMED`, `RUNNING`, `COMPLETED_WITH_ERRORS` or `FAILED`; and current PENDING SchoolMembership or unaccepted non-revoked, non-expired AccessInvite with pending/failed delivery. Each count uses `(organization_id, school_id)` and links to its owning workspace. Existing scope-leading indexes support the reads; no migration is required. `asOf` is the injected clock and current enrollment/assignment dates use the school's timezone-derived date. No Person details, import source bytes/hash, tokens or audit narratives are returned.
+
+```mermaid
+sequenceDiagram
+  actor A as School administrator
+  participant P as Admin page
+  participant G as Reporting gateway
+  participant U as SA-COMP-01 use case
+  participant R as PostgreSQL projection
+  A->>P: Open overview or setup
+  P->>G: Current authenticated identity
+  G->>U: Verified session scope
+  U->>R: get(actor, organization, school)
+  R->>R: Establish transaction-local context and reauthorize
+  R->>R: Read module-effective setup facts and exception counts
+  R-->>U: Safe snapshot DTO
+  U-->>P: Render progress and source actions
+```
+
+Verification: unit validation and repository delegation; real PostgreSQL populated/empty projections, cross-branch denial, revoked membership, disabled-module omission and current-date exception predicates; Playwright administrator overview/setup populated and empty states at desktop/mobile, keyboard links and no horizontal overflow. Human visual review remains separate.
+
 ## Database naming and physical mapping
 
 All physical objects follow [the VS database contract](../../DATABASE_DESIGN.md). Table names and columns below are physical SQL names; workflow prose uses logical domain names. `organizationId` maps to `organization_id`, `schoolId` to `school_id`, and `scope` expands to both columns. Models retain PascalCase through Prisma `@@map`; camelCase fields use `@map`. Planned schemas are implemented only through their named tasks and reviewed migrations.

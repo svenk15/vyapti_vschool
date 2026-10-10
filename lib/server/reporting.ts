@@ -8,4 +8,5 @@ const reporting=createReportingServices(reportingRuntimeConfiguration());
 export const reportingGateway={
  overview:async(identity:Identity|null,input:AttendanceReportInput)=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.overview(identity,scope.organizationId,scope.schoolId,input);},
  exportAttendance:async(identity:Identity|null,input:AttendanceReportInput)=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.exportAttendance(identity,scope.organizationId,scope.schoolId,input);},
+ schoolAdminOverview:async(identity:Identity|null)=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.schoolAdminOverview(identity,scope.organizationId,scope.schoolId);},
 };

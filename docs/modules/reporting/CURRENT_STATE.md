@@ -6,6 +6,13 @@ Last updated: 2026-10-10. No active execution timer.
 |---|---|---|---|
 | RPT-01 | VERIFIED | PENDING | Source `370c7d703a9e4209ca5db406c22400f4eccf5519`; entitlement test follow-up `a92501b048160673a40771ee5ddd3d11305fa5cf`; live build `LCX3HkLL1u3jYJ1THM-GR` at port 3428 |
 | RPT-02 | VERIFIED | PENDING | RPT-02 source `487b4050136570784bba403cf5acfdadc902a0d8`; verified demo source `d1e3bc7efbce0eb33eb95bc4b4e18a685b3c709e`; PostgreSQL, E2E and full check evidence below |
+| SA-COMP-01 | VERIFIED | PENDING | SA-04/SA-05 setup and exception projection; 115 unit, 107 PostgreSQL functional and 84 desktop/mobile browser journeys; [evidence](../../evidence/sa-comp-01/README.md) |
+
+## SA-COMP-01 administrator readiness and exceptions — 10 October 2026
+
+Reporting now exposes a transport-neutral, browser-safe School Administrator projection that rechecks active account/token, organization, branch, membership and `school.manage`, establishes transaction-local verified context, and reads a repeatable snapshot of effective-module setup facts plus attendance/import/staff exceptions. `/admin/setup` renders derived progress and the next incomplete owner workspace; `/admin` renders current exceptions with source actions. No table or migration was added, and source owners remain unchanged.
+
+Evidence: 115/115 unit tests, 107/107 guarded real-PostgreSQL functional tests and 84/84 Playwright journeys across desktop/mobile passed; lint, typecheck, backend compile and documentation checks passed, and Playwright's production build passed. `pnpm demo:seed` completed against the guarded development database without replacing existing data or credentials. Screenshots and exact verification notes are linked above. Source commit will be recorded after the focused checkpoint is created. Next action: SA-COMP-02 Academics retirement/dependency-count LLD and implementation.
 
 ## Current checkpoint
 

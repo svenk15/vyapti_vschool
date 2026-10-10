@@ -49,6 +49,23 @@ beforeAll(async()=>{
 
 
 afterAll(async()=>{await attendance.disconnect();await students.disconnect();await people.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
+describe('SA-COMP-01 PostgreSQL administrator projection',()=>{
+ it('derives scoped readiness and exceptions, omits disabled modules, and rechecks live membership',async()=>{
+  const reporting=createReportingServices({databaseUrl:url,releasedModules:released,now:()=>attendanceNow??new Date()});
+  try{
+   const overview=await reporting.schoolAdminOverview(identity,primary.organizationId,primary.schoolId);
+   expect(overview.readiness.map(item=>item.id)).toEqual(['school','academics','staff','students','attendance']);
+   expect(overview.readiness.find(item=>item.id==='academics')).toMatchObject({complete:true});
+   expect(overview.readiness.find(item=>item.id==='students')!.count).toBeGreaterThanOrEqual(3);
+   expect(overview.exceptions.every(item=>['attendance','imports','staff'].includes(item.id))).toBe(true);
+   await expect(reporting.schoolAdminOverview(identity,foreign.organizationId,foreign.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
+   const activation=await db.branchActivation.findUniqueOrThrow({where:{organizationId_schoolId_moduleId:{organizationId:primary.organizationId,schoolId:primary.schoolId,moduleId:'attendance'}}});
+   try{await db.branchActivation.update({where:{id:activation.id},data:{state:'DISABLED',enabledAt:null,version:{increment:1}}});expect((await reporting.schoolAdminOverview(identity,primary.organizationId,primary.schoolId)).readiness.some(item=>item.id==='attendance')).toBe(false);}finally{await db.branchActivation.update({where:{id:activation.id},data:{state:'ACTIVE',enabledAt:activation.enabledAt,version:{increment:1}}});}
+   const membership=await db.schoolMembership.findUniqueOrThrow({where:{organizationId_schoolId_accountId:{organizationId:primary.organizationId,schoolId:primary.schoolId,accountId:identity.accountId}}});
+   try{await db.schoolMembership.update({where:{id:membership.id},data:{status:'REVOKED',version:{increment:1}}});await expect(reporting.schoolAdminOverview(identity,primary.organizationId,primary.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});}finally{await db.schoolMembership.update({where:{id:membership.id},data:{status:'ACTIVE',version:{increment:1}}});}
+  }finally{await reporting.disconnect();}
+ });
+});
 describe('ATT-01 PostgreSQL session scheduling',()=>{
  it('schedules with a pinned calendar, idempotently replays, authorizes only the dated assigned teacher, and rejects clashes',async()=>{
   await attendance.authorizeAdmin(identity,primary.organizationId,primary.schoolId);await expect(attendance.authorizeAdmin(teacherIdentity,primary.organizationId,primary.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});

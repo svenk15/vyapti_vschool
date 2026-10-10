@@ -2,6 +2,14 @@
 
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
+## SA-COMP-01 — Derive administrator setup readiness and daily exceptions
+
+Workflows: SA-04, SA-05. Depends on the existing verified Access, Tenancy, Academics, People, Students, Imports and Attendance owner slices.
+
+Outcome: the School Administrator overview and setup pages show one consistent, authorized snapshot of enabled setup prerequisites and actionable attendance/import/staff exceptions, with source-workspace links and distinct empty/failure states. No source fact is mutated.
+
+Acceptance: live `school.manage` and current branch scope are rechecked; ineffective modules are omitted; counts use complete scoped queries rather than paginated results; absent context, revoked access and cross-branch access fail closed; PostgreSQL and browser evidence passes; seed data yields a coherent populated demonstration. Human review remains PENDING.
+
 ## RPT-01 — Review school attendance with explainable totals
 
 Depends on: ATT-03

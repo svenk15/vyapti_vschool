@@ -1,5 +1,9 @@
 # Phase 1 execution index — v4.6
 
+## School administrator completion batch (10 October 2026)
+
+The authorized post-EX queue is `SA-COMP-01` through `SA-COMP-06` in [SCHOOL_ADMIN_COMPLETION](execution/SCHOOL_ADMIN_COMPLETION.md). It covers the 29 Phase 1 School Administrator workflows from the approved Edition 03 catalog, preserves the 22 already verified workflows, completes six partial journeys, and records SA-08's commercial request alternative as a product-authority blocker. Later-phase workflows remain outside this release. Human review stays PENDING and TEN-03 remains a production gate.
+
 ## Approved experience overlay — revision 2 (9 October 2026)
 
 The current implementation overlay is EX-00–EX-15 in [the execution pack](execution/VSchool_Execution_Pack/modules/experience/TASKS.md). It reuses the Phase 1 owner slices below and does not change their historical verification or human-review evidence. [CONTRACT_DIFF](execution/CONTRACT_DIFF.md) is authoritative for existing, partial and missing operations; [ROUTE_REFERENCE_MAP](execution/ROUTE_REFERENCE_MAP.md) pins the six approved visual references; [WORKFLOW_IMPLEMENTATION_MATRIX](execution/WORKFLOW_IMPLEMENTATION_MATRIX.md) maps all 268 approved workflows without widening the current release.
