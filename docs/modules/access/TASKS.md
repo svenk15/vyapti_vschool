@@ -70,6 +70,10 @@ With a synthetic institution in HYBRID, invite a new staff email, show delivery 
 
 Start/check a frozen local demo, report URL and tested source commit, give exact steps, record human review PENDING and continue without waiting unless a documented acceptance dependency or blocking verification issue applies. Do not mark acceptance passed without explicit owner feedback.
 
+### SA-COMP-03 / SA-15 closure
+
+Reuse the implemented IAM-04 invitation owner contract without schema or business-policy changes. Prove in the real administrator screen that a development-sink delivery failure shows only the allowlisted reason and timestamp, the authorized resend action creates a distinct replacement invitation, and the prior token is revoked before the replacement delivery result is stored. Verify desktop and mobile, current branch isolation, and no token disclosure. Keep production-provider review as an outstanding release gate.
+
 ## IAM-02 — Manage school settings and staff access
 
 Depends on: IAM-01
