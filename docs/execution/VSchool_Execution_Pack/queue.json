@@ -47,10 +47,10 @@
     "depends_on": [
       "EX-03"
     ],
-    "status": "NOT_STARTED",
-    "design": "READY_SUBJECT_TO_EX00",
-    "human_review": "NOT_REQUESTED",
-    "evidence": null
+    "status": "VERIFIED",
+    "design": "READY",
+    "human_review": "PENDING",
+    "evidence": "docs/evidence/ex-04/README.md"
   },
   {
     "id": "EX-05",
