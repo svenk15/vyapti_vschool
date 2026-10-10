@@ -86,7 +86,7 @@ Dependencies: EX-03. Implementation status: NOT_STARTED. Human review: NOT_REQUE
 
 ## EX-05 — Adopt Today, school settings and branding screens
 
-Dependencies: EX-04. Implementation status: NOT_STARTED. Human review: NOT_REQUESTED.
+Dependencies: EX-04. Implementation status: VERIFIED. Human review: PENDING.
 
 **Files:** app/admin/page.tsx; app/admin/setup/page.tsx; app/admin/school/page.tsx; app/admin/branding/page.tsx; components/access-management.tsx; branding-workspace.tsx.
 

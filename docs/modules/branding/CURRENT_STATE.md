@@ -15,6 +15,12 @@ BRD-01 remains available as the synthetic preview described below. BRD-02 adds b
 
 Human review for BRD-02 is PENDING. Keep the task demo available, address any reported defect before dependent work, and continue with the next eligible task under the current execution policy. TEN-02 and IAM-03 dependency reviews remain PENDING; their implementations are VERIFIED, and BRD-01 was explicitly PASSED.
 
+### EX-05 branding-screen adoption — 10 October 2026
+
+Implementation VERIFIED at `486f5d9ed90c3f985d2ca53f78cb0350f5e47a6b`; human review PENDING. The existing BRD-02 operations now use the approved production composition: a constrained school-identity editor, explicit published state and public-sign-in action, separate private preview, immutable revision history, one primary publish action, focused feedback and collapsed advanced DNS-host controls. Published palette propagation, sanitized PNG handling, version checks, command keys, rollback-as-new-revision and current branch authorization are unchanged.
+
+Focused desktop/mobile Playwright passed the full create/preview/logo/draft/publish/public-sign-in/republish/cross-tenant journey in the 6/6 affected run and 2/2 final capture rerun. `pnpm check` and the root production build passed. The committed local demo exposes `/admin/branding` and `/sign-in/vschool-demo-69a6f7fe` at `http://127.0.0.1:3400`. No schema, migration or seed contract changed. Evidence: `docs/evidence/ex-05/README.md`.
+
 ## Evidence and feedback
 
 Append exact source revision, test reports, DB migration state, demo identity, limitations and human feedback here. No live institution or pupil data is bundled.
