@@ -35,6 +35,8 @@ The images were opened and inspected directly. The application aligns teaching-d
 
 One incorrectly forwarded functional-test invocation began broader tests and was stopped before completion; no result from that interrupted run is claimed. One mobile iteration stalled because the test used the wrong drawer close label; the selector was corrected, then the focused mobile journey passed.
 
+The final normal standalone build is served at `http://127.0.0.1:3400`. Health returned ready and an unauthenticated `/admin/timetable` request redirected to `/sign-in`. The local launcher copies the generated static/public assets into the standalone bundle before running its generated server; this corrects the prior incompatible `next start` command without changing application behavior.
+
 ## Remaining scope
 
 TT-02 must define and implement the weekly lesson draft, scope joins, conflict preview, effective-date semantics and recovery before those reference elements can be added. TT-03–TT-05 retain immutable publication and idempotent Attendance handoff. SA-41 remains partial. TEN-03 restricted-role/RLS proof, native VoiceOver/NVDA, exact font portability, provider/restore/load gates and human review remain pending.
