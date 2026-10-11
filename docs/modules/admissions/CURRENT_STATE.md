@@ -13,3 +13,7 @@ Resolved owner separation (Applicant is not Person/Student), branch scope, exact
 ## Implementation checkpoint — 11 October 2026
 
 ADM-01 is implemented through the portable facade, Prisma adapter, composition factory, Next server gateway/API and approved staged UI. Migration `20261011170000_admissions_inquiry_application` is applied to both designated local databases; all three tables remain registered for the TEN-03 closure gate. Focused unit 15/15, real-PostgreSQL 3/3 and browser 2/2 passed; the browser gate built current source. Direct desktop/mobile reference comparison is recorded in the evidence directory. `pnpm demo:seed` creates/preserves the fictional 2027–28 cycle and activates Admissions only for its existing fictional demo branch. Human visual review, native accessibility, font resolution, production retention and TEN-03 remain pending. Next action: assess SA-39 design readiness without implying its decision-authority contract is approved.
+
+## Subsequent-workflow assessment — 11 October 2026
+
+SA-39 is `BLOCKED_PRODUCT_DECISION`: the live owner contract has no capacity/reservation/expiry model, distinct decision delegation, restricted-note audience or document-review grant. SA-40 is `BLOCKED_DEPENDENCY` on SA-39 plus a one-time Students conversion contract. The exact unanswered rules and recommended bounded model are recorded in DESIGN; no speculative tables, grants or UI success were added. Independent Administrator work may continue.

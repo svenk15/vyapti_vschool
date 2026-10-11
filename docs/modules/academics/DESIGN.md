@@ -2,6 +2,14 @@
 
 Phase 1 · Design revision 3 · 5 October 2026. ACA-01 and ACA-02 are implementation-verified; ACA-03 is in progress. CourseOffering and TeacherAssignment are installed by forward migration `20261005001900_academic_offerings`. Review unresolved deployment choices in FND-02 before real-data use.
 
+## TT-00 timetable readiness reconciliation — 11 October 2026
+
+The coordinated timetable pack is adopted as an Academics-owned later capability, without claiming SA-41 implementation or release. The first live checkpoint is read-only `/admin/timetable/readiness`: it reports the current server release, institution entitlement, branch activation and `timetable.manage` permission from trusted server data. It creates no schedule data and is intentionally absent from operational navigation until the capability is usable.
+
+Academics owns day patterns, periods, timetable revisions/slots and stable lesson occurrences. Attendance alone owns registers and pins an opened/submitted session to its source occurrence. An acknowledgement never grants teaching or roster authority. Stable occurrence identity is `(organization, school, academic year, class section, local date, period key)`; publication reconciliation updates future unpinned projections under that key and never rewrites an opened/submitted session.
+
+The first cut supports the approved pack's **weekly** plan only. The generic SA-41 card still lists a two-week option, but the coordinated timetable README explicitly defers two-week cycles; production must omit that unsupported option and record the reference deviation. The engineering bounds for the first cut are 256 KiB per draft command, at most 100 slots per command and a rolling 42-day occurrence horizon in seven-day batches. Rooms stay nullable until a Facilities-owned room source exists. TT-01 may add only day-pattern/period persistence after its exact live schema and Path A registry entries are reviewed. No timetable tables exist at TT-00.
+
 ## Database naming and physical mapping
 
 All physical objects follow [the VS database contract](../../DATABASE_DESIGN.md). Table names and columns below are physical SQL names; workflow prose uses logical domain names. `organizationId` maps to `organization_id`, `schoolId` to `school_id`, and `scope` expands to both columns. Models retain PascalCase through Prisma `@@map`; camelCase fields use `@map`. Planned schemas are implemented only through their named tasks and reviewed migrations.

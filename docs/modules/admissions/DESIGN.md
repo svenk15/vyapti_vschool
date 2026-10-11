@@ -49,3 +49,9 @@ sequenceDiagram
 ## Verification criteria
 
 Unit: normalization, bounds, notice and key. Real PostgreSQL: current module/role/scope denial, no Student/Person writes, exact duplicate conflict without partial Applicant, rollback, same-key replay/changed-input conflict, cycle/grade rejection and cross-branch isolation. Browser desktop/mobile: exact stages, retained Back values, final-only write, response-loss replay, receipt, empty/error/permission states, keyboard focus and matched approved screenshots. Migration tests use populated existing tables and forward-only history. TEN-03, production retention, native accessibility and human review remain separate gates.
+
+## SA-39 / SA-40 readiness boundary — 11 October 2026
+
+SA-39 cannot be implemented safely from the catalog fields alone. The approved outcome requires an atomic seat reservation and offer expiry plus current delegated decision authority, but the live contract does not define capacity ownership and units, reservation creation/release/expiry, offer duration, delegation grant scope or expiry, restricted-note visibility, or document-review grants. `admissions.manage` must not be silently widened into decision authority. The smallest product decision is to approve those six rules and the distinct `admissions.review` capability; the recommended model is capacity per cycle and grade, one active reservation per application, school-local exclusive expiry, explicit dated branch delegation, reviewer-only reason text, and purpose-scoped document grants. Alternatives are advisory recommendations without offers, or deferring offers until a capacity owner exists; the former cannot satisfy SA-39's approved outcome.
+
+SA-40 consequently remains blocked by SA-39 and the accepted one-time conversion handoff to Students. No Application state, reservation, offer or Student conversion table is added by ADM-01, and no browser action may simulate those outcomes.

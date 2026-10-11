@@ -43,6 +43,12 @@ Create AY2026, Grade 8, Section A and Mathematics; add two adjacent terms; try a
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## TT-00 — Reconcile timetable ownership and readiness
+
+Depends on verified Academic setup, existing Attendance pinning semantics and Tenancy module configuration. Add the read-only readiness route described in DESIGN. It must obtain release, entitlement, activation and current permission from server-owned contracts, remain outside operational navigation while unavailable, and perform no planning write. Record the weekly-only reference deviation and the exact first-cut request/generation bounds.
+
+Acceptance: denied and unavailable states are honest; no timetable/attendance row changes; lint, typecheck, boundary/backend and focused browser rendering at desktop/mobile. Human review remains PENDING. TT-01 follows only after its two scoped day-pattern tables, constraints, indexes, mutation guard and migration test are reconciled into the live LLD. SA-41 remains incomplete until draft editing, conflict preview, immutable publication and idempotent Attendance occurrence handoff are implemented.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.
