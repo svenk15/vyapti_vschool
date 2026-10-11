@@ -1,0 +1,6 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="5.306879">
+<testsuite name="timetable-pattern.spec.ts" timestamp="2026-10-11T19:18:00.180Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.764" errors="0">
+<testcase name="administrator rejects overlap, then saves a valid weekly day pattern and reloads it" classname="timetable-pattern.spec.ts" time="2.764">
+</testcase>
+</testsuite>
+</testsuites>

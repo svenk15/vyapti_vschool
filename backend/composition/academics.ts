@@ -5,6 +5,8 @@ import {createAcademicSetupUseCases,type CalendarImpactPort} from '../modules/ac
 import {PrismaAcademicSetupRepository} from '../modules/academics/infrastructure/setup';
 import {createAcademicOfferingUseCases,type AssignmentImpactPort} from '../modules/academics/application/offerings';
 import {PrismaAcademicOfferingRepository} from '../modules/academics/infrastructure/offerings';
+import {createTimetablePatternUseCases} from '../modules/academics/application/timetable';
+import {PrismaTimetablePatternRepository} from '../modules/academics/infrastructure/timetable';
 import {PrismaVerifiedDatabaseContext} from '../modules/tenancy/infrastructure/verified-db-context';
 import {PrismaScheduledSessions} from '../modules/attendance/infrastructure/scheduled-sessions';
 import {PrismaInstitutionEvidence} from '../modules/tenancy/infrastructure/evidence';
@@ -20,5 +22,5 @@ export function validateAcademicServiceConfiguration(config:AcademicServiceConfi
 export function createAcademicServices(input:AcademicServiceConfiguration){
  const config=validateAcademicServiceConfiguration(input),db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]}),manifest=capabilityReleaseManifest(config.releasedModules),databaseContext=new PrismaVerifiedDatabaseContext();
  const evidence=(tx:Prisma.TransactionClient)=>new PrismaInstitutionEvidence(tx),calendarImpact=config.calendarImpact??{publicationAffectsSessions:(input:Parameters<CalendarImpactPort['publicationAffectsSessions']>[0],transaction?:unknown)=>new PrismaScheduledSessions(transaction as Prisma.TransactionClient).calendarPublicationAffectsSessions(input),hasPendingSessions:(input:Parameters<CalendarImpactPort['hasPendingSessions']>[0],transaction?:unknown)=>new PrismaScheduledSessions(transaction as Prisma.TransactionClient).hasPendingSessions(input)},assignmentImpact=config.assignmentImpact??{hasFutureSessions:(input:Parameters<AssignmentImpactPort['hasFutureSessions']>[0],transaction?:unknown)=>new PrismaScheduledSessions(transaction as Prisma.TransactionClient).hasFutureAssignmentSessions(input)};
- return {...createAcademicSetupUseCases(new PrismaAcademicSetupRepository(db,evidence,manifest,databaseContext,config.now,calendarImpact)),...createAcademicOfferingUseCases(new PrismaAcademicOfferingRepository(db,evidence,manifest,databaseContext,config.now,assignmentImpact)),disconnect:()=>db.$disconnect()};
+ return {...createAcademicSetupUseCases(new PrismaAcademicSetupRepository(db,evidence,manifest,databaseContext,config.now,calendarImpact)),...createAcademicOfferingUseCases(new PrismaAcademicOfferingRepository(db,evidence,manifest,databaseContext,config.now,assignmentImpact)),...createTimetablePatternUseCases(new PrismaTimetablePatternRepository(db,manifest,databaseContext,evidence,config.now)),disconnect:()=>db.$disconnect()};
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="2" failures="0" errors="0" time="0.00275425">
+    <testsuite name="test/unit/timetable-pattern.test.ts" timestamp="2026-10-11T18:57:40.354Z" hostname="Venkateshs-MacBook-Air.local" tests="2" failures="0" errors="0" skipped="0" time="0.00275425">
+        <testcase classname="test/unit/timetable-pattern.test.ts" name="TT-01 timetable pattern use cases &gt; normalizes a valid weekly pattern before invoking its port" time="0.001412959">
+        </testcase>
+        <testcase classname="test/unit/timetable-pattern.test.ts" name="TT-01 timetable pattern use cases &gt; rejects overlaps, noncontiguous positions, empty teaching days and invalid keys" time="0.000623291">
+        </testcase>
+    </testsuite>
+</testsuites>

@@ -45,6 +45,7 @@ model Organization {
   admissionCycles AdmissionCycle[]
   admissionApplicants AdmissionApplicant[]
   admissionApplications AdmissionApplication[]
+  academicDayPatterns AcademicDayPattern[]
 
   @@map("vs_access_organization")
 }
@@ -89,6 +90,7 @@ model School {
   admissionCycles AdmissionCycle[]
   admissionApplicants AdmissionApplicant[]
   admissionApplications AdmissionApplication[]
+  academicDayPatterns AcademicDayPattern[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -133,6 +135,7 @@ model UserAccount {
   grantedBrandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationGrantor")
   revokedBrandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationRevoker")
   createdAdmissionApplications AdmissionApplication[] @relation("AdmissionApplicationCreator")
+  createdAcademicDayPatterns AcademicDayPattern[] @relation("AcademicDayPatternCreator")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -734,6 +737,7 @@ model AcademicYear {
  offerings CourseOffering[]
  enrollments Enrollment[]
  importJobs ImportJob[]
+ dayPatterns AcademicDayPattern[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_academic_year_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_academics_academic_year_code_key")
  @@map("vs_academics_academic_year")
@@ -846,6 +850,46 @@ model TeacherAssignment {
  @@index([organizationId,schoolId,offeringId,validFrom,validTo],map:"vs_academics_teacher_assignment_offering_date_idx")
  @@index([organizationId,schoolId,teacherId,validFrom,validTo],map:"vs_academics_teacher_assignment_teacher_date_idx")
  @@map("vs_academics_teacher_assignment")
+}
+
+model AcademicDayPattern {
+ id String @id(map:"vs_academics_day_pattern_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ academicYearId String @map("academic_year_id") @db.Uuid
+ name String @db.VarChar(80)
+ teachingDays Int[] @map("teaching_days") @db.SmallInt
+ state String @db.VarChar(16)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ createdByAccountId String @map("created_by_account_id") @db.Uuid
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_pattern_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_pattern_school_fkey")
+ academicYear AcademicYear @relation(fields:[organizationId,schoolId,academicYearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_pattern_year_fkey")
+ createdBy UserAccount @relation("AcademicDayPatternCreator",fields:[createdByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_pattern_creator_fkey")
+ periods AcademicDayPeriod[]
+ @@unique([organizationId,schoolId,id],map:"vs_academics_day_pattern_scope_id_key")
+ @@index([organizationId,schoolId,academicYearId,state,updatedAt(sort:Desc)],map:"vs_academics_day_pattern_context_idx")
+ @@map("vs_academics_day_pattern")
+}
+
+model AcademicDayPeriod {
+ id String @id(map:"vs_academics_day_period_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ dayPatternId String @map("day_pattern_id") @db.Uuid
+ periodKey String @map("period_key") @db.Uuid
+ label String @db.VarChar(60)
+ kind String @db.VarChar(12)
+ startLocal DateTime @map("start_local") @db.Time(0)
+ endLocal DateTime @map("end_local") @db.Time(0)
+ position Int @db.SmallInt
+ pattern AcademicDayPattern @relation(fields:[organizationId,schoolId,dayPatternId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_period_pattern_fkey")
+ @@unique([organizationId,schoolId,dayPatternId,periodKey],map:"vs_academics_day_period_key_key")
+ @@unique([organizationId,schoolId,dayPatternId,position],map:"vs_academics_day_period_position_key")
+ @@index([organizationId,schoolId,dayPatternId,position],map:"vs_academics_day_period_pattern_idx")
+ @@map("vs_academics_day_period")
 }
 
 model Enrollment {

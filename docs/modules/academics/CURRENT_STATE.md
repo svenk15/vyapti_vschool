@@ -1,6 +1,6 @@
 # Academic setup and teaching context — current state
 
-Last updated: 2026-10-10. Task state is local to this checkout; no imported task completion. Design revision 4. No active execution timer.
+Last updated: 2026-10-12. Task state is local to this checkout; no imported task completion. Design revision 4. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -8,8 +8,13 @@ Last updated: 2026-10-10. Task state is local to this checkout; no imported task
 | ACA-02 | VERIFIED | PENDING | [Local verification](../../evidence/academics-02-local/verification.json); 65 unit, 50 PostgreSQL and 58 desktop/mobile browser tests passed |
 | ACA-03 | VERIFIED | PENDING | [Local verification](../../evidence/academics-03-local/verification.json); 84 unit, 17 real-PostgreSQL functional and 2 desktop/mobile browser tests passed |
 | TT-00 | VERIFIED | PENDING | [Readiness evidence](../../evidence/admin-tt-00-2026-10-11/README.md); focused repository gates, production build and desktop/mobile authenticated browser probe passed |
+| TT-01 | VERIFIED | PENDING | [Day-pattern evidence](../../evidence/admin-tt-01-2026-10-12/README.md); 2 unit, 2 real-PostgreSQL and 2 sequential desktop/mobile browser tests passed |
 
 ## Current checkpoint
+
+**TT-01 day-pattern checkpoint (12 October 2026):** `/admin/timetable` now lets an authorized Administrator configure one versioned draft per branch and academic year with teaching weekdays and ordered lesson/break intervals. The portable Academics domain/application code validates bounds, positions, local times, overlap and stable keys. The Prisma adapter rechecks account/token, organization, school, membership, `timetable.manage`, release, entitlement and activation before reads and inside account→Organization→School guarded writes. Writes use expected-version CAS, scoped exact-input receipts and atomic School revision/audit/outbox evidence; published patterns remain immutable. Forward migration `20261012090000_timetable_day_patterns` is applied to both named local databases. `pnpm demo:seed` preserves an existing fixture or creates the deterministic synthetic pattern and stores credentials only in the ignored private file.
+
+Focused unit and PostgreSQL tests passed 2/2 each. Sequential one-worker Chromium and mobile journeys passed 1/1 each after the final presentation change; overlap recovery, persistence after reload and navigation visibility were exercised. TypeScript, lint, backend boundaries, database-design validation and the isolated production build passed. Screenshots were directly inspected against the approved school-day editor. Visual status is `PARTIAL_REFERENCE_COMPARISON`: teaching-day, time-row, density and action composition align, while effective-date publication and the weekly draft canvas remain TT-02 work. The documented font portability deviation, native accessibility, TEN-03 and human review remain pending. SA-41 is therefore partial rather than complete.
 
 **TT-00 readiness checkpoint (11 October 2026):** the coordinated timetable pack has been reconciled to the live Academics, Attendance and Tenancy boundaries. `/admin/timetable/readiness` reports trusted module prerequisites and performs no write. Weekly-only scope, stable occurrence identity, acknowledgement/authority separation, 256 KiB/100-slot request limits and a 42-day batched generation horizon are recorded in DESIGN. The route is not in operational navigation and SA-41 remains incomplete. Focused lint/type/docs/boundary/backend checks, production build and authenticated desktop/mobile browser rendering passed; screenshots were inspected directly. Human review remains PENDING.
 

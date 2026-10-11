@@ -49,6 +49,12 @@ Depends on verified Academic setup, existing Attendance pinning semantics and Te
 
 Acceptance: denied and unavailable states are honest; no timetable/attendance row changes; lint, typecheck, boundary/backend and focused browser rendering at desktop/mobile. Human review remains PENDING. TT-01 follows only after its two scoped day-pattern tables, constraints, indexes, mutation guard and migration test are reconciled into the live LLD. SA-41 remains incomplete until draft editing, conflict preview, immutable publication and idempotent Attendance occurrence handoff are implemented.
 
+## TT-01 — Configure a versioned weekly day pattern
+
+Depends on TT-00, verified Academic setup, the trusted Timetable release, active institution entitlement and active branch activation. The Administrator outcome is one current branch/year draft containing teaching weekdays plus ordered lesson and break intervals. This task does not publish a timetable, assign lessons, create dated exceptions or generate Attendance sessions.
+
+Acceptance: validate unique teaching days 1–7, 1–32 contiguous ordered periods, valid local times, nonoverlap and at least one lesson. Every protected read/write rechecks current account/token, membership, `timetable.manage`, release, entitlement and activation. Mutations use account→Organization→School guards, expected-version CAS, exact scoped idempotency and atomic audit/outbox/receipt evidence. Preserve published history while replacing only the one draft. Real PostgreSQL proves scope/FKs, replay, stale conflict, rollback and published-row preservation. Focused desktop/mobile browser journeys prove overlap recovery, save/reload, navigation visibility and responsive composition. The approved reference comparison remains partial until TT-02 supplies the weekly draft canvas and effective-date publication contract.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.

@@ -25,4 +25,6 @@ export const academicsGateway={
  async createOffering(identity:Identity|null,input:Parameters<AcademicServices['create']>[3]){const s=await scope(identity);return service().create(identity,s.organizationId,s.schoolId,input);},
  async assignTeacher(identity:Identity|null,input:Parameters<AcademicServices['assign']>[3]){const s=await scope(identity);return service().assign(identity,s.organizationId,s.schoolId,input);},
  async endTeacherAssignment(identity:Identity|null,id:string,input:Parameters<AcademicServices['end']>[4]){const s=await scope(identity);return service().end(identity,s.organizationId,s.schoolId,id,input);},
+ async timetablePatternContext(identity:Identity|null,academicYearId:string){const s=await scope(identity);return service().context(identity,s.organizationId,s.schoolId,academicYearId);},
+ async saveTimetablePattern(identity:Identity|null,input:Parameters<AcademicServices['save']>[3]){const s=await scope(identity);return service().save(identity,s.organizationId,s.schoolId,input);},
 };

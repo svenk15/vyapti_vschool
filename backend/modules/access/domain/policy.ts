@@ -1,6 +1,6 @@
 import type { ProvisionInput, RoleCode } from "../../../../shared/contracts/access";
 export class AccessError extends Error {
-  constructor(public readonly code: "VALIDATION" | "PROVISION_CONFLICT" | "UNAUTHENTICATED" | "NOT_FOUND" | "UNAVAILABLE" | "FORBIDDEN" | "CONFLICT" | "STALE_VERSION" | "LAST_ADMIN" | "TIMEZONE_IN_USE" | "IDEMPOTENCY_CONFLICT" | "INVALID_CURSOR" | "INVALID_ACTIVATION" | "MODULE_NOT_LICENSED" | "RELEASE_UNAVAILABLE" | "DEPENDENCY_DISABLED" | "PREVIEW_STALE" | "MODULE_DISABLED" | "CALENDAR_REQUIRED" | "CALENDAR_IN_USE" | "SOURCE_EXPIRED" | "NON_TEACHING_DAY" | "NO_ELIGIBLE_TEACHER" | "TEACHER_TIME_CONFLICT" | "ROSTER_IN_USE" | "STUDENT_IN_USE" | "PERSON_SHARED" | "EMPTY_ROSTER" | "ROSTER_TOO_LARGE") { super(code); }
+  constructor(public readonly code: "VALIDATION" | "PROVISION_CONFLICT" | "UNAUTHENTICATED" | "NOT_FOUND" | "UNAVAILABLE" | "FORBIDDEN" | "CONFLICT" | "STALE_VERSION" | "LAST_ADMIN" | "TIMEZONE_IN_USE" | "IDEMPOTENCY_CONFLICT" | "INVALID_CURSOR" | "INVALID_ACTIVATION" | "MODULE_NOT_LICENSED" | "RELEASE_UNAVAILABLE" | "DEPENDENCY_DISABLED" | "PREVIEW_STALE" | "MODULE_DISABLED" | "CALENDAR_REQUIRED" | "CALENDAR_IN_USE" | "PERIOD_OVERLAP" | "SOURCE_EXPIRED" | "NON_TEACHING_DAY" | "NO_ELIGIBLE_TEACHER" | "TEACHER_TIME_CONFLICT" | "ROSTER_IN_USE" | "STUDENT_IN_USE" | "PERSON_SHARED" | "EMPTY_ROSTER" | "ROSTER_TOO_LARGE") { super(code); }
 }
 export const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function normalizeEmail(value: string): string { return value.trim().toLowerCase(); }
@@ -16,7 +16,7 @@ export function normalizeProvision(input: ProvisionInput): ProvisionInput {
   try { new Intl.DateTimeFormat("en",{timeZone:result.timezone}); } catch { throw new AccessError("VALIDATION"); }
   return result;
 }
-const admin=["school.manage","user.manage","module.configure","branding.manage","class.manage","class.read","student.manage","student.read","attendance.read_class","attendance.read_school","attendance.correct","attendance.export","admissions.manage","self.read"];
+const admin=["school.manage","user.manage","module.configure","branding.manage","class.manage","class.read","student.manage","student.read","attendance.read_class","attendance.read_school","attendance.correct","attendance.export","admissions.manage","timetable.manage","self.read"];
 const teacher=["class.read","student.read","attendance.mark","attendance.read_class","self.read"];
 export function capabilitiesFor(roles: readonly RoleCode[]): readonly string[] { return [...new Set(roles.flatMap(r=>r==="SCHOOL_ADMIN"?admin:r==="TEACHER"?teacher:[]))]; }
 export function currentIdentity(account:{status:string;tokenVersion:number}|null,tokenVersion:number):boolean { return !!account&&account.status==="ACTIVE"&&account.tokenVersion===tokenVersion; }

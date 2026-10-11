@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="2" failures="0" errors="0" time="1.349040167">
+    <testsuite name="test/functional/timetable-pattern.test.ts" timestamp="2026-10-11T19:13:20.858Z" hostname="Venkateshs-MacBook-Air.local" tests="2" failures="0" errors="0" skipped="0" time="1.349040167">
+        <testcase classname="test/functional/timetable-pattern.test.ts" name="TT-01 PostgreSQL timetable pattern &gt; creates, reads, replays and updates one scoped draft while preserving published history" time="0.110004625">
+        </testcase>
+        <testcase classname="test/functional/timetable-pattern.test.ts" name="TT-01 PostgreSQL timetable pattern &gt; denies foreign scope and rolls back the pattern when evidence fails" time="0.03717575">
+        </testcase>
+    </testsuite>
+</testsuites>

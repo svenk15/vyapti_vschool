@@ -81,6 +81,7 @@
 .admission-workflow .workspace-choice-stage{gap:0}.admission-workflow .workspace-choice-stage>h2{margin:0}.admission-workflow .workspace-choice-stage>p.muted{margin:8px 0 24px}.admission-workflow .workspace-choice-actions .btn{min-height:40px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:550;line-height:1.4}
 .admission-workflow .workspace-choice-review{grid-template-columns:minmax(160px,300px) minmax(0,1fr);gap:12px 0;padding-bottom:22px;border-bottom:1px solid var(--line)}.admission-workflow .workspace-choice-review>div{display:contents}.admission-workflow .workspace-choice-review dt,.admission-workflow .workspace-choice-review dd{padding:0;border:0}.admission-workflow .workspace-choice-outcome{padding:20px 0 22px}.admission-workflow .workspace-choice-outcome h3{margin:0 0 8px;font-size:13px}.admission-workflow .workspace-choice-outcome p{margin:0;font-size:13px}
 .timetable-readiness-list{display:grid;margin-top:18px}.timetable-readiness-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 0;border-top:1px solid var(--line)}.timetable-readiness-row:first-child{border-top:0}.timetable-readiness-row p{margin:4px 0 0}.timetable-readiness-row .badge{flex:none}
+.weekday-fieldset{display:flex;flex-wrap:wrap;gap:12px;border:0;padding:0;margin:0}.weekday-fieldset legend{font-weight:650;margin-bottom:8px}.weekday-fieldset label{display:flex;align-items:center;gap:6px}.timetable-period-list{display:grid;margin-top:18px}.timetable-period-row{display:grid;grid-template-columns:minmax(180px,2fr) minmax(120px,1fr) minmax(110px,1fr) minmax(110px,1fr) auto;gap:12px;align-items:end;padding:16px 0;border-top:1px solid var(--line)}.timetable-period-row:first-child{border-top:0}
 .capability-interest-stage .field{max-width:none}.capability-interest-stage textarea{min-height:96px}
 .portal-sidebar{width:252px}
 .portal-page-content .container{max-width:1320px;padding-inline:clamp(20px,2.4vw,34px)}
@@ -101,6 +102,7 @@
 @media(max-width:760px){.context-workflow-layout{grid-template-columns:minmax(0,1fr)}.context-workflow-main>.stepper{gap:8px}.context-workflow-main>.stepper li{align-items:flex-start;flex-direction:column}.context-workflow-card{padding:20px}.context-workflow-card .field{max-width:none}.context-workflow-card .workspace-choice-stage{min-height:0}.branding-review-fields,.activity-review-fields,.admission-applicant-fields{grid-template-columns:minmax(0,1fr)}.branding-review-fields .field:last-child,.admission-applicant-fields .field:last-child{grid-column:auto}}
 @media(max-width:760px){.admission-workflow .workspace-choice-actions .btn{min-height:44px;padding:10px 14px}}
 @media(max-width:760px){.admission-workflow .workspace-choice-review{grid-template-columns:122px minmax(0,1fr);column-gap:0}}
+@media(max-width:760px){.timetable-period-row{grid-template-columns:minmax(0,1fr) minmax(110px,.7fr)}.timetable-period-row .field:first-child{grid-column:1/-1}.timetable-period-row .btn{justify-self:start}}
 .brand-preview-session{display:grid;gap:14px;margin-top:20px;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg)}
 .brand-preview-session h2{margin:0;font-size:19px}
 .brand-preview-session .spread{align-items:flex-start}
@@ -733,3 +735,25 @@ body{font-family:var(--font-ui)}
 .attendance-stale-review li{display:grid;grid-template-columns:minmax(140px,1fr) repeat(2,minmax(120px,auto));gap:10px;font-size:13px}
 @media(max-width:900px){.attendance-correction-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:620px){.attendance-correction-fields{grid-template-columns:minmax(0,1fr)}.attendance-correction-fields>.field:nth-child(n+3),.attendance-correction-review-reason{grid-column:auto}.attendance-correction-card{min-height:0}.attendance-stale-review li{grid-template-columns:minmax(0,1fr)}.attendance-review-page>.attendance-history-card,.attendance-review-page>.attendance-cancel-card{width:100%}}
+
+/* TT-01 day-pattern composition derived from the approved school-day editor. */
+.timetable-pattern-editor{width:min(100%,760px);display:grid;gap:20px}
+.timetable-pattern-editor>.page-heading{margin-bottom:0}
+.timetable-pattern-editor>.page-heading h1{font-size:28px;font-weight:650;line-height:1.25;letter-spacing:-.7px}
+.timetable-pattern-card{padding:22px;overflow:hidden}
+.timetable-pattern-card>.section-header{margin-bottom:24px}
+.timetable-pattern-settings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.timetable-pattern-settings>.field{margin:0}
+.timetable-weekdays{margin:22px 0 0;padding:18px 0 22px;border:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.timetable-weekdays legend{padding:0 10px 0 0;font-size:13px;font-weight:650}
+.timetable-period-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:22px 0 16px}
+.timetable-period-heading h3,.timetable-period-heading p{margin:0}
+.timetable-period-heading h3{font-size:16px;line-height:1.4}
+.timetable-period-heading p{margin-top:5px;color:var(--muted);font-size:12px}
+.timetable-period-list{display:grid;gap:0;border-top:1px solid var(--line)}
+.timetable-period-row{display:grid;grid-template-columns:minmax(150px,1.4fr) minmax(105px,.8fr) minmax(105px,.8fr) minmax(105px,.8fr) auto;align-items:end;gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}
+.timetable-period-row>.field{min-width:0;margin:0}
+.timetable-period-row>.btn{min-height:40px;margin-bottom:18px;padding-inline:10px}
+.timetable-pattern-actions{align-items:center;justify-content:space-between;margin-top:20px}
+.timetable-pattern-actions p{margin:0;color:var(--muted);font-size:12px}
+@media(max-width:760px){.timetable-pattern-editor{width:100%}.timetable-pattern-card{padding:20px}.timetable-pattern-settings{grid-template-columns:minmax(0,1fr)}.timetable-period-heading{align-items:stretch;flex-direction:column}.timetable-period-heading .btn{align-self:flex-start}.timetable-period-row{grid-template-columns:repeat(2,minmax(0,1fr))}.timetable-period-row>.field:first-child{grid-column:1/-1}.timetable-period-row>.btn{justify-self:start;margin:0}.timetable-pattern-actions{align-items:stretch;flex-direction:column}.timetable-pattern-actions .btn{width:100%}}

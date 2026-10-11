@@ -1,0 +1,9 @@
+import {redirect} from 'next/navigation';
+import {AccessError} from '@/backend/modules/access/contracts';
+import {Alert,BrandSurface,PageHeader} from '@/components/ui/primitives';
+import {TimetablePatternEditor} from '@/components/timetable-pattern-editor';
+import {accountGateway} from '@/lib/server/access';
+import {academicsGateway} from '@/lib/server/academics';
+import {getIdentity} from '@/lib/server/auth';
+export const dynamic='force-dynamic';
+export default async function TimetablePage(){const identity=await getIdentity();let home:Awaited<ReturnType<typeof accountGateway.getHome>>|undefined,context:Awaited<ReturnType<typeof academicsGateway.timetablePatternContext>>|undefined,error:unknown;try{home=await accountGateway.getHome(identity);const workspace=await academicsGateway.workspace(identity),year=workspace.years.find(item=>item.status==='OPEN')??workspace.years.find(item=>item.status==='DRAFT');if(!year)throw new AccessError('NOT_FOUND');context=await academicsGateway.timetablePatternContext(identity,year.id);}catch(cause){error=cause;}if(!home||!context){if(error instanceof AccessError&&error.code==='UNAUTHENTICATED')redirect('/sign-in');return <BrandSurface><main id="main-content" className="container page-space"><PageHeader title="Weekly timetable pattern"/><Alert tone="warning" title="Timetable setup unavailable">The current branch needs an active academic year, Timetable release, entitlement, activation and planning permission.</Alert></main></BrandSurface>;}return <BrandSurface><main id="main-content" className="container page-space"><TimetablePatternEditor initial={context} schoolName={`${home.institutionName} · ${home.schoolName}`}/></main></BrandSurface>;}
