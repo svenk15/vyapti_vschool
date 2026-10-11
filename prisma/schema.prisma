@@ -46,6 +46,7 @@ model Organization {
   admissionApplicants AdmissionApplicant[]
   admissionApplications AdmissionApplication[]
   academicDayPatterns AcademicDayPattern[]
+  timetableRevisions TimetableRevision[]
 
   @@map("vs_access_organization")
 }
@@ -91,6 +92,7 @@ model School {
   admissionApplicants AdmissionApplicant[]
   admissionApplications AdmissionApplication[]
   academicDayPatterns AcademicDayPattern[]
+  timetableRevisions TimetableRevision[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -136,6 +138,7 @@ model UserAccount {
   revokedBrandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationRevoker")
   createdAdmissionApplications AdmissionApplication[] @relation("AdmissionApplicationCreator")
   createdAcademicDayPatterns AcademicDayPattern[] @relation("AcademicDayPatternCreator")
+  createdTimetableRevisions TimetableRevision[] @relation("TimetableRevisionCreator")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -738,6 +741,7 @@ model AcademicYear {
  enrollments Enrollment[]
  importJobs ImportJob[]
  dayPatterns AcademicDayPattern[]
+ timetableRevisions TimetableRevision[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_academic_year_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_academics_academic_year_code_key")
  @@map("vs_academics_academic_year")
@@ -809,6 +813,7 @@ model Section {
  campus Campus? @relation(fields:[organizationId,schoolId,campusId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_section_campus_fkey")
  placements SectionPlacement[]
  offerings CourseOffering[]
+ timetableSlots TimetableSlot[]
  @@unique([organizationId,schoolId,id,yearId],map:"vs_academics_section_scope_year_id_key")
  @@index([organizationId,schoolId,yearId,gradeId],map:"vs_academics_section_year_grade_idx")
  @@map("vs_academics_section")
@@ -829,6 +834,7 @@ model CourseOffering {
  subject Subject @relation(fields:[organizationId,schoolId,subjectId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_course_offering_subject_fkey")
  assignments TeacherAssignment[]
  sessions AttendanceSession[]
+ timetableSlots TimetableSlot[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_course_offering_scope_id_key")
  @@unique([organizationId,schoolId,yearId,code],map:"vs_academics_course_offering_code_key")
  @@unique([organizationId,schoolId,yearId,sectionId,subjectId],map:"vs_academics_course_offering_section_subject_key")
@@ -846,7 +852,9 @@ model TeacherAssignment {
  version Int
  offering CourseOffering @relation(fields:[organizationId,schoolId,offeringId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_assignment_offering_fkey")
  teacher Teacher @relation(fields:[organizationId,schoolId,teacherId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_assignment_teacher_fkey")
+ timetableSlots TimetableSlot[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_assignment_scope_id_key")
+ @@unique([organizationId,schoolId,id,offeringId],map:"vs_academics_teacher_assignment_scope_offering_key")
  @@index([organizationId,schoolId,offeringId,validFrom,validTo],map:"vs_academics_teacher_assignment_offering_date_idx")
  @@index([organizationId,schoolId,teacherId,validFrom,validTo],map:"vs_academics_teacher_assignment_teacher_date_idx")
  @@map("vs_academics_teacher_assignment")
@@ -869,6 +877,7 @@ model AcademicDayPattern {
  academicYear AcademicYear @relation(fields:[organizationId,schoolId,academicYearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_pattern_year_fkey")
  createdBy UserAccount @relation("AcademicDayPatternCreator",fields:[createdByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_pattern_creator_fkey")
  periods AcademicDayPeriod[]
+ timetableRevisions TimetableRevision[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_day_pattern_scope_id_key")
  @@index([organizationId,schoolId,academicYearId,state,updatedAt(sort:Desc)],map:"vs_academics_day_pattern_context_idx")
  @@map("vs_academics_day_pattern")
@@ -886,10 +895,60 @@ model AcademicDayPeriod {
  endLocal DateTime @map("end_local") @db.Time(0)
  position Int @db.SmallInt
  pattern AcademicDayPattern @relation(fields:[organizationId,schoolId,dayPatternId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_day_period_pattern_fkey")
+ timetableSlots TimetableSlot[] @relation("TimetableSlotPeriod")
  @@unique([organizationId,schoolId,dayPatternId,periodKey],map:"vs_academics_day_period_key_key")
  @@unique([organizationId,schoolId,dayPatternId,position],map:"vs_academics_day_period_position_key")
  @@index([organizationId,schoolId,dayPatternId,position],map:"vs_academics_day_period_pattern_idx")
  @@map("vs_academics_day_period")
+}
+
+model TimetableRevision {
+ id String @id(map:"vs_academics_timetable_revision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ academicYearId String @map("academic_year_id") @db.Uuid
+ dayPatternId String @map("day_pattern_id") @db.Uuid
+ revisionNo Int @map("revision_no")
+ state String @db.VarChar(16)
+ effectiveFrom DateTime @map("effective_from") @db.Date
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ createdByAccountId String @map("created_by_account_id") @db.Uuid
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_revision_org_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_revision_school_fkey")
+ academicYear AcademicYear @relation(fields:[organizationId,schoolId,academicYearId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_revision_year_fkey")
+ dayPattern AcademicDayPattern @relation(fields:[organizationId,schoolId,dayPatternId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_revision_pattern_fkey")
+ createdBy UserAccount @relation("TimetableRevisionCreator",fields:[createdByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_revision_creator_fkey")
+ slots TimetableSlot[]
+ @@unique([organizationId,schoolId,id],map:"vs_academics_timetable_revision_scope_id_key")
+ @@index([organizationId,schoolId,academicYearId,state,updatedAt(sort:Desc)],map:"vs_academics_timetable_revision_context_idx")
+ @@map("vs_academics_timetable_revision")
+}
+
+model TimetableSlot {
+ id String @id(map:"vs_academics_timetable_slot_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ revisionId String @map("revision_id") @db.Uuid
+ slotKey String @map("slot_key") @db.Uuid
+ academicYearId String @map("academic_year_id") @db.Uuid
+ dayPatternId String @map("day_pattern_id") @db.Uuid
+ classSectionId String @map("class_section_id") @db.Uuid
+ subjectOfferingId String @map("subject_offering_id") @db.Uuid
+ teacherAssignmentId String @map("teacher_assignment_id") @db.Uuid
+ dayOfWeek Int @map("day_of_week") @db.SmallInt
+ periodKey String @map("period_key") @db.Uuid
+ position Int @db.SmallInt
+ revision TimetableRevision @relation(fields:[organizationId,schoolId,revisionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_slot_revision_fkey")
+ section Section @relation(fields:[organizationId,schoolId,classSectionId,academicYearId],references:[organizationId,schoolId,id,yearId],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_slot_section_fkey")
+ offering CourseOffering @relation(fields:[organizationId,schoolId,subjectOfferingId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_slot_offering_fkey")
+ assignment TeacherAssignment @relation(fields:[organizationId,schoolId,teacherAssignmentId,subjectOfferingId],references:[organizationId,schoolId,id,offeringId],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_slot_assignment_fkey")
+ period AcademicDayPeriod @relation("TimetableSlotPeriod",fields:[organizationId,schoolId,dayPatternId,periodKey],references:[organizationId,schoolId,dayPatternId,periodKey],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_slot_period_fkey")
+ @@unique([organizationId,schoolId,revisionId,slotKey],map:"vs_academics_timetable_slot_key_key")
+ @@unique([organizationId,schoolId,revisionId,classSectionId,dayOfWeek,periodKey],map:"vs_academics_timetable_slot_cell_key")
+ @@index([organizationId,schoolId,revisionId,classSectionId,dayOfWeek,position],map:"vs_academics_timetable_slot_class_week_idx")
+ @@map("vs_academics_timetable_slot")
 }
 
 model Enrollment {

@@ -1171,6 +1171,28 @@
       "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, current timetable.manage and live module eligibility through the owning pattern operation.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
     },
     {
+      "model": "TimetableRevision",
+      "owner": "academics",
+      "table": "vs_academics_timetable_revision",
+      "status": "MIGRATED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; day_pattern_id uuid; revision_no int; state varchar(16); effective_from date; version int; created_at timestamptz(3); created_by_account_id uuid; updated_at timestamptz(3)",
+      "responsibility": "Versioned private weekly timetable draft root; publication is a later immutable lifecycle.",
+      "constraints": "Scoped Organization/School/Year/Pattern FKs; creator FK; DRAFT/DISCARDED state; positive revision/version; one partial unique live DRAFT per branch/year; scoped resume index",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, current timetable.manage and live Timetable/Academics/Staff eligibility for every read/write.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+    },
+    {
+      "model": "TimetableSlot",
+      "owner": "academics",
+      "table": "vs_academics_timetable_slot",
+      "status": "MIGRATED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; slot_key uuid; academic_year_id uuid; day_pattern_id uuid; class_section_id uuid; subject_offering_id uuid; teacher_assignment_id uuid; day_of_week smallint; period_key uuid; position smallint",
+      "responsibility": "Recurring weekly lesson candidate within one private timetable draft.",
+      "constraints": "Scoped Revision/Section/Offering/Assignment/Period FKs; day 1..7; positive position; unique stable slot key and unique class/day/period cell; scoped class-week index",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context and authorization through the owning timetable draft operation.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+    },
+    {
       "model": "OperatorAuditEntry",
       "owner": "platform",
       "table": "vs_platform_operator_audit",

@@ -27,4 +27,7 @@ export const academicsGateway={
  async endTeacherAssignment(identity:Identity|null,id:string,input:Parameters<AcademicServices['end']>[4]){const s=await scope(identity);return service().end(identity,s.organizationId,s.schoolId,id,input);},
  async timetablePatternContext(identity:Identity|null,academicYearId:string){const s=await scope(identity);return service().context(identity,s.organizationId,s.schoolId,academicYearId);},
  async saveTimetablePattern(identity:Identity|null,input:Parameters<AcademicServices['save']>[3]){const s=await scope(identity);return service().save(identity,s.organizationId,s.schoolId,input);},
+ async timetableDraftContext(identity:Identity|null,academicYearId:string,effectiveFrom:string){const s=await scope(identity);return service().draftContext(identity,s.organizationId,s.schoolId,academicYearId,effectiveFrom);},
+ async saveTimetableDraft(identity:Identity|null,input:Parameters<AcademicServices['saveDraft']>[3]){const s=await scope(identity);return service().saveDraft(identity,s.organizationId,s.schoolId,input);},
+ async discardTimetableDraft(identity:Identity|null,input:Parameters<AcademicServices['discardDraft']>[3]){const s=await scope(identity);return service().discardDraft(identity,s.organizationId,s.schoolId,input);},
 };
