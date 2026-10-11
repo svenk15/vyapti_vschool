@@ -63,6 +63,12 @@ sequenceDiagram
 
 Verification requires domain/input validation, real PostgreSQL proof of atomic persistence, exact replay, conflicting replay, revoked and cross-branch denial, institution reviewer scope and unchanged entitlement/activation rows. Playwright covers school-admin submission and institution inbox at desktop/mobile widths, including keyboard-reachable fields and explicit non-binding copy. RLS enforcement remains deferred under TEN-ADR-006 Path A; application authorization and scoped queries remain mandatory.
 
+### SA-08 approved composition overlay — 11 October 2026
+
+`/admin/modules` implements the approved **Choose a module → Request a change → Confirm** composition. The selected capability and normalized need remain in component memory through Back/Continue; no durable wizard draft is implied. Final confirmation alone calls the existing capability-interest use case. The browser retains one intent key after an unknown response and retries the exact payload with that key, so a committed first attempt is disclosed as the original result rather than duplicated. Editing either input starts a new intent. The success receipt states that no purchase, payment obligation, entitlement, release or branch activation changed.
+
+The existing status/history and institution-authorized activation controls remain at `/admin/modules/manage`. This route split changes no authority: both entries first load the current server-authorized branch context, and every read/write retains the application and transactional checks above.
+
 ## Transport and state transitions
 
 POST /api/v1/institutions/:id/branches requires institution branch.manage, input `{code,name,timezone,key}`; result safe branch metadata. POST /api/v1/context/switch accepts candidate institutionId/branchId, validates membership and returns new actor context; no trusting prior UI selection. Reads/commands use explicit scope rather than a mutable global server singleton.

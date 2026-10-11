@@ -76,6 +76,7 @@
 .sa02-request-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.workspace-choice-stage>.check-control{padding-block:4px}
 .context-workflow-page>.page-heading{margin-bottom:20px}.context-workflow-layout{display:grid;grid-template-columns:minmax(0,760px) minmax(280px,352px);justify-content:space-between;gap:24px;align-items:start}.context-workflow-main>.stepper{justify-content:space-between;padding:0 0 22px}.context-workflow-main>.stepper li{flex:1}.context-workflow-card{padding:24px 22px}.context-workflow-card .workspace-choice-stage{min-height:248px}.context-workflow-card .field{max-width:347px}.context-workflow-card .workspace-choice-actions{margin-top:auto}.context-workflow-card .workspace-choice-draft{margin-top:14px}.context-workflow-notes{display:grid;gap:20px}.context-workflow-notes h2{font-size:18px}.context-workflow-notes h3{font-size:13px}.context-workflow-notes p{margin:8px 0 0;color:var(--muted);font-size:12px}.context-workflow-notes hr{margin:20px 0;border:0;border-top:1px solid var(--line)}
 .branding-review-fields{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}.branding-review-fields .field{max-width:none}.branding-review-fields .field:last-child{grid-column:1}
+.capability-interest-stage .field{max-width:none}.capability-interest-stage textarea{min-height:96px}
 .portal-sidebar{width:252px}
 .portal-page-content .container{max-width:1320px;padding-inline:clamp(20px,2.4vw,34px)}
 .portal-page-content .page-space{padding-top:28px}
