@@ -1,6 +1,6 @@
 # SA-27 staged attendance correction — 11 October 2026
 
-Human visual acceptance is **PENDING**. This checkpoint changes presentation and client flow only; it does not alter Attendance persistence, authorization, transaction, locking, receipt or migration contracts.
+Owner review on 11 October 2026 **PASSED only the staged layout and normal successful correction journey** at source `f1a06607c9df7176629a436cc7586f27a9d92041`. It does not accept forced recovery or cancellation states, native accessibility, the documented font deviation, production gates or another Administrator workflow. This checkpoint changes presentation and client flow only; it does not alter Attendance persistence, authorization, transaction, locking, receipt or migration contracts.
 
 ## Authority and compared state
 
@@ -20,7 +20,7 @@ The browser probe uses real demo persistence for corrections and route intercept
 - A stale response retains attempted values, loads current records, shows current versus attempted status and requires a fresh review.
 - Successful correction persists after reload and immutable history remains separately reachable.
 - Cancellation remains reachable after resetting/completing a correction and is locked while a correction draft or unknown outcome exists.
-- Desktop 1440×1000, mobile 390×844 and Chromium scale factor 2.0 have no document-level horizontal overflow.
+- Desktop 1440×1000, mobile 390×844 and CDP `Emulation.setPageScaleFactor(2)` had no document-level horizontal overflow. This is page-scale emulation, not native browser zoom.
 
 `measurements.json` records computed styles, rendered fonts, overflow results and recovery assertions. `reference-sa-27-desktop.png` / `reference-sa-27-mobile.png` are the authority captures. `application-stage-select-desktop.png`, `application-stage-confirm-desktop.png`, `application-stage-select-mobile.png`, `application-correction-unknown-desktop.png`, `application-correction-stale-desktop.png`, `application-saved-history-unavailable-desktop.png`, `application-stage-final-desktop.png` and `application-cancellation-unknown-desktop.png` show the implemented states.
 
@@ -31,4 +31,4 @@ The browser probe uses real demo persistence for corrections and route intercept
 - `VSCHOOL_DEMO_URL=http://127.0.0.1:3400 node scripts/verify-admin-attendance-local.mjs`: passed all six recovery assertions plus stage retention and layout checks.
 - Real-PostgreSQL owner verification was reused from the unchanged Attendance backend: scoped correction/history authorization, current-value derivation, stale concurrency, replay, rollback and immutable revision evidence remain recorded in Attendance CURRENT_STATE.
 
-The reference sidebar renders bundled Nimbus Sans while the application uses the established macOS system fallback; redistribution authority remains unestablished. No font asset or reference was changed. Native VoiceOver/NVDA, TEN-03 and production-release gates remain outstanding.
+The reference sidebar renders bundled Nimbus Sans while the application uses the established macOS system fallback; redistribution authority remains unestablished. No font asset or reference was changed. Native 200% browser zoom, VoiceOver/NVDA, TEN-03 and production-release gates remain outstanding. Human acceptance is limited to the staged layout and normal successful correction journey described above.

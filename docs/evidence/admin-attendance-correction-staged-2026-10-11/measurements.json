@@ -503,7 +503,7 @@
       "overflow": false,
       "offenders": []
     },
-    "zoom200": {
+    "pageScale2x": {
       "mechanism": "Chromium DevTools Emulation.setPageScaleFactor",
       "viewport": 1440,
       "documentWidth": 1440,
