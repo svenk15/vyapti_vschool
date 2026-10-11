@@ -55,6 +55,12 @@ Depends on TT-00, verified Academic setup, the trusted Timetable release, active
 
 Acceptance: validate unique teaching days 1–7, 1–32 contiguous ordered periods, valid local times, nonoverlap and at least one lesson. Every protected read/write rechecks current account/token, membership, `timetable.manage`, release, entitlement and activation. Mutations use account→Organization→School guards, expected-version CAS, exact scoped idempotency and atomic audit/outbox/receipt evidence. Preserve published history while replacing only the one draft. Real PostgreSQL proves scope/FKs, replay, stale conflict, rollback and published-row preservation. Focused desktop/mobile browser journeys prove overlap recovery, save/reload, navigation visibility and responsive composition. The approved reference comparison remains partial until TT-02 supplies the weekly draft canvas and effective-date publication contract.
 
+## TT-02 — Save, resume and discard a weekly timetable draft
+
+Depends on TT-01. Implement the branch/year draft aggregate and slots exactly as reconciled in DESIGN. Use real scoped Sections, Offerings and effective TeacherAssignments; use the current TT-01 pattern and lesson period keys. The first cut is weekly and roomless under TT-00's accepted nullable-room boundary. Do not publish, validate TT-03 whole-branch clashes or generate Attendance occurrences.
+
+Acceptance: at most 100 unique class/day/lesson-period slots; effective date within the academic year; each offering matches its section/year and each assignment matches the offering and covers effective date. Save/reopen and explicit discard use current authorization, module eligibility, account→Organization→School guards, version CAS and exact idempotency with atomic evidence. Discard retains the row and slots. The Administrator UI has a grid plus accessible list semantics, preserves in-flow edits, warns before abandoning changes, enables Save only after change and never exposes an unsupported two-week or room choice. Unit, real-PostgreSQL and sequential one-worker desktop/mobile browser evidence are required; human review remains PENDING.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.
