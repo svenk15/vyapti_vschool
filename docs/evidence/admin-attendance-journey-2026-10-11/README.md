@@ -45,7 +45,7 @@ Chromium's platform-font inspection on macOS reported `.SF NS` for reference and
 | 40 px desktop primary action | Attendance inherited the shared 44 px action height | Attendance CTAs now measure 40 px with 8 × 14 px padding; mobile retains a 44 px target | Computed desktop/mobile bounds |
 | Saved confirmation can be dismissed | Confirmation had no close action | Added a 40 px accessible close control labelled “Close correction saved message” | Focused Playwright open/close check and `application-correction-saved-dismissible.png` |
 
-Remaining deviations: the live page represents the complete real register rather than the prototype's three-step simulated form; it therefore shows summary, all frozen students, current values, history, and cancellation together. This is required by the accepted attendance contract. Nimbus Sans is not copied into production. Native VoiceOver/NVDA evidence remains outstanding.
+Remaining deviations: the live page represents the complete real register rather than the prototype's three-step simulated form; it therefore shows summary, all frozen students, current values, history, and cancellation together. The Attendance owner contract requires those persisted facts and operations, but no recorded owner feedback accepts the resulting visual/compositional difference from the approved reference. Treat it as an **unaccepted reference deviation**, not as visual acceptance. Nimbus Sans is not copied into production. Native VoiceOver/NVDA evidence remains outstanding.
 
 ## Verification
 

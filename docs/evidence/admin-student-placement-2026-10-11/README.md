@@ -36,4 +36,4 @@ Engineering comparison captured 11 October 2026. Human visual acceptance remains
 ## Remaining deviations
 
 - Production uses the enabled route set and real account/school data, so prototype-only navigation, review banner and fictional identities are absent.
-- The standalone selector is intentionally capped at the server-supported first 100 active Students; branches beyond that use the existing paginated/searchable directory before entering the same workflow. Draft persistence/resume remains unimplemented because its lifecycle contract is unresolved. Human comparison and acceptance are pending.
+- The initial standalone selector page remains bounded to 100 active Students, but the picker now consumes the existing authorized Student search and signed-cursor pagination contract. Eligible Students beyond the first page can be loaded or found by explicit name/admission search without using identity-resolution rules. Draft persistence/resume remains unimplemented because its lifecycle contract is unresolved. Human comparison and acceptance are pending.

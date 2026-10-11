@@ -5,10 +5,12 @@ import {createTenancyServices} from '../../backend/composition/tenancy';
 import {createAcademicServices} from '../../backend/composition/academics';
 import {createStudentsServices} from '../../backend/composition/students';
 import {schoolInput} from '../fixtures/access-management';
+import {PrismaClient} from '../../generated/prisma/client';
+import {PrismaPg} from '@prisma/adapter-pg';
 
 const url=process.env.TEST_DATABASE_URL??'';if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated STU-02 E2E PostgreSQL database required');
-const releasedModules=['student_core','academic_core'] as const,access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules}),academics=createAcademicServices({databaseUrl:url,releasedModules}),students=createStudentsServices({databaseUrl:url,releasedModules,cursorSecret:'students-e2e-cursor-secret-32-bytes-minimum'}),operator={operatorId:randomUUID(),verified:true as const},input=schoolInput();
-let school:Awaited<ReturnType<typeof access.provisionSchool>>,studentId:string,studentAdmission:string,yearId:string,yearCode:string,sectionId:string,otherYearSectionId:string;
+const releasedModules=['student_core','academic_core'] as const,access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules}),academics=createAcademicServices({databaseUrl:url,releasedModules}),students=createStudentsServices({databaseUrl:url,releasedModules,cursorSecret:'students-e2e-cursor-secret-32-bytes-minimum'}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},input=schoolInput();
+let school:Awaited<ReturnType<typeof access.provisionSchool>>,studentId:string,studentAdmission:string,overflowStudentId:string,overflowAdmission:string,yearId:string,yearCode:string,sectionId:string,otherYearSectionId:string;
 async function openYear(suffix:string,gradeId:string){const year=await academics.createYear({accountId:school.accountId,tokenVersion:1},school.organizationId,school.schoolId,{code:`Y${suffix}`,name:`Synthetic Year ${suffix}`,startsOn:'2026-01-01',endsOn:'2027-01-01',key:randomUUID(),reason:'Synthetic STU-02 browser year'}),section=await academics.createSection({accountId:school.accountId,tokenVersion:1},school.organizationId,school.schoolId,{yearId:year.id,gradeId,campusId:null,code:'A',name:'Section A',key:randomUUID(),reason:'Synthetic STU-02 browser section'});await academics.publishCalendar({accountId:school.accountId,tokenVersion:1},school.organizationId,school.schoolId,year.calendarId,{expectedVersion:1,teachingWeekdays:[1,2,3,4,5],exceptions:[],key:randomUUID(),reason:'Synthetic STU-02 browser calendar'});await academics.transitionYear({accountId:school.accountId,tokenVersion:1},school.organizationId,school.schoolId,year.id,{expectedVersion:1,target:'OPEN',key:randomUUID(),reason:'Open synthetic STU-02 browser year'});return {year,section};}
 test.beforeAll(async()=>{
   school=await access.provisionSchool(input,operator);const identity={accountId:school.accountId,tokenVersion:1};
@@ -18,9 +20,24 @@ test.beforeAll(async()=>{
   const grade=await academics.createGrade(identity,school.organizationId,school.schoolId,{code:`G${randomUUID().slice(0,6).toUpperCase()}`,name:'Grade 8',key:randomUUID(),reason:'Synthetic STU-02 browser grade'}),primary=await openYear(randomUUID().slice(0,6).toUpperCase(),grade.id),other=await openYear(randomUUID().slice(0,6).toUpperCase(),grade.id);
   yearId=primary.year.id;yearCode=primary.year.code;sectionId=primary.section.id;otherYearSectionId=other.section.id;
   const student=await students.create(identity,school.organizationId,school.schoolId,{firstName:'Jordan',lastName:'Learner',admissionNumber:`E2E-${randomUUID().slice(0,8).toUpperCase()}`,admittedOn:'2026-01-01',existingPersonId:null,key:randomUUID()});studentId=student.studentId;studentAdmission=student.admissionNumber;
+  const token=randomUUID().slice(0,8).toUpperCase(),now=new Date(),people=Array.from({length:101},(_,index)=>({id:randomUUID(),organizationId:school.organizationId,firstName:index===100?'Zzz Beyond':`Aaa Page ${String(index).padStart(3,'0')}`,lastName:'Selector',contactEmail:null,version:1,createdAt:now})),studentRows=people.map((person,index)=>({id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,personId:person.id,admissionNumber:`PAGE-${token}-${String(index).padStart(3,'0')}`,status:'ACTIVE',version:1,createdAt:now}));
+  overflowStudentId=studentRows[100]!.id;overflowAdmission=studentRows[100]!.admissionNumber;
+  await db.$transaction([db.person.createMany({data:people}),db.student.createMany({data:studentRows})]);
 });
-test.afterAll(async()=>{await students.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();});
+test.afterAll(async()=>{await db.$disconnect();await students.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();});
 async function signIn(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email address',exact:true}).fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/admin$/,{timeout:15000});}
+
+test('finds and selects an eligible student beyond the first standalone enrollment page',async({page})=>{
+  await signIn(page);await page.goto('/admin/students/enroll');
+  const selector=page.getByLabel('Student',{exact:true});
+  await expect(page.getByRole('button',{name:'Load more students'})).toBeVisible();
+  await expect(selector.locator(`option[value="${overflowStudentId}"]`)).toHaveCount(0);
+  await page.getByRole('button',{name:'Load more students'}).click();
+  await expect(selector.locator(`option[value="${overflowStudentId}"]`)).toHaveCount(1);
+  await page.reload();await page.getByLabel('Search by').selectOption('admissionNumber');await page.getByLabel('Find student').fill(overflowAdmission);await page.getByRole('button',{name:'Search',exact:true}).click();
+  await selector.selectOption(overflowStudentId);await page.getByRole('button',{name:/Continue/}).click();
+  await expect(page).toHaveURL(new RegExp(`/admin/students/${overflowStudentId}/enrollment`));await expect(page.getByLabel('Student',{exact:true})).toBeDisabled();
+});
 
 test('enrolls once into an open year, refreshes history and class roster count, and rejects duplicate/year mismatch',async({page})=>{
   await signIn(page);await page.goto('/admin/students');await page.getByRole('link',{name:'Enroll student'}).click();await expect(page).toHaveURL(/\/admin\/students\/enroll/);await page.getByLabel('Student',{exact:true}).selectOption(studentId);await page.getByRole('button',{name:/Continue/}).click();await expect(page).toHaveURL(new RegExp(`/admin/students/${studentId}/enrollment`));await expect(page.getByRole('heading',{name:'Enroll and place a student'})).toBeVisible();await expect(page.getByRole('heading',{name:'Enrollment',exact:true})).toBeVisible();await expect(page.getByLabel('Student',{exact:true})).toBeDisabled();await page.screenshot({path:`docs/evidence/admin-student-placement-2026-10-11/application-sa-19-entry-${test.info().project.name}.png`,fullPage:true});
