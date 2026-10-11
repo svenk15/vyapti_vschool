@@ -24,6 +24,8 @@ const observations=[];
 try{
  const adminContext=await browser.newContext({viewport:{width:1440,height:1000}}),admin=await adminContext.newPage();
  await signIn(admin,required(people.adminEmail,'adminEmail'),required(people.password,'password'),/\/admin$/);
+ const navigation=admin.locator('#portal-navigation nav');
+ await navigation.getByRole('link',{name:'Attendance',exact:true}).waitFor();
  for(const [path,heading] of [['/admin',''],['/admin/teachers',''],['/admin/students',''],['/admin/classes',''],['/admin/attendance/sessions','']]){
   const response=await admin.goto(`${baseURL}${path}`);if(!response?.ok())throw new Error(`Admin route ${path} returned ${response?.status()}.`);
   await admin.locator('#main-content').waitFor();
@@ -35,6 +37,8 @@ try{
   const title=(await titleLocator.textContent())?.trim()??heading;
   observations.push({persona:'administrator',path,title,status:response.status()});
  }
+ if(await admin.getByRole('alert').filter({hasText:'Attendance unavailable'}).count())throw new Error('Attendance navigation is visible but its module is unavailable. Start the demo with pnpm demo:start.');
+ await admin.getByRole('heading',{name:'Session',exact:true}).waitFor();
  const reportPath=`/admin/reports/attendance?fromDate=${recommendedDate}&toDate=${toDate}`;
  const reportResponse=await admin.goto(`${baseURL}${reportPath}`);if(!reportResponse?.ok())throw new Error(`Attendance report returned ${reportResponse?.status()}.`);
  await admin.getByRole('heading',{name:'Review and export attendance'}).waitFor();

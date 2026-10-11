@@ -16,11 +16,12 @@ Final queue checkpoint: 11 October 2026. Canonical workflow statuses remain in `
 - Source: `02ba4cee2014a3a495e3e9f2fc3759cd5dec38ba`
 - Production build: `TEPKFVik4z6UA_YZ4PO9l`
 - URL: `http://127.0.0.1:3400/sign-in`
+- Start: `pnpm demo:start` (after `pnpm build` when source changed)
 - Seed: `pnpm demo:seed`
 - Administrator and teacher credentials: ignored private file `artifacts/people-02/private-demo.json`
 - Attendance scenario: ignored private file `artifacts/attendance-01/private-demo.json`, school-local date `2026-10-11`
 
-`pnpm demo:seed` completed without replacing existing records and reported three assigned sessions plus preserved submitted/scheduled/report fixtures. The final production build passed. A read-only authenticated browser smoke verified the committed demo's Administrator attendance list, Student registration, SA-13, SA-14 and SA-17 routes and headings. The focused Staff/access test passed 1/1 desktop and 1/1 mobile against `vyapti_vschool_test`; the remaining journey-specific verification is linked above and was not rerun unchanged.
+`pnpm demo:seed` completed without replacing existing records and reported three assigned sessions plus preserved submitted/scheduled/report fixtures. The final production build passed. Use `pnpm demo:start` so the local server receives the explicit Phase 1 release manifest; plain `pnpm start` intentionally does not infer released modules. A read-only authenticated browser smoke verifies that Attendance is both present in the server-filtered navigation and renders its usable Session step, in addition to the connected Administrator and teacher routes. The focused Staff/access test passed 1/1 desktop and 1/1 mobile against `vyapti_vschool_test`; the remaining journey-specific verification is linked above and was not rerun unchanged.
 
 ## Consolidated walkthrough
 
