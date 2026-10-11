@@ -6,9 +6,15 @@ Last updated: 2026-10-10. FND-01 locally verified and accepted on the owner’s 
 |---|---|---|---|
 | FND-01 | VERIFIED | PASSED | [Local verification](../../evidence/fnd-01-local/verification.json); source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff |
 | FND-02 | VERIFIED | PENDING | [Demo verification](../../evidence/fnd-02-demo/verification.json); executable checkpoint and evidence commit recorded there |
-| SA-COMP-05 / SA-62 activity subset | VERIFIED | PENDING | [Safe activity evidence](../../evidence/sa-comp-05/README.md); implementation source `2ac3f9c314674dd36819eb0ea0c8a5824dcb5120` |
+| SA-COMP-05 / SA-62 activity subset | VERIFIED | PENDING | [Staged direct comparison](../../evidence/admin-sa-62-2026-10-11/README.md); [safe activity backend evidence](../../evidence/sa-comp-05/README.md) |
 
 ## Current checkpoint
+
+### SA-62 approved staged composition — 11 October 2026
+
+Implementation and direct reference comparison are complete on the tested worktree based on `f7a7896`; the resulting checkpoint is the enclosing commit. `/admin/activity` now implements Find activity → Inspect evidence → Confirm with URL-preserved filters/action, focus movement, a selected-action safe receipt and truthful empty/invalid/denied states. `/admin/activity/manage` retains the earlier authorized paginated directory. The existing safe activity facade, live `school.manage` authorization, branch scope, allowlist and redaction contracts are unchanged; no schema or migration changed.
+
+Focused Playwright passed the staged administrator journey on Chromium desktop and mobile (2/2) and the empty, invalid-range and direct teacher-denial cases on both projects (2/2), using real `vyapti_vschool_test` with all 38 migrations. Reference and application captures at matching 1440×1000 desktop and 390×844 mobile sizes were directly inspected. The approved stage order, copy, field/control placement, card hierarchy and responsive composition match. Shared topbar breadcrumb detail, intentionally entitlement-filtered navigation, disabled unsupported durable draft, the recorded font fallback, native accessibility/actual browser zoom and human review remain pending. See [SA-62 evidence](../../evidence/admin-sa-62-2026-10-11/README.md).
 
 Foundation source fd1ba58f02bb60d14527595a73aca93ad4c8e0ff passed local checks, real PostgreSQL functional tests, desktop/mobile browser journeys, failure-state probes and production build. The FND-01 demo at http://127.0.0.1:3400 was accepted and stopped for the authorized DS-01 build. See design-system CURRENT_STATE for the current demo. Human acceptance PASSED after explicit owner feedback.
 
