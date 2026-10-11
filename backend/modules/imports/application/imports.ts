@@ -1,11 +1,12 @@
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
-import type {ImportConfirmation,ImportJobStatus,ImportOptions,ImportPreview,ImportProcessResult,ImportRowPage} from '../../../../shared/contracts/imports';
+import type {ImportConfirmation,ImportJobPage,ImportJobStatus,ImportOptions,ImportPreview,ImportProcessResult,ImportRowPage} from '../../../../shared/contracts/imports';
 import {AccessError,uuidPattern} from '../../access/contracts/index';
 import {parseRosterCsv,validCivilDate,type ParsedRosterRow} from '../domain/csv';
 export type PreviewCommand=Readonly<{yearId:string;campusId:string|null;namespace:string;validFrom:string;schemaVersion:'STUDENT_ROSTER_V1';fileName:string;idempotencyKey:string;sourceBytes:Uint8Array;rows:readonly ParsedRosterRow[]}>;
 export interface ImportsRepository{
  authorize(identity:Identity,organizationId:string,schoolId:string):Promise<void>;
  options(identity:Identity,organizationId:string,schoolId:string):Promise<ImportOptions>;
+ list(identity:Identity,organizationId:string,schoolId:string,cursor:string|null):Promise<ImportJobPage>;
  preview(identity:Identity,organizationId:string,schoolId:string,command:PreviewCommand):Promise<ImportPreview>;
  rows(identity:Identity,organizationId:string,schoolId:string,jobId:string,cursor:string|null):Promise<ImportRowPage>;
  confirm(identity:Identity,organizationId:string,schoolId:string,input:{jobId:string;expectedVersion:number;previewRevision:number;fileHash:string;skipInvalid:boolean;key:string}):Promise<ImportConfirmation>;
@@ -28,6 +29,7 @@ function command(input:{yearId:unknown;campusId?:unknown;namespace:unknown;valid
 export function createImportsUseCases(repository:ImportsRepository){return {
  authorize(identity:Identity|null,organizationId:unknown,schoolId:unknown){return repository.authorize(actor(identity),id(organizationId),id(schoolId));},
  options(identity:Identity|null,organizationId:unknown,schoolId:unknown){return repository.options(actor(identity),id(organizationId),id(schoolId));},
+ list(identity:Identity|null,organizationId:unknown,schoolId:unknown,cursor:unknown){if(cursor!==undefined&&cursor!==null&&typeof cursor!=='string')throw new AccessError('INVALID_CURSOR');return repository.list(actor(identity),id(organizationId),id(schoolId),cursor as string|null??null);},
  async preview(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:Parameters<typeof command>[0]){const a=actor(identity),org=id(organizationId),school=id(schoolId),checked=command(input),rows=parseRosterCsv(checked.sourceBytes);return repository.preview(a,org,school,{...checked,rows});},
  rows(identity:Identity|null,organizationId:unknown,schoolId:unknown,jobId:unknown,cursor:unknown){if(cursor!==undefined&&cursor!==null&&typeof cursor!=='string')throw new AccessError('INVALID_CURSOR');return repository.rows(actor(identity),id(organizationId),id(schoolId),id(jobId),cursor as string|null??null);},
  confirm(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{jobId:unknown;expectedVersion:unknown;previewRevision:unknown;fileHash:unknown;skipInvalid:unknown;key:unknown}){if(!Number.isSafeInteger(input.expectedVersion)||!Number.isSafeInteger(input.previewRevision)||typeof input.fileHash!=='string'||!/^[0-9a-f]{64}$/.test(input.fileHash)||typeof input.skipInvalid!=='boolean'||typeof input.key!=='string'||!/^[A-Za-z0-9_-]{16,100}$/.test(input.key))throw new AccessError('VALIDATION');return repository.confirm(actor(identity),id(organizationId),id(schoolId),{jobId:id(input.jobId),expectedVersion:input.expectedVersion as number,previewRevision:input.previewRevision as number,fileHash:input.fileHash,skipInvalid:input.skipInvalid,key:input.key});},

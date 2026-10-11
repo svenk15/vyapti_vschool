@@ -21,6 +21,7 @@ async function parseMultipart(request:Request,bytes:Uint8Array,key:string){let f
  const text=(name:string)=>{const value=form.get(name);if(typeof value!=='string')throw new HttpUploadError('MALFORMED_MULTIPART');return value;},sourceBytes=new Uint8Array(await fileValue.arrayBuffer());return {fileName:fileValue.name,sourceBytes,schemaVersion:text('schemaVersion'),yearId:text('yearId'),campusId:form.has('campusId')?text('campusId'):null,namespace:text('namespace'),validFrom:text('validFrom'),idempotencyKey:key};
 }
 export async function importOptions(){try{return Response.json(await importsGateway.options(await getIdentity()),{headers:responseHeaders});}catch(errorValue){return error(errorValue);}}
+export async function listImports(request:Request){try{const url=new URL(request.url);return Response.json(await importsGateway.list(await getIdentity(),url.searchParams.get('cursor')),{headers:responseHeaders});}catch(errorValue){return error(errorValue);}}
 export async function previewImport(request:Request){try{
  if(!process.env.NEXTAUTH_URL||request.headers.get('origin')!==new URL(process.env.NEXTAUTH_URL).origin)throw new HttpUploadError('SAME_ORIGIN');
  const identity=await getIdentity();await importsGateway.authorize(identity);if(!identity)throw new AccessError('UNAUTHENTICATED');

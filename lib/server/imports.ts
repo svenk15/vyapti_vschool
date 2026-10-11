@@ -13,6 +13,7 @@ async function scope(identity:Identity|null){return (await accountGateway.getHom
 export const importsGateway={
  async authorize(identity:Identity|null){const current=await scope(identity);return service().authorize(identity,current.organizationId,current.schoolId);},
  async options(identity:Identity|null){const current=await scope(identity);return service().options(identity,current.organizationId,current.schoolId);},
+ async list(identity:Identity|null,cursor:unknown=null){const current=await scope(identity);return service().list(identity,current.organizationId,current.schoolId,cursor);},
  async preview(identity:Identity|null,input:Parameters<ImportsFacade['preview']>[3]){const current=await scope(identity);return service().preview(identity,current.organizationId,current.schoolId,input);},
  async rows(identity:Identity|null,jobId:unknown,cursor:unknown){const current=await scope(identity);return service().rows(identity,current.organizationId,current.schoolId,jobId,cursor);},
  async confirm(identity:Identity|null,input:Parameters<ImportsFacade['confirm']>[3]){const current=await scope(identity);return service().confirm(identity,current.organizationId,current.schoolId,input);},

@@ -19,7 +19,7 @@ const routes:readonly Route[]=[
  {label:'Staff & access',href:'/admin/users',icon:'staff',permission:'user.manage'},
  {label:'Staff profiles',href:'/admin/teachers',icon:'people',permission:'class.manage',modules:['staff_core']},
  {label:'Students',href:'/admin/students',icon:'students',permission:'student.read',modules:['student_core']},
- {label:'Roster preview',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
+ {label:'Imports',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
  {label:'Academics',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
  {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
  {label:'Attendance',href:'/admin/attendance/sessions',icon:'attendance',permission:'attendance.read_school',modules:['attendance']},

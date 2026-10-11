@@ -1,5 +1,11 @@
 # Previewed, resumable student roster import — current state
 
+## 11 October 2026 — SA-24 Administrator reconciliation checkpoint
+
+`/admin/imports/manage` now implements the approved three-stage reconciliation composition over real Imports operations. Administrators select a current branch import from a deterministic signed-cursor page, review the eligible action, confirm it, and receive durable row counts/results. Exact-key recovery checks server status after an interrupted confirmation response; bounded processing remains replay-safe. Cancellation and advanced recovery remain available at `/admin/imports/operations?jobId=…`.
+
+The portable list query, Next delivery adapter and browser-safe contracts were extended without a schema change; the existing branch/list index supports the query. Focused PostgreSQL evidence covers 51 records, second-page retrieval and tampered-cursor rejection. Focused desktop/mobile Playwright covers real preview creation, staged confirmation, simulated lost response, recovery, processing and persisted completion. Direct matched reference/application captures for all three stages are in `../../evidence/admin-sa-24-2026-10-11/`. Human review, the documented font deviation and native accessibility remain PENDING.
+
 ## 11 October 2026 — SA-23 Administrator composition checkpoint
 
 The current source gives `/admin/imports` the approved four-stage Preview a roster import composition and leaves the full processing controls at `/admin/imports/manage`. The target, file, actual row decisions and explicit read-only confirmation retain in-flow state and keyboard focus. Final confirmation only acknowledges the durable preview and links to its job; PostgreSQL browser assertions verify that no Person, Student, Enrollment or Placement is created by this journey. No schema, migration, backend contract, seed or permission changed.

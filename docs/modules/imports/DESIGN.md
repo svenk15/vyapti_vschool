@@ -217,6 +217,14 @@ See [tasks](TASKS.md), [current state](CURRENT_STATE.md), [Bible](../../VSchool_
 
 Changing target or file input invalidates the previous preview acknowledgement. A failed preview retains safe target/file input and its idempotency key so retry cannot create a second intent. Each stage moves focus to its heading; Back retains in-flow values. Durable draft/resume remains unimplemented and the disabled action says so. All preview reads and writes continue through the existing Imports facade with current branch authorization and the existing upload/hash/audit exclusions.
 
+## SA-24 Administrator reconciliation overlay (11 October 2026)
+
+`/admin/imports/manage` presents the approved Confirm preview → Review partial results → Confirm composition. Its Import selector is backed by a current-authorized, branch-scoped query over `vs_imports_import_job`; results order by `created_at DESC, id DESC` and use a signed cursor bound to the organization, school and account. Pages contain at most 50 jobs. The existing `vs_imports_import_job_list_idx` supports the scope and ordering, so this slice needs no migration. The established combined processing interface remains available at `/admin/imports/operations` for cancellation and advanced recovery.
+
+The first stage selects a real durable job. The second exposes only actions valid for its current server state. The third records the selected job and action before invoking the existing confirm, process or redacted-download operation. A response interruption queries the authorized durable status before offering an exact-payload retry; the same idempotency key remains attached until the result is found or the original action is retried. Processing receipts show durable row results and counts. Back retains the active in-flow selection; durable cross-session drafts remain unsupported and visibly disabled.
+
+Every list, status, row, confirmation, process and download request repeats current application authorization, module availability and branch scope. The browser-supplied job ID and cursor are candidates only. Existing account → Organization → School → job/row locks, preview version/hash checks, enlisted owner transactions and immutable row receipts are unchanged.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.

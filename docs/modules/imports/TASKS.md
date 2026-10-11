@@ -46,6 +46,14 @@ EX-09 adopts preview, confirm, processing, resume, cancel and safe error export 
 - Final confirmation creates no student-domain record and links to `/admin/imports/manage?jobId=…` for the separately authorized processing journey.
 - Desktop/mobile reference comparison, invalid upload behavior, current scope denial and PostgreSQL proof of zero Student writes remain required. Durable drafts are outside this slice.
 
+### SA-24 Administrator composition acceptance
+
+- `/admin/imports/manage` uses the approved Confirm preview, Review partial results and Confirm stages with real branch-scoped imports; Back retains in-flow state and each stage heading receives focus.
+- Import selection is server-paginated in deterministic newest-first order with a signed account/branch cursor. A foreign-branch job and a tampered cursor return no protected data.
+- Confirmation and processing retain existing preview/hash/version validation, transaction locks, bounded batches and immutable row receipts. Unknown outcomes query durable status and preserve the original payload and key before retry.
+- The receipt survives reload through PostgreSQL status/row reads, reports created/unchanged/failed/remaining outcomes and keeps cancellation and safe error recovery reachable through the advanced interface.
+- Desktop/mobile reference comparison, keyboard operation, PostgreSQL pagination/scope evidence and the lost-response journey are required. Durable drafts remain outside this slice.
+
 ## IMP-02 — Confirm and process complete student rows
 
 Depends on: IMP-01
