@@ -72,8 +72,8 @@ Statuses separate functional implementation, reference comparison and human acce
 
 ## Current checkpoint
 
-- Functional: 29 VERIFIED; 34 require implementation or design/dependency closure.
+- Functional: 27 VERIFIED and 2 VERIFIED_SUPPORTED_SLICE; 34 require implementation or design/dependency closure. This preserves the checked 29 implemented/supported count without treating SA-15 or SA-16 as complete reference workflows.
 - Visual: the overnight queue now has direct reference comparisons for attendance correction/lifecycle/reporting, Student management/registration/placement, and SA-13/SA-14/SA-17 Staff/access. SA-15 and SA-16 have captured references with explicit contract gaps; unrelated journeys remain pending or partial.
 - Human acceptance: PENDING for every row.
 - Production gates: TEN-03, native VoiceOver/NVDA, provider/restore/load and module-specific security decisions remain outstanding.
-- Next safe work: continue reference comparison across implemented Phase 1 routes while consolidating the unresolved decisions that block later owner modules.
+- Overnight queue reconciliation: [six-priority evidence and demo handover](../evidence/admin-overnight-queue-2026-10-11/README.md). Next safe work is the precise SA-15 reason/audit contract or SA-16 dated Teacher eligibility owner contract; unrelated reference comparisons can continue independently.
