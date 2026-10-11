@@ -86,8 +86,14 @@ Routes, owner evidence, accepted behavior and human-review status remain authori
 
 ## Current checkpoint
 
-- Functional: 28 VERIFIED and 2 VERIFIED_SUPPORTED_SLICE; 33 require implementation or design/dependency closure. The checked total is 30 implemented/supported workflows after SA-38; SA-15 and SA-16 remain supported slices rather than complete reference workflows.
-- Visual: direct reference comparisons now cover attendance correction/lifecycle/reporting, Student management/registration/placement, SA-13/SA-14/SA-17 Staff/access, SA-23 roster preview and SA-24 import reconciliation. SA-15 and SA-16 have captured references with explicit contract gaps; unrelated journeys remain pending or partial.
-- Human acceptance: PENDING for every row except SA-27's explicitly scoped staged-layout and normal-correction acceptance. That scoped pass does not accept other SA-27 states or any other workflow.
+All 63 rows are accounted for by one functional label, one visual label and one human-review label:
+
+| Dimension | Mutually exclusive labels and counts | Total |
+|---|---|---:|
+| Functional | `VERIFIED` 24; `VERIFIED_SUPPORTED_OPERATIONS` 4; `VERIFIED_SUPPORTED_SLICE` 2; `PARTIAL_TT00_VERIFIED` 1; `BLOCKED_PRODUCT_DECISION` 7; `BLOCKED_DEPENDENCY` 2; `DESIGN_READINESS_REQUIRED` 23 | 63 |
+| Visual | `DIRECT_REFERENCE_COMPARISON_PENDING_HUMAN` 19; `HOME_COMPOSITION_VERIFIED` 2; `DIRECT_REFERENCE_RECHECK_PENDING_HUMAN` 1; `DIRECT_REFERENCE_COMPARISON_ACCEPTED_SCOPED` 1; `PARTIAL_REFERENCE_COMPARISON` 3; `BLOCKED_CONTRACT_RECONCILIATION` 4; `PENDING_REFERENCE_COMPARISON` 33 | 63 |
+| Human review | `PASSED_SCOPED` 1; `PENDING` 62 | 63 |
+
+The four `VERIFIED_SUPPORTED_OPERATIONS` rows have verified owner operations but not a complete approved workflow composition. SA-15 and SA-16 are the two `VERIFIED_SUPPORTED_SLICE` rows. SA-38 is one verified application-start workflow and does not imply complete Admissions. TT-00 is the single timetable partial and does not imply SA-41 implementation.
 - Production gates: TEN-03, native VoiceOver/NVDA, provider/restore/load and module-specific security decisions remain outstanding.
 - Overnight queue reconciliation: [six-priority evidence and demo handover](../evidence/admin-overnight-queue-2026-10-11/README.md). Next safe work is the precise SA-15 reason/audit contract or SA-16 dated Teacher eligibility owner contract; unrelated reference comparisons can continue independently.
