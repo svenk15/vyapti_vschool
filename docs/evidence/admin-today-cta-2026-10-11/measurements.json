@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-11T06:31:25.444Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "desktop": {
+    "width": 1440,
+    "height": 1000
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844
+  },
+  "metrics": {
+    "header": {
+      "width": 137.625,
+      "height": 40,
+      "padding": "8px 14px",
+      "gap": "8px",
+      "borderColor": "rgb(223, 230, 223)",
+      "borderRadius": "8px",
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(33, 58, 50)",
+      "fontSize": "13px",
+      "fontWeight": "550",
+      "lineHeight": "18.2px",
+      "iconPath": "m9 3-1 3-3 1 1 3-2 2 2 2-1 3 3 1 1 3h6l1-3 3-1-1-3 2-2-2-2 1-3-3-1-1-3Z"
+    },
+    "attention": {
+      "width": 141.625,
+      "height": 40,
+      "padding": "8px 14px",
+      "gap": "8px",
+      "borderColor": "rgb(223, 230, 223)",
+      "borderRadius": "8px",
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(33, 58, 50)",
+      "fontSize": "13px",
+      "fontWeight": "550",
+      "lineHeight": "18.2px",
+      "iconPath": "M4 12h16m-6-6 6 6-6 6"
+    },
+    "quick": {
+      "width": 339.515625,
+      "height": 40,
+      "padding": "8px 14px",
+      "gap": "8px",
+      "borderColor": "rgb(223, 230, 223)",
+      "borderRadius": "8px",
+      "background": "rgb(255, 255, 255)",
+      "color": "rgb(33, 58, 50)",
+      "fontSize": "13px",
+      "fontWeight": "550",
+      "lineHeight": "18.2px",
+      "iconPath": "M4 12h16m-6-6 6 6-6 6"
+    },
+    "overflow": false
+  }
+}
