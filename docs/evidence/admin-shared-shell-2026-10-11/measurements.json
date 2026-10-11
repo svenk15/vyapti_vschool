@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-10-11T06:14:00.797Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "measurements": {
+    "sidebar": {
+      "width": 240,
+      "height": 1000,
+      "background": "rgb(23, 59, 50)"
+    },
+    "brand": {
+      "width": 131.28125,
+      "height": 36,
+      "fontSize": "24px",
+      "fontWeight": "600",
+      "gap": "12px"
+    },
+    "brandMark": {
+      "width": 33,
+      "height": 33
+    },
+    "heading": {
+      "fontSize": "28px",
+      "fontWeight": "650",
+      "lineHeight": "35px"
+    },
+    "inactiveNav": {
+      "fontSize": "13px",
+      "fontWeight": "400",
+      "minHeight": "42px"
+    },
+    "activeNav": {
+      "fontWeight": "600",
+      "iconPath": "m5 12 4 4L19 6"
+    }
+  }
+}

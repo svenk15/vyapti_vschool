@@ -12,9 +12,9 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 
 /* Approved Administrator Students composition. */
-.portal-school-identity{flex:none;margin:0 18px 14px;padding:13px 6px 17px;border-bottom:1px solid #ffffff24;line-height:1.4}
+.portal-school-identity{flex:none;margin:0 24px 12px;padding:0 0 18px;border-bottom:1px solid #ffffff25;line-height:1.4}
 .portal-school-identity strong,.portal-school-identity span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.portal-school-identity strong{font-size:13px}.portal-school-identity span{margin-top:3px;color:var(--portal-nav-muted);font-size:11px}
+.portal-school-identity strong{color:#f2f7f3;font-size:13px;font-weight:600}.portal-school-identity span{margin-top:2px;color:var(--portal-nav-muted);font-size:11px}
 .drawer{width:min(420px,100vw);height:100dvh;max-height:100dvh;padding:0;overflow:hidden;border:0;border-left:1px solid var(--line);border-radius:0}
 .drawer::backdrop{background:#18352d66;backdrop-filter:none}
 .drawer-layout{display:flex;flex-direction:column;height:100%;min-height:0}
@@ -133,22 +133,22 @@ body{font-family:var(--font-ui)}
 
 /* Shared school portal frame. Navigation, context and page work have distinct regions. */
 .portal-shell{min-height:100dvh;display:grid;grid-template-columns:240px minmax(0,1fr);grid-template-rows:60px minmax(0,1fr);background:var(--bg);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.portal-sidebar{--portal-nav-surface:color-mix(in srgb,var(--primary) 72%,#10281f);--portal-nav-text:#f5faf6;--portal-nav-muted:#b9cbc2;grid-column:1;grid-row:1 / span 2;position:sticky;top:0;z-index:40;display:flex;flex-direction:column;height:100dvh;min-height:0;overflow:hidden;background:var(--portal-nav-surface);color:var(--portal-nav-text);border-right:1px solid #ffffff1f}
-.portal-sidebar-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;padding:18px 18px 12px}
-.portal-brand{display:flex;align-items:center;gap:10px;min-height:44px;padding:2px 6px;color:inherit;font-size:20px;font-weight:700;letter-spacing:-.5px;text-decoration:none}
-.portal-brand-mark{display:inline-grid;place-items:center;flex:none;width:34px;height:36px;border-radius:10px 10px 14px 10px;background:#ffffff1f;color:var(--brand-accent);font:700 28px/1 Georgia,serif;padding-bottom:4px}
+.portal-sidebar{--portal-nav-surface:#173b32;--portal-nav-text:#d8e5dc;--portal-nav-muted:#c2d2c9;grid-column:1;grid-row:1 / span 2;position:sticky;top:0;z-index:40;display:flex;flex-direction:column;height:100dvh;min-height:0;overflow:hidden;background:var(--portal-nav-surface);color:#edf5ef;border-right:0}
+.portal-sidebar-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:none;padding:26px 24px}
+.portal-brand{display:flex;align-items:center;gap:12px;min-height:33px;padding:0;color:#f2f7f3;font-size:24px;font-weight:600;letter-spacing:-.7px;text-decoration:none}
+.portal-brand-mark{display:inline-grid;place-items:center;flex:none;width:33px;height:33px;border:1px solid #8dafa0;border-radius:9px;background:transparent;color:#ecf6ec;font:25px/1 Georgia,serif;padding:0}
 .portal-sidebar-close{display:none;width:42px;height:42px;border:1px solid #ffffff40;border-radius:7px;background:transparent;color:var(--portal-nav-text);font-size:24px}
-.portal-nav-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:10px 14px 24px;scrollbar-color:#ffffff45 transparent}
+.portal-nav-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 14px 24px;scrollbar-color:#ffffff45 transparent}
 .portal-sidebar nav{display:grid;gap:22px}
 .portal-nav-group{display:grid;gap:4px;min-width:0}
 .portal-nav-group h2{margin:0 10px 5px;color:var(--portal-nav-muted);font-size:11px;font-weight:600;letter-spacing:1px;line-height:1.5;text-transform:uppercase}
-.portal-nav-group a{display:flex;align-items:center;min-height:42px;padding:10px 12px;border-radius:7px;color:var(--portal-nav-text);font-size:13px;font-weight:600;line-height:1.5;text-decoration:none}
+.portal-nav-group a{display:flex;align-items:center;min-height:42px;padding:10px 12px;border-radius:7px;color:var(--portal-nav-text);font-size:13px;font-weight:400;line-height:1.5;text-decoration:none}
 .portal-nav-group a:hover{background:#ffffff12}
-.portal-nav-group a[aria-current=page]{background:#ffffff16;color:#fff;font-weight:600;box-shadow:inset 2px 0 var(--brand-accent)}
+.portal-nav-group a[aria-current=page]{background:#ffffff16;color:#fff;font-weight:600;box-shadow:inset 2px 0 #b9d9c7}
 .portal-nav-group a:focus-visible,.portal-brand:focus-visible,.portal-identity:focus-visible,.portal-sidebar button:focus-visible{outline-color:#f0bd67}
-.portal-sidebar-footer{flex:none;padding:14px 16px 16px;border-top:1px solid #ffffff24;background:#071c151f}
+.portal-sidebar-footer{flex:none;padding:14px 16px 16px;border-top:1px solid #ffffff25;background:transparent}
 .portal-identity{display:flex;align-items:center;gap:11px;min-width:0;padding:7px 8px 12px;color:var(--portal-nav-text);text-decoration:none}
-.portal-identity-avatar{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:#ffffff1c;color:var(--brand-accent);font-size:11px;font-weight:750}
+.portal-identity-avatar{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:#d9ebdf;color:#264b39;font-size:11px;font-weight:650}
 .portal-identity>span:last-child{display:grid;min-width:0;line-height:1.35}
 .portal-identity strong,.portal-identity small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .portal-identity strong{font-size:13px}.portal-identity small{color:var(--portal-nav-muted);font-size:11px}
@@ -218,7 +218,7 @@ body{font-family:var(--font-ui)}
 .portal-page-content .container{max-width:var(--content-workspace)}
 .portal-page-content .page-space,.teacher-portal-content .page-space{padding-top:32px;padding-bottom:64px}
 .portal-page-content .page-heading,.teacher-portal-content .page-heading{align-items:flex-start;margin:0}
-.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{margin-bottom:8px;font-size:30px;line-height:1.18;letter-spacing:-.7px}
+.portal-page-content .page-heading h1,.teacher-portal-content .page-heading h1{margin-bottom:8px;font-size:28px;font-weight:650;line-height:35px;letter-spacing:-.7px}
 .portal-page-content .page-description,.teacher-portal-content .page-description{max-width:700px;font-size:15px;line-height:1.55}
 .page-stack{display:grid;gap:24px;min-width:0}
 .page-stack>.alert,.page-stack>div>.alert{margin-block:0}
@@ -472,7 +472,7 @@ body{font-family:var(--font-ui)}
 .portal-nav-group a{gap:11px;font-size:13px}
 .portal-nav-icon{display:inline-grid;place-items:center;flex:none;width:20px;height:20px;color:inherit;opacity:.78}
 .portal-nav-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.portal-nav-group a[aria-current=page] .portal-nav-icon{color:var(--brand-accent);opacity:1}
+.portal-nav-group a[aria-current=page] .portal-nav-icon{color:#b9d9c7;opacity:1}
 .empty-symbol svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .portal-page-content main>.card+ .card,.portal-page-content main>.card+form>.card,.portal-page-content main>form+ .card,.portal-page-content main>.alert+ .card{margin-top:24px}
 .portal-page-content main>.two-columns.section-space{grid-template-columns:minmax(300px,380px) minmax(0,1fr);align-items:start}

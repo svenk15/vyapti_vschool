@@ -10,9 +10,9 @@ export type AdminNavigationGroup=Readonly<{label:string;items:readonly AdminNavi
 type Route={label:string;href:string;icon:PortalIconName;permission:string;modules?:readonly ModuleId[];institutionAdmin?:boolean};
 
 const routes:readonly Route[]=[
- {label:'Today',href:'/admin',icon:'overview',permission:'school.manage'},
- {label:'School setup',href:'/admin/setup',icon:'setup',permission:'school.manage'},
- {label:'School settings',href:'/admin/school',icon:'settings',permission:'school.manage'},
+ {label:'Today',href:'/admin',icon:'home',permission:'school.manage'},
+ {label:'School setup',href:'/admin/setup',icon:'school',permission:'school.manage'},
+ {label:'School settings',href:'/admin/school',icon:'school',permission:'school.manage'},
  {label:'Branch module access',href:'/admin/modules',icon:'modules',permission:'module.configure',institutionAdmin:true},
  {label:'Sign-in branding',href:'/admin/branding',icon:'branding',permission:'branding.manage'},
  {label:'Branch activity',href:'/admin/activity',icon:'activity',permission:'school.manage'},
@@ -22,7 +22,7 @@ const routes:readonly Route[]=[
  {label:'Roster preview',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
  {label:'Academics',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
  {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
- {label:'Attendance',href:'/admin/attendance/sessions',icon:'calendar',permission:'attendance.read_school',modules:['attendance']},
+ {label:'Attendance',href:'/admin/attendance/sessions',icon:'attendance',permission:'attendance.read_school',modules:['attendance']},
  {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
 const sections:readonly Readonly<{label:string;hrefs:readonly string[]}>[]=[
