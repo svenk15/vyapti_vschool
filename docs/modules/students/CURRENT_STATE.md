@@ -1,6 +1,6 @@
 # Students, enrollment and placement history — current state
 
-Last updated: 2026-10-10. This is an independent project checkpoint; no completion was imported.
+Last updated: 2026-10-11. This is an independent project checkpoint; no completion was imported.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -8,6 +8,8 @@ Last updated: 2026-10-10. This is an independent project checkpoint; no completi
 | STU-02 | VERIFIED | PENDING | Depends on STU-01 and ACA-02 implementation; both are VERIFIED/PENDING and neither declares human PASSED as a dependency gate |
 | STU-03 | VERIFIED | PENDING | PostgreSQL, unit, desktop/mobile Playwright, repository checks, build and repeatable seed passed; local demo checkpoint to be recorded below |
 | SA-COMP-07 + SA-COMP-12 / SA-18 | VERIFIED | PENDING | Exact identity resolution plus explicit manual/import branch admission date, nullable legacy verification and correction passed unit, PostgreSQL and desktop/mobile browser checks |
+
+**SA-18 dedicated registration comparison (11 October 2026):** engineering implementation and direct desktop/mobile comparison are complete; human review remains PENDING. The Students directory now opens a dedicated authorized four-step registration route matching the approved Identity, School record, Review identity and Confirm composition. It preserves the accepted branch admission date, exact Person-ID/admission-number selection, atomic Person/Student command, rollback, replay and scope contracts. Success renders a real receipt; duplicate/racing admission numbers offer the existing Student only after an exact current-scope lookup and leave no orphan Person. Focused lint/type checks passed. The final changed real-PostgreSQL Playwright cases passed 2/2 desktop/mobile; the preceding full-file run also passed all four unchanged security/selection cases before its stale combined-search expectation was corrected to use the documented Admission number attribute. No backend, schema, migration, seed or development row changed. Draft persistence remains an unresolved product contract. [Comparison evidence](../../evidence/admin-student-registration-2026-10-11/README.md).
 
 **SA-19 direct enrollment and placement comparison (11 October 2026):** engineering implementation and direct desktop/mobile comparison are complete; human review remains PENDING. Enrollment now has a dedicated authorized route with the approved Enrollment, Class placement, Review placement and Confirm states. It consumes the real Student selected from the directory/record, real authorized year/class options and the existing atomic Students enrollment command. Keyboard focus follows step changes, Cancel preserves the validated Students return URL and the unimplemented draft action remains disabled. Focused lint/type checks passed; real-PostgreSQL Playwright and its production build passed 2/2 desktop/mobile, including persistence/history, exact directory lookup, duplicate rejection and wrong-year rejection. No backend, schema, migration, seed or development row changed. The generic reference recovery link/receipt composition remains a documented UI gap. [Comparison evidence](../../evidence/admin-student-placement-2026-10-11/README.md).
 
