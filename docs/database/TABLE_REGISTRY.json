@@ -1095,6 +1095,60 @@
       }
     },
     {
+      "model": "AdmissionCycle",
+      "owner": "admissions",
+      "table": "vs_admissions_cycle",
+      "status": "MIGRATED",
+      "design": "docs/modules/admissions/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); opens_on date; closes_on date; state varchar(20); version int",
+      "responsibility": "Branch admission intake window selectable by SA-38.",
+      "constraints": "Scoped organization/school FKs and unique id/code; valid inclusive date range; OPEN/CLOSED state; positive version; open-cycle context index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": ["organization_id", "school_id"],
+        "intendedPolicy": "Require verified organization and branch context plus current admissions.manage permission for every read/write.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "admissions",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AdmissionApplicant",
+      "owner": "admissions",
+      "table": "vs_admissions_applicant",
+      "status": "MIGRATED",
+      "design": "docs/modules/admissions/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; display_name varchar(160); normalized_name varchar(160); contact_email varchar(254); created_at timestamptz(3)",
+      "responsibility": "Purpose-bound intake identity; never an automatic Person or Student.",
+      "constraints": "Scoped organization/school FKs and unique id; bounded text/email; scoped contact lookup index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": ["organization_id", "school_id"],
+        "intendedPolicy": "Require verified organization and branch context plus current admissions.manage permission for every read/write.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "admissions",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AdmissionApplication",
+      "owner": "admissions",
+      "table": "vs_admissions_application",
+      "status": "MIGRATED",
+      "design": "docs/modules/admissions/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; applicant_id uuid; cycle_id uuid; grade_id uuid; reference varchar(40); state varchar(20); collection_notice_provided_at timestamptz(3); dedupe_key char(64); version int; created_by uuid; created_at timestamptz(3)",
+      "responsibility": "Started application with notice evidence, exact duplicate guard and next-action receipt.",
+      "constraints": "Scoped Applicant/Cycle/Grade FKs; actor FK; unique scoped id/reference and cycle/dedupe key; STARTED state; positive version; scoped created-at index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": ["organization_id", "school_id"],
+        "intendedPolicy": "Require verified organization and branch context plus current admissions.manage permission for every read/write.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "admissions",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
       "model": "OperatorAuditEntry",
       "owner": "platform",
       "table": "vs_platform_operator_audit",

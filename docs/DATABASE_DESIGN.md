@@ -101,6 +101,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 
 No business table is migrated simply because it is listed here. Fees, admissions, exams, learning, transport, HR/payroll, library, inventory, health, documents, analytics and AI retain Bible blueprints. Each gets a physical schema and its own DESIGN/TASKS/CURRENT_STATE pack before implementation. Reserve matching owner names such as `fees` and `admissions`; do not install speculative empty tables now. Fees can consume Student core through its owner contract without enabling Attendance.
 
+SA-38 installs the first bounded Admissions owner slice after its live design-readiness gate: `vs_admissions_cycle`, `vs_admissions_applicant` and `vs_admissions_application`. Their exact schema, scoped joins and Path A TEN-03 metadata are owned by `docs/modules/admissions/DESIGN.md`; no Student, Person, guardian, fee or communication table is part of that migration.
+
 ## Join contracts that power the experience
 
 Read queries are scoped and authorized before data is returned. The examples below are planned SQL read shapes, not SQL to run against this starter: their business tables do not exist yet. Parameters come from the verified actor/context, not direct trust in URL/body tenant IDs. CROSS-module reads are implemented through owner-approved projections/facades; raw physical joins live in infrastructure. Every SELECT lists safe output fields rather than SELECT *.

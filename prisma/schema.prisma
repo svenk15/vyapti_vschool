@@ -42,6 +42,9 @@ model Organization {
   accountPersonBindings AccountPersonBinding[]
   accessInvites AccessInvite[]
   passwordResetTokens PasswordResetToken[]
+  admissionCycles AdmissionCycle[]
+  admissionApplicants AdmissionApplicant[]
+  admissionApplications AdmissionApplication[]
 
   @@map("vs_access_organization")
 }
@@ -83,6 +86,9 @@ model School {
   students Student[]
   importJobs ImportJob[]
   personNameRevisions PersonNameRevision[]
+  admissionCycles AdmissionCycle[]
+  admissionApplicants AdmissionApplicant[]
+  admissionApplications AdmissionApplication[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -126,6 +132,7 @@ model UserAccount {
   brandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationDelegate")
   grantedBrandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationGrantor")
   revokedBrandingPublicationDelegations BrandingPublicationDelegation[] @relation("BrandingPublicationRevoker")
+  createdAdmissionApplications AdmissionApplication[] @relation("AdmissionApplicationCreator")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -759,6 +766,7 @@ model GradeLevel {
  organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_grade_level_org_fkey")
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_grade_level_school_fkey")
  sections Section[]
+ admissionApplications AdmissionApplication[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_grade_level_scope_id_key")
  @@unique([organizationId,schoolId,code],map:"vs_academics_grade_level_code_key")
  @@map("vs_academics_grade_level")
@@ -1064,4 +1072,66 @@ model AttendanceRevision {
  actor UserAccount @relation("AttendanceRevisionActor",fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_revision_actor_fkey")
  @@unique([organizationId,schoolId,sessionId,number],map:"vs_attendance_revision_number_key")
  @@map("vs_attendance_revision")
+}
+
+model AdmissionCycle {
+ id String @id(map:"vs_admissions_cycle_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ code String @db.VarChar(40)
+ name String @db.VarChar(160)
+ opensOn DateTime @map("opens_on") @db.Date
+ closesOn DateTime @map("closes_on") @db.Date
+ state String @db.VarChar(20)
+ version Int
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_cycle_organization_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_cycle_school_fkey")
+ applications AdmissionApplication[]
+ @@unique([organizationId,schoolId,id],map:"vs_admissions_cycle_scope_id_key")
+ @@unique([organizationId,schoolId,code],map:"vs_admissions_cycle_scope_code_key")
+ @@index([organizationId,schoolId,state,opensOn,closesOn,id],map:"vs_admissions_cycle_open_idx")
+ @@map("vs_admissions_cycle")
+}
+
+model AdmissionApplicant {
+ id String @id(map:"vs_admissions_applicant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ displayName String @map("display_name") @db.VarChar(160)
+ normalizedName String @map("normalized_name") @db.VarChar(160)
+ contactEmail String @map("contact_email") @db.VarChar(254)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_applicant_organization_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_applicant_school_fkey")
+ applications AdmissionApplication[]
+ @@unique([organizationId,schoolId,id],map:"vs_admissions_applicant_scope_id_key")
+ @@index([organizationId,schoolId,contactEmail,id],map:"vs_admissions_applicant_contact_idx")
+ @@map("vs_admissions_applicant")
+}
+
+model AdmissionApplication {
+ id String @id(map:"vs_admissions_application_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ applicantId String @map("applicant_id") @db.Uuid
+ cycleId String @map("cycle_id") @db.Uuid
+ gradeId String @map("grade_id") @db.Uuid
+ reference String @db.VarChar(40)
+ state String @db.VarChar(20)
+ collectionNoticeProvidedAt DateTime @map("collection_notice_provided_at") @db.Timestamptz(3)
+ dedupeKey String @map("dedupe_key") @db.Char(64)
+ version Int
+ createdBy String @map("created_by") @db.Uuid
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_application_organization_fkey")
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_application_school_fkey")
+ applicant AdmissionApplicant @relation(fields:[organizationId,schoolId,applicantId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_application_applicant_fkey")
+ cycle AdmissionCycle @relation(fields:[organizationId,schoolId,cycleId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_application_cycle_fkey")
+ grade GradeLevel @relation(fields:[organizationId,schoolId,gradeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_application_grade_fkey")
+ creator UserAccount @relation("AdmissionApplicationCreator",fields:[createdBy],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_admissions_application_creator_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_admissions_application_scope_id_key")
+ @@unique([organizationId,schoolId,reference],map:"vs_admissions_application_reference_key")
+ @@unique([organizationId,schoolId,cycleId,dedupeKey],map:"vs_admissions_application_dedupe_key")
+ @@index([organizationId,schoolId,createdAt(sort: Desc),id(sort: Desc)],map:"vs_admissions_application_created_idx")
+ @@map("vs_admissions_application")
 }

@@ -18,6 +18,7 @@ const demos = [
   { name: "ATT-02 submitted attendance and correction base", script: "scripts/demo-attendance-01.ts" },
   { name: "Administrator Today connected review queues", script: "scripts/demo-dashboard.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
+  { name: "SA-38 Admissions intake", script: "scripts/demo-admissions.ts", required: true },
 ] as const;
 
 function prepareImportSample(): void {
@@ -72,9 +73,12 @@ function main(): void {
       { stdio: "inherit", env: process.env },
     );
     if (result.error || result.status !== 0) {
-      console.error(`Stopped at ${demo.name}; earlier successful demo data was preserved.`);
-      process.exitCode = result.status ?? 1;
-      return;
+      if ('required' in demo && demo.required) {
+        console.error(`Stopped at ${demo.name}; earlier successful demo data was preserved.`);
+        process.exitCode = result.status ?? 1;
+        return;
+      }
+      console.warn(`${demo.name} refresh was unavailable; its existing records and private artifacts were preserved. Continuing independent demo seeds.`);
     }
   }
   prepareImportSample();
@@ -92,6 +96,7 @@ function main(): void {
   console.log("- artifacts/academics-03/private-demo.json");
   console.log("- artifacts/attendance-01/private-demo.json");
   console.log("- artifacts/dashboard-01/private-demo.json");
+  console.log("- artifacts/admissions-01/private-demo.json");
   console.log("- artifacts/students-03/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");
