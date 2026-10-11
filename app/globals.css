@@ -691,3 +691,28 @@ body{font-family:var(--font-ui)}
 @media(max-width:900px){.branch-edit-page .branch-edit-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:800px){.branch-edit-page .btn{min-height:44px;padding-block:10px}.branch-edit-page .workflow-draft-action{min-height:44px}.branch-edit-page .branch-edit-card{padding:20px}}
 @media(max-width:620px){.branch-edit-page .student-registration-receipt{grid-template-columns:38px minmax(0,1fr);gap:0 12px;padding:20px}.student-registration-receipt .success-mark{font-size:18px;height:38px;width:38px}.student-registration-receipt .branch-review{grid-template-columns:1fr}.student-registration-receipt .workflow-actions{align-items:stretch;flex-direction:column}.student-registration-receipt .workflow-actions .btn{width:100%}}
+
+/* SA-27 approved staged correction composition. */
+.attendance-correction-stepper{margin-bottom:0}
+.attendance-correction-grid{grid-template-columns:minmax(0,760px) minmax(240px,352px)}
+.attendance-correction-card{min-height:354px}
+.attendance-correction-card>[tabindex="-1"]{outline:0}
+.attendance-correction-card>[tabindex="-1"]>h2{margin:0;font-size:18px;font-weight:650;line-height:1.35;letter-spacing:0}
+.attendance-correction-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.attendance-correction-fields>.field{margin:0}
+.attendance-correction-fields>.field:nth-child(n+3){grid-column:1}
+.attendance-correction-evidence{display:grid;gap:18px}
+.attendance-correction-evidence>.field{margin:0}
+.attendance-correction-help{margin:8px 0 24px;font-size:14px;line-height:21px}
+.attendance-correction-review{margin-top:22px}
+.attendance-correction-review-reason{grid-column:1/-1}
+.attendance-correction-outcome{margin:0}
+.attendance-related-actions{display:flex;align-items:flex-start;flex-direction:column;gap:4px}
+.attendance-related-actions .btn{justify-content:flex-start;min-height:32px;padding:5px 8px}
+.attendance-review-page>.attendance-history-card,.attendance-review-page>.attendance-cancel-card{width:min(100%,760px)}
+.attendance-stale-review{display:grid;gap:12px;margin:18px 0;padding:16px;border:1px solid var(--warning-border);border-radius:8px;background:var(--warning-soft)}
+.attendance-stale-review h3{margin:0;font-size:14px}
+.attendance-stale-review ul{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.attendance-stale-review li{display:grid;grid-template-columns:minmax(140px,1fr) repeat(2,minmax(120px,auto));gap:10px;font-size:13px}
+@media(max-width:900px){.attendance-correction-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:620px){.attendance-correction-fields{grid-template-columns:minmax(0,1fr)}.attendance-correction-fields>.field:nth-child(n+3),.attendance-correction-review-reason{grid-column:auto}.attendance-correction-card{min-height:0}.attendance-stale-review li{grid-template-columns:minmax(0,1fr)}.attendance-review-page>.attendance-history-card,.attendance-review-page>.attendance-cancel-card{width:100%}}

@@ -40,14 +40,14 @@ Start and verify the server, give the user the URL and this script, record human
 
 ### Administrator daily-attendance checkpoint — 11 October 2026
 
-- [ ] Today shows either authoritative current-day sessions, a genuine empty result, or a distinct unavailable/capability state.
-- [ ] A submitted session shows branch-local context, current records and immutable history without exposing internal concurrency versions.
-- [ ] Correction success persists after reload; history-refresh failure remains a separate recoverable read error.
-- [ ] Lost-response retry reuses the exact correction payload/key and creates no duplicate revision.
-- [ ] Stale correction preserves the attempted edit, loads authoritative data and requires review before a new command.
-- [ ] Correction and cancellation cannot be submitted concurrently; cancellation retains an exact unknown payload/key and confirmed cancellation remains successful if history refresh fails.
-- [ ] Approved `#/home`, `#/flow/SA-26` and `#/flow/SA-27` states are compared at desktop/mobile sizes with measured styles under `docs/evidence/admin-attendance-journey-2026-10-11/`.
-- [ ] Focused authorization, PostgreSQL, browser, accessibility/layout and production-build gates pass; human acceptance remains PENDING.
+- [x] Today shows either authoritative current-day sessions, a genuine empty result, or a distinct unavailable/capability state.
+- [x] A submitted session shows branch-local context, current records and immutable history without exposing internal concurrency versions.
+- [x] Correction success persists after reload; history-refresh failure remains a separate recoverable read error.
+- [x] Lost-response retry reuses the exact correction payload/key and creates no duplicate revision.
+- [x] Stale correction preserves the attempted edit, loads authoritative data and requires review before a new command.
+- [x] Correction and cancellation cannot be submitted concurrently; cancellation retains an exact unknown payload/key and confirmed cancellation remains successful if history refresh fails.
+- [x] Approved `#/home`, `#/flow/SA-26` and `#/flow/SA-27` states are compared at desktop/mobile sizes with measured styles under `docs/evidence/admin-attendance-journey-2026-10-11/` and `docs/evidence/admin-attendance-correction-staged-2026-10-11/`.
+- [x] Focused authorization, PostgreSQL, browser, accessibility/layout and production-build gates pass; human acceptance remains PENDING.
 
 ## Experience overlay consumption
 

@@ -83,6 +83,13 @@ The portal UX review reproduced the reported empty-day discrepancy without chang
 
 No product completion is assumed. Pilot deployment/provider, staff activation delivery procedure, backup targets and school retention requirements must be resolved in FND-02 before real-data release. Module-specific risks are listed in DESIGN.md.
 
+### 11 October 2026 — SA-27 staged correction composition
+
+- **Implementation:** `/admin/attendance/sessions/:id` now follows the approved `Select the record` → `Record evidence` → `Confirm` order. Student, contextual-session, status, reason and review values survive Back/Continue in memory. Validation occurs at the owning stage and the correction request is sent only by final confirmation. No durable draft storage was added.
+- **Preserved contracts:** Existing server-side scope/capability checks, frozen roster, locked current-value derivation, reason bounds, optimistic version, exact-payload/key unknown retry, immutable revisions, cancellation policy and history APIs are unchanged. History and cancellation are secondary actions in the approved aside composition; correction/cancellation mutual locking remains active.
+- **Verification:** Current-source TypeScript and focused ESLint passed; `pnpm build` passed. `node scripts/verify-admin-attendance-local.mjs` against the development PostgreSQL-backed demo passed retained Back values, final confirmation, committed persistence after reload, exact-key lost-response recovery without a duplicate result, stale-value comparison/review, independent history recovery, cancellation reachability/locking, desktop/mobile layout, keyboard focus and 200% Chromium scale with no document overflow. Existing real-PostgreSQL authorization/concurrency/rollback evidence remains applicable because backend code and schema did not change.
+- **Evidence:** Direct reference/application captures and measured styles/fonts are in `docs/evidence/admin-attendance-correction-staged-2026-10-11/`. Schema/migrations: none. Human visual acceptance remains **PENDING**. The reference navigation’s custom Nimbus Sans remains unavailable for licensed production reuse, so the documented system-font fallback remains explicit.
+
 ### 10 October 2026 — EX-10 administrator experience adoption
 
 - **Source:** `91fcb6ce4b7eb3506016a1f6e80ec741c3801444`; human visual review PENDING.
