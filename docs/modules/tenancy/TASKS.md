@@ -2,6 +2,10 @@
 
 Read DESIGN.md and Bible v4.1. These are vertical slices; previews do not prove persistence or authorization.
 
+## SA-03 — Switch branch or sign out
+
+Presentation overlay on TEN-01 and IAM session termination. Use the approved Destination, Leave this workspace and Confirm stages. Populate destinations only from the current authorized context projection; preserve in-flow selection and acknowledgement; keep the active context unchanged until final confirmation. The final action must invoke the existing guarded branch switch or session sign-out, clear scoped client state/cross-tab views and retain the old context on a revoked target. No durable draft or schema change is authorized. Verify branch denial, stale target recovery, cross-tab behavior, sign-out, keyboard focus and matched desktop/mobile states.
+
 ## TEN-01 — Provision institutions/branches and switch authorized context
 
 Depends on: IAM-02

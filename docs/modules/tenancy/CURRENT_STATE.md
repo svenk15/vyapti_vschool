@@ -1,5 +1,11 @@
 # Institution, branch and module configuration — current state
 
+### SA-03 staged context exit — 11 October 2026
+
+Implementation VERIFIED; direct approved-reference comparison complete; human review PENDING. Administrator branch switching and portal sign-out now use the approved three-stage composition at `/admin/context`. Real authorized destinations come from the existing guarded context projection, the active branch remains unchanged until final confirmation, and Back retains the destination and unsaved-work acknowledgement. Final branch confirmation uses the existing server guard and then clears source/cross-tab UI state with a full navigation; a source-tab broadcast race discovered by the focused browser run was fixed without changing authorization. A revoked/unavailable target leaves the old context active with safe recovery. Portal sign-out is staged; public authentication error pages retain their direct sign-out escape.
+
+The current-source PostgreSQL-backed Playwright journey passed 2/2 at 1440×1000 and 390×844, including foreign/ungranted denials, forced-colors focus evidence, 200% CSS zoom overflow, failed-target recovery, cross-tab reload and sign-out. Focused lint/type checks and the production build inside Playwright passed. Evidence is in [SA-03 evidence](../../evidence/admin-sa-03-2026-10-11/README.md). No migration, schema, seed or backend owner contract changed. The documented font substitution, native browser zoom, VoiceOver, NVDA and human visual review remain pending.
+
 Fresh v4.1 extension. No active timer. Design is specified; production runtime is not inferred from previews.
 
 | Task | Implementation | Human review | Evidence |

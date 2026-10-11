@@ -64,7 +64,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
      <span className="portal-identity-avatar" aria-hidden="true">{initials}</span>
      <span><strong>{identityLabel}</strong><small>{roleLabel}</small></span>
     </Link>
-    <div className="portal-sidebar-signout"><AccessSignOut/></div>
+    <div className="portal-sidebar-signout"><AccessSignOut staged/></div>
    </footer>
   </aside>
   <div className={`portal-page-content${contentClassName?` ${contentClassName}`:''}`}>{children}</div>
