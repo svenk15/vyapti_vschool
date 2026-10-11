@@ -4,6 +4,10 @@
 
 Presentation overlay on IAM-01 and TEN-01. Successful sign-in must route through an explicit branch selection when more than one current selectable branch exists; one branch skips the chooser. Use the existing context directory and guarded switch command. Preserve generic credential errors, allowlisted return paths, branch exclusion, session revocation and role-appropriate `/account` resolution. Verify retained in-flow selection, final-only context switch, responsive reference comparison and focused multi-branch PostgreSQL-backed browser behavior. No schema or migration is authorized by this slice.
 
+## SA-02 — Activate or recover an account
+
+Presentation overlay on IAM-03/IAM-04. Implement the approved request-help, verified-channel acknowledgement and confirmation stages at the public recovery entry. Password reset invokes the existing generic issue endpoint only on final confirmation. Invited-account help must remain generic and must not fabricate, resend or expose an activation; actual invitation/operator activation continues through its verified owner channel. Preserve in-flow values, token lifecycle, account-wide trust evaluation, secret clearing and replay/session revocation. Verify both choices, known/unknown parity, Back retention, no activation-help token write, reset consumption and desktop/mobile reference comparison. No schema or migration is authorized.
+
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
 ## IAM-01 — Provision a school and sign in as its administrator

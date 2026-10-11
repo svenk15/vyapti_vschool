@@ -318,6 +318,14 @@ The browser submits only the selected organization/branch pair as a candidate. `
 
 Verification covers single-branch skip, multi-branch authorized options, exclusion of foreign/unselectable branches, retained selection on Back, final scoped switch, revocation/failure feedback, keyboard focus and matched desktop/mobile reference states. Existing Access PostgreSQL authorization evidence remains applicable because the owner use cases and repository are unchanged.
 
+### SA-02 public activation and recovery help
+
+`/forgot-password` is the public, non-enumerating entry for both approved help choices. The browser collects normalized email intent and either `ACTIVATE` or `RESET`, requires the verified-channel acknowledgement, preserves those values within Back/Continue navigation and executes only on final confirmation. `RESET` calls the existing bounded same-origin password-reset issue endpoint; every eligibility, trust-mode, account-wide membership, delivery and token rule remains in IAM-04. `ACTIVATE` creates no token and performs no mutation: it returns the same generic acknowledgement and directs the user to the already-verified invitation/operator channel without claiming an activation exists.
+
+The success receipt is deliberately identical for known, unknown and policy-ineligible accounts. The page never identifies which institution blocks email recovery. Existing `/activate`, `/invite` and `/reset-password` token-consumption pages retain generic invalid/expired/revoked/consumed behavior, secret clearing and recovery links. No durable draft, email resend, operator authority or browser-supplied trust decision is introduced. The catalog prototype's authenticated sidebar is not rendered on this public pre-identity route for the same security reason recorded for SA-01.
+
+Verification covers both help choices, Back retention, acknowledgement and final-only execution; known/unknown reset parity; no token creation for activation help; fragment-only token links; successful consumption/session revocation; invalid/expired/revoked/consumed paths; and matched desktop/mobile stages.
+
 ### SA-06 branch office profile corrective contract
 
 The Edition 03 SA-06 field set and `school.manage` authority are `EXISTING_ACCEPTED_CONTRACT`: branch display name, required office email, optional office phone, required address, mandatory reason, read-only existing timezone, revisioned activity and stale comparison. Keeping legacy rows nullable while requiring complete values on every new update is a `ROUTINE_ENGINEERING_CHOICE` needed for a forward-only migration; no historical contact values are guessed.
