@@ -310,6 +310,14 @@ Both token tables constrain purpose/channel/status labels, hash format, timestam
 
 ## SA-06 and SA-14 completion-review deltas
 
+### SA-01 authenticated workspace selection
+
+Authentication remains a public Access-owned operation and never renders protected Administrator navigation before identity is established. After successful credential authentication, the host routes to `/choose-workspace`. Access `getContexts(identity)` returns only current selectable branches derived from live account, organization, SchoolMembership and grants. A single selectable branch skips selection and follows the existing `/account` resolver. Multiple branches require an explicit choice, review and confirmation before the existing same-origin `/api/v1/context/switch` adapter records the HTTP-only context cookie and `/account` resolves the role-appropriate destination.
+
+The browser submits only the selected organization/branch pair as a candidate. `switchContext` rechecks the current account token, institution, branch and active membership/resource authority; a missing, foreign or newly revoked branch returns the existing safe error and writes no context. Back from confirmation preserves the in-flow selection. Final confirmation is the only context-changing action. No draft is persisted, no database row is written and the context cookie remains hosting state rather than authority. Returning to sign-in signs out the authenticated session. The public/authenticated shell difference from the catalog prototype is deliberate: the prototype shows a protected sidebar before credential verification, which production must not reproduce.
+
+Verification covers single-branch skip, multi-branch authorized options, exclusion of foreign/unselectable branches, retained selection on Back, final scoped switch, revocation/failure feedback, keyboard focus and matched desktop/mobile reference states. Existing Access PostgreSQL authorization evidence remains applicable because the owner use cases and repository are unchanged.
+
 ### SA-06 branch office profile corrective contract
 
 The Edition 03 SA-06 field set and `school.manage` authority are `EXISTING_ACCEPTED_CONTRACT`: branch display name, required office email, optional office phone, required address, mandatory reason, read-only existing timezone, revisioned activity and stale comparison. Keeping legacy rows nullable while requiring complete values on every new update is a `ROUTINE_ENGINEERING_CHOICE` needed for a forward-only migration; no historical contact values are guessed.

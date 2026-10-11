@@ -1,5 +1,9 @@
 # School scope, authentication and permissions — execution tasks
 
+## SA-01 — Sign in and choose an authorized workspace
+
+Presentation overlay on IAM-01 and TEN-01. Successful sign-in must route through an explicit branch selection when more than one current selectable branch exists; one branch skips the chooser. Use the existing context directory and guarded switch command. Preserve generic credential errors, allowlisted return paths, branch exclusion, session revocation and role-appropriate `/account` resolution. Verify retained in-flow selection, final-only context switch, responsive reference comparison and focused multi-branch PostgreSQL-backed browser behavior. No schema or migration is authorized by this slice.
+
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
 ## IAM-01 — Provision a school and sign in as its administrator

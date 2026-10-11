@@ -4,9 +4,23 @@ Canonical Administrator delivery inventory. Verified against the approved Editio
 
 Statuses separate functional implementation, reference comparison and human acceptance. `PENDING` never means accepted. Previously deferred phases now control sequencing rather than exclusion under the owner directive dated 10 October 2026.
 
+## Expanded execution programme — 11 October 2026
+
+The owner expanded the implementation target to every SA-01–SA-63 workflow represented in the approved Administrator pack. Historical Phase 1 decisions and production release flags remain intact: the expanded programme authorizes design and local implementation where contracts are settled, but it does not activate later modules for real clients or bypass TEN-03, accessibility, provider, restoration or load gates.
+
+The executable queue uses the existing rows below as the per-workflow record and applies these classifications incrementally:
+
+- **A — ready visual/composition correction:** implemented workflows still marked `PENDING_REFERENCE_COMPARISON`, starting with SA-01–SA-03 and then SA-07–SA-12, SA-23–SA-24 and SA-62.
+- **B — ready functional implementation:** an approved behavior is supported by current owner contracts but is missing from the application. SA-01's explicit multi-branch choice is the first identified case.
+- **C — engineering design under settled rules:** rows marked `DESIGN_READINESS_REQUIRED` are assessed in dependency order; their live owner LLD must resolve persistence, scope, transactions, recovery and verification before code.
+- **D — unresolved product/authority decision:** rows explicitly marked `BLOCKED_PRODUCT_DECISION`, plus the bounded SA-15 reason, SA-16 dated eligibility, durable-draft, additional-report and font-replacement decisions. These do not block independent work.
+- **E — explicit dependency/gate:** a later workflow remains queued behind its owner capability, release flag or recorded acceptance/security gate even when its reference is available.
+
+Routes, owner evidence, accepted behavior and human-review status remain authoritative in this matrix and the linked module state/evidence records. Classification changes are recorded only after inspecting the specific workflow contract; `DESIGN_READINESS_REQUIRED` is not treated as a product blocker by default.
+
 | Workflow | User objective | Approved reference/state | Owner | Dependencies | Functional implementation | Visual fidelity | Verification evidence | Human acceptance | Remaining blocker |
 |---|---|---|---|---|---|---|---|---|---|
-| SA-01 | Sign in and choose a branch | `VSchool_School_Admin_Review.html#/flow/SA-01` | home | EX-03 | VERIFIED | PENDING_REFERENCE_COMPARISON | `test/e2e/access.spec.ts`, `branding.spec.ts`, `iam04.spec.ts`; `docs/evidence/ex-04/README.md` | PENDING | Approved reference comparison and human review remain pending. |
+| SA-01 | Sign in and choose a branch | `VSchool_School_Admin_Review.html#/flow/SA-01` | home | EX-03 | VERIFIED | DIRECT_REFERENCE_COMPARISON_PENDING_HUMAN | [Direct SA-01 comparison](../evidence/admin-sa-01-2026-10-11/README.md); real PostgreSQL desktop/mobile context journey; existing Access credential/revocation evidence | PENDING | Authorized multi-branch selection and confirmation are complete. The public pre-scope shell intentionally differs from the prototype's already-authenticated sidebar; font/native accessibility and human review remain pending. |
 | SA-02 | Activate or recover an account | `VSchool_School_Admin_Review.html#/flow/SA-02` | home | EX-03 | VERIFIED | PENDING_REFERENCE_COMPARISON | `test/e2e/access.spec.ts`, `branding.spec.ts`, `iam04.spec.ts` | PENDING | Approved reference comparison and human review remain pending. |
 | SA-03 | Switch branch or sign out | `VSchool_School_Admin_Review.html#/flow/SA-03` | home | EX-03 | VERIFIED | PENDING_REFERENCE_COMPARISON | `test/e2e/access.spec.ts`, `branding.spec.ts`, `iam04.spec.ts`; `docs/evidence/ex-04/README.md` | PENDING | Approved reference comparison and human review remain pending. |
 | SA-04 | Complete first-use setup | `VSchool_School_Admin_Review.html#/flow/SA-04` | home | EX-05 | VERIFIED | HOME_COMPOSITION_VERIFIED | [SA-COMP-10](../evidence/sa-comp-10/README.md); unit, scoped PostgreSQL and desktop/mobile browser evidence | PENDING | Human review remains pending. |

@@ -13,7 +13,7 @@ export function AccessLogin() {
  return <form className="control-stack access-login-form" onSubmit={async e=>{
   e.preventDefault();setBusy(true);setError("");
   try{const result=await signIn("credentials",{email,password,redirect:false,callbackUrl:"/admin"});
-   if(result?.ok&&!result.error){router.replace("/account");router.refresh();return;}
+   if(result?.ok&&!result.error){router.replace("/choose-workspace");router.refresh();return;}
    setError("Unable to sign in. Check your details or try again later.");
   }catch{setError("Unable to sign in. Check your details or try again later.");}
   setPassword("");setShow(false);setBusy(false);requestAnimationFrame(()=>feedback.current?.focus());

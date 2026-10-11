@@ -1,6 +1,12 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-10. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
+Last updated: 2026-10-11. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
+
+## SA-01 explicit workspace choice — 11 October 2026
+
+Implementation VERIFIED; direct reference comparison complete; human review PENDING. Successful authentication now enters `/choose-workspace`: one authorized branch skips the chooser, while multiple live selectable branches require selection, review and final confirmation through the existing guarded Access context endpoint. The browser never supplies authority; foreign/unselectable branches are absent and the server rechecks current identity, organization, branch and membership before accepting context. Confirmation is the only context-changing action and Back retains the in-flow choice. No schema, migration, database row, backend owner contract or seed changed.
+
+Focused lint/type checks passed. The full focused Tenancy browser file passed 6/6 against real PostgreSQL, and the final comparable-fixture multi-branch capture passed 2/2 across desktop/mobile. Single-branch, generic credential and suspended-membership regressions are recorded in [SA-01 evidence](../../evidence/admin-sa-01-2026-10-11/README.md). The approved prototype's protected sidebar before authentication is not reproduced; production keeps the public auth shell until scope is confirmed. This explicit security-boundary difference, the documented font fallback, native accessibility/zoom and human visual review remain pending.
 
 ## SA-06 approved workflow composition — 10 October 2026
 

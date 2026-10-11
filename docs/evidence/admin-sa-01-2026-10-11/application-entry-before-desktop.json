@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:3470/sign-in",
+  "width": 1440,
+  "viewport": 1440,
+  "heading": [
+    "A thoughtful space for your school.",
+    "Sign in to your school"
+  ],
+  "buttons": [
+    "Show",
+    "Sign in"
+  ],
+  "font": "Arial, Helvetica, sans-serif"
+}
