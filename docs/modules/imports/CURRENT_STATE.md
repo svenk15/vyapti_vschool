@@ -1,5 +1,11 @@
 # Previewed, resumable student roster import — current state
 
+## 11 October 2026 — SA-23 Administrator composition checkpoint
+
+The current source gives `/admin/imports` the approved four-stage Preview a roster import composition and leaves the full processing controls at `/admin/imports/manage`. The target, file, actual row decisions and explicit read-only confirmation retain in-flow state and keyboard focus. Final confirmation only acknowledges the durable preview and links to its job; PostgreSQL browser assertions verify that no Person, Student, Enrollment or Placement is created by this journey. No schema, migration, backend contract, seed or permission changed.
+
+Direct desktop/mobile captures for every reference and application stage are in `../../evidence/admin-sa-23-2026-10-11/`. The focused current-source Playwright journey, exact commands and any retry history are recorded there. Human review, the documented font deviation and native accessibility remain PENDING. SA-24 is the next Imports composition slice; its existing processing behavior remains verified independently.
+
 Last updated: 2026-10-10. Existing task progress preserved; local owner acceptance is pending. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |

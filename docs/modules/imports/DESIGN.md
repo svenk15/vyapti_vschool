@@ -211,6 +211,12 @@ Malformed quotes/BOM/UTF-8, duplicate/unknown headers, leading zeros, Unicode, e
 
 See [tasks](TASKS.md), [current state](CURRENT_STATE.md), [Bible](../../VSchool_Bible.md) and [agent runbook](../../AGENT_RUNBOOK.md).
 
+## SA-23 Administrator composition overlay (11 October 2026)
+
+`/admin/imports` presents IMP-01 as the approved four-stage Administrator journey: Target and template → Choose file → Review preview → Confirm. The upload command still runs only when leaving Choose file so Review preview can show the durable server decisions. The final Confirm action acknowledges that saved preview and exposes its opaque job link; it does not confirm rows for processing and writes no Person, Student, Enrollment or Placement. `/admin/imports/manage` retains the verified IMP-02/IMP-03 processing workspace until SA-24 receives its dedicated composition.
+
+Changing target or file input invalidates the previous preview acknowledgement. A failed preview retains safe target/file input and its idempotency key so retry cannot create a second intent. Each stage moves focus to its heading; Back retains in-flow values. Durable draft/resume remains unimplemented and the disabled action says so. All preview reads and writes continue through the existing Imports facade with current branch authorization and the existing upload/hash/audit exclusions.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.

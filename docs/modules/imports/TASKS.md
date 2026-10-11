@@ -39,6 +39,13 @@ Start and verify the server, give the user the URL and this script, record human
 
 EX-09 adopts preview, confirm, processing, resume, cancel and safe error export through the current Imports facade. Preserve the 2 MiB file contract, preview revision, source hash, idempotency and enlisted Students transaction; prototype file data is never runtime input.
 
+### SA-23 Administrator composition acceptance
+
+- `/admin/imports` uses the approved Target, file, preview and separate confirmation stages, preserving values on Back and focusing each stage heading.
+- The review uses actual durable row decisions and the confirmation names the real target, file, preview revision and no-student-write outcome.
+- Final confirmation creates no student-domain record and links to `/admin/imports/manage?jobId=…` for the separately authorized processing journey.
+- Desktop/mobile reference comparison, invalid upload behavior, current scope denial and PostgreSQL proof of zero Student writes remain required. Durable drafts are outside this slice.
+
 ## IMP-02 — Confirm and process complete student rows
 
 Depends on: IMP-01
