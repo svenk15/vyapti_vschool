@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-10-11T13:08:18.325Z",
+  "reference": {
+    "file": "docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_School_Admin_Design/VSchool_School_Admin_Review.html",
+    "route": "#/flow/SA-21",
+    "desktop": {
+      "viewport": 1440,
+      "width": 1440,
+      "overflow": false
+    },
+    "mobile": {
+      "viewport": 390,
+      "width": 390,
+      "overflow": false
+    }
+  },
+  "application": {
+    "route": "/admin/students/transfer?studentId=5c5eedd0-bcdc-42b0-96a7-a6e5dff3b6da",
+    "desktop": {
+      "viewport": 1440,
+      "width": 1440,
+      "overflow": false
+    },
+    "mobile": {
+      "viewport": 390,
+      "width": 390,
+      "overflow": false
+    }
+  },
+  "notes": [
+    "Application captures stop before mutation. Successful persisted receipt is captured by the focused PostgreSQL-backed Playwright test.",
+    "Application retains the documented font deviation; no font asset was changed.",
+    "No native VoiceOver, NVDA or native browser-zoom claim is made."
+  ]
+}

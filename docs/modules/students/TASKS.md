@@ -139,3 +139,13 @@ Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm 
 Transfer the seeded Casey Learner from Section A to Section B effective today; inspect both intervals and carried roll `0007`. Attempt to archive the still-enrolled student and confirm rejection without changing history; archive the separate unused Riley Learner and retrieve it with the ARCHIVED filter. The PostgreSQL test covers the open-session rejection and unchanged history.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
+
+### SA-21 staged presentation checkpoint — 11 October 2026
+
+- [x] Contextual and standalone entry resolve the same authorized staged transfer workflow; standalone search/pagination reaches eligible Students beyond the initial page.
+- [x] `New placement` collects the approved fields plus the existing optional roll value and validates current placement/destination/date before advancing.
+- [x] `Review roster changes` collects the required reason and frozen-roster acknowledgement without inventing impact counts or bypassing the authoritative Attendance check.
+- [x] `Confirm` is the only stage that submits; Back/Continue retains memory-only values and changing dependencies clears acknowledgement.
+- [x] Unknown outcome retries the exact payload/key; stale state reloads current scoped data and requires renewed review; confirmed success survives detail-refresh failure.
+- [x] Persisted placement history, roster-impact rejection and authorization/scope denials retain the existing real-PostgreSQL evidence and focused UI wiring coverage.
+- [x] All three stages, validation and success were directly compared with the approved desktop/mobile reference; font, native accessibility/zoom and production gates remain explicit.
