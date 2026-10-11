@@ -4,7 +4,7 @@ import {useRouter,useSearchParams} from 'next/navigation';
 import Link from 'next/link';
 import type {ExistingPersonChoice,StudentWorkspace} from '@/shared/contracts/students';
 import {SelectField,TextField} from '@/components/ui/forms';
-import {Alert,Avatar,Badge,Button,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
+import {Alert,Avatar,Badge,Button,ButtonLink,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
 import {Dialog} from '@/components/ui/interactive';
 import {ServerTable} from '@/components/ui/server-table';
 import {ListToolbar} from '@/components/portal/list-toolbar';
@@ -32,7 +32,7 @@ export function StudentsWorkspace({initial,initialSearch,initialBy,initialStatus
  function applySort(selection:SortSelection){const sort:StudentSort=selection.by==='admissionNumber'||selection.by==='status'?selection.by:'name',order:StudentOrder=selection.order==='descending'?'desc':'asc';navigateList({sort,order});}
  const sortLabel=initialSort==='admissionNumber'?'Reference':initialSort==='status'?'Status':'Name';
  return <PageStack className="students-page">
-  <PageHeader title="Students" description="Find a student, review enrollment and keep dated records clear." actions={<Button onClick={()=>router.push(`/admin/students/register?returnTo=${encodeURIComponent(returnTo)}`)}><ActionIcon name="add"/>Register student</Button>}/>
+  <PageHeader title="Students" description="Find a student, review enrollment and keep dated records clear." actions={<div className="button-row"><ButtonLink href={`/admin/students/enroll?returnTo=${encodeURIComponent(returnTo)}`} variant="secondary">Enroll student</ButtonLink><Button onClick={()=>router.push(`/admin/students/register?returnTo=${encodeURIComponent(returnTo)}`)}><ActionIcon name="add"/>Register student</Button></div>}/>
   {message&&!registrationOpen&&<div role={failed?'alert':'status'} aria-live="polite" aria-label="Student feedback"><Alert tone={failed?'danger':'info'} title={failed?'Request not completed':'Student lookup'}>{message}</Alert></div>}
   <div className="students-directory-tabs" role="navigation" aria-label="Student directory views"><span aria-current="page">All students <Badge>{data.items.length}</Badge></span></div>
   <section className="students-directory" aria-label="Students in this branch">

@@ -2,9 +2,12 @@
 
 import {useEffect,useRef,useState} from "react";
 import {useRouter} from "next/navigation";
-import type {EnrollmentOptions} from "@/shared/contracts/students";
+import type {EnrollmentOptions,EnrollmentResult} from "@/shared/contracts/students";
 import {Checkbox,SelectField,TextField} from "@/components/ui/forms";
-import {Alert,Button,Card,SectionHeader} from "@/components/ui/primitives";
+import {Alert,Button,ButtonLink,Card,SectionHeader} from "@/components/ui/primitives";
+
+type EnrollmentAttempt=Readonly<{studentId:string;yearId:string;sectionId:string;startsOn:string;lastDay:string;rollNumber:string;key:string}>;
+type ApiFailure=Error&{code?:string;status?:number;retryable?:boolean};
 
 function priorDay(value:string){
   const [year,month,day]=value.split("-").map(Number),date=new Date(Date.UTC(year,month-1,day-1));
@@ -17,7 +20,7 @@ function defaultStart(year:EnrollmentOptions["years"][number]|undefined,today:st
 
 export function StudentEnrollmentForm({studentId,studentName,admissionNumber,cancelHref,options}:{studentId:string;studentName:string;admissionNumber:string;cancelHref:string;options:EnrollmentOptions}){
   const router=useRouter(),years=options.years.filter(item=>!options.enrolledYearIds.includes(item.yearId));
-  const [step,setStep]=useState<1|2|3|4>(1),[yearId,setYearId]=useState(years[0]?.yearId??""),[sectionId,setSectionId]=useState(""),[startsOn,setStartsOn]=useState(()=>defaultStart(years[0],options.today)),[lastDay,setLastDay]=useState(()=>years[0]?priorDay(years[0].endsOn):""),[rollNumber,setRollNumber]=useState(""),[reviewed,setReviewed]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(""),[success,setSuccess]=useState(false);
+  const [step,setStep]=useState<1|2|3|4>(1),[yearId,setYearId]=useState(years[0]?.yearId??""),[sectionId,setSectionId]=useState(""),[startsOn,setStartsOn]=useState(()=>defaultStart(years[0],options.today)),[lastDay,setLastDay]=useState(()=>years[0]?priorDay(years[0].endsOn):""),[rollNumber,setRollNumber]=useState(""),[reviewed,setReviewed]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(""),[errorCode,setErrorCode]=useState(""),[attempt,setAttempt]=useState<EnrollmentAttempt|null>(null),[saved,setSaved]=useState<EnrollmentResult|null>(null);
   const stepPanel=useRef<HTMLDivElement>(null),didMount=useRef(false),year=years.find(item=>item.yearId===yearId)??years[0],sections=year?.sections??[];
 
   useEffect(()=>{
@@ -36,16 +39,19 @@ export function StudentEnrollmentForm({studentId,studentName,admissionNumber,can
 
   async function submit(){
     if(!year||!sectionId||!startsOn||!lastDay||!reviewed)return;
-    setBusy(true);setError("");setSuccess(false);
+    const payload=attempt??{studentId,yearId:year.yearId,sectionId,startsOn,lastDay,rollNumber,key:crypto.randomUUID()};
+    setBusy(true);setError("");setErrorCode("");
     try{
-      const key=crypto.randomUUID(),response=await fetch("/api/v1/enrollments",{method:"POST",headers:{"Content-Type":"application/json","Idempotency-Key":key},body:JSON.stringify({studentId,yearId:year.yearId,sectionId,startsOn,lastDay,rollNumber,key})}),result=await response.json();
-      if(!response.ok)throw new Error(typeof result.message==="string"?result.message:"Enrollment could not be completed.");
-      setSuccess(true);router.refresh();
-    }catch(cause){setError(cause instanceof Error?cause.message:"Enrollment could not be completed. Retry with a new request.");}
+      const response=await fetch("/api/v1/enrollments",{method:"POST",headers:{"Content-Type":"application/json","Idempotency-Key":payload.key},body:JSON.stringify(payload)}),result=await response.json();
+      if(!response.ok){const failure=Object.assign(new Error(typeof result.message==="string"?result.message:"Enrollment could not be completed."),{code:result.code,status:response.status,retryable:result.retryable}) as ApiFailure;throw failure;}
+      setAttempt(null);setSaved(result as EnrollmentResult);router.refresh();
+    }catch(cause){const failure=cause as ApiFailure,unknown=!(cause instanceof Error)||failure.status===undefined||failure.status>=500||failure.retryable===true;if(unknown){setAttempt(payload);setError("The outcome is unknown. Retry the exact retained enrollment before starting another request.");}else{setAttempt(null);setErrorCode(failure.code??"");setError(failure.message);}}
     finally{setBusy(false);}
   }
 
-  if(!years.length)return <Card className="padded settings-panel"><SectionHeader title="Enroll in an academic year" description="There is no open year with an active section available, or this student is already enrolled in every open year."/></Card>;
+  if(saved)return <Card className="receipt student-registration-receipt"><div className="success-mark" aria-hidden="true">✓</div><SectionHeader title="Enrollment saved" description="The enrollment and effective placement were committed together."/><dl className="branch-review"><div><dt>Student</dt><dd>{studentName}</dd></div><div><dt>Academic year</dt><dd>{saved.yearCode} · {saved.yearName}</dd></div><div><dt>Class</dt><dd>{saved.placement.gradeName} · {saved.placement.sectionName}</dd></div><div><dt>Included dates</dt><dd>{saved.validFrom} to {priorDay(saved.validTo)}</dd></div></dl><div className="workflow-actions"><ButtonLink href={cancelHref} variant="secondary">Back to students</ButtonLink><ButtonLink href={`/admin/students/${studentId}#enrollment-history`}>Review enrollment history</ButtonLink></div></Card>;
+
+  if(!years.length)return <Card className="padded settings-panel"><SectionHeader title="Enroll in an academic year" description="There is no open year with an active section available, or this student is already enrolled in every open year."/><ButtonLink href={`/admin/students/${studentId}#enrollment-history`} variant="secondary">Review enrollment history</ButtonLink></Card>;
 
   return <section className="student-enrollment-workflow">
     <ol className="workflow-stepper student-enrollment-stepper" aria-label="Student enrollment progress">
@@ -56,8 +62,7 @@ export function StudentEnrollmentForm({studentId,studentName,admissionNumber,can
     </ol>
     <div className="branch-edit-grid student-enrollment-grid">
       <Card className="branch-edit-card student-enrollment-card">
-        {error&&<div role="alert" aria-label="Enrollment feedback"><Alert tone="danger" title="Enrollment not saved">{error}</Alert></div>}
-        {success&&<div role="status" aria-label="Enrollment feedback"><Alert tone="success" title="Enrollment saved">The student is enrolled in {year?.name}. History has been refreshed.</Alert></div>}
+        {error&&<div role="alert" aria-label="Enrollment feedback"><Alert tone="danger" title={attempt?"Enrollment outcome unknown":"Enrollment not saved"}>{error} <ButtonLink href={errorCode==="ROSTER_IN_USE"?"/admin/attendance/sessions?view=monitor":`/admin/students/${studentId}#enrollment-history`} variant="secondary">{errorCode==="ROSTER_IN_USE"?"Review attendance sessions":"Review enrollment history"}</ButtonLink></Alert></div>}
         <div ref={stepPanel}>
           {step===1&&<>
             <SectionHeader title="Enrollment" description="Choose the student and one open academic year."/>
@@ -88,7 +93,7 @@ export function StudentEnrollmentForm({studentId,studentName,admissionNumber,can
             <SectionHeader title="Review and confirm" description="Check the intended outcome before saving the enrollment and placement."/>
             <dl className="branch-review"><div><dt>Student</dt><dd>{studentName}</dd></div><div><dt>Academic year</dt><dd>{year?.code} · {year?.name}</dd></div><div><dt>Class</dt><dd>{sections.find(item=>item.sectionId===sectionId)?.gradeName} · {sections.find(item=>item.sectionId===sectionId)?.name}</dd></div><div><dt>Included dates</dt><dd>{startsOn} to {lastDay}</dd></div></dl>
             <h3>Expected outcome</h3><p className="muted small">The enrollment and effective placement are saved together.</p>
-            <div className="workflow-actions"><Button variant="secondary" disabled={busy} onClick={()=>setStep(3)}>← Back</Button><Button disabled={!reviewed} loading={busy} onClick={()=>void submit()}>Confirm enrollment</Button></div>
+            <div className="workflow-actions"><Button variant="secondary" disabled={busy||attempt!==null} onClick={()=>setStep(3)}>← Back</Button><Button disabled={!reviewed} loading={busy} onClick={()=>void submit()}>{attempt?"Retry same enrollment":"Confirm enrollment"}</Button></div>
           </>}
         </div>
       </Card>

@@ -23,6 +23,7 @@ Engineering comparison captured 11 October 2026. Human visual acceptance remains
 - The final changed desktop/mobile registration journey passed 2/2 with Playwright against guarded real PostgreSQL `vyapti_vschool_test`. It proves create/persist/reload, explicit admission-number directory search, duplicate rollback and recovery, exact existing-Person registration and foreign-profile denial.
 - In the preceding full-file run, the four unchanged authorization and exact-selection cases passed; the two registration cases exposed a stale combined-search test assumption. The test now selects the documented Admission number attribute, and the final changed cases passed without weakening product assertions.
 - Reference and application entry states were captured at desktop and mobile sizes. Application receipt states were also captured and visually inspected.
+- After the shared receipt composition was refined for SA-19, the combined SA-18/SA-19 desktop/mobile visual checkpoint passed 4/4 and refreshed these receipt captures.
 - No backend contract, schema, migration, seed or development-database row changed.
 
 ## Evidence
