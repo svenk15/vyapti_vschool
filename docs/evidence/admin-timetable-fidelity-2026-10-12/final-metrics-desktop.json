@@ -1,0 +1,8 @@
+{
+  "url": "http://127.0.0.1:3400/admin/timetable",
+  "overflow": false,
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  }
+}

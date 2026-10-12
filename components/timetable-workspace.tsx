@@ -7,12 +7,11 @@ import {TimetableDraftEditor} from '@/components/timetable-draft-editor';
 import {TimetablePatternEditor} from '@/components/timetable-pattern-editor';
 
 export function TimetableWorkspace({pattern,draft,schoolName}:{pattern:TimetablePatternContext;draft:TimetableDraftContext;schoolName:string}){
- const [schoolDay,setSchoolDay]=useState(false),[reviewing,setReviewing]=useState(false);
+ const [schoolDay,setSchoolDay]=useState(false);
  return <div className="timetable-workspace">
-  {!reviewing&&<PageHeader eyebrow={schoolName} title="Timetable & daily changes" description="A clear plan for every class. Keep daily changes separate from the weekly timetable."/>}
   {schoolDay?<>
-   <div className="timetable-view-actions"><Button variant="secondary" onClick={()=>setSchoolDay(false)}>Back to weekly draft</Button></div>
+   <PageHeader title="School day & effective date" description="Set teaching days, periods and breaks for this branch." actions={<Button variant="secondary" onClick={()=>setSchoolDay(false)}>Back to timetable</Button>}/>
    <TimetablePatternEditor initial={pattern} schoolName={schoolName} showHeader={false}/>
-  </>:<TimetableDraftEditor initial={draft} schoolName={schoolName} onOpenSchoolDay={()=>setSchoolDay(true)} onReviewModeChange={setReviewing}/>}
+  </>:<TimetableDraftEditor initial={draft} schoolName={schoolName} onOpenSchoolDay={()=>setSchoolDay(true)}/>}
  </div>;
 }
