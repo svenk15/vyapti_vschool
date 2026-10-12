@@ -61,6 +61,12 @@ Depends on TT-01. Implement the branch/year draft aggregate and slots exactly as
 
 Acceptance: at most 100 unique class/day/lesson-period slots; effective date within the academic year; each offering matches its section/year and each assignment matches the offering and covers effective date. Save/reopen and explicit discard use current authorization, module eligibility, account→Organization→School guards, version CAS and exact idempotency with atomic evidence. Discard retains the row and slots. The Administrator UI has a grid plus accessible list semantics, preserves in-flow edits, warns before abandoning changes, enables Save only after change and never exposes an unsupported two-week or room choice. Unit, real-PostgreSQL and sequential one-worker desktop/mobile browser evidence are required; human review remains PENDING.
 
+## TT-03 — Preview whole-branch conflicts and publication impact
+
+Depends on TT-02. Implement the read-only preview exactly as reconciled in DESIGN. Recheck the current draft/version, current calendar revision, assignment eligibility across the 42-day bounded horizon, class intervals and Teacher Person intervals across every class in the draft. Use current application authorization, tenant/branch scope, release, entitlement, activation and `timetable.manage`; reads do not acquire mutation locks. Count protected Attendance sessions only as an impact warning. Do not publish, generate/cancel sessions, infer occurrence reuse or persist a validation token.
+
+Acceptance: same Teacher Person through two assignments at overlapping class periods blocks readiness; adjacent half-open periods pass; nonteaching calendar dates do not generate candidates; an assignment ending within the horizon produces an actionable issue; stale/foreign/permission paths are safe. The result distinguishes added/changed/removed candidate slots and protected-session count, with added-only comparison until TT-04 supplies a published baseline. Room validation is explicitly not applicable while the accepted nullable-room boundary has no room owner/column; do not claim it tested. Unit, real-PostgreSQL and sequential focused desktop/mobile preview evidence are required. TT-04 must reauthorize/recompute under the mutation guard and remains blocked until TT-03 passes.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.

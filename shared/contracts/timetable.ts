@@ -10,3 +10,6 @@ export type TimetableDraftContext=Readonly<{timezone:string;year:{id:string;code
 export type SaveTimetableDraft=Readonly<{academicYearId:string;dayPatternId:string;effectiveFrom:string;expectedVersion:number;slots:readonly Omit<TimetableDraftSlot,'id'>[];key:string;reason:string}>;
 export type DiscardTimetableDraft=Readonly<{draftId:string;expectedVersion:number;key:string;reason:string}>;
 export type TimetableDraftResult=TimetableDraft&Readonly<{replayed:boolean}>;
+export type TimetablePreviewIssueCode='CLASS_CONFLICT'|'TEACHER_CONFLICT'|'ASSIGNMENT_INELIGIBLE'|'CALENDAR_UNAVAILABLE'|'ROOM_CONFLICT';
+export type TimetablePreviewIssue=Readonly<{code:TimetablePreviewIssueCode;message:string;slotKeys:readonly string[];sectionLabels:readonly string[];dayOfWeek:number|null;periodLabels:readonly string[]}>;
+export type TimetableDraftPreview=Readonly<{draftId:string;draftVersion:number;effectiveFrom:string;horizonUntil:string;ready:boolean;issues:readonly TimetablePreviewIssue[];counts:{draftSlots:number;candidateOccurrences:number;addedSlots:number;changedSlots:number;removedSlots:number;protectedAttendanceSessions:number};previewHash:string;roomValidation:'NOT_APPLICABLE'}>;
