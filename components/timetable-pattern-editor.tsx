@@ -8,7 +8,7 @@ import type {SaveTimetablePattern, TimetablePatternContext, TimetablePeriodKind}
 type Row = {periodKey:string;label:string;kind:TimetablePeriodKind;startLocal:string;endLocal:string;position:number};
 const fresh = ():Row => ({periodKey:crypto.randomUUID(),label:'',kind:'LESSON',startLocal:'09:00',endLocal:'09:40',position:1});
 
-export function TimetablePatternEditor({initial,schoolName}:{initial:TimetablePatternContext;schoolName:string}) {
+export function TimetablePatternEditor({initial,schoolName,showHeader=true}:{initial:TimetablePatternContext;schoolName:string;showHeader?:boolean}) {
   const [context,setContext]=useState(initial);
   const [yearId,setYearId]=useState(initial.pattern?.academicYearId??initial.years[0]?.id??'');
   const [name,setName]=useState(initial.pattern?.name??'Weekly timetable');
@@ -53,7 +53,7 @@ export function TimetablePatternEditor({initial,schoolName}:{initial:TimetablePa
   }
 
   return <div className="timetable-pattern-editor">
-    <PageHeader eyebrow={schoolName} title="Timetable & daily changes" description="Set the teaching week and the ordered periods used when building this branch’s timetable."/>
+    {showHeader&&<PageHeader eyebrow={schoolName} title="Timetable & daily changes" description="Set the teaching week and the ordered periods used when building this branch’s timetable."/>}
     {error&&<Alert tone="danger" title="Draft not saved">{error}</Alert>}
     {message&&<Alert tone="success" title="Draft saved">{message}</Alert>}
     <Card className="padded timetable-pattern-card">
