@@ -5,16 +5,16 @@ import {config as loadEnvironment} from 'dotenv';
 const root = process.cwd();
 loadEnvironment({path: resolve(root, '.env.local'), quiet: true});
 loadEnvironment({path: resolve(root, '.env'), quiet: true});
-const standalone = resolve(root, '.next/standalone');
-if (!existsSync(resolve(standalone, 'server.js'))) {
-  throw new Error('No standalone build found. Run pnpm build before pnpm demo:start.');
-}
+const distDir=process.env.VSCHOOL_E2E==='1'?'.next-e2e':'.next';
+const standalone = resolve(root, `${distDir}/standalone`);
+const serverRoot=existsSync(resolve(standalone,'server.js'))?standalone:resolve(root,distDir);
+if (!existsSync(resolve(serverRoot, 'server.js'))) throw new Error(`No ${distDir} server build found. Run pnpm build before pnpm demo:start.`);
 
-cpSync(resolve(root, '.next/static'), resolve(standalone, '.next/static'), {recursive: true});
+if(serverRoot===standalone)cpSync(resolve(root, `${distDir}/static`), resolve(standalone, `${distDir}/static`), {recursive: true});
 if (existsSync(resolve(root, 'public'))) {
-  cpSync(resolve(root, 'public'), resolve(standalone, 'public'), {recursive: true});
+  cpSync(resolve(root, 'public'), resolve(serverRoot, 'public'), {recursive: true});
 }
 
 process.env.HOSTNAME ??= '127.0.0.1';
 process.env.PORT ??= '3400';
-await import('../.next/standalone/server.js');
+await import(resolve(serverRoot,'server.js'));

@@ -75,9 +75,11 @@ Acceptance: applicability is half-open from `effective_from` to the next publica
 
 ## TT-05 — Reconcile bounded Attendance occurrences
 
+Status: VERIFIED / human review PENDING (12 October 2026).
+
 Depends on verified TT-04 and an accepted Attendance-owner planning contract. The coordinated contract settles stable occurrence identity, seven-day batches within the published `validated_until` horizon, resumable generation checkpoints, idempotent owner commands, cancellation rather than deletion of removed future generated sessions, and preservation of open/submitted sessions. It does not settle how to handle a pre-existing manually scheduled Attendance session occupying the same branch/year/class/date/period when no trusted timetable-source link exists.
 
-Status: **BLOCKED_CONTRACT**. The smallest product decision is whether that unlinked manual collision must (a) block reconciliation for explicit administrator resolution, (b) be adopted as the generated occurrence after an approved equivalence check, or (c) coexist. Recommended: block only the colliding occurrence and expose actionable checkpoint failure; this avoids duplicate registers and does not claim lineage the system cannot prove. After that decision, define the narrow enlisted Attendance planning port and source-link columns in both owner LLDs before adding forward migrations. Do not reuse the actor-facing manual schedule/cancel facade as an implicit system port.
+Status: **IN_PROGRESS**. The owner approved an actionable per-occurrence block on 12 October 2026. Implement the narrow enlisted Attendance planning port and trusted source link; do not reuse the actor-facing manual schedule/cancel facade as an implicit system port. Verify creation/replay, mixed partial result, authorized manual cancellation then retry, frozen-session protection, concurrency, scope/revocation and lost-response recovery with real PostgreSQL; verify receipt → reconcile → conflict review → supported resolution → retry at desktop/mobile with one worker.
 
 ## Experience overlay consumption
 

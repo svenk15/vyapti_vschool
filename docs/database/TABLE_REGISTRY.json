@@ -541,9 +541,9 @@
       "table": "vs_attendance_session",
       "status": "MIGRATED",
       "design": "docs/modules/attendance/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; school_date date; starts_at timestamptz(3); ends_at timestamptz(3); occurrence_key varchar(80); calendar_revision_id uuid; status SCHEDULED/OPEN/SUBMITTED/CANCELLED; version int; roster_revision char(64) nullable; opened_at timestamptz(3) nullable; submitted_at timestamptz(3) nullable; submitted_by uuid nullable; cancelled_at timestamptz(3) nullable",
-      "responsibility": "One actual offering occurrence; retains calendar version and scope. School timezone used to validate local date.",
-      "constraints": "Scoped Offering/CalendarRevision FKs; UNIQUE(scope,offering_id,occurrence_key); UNIQUE(scope,id); CHECK starts<ends, known status and version>=1; index(scope,school_date,status,starts_at,id).",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; school_date date; starts_at timestamptz(3); ends_at timestamptz(3); occurrence_key varchar(80); calendar_revision_id uuid; source_occurrence_id uuid nullable; status SCHEDULED/OPEN/SUBMITTED/CANCELLED; version int; roster_revision char(64) nullable; opened_at timestamptz(3) nullable; submitted_at timestamptz(3) nullable; submitted_by uuid nullable; cancelled_at timestamptz(3) nullable",
+      "responsibility": "One actual offering occurrence; retains calendar version and scope. A nullable trusted Academics occurrence link distinguishes timetable-generated sessions from manual sessions. School timezone validates local date.",
+      "constraints": "Scoped Offering/CalendarRevision and optional LessonOccurrence FKs; UNIQUE(scope,offering_id,occurrence_key); UNIQUE(scope,source_occurrence_id); UNIQUE(scope,id); CHECK starts<ends, known status and version>=1; index(scope,school_date,status,starts_at,id).",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -1191,6 +1191,28 @@
       "responsibility": "Recurring weekly lesson within a private draft or copied immutable published timetable snapshot.",
       "constraints": "Scoped Revision/Section/Offering/Assignment/Period FKs; day 1..7; positive position; unique stable slot key and unique class/day/period cell; scoped class-week index; update/delete guard when owned by a PUBLISHED revision",
       "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context and authorization through the owning timetable draft operation.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+    },
+    {
+      "model": "LessonOccurrence",
+      "owner": "academics",
+      "table": "vs_academics_lesson_occurrence",
+      "status": "MIGRATED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; class_section_id uuid; local_date date; period_key uuid; source_revision_id uuid; source_slot_key uuid; starts_at/ends_at timestamptz(3); subject_offering_id uuid; effective_teacher_assignment_id uuid; state varchar(20); generation_revision int; last_outcome varchar(40); last_error_code varchar(80) nullable; version int; created_at/updated_at timestamptz(3)",
+      "responsibility": "Stable dated occurrence derived from one immutable timetable publication, retaining its latest Attendance reconciliation outcome.",
+      "constraints": "Scoped School/Year/Section/Revision/Slot/Offering/Assignment FKs; starts_at<ends_at; constrained state/outcome; positive versions; UNIQUE(scope,year,section,local_date,period_key); source/date and class/date indexes",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, timetable.manage, and live Timetable/Academics/Staff eligibility; Attendance effects additionally require live Attendance eligibility.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+    },
+    {
+      "model": "TimetableGenerationCheckpoint",
+      "owner": "academics",
+      "table": "vs_academics_generation_checkpoint",
+      "status": "MIGRATED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; source_revision_id uuid; horizon_from/horizon_until/cursor_date date; state varchar(16); counts jsonb; last_error_code varchar(80) nullable; source_command_id uuid; version int; created_at/updated_at timestamptz(3)",
+      "responsibility": "Durable seven-day batch cursor and latest reconciliation summary for one immutable publication.",
+      "constraints": "Scoped School/Year/Revision FKs; UNIQUE(scope,source_revision_id); bounded horizon/cursor check; constrained state; positive version; scope/state/update index",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, timetable.manage, and live Timetable/Attendance eligibility for every read/write.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
     },
     {
       "model": "OperatorAuditEntry",

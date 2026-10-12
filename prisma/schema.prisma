@@ -962,6 +962,56 @@ model TimetableSlot {
  @@map("vs_academics_timetable_slot")
 }
 
+model LessonOccurrence {
+ id String @id(map:"vs_academics_lesson_occurrence_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ academicYearId String @map("academic_year_id") @db.Uuid
+ classSectionId String @map("class_section_id") @db.Uuid
+ localDate DateTime @map("local_date") @db.Date
+ periodKey String @map("period_key") @db.Uuid
+ sourceRevisionId String @map("source_revision_id") @db.Uuid
+ sourceSlotKey String @map("source_slot_key") @db.Uuid
+ startsAt DateTime @map("starts_at") @db.Timestamptz(3)
+ endsAt DateTime @map("ends_at") @db.Timestamptz(3)
+ subjectOfferingId String @map("subject_offering_id") @db.Uuid
+ effectiveTeacherAssignmentId String @map("effective_teacher_assignment_id") @db.Uuid
+ state String @db.VarChar(20)
+ generationRevision Int @map("generation_revision")
+ lastOutcome String @map("last_outcome") @db.VarChar(40)
+ lastErrorCode String? @map("last_error_code") @db.VarChar(80)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,id],map:"vs_academics_lesson_occurrence_scope_id_key")
+ @@unique([organizationId,schoolId,academicYearId,classSectionId,localDate,periodKey],map:"vs_academics_lesson_occurrence_stable_key")
+ @@index([organizationId,schoolId,sourceRevisionId,localDate],map:"vs_academics_lesson_occurrence_source_date_idx")
+ @@index([organizationId,schoolId,classSectionId,localDate,startsAt],map:"vs_academics_lesson_occurrence_class_date_idx")
+ @@map("vs_academics_lesson_occurrence")
+}
+
+model TimetableGenerationCheckpoint {
+ id String @id(map:"vs_academics_generation_checkpoint_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ academicYearId String @map("academic_year_id") @db.Uuid
+ sourceRevisionId String @map("source_revision_id") @db.Uuid
+ horizonFrom DateTime @map("horizon_from") @db.Date
+ horizonUntil DateTime @map("horizon_until") @db.Date
+ cursorDate DateTime @map("cursor_date") @db.Date
+ state String @db.VarChar(16)
+ counts Json
+ lastErrorCode String? @map("last_error_code") @db.VarChar(80)
+ sourceCommandId String @map("source_command_id") @db.Uuid
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,id],map:"vs_academics_generation_checkpoint_scope_id_key")
+ @@unique([organizationId,schoolId,sourceRevisionId],map:"vs_academics_generation_checkpoint_source_key")
+ @@index([organizationId,schoolId,state,updatedAt(sort:Desc)],map:"vs_academics_generation_checkpoint_state_idx")
+ @@map("vs_academics_generation_checkpoint")
+}
+
 model Enrollment {
  id String @id(map:"vs_students_enrollment_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid
@@ -1128,6 +1178,7 @@ model AttendanceSession {
  submittedAt DateTime? @map("submitted_at") @db.Timestamptz(3)
  submittedBy String? @map("submitted_by") @db.Uuid
  cancelledAt DateTime? @map("cancelled_at") @db.Timestamptz(3)
+ sourceOccurrenceId String? @map("source_occurrence_id") @db.Uuid
  offering CourseOffering @relation(fields:[organizationId,schoolId,offeringId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_offering_fkey")
  calendarRevision CalendarRevision @relation("AttendanceSessionCalendarRevision",fields:[organizationId,schoolId,calendarRevisionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_calendar_revision_fkey")
  rosterEntries SessionRosterEntry[]
@@ -1135,6 +1186,7 @@ model AttendanceSession {
  revisions AttendanceRevision[]
  @@unique([organizationId,schoolId,id],map:"vs_attendance_session_scope_id_key")
  @@unique([organizationId,schoolId,offeringId,occurrenceKey],map:"vs_attendance_session_occurrence_key")
+ @@unique([organizationId,schoolId,sourceOccurrenceId],map:"vs_attendance_session_source_occurrence_key")
  @@index([organizationId,schoolId,schoolDate,status,startsAt,id],map:"vs_attendance_session_school_day_idx")
  @@map("vs_attendance_session")
 }

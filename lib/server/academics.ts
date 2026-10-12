@@ -30,7 +30,8 @@ export const academicsGateway={
  async timetableDraftContext(identity:Identity|null,academicYearId:string,effectiveFrom:string){const s=await scope(identity);return service().draftContext(identity,s.organizationId,s.schoolId,academicYearId,effectiveFrom);},
  async saveTimetableDraft(identity:Identity|null,input:Parameters<AcademicServices['saveDraft']>[3]){const s=await scope(identity);return service().saveDraft(identity,s.organizationId,s.schoolId,input);},
  async previewTimetableDraft(identity:Identity|null,draftId:string,expectedVersion:number){const s=await scope(identity);return service().previewDraft(identity,s.organizationId,s.schoolId,draftId,expectedVersion);},
- async timetablePublication(identity:Identity|null,id:string){const s=await scope(identity);return service().publication(identity,s.organizationId,s.schoolId,id);},
+ async timetablePublication(identity:Identity|null,id:string){const s=await scope(identity),publication=await service().publication(identity,s.organizationId,s.schoolId,id),reconciliation=await service().reconciliationStatus(identity,s.organizationId,s.schoolId,id);return {...publication,reconciliationState:reconciliation?.state??'PENDING',reconciliation};},
+ async reconcileTimetable(identity:Identity|null,input:Parameters<ReturnType<typeof service>['reconcileTimetable']>[3]){const s=await scope(identity);return service().reconcileTimetable(identity,s.organizationId,s.schoolId,input);},
  async publishTimetableDraft(identity:Identity|null,input:Parameters<AcademicServices['publishDraft']>[3]){const s=await scope(identity);return service().publishDraft(identity,s.organizationId,s.schoolId,input);},
  async discardTimetableDraft(identity:Identity|null,input:Parameters<AcademicServices['discardDraft']>[3]){const s=await scope(identity);return service().discardDraft(identity,s.organizationId,s.schoolId,input);},
 };
