@@ -1,7 +1,10 @@
 import {cpSync, existsSync} from 'node:fs';
 import {resolve} from 'node:path';
+import {config as loadEnvironment} from 'dotenv';
 
 const root = process.cwd();
+loadEnvironment({path: resolve(root, '.env.local'), quiet: true});
+loadEnvironment({path: resolve(root, '.env'), quiet: true});
 const standalone = resolve(root, '.next/standalone');
 if (!existsSync(resolve(standalone, 'server.js'))) {
   throw new Error('No standalone build found. Run pnpm build before pnpm demo:start.');
