@@ -73,6 +73,12 @@ Depends on verified TT-03. Reauthorize and recompute the reviewed preview inside
 
 Acceptance: applicability is half-open from `effective_from` to the next publication (or academic-year end); a successor must start after the current published revision. Exact replay returns the original publication, changed payload conflicts, stale review requires a renewed preview, concurrent publish yields one successor, and rollback leaves no partial snapshot/evidence. Published patterns/periods/slots are database-immutable. The receipt says Attendance reconciliation is `PENDING`. Real PostgreSQL, focused desktop/mobile review → confirm → receipt tests, repository gates and a production demo are required. SA-41 remains partial until TT-05.
 
+## TT-05 — Reconcile bounded Attendance occurrences
+
+Depends on verified TT-04 and an accepted Attendance-owner planning contract. The coordinated contract settles stable occurrence identity, seven-day batches within the published `validated_until` horizon, resumable generation checkpoints, idempotent owner commands, cancellation rather than deletion of removed future generated sessions, and preservation of open/submitted sessions. It does not settle how to handle a pre-existing manually scheduled Attendance session occupying the same branch/year/class/date/period when no trusted timetable-source link exists.
+
+Status: **BLOCKED_CONTRACT**. The smallest product decision is whether that unlinked manual collision must (a) block reconciliation for explicit administrator resolution, (b) be adopted as the generated occurrence after an approved equivalence check, or (c) coexist. Recommended: block only the colliding occurrence and expose actionable checkpoint failure; this avoids duplicate registers and does not claim lineage the system cannot prove. After that decision, define the narrow enlisted Attendance planning port and source-link columns in both owner LLDs before adding forward migrations. Do not reuse the actor-facing manual schedule/cancel facade as an implicit system port.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.
