@@ -911,6 +911,15 @@ model TimetableRevision {
  revisionNo Int @map("revision_no")
  state String @db.VarChar(16)
  effectiveFrom DateTime @map("effective_from") @db.Date
+ effectiveUntil DateTime? @map("effective_until") @db.Date
+ validatedUntil DateTime? @map("validated_until") @db.Date
+ publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+ publishedByAccountId String? @map("published_by_account_id") @db.Uuid
+ basedOnRevisionId String? @map("based_on_revision_id") @db.Uuid
+ basedOnDraftVersion Int? @map("based_on_draft_version")
+ sourceCommandId String? @map("source_command_id") @db.Uuid
+ calendarRevisionId String? @map("calendar_revision_id") @db.Uuid
+ contentSnapshot Json? @map("content_snapshot")
  version Int
  createdAt DateTime @map("created_at") @db.Timestamptz(3)
  createdByAccountId String @map("created_by_account_id") @db.Uuid
@@ -922,6 +931,8 @@ model TimetableRevision {
  createdBy UserAccount @relation("TimetableRevisionCreator",fields:[createdByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_revision_creator_fkey")
  slots TimetableSlot[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_timetable_revision_scope_id_key")
+ @@unique([organizationId,schoolId,academicYearId,revisionNo],map:"vs_academics_timetable_revision_number_key")
+ @@index([organizationId,schoolId,academicYearId,effectiveFrom,effectiveUntil],map:"vs_academics_timetable_revision_effective_idx")
  @@index([organizationId,schoolId,academicYearId,state,updatedAt(sort:Desc)],map:"vs_academics_timetable_revision_context_idx")
  @@map("vs_academics_timetable_revision")
 }

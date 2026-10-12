@@ -1176,9 +1176,9 @@
       "table": "vs_academics_timetable_revision",
       "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; day_pattern_id uuid; revision_no int; state varchar(16); effective_from date; version int; created_at timestamptz(3); created_by_account_id uuid; updated_at timestamptz(3)",
-      "responsibility": "Versioned private weekly timetable draft root; publication is a later immutable lifecycle.",
-      "constraints": "Scoped Organization/School/Year/Pattern FKs; creator FK; DRAFT/DISCARDED state; positive revision/version; one partial unique live DRAFT per branch/year; scoped resume index",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; day_pattern_id uuid; revision_no int; state varchar(16); effective_from date; effective_until date nullable; validated_until date nullable; published_at timestamptz(3) nullable; published_by_account_id uuid nullable; based_on_revision_id uuid nullable; based_on_draft_version int nullable; source_command_id uuid nullable; calendar_revision_id uuid nullable; content_snapshot jsonb nullable; version int; created_at timestamptz(3); created_by_account_id uuid; updated_at timestamptz(3)",
+      "responsibility": "Versioned private weekly draft plus immutable published timetable snapshots and half-open applicability metadata.",
+      "constraints": "Scoped Organization/School/Year/Pattern, publisher, source-draft and calendar-revision FKs; DRAFT/DISCARDED/PUBLISHED state; positive revision/version; one live DRAFT and one open-ended PUBLISHED revision per branch/year; unique scoped revision number; complete publication metadata/snapshot check; immutable published content with controlled predecessor effective_until close; scoped resume and applicability indexes",
       "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, current timetable.manage and live Timetable/Academics/Staff eligibility for every read/write.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
     },
     {
@@ -1188,8 +1188,8 @@
       "status": "MIGRATED",
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; slot_key uuid; academic_year_id uuid; day_pattern_id uuid; class_section_id uuid; subject_offering_id uuid; teacher_assignment_id uuid; day_of_week smallint; period_key uuid; position smallint",
-      "responsibility": "Recurring weekly lesson candidate within one private timetable draft.",
-      "constraints": "Scoped Revision/Section/Offering/Assignment/Period FKs; day 1..7; positive position; unique stable slot key and unique class/day/period cell; scoped class-week index",
+      "responsibility": "Recurring weekly lesson within a private draft or copied immutable published timetable snapshot.",
+      "constraints": "Scoped Revision/Section/Offering/Assignment/Period FKs; day 1..7; positive position; unique stable slot key and unique class/day/period cell; scoped class-week index; update/delete guard when owned by a PUBLISHED revision",
       "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context and authorization through the owning timetable draft operation.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
     },
     {

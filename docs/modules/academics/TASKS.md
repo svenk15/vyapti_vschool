@@ -67,6 +67,12 @@ Depends on TT-02. Implement the read-only preview exactly as reconciled in DESIG
 
 Acceptance: same Teacher Person through two assignments at overlapping class periods blocks readiness; adjacent half-open periods pass; nonteaching calendar dates do not generate candidates; an assignment ending within the horizon produces an actionable issue; stale/foreign/permission paths are safe. The result distinguishes added/changed/removed candidate slots and protected-session count, with added-only comparison until TT-04 supplies a published baseline. Room validation is explicitly not applicable while the accepted nullable-room boundary has no room owner/column; do not claim it tested. Unit, real-PostgreSQL and sequential focused desktop/mobile preview evidence are required. TT-04 must reauthorize/recompute under the mutation guard and remains blocked until TT-03 passes.
 
+## TT-04 — Publish an immutable timetable revision
+
+Depends on verified TT-03. Reauthorize and recompute the reviewed preview inside the existing account → Organization → School guarded serializable transaction. Require draft expected version, exact preview digest, explicit acknowledgement and scoped command key. Copy the day pattern, periods, recurring slots and a complete JSON reproduction snapshot into a new immutable `PUBLISHED` revision. Close only the prior published revision's applicability metadata; never rewrite its content. Publication validates the bounded 42-day window and records `validated_until`; it does not claim validity beyond that window or perform TT-05 Attendance reconciliation.
+
+Acceptance: applicability is half-open from `effective_from` to the next publication (or academic-year end); a successor must start after the current published revision. Exact replay returns the original publication, changed payload conflicts, stale review requires a renewed preview, concurrent publish yields one successor, and rollback leaves no partial snapshot/evidence. Published patterns/periods/slots are database-immutable. The receipt says Attendance reconciliation is `PENDING`. Real PostgreSQL, focused desktop/mobile review → confirm → receipt tests, repository gates and a production demo are required. SA-41 remains partial until TT-05.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.

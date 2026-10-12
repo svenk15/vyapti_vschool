@@ -13,6 +13,6 @@ export function TimetableWorkspace({pattern,draft,schoolName}:{pattern:Timetable
   {schoolDay?<>
    <div className="timetable-view-actions"><Button variant="secondary" onClick={()=>setSchoolDay(false)}>Back to weekly draft</Button></div>
    <TimetablePatternEditor initial={pattern} schoolName={schoolName} showHeader={false}/>
-  </>:<TimetableDraftEditor initial={draft} onOpenSchoolDay={()=>setSchoolDay(true)} onReviewModeChange={setReviewing}/>}
+  </>:<TimetableDraftEditor initial={draft} schoolName={schoolName} onOpenSchoolDay={()=>setSchoolDay(true)} onReviewModeChange={setReviewing}/>}
  </div>;
 }
