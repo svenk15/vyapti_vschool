@@ -14,6 +14,8 @@ Verification on the implementation source:
 - Sequential one-worker Chromium and mobile TT-02/TT-03 journeys: 1/1 each passed. They cover save/reload, focus, exact-key response-loss recovery, staged conflict review, Back to draft, stale recovery, discard retry and retained history.
 - `pnpm build`: passed; build ID `7xsq2y9ismCsh8IB9dsap`.
 
+`pnpm demo:seed` completed with exit 0 and preserved the existing idempotent weekly timetable draft/lesson fixture in `artifacts/timetable-01/private-demo.json`. Independent legacy TEN-02/ACA-01/branding refreshes reported their already-recorded unavailable/conflict states and preserved existing data; TT-03 did not depend on those refreshes. The production build is running at `http://127.0.0.1:3400`; a private local sign-in probe opened the saved draft and reached **Review timetable publication**. Credentials remain in ignored `artifacts/people-02/private-demo.json`.
+
 Directly inspected comparison:
 
 - [Approved draft entry](reference-draft-desktop.png)
