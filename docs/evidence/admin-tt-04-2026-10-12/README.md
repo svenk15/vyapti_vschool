@@ -1,6 +1,6 @@
 # TT-04 immutable timetable publication evidence — 12 October 2026
 
-Source checkpoint: pending focused commit. Human review: **PENDING**. Parent workflow SA-41 remains **PARTIAL** until TT-05 performs the Attendance-owner handoff.
+Source checkpoint: `2f9b6a733318c9617ce3bf6301138a1630ed4377`. Human review: **PENDING**. Parent workflow SA-41 remains **PARTIAL** until TT-05 performs the Attendance-owner handoff.
 
 ## Contract and reference
 
