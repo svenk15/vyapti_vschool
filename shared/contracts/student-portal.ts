@@ -1,0 +1,11 @@
+export const studentPortalPurposes=['profile.read_self','attendance.read_self','timetable.read_self'] as const;
+export type StudentPortalPurpose=typeof studentPortalPurposes[number];
+export type StudentPortalAccessStatus='INVITE_SENT'|'DELIVERY_FAILED'|'OPERATOR_REQUIRED'|'ACCESS_ENABLED'|'ACCESS_REMOVED';
+export type StudentPortalAccessRecord=Readonly<{accessId:string;studentId:string;studentName:string;email:string;status:StudentPortalAccessStatus;version:number;authorizedAt:string;acceptedAt:string|null;revokedAt:string|null;invitationId:string|null;deliveryFailureReason:string|null}>;
+export type StudentPortalAuthorizationResult=Readonly<{accessId:string;invitationId:string;status:StudentPortalAccessStatus;version:number;replayed:boolean}>;
+export type StudentPortalContext=Readonly<{accessId:string;studentId:string;displayName:string;admissionNumber:string;institutionName:string;schoolName:string;schoolCode:string;timezone:string;academicYear:string;classLabel:string;enrollmentFrom:string;enrollmentUntil:string;purposes:readonly StudentPortalPurpose[]}>;
+export type StudentPortalWorkspace=Readonly<{accountId:string;displayName:string;contexts:readonly StudentPortalContext[]}>;
+export type StudentSelfAttendanceItem=Readonly<{sessionId:string;date:string;startsAt:string;subjectName:string;sectionName:string;status:'PRESENT'|'ABSENT'|'LATE'|'EXCUSED'|null;lateMinutes:number|null;sessionState:'OPEN'|'SUBMITTED'|'CANCELLED'}>;
+export type StudentSelfAttendanceHistory=Readonly<{studentId:string;timezone:string;from:string;until:string;items:readonly StudentSelfAttendanceItem[]}>
+export type StudentSelfTimetableLesson=Readonly<{occurrenceId:string;date:string;startsAt:string;endsAt:string;subjectName:string;sectionName:string;teacherName:string}>;
+export type StudentSelfTimetableWeek=Readonly<{studentId:string;timezone:string;weekStart:string;weekEndExclusive:string;lessons:readonly StudentSelfTimetableLesson[]}>;

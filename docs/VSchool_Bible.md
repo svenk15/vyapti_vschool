@@ -24,7 +24,7 @@ These are product releases. Preserve, scope, design, implement, validate and rel
 | 6 — School operations | Operational modules selected by school need | Transport, HR, library, facilities, inventory and health | Scope and sensitive-data access defined separately for each module |
 | 7 — AI assistance | Permission-aware explanations and assistance | Principal/teacher/parent AI capabilities | Grounded retrieval, evaluations, provenance and privacy gates before use |
 
-The fresh baseline deliberately narrows the first release to admin/teacher operations. Parent access and notification delivery belong to Phase 2. Full admissions is explicitly Phase 3. The later roadmap is a commitment to design modules before implementing them, not a claim that their detailed schemas are complete. The earlier numbering is not used by this repository.
+The fresh baseline originally narrowed the first release to admin/teacher operations. Subsequent owner decisions authorize bounded Parent and Student workspaces where existing owner data and explicit access contracts are ready; they do not accelerate absent Communication, Learning, Requests, Results, Services or AI owners. Full admissions remains Phase 3. The later roadmap is a commitment to design modules before implementing them, not a claim that their detailed schemas are complete. The earlier numbering is not used by this repository.
 
 ### Phase 1 user journey
 
@@ -39,7 +39,7 @@ A subject can have several sessions on the same date. Attendance belongs to one 
 
 ### Explicit Phase 1 exclusions
 
-Guardian accounts/views, automatic absence messages, billing, examination results, full admissions, native mobile apps, durable offline queues, timetable optimization, AI and custom role editing. Institution/branch administration, module configuration and branding are Phase 1 foundations, not optional later work. No disabled future-module navigation. Manual enrollment history, manual dated sessions and the internal outbox contract remain first-release requirements.
+Automatic absence messages, billing, examination results, full admissions, native mobile apps, durable offline queues, timetable optimization, AI and custom role editing. Parent/Guardian and Student access are limited to their separately approved explicit-link, own-data/read-purpose contracts; no public registration, inferred relationship, impersonation or future-owner capability is implied. Institution/branch administration, module configuration and branding are Phase 1 foundations, not optional later work. No disabled future-module navigation. Manual enrollment history, manual dated sessions and the internal outbox contract remain first-release requirements.
 
 ## 3. The four connected sources of truth
 
@@ -704,3 +704,7 @@ Roster preview requires `student.manage` and active student_core/academic_core a
 ### 5 October 2026 — IMP-03 retention and cancellation
 
 IMP-03 uses explicit local pilot retention windows (source bytes 7 days; terminal row PII 30 days), while production durations/legal holds remain school-approved FND-02 decisions. Global retention operations use an append-only platform operator audit rather than attributing the action to a school account. Cancellation preserves committed rows and skips pending rows only; import mappings and immutable receipts remain durable.
+
+### 14 October 2026 — Optional Student portal access
+
+A Student record does not create a login. A trusted operator designates `student.access.manage`; that Administrator may authorize one exact active Student and a school-confirmed Student address through a dedicated single-use invitation. Acceptance binds the intended account to the Student-owned Person and creates no staff membership, Guardian grant or impersonation authority. Student reads require the accepted non-revoked link, exact self purpose, active dated enrollment, current module availability and server-derived scope. Revocation preserves the Student and all school history, and account-wide recovery applies the strictest trust mode across Student and other affiliations.

@@ -32,6 +32,7 @@
     "demo:task": "node scripts/demo-task.mjs",
     "institution-operator": "node --import tsx scripts/institution-operator.ts",
     "family-operator": "node --import tsx scripts/family-operator.ts",
+    "student-access-operator": "node --import tsx scripts/student-access-operator.ts",
     "demo:tenancy": "node --import tsx scripts/demo-tenancy.ts",
     "verify:tenancy-local": "node scripts/verify-tenancy-local.mjs",
     "tenancy-operator": "node --import tsx scripts/tenancy-operator.ts",

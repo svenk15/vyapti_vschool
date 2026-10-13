@@ -1,0 +1,4 @@
+import Link from 'next/link';
+import {AccessSignOut} from '@/components/access-login';
+import {Alert,BrandSurface,Card,PageHeader} from '@/components/ui/primitives';
+export default function StudentAccessUnavailable(){return <BrandSurface><main id="main-content" className="container page-space family-unavailable"><PageHeader eyebrow="Student workspace" title="Workspace unavailable" description="This account has no current school-verified Student access and active enrollment."/><Card className="padded"><Alert tone="warning" title="Check your school access">Ask the school office to review a pending, revoked or changed Student access link. Historical access does not authorize current school information.</Alert><div className="form-actions"><Link className="btn btn-secondary" href="/forgot-password">Access help</Link><AccessSignOut/></div></Card></main></BrandSurface>;}

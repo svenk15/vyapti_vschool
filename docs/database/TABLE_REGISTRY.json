@@ -1275,6 +1275,50 @@
         "owner": "platform",
         "closureGate": "PLATFORM"
       }
+    },
+    {
+      "model": "StudentAccessManagerGrant",
+      "owner": "students",
+      "table": "vs_students_access_manager_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/students/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Trusted-operator provisioned branch capability allowing one active School Administrator to manage optional Student portal access.",
+      "constraints": "Scoped School and SchoolMembership FKs; unique scope/account; positive version; active capability lookup index; current administrator membership rechecked by application",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context plus current active School Administrator membership and active designated student.access.manage grant.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
+    },
+    {
+      "model": "StudentPortalAccess",
+      "owner": "students",
+      "table": "vs_students_portal_access",
+      "status": "MIGRATED",
+      "design": "docs/modules/students/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; normalized_email varchar(254); account_id nullable; authorized_by_account_id uuid; authorized_at timestamptz(3); accepted_at/revoked_at/revoked_by_account_id/revocation_reason nullable; version int; created_at timestamptz(3)",
+      "responsibility": "One explicit school authorization and exact accepted account binding for one Student self-service identity.",
+      "constraints": "Scoped Student and global account/actor FKs; coherent acceptance/revocation evidence; partial unique non-revoked Student access; scope/student and account indexes",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require current designated manager for administration or current accepted account plus exact Student purpose and active enrollment for self reads.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
+    },
+    {
+      "model": "StudentPortalPurposeGrant",
+      "owner": "students",
+      "table": "vs_students_portal_purpose_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/students/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; student_id uuid; purpose varchar(40); granted_at timestamptz(3)",
+      "responsibility": "Separately enforceable profile.read_self, attendance.read_self and timetable.read_self grants issued as one first-release bundle.",
+      "constraints": "Scoped access+Student FK; allowed-purpose check; unique access/purpose; scoped purpose lookup index",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Visible only through a current non-revoked accepted Student access and the exact requested purpose.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
+    },
+    {
+      "model": "StudentPortalInvitation",
+      "owner": "students",
+      "table": "vs_students_portal_invitation",
+      "status": "MIGRATED",
+      "design": "docs/modules/students/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; intended_account_id uuid; token_hash char(64); delivery_status varchar(24); delivered_at/delivery_failed_at/delivery_failure_reason nullable; created_by_account_id uuid; created_at/expires_at timestamptz(3); accepted_at/revoked_at nullable; version int",
+      "responsibility": "Dedicated single-use expiring Student setup invitation and delivery evidence for one already-authorized Student access.",
+      "constraints": "Scoped access FK; global intended-account/creator FKs; unique token hash; delivery-state/evidence and expiry checks; access history and account expiry indexes",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Admin reads require current designated manager; consumption requires exact intended account, Student Person binding and live access authorization.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
     }
   ],
   "rlsPlan": {

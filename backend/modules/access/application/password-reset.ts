@@ -22,6 +22,7 @@ export interface AccessEmailSender {
  sendPasswordReset(input:{to:string;token:string;expiresAt:string}):Promise<{ok:true}|{ok:false;reason:string}>;
  sendStaffInvite(input:{to:string;token:string;expiresAt:string;organizationId:string;schoolId:string}):Promise<{ok:true}|{ok:false;reason:string}>;
  sendFamilyInvite?(input:{to:string;token:string;expiresAt:string;organizationId:string;schoolId:string}):Promise<{ok:true}|{ok:false;reason:string}>;
+ sendStudentInvite?(input:{to:string;token:string;expiresAt:string;organizationId:string;schoolId:string}):Promise<{ok:true}|{ok:false;reason:string}>;
 }
 export interface PasswordResetRepository {
  /** Must transactionally recheck address, account eligibility, active memberships and institution grants. */

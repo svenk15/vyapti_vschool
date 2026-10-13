@@ -2,6 +2,16 @@
 
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
+## STW-A01 — Student access setup, activation and own workspace
+
+Depends on: STU-01, STU-02, IAM-03, TEN-02
+
+Implement the designated `student.access.manage` grant, dedicated StudentAccountLink/invitation, exact Student Person binding, revocation, account-wide recovery affiliation, approved Student shell, own profile and current enrollment context from DESIGN.
+
+Acceptance: real PostgreSQL proves designated-manager and self-grant denial, exact Person binding, no SchoolMembership/RoleGrant/Guardian authority, wrong/expired/revoked/reused invitation denial, acceptance-versus-revocation serialization, replay, delivery failure, current enrollment bounds, own/classmate/foreign denial and strict mixed-role recovery. Browser proves Administrator setup, activation, sign-in, profile, mobile navigation, sign-out and immediate access loss after revocation. Direct desktop/mobile reference comparison uses the unmodified Student Edition 01 HTML. Human review remains separate.
+
+Status: **VERIFIED** for the access foundation, self profile, published timetable and factual attendance slices. Human review: **PENDING**. Learning, communication, requests, results, preferences and other absent owners remain separate blocked workflows in the Student matrix.
+
 ## STU-01 — Register and inspect students
 
 Depends on: PER-01, ACA-01
