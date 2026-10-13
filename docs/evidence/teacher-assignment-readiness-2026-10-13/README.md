@@ -15,7 +15,7 @@ No schema or migration changed. Development and test remain at 46 applied migrat
 - `pnpm check`: passed, including lint, typecheck, documentation/database/boundary/backend checks and 146/146 unit tests.
 - `pnpm test:functional test/functional/attendance-sessions.test.ts`: final run passed 11/11 against `vyapti_vschool_test`. It proves no-assignment, session-changed/cancelled and ready states, cross-branch denial, stable safe-reference shape and unchanged Attendance persistence. The first run exposed an extra synthetic session contaminating later cases; the test was corrected to reuse the suite's normal scheduled session. The second run still contained its cancellation evidence; the final run removed every extra fixture write and passed.
 - Focused Playwright, one worker: Chromium 1/1 and mobile 1/1 passed. It proves derived status, three-stage navigation, retained selection after Back/Continue, final informational outcome, keyboard-operable native controls and no viewport overflow.
-- Production/E2E build passed; build ID `8Bb9Fp5riUiq3yNKEVvL7`.
+- Production/E2E build passed; build ID `E1ehJKrvSmEwkQUDK5z4u`.
 
 JUnit evidence: [unit](unit.junit.xml), [functional](functional.junit.xml), [browser](e2e.junit.xml).
 
