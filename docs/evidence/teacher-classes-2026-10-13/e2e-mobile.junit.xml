@@ -1,0 +1,10 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="17.683614">
+<testsuite name="teacher-attendance-milestone.spec.ts" timestamp="2026-10-13T03:52:04.416Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.633" errors="0">
+<testcase name="Teacher reviews assigned classes and only the dated minimal roster" classname="teacher-attendance-milestone.spec.ts" time="2.633">
+<system-err>
+<![CDATA[(node:47282) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+]]>
+</system-err>
+</testcase>
+</testsuite>
+</testsuites>

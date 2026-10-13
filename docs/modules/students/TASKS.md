@@ -10,7 +10,7 @@ Design: [flow STU-01](DESIGN.md). Scope and API: POST /api/v1/students; GET /api
 
 ### Implementation instructions
 
-1. Require `student.manage` for create, exact Person selection and the school-wide list/detail endpoints. Keep teacher `student.read` limited to the Attendance-owned assigned-roster flow; deny generic directory/detail access to a teacher.
+1. Require `student.manage` for create, exact Person selection and the school-wide list/detail endpoints. Keep teacher `student.read` limited to the Attendance-owned assigned-session roster and the Academics-authorized TEA-07/08 dated minimal-roster port; deny generic directory/detail access to a teacher.
 2. Acquire guards; validate admission number and deliberate Person identity.
 3. Invoke People enlisted facade then Student factory; no guardian/account invented.
 4. Persist Person+Student+envelopes in one transaction.

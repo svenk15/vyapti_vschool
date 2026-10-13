@@ -366,6 +366,37 @@ sequenceDiagram
 
 Verification covers input validation; real PostgreSQL published-only projection, trusted Attendance linking, branch isolation and current authority; and sequential desktop/mobile browser navigation, URL week state, responsive layout and register link. The exact reference is `VSchool_Teacher_Review.html#/planning`. Unsupported cover/request cards are recorded gaps rather than dead controls. Font portability and native assistive-technology evidence remain separate gates.
 
+## TEA-07/TEA-08 — Assigned classes and minimal roster — 13 October 2026
+
+The Teacher class workspace uses the approved `class.read` and assigned-roster `student.read` policy. Academics owns the dated teaching assignment and class context; Students owns the minimal pupil projection. It does not expose the school-wide Student directory, Student detail, guardian/contact information, financial, clinical or administrative fields.
+
+`teacherClasses(actor, organizationId, schoolId, schoolDate, offeringId?)` validates an ISO civil date and optional UUID. In one repeatable-read transaction, Academics establishes verified tenant context, rechecks the live account/token, organization, branch, membership, both capabilities, release, entitlement and activation for Academics, Staff and Students, resolves `AccountPersonBinding → active Employee → active Teacher`, and selects at most 100 active Offerings with a half-open TeacherAssignment effective on that date. A supplied offering must occur in that authorized result or returns not found. Academics then invokes `TeacherClassRosterPort` inside the same transaction for each authorized Section. The Students adapter reads only active Student identity, admission number and effective Enrollment/SectionPlacement on that exact date, bounded at 200 pupils per class. It returns name, school reference and roll number; no Person search or generic Student DTO is reused.
+
+The read uses the existing scope-leading TeacherAssignment `(organization_id, school_id, teacher_id, valid_from, valid_to)` and SectionPlacement date indexes plus scoped joins. It acquires no write lock and writes no business, receipt or audit row; idempotency is not applicable. No schema or migration changes. Existing application authorization remains active while TEN-03 stays a separate production gate.
+
+```mermaid
+sequenceDiagram
+  actor T as Teacher
+  participant H as Next host
+  participant A as Academics query
+  participant S as Students roster port
+  participant D as PostgreSQL
+  T->>H: Open My classes / class + roster date
+  H->>A: Verified identity and current branch
+  A->>D: Reauthorize and resolve dated Teacher assignments
+  alt offering is assigned on date
+    A->>S: Same transaction, authorized Section and date
+    S->>D: Read effective minimal roster
+    D-->>S: Name, school reference and roll only
+    S-->>A: Bounded roster
+    A-->>H: Assigned class workspace
+  else foreign, ended or changed assignment
+    A-->>H: Not found / unavailable; no pupil data
+  end
+```
+
+The host routes are `GET /api/v1/teacher/classes?date=&offeringId=`, `/teacher/classes`, and `/teacher/classes/[offeringId]?date=`. The list provides URL-backed class/subject search and deterministic class/subject ordering over the complete bounded assigned set; the detail provides an explicit roster-date refresh, minimal table, teaching context and return paths. Validation failure is 422; foreign resources are hidden as 404; revoked identity/capability is 401/403; release/license/activation or infrastructure failures retain their established safe errors. Verification requires application validation, real PostgreSQL dated assignment/roster joins plus foreign/revoked denials, and sequential desktop/mobile list/detail/search/date-boundary browser checks against `VSchool_Teacher_Review.html#/classes` and `#/classes/c1`.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.
