@@ -93,6 +93,12 @@ Depends on: ACA-03, STU-02, PER-02
 
 Acceptance: resolve the signed-in account through its active Employee/Teacher identity and return only Offerings covered by a dated assignment in the current branch. A selected Offering must be in that result. Students supplies only active name, school reference and roll for Enrollment/SectionPlacement effective on the chosen date through the same authorized read transaction. Recheck `class.read`, `student.read`, release, entitlement and activation; deny foreign offerings, branches, other Teachers and generic Student directory/detail access. Bound assigned classes at 100 and a roster at 200. Provide URL-backed class/subject search and deterministic sorting, class detail and roster-date refresh, with approved desktop/mobile compositions and explicit empty/unavailable states. No write, receipt, audit row, migration or durable browser pupil cache is permitted. Verify validation, real PostgreSQL date/scope/revocation behavior and sequential focused browser journeys.
 
+## TEA-06 — Resolve a missing or changed assignment
+
+Depends on: EX-04, ACA-03, ATT-01
+
+Acceptance: expose a dedicated three-stage Teacher route that derives, rather than accepts, eligibility-not-ready, no-active-assignment, session-changed/cancelled or ready from the current verified account, branch, dated Employee/Teacher identity, assignments and Attendance-owned session-status port. Require Teacher membership plus `self.read` and current release/entitlement/activation. Return only a non-sensitive support reference and school date/timezone. Preserve the selected next step across Back/Continue, recheck current authority and state on refresh, and never create/widen an assignment or reveal another Teacher's session. Verify classification, cross-scope/revoked denial, no mutation, desktop/mobile composition and keyboard focus. No schema, migration, ticket or durable draft is permitted.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.

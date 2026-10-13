@@ -25,7 +25,7 @@ import {capabilityReleaseManifest} from '../../backend/modules/tenancy/domain/en
 import {schoolDate} from '../../backend/modules/attendance/domain/schedule';
 import {activeStaffFixture,schoolInput} from '../fixtures/access-management';
 const url=process.env.TEST_DATABASE_URL??'';if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated attendance PostgreSQL test DB required');
-const released=['academic_core','attendance','student_core','staff_core'] as const,access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules:released}),academics=createAcademicServices({databaseUrl:url,releasedModules:['academic_core']}),people=createPeopleServices({databaseUrl:url,releasedModules:['academic_core']}),students=createStudentsServices({databaseUrl:url,releasedModules:['student_core','academic_core'],cursorSecret:'attendance-student-test-cursor-secret'}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},reason='Synthetic attendance integration';let attendanceNow:Date|null=null;const attendance=createAttendanceServices({databaseUrl:url,releasedModules:released,now:()=>attendanceNow??new Date()});
+const released=['academic_core','attendance','student_core','staff_core'] as const,access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules:released}),academics=createAcademicServices({databaseUrl:url,releasedModules:['academic_core']}),people=createPeopleServices({databaseUrl:url,releasedModules:['academic_core']}),students=createStudentsServices({databaseUrl:url,releasedModules:['student_core','academic_core'],cursorSecret:'attendance-student-test-cursor-secret'}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},reason='Synthetic attendance integration';let attendanceNow:Date|null=null;const attendance=createAttendanceServices({databaseUrl:url,releasedModules:released,now:()=>attendanceNow??new Date()}),teacherReadiness=createAcademicServices({databaseUrl:url,releasedModules:released,now:()=>attendanceNow??new Date()});
 let primary:Awaited<ReturnType<typeof access.provisionSchool>>,foreign:Awaited<ReturnType<typeof access.provisionSchool>>,identity:{accountId:string;tokenVersion:number},teacherIdentity:{accountId:string;tokenVersion:number},date:string,tomorrow:string,yearId:string,calendarId:string,offeringId:string,sectionId:string,subjectId:string,teacherId:string,submittedSessionId:string,otherTeacherIdentity:{accountId:string;tokenVersion:number};const studentIds:string[]=[];
 const nextDate=(value:string,days:number)=>{const d=new Date(`${value}T00:00:00.000Z`);d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10);};
 const instant=(day:string,time:string)=>new Date(`${day}T${time}:00.000Z`).toISOString();
@@ -48,7 +48,7 @@ beforeAll(async()=>{
 });
 
 
-afterAll(async()=>{await attendance.disconnect();await students.disconnect();await people.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
+afterAll(async()=>{await teacherReadiness.disconnect();await attendance.disconnect();await students.disconnect();await people.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
 describe('SA-COMP-01 PostgreSQL administrator projection',()=>{
  it('derives scoped readiness and exceptions, omits disabled modules, and rechecks live membership',async()=>{
   const reporting=createReportingServices({databaseUrl:url,releasedModules:released,now:()=>attendanceNow??new Date()});
@@ -68,9 +68,15 @@ describe('SA-COMP-01 PostgreSQL administrator projection',()=>{
  });
 });
 describe('ATT-01 PostgreSQL session scheduling',()=>{
+ it('derives the safe Teacher readiness issue without exposing or changing another assignment',async()=>{
+  expect(await teacherReadiness.teacherReadiness(otherTeacherIdentity,primary.organizationId,primary.schoolId,date)).toMatchObject({issue:'NO_ACTIVE_ASSIGNMENT',issueLabel:'No active teaching assignment',supportReference:expect.stringMatching(/^TEACH-SETUP-[A-F0-9]{8}$/)});
+  expect(await teacherReadiness.teacherReadiness(teacherIdentity,primary.organizationId,primary.schoolId,date)).toMatchObject({issue:'SESSION_CHANGED_OR_CANCELLED'});
+  await expect(teacherReadiness.teacherReadiness(teacherIdentity,foreign.organizationId,foreign.schoolId,date)).rejects.toMatchObject({code:'FORBIDDEN'});
+ });
  it('schedules with a pinned calendar, idempotently replays, authorizes only the dated assigned teacher, and rejects clashes',async()=>{
   await attendance.authorizeAdmin(identity,primary.organizationId,primary.schoolId);await expect(attendance.authorizeAdmin(teacherIdentity,primary.organizationId,primary.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
   const input={offeringId,schoolDate:date,startsAt:instant(date,'07:00'),endsAt:instant(date,'07:45'),occurrenceKey:`OCC-${date}`,key:randomUUID(),reason},saved=await attendance.schedule(identity,primary.organizationId,primary.schoolId,input);expect(saved).toMatchObject({status:'SCHEDULED',schoolDate:date,replayed:false,offering:{subjectName:'Attendance Mathematics',sectionName:'Section A'}});
+  expect(await teacherReadiness.teacherReadiness(teacherIdentity,primary.organizationId,primary.schoolId,date)).toMatchObject({issue:'READY',date,timezone:'Asia/Kolkata'});
   expect(await db.attendanceSession.findUniqueOrThrow({where:{id:saved.id}})).toMatchObject({calendarRevisionId:(await db.schoolCalendar.findUniqueOrThrow({where:{id:calendarId}})).currentRevisionId,status:'SCHEDULED'});
   expect(await db.tenantCommandReceipt.findUnique({where:{organizationId_actorAccountId_command_key:{organizationId:primary.organizationId,actorAccountId:identity.accountId,command:'AttendanceSessionScheduled',key:input.key}}})).toMatchObject({response:expect.objectContaining({id:saved.id})});
   expect(await attendance.schedule(identity,primary.organizationId,primary.schoolId,input)).toMatchObject({id:saved.id,replayed:true});

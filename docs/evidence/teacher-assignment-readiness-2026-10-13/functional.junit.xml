@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="11" failures="0" errors="0" time="4.573976583">
+    <testsuite name="test/functional/attendance-sessions.test.ts" timestamp="2026-10-13T04:37:10.129Z" hostname="Venkateshs-MacBook-Air.local" tests="11" failures="0" errors="0" skipped="0" time="4.573976583">
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="SA-COMP-01 PostgreSQL administrator projection &gt; derives scoped readiness and exceptions, omits disabled modules, and rechecks live membership" time="0.085855917">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-01 PostgreSQL session scheduling &gt; derives the safe Teacher readiness issue without exposing or changing another assignment" time="0.04598475">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-01 PostgreSQL session scheduling &gt; schedules with a pinned calendar, idempotently replays, authorizes only the dated assigned teacher, and rejects clashes" time="0.230533208">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-01 PostgreSQL session scheduling &gt; settles a concurrent duplicate occurrence to one persisted row and fails closed when the current resource permission is revoked" time="0.053641792">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-02 PostgreSQL roll call &gt; freezes the exact live roster, submits one immutable revision, and replays the same result" time="0.304211209">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-02 PostgreSQL roll call &gt; cancels submitted attendance atomically, reauthorizes command recovery and serializes against teacher submission" time="0.112784417">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-02 PostgreSQL roll call &gt; refuses empty and oversized rosters and rolls back every submission write when evidence fails" time="0.197323625">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-02 PostgreSQL roll call &gt; serializes the point-in-time roster against a concurrent enrollment" time="0.043617542">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="ATT-02 PostgreSQL roll call &gt; records EXPLAIN ANALYZE plans for scoped roster, record and revision reads" time="0.060561334">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="RPT-01 PostgreSQL report snapshot &gt; keeps aggregate and session drilldown on one repeatable-read snapshot while a correction commits" time="0.0970835">
+        </testcase>
+        <testcase classname="test/functional/attendance-sessions.test.ts" name="RPT-01 PostgreSQL report snapshot &gt; exports only the current scoped submitted roster, audits atomically, rechecks permission and paginates immutable history" time="0.088354542">
+        </testcase>
+    </testsuite>
+</testsuites>

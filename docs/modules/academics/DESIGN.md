@@ -397,6 +397,36 @@ sequenceDiagram
 
 The host routes are `GET /api/v1/teacher/classes?date=&offeringId=`, `/teacher/classes`, and `/teacher/classes/[offeringId]?date=`. The list provides URL-backed class/subject search and deterministic class/subject ordering over the complete bounded assigned set; the detail provides an explicit roster-date refresh, minimal table, teaching context and return paths. Validation failure is 422; foreign resources are hidden as 404; revoked identity/capability is 401/403; release/license/activation or infrastructure failures retain their established safe errors. Verification requires application validation, real PostgreSQL dated assignment/roster joins plus foreign/revoked denials, and sequential desktop/mobile list/detail/search/date-boundary browser checks against `VSchool_Teacher_Review.html#/classes` and `#/classes/c1`.
 
+## TEA-06 — Missing or changed assignment readiness — 13 October 2026
+
+This Phase 1 workflow is an informational three-stage handoff. Academics owns the account-to-Teacher eligibility and dated-assignment diagnosis; Attendance supplies only whether any non-cancelled session exists for the authorized offering IDs and selected school date through `TeacherSessionReadinessPort`. The browser cannot choose the diagnosed issue, assert a Teacher/session identity, create an assignment, or see another Teacher's session. No durable support ticket or draft is created.
+
+`teacherReadiness(actor, organizationId, schoolId, schoolDate)` validates a non-future ISO civil date. In one repeatable-read transaction it establishes verified tenant context; rechecks the account/token, active Institution/Branch/Teacher membership, `self.read`, release/entitlement/activation for Academics, Staff and Attendance; resolves AccountPersonBinding → active dated Employee → active Teacher; and reads at most 100 active Offering assignments effective on that date. The result is exactly one server-derived status: missing binding/Employee/Teacher eligibility → `TEACHER_ELIGIBILITY_NOT_READY`; eligible Teacher with no dated assignment → `NO_ACTIVE_ASSIGNMENT`; dated assignment with no current non-cancelled Attendance session → `SESSION_CHANGED_OR_CANCELLED`; otherwise `READY`. The support reference is a non-sensitive stable digest of the verified scope, account, date and issue. It is informational and grants no authority.
+
+The read joins existing scope-leading binding, Employee, Teacher and TeacherAssignment indexes. It writes no business, audit, outbox or receipt row, takes no mutation lock, and adds no table or migration. Refresh performs the complete query again. If membership or assignment is revoked while the flow is open, the next request fails closed or returns the newly derived status; the client retains only the selected next-step label and clears it on navigation.
+
+```mermaid
+sequenceDiagram
+  actor T as Teacher
+  participant H as Next host
+  participant A as Academics readiness query
+  participant P as Attendance status port
+  participant D as PostgreSQL
+  T->>H: Review readiness for selected date
+  H->>A: Verified identity and current branch
+  A->>D: Reauthorize and resolve Teacher eligibility/assignments
+  alt dated assignments exist
+    A->>P: Same transaction, scoped offering IDs and date
+    P->>D: Count non-cancelled matching sessions
+  end
+  D-->>A: Minimal current facts
+  A-->>T: Server issue + safe support reference
+  T->>H: Refresh after administrator update
+  H->>A: Recheck all current authority and facts
+```
+
+The UI route is `/teacher/readiness?date=` and the JSON endpoint is `GET /api/v1/teacher/readiness?date=`. The three stages use the approved `Readiness`, `Handoff` and `Confirm` labels, preserve an in-flow next-step choice across Back/Continue, and offer either the existing school support channel or a live refresh. Errors are safe and retryable through existing academic error mapping. Verification covers all three incomplete-state classifications plus ready, cross-scope/current-authority denial, no mutation, stage retention, desktop/mobile reference comparison and keyboard focus. The exact authority is `VSchool_Teacher_Review.html#/flow/TEA-06`. Generic durable-draft semantics do not apply.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.
