@@ -38,7 +38,7 @@ export class PrismaAccessRepository implements AccessRepository {
    return success?{accountId:account!.id,tokenVersion:account!.tokenVersion}:null;
   });
  }
- account(identity:Identity) {return this.db.$transaction(async tx=>{if(!await this.databaseContext.establishAccount(tx,identity.accountId,identity.tokenVersion))return null;return tx.userAccount.findUnique({where:{id:identity.accountId},select:{status:true,tokenVersion:true}});},{isolationLevel:'RepeatableRead'});}
+ account(identity:Identity) {return this.db.$transaction(async tx=>{if(!await this.databaseContext.establishAccount(tx,identity.accountId,identity.tokenVersion))return null;return tx.userAccount.findUnique({where:{id:identity.accountId},select:{status:true,tokenVersion:true,normalizedEmail:true,createdAt:true}});},{isolationLevel:'RepeatableRead'});}
  adminContext(identity:Identity,schoolId?:string){return this.context(identity,schoolId,true);}
  memberContext(identity:Identity,schoolId?:string){return this.context(identity,schoolId,false);}
  private async context(identity:Identity,schoolId:string|undefined,requireAdmin:boolean) {

@@ -1,11 +1,11 @@
-import type { AdminHome, Identity, OperatorPrincipal, ProvisionInput, ProvisionResult } from "../../../../shared/contracts/access";
+import type { AdminHome, Identity, OperatorPrincipal, ProvisionInput, ProvisionResult, SelfAccount } from "../../../../shared/contracts/access";
 import { AccessError, capabilitiesFor, currentIdentity, normalizeEmail, normalizeProvision, uuidPattern, validPassword } from "../domain/policy";
 export type LoginRecord = { id:string; passwordHash:string|null; tokenVersion:number };
 export interface AccessRepository {
  provision(input:Omit<ProvisionInput,"password">,passwordHash:string,operator:OperatorPrincipal,requestId:string):Promise<ProvisionResult>;
  loginRecord(email:string):Promise<LoginRecord|null>;
  finishLogin(record:LoginRecord|null,verified:boolean,requestId:string):Promise<Identity|null>;
- account(identity:Identity):Promise<{status:string;tokenVersion:number}|null>;
+ account(identity:Identity):Promise<{status:string;tokenVersion:number;normalizedEmail:string;createdAt:Date}|null>;
  adminContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:("SCHOOL_ADMIN"|"TEACHER")[]})|null>;
  memberContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:("SCHOOL_ADMIN"|"TEACHER")[]})|null>;
 }
@@ -16,9 +16,16 @@ export interface AccessFacade {
  authenticate(email:unknown,password:unknown):Promise<Identity|null>;
  getAdminHome(identity:Identity|null,schoolId?:string):Promise<AdminHome>;
  getAccountHome(identity:Identity|null,schoolId?:string):Promise<AdminHome>;
+ getSelfAccount(identity:Identity|null):Promise<SelfAccount>;
 }
 export function createAccessUseCases(repository:AccessRepository,passwords:Passwords,newId:()=>string):AccessFacade {
  return {
+  async getSelfAccount(identity:Identity|null){
+   if(!identity||!uuidPattern.test(identity.accountId)||!Number.isInteger(identity.tokenVersion))throw new AccessError("UNAUTHENTICATED");
+   const account=await repository.account(identity);
+   if(!currentIdentity(account,identity.tokenVersion))throw new AccessError("UNAUTHENTICATED");
+   return {accountId:identity.accountId,email:account!.normalizedEmail,status:account!.status,createdAt:account!.createdAt.toISOString()};
+  },
   async getAccountHome(identity:Identity|null,schoolId?:string){
    if(!identity||!uuidPattern.test(identity.accountId)||!Number.isInteger(identity.tokenVersion)||!currentIdentity(await repository.account(identity),identity.tokenVersion))throw new AccessError("UNAUTHENTICATED");
    if(schoolId&&!uuidPattern.test(schoolId))throw new AccessError("NOT_FOUND");

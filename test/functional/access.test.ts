@@ -42,10 +42,11 @@ it("serializes concurrent failures, locks valid credentials, and recovers after 
 });
 it("checks disabled, token revocation, current membership and foreign scope on every read",async()=>{
  const input=fixture(),ids=await service.provisionSchool(input,operator),other=await service.provisionSchool(fixture(),operator),identity=await service.authenticate(input.adminEmail,input.password);
+ expect(await service.getSelfAccount(identity)).toMatchObject({accountId:ids.accountId,email:input.adminEmail,status:'ACTIVE'});
  expect((await service.getAdminHome(identity)).scope.schoolId).toBe(ids.schoolId);await expect(service.getAdminHome(identity,other.schoolId)).rejects.toThrow("NOT_FOUND");
  await db.schoolMembership.update({where:{id:ids.membershipId},data:{status:"SUSPENDED",version:{increment:1}}});await expect(service.getAdminHome(identity)).rejects.toThrow("NOT_FOUND");
  await db.schoolMembership.update({where:{id:ids.membershipId},data:{status:"ACTIVE",version:{increment:1}}});
- await db.userAccount.update({where:{id:ids.accountId},data:{tokenVersion:{increment:1},version:{increment:1}}});await expect(service.getAdminHome(identity)).rejects.toThrow("UNAUTHENTICATED");
+ await db.userAccount.update({where:{id:ids.accountId},data:{tokenVersion:{increment:1},version:{increment:1}}});await expect(service.getAdminHome(identity)).rejects.toThrow("UNAUTHENTICATED");await expect(service.getSelfAccount(identity)).rejects.toThrow('UNAUTHENTICATED');
  await db.userAccount.update({where:{id:ids.accountId},data:{status:"DISABLED",version:{increment:1}}});expect(await service.authenticate(input.adminEmail,input.password)).toBeNull();expect(await service.authenticate(fixture().adminEmail,input.password)).toBeNull();
 });
 it("rechecks organization, branch and administrator grant on each read",async()=>{

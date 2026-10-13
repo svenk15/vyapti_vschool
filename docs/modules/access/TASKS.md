@@ -173,3 +173,15 @@ Contract: [SA-14 verified-Employee access grant contract](DESIGN.md#sa-14-verifi
 - [x] Add no schema or migration; preserve Access and Attendance ownership.
 
 Human visual acceptance, native VoiceOver/NVDA, font portability and TEN-03 remain separate pending gates.
+
+## TEA-04 — Review the Teacher account and current session
+
+- [x] Add the Access-owned safe self projection without exposing credential, lockout, token-version or security-event data.
+- [x] Derive only current-session issue/expiry timestamps in the Next hosting adapter; expose no token material or other-session inventory.
+- [x] Keep the configured session cookie and JWT lifetime at the documented eight hours.
+- [x] Render My account → Account action → Confirm with retained in-flow selection and final-only action.
+- [x] Route to existing password recovery, provide a no-write administrator handoff, and end only the current session.
+- [x] Prove authorized-only branch display, stale-token rejection, desktop/mobile layout and keyboard focus.
+- [x] Compare matched approved/application states and record the necessary live-data extension separately.
+
+Human visual acceptance, native VoiceOver/NVDA, font portability and TEN-03 remain separate pending gates.
