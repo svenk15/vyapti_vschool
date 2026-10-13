@@ -47,6 +47,7 @@ model Organization {
   admissionApplications AdmissionApplication[]
   academicDayPatterns AcademicDayPattern[]
   timetableRevisions TimetableRevision[]
+  guardianChildAccesses GuardianChildAccess[]
 
   @@map("vs_access_organization")
 }
@@ -93,6 +94,7 @@ model School {
   admissionApplications AdmissionApplication[]
   academicDayPatterns AcademicDayPattern[]
   timetableRevisions TimetableRevision[]
+  familyAccessManagerGrants FamilyAccessManagerGrant[]
 
   @@unique([organizationId, id], map: "vs_access_school_u0_key")
   @@unique([organizationId, code], map: "vs_access_school_u1_key")
@@ -139,6 +141,11 @@ model UserAccount {
   createdAdmissionApplications AdmissionApplication[] @relation("AdmissionApplicationCreator")
   createdAcademicDayPatterns AcademicDayPattern[] @relation("AcademicDayPatternCreator")
   createdTimetableRevisions TimetableRevision[] @relation("TimetableRevisionCreator")
+  acceptedGuardianAccesses GuardianChildAccess[] @relation("GuardianAccessAccount")
+  authorizedGuardianAccesses GuardianChildAccess[] @relation("GuardianAccessAuthorizer")
+  revokedGuardianAccesses GuardianChildAccess[] @relation("GuardianAccessRevoker")
+  intendedFamilyInvitations FamilyInvitation[] @relation("FamilyInvitationAccount")
+  createdFamilyInvitations FamilyInvitation[] @relation("FamilyInvitationCreator")
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -161,6 +168,95 @@ model AccountPersonBinding {
  @@map("vs_access_account_person_binding")
 }
 
+model FamilyAccessManagerGrant {
+ id String @id(map:"vs_guardians_access_manager_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_manager_grant_school_fkey")
+ membership SchoolMembership @relation(fields:[organizationId,schoolId,membershipId,accountId],references:[organizationId,schoolId,id,accountId],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_manager_grant_membership_fkey")
+ @@unique([organizationId,schoolId,accountId],map:"vs_guardians_manager_grant_scope_account_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_guardians_manager_grant_active_idx")
+ @@map("vs_guardians_access_manager_grant")
+}
+
+model GuardianChildAccess {
+ id String @id(map:"vs_guardians_child_access_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ studentId String @map("student_id") @db.Uuid
+ displayName String @map("display_name") @db.VarChar(160)
+ normalizedEmail String @map("normalized_email") @db.VarChar(254)
+ accountId String? @map("account_id") @db.Uuid
+ personId String? @map("person_id") @db.Uuid
+ authorizedByAccountId String @map("authorized_by_account_id") @db.Uuid
+ authorizedAt DateTime @map("authorized_at") @db.Timestamptz(3)
+ accessFrom DateTime @map("access_from") @db.Date
+ acceptedAt DateTime? @map("accepted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ revokedByAccountId String? @map("revoked_by_account_id") @db.Uuid
+ revocationReason String? @map("revocation_reason") @db.VarChar(500)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ organization Organization @relation(fields:[organizationId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_child_access_org_fkey")
+ student Student @relation(fields:[organizationId,schoolId,studentId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_child_access_student_fkey")
+ account UserAccount? @relation("GuardianAccessAccount",fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_child_access_account_fkey")
+ person Person? @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_child_access_person_fkey")
+ authorizer UserAccount @relation("GuardianAccessAuthorizer",fields:[authorizedByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_child_access_authorizer_fkey")
+ revoker UserAccount? @relation("GuardianAccessRevoker",fields:[revokedByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_child_access_revoker_fkey")
+ purposes GuardianPurposeGrant[]
+ invitations FamilyInvitation[]
+ @@unique([organizationId,schoolId,id],map:"vs_guardians_child_access_scope_id_key")
+ @@unique([organizationId,schoolId,id,studentId],map:"vs_guardians_child_access_scope_student_key")
+ @@index([organizationId,schoolId,studentId,authorizedAt(sort:Desc)],map:"vs_guardians_child_access_student_history_idx")
+ @@index([accountId,revokedAt,organizationId,schoolId],map:"vs_guardians_child_access_account_idx")
+ @@map("vs_guardians_child_access")
+}
+
+model GuardianPurposeGrant {
+ id String @id(map:"vs_guardians_purpose_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ accessId String @map("access_id") @db.Uuid
+ studentId String @map("student_id") @db.Uuid
+ purpose String @db.VarChar(40)
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ access GuardianChildAccess @relation(fields:[organizationId,schoolId,accessId,studentId],references:[organizationId,schoolId,id,studentId],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_purpose_grant_access_fkey")
+ @@unique([accessId,purpose],map:"vs_guardians_purpose_grant_access_purpose_key")
+ @@index([organizationId,schoolId,studentId,purpose],map:"vs_guardians_purpose_grant_lookup_idx")
+ @@map("vs_guardians_purpose_grant")
+}
+
+model FamilyInvitation {
+ id String @id(map:"vs_guardians_invitation_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ accessId String @map("access_id") @db.Uuid
+ intendedAccountId String @map("intended_account_id") @db.Uuid
+ tokenHash String @unique(map:"vs_guardians_invitation_token_hash_key") @map("token_hash") @db.Char(64)
+ deliveryStatus String @map("delivery_status") @db.VarChar(24)
+ deliveredAt DateTime? @map("delivered_at") @db.Timestamptz(3)
+ deliveryFailedAt DateTime? @map("delivery_failed_at") @db.Timestamptz(3)
+ deliveryFailureReason String? @map("delivery_failure_reason") @db.VarChar(120)
+ createdByAccountId String @map("created_by_account_id") @db.Uuid
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ expiresAt DateTime @map("expires_at") @db.Timestamptz(3)
+ acceptedAt DateTime? @map("accepted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ access GuardianChildAccess @relation(fields:[organizationId,schoolId,accessId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_invitation_access_fkey")
+ intendedAccount UserAccount @relation("FamilyInvitationAccount",fields:[intendedAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_invitation_account_fkey")
+ creator UserAccount @relation("FamilyInvitationCreator",fields:[createdByAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_guardians_invitation_creator_fkey")
+ @@index([organizationId,schoolId,accessId,createdAt(sort:Desc)],map:"vs_guardians_invitation_access_idx")
+ @@index([intendedAccountId,expiresAt],map:"vs_guardians_invitation_account_expiry_idx")
+ @@map("vs_guardians_invitation")
+}
+
 model Person {
  id String @id(map:"vs_people_person_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid
@@ -174,6 +270,7 @@ model Person {
  students Student[]
  accountBinding AccountPersonBinding?
  nameRevisions PersonNameRevision[]
+ guardianAccesses GuardianChildAccess[]
  @@unique([organizationId,id],map:"vs_people_person_organization_id_key")
  @@index([organizationId,lastName,id],map:"vs_people_person_name_idx")
  @@map("vs_people_person")
@@ -253,7 +350,8 @@ model Student {
  person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_student_person_fkey")
  enrollments Enrollment[]
  sourceMaps SourceStudentMap[]
- attendanceRosterEntries SessionRosterEntry[]
+  attendanceRosterEntries SessionRosterEntry[]
+ guardianAccesses GuardianChildAccess[]
  @@unique([organizationId,schoolId,id],map:"vs_students_student_scope_id_key")
  @@unique([organizationId,schoolId,admissionNumber],map:"vs_students_student_admission_key")
  @@unique([organizationId,schoolId,personId],map:"vs_students_student_person_key")
@@ -273,6 +371,7 @@ model SchoolMembership {
   grants         RoleGrant[]
   brandingPublicationDelegations BrandingPublicationDelegation[]
   activationIntents AccountActivationMembership[]
+  familyAccessManagerGrants FamilyAccessManagerGrant[]
 
   @@unique([organizationId, schoolId, id], map: "vs_access_school_membership_u0_key")
   @@unique([organizationId, schoolId, accountId], map: "vs_access_school_membership_u1_key")

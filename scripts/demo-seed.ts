@@ -20,6 +20,7 @@ const demos = [
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
   { name: "SA-38 Admissions intake", script: "scripts/demo-admissions.ts", required: true },
   { name: "TT-01 weekly timetable pattern", script: "scripts/demo-timetable.ts", required: true },
+  { name: "Parent/Guardian child access", script: "scripts/demo-guardians.ts", required: true },
 ] as const;
 
 function prepareImportSample(): void {
@@ -100,6 +101,7 @@ function main(): void {
   console.log("- artifacts/admissions-01/private-demo.json");
   console.log("- artifacts/timetable-01/private-demo.json");
   console.log("- artifacts/students-03/private-demo.json");
+  console.log("- artifacts/guardians-01/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");
   console.log(`\nPrimary administrator/teacher credentials: artifacts/people-02/private-demo.json`);

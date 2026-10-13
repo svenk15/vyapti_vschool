@@ -31,4 +31,8 @@ export class DevelopmentMailSink implements AccessEmailSender{
   const link=new URL("/invite",this.origin);link.hash=input.token;
   return this.deliver({to:input.to,subject:"You are invited to VSchool",expiresAt:input.expiresAt,link:link.toString()});
  }
+ async sendFamilyInvite(input:{to:string;token:string;expiresAt:string;organizationId:string;schoolId:string}){
+  const link=new URL("/family/invite",this.origin);link.hash=input.token;
+  return this.deliver({to:input.to,subject:"Set up your VSchool Parent access",expiresAt:input.expiresAt,link:link.toString()});
+ }
 }

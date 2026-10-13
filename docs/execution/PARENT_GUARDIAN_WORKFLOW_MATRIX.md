@@ -1,6 +1,6 @@
 # Parent/Guardian workflow matrix
 
-Last updated: 13 October 2026. Baseline reconciliation started at 21:34 IST; the intended six-hour handover checkpoint was 03:34 IST on 14 October 2026. Execution stopped at the shared authority gate rather than inventing a guardian principal or child grant.
+Last updated: 13 October 2026. Baseline reconciliation started at 21:34 IST. The owner decision received at 22:32 IST supersedes the former five-state proposal and authorizes the simplified foundation in `docs/modules/guardians/DESIGN.md`.
 
 Authoritative UX source: `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Parent_Guardian_Design/VSchool_Parent_Guardian_Review.html` (SHA-256 `3f5fdc44d4d48dbb794dfa9cef61b1f09adbafadb737d73cbc99cdb71cc21f9e`, matching `implementation-spec/SOURCE_MANIFEST.json`). The catalog is a 52-workflow **UX design proposal**. Its database worksheet explicitly says that its table names and physical design are proposals requiring reconciliation with the live schema.
 
@@ -8,7 +8,7 @@ Authoritative UX source: `docs/execution/VSchool_Execution_Pack/references/appro
 
 The live repository has global `UserAccount` and organization-scoped `AccountPersonBinding`, but only `SCHOOL_ADMIN` and `TEACHER` membership roles. It has no Guardian owner, verified guardian-to-Student relationship, child-purpose grant, family invitation binding, family principal, or parent route. Existing staff invitations cannot be reused: they create a `SchoolMembership`, and a guardian must not become staff merely to enter the family workspace.
 
-SA-32 remains `BLOCKED_PRODUCT_DECISION` in the canonical Administrator matrix. It requires accepted decisions for the adult verification source and authority, restricted evidence handling, purpose-grant overlap/history, relationship lifecycle, and account-wide recovery. These decisions precede every protected child read, including TT-06's Parent projection. [Baseline evidence and the narrow proposal](../evidence/parent-guardian-baseline-2026-10-13/README.md).
+The shared authority decision is resolved and implemented: designated `family.access.manage`, explicit school authorization, fixed distinct read purposes, account-bound invitation/acceptance, per-child revocation and authorization-date history bounds. FAM-01 through FAM-04 are engineering-verified; visual comparison and human review remain separate. [Historical baseline](../evidence/parent-guardian-baseline-2026-10-13/README.md). [Current evidence](../evidence/parent-guardian-foundation-2026-10-13/README.md).
 
 Status meanings are mutually exclusive:
 
@@ -20,16 +20,16 @@ Functional/security status, reference comparison, and human acceptance remain se
 
 | Workflow | Approved state | Owning dependency | Functional/security | Reference comparison | Exact remaining gap | Human review |
 |---|---|---|---|---|---|---|
-| PAR-01 Accept a school invitation | `#/flow/PAR-01` | Guardians + Access | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Verification authority/evidence, intended-account binding, exact grant activation and replay lifecycle | PENDING |
-| PAR-02 Sign in through the school page | `#/flow/PAR-02` | Access + family principal | BLOCKED_FOUNDATION | NOT_STARTED | Family workspace resolution from live relationships; current workspace resolution is staff membership based | PENDING |
-| PAR-03 Activate or recover account access | `#/flow/PAR-03` | Access + Guardians | BLOCKED_PRODUCT_DECISION | NOT_STARTED | How active/pending/revoked guardian links participate in account-wide stricter recovery | PENDING |
-| PAR-04 Review verified child links | `#/flow/PAR-04` | Guardians + Students | BLOCKED_FOUNDATION | NOT_STARTED | Active relationship and purpose-filtered child summary query | PENDING |
+| PAR-01 Accept a school invitation | `#/flow/PAR-01` | Guardians + Access | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_EXTENSION | Narrow real activation confirmation is an explicit reference-less extension; no functional gap | PENDING |
+| PAR-02 Sign in through the school page | `#/flow/PAR-02` | Access + family principal | ENGINEERING_COMPLETE | SHARED_AUTH_EVIDENCE | Family workspace resolves from live accepted child links; no remaining current-slice gap | PENDING |
+| PAR-03 Activate or recover account access | `#/flow/PAR-03` | Access + Guardians | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_EXTENSION | Generic public recovery and dedicated family activation verified; font exception remains | PENDING |
+| PAR-04 Review verified child links | `#/flow/PAR-04` | Guardians + Students | ENGINEERING_COMPLETE | DIRECT_COMPARISON | Server-issued permitted-child list and selector verified | PENDING |
 | PAR-05 Ask about a missing child link | `#/flow/PAR-05` | Family requests | DESIGN_READINESS_REQUIRED | NOT_STARTED | Non-enumerating request owner, routing, retention and verifier disposition | PENDING |
-| PAR-06 Handle changed or withdrawn access | `#/flow/PAR-06` | Guardians | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Effective dates, revocation authority, overlap/history and cache invalidation event | PENDING |
-| PAR-07 Review family overview | `#/flow/PAR-07` | Guardians + owner summaries | BLOCKED_FOUNDATION | NOT_STARTED | Purpose-filtered multi-child read model | PENDING |
-| PAR-08 Switch child and school context | `#/flow/PAR-08` | Guardians | BLOCKED_FOUNDATION | NOT_STARTED | Server-issued child context and cross-request invalidation boundary | PENDING |
+| PAR-06 Handle changed or withdrawn access | `#/flow/PAR-06` | Guardians | ENGINEERING_COMPLETE | REFERENCE_LESS_NARROW_EXTENSION | Approved simple manager flow was absent from the prototype; real removal and open-page denial verified | PENDING |
+| PAR-07 Review family overview | `#/flow/PAR-07` | Guardians + owner summaries | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_SCOPED_OMISSIONS | Minimal fixed-bundle summary implemented; unowned prototype Messages/Requests are deliberately absent | PENDING |
+| PAR-08 Switch child and school context | `#/flow/PAR-08` | Guardians | ENGINEERING_COMPLETE | DIRECT_COMPARISON | Server-issued child context, URL state and protected reload verified | PENDING |
 | PAR-09 Manage notification preferences | `#/flow/PAR-09` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Preference persistence, mandatory notice policy and channel verification | PENDING |
-| PAR-10 Read child attendance | `#/flow/PAR-10` | Guardians + Attendance | BLOCKED_FOUNDATION | NOT_STARTED | `attendance.read_child` authority and scoped child-to-frozen-roster projection | PENDING |
+| PAR-10 Read child attendance | `#/flow/PAR-10` | Guardians + Attendance | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_SCOPED_OMISSIONS | Read-only submitted history is complete; absence/query controls await their own request-owner contracts | PENDING |
 | PAR-11 Submit an absence explanation | `#/flow/PAR-11` | Family requests + Attendance | DESIGN_READINESS_REQUIRED | NOT_STARTED | Request category/date/note policy, transaction, replay and school routing | PENDING |
 | PAR-12 Track or withdraw an explanation | `#/flow/PAR-12` | Family requests | DESIGN_READINESS_REQUIRED | NOT_STARTED | Originator visibility, eligible states, optimistic version and retained history | PENDING |
 | PAR-13 Query an attendance discrepancy | `#/flow/PAR-13` | Family requests + Attendance | DESIGN_READINESS_REQUIRED | NOT_STARTED | Query owner/routing and disposition contract without correction authority | PENDING |
@@ -37,7 +37,7 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-15 Reply to a permitted conversation | `#/flow/PAR-15` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Child-scoped participant grants, recipient resolution and delivery lifecycle | PENDING |
 | PAR-16 Request a teacher meeting | `#/flow/PAR-16` | Communication/calendar | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Proposed capability, availability source, confirmation and cancellation policy | PENDING |
 | PAR-17 Resolve an undelivered message | `#/flow/PAR-17` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Stable message/delivery attempt model and revoked-recipient handling | PENDING |
-| PAR-18 Plan with school calendar | `#/flow/PAR-18` and `#/timetable` | Academics/Events + TT-06 Parent | BLOCKED_FOUNDATION | NOT_STARTED | Published child audience plus verified relationship/purpose projection; no draft exposure | PENDING |
+| PAR-18 Plan with school calendar | `#/flow/PAR-18` and `#/timetable` | Academics/Events + TT-06 Parent | PARTIAL | DIRECT_TIMETABLE_COMPARISON | Published child Timetable is complete; Calendar/Events owner remains design-readiness work | PENDING |
 | PAR-19 Respond to a school event | `#/flow/PAR-19` | Events | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Proposed response authority, versioning, withdrawal and consent separation | PENDING |
 | PAR-20 Review published homework | `#/flow/PAR-20` | Learning | DESIGN_READINESS_REQUIRED | NOT_STARTED | Learning owner, published task projection and `learning.read_child` grant | PENDING |
 | PAR-21 Read returned feedback | `#/flow/PAR-21` | Learning | DESIGN_READINESS_REQUIRED | NOT_STARTED | Returned-version owner and private-draft exclusion | PENDING |
@@ -69,7 +69,7 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-47 Read school care note | `#/flow/PAR-47` | Health | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Restricted audience, safeguarding exclusions and emergency access | PENDING |
 | PAR-48 Request support discussion | `#/flow/PAR-48` | Student support | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Support authority, routing, restricted notes and retention | PENDING |
 | PAR-49 Update verified contact | `#/flow/PAR-49` | Access/People | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Step-up verification, compromise recovery and separation from relationship evidence | PENDING |
-| PAR-50 Review sessions/sign out | `#/flow/PAR-50` | Access | BLOCKED_FOUNDATION | NOT_STARTED | Current-session sign-out primitive exists; Parent session view/entry and child-state clearing require family principal | PENDING |
+| PAR-50 Review sessions/sign out | `#/flow/PAR-50` | Access | PARTIAL | BROWSER_VERIFIED | Account/help/current-session sign-out is complete; cross-session inventory/revocation is outside the authorized slice | PENDING |
 | PAR-51 Request privacy support | `#/flow/PAR-51` | Privacy/Requests | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Jurisdiction, authority, routing, retention and child/co-guardian rights | PENDING |
 | PAR-52 Ask school assistant | `#/flow/PAR-52` | Assistant | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Provider, allowed sources/data classes, grounding, evaluation and human action policy | PENDING |
 
@@ -77,11 +77,10 @@ Functional/security status, reference comparison, and human acceptance remain se
 
 | Functional/security status | Count |
 |---|---:|
-| `BLOCKED_PRODUCT_DECISION` | 19 |
-| `BLOCKED_FOUNDATION` | 7 |
+| `ENGINEERING_COMPLETE` | 8 |
+| `PARTIAL` | 2 |
+| `BLOCKED_PRODUCT_DECISION` | 16 |
 | `DESIGN_READINESS_REQUIRED` | 26 |
 | **Total** | **52** |
 
-All 52 reference comparisons and human reviews are `NOT_STARTED`/`PENDING` because there is no authorized Parent application route to compare. TT-06 Parent projection is an additional cross-role dependency outside the 52 catalog rows; it remains blocked on the same verified relationship and `timetable.read` purpose authority.
-
-The next executable slice is the Guardians foundation plus PAR-01/PAR-04 only after the five decisions in the baseline evidence are accepted. Once that foundation exists, PAR-02, PAR-07, PAR-08, PAR-10 and the TT-06 Parent projection become independently implementable without inventing another product rule.
+Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. The remaining PAR-18 Calendar/Events behavior and PAR-50 cross-session management remain partial rather than being inferred from those narrower slices.

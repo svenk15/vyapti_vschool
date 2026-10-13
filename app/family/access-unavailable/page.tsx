@@ -1,0 +1,4 @@
+import Link from 'next/link';
+import {AccessSignOut} from '@/components/access-login';
+import {Alert,BrandSurface,Card,PageHeader} from '@/components/ui/primitives';
+export default function FamilyAccessUnavailable(){return <BrandSurface><main id="main-content" className="container page-space family-unavailable"><PageHeader eyebrow="Family workspace" title="Access unavailable" description="This account has no current school-verified child access."/><Card className="padded"><Alert tone="warning" title="Ask the school to review access">A revoked or inactive child link cannot expose previous school information. Contact the school office if you believe this is unexpected.</Alert><div className="form-actions"><Link className="btn btn-secondary" href="/forgot-password">Account help</Link><AccessSignOut/></div></Card></main></BrandSurface>;}

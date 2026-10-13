@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import type {Ref} from 'react';
-export type PortalIconName='home'|'school'|'settings'|'modules'|'branding'|'staff'|'people'|'students'|'import'|'academics'|'classes'|'attendance'|'calendar'|'report'|'activity'|'account';
+export type PortalIconName='home'|'school'|'settings'|'modules'|'branding'|'staff'|'people'|'students'|'import'|'academics'|'classes'|'attendance'|'calendar'|'report'|'activity'|'account'|'menu'|'down';
 export type PortalNavigationItem=Readonly<{href:string;label:string;icon?:PortalIconName}>;
 export type PortalNavigationGroupData=Readonly<{label:string;items:readonly PortalNavigationItem[]}>;
-function PortalIcon({name='home'}:{name?:PortalIconName}){
+export function PortalIcon({name='home'}:{name?:PortalIconName}){
  const common={viewBox:'0 0 24 24',focusable:false,'aria-hidden':true} as const;
  if(name==='home')return <svg {...common}><path d="M3 10 12 3l9 7v10H3Z M9 20v-7h6v7"/></svg>;
  if(name==='school')return <svg {...common}><path d="M3 21V8l9-5 9 5v13 M1 21h22 M9 21v-6h6v6 M7 10h1m8 0h1 M7 13h1m8 0h1"/></svg>;
@@ -20,6 +20,8 @@ function PortalIcon({name='home'}:{name?:PortalIconName}){
  if(name==='report')return <svg {...common}><path d="M4 3v18h17 M8 17v-5m5 5V7m5 10V9"/></svg>;
  if(name==='activity')return <svg {...common}><path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0 M12 6v6l4 2"/></svg>;
  if(name==='account')return <svg {...common}><path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6Z M9 12l2 2 4-5"/></svg>;
+ if(name==='menu')return <svg {...common}><path d="M3 6h18M3 12h18M3 18h18"/></svg>;
+ if(name==='down')return <svg {...common}><path d="m6 9 6 6 6-6"/></svg>;
  return null;
 }
 export function PortalNavigationGroup({group,pathname,onNavigate,firstItemRef}:{group:PortalNavigationGroupData;pathname:string;onNavigate?:()=>void;firstItemRef?:Ref<HTMLAnchorElement>}){

@@ -25,7 +25,8 @@ export class PrismaPasswordResetRepository implements PasswordResetRepository{
  private async policy(tx:Prisma.TransactionClient,account:AccountRow){
   const organizations=await tx.organization.findMany({where:{OR:[
    {schools:{some:{memberships:{some:{accountId:account.id,status:"ACTIVE"}}}}},
-   {institutionGrants:{some:{accountId:account.id,status:"ACTIVE"}}}
+   {institutionGrants:{some:{accountId:account.id,status:"ACTIVE"}}},
+   {guardianChildAccesses:{some:{accountId:account.id,acceptedAt:{not:null},revokedAt:null}}}
   ]},select:{id:true,trustMode:true,configurationVersion:true}});
   const records=organizations.map(o=>({organizationId:o.id,trustMode:o.trustMode as TrustMode,configurationVersion:o.configurationVersion})).sort((a,b)=>a.organizationId.localeCompare(b.organizationId));
   return {records,decision:evaluatePasswordRecoveryPolicy({accountStatus:account.status,emailVerified:account.emailVerifiedAt!==null,hasPassword:account.passwordHash!==null,organizations:records})};

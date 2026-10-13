@@ -1215,6 +1215,50 @@
       "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, timetable.manage, and live Timetable/Attendance eligibility for every read/write.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
     },
     {
+      "model": "FamilyAccessManagerGrant",
+      "owner": "guardians",
+      "table": "vs_guardians_access_manager_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/guardians/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Trusted-operator provisioned branch capability allowing one active School Administrator to manage child-specific family access.",
+      "constraints": "Scoped School and SchoolMembership FKs; unique scope/account; positive version; active capability lookup index; current administrator membership rechecked by application",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context plus current active School Administrator membership and active designated family.access.manage grant.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+    },
+    {
+      "model": "GuardianChildAccess",
+      "owner": "guardians",
+      "table": "vs_guardians_child_access",
+      "status": "MIGRATED",
+      "design": "docs/modules/guardians/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; display_name varchar(160); normalized_email varchar(254); account_id/person_id nullable; authorized_by_account_id uuid; authorized_at timestamptz(3); access_from date; accepted_at/revoked_at/revoked_by_account_id/revocation_reason nullable; version int; created_at timestamptz(3)",
+      "responsibility": "One explicit school authorization and accepted account binding for the fixed read-only Parent bundle for one Student.",
+      "constraints": "Scoped Student/Person and global account/actor FKs; coherent acceptance/revocation evidence; partial unique non-revoked child/email; scope/student and account indexes",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require current designated manager for administration or current accepted account plus exact child purpose for Parent reads.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+    },
+    {
+      "model": "GuardianPurposeGrant",
+      "owner": "guardians",
+      "table": "vs_guardians_purpose_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/guardians/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; student_id uuid; purpose varchar(40); granted_at timestamptz(3)",
+      "responsibility": "Separately enforceable child.summary.read, attendance.read_child and timetable.read_child grants issued as one first-release bundle.",
+      "constraints": "Scoped access+Student FK; allowed-purpose check; unique access/purpose; scoped purpose lookup index",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Visible only through a current non-revoked accepted child access and exact requested purpose.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+    },
+    {
+      "model": "FamilyInvitation",
+      "owner": "guardians",
+      "table": "vs_guardians_invitation",
+      "status": "MIGRATED",
+      "design": "docs/modules/guardians/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; intended_account_id uuid; token_hash char(64); delivery_status varchar(24); delivered_at/delivery_failed_at/delivery_failure_reason nullable; created_by_account_id uuid; created_at/expires_at timestamptz(3); accepted_at/revoked_at nullable; version int",
+      "responsibility": "Dedicated single-use expiring family invitation and delivery evidence for one already-authorized child access.",
+      "constraints": "Scoped access FK; global intended-account/creator FKs; unique token hash; delivery-state/evidence and expiry checks; access history and account expiry indexes",
+      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Admin reads require current designated manager; consumption requires exact intended account and live access authorization.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+    },
+    {
       "model": "OperatorAuditEntry",
       "owner": "platform",
       "table": "vs_platform_operator_audit",

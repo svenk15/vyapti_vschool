@@ -3,7 +3,7 @@ import {join} from "node:path";
 import {DevelopmentMailSink} from "../../backend/modules/access/infrastructure/development-mail-sink";
 import type {AccessEmailSender} from "../../backend/modules/access/application/password-reset";
 
-const unavailable:AccessEmailSender={sendPasswordReset:async()=>({ok:false,reason:"Email delivery is not configured"}),sendStaffInvite:async()=>({ok:false,reason:"Email delivery is not configured"})};
+const unavailable:AccessEmailSender={sendPasswordReset:async()=>({ok:false,reason:"Email delivery is not configured"}),sendStaffInvite:async()=>({ok:false,reason:"Email delivery is not configured"}),sendFamilyInvite:async()=>({ok:false,reason:"Email delivery is not configured"})};
 const configuredOrigin=process.env.NEXTAUTH_URL;
 function localEndToEndMailSink(){
  if(process.env.VSCHOOL_E2E!=="1")return false;

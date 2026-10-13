@@ -2,11 +2,11 @@
 
 Last updated: 2026-10-13. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
-## Parent/Guardian authority readiness — 13 October 2026
+## Parent/Guardian authority decision — 13 October 2026
 
 The approved Parent/Guardian Edition 01 reference and all 52 catalog workflows were reconciled against the live Access schema at source `c55b202a9d74fd1a203cc9d2cfa364735e1c8607`. The global account, token-version session, account-to-Person binding and staff membership primitives are real; a Guardian relationship owner, child-purpose grant, family invitation binding and family principal are absent. Existing roles remain `SCHOOL_ADMIN` and `TEACHER`; Guardians must not be represented as staff.
 
-SA-32's existing product-decision block therefore remains authoritative. No Parent code, schema, migration, database data or runtime authorization fallback was added. The exact five-decision proposal, manifest verification and next safe vertical slice are recorded in [Parent authority evidence](../../evidence/parent-guardian-baseline-2026-10-13/README.md); the mutually exclusive 52-row status baseline is in [the Parent workflow matrix](../../execution/PARENT_GUARDIAN_WORKFLOW_MATRIX.md). PAR-02/PAR-07/PAR-08/PAR-10 and TT-06 Parent become engineering work only after the shared verified relationship/purpose port is accepted and implemented. Human review remains PENDING.
+The owner decision now supersedes the prior five-state proposal and resolves the first-release authority semantics: designated `family.access.manage`, explicit school authorization, a fixed three-purpose read bundle, dedicated account-bound family invitations, per-child revocation and authorization-date history bounds. Guardians remain separate from staff membership. The accepted physical/application contract is in [Guardians DESIGN](../guardians/DESIGN.md); the prior proposal remains historical evidence in [the baseline](../../evidence/parent-guardian-baseline-2026-10-13/README.md). FAM-01 is engineering-verified, including family-affiliation recovery evaluation and strict-mode precedence across mixed staff/family affiliations. Human review remains PENDING.
 
 ## SA-01 explicit workspace choice — 11 October 2026
 

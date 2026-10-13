@@ -1,0 +1,7 @@
+import Link from 'next/link';
+import {FamilyPortalFrame} from '@/components/family-portal-frame';
+import {AccessSignOut} from '@/components/access-login';
+import {Badge,BrandSurface,Card,PageHeader,PageStack} from '@/components/ui/primitives';
+import {familyPageContext} from '@/lib/server/family-page';
+export const dynamic='force-dynamic';
+export default async function FamilyAccount({searchParams}:{searchParams:Promise<{child?:string|string[]}>}){const params=await searchParams,{workspace,selected}=await familyPageContext(Array.isArray(params.child)?undefined:params.child);return <BrandSurface><FamilyPortalFrame workspace={workspace} selected={selected}><main id="main-content" className="container page-space"><PageStack><PageHeader title="My account" description="Your identity and school-verified family access."/><div className="family-summary-grid"><Card className="padded"><h2>{workspace.accountDisplayName??'Parent / guardian'}</h2><dl className="record-facts"><div><dt>Account status</dt><dd><Badge tone="success">Active</Badge></dd></div><div><dt>Verified child links</dt><dd>{workspace.children.length}</dd></div></dl></Card><Card className="padded"><h2>Account help</h2><p className="muted">Use password recovery for account access. Ask the school office to correct or remove a child link.</p><div className="form-actions"><Link className="btn btn-secondary" href="/forgot-password">Password recovery</Link><AccessSignOut/></div></Card></div></PageStack></main></FamilyPortalFrame></BrandSurface>;}
