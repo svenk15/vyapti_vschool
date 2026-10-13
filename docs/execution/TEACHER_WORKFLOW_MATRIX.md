@@ -1,0 +1,18 @@
+# Teacher workflow matrix
+
+Last updated: 13 October 2026. This matrix records the first authorized Teacher milestone only. It does not claim the wider Teacher workspace is complete.
+
+| Workflow | Reference state | Application route | Dependencies and authority | Functional/security | Reference comparison | Human acceptance | Evidence |
+|---|---|---|---|---|---|---|---|
+| TEA-01 Sign in | Teacher sign-in → My teaching day | `/sign-in` → `/teacher/today` for one authorized branch | Live account, active membership, branch, `attendance.mark`, released/entitled/active Attendance module | VERIFIED | VERIFIED for the milestone entry; branded sign-in evidence remains owned by EX-04 | PENDING | `docs/evidence/teacher-attendance-milestone-2026-10-13/` |
+| TEA-05 My teaching day | `today`, populated and empty | `/teacher/today` | Current Employee/Teacher binding, dated assignment, school-local date | VERIFIED | VERIFIED at 1440×1000 and 390×844 | PENDING | same evidence directory |
+| TEA-09 Open assigned session | `attendance`, scheduled/open | `/teacher/sessions/[id]` | Exact assigned offering/date; frozen roster on guarded open | VERIFIED | VERIFIED for open register | PENDING | same evidence directory; unchanged owner PostgreSQL evidence in `docs/evidence/ex-11/` |
+| TEA-10 Mark and review | `attendance`, unmarked/marked/review | `/teacher/sessions/[id]` | Complete unique roster, valid status and Late minutes | VERIFIED | VERIFIED for roster controls and review composition | PENDING | focused Teacher Playwright evidence below |
+| TEA-11 Submit and receipt | `attendance`, submitted/read-only | `/teacher/sessions/[id]` | Current authority, exact roster revision, optimistic version, immutable submission | VERIFIED | VERIFIED for register composition; receipt behavior verified in browser | PENDING | focused Teacher Playwright evidence below |
+| TEA-12 Recover uncertain submit | `attendance`, recovery | `/teacher/sessions/[id]` | Same actor/command/key and exact payload; authority rechecked | VERIFIED | Functional state verified; reference recovery state is not a separate supplied screenshot | PENDING | focused lost-response browser case; owner PostgreSQL replay evidence |
+| TEA-13 Stale/lost authority | attendance conflict/unavailable states | `/teacher/sessions/[id]` | Current version, assignment, membership and module checks | VERIFIED from unchanged owner implementation | Existing error composition retained; no new matched screenshot in this slice | PENDING | `docs/evidence/ex-11/README.md` and Attendance PostgreSQL evidence |
+| TEA-14 Reopen submitted register | `attendance`, submitted/read-only | `/teacher/today` → `/teacher/sessions/[id]` | Assigned read scope; no Teacher correction authority | VERIFIED for this milestone subset | VERIFIED for read-only register; full Teacher history journey remains outside this milestone | PENDING | focused reload/reopen assertion and final captures |
+
+TT-06 family timetable projections are independent of this Attendance-session milestone. The day list uses reconciled, authorized Attendance sessions and does not expose Timetable drafts as published schedules.
+
+Known differences from the approved prototype are explicit: the application omits unimplemented `My classes` and `Attendance history` destinations; the access home contract currently supplies a role label rather than the reference's richer person/subject identity; the scheduled Attendance projection does not expose an eligible-pupil count until roster freeze; the development branch contains six legitimate feature-owned sessions rather than the reference's three memory-only examples; and the documented reference-font portability deviation remains. These are not claimed as human-accepted deviations.

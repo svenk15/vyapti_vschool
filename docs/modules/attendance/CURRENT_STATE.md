@@ -63,6 +63,16 @@ ATT-03 frozen local demo: http://127.0.0.1:3426/sign-in; tested commit `a438bd19
 
 ATT-04 human review is PENDING. RPT-01, RPT-02 and TEN-03 implementation dependencies are satisfied; the owner’s 6 October execution policy removes ATT-04 human acceptance as an implementation gate. Keep ATT-04 review PENDING and preserve all technical prerequisites.
 
+### First Teacher attendance milestone — 13 October 2026
+
+- **Outcome:** A single-branch authorized Teacher now lands on `/teacher/today`, opens an assigned session, marks the frozen roster, reviews totals, submits once, recovers a lost response with the retained exact key/payload, and reopens the immutable read-only register. Teacher correction authority remains absent.
+- **Presentation:** The My teaching day and Attendance register routes were recomposed against `VSchool_Teacher_Review.html` at 1440×1000 and 390×844. Final reference/application pairs were directly inspected and are in `docs/evidence/teacher-attendance-milestone-2026-10-13/`.
+- **Security/data:** Existing account, membership, branch, module, capability, assignment, roster, optimistic-version and idempotency guards remain owner-enforced. No backend contract, schema or migration changed. Existing PostgreSQL denial/stale/replay evidence remains applicable.
+- **Verification:** Focused real-PostgreSQL Playwright passed 1/1 on desktop in 36.3 s and 1/1 on mobile in 33.0 s, each with one worker and all 46 migrations current. The assertions cover direct Teacher landing, submission recovery, reload persistence, one SUBMIT revision, three attendance records and no overflow. `pnpm build` passed. Repository-gate results are recorded in the milestone evidence.
+- **Fixture:** `pnpm demo:seed` adds or preserves a current-date fictional practice session. The current practice register is OPEN with three unmarked pupils; repeat runs do not overwrite it. Credentials remain in ignored `artifacts/people-02/private-demo.json`.
+- **Status:** TEA-01, TEA-05 and TEA-09–TEA-13 are engineering verified for this milestone. TEA-14's reopen/read-only subset is verified; the broader history journey remains partial. Human acceptance, the documented font deviation, native VoiceOver/NVDA, TEN-03 and production gates remain PENDING.
+- **Next Teacher journey:** TEA-06 missing/changed-assignment guidance is the next dependency-ordered candidate. Its precise assignment-status projection must be reconciled before implementation; it is not part of this checkpoint.
+
 ### Administrator daily-attendance milestone — 11 October 2026
 
 - **Implementation:** The submitted-register workspace now has explicit editable, submitting, confirmed, rejected, stale, and unknown states. Unknown correction/cancellation outcomes retain their exact payload and key while permitting replay; stale corrections retain the attempted values, load authoritative records, show a comparison, and require a fresh review before a new command. A saved correction remains confirmed when history refresh fails, and history has an independent retry. Correction and cancellation cannot compete from the same screen. Today distinguishes loaded-empty, summary unavailable, overview unavailable, and capability unavailable states.

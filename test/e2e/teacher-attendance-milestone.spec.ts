@@ -1,0 +1,49 @@
+import {test,expect,type Page} from '@playwright/test';
+import {randomUUID} from 'node:crypto';
+import {PrismaClient} from '../../generated/prisma/client';
+import {PrismaPg} from '@prisma/adapter-pg';
+import {createAccessServices} from '../../backend/composition/access';
+import {createAttendanceServices} from '../../backend/composition/attendance';
+import {createAcademicServices} from '../../backend/composition/academics';
+import {createPeopleServices} from '../../backend/composition/people';
+import {createStudentsServices} from '../../backend/composition/students';
+import {createTenancyServices} from '../../backend/composition/tenancy';
+import {activeStaffFixture,schoolInput} from '../fixtures/access-management';
+
+const url=process.env.TEST_DATABASE_URL??'';
+if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated Teacher attendance E2E PostgreSQL DB required');
+const released=['academic_core','attendance','student_core','staff_core'] as const;
+const access=createAccessServices({databaseUrl:url}),tenancy=createTenancyServices({databaseUrl:url,releasedModules:released}),academics=createAcademicServices({databaseUrl:url,releasedModules:['academic_core']}),people=createPeopleServices({databaseUrl:url,releasedModules:['academic_core']}),students=createStudentsServices({databaseUrl:url,releasedModules:['student_core','academic_core'],cursorSecret:'teacher-milestone-test-cursor-secret'}),attendance=createAttendanceServices({databaseUrl:url,releasedModules:released}),db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]});
+const operator={operatorId:randomUUID(),verified:true as const};
+let teacherEmail='',teacherPassword='',sessionId='',today='';
+
+test.beforeAll(async()=>{
+ const input=schoolInput(),school=await access.provisionSchool(input,operator),identity={accountId:school.accountId,tokenVersion:1};
+ await access.institutionOperation({kind:'SetInstitutionGrant',organizationId:school.organizationId,accountId:school.accountId,status:'ACTIVE',expectedVersion:0,key:randomUUID(),reason:'Synthetic Teacher milestone authority'},operator);
+ for(const moduleId of released)await tenancy.setEntitlement(operator,{kind:'SetOrganizationEntitlement',organizationId:school.organizationId,actorAccountId:school.accountId,moduleId,state:'ACTIVE',startsAt:'2026-01-01T00:00:00.000Z',endsAt:null,expectedVersion:0,manifestVersion:1,limits:{},key:randomUUID(),reason:'Synthetic Teacher milestone module'});
+ const preview=await tenancy.preview(identity,school.organizationId,school.schoolId,['attendance']);
+ await tenancy.confirm(identity,school.organizationId,school.schoolId,{enabled:['attendance'],expectedVersions:preview.expectedVersions,previewHash:preview.previewHash,expectedInstitutionRevision:preview.institutionRevision,expectedBranchRevision:preview.branchRevision,key:randomUUID(),reason:'Enable Teacher milestone branch'});
+ const year=await academics.createYear(identity,school.organizationId,school.schoolId,{code:`T${randomUUID().slice(0,6).toUpperCase()}`,name:'Teacher milestone year',startsOn:'2026-04-01',endsOn:'2027-04-01',key:randomUUID(),reason:'Prepare Teacher milestone'});
+ await academics.publishCalendar(identity,school.organizationId,school.schoolId,year.calendarId,{expectedVersion:1,teachingWeekdays:[1,2,3,4,5,6,7],exceptions:[],key:randomUUID(),reason:'Publish Teacher milestone calendar'});
+ await academics.transitionYear(identity,school.organizationId,school.schoolId,year.id,{expectedVersion:1,target:'OPEN',key:randomUUID(),reason:'Open Teacher milestone year'});
+ const grade=await academics.createGrade(identity,school.organizationId,school.schoolId,{code:`G${randomUUID().slice(0,5)}`,name:'Grade 6',key:randomUUID(),reason:'Teacher milestone grade'}),subject=await academics.createSubject(identity,school.organizationId,school.schoolId,{code:`M${randomUUID().slice(0,5)}`,name:'Mathematics',key:randomUUID(),reason:'Teacher milestone subject'}),section=await academics.createSection(identity,school.organizationId,school.schoolId,{yearId:year.id,gradeId:grade.id,campusId:null,code:'A',name:'Grade 6 · A',key:randomUUID(),reason:'Teacher milestone section'}),offering=await academics.create(identity,school.organizationId,school.schoolId,{yearId:year.id,sectionId:section.id,subjectId:subject.id,code:`TEA${randomUUID().slice(0,6)}`,key:randomUUID(),reason:'Teacher milestone offering'});
+ today=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ for(const [index,name] of ['Casey','Riley','Morgan'].entries()){const student=await students.create(identity,school.organizationId,school.schoolId,{firstName:name,lastName:'Example',admissionNumber:`TEA-${randomUUID().slice(0,8)}`,admittedOn:'2026-04-01',key:randomUUID()});await students.enroll(identity,school.organizationId,school.schoolId,{studentId:student.studentId,yearId:year.id,sectionId:section.id,startsOn:today,lastDay:'2027-03-31',rollNumber:String(index+1).padStart(4,'0'),key:randomUUID()});}
+ const employee=await people.createEmployee(identity,school.organizationId,school.schoolId,{firstName:'Avery',lastName:'Demo',contactEmail:null,staffNumber:`TEA-${randomUUID().slice(0,6)}`,category:'TEACHING',employedFrom:'2026-04-01',key:randomUUID()}),teacher=await people.enableTeacher(identity,school.organizationId,school.schoolId,employee.employeeId,{expectedVersion:employee.version,key:randomUUID()});
+ await academics.assign(identity,school.organizationId,school.schoolId,{offeringId:offering.id,teacherId:teacher.teacherId!,validFrom:'2026-04-01',validTo:'2027-04-01',key:randomUUID(),reason:'Assign milestone teacher'});
+ const staff=await activeStaffFixture(db,school,['TEACHER']);teacherEmail=staff.email;teacherPassword=staff.password;await db.userAccount.update({where:{id:staff.accountId},data:{emailVerifiedAt:new Date()}});await people.bindAccount(identity,school.organizationId,school.schoolId,employee.employeeId,{accountId:staff.accountId,verificationReference:'SYNTHETIC-TEACHER-MILESTONE',reason:'Link milestone teacher',key:randomUUID()});
+ const scheduled=await attendance.schedule(identity,school.organizationId,school.schoolId,{offeringId:offering.id,schoolDate:today,startsAt:`${today}T00:01:00+05:30`,endsAt:`${today}T00:46:00+05:30`,occurrenceKey:`TEACHER-${today}`,key:randomUUID(),reason:'Teacher milestone session'});sessionId=scheduled.id;
+});
+test.afterAll(async()=>{await attendance.disconnect();await students.disconnect();await people.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
+async function signIn(page:Page){await page.goto('/sign-in');await page.getByRole('textbox',{name:'Email address',exact:true}).fill(teacherEmail);await page.getByLabel(/^Password/).fill(teacherPassword);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/teacher\/today$/);}
+
+test('Teacher completes and recovers the assigned attendance register',async({page})=>{
+ test.setTimeout(180000);await signIn(page);await expect(page.getByRole('heading',{name:'My teaching day'})).toBeVisible();
+ await expect(page.getByLabel('Teaching day summary')).toContainText('Sessions today1');const register=page.getByRole('link',{name:/Open register: Mathematics/});await expect(register).toBeVisible();await register.click();await expect(page.getByRole('heading',{name:'Mathematics · Grade 6 · A'})).toBeVisible();
+ await page.getByRole('button',{name:'Open register'}).click();await expect(page.locator('.teacher-register-layout > .teacher-count-chips')).toContainText('3 Unmarked');
+ await page.getByRole('button',{name:'Mark unmarked present'}).click();await page.getByRole('button',{name:'Mark 3 present'}).click();await page.getByRole('group',{name:'Attendance for Riley Example'}).getByRole('radio',{name:'Absent'}).check();await page.getByRole('group',{name:'Attendance for Morgan Example'}).getByRole('radio',{name:'Late'}).check();await page.getByLabel('Late minutes for Morgan Example').fill('15');
+ await page.getByPlaceholder('Find a pupil in this roster').fill('Casey');await expect(page.getByText('1 shown')).toBeVisible();await expect(page.locator('.teacher-register-layout > .teacher-count-chips')).toContainText('1 Absent');await page.getByPlaceholder('Find a pupil in this roster').fill('');
+ await page.getByRole('button',{name:'Review attendance'}).click();await expect(page.getByRole('dialog').getByLabel('Register totals')).toContainText('1 Present');
+ let lose=true;await page.route('**/api/v1/sessions/*/submit',async route=>{const response=await route.fetch();if(lose){lose=false;await route.abort();return;}await route.fulfill({response});});await page.getByRole('button',{name:'Submit attendance'}).click();await expect(page.getByRole('button',{name:'Check submission status'})).toBeVisible();await page.getByRole('button',{name:'Check submission status'}).click();
+ await expect(page.getByText('Submitted roster',{exact:true})).toBeVisible();await page.reload();await expect(page.getByText('Submitted roster',{exact:true})).toBeVisible();await expect(page.getByText('Session reference')).toBeVisible();await expect(page.getByRole('link',{name:'Back to my teaching day'})).toBeVisible();expect(await db.attendanceRevision.count({where:{sessionId,kind:'SUBMIT'}})).toBe(1);expect(await db.attendanceRecord.count({where:{sessionId}})).toBe(3);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
