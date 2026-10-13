@@ -87,6 +87,10 @@ The current slice implements the independent Teacher/TEA-22 projection only. It 
 
 Acceptance: the Teacher sees only effective immutable published slots assigned through their dated TeacherAssignment; drafts and other Teachers remain absent. Every read rechecks current account/token, active scope, membership, Teacher/Employee identity, release, entitlement, activation and `timetable.read`. Attendance actions appear only for a session joined by trusted `source_occurrence_id`. A validated Monday drives URL-backed previous/next week navigation; desktop/mobile, keyboard navigation, empty/unavailable states and direct register navigation match the approved Teacher planning composition where supported. Unit, real PostgreSQL and sequential focused Playwright evidence are required. No migration is expected.
 
+## TT-07 / TEA-23 — Assign and respond to dated cover
+
+Status: **DESIGN PREPARED / BLOCKED ON PRODUCT DECISIONS**. The narrow LLD is in DESIGN. Its technical dependency is TT-05 plus the verified TT-06 Teacher projection; Student and Parent timetable projections are not command dependencies. Do not add tables, capabilities, grants or browser actions until the authority timing, response lifecycle, original-Teacher access, dated eligibility and Attendance-state decisions in the LLD are accepted. When unblocked, implement the exact occurrence-scoped command through Academics and Attendance owner ports with current authorization, guarded locking, optimistic versioning, exact replay and immutable audit/history evidence.
+
 ## TEA-07/TEA-08 — Review assigned classes and a minimal dated roster
 
 Depends on: ACA-03, STU-02, PER-02

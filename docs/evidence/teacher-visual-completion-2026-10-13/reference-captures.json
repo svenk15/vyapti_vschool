@@ -1,0 +1,49 @@
+{
+  "capturedAt": "2026-10-13T14:09:53.544Z",
+  "reference": "docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Teacher_Design/VSchool_Teacher_Review.html",
+  "prototypeReviewBarExcluded": true,
+  "states": [
+    {
+      "id": "TEA-02",
+      "name": "chromium",
+      "url": "http://127.0.0.1:3412/VSchool_Teacher_Review.html#/flow/TEA-02",
+      "title": "Activate or recover a teacher account",
+      "overflow": false
+    },
+    {
+      "id": "TEA-12",
+      "name": "chromium",
+      "url": "http://127.0.0.1:3412/VSchool_Teacher_Review.html#/flow/TEA-12",
+      "title": "Recover an uncertain submission",
+      "overflow": false
+    },
+    {
+      "id": "TEA-13",
+      "name": "chromium",
+      "url": "http://127.0.0.1:3412/VSchool_Teacher_Review.html#/flow/TEA-13",
+      "title": "Handle a stale register or lost permission",
+      "overflow": false
+    },
+    {
+      "id": "TEA-02",
+      "name": "mobile",
+      "url": "http://127.0.0.1:3412/VSchool_Teacher_Review.html#/flow/TEA-02",
+      "title": "Activate or recover a teacher account",
+      "overflow": false
+    },
+    {
+      "id": "TEA-12",
+      "name": "mobile",
+      "url": "http://127.0.0.1:3412/VSchool_Teacher_Review.html#/flow/TEA-12",
+      "title": "Recover an uncertain submission",
+      "overflow": false
+    },
+    {
+      "id": "TEA-13",
+      "name": "mobile",
+      "url": "http://127.0.0.1:3412/VSchool_Teacher_Review.html#/flow/TEA-13",
+      "title": "Handle a stale register or lost permission",
+      "overflow": false
+    }
+  ]
+}
