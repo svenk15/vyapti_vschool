@@ -103,6 +103,8 @@ Human review remains PENDING until owner feedback is received. Automated verific
 
 ## Next action
 
+TEA-07's approved Assigned sessions and Session history composition is now supplied through the Attendance-owner TEA-14 query without adding an Academics-to-Attendance persistence dependency. The populated desktop/mobile class detail was rechecked in `docs/evidence/teacher-classes-2026-10-13/`; TEA-07 is engineering verified and human review remains PENDING.
+
 TT-06's Teacher/TEA-22 slice is verified; human review remains PENDING. Continue the independently eligible TEA-07/TEA-08 assigned-classes and minimal-roster design only if the existing scoped owner contracts resolve its information-access policy. TT-06 Student/Parent projections, TEA-23/TEA-24, TEN-03, native accessibility, provider and other production gates remain unchanged.
 
 ## Pending decisions / limitations

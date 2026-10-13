@@ -183,7 +183,7 @@ sequenceDiagram
 
 **Database writes / atomicity:** AttendanceRecord statuses/revision, immutable AttendanceRevision, AttendanceSession.version and envelopes.
 
-**Authorization and physical contract:** Recheck active account/token, Organization/School, membership, `attendance` and its `student_core`/`academic_core`/`staff_core` dependencies and current resource permission for every history read or correction. `attendance.correct` is currently granted only to School administrators; class-read teachers cannot mutate. History requires current `attendance.read_school` and returns only rows for the scoped session. No tenant ID comes from the request. Correction locks account → Organization → School → AttendanceSession, then reads current roster/records and derives old values server-side. Read paths use no write locks.
+**Authorization and physical contract:** Recheck active account/token, Organization/School, membership, `attendance` and its `student_core`/`academic_core`/`staff_core` dependencies and current resource permission for every history read or correction. `attendance.correct` is currently granted only to School administrators; class-read teachers cannot mutate. Administrator history requires current `attendance.read_school`; TEA-14 additionally permits only the assigned Teacher with current `attendance.read_class` to read that exact submitted session history. No tenant ID comes from the request. Correction locks account → Organization → School → AttendanceSession, then reads current roster/records and derives old values server-side. Read paths use no write locks.
 
 ATT-02 already provides the physical contract: `vs_attendance_record` has scoped `(organization_id,school_id,session_id,student_id)` membership and `current_revision >= 1`; `vs_attendance_revision` has scoped session and global actor FKs, unique `(organization_id,school_id,session_id,number)` (`vs_attendance_revision_number_key`), known-kind/reason constraints and an immutable trigger. No new table or migration is expected. A correction updates only selected current record rows to the next revision, appends one CORRECT JSON change set with student IDs and from/to status values, increments session version, and commits safe evidence atomically. Revision changes may retain student IDs/statuses in Attendance-owned history, but names, roll values, emails and raw pupil PII are excluded from audit/outbox/receipt.
 
@@ -319,6 +319,40 @@ sequenceDiagram
 **Verification:** Unit — Cancellation capability by state; result reconciliation state machine. Functional PostgreSQL — Submit-vs-cancel serialization; no duplicate outbox; revoked actor cannot read prior receipt payload. E2E — Simulated response loss recovers; cancel submitted session retains visible history and excludes metrics.
 
 ## Administrator daily-attendance milestone contract — 11 October 2026
+
+## TEA-14 — Teacher attendance history and correction handoff
+
+**Design-readiness note (13 October 2026):** The approved Teacher pack resolves this Phase 1 read-only workflow. Attendance owns the directory, exact register and immutable revision projection. Academics supplies authority through the current bound Teacher and `TeacherAssignment`; Students data is read only from the Attendance-owned frozen roster. No mutation, durable support request, school-wide export, schema change or migration is introduced.
+
+**Invariant and authorization:** Every list/detail/history read requires a live account/token, active Institution/Branch membership, `attendance.read_class`, released/entitled/active Attendance dependencies, an active AccountPersonBinding→Employee→Teacher identity, and a TeacherAssignment that is effective both now and on the session school date. Losing the current assignment makes the historical register unavailable even when the account taught it previously. A Teacher never receives `attendance.correct`; the handoff is explanatory and creates no record. Existing administrator `attendance.read_school` history remains available independently.
+
+**Read schema and joins:** The directory reads `vs_attendance_session` by `(organization_id,school_id,status,school_date,starts_at,id)`, then its scoped `vs_academics_course_offering`→Section/Subject and current TeacherAssignment intervals. Exact detail reads the scoped Session→`vs_attendance_session_roster_entry`→`vs_attendance_record`; receipt history reads `vs_attendance_revision` ordered by its scoped session/number key plus global UserAccount→Organization AccountPersonBinding→Person for the safe actor name. Returned Teacher data is limited to session ID, offering ID, branch-local date/time, subject, class, state, frozen roster/effective marks, revision kind/time/actor and permitted reason. Raw receipt bodies, audit payloads and unrelated identities are excluded.
+
+**Query/API contract:** `GET /api/v1/teacher/history` accepts normalized `q` (maximum 100) with `by=subject|class|date`, optional exact assigned `offeringId`, optional civil `date`, repeated `status=SCHEDULED|OPEN|SUBMITTED`, `sort=date|subject|class`, `order=asc|desc` and an opaque validated offset cursor. Results are bounded to the branch's school-local today and earlier; future commitments remain in My timetable/My teaching day rather than historical review. The repository applies all filters and deterministic tie-breakers before a bounded 25-row page; it never sorts a loaded browser page. `/teacher/history` preserves validated query state in the URL and Back/Forward history. `/teacher/sessions/:id` remains the exact read-only register; submitted state additionally reads immutable revisions. Class detail consumes the same Attendance query with its offering ID rather than joining Attendance tables from Academics.
+
+**Transactions/concurrency:** These are lock-free `REPEATABLE READ` owner queries. Each request establishes transaction-local database scope and rechecks present authority; no write version, idempotency key or audit row applies because TEA-14 performs no mutation. Concurrent corrections are observed on the next request/reload, while one response remains internally consistent. Cancellation removes the record from Teacher history and direct Teacher detail, without deleting retained Attendance evidence.
+
+```mermaid
+sequenceDiagram
+  actor T as Teacher
+  participant H as Next host
+  participant A as Attendance application
+  participant P as Attendance PostgreSQL adapter
+  participant D as PostgreSQL
+  T->>H: Locate class/date/subject
+  H->>A: Validated history query + verified identity
+  A->>P: teacherHistory(scope, query)
+  P->>D: Recheck account, modules, Teacher and current/date assignments
+  D-->>P: Authorized scoped sessions only
+  P-->>T: Bounded directory
+  T->>H: Open exact submitted register
+  H->>A: detail + history
+  A->>P: Scoped read-only queries
+  P->>D: Frozen roster, effective records, immutable revisions
+  D-->>T: Receipt and administrator correction handoff
+```
+
+**Verification criteria:** Unit validation covers civil dates, allowlists, normalized search and cursors. Real PostgreSQL proves current-assignment list/detail/history, subject/date/offering filters, deterministic ordering, unassigned Teacher empty result, cross-branch denial, revoked-membership denial and continued Teacher correction denial. Playwright covers navigation, URL-backed search/sort/filter composition, class assigned-session link, submitted receipt/history, reload, desktop/mobile layout and keyboard focus. Existing Attendance mutation/replay evidence remains unchanged.
 
 The bounded journey is `/sign-in` → `/admin` → `/admin/attendance/sessions/:id` for a submitted register → select one frozen-roster Student and the contextual session → select the corrected mark → record the required evidence → review and confirm → inspect the immutable revision/history → reload to prove persistence → return to Attendance. Its approved reference states are `VSchool_School_Admin_Review.html#/home`, `#/flow/SA-26` and `#/flow/SA-27`; production excludes the prototype review banner, simulated navigation and fictional values. SA-27 uses the approved `Select the record` → `Record evidence` → `Confirm` composition. Back/Continue retains the in-memory values, only final confirmation calls the correction command, and the disabled prototype draft action does not imply durable draft persistence. History and authorized cancellation remain reachable as secondary actions without reverting to the former combined register page. The page reuses the approved Administrator shell, `PageHeader`, `Card`, `SectionHeader`, status `Alert`/`Badge`, shared fields/buttons and semantic brand tokens. Current staged comparison evidence belongs in `docs/evidence/admin-attendance-correction-staged-2026-10-11/`.
 

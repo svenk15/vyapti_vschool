@@ -51,7 +51,7 @@ Start and verify the server, give the user the URL and this script, record human
 
 ## Experience overlay consumption
 
-EX-10 adopts administrator schedule/detail/correction/cancellation; EX-11 adopts assigned teacher day and roll call. Current assignment/resource checks, pinned roster, UUID intent keys, tenant receipt scope and unknown-result recovery remain unchanged. Timetable planning and teacher school-wide history remain separate missing owner contracts.
+EX-10 adopts administrator schedule/detail/correction/cancellation; EX-11 adopts assigned teacher day and roll call. Current assignment/resource checks, pinned roster, UUID intent keys, tenant receipt scope and unknown-result recovery remain unchanged. TEA-14 adds assignment-scoped Teacher history; school-wide Teacher history remains unavailable.
 
 ## ATT-02 — Open the exact roster and submit attendance
 
@@ -93,7 +93,7 @@ Design: [flow ATT-03](DESIGN.md). Scope and API: POST /api/v1/sessions/:id/corre
 
 ### Implementation instructions
 
-1. Recheck current account/token, membership, active branch, attendance and dependency module availability, scoped session and `attendance.correct`; this currently resolves to an active School administrator. For correction mutations lock account → Organization → School → AttendanceSession. Keep history reads lock-free and require current `attendance.read_school`.
+1. Recheck current account/token, membership, active branch, attendance and dependency module availability, scoped session and `attendance.correct`; this currently resolves to an active School administrator. For correction mutations lock account → Organization → School → AttendanceSession. Keep history reads lock-free: administrators require current `attendance.read_school`; TEA-14 permits only an assigned Teacher with current `attendance.read_class` to read the exact submitted revision history.
 2. Require a SUBMITTED session and expected session version. Validate a nonempty subset of unique IDs in the frozen roster, reject duplicate/no-op changes, validate status/late-minute pairing and a normalized 5–500 character reason.
 3. Compute from/to values from locked AttendanceRecord rows; never trust caller-supplied prior values. Update only selected current records and set their `current_revision` to the next number. Append one immutable CORRECT revision at the next session revision number and increment session version.
 4. Write safe audit/outbox/receipt in the same transaction. Identical same-key retry returns its original result only after fresh authorization; changed payload conflicts. Concurrent writes serialize on the session and stale versions fail atomically.
@@ -149,3 +149,17 @@ Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm 
 Simulate a lost submit response and reconcile it; cancel a submitted synthetic session with a reason; show retained history and verify it no longer contributes to rates.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
+
+## TEA-14 — Teacher attendance history and correction handoff
+
+Depends on: ATT-02, ATT-03, TEA-07. Human acceptance is not an implementation dependency.
+
+- [x] Reconcile the approved `history` contract with the existing Attendance owner and current assignment policy.
+- [x] Define scoped Session/Offering/Assignment and frozen roster/record/revision joins, bounded validated query state and lock-free repeatable-read behavior in DESIGN.md.
+- [x] Implement `/teacher/history` through the portable Attendance facade and thin host gateway with subject/class/date search, assigned-class/status filters, deterministic sort and pagination.
+- [x] Add the Attendance-owned assigned-session projection to Teacher class detail and immutable receipt/revision history to submitted register detail.
+- [x] Preserve Teacher correction denial and deny list/detail/history after membership or current assignment loss.
+- [x] Run current-source unit, real PostgreSQL, desktop/mobile Playwright, repository gates and production build; record exact evidence and source.
+- [x] Inspect matched approved/application desktop and mobile captures; keep font/native accessibility and human acceptance separate.
+
+No schema or migration is required. Demo data reuses the deterministic fictional Teacher attendance fixture and must not overwrite a manually created register.
