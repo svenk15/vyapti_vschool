@@ -339,6 +339,33 @@ Real dates/leap years, adjacent terms, reversed ranges, nullable-campus duplicat
 
 See [tasks](TASKS.md), [current state](CURRENT_STATE.md), [Bible](../../VSchool_Bible.md) and [agent runbook](../../AGENT_RUNBOOK.md).
 
+## TT-06 — Teacher published timetable projection — 13 October 2026
+
+The first TT-06 slice owns TEA-22 only. A signed-in Teacher reads the immutable published weekly commitments currently assigned to their active Teacher identity at `/teacher/timetable`. Student and Parent projections remain outside this slice, so TT-06 as a cross-role task remains partial. Draft revisions, administrator planning controls, cover acceptance and schedule-change requests are never exposed.
+
+`teacherTimetableWeek(actor, organizationId, schoolId, weekStart)` accepts an ISO civil Monday and returns a JSON-safe seven-day projection. The read resolves `AccountPersonBinding → Person → active Employee → active Teacher`, then joins effective `PUBLISHED TimetableRevision → TimetableSlot → CourseOffering/Subject/Section → TeacherAssignment` using branch scope and half-open publication, year, employment and assignment intervals. It joins `LessonOccurrence` by trusted revision/slot/date identity and AttendanceSession only through `source_occurrence_id`; a browser value cannot create or assert that link. Room stays explicitly unavailable because the current accepted timetable schema has no room owner.
+
+Every read establishes verified tenant context and rechecks live account/token, active organization/branch/membership, `timetable.read`, release, institution entitlement and branch activation for Timetable, Academics and Staff. It uses a repeatable-read transaction without mutation locks and writes no row. Foreign branch, unbound/inactive Teacher and revoked permission are hidden or denied; invalid week input is validation failure; unavailable infrastructure is retryable. The existing scope-leading publication, slot, assignment, occurrence-source and Attendance source-occurrence indexes support the joins. No schema or migration changes.
+
+```mermaid
+sequenceDiagram
+  actor T as Teacher
+  participant H as Next host
+  participant U as Teacher timetable use case
+  participant R as Academics read adapter
+  participant D as PostgreSQL
+  T->>H: Open published week
+  H->>U: Verified identity and branch scope
+  U->>R: Validated Monday
+  R->>D: Establish tenant context and reauthorize
+  R->>D: Resolve Teacher and effective published slots
+  R->>D: Join trusted occurrence and Attendance link
+  D-->>R: Scoped immutable projection
+  R-->>T: Week/day commitments and eligible register links
+```
+
+Verification covers input validation; real PostgreSQL published-only projection, trusted Attendance linking, branch isolation and current authority; and sequential desktop/mobile browser navigation, URL week state, responsive layout and register link. The exact reference is `VSchool_Teacher_Review.html#/planning`. Unsupported cover/request cards are recorded gaps rather than dead controls. Font portability and native assistive-technology evidence remain separate gates.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.

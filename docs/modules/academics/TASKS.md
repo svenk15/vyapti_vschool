@@ -81,6 +81,12 @@ Depends on verified TT-04 and an accepted Attendance-owner planning contract. Th
 
 Status: **IN_PROGRESS**. The owner approved an actionable per-occurrence block on 12 October 2026. Implement the narrow enlisted Attendance planning port and trusted source link; do not reuse the actor-facing manual schedule/cancel facade as an implicit system port. Verify creation/replay, mixed partial result, authorized manual cancellation then retry, frozen-session protection, concurrency, scope/revocation and lost-response recovery with real PostgreSQL; verify receipt → reconcile → conflict review → supported resolution → retry at desktop/mobile with one worker.
 
+## TT-06 — Project published timetable to authorized users
+
+The current slice implements the independent Teacher/TEA-22 projection only. It depends on verified TT-04 publication, TT-05 trusted occurrence linkage, the existing Teacher identity binding and the approved `timetable.read` policy for current assignments. Student and Parent projections remain future TT-06 work and must not be inferred from this checkpoint.
+
+Acceptance: the Teacher sees only effective immutable published slots assigned through their dated TeacherAssignment; drafts and other Teachers remain absent. Every read rechecks current account/token, active scope, membership, Teacher/Employee identity, release, entitlement, activation and `timetable.read`. Attendance actions appear only for a session joined by trusted `source_occurrence_id`. A validated Monday drives URL-backed previous/next week navigation; desktop/mobile, keyboard navigation, empty/unavailable states and direct register navigation match the approved Teacher planning composition where supported. Unit, real PostgreSQL and sequential focused Playwright evidence are required. No migration is expected.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.

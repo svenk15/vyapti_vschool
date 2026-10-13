@@ -1,6 +1,6 @@
 # Academic setup and teaching context — current state
 
-Last updated: 2026-10-12. Task state is local to this checkout; no imported task completion. Design revision 4. No active execution timer.
+Last updated: 2026-10-13. Task state is local to this checkout; no imported task completion. Design revision 4. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -13,8 +13,13 @@ Last updated: 2026-10-12. Task state is local to this checkout; no imported task
 | TT-03 | VERIFIED | PENDING | [Whole-branch preview evidence](../../evidence/admin-tt-03-2026-10-12/README.md); domain, real-PostgreSQL, sequential desktop/mobile and build gates passed |
 | TT-04 | VERIFIED | PENDING | [Immutable publication evidence](../../evidence/admin-tt-04-2026-10-12/README.md); real-PostgreSQL publication/replay/concurrency/rollback/immutability and sequential desktop/mobile review/receipt journeys passed |
 | TT-05 | VERIFIED | PENDING | Bounded partial reconciliation, trusted source links and explicit manual conflicts verified; human review pending |
+| TT-06 | PARTIAL | PENDING | Teacher/TEA-22 published-timetable projection is verified; Student and Parent projections remain unimplemented |
 
 ## Current checkpoint
+
+**TT-06 Teacher published-timetable checkpoint (13 October 2026):** the Teacher/TEA-22 slice is implementation VERIFIED and human review is PENDING; the cross-role TT-06 task remains PARTIAL because Student and Parent projections are not implemented. `/teacher/timetable` now reads only effective immutable published slots assigned through the signed-in account's active Person, Employee and Teacher identity and dated TeacherAssignment. Every read rechecks the live account/token, organization, school, membership, `timetable.read`, release, entitlement and branch activation. Attendance actions are exposed only when a session is joined through its trusted timetable occurrence source. The read uses a repeatable-read snapshot and takes no mutation lock; no schema or migration changed.
+
+The approved Teacher planning reference and application were directly inspected at desktop and 390px mobile widths. The application provides URL-backed week navigation, the weekly grid, mobile day tabs, published status, school-local time and real authorized register links. The current schema has no room source and does not project unassigned periods or breaks; cover/change actions belong to TEA-23/TEA-24 and remain unavailable. Those differences, shared-shell review chrome and the recorded font-portability deviation remain explicit and are not treated as accepted visual deviations. Focused unit, real-PostgreSQL, sequential one-worker browser, repository and build evidence is recorded in [TT-06 evidence](../../evidence/teacher-timetable-2026-10-13/README.md). Native accessibility, actual browser 200% zoom, TEN-03 and human acceptance remain pending.
 
 **TT-01–TT-05 consolidated timetable presentation checkpoint (12 October 2026):** functional/security status remains VERIFIED for each task and human review remains PENDING. The normal `/admin/timetable` route now uses the approved SA-41 weekly composition for its populated draft and published states, exposes the latest authorized published revision without requiring a private URL, and provides a visible route from published timetable to its immutable receipt and Attendance reconciliation result. The weekly grid, mobile single-day cards, draft banner, tabs, controls, icons, spacing and responsive actions were directly compared with the approved Administrator HTML at 1440 × 1000 and 390 × 844. The final captures have no horizontal viewport overflow. Exact evidence and labelled reference/before/after/overlay files are in [the consolidated fidelity record](../../evidence/admin-timetable-fidelity-2026-10-12/README.md).
 
@@ -92,7 +97,7 @@ Human review remains PENDING until owner feedback is received. Automated verific
 
 ## Next action
 
-SA-COMP-02 implementation verification is complete; human review remains PENDING. Continue SA-COMP-03 invitation delivery recovery. TEN-03, native accessibility, provider and other production gates remain unchanged.
+TT-06's Teacher/TEA-22 slice is verified; human review remains PENDING. Continue the independently eligible TEA-07/TEA-08 assigned-classes and minimal-roster design only if the existing scoped owner contracts resolve its information-access policy. TT-06 Student/Parent projections, TEA-23/TEA-24, TEN-03, native accessibility, provider and other production gates remain unchanged.
 
 ## Pending decisions / limitations
 

@@ -34,4 +34,5 @@ export const academicsGateway={
  async reconcileTimetable(identity:Identity|null,input:Parameters<ReturnType<typeof service>['reconcileTimetable']>[3]){const s=await scope(identity);return service().reconcileTimetable(identity,s.organizationId,s.schoolId,input);},
  async publishTimetableDraft(identity:Identity|null,input:Parameters<AcademicServices['publishDraft']>[3]){const s=await scope(identity);return service().publishDraft(identity,s.organizationId,s.schoolId,input);},
  async discardTimetableDraft(identity:Identity|null,input:Parameters<AcademicServices['discardDraft']>[3]){const s=await scope(identity);return service().discardDraft(identity,s.organizationId,s.schoolId,input);},
+ async teacherTimetableWeek(identity:Identity|null,weekStart:string){const s=await scope(identity);return service().teacherTimetableWeek(identity,s.organizationId,s.schoolId,weekStart);},
 };
