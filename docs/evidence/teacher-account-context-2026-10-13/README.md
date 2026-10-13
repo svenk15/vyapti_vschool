@@ -27,7 +27,7 @@ Initial mobile reruns reused a production build created before the Access-route 
 - `application-account-chromium.png`, `application-account-mobile.png`
 - `application-confirm-chromium.png`, `application-confirm-mobile.png`
 
-The application uses real synthetic institution/branch names and a generic “Teacher account” label because the current safe Access home DTO does not expose an account display name. That remaining projection belongs to TEA-04. The documented font portability difference, native VoiceOver/NVDA and TEN-03 remain pending release gates.
+The application uses real synthetic institution/branch names and a generic “Teacher account” label because the safe Access DTO does not join People-owned display-name data. TEA-04 separately adds safe account email and current-session timing without widening that owner boundary. The documented font portability difference, native VoiceOver/NVDA and TEN-03 remain pending release gates.
 
 ## Manual demo
 
