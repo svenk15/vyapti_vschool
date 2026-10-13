@@ -2,6 +2,8 @@
 
 Human acceptance is **PENDING**. Functional/security verification and visual comparison below are engineering evidence only.
 
+Executable implementation commit: `892abf4b1403b97803cc6e75802520ded1b4bcf4`. The running production build at the checkpoint contains the same application source; the follow-up evidence commit changes documentation only.
+
 ## Authority and implemented slice
 
 - Approved source: `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Student_Design/VSchool_Student_Review.html`, SHA-256 `74dc76af2e3b2000dfeb4b1258d49c6081aa255d6294f9ac6fe10ae59253cc9b` (matches `SOURCE_MANIFEST.json`).
