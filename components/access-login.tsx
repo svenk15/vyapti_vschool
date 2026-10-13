@@ -4,7 +4,7 @@ import { signIn,signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { TextField } from "./ui/forms";
-import { Button,ButtonLink } from "./ui/primitives";
+import { Button } from "./ui/primitives";
 
 export function AccessLogin() {
  const router=useRouter();
@@ -25,4 +25,4 @@ export function AccessLogin() {
   <Button type="submit" loading={busy}>{busy?"Signing in…":"Sign in"}</Button>
  </form>;
 }
-export function AccessSignOut({staged=false}:{staged?:boolean}){const [busy,setBusy]=useState(false),[error,setError]=useState(false);if(staged)return <ButtonLink href="/admin/context?destination=sign-out" variant="secondary">Sign out</ButtonLink>;return <div><Button variant="secondary" loading={busy} onClick={async()=>{setBusy(true);try{await signOut({callbackUrl:"/sign-in"});}catch{setError(true);setBusy(false);}}}>Sign out</Button>{error&&<p role="alert">Unable to sign out. Try again.</p>}</div>;}
+export function AccessSignOut({staged=false,stagedHref='/admin/context?destination=sign-out'}:{staged?:boolean;stagedHref?:string}){const [busy,setBusy]=useState(false),[error,setError]=useState(false);if(staged)return <div><Link className="btn btn-secondary" href={stagedHref} onClick={event=>{if(document.documentElement.dataset.attendanceOutcomePending==='true'){event.preventDefault();setError(true);}}}>Sign out</Link>{error&&<p role="alert">Resolve the unknown attendance submission before leaving this workspace.</p>}</div>;return <div><Button variant="secondary" loading={busy} onClick={async()=>{setBusy(true);try{await signOut({callbackUrl:"/sign-in"});}catch{setError(true);setBusy(false);}}}>Sign out</Button>{error&&<p role="alert">Unable to sign out. Try again.</p>}</div>;}

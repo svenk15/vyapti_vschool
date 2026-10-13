@@ -8,12 +8,17 @@ import { TextField,TextArea,SelectField } from '@/components/ui/forms';
 type Outcome={busy:boolean;error:string;success:string};
 async function send(url:string,body:unknown,key:string){return fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key},body:JSON.stringify(body),cache:'no-store'});}
 export function InstitutionContextSummary({institutionName,schoolName}:{institutionName:string;schoolName:string}){return <div className="portal-context-current"><strong>{schoolName}</strong><span className="sr-only">Institution {institutionName}</span></div>;}
-export function BranchSwitcher({home}:{home:AdminHome}){
+export function BranchSwitcher({home,contextHref='/admin/context'}:{home:AdminHome;contextHref?:string}){
  const router=useRouter(),[directory,setDirectory]=useState<ContextDirectory|null>(null),[error,setError]=useState(''),[selected,setSelected]=useState(home.scope.schoolId);
  useEffect(()=>{let live=true;fetch('/api/v1/context',{cache:'no-store'}).then(async r=>{if(!r.ok)throw new Error();const v=await r.json() as ContextDirectory;if(live)setDirectory(v);}).catch(()=>{if(live)setError('Authorized branches could not be loaded. Refresh to retry.');});return()=>{live=false;}},[]);
  useEffect(()=>{const handler=(event:PageTransitionEvent)=>{if(event.persisted)location.reload();};addEventListener('pageshow',handler);const sourceSwitch=sessionStorage.getItem('vschool-context-switching')==='1';if(sourceSwitch)sessionStorage.removeItem('vschool-context-switching');if(typeof BroadcastChannel==='undefined')return()=>removeEventListener('pageshow',handler);const channel=new BroadcastChannel('vschool-context');channel.onmessage=()=>{if(sessionStorage.getItem('vschool-context-switching')!=='1')location.reload();};return()=>{removeEventListener('pageshow',handler);channel.close();};},[]);
  const branches=directory?.institutions.flatMap(institution=>institution.branches.filter(branch=>branch.selectable).map(branch=>({institution,branch})))??[];
- function requestSwitch(value:string){setSelected(value);if(value!==home.scope.schoolId)router.push(`/admin/context?destination=${encodeURIComponent(value)}`);}
+ function requestSwitch(value:string){
+  if(document.documentElement.dataset.attendanceOutcomePending==='true'){
+   setSelected(home.scope.schoolId);setError('Resolve the unknown attendance submission before switching workspace. The retained request must stay on this page.');return;
+  }
+  setSelected(value);setError('');if(value!==home.scope.schoolId)router.push(`${contextHref}?destination=${encodeURIComponent(value)}`);
+ }
  return <div className="portal-context-control" role="group" aria-label="Institution and branch context"><InstitutionContextSummary institutionName={home.institutionName} schoolName={home.schoolName}/>{branches.length>1?<SelectField label="Switch institution and branch" value={selected} disabled={!directory} onChange={event=>requestSwitch(event.target.value)}>{branches.map(({institution,branch})=><option key={branch.id} value={branch.id}>{institution.name} · {branch.name}</option>)}</SelectField>:<span className="portal-context-single">{home.schoolCode}</span>}{error&&<p role="alert" aria-live="assertive" className="portal-context-error">{error}</p>}</div>;
 }
 export function InstitutionBranchManager({institutions,onCreated}:{institutions:InstitutionSummary[];onCreated?:(created:InstitutionResult&{code:string;name:string;timezone:string})=>void}){

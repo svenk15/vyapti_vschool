@@ -2,7 +2,7 @@
 
 Source workflow: TEA-03. Workspace: VSchool_Teacher_Design. Source area: access. Catalog phase: 1.
 
-Status: DESIGN_RECONCILIATION_REQUIRED. This coverage card is not a claim of implementation readiness or completion. Find the matching owner task; do not build the same business operation again for another workspace. Wave A may cover the existing-operation subset; record the exact subset and remaining gaps.
+Status: IMPLEMENTED_AND_VERIFIED. The live Access owner contract is reconciled in `docs/modules/access/DESIGN.md`; current-source evidence is in `docs/evidence/teacher-account-context-2026-10-13/README.md`. Human review remains PENDING.
 
 ## Original contract (unaltered)
 ```json
