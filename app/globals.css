@@ -325,6 +325,7 @@ body{font-family:var(--font-ui)}
 .student-current-context{flex:none;color:var(--muted);font-size:12px;font-weight:600}
 .student-portal-content .page-space{padding-top:28px}
 .student-home-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:20px}
+.student-next-class.populated{padding:22px;border-color:var(--primary);background:var(--primary);color:var(--on-primary)}.student-next-class-eyebrow{color:var(--on-primary);font-size:11px;font-weight:650;letter-spacing:.7px;text-transform:uppercase;opacity:.86}.student-next-class.populated h2{margin:14px 0 10px;color:inherit;font-size:25px}.student-next-class.populated p{margin:0 0 14px;color:inherit}.student-next-class.populated .btn{margin-top:8px;background:var(--surface);color:var(--ink)}.student-next-class>.alert{margin-top:4px}
 .student-profile-card{max-width:720px}
 .student-bottom-nav{display:none}
 @media(max-width:900px){.guardian-access-grid,.family-summary-grid{grid-template-columns:minmax(0,1fr)}.guardian-invite-flow{padding-right:0;padding-bottom:24px;border-right:0;border-bottom:1px solid var(--line)}.family-child-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -366,6 +366,29 @@ sequenceDiagram
 
 Verification covers input validation; real PostgreSQL published-only projection, immutable break/unassigned-period display, trusted Attendance linking, branch isolation and current authority; and sequential desktop/mobile browser navigation, URL week state, responsive layout and register link. The exact reference is `VSchool_Teacher_Review.html#/planning`. Unsupported cover/request cards are recorded gaps rather than dead controls. Font portability and native assistive-technology evidence remain separate gates.
 
+### STW-06 — Student next-class projection — 14 October 2026
+
+This narrow Student-home slice reuses the verified TT-06 Student weekly projection. The server derives the branch-local civil date and its Monday, calls the existing `timetable.read_self` use case, then selects the earliest `PLANNED` lesson for the accepted Student whose start instant has not passed. Ordering is `starts_at, occurrence_id`, so the result is deterministic. The browser supplies no organization, branch, Person, placement, occurrence or clock authority.
+
+The existing timetable verifier remains authoritative: live account/token, exact accepted Student access, account–Person binding, active Enrollment and SectionPlacement, organization/branch scope, purpose, release, entitlement and branch activation are rechecked inside the repeatable-read transaction. This composition is read-only and adds no table, migration, lock, receipt or audit event. An unavailable read shows a retryable warning; a valid day with no remaining occurrence shows an honest empty state. Learning-owned prioritized work remains outside this slice, so STW-06 remains partial.
+
+```mermaid
+sequenceDiagram
+  actor S as Student
+  participant H as Student home host
+  participant T as Existing timetable use case
+  participant D as PostgreSQL
+  S->>H: Open My day
+  H->>H: Derive school-local date and week
+  H->>T: Accepted Student identity and week
+  T->>D: Reauthorize and read published occurrences
+  D-->>T: Scoped immutable week
+  T-->>H: Lessons
+  H-->>S: Earliest remaining class or honest state
+```
+
+Verification requires a pure deterministic-selection unit test, a populated real-PostgreSQL browser journey through the existing guarded read, desktop/mobile comparison with the approved Student day reference, and empty/failure rendering. The recorded font-portability and native accessibility gates remain unchanged.
+
 ## TT-07 / TEA-23 — Cover and substitution design readiness — 13 October 2026
 
 This is a narrow readiness proposal, not implemented authority. The actual owner contracts show that a Teacher-only timetable projection can depend on the verified TT-06 Teacher slice rather than waiting for Student and Parent TT-06 projections: the candidate occurrence, original assignment, substitute Teacher identity and any trusted Attendance session are all resolved from Academics, People and Attendance owner data. The proposed dependency is therefore `TT-05 + TT-06 Teacher slice`; Student/Parent projection work is not on the command path. This dependency change does not authorize a cover command.

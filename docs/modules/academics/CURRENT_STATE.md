@@ -1,6 +1,6 @@
 # Academic setup and teaching context — current state
 
-Last updated: 2026-10-13. Task state is local to this checkout; no imported task completion. Design revision 4. No active execution timer.
+Last updated: 2026-10-15. Task state is local to this checkout; no imported task completion. Design revision 4. No active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -13,12 +13,16 @@ Last updated: 2026-10-13. Task state is local to this checkout; no imported task
 | TT-03 | VERIFIED | PENDING | [Whole-branch preview evidence](../../evidence/admin-tt-03-2026-10-12/README.md); domain, real-PostgreSQL, sequential desktop/mobile and build gates passed |
 | TT-04 | VERIFIED | PENDING | [Immutable publication evidence](../../evidence/admin-tt-04-2026-10-12/README.md); real-PostgreSQL publication/replay/concurrency/rollback/immutability and sequential desktop/mobile review/receipt journeys passed |
 | TT-05 | VERIFIED | PENDING | Bounded partial reconciliation, trusted source links and explicit manual conflicts verified; human review pending |
-| TT-06 | PARTIAL | PENDING | Teacher/TEA-22 published-timetable projection is verified; Student and Parent projections remain unimplemented |
+| TT-06 | PARTIAL | PENDING | Teacher/TEA-22 and Student/STW-06 next-class projections are verified; the Parent projection and Student Learning-owned day work remain |
 | TEA-07 | PARTIAL | PENDING | Authorized assigned-class directory verified; approved assigned-session projection remains |
 | TEA-08 | VERIFIED | PENDING | Dated assignment-scoped minimal roster verified in PostgreSQL and desktop/mobile browser journeys |
 | TEA-06 | VERIFIED | PENDING | [Assignment-readiness evidence](../../evidence/teacher-assignment-readiness-2026-10-13/README.md); 11 real-PostgreSQL cases and sequential desktop/mobile browser journeys passed |
 
 ## Current checkpoint
+
+**STW-06 Student next-class checkpoint (15 October 2026):** the independently ready next-class slice is implementation VERIFIED and human review is PENDING. `/student` derives the branch-local date on the server, reuses the existing exact `timetable.read_self` weekly projection and deterministically selects the earliest remaining published occurrence. The read continues to recheck live identity, exact accepted Student access, account–Person binding, dated Enrollment/Placement, scope, release, entitlement and branch activation in the existing repeatable-read transaction. No schema, migration, write, lock or new capability was added. A failed timetable read and a valid day with no remaining lesson stay honest states. The full STW-06 remains PARTIAL because prioritized Learning work has no owner implementation.
+
+The populated next-class card was directly compared with the approved Student `#/home` reference at desktop and 390px mobile widths and corrected to its dark card, eyebrow, type hierarchy and action treatment. Room/change information is omitted because the current timetable schema has no room/change projection; Learning cards remain absent rather than fabricated. Deterministic unit tests passed 2/2; the current E2E build and sequential real-PostgreSQL Chromium/mobile journeys passed 1/1 each; typecheck, backend boundaries and documentation checks passed. Evidence: [STW-06 next class](../../evidence/student-next-class-stw-06-2026-10-15/README.md). Font portability, native accessibility, actual browser zoom, TEN-03 and human review remain pending.
 
 **TEA-06 assignment-readiness checkpoint (13 October 2026):** implementation is VERIFIED and human review is PENDING. `/teacher/readiness?date=` now implements the approved Readiness → Handoff → Confirm composition with a server-derived issue and non-sensitive support reference. The Academics query rechecks the current account/token, Teacher membership, `self.read`, Institution/Branch/module state, dated Employee/Teacher eligibility and assignments; Attendance contributes only a same-transaction non-cancelled-session existence port. Refresh reauthorizes and re-derives the result. No assignment, Attendance row, support ticket, receipt or durable draft is written; no schema or migration changed.
 
