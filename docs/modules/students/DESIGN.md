@@ -8,6 +8,8 @@ Phase 1 · Design revision 1 · 3 October 2026. Status: STU-01 and STU-02 are lo
 
 The fixed first-release Student bundle is `profile.read_self`, `attendance.read_self` and `timetable.read_self`. Each purpose is persisted and checked separately. Access requires a current account/token, an accepted non-revoked Student access row, the exact account-to-Student Person binding, an active Student and current dated Enrollment/Placement, current institution/branch/module availability, and the requested purpose. A route Student ID is only a reference. Revocation removes only the portal link; it preserves the Student, Person, enrollment, attendance, account and unrelated staff/guardian roles.
 
+One account may hold multiple independently accepted Student bindings, including bindings in different Institutions, only when each invitation was separately authorized and accepted under its own exact account/Person/Student scope. The workspace lists only those live bindings. Context changes use the selected server-issued Student reference, and a revoked candidate falls back to another still-authorized binding without retaining data from the revoked context.
+
 ### Physical schema and query joins
 
 | Physical schema | Fields | Responsibility | Constraints and indexes |
@@ -33,7 +35,7 @@ Failures are generic for public activation and recovery. Protected operations di
 
 Administrator management is composed on the existing Student detail route. Student activation is `/student/invite`; authenticated entry is `/student`, with `/student/profile`, `/student/timetable`, `/student/attendance` and `/student/account` added only as their owner projections verify. The shell follows the approved Student reference: operational navigation, school/class context, Student identity, current academic year and mobile bottom navigation. Missing owner modules are omitted rather than shown as dead controls.
 
-Real PostgreSQL must prove exact binding, no staff/guardian authority creation, wrong account, expired/revoked/reused token, concurrent accept/revoke, classmate/foreign scope denial, revocation of an open page, role separation, active Enrollment/Placement bounds and mixed-role recovery. Playwright covers Administrator authorization → Student activation/sign-in → own workspace → revocation at desktop/mobile. Human visual acceptance, native accessibility, font portability and TEN-03 remain separate gates.
+Real PostgreSQL must prove exact binding, no staff/guardian authority creation, wrong account, expired/revoked/reused token, concurrent accept/revoke, classmate/foreign scope denial, revocation of one context without removing an unrelated accepted binding, role separation, active Enrollment/Placement bounds and mixed-role recovery. Playwright covers Administrator authorization → Student activation/sign-in → multi-context switching without stale data → scoped revocation at desktop/mobile. The self Timetable resolves effective immutable publications per date and exposes configured teaching days and ordered LESSON/BREAK periods without a five-day assumption. Human visual acceptance, native accessibility, font portability and TEN-03 remain separate gates.
 
 ## Database naming and physical mapping
 
@@ -41,7 +43,7 @@ All physical objects follow [the VS database contract](../../DATABASE_DESIGN.md)
 
 ## Ownership, aggregates and values
 
-Student is a school-local aggregate referencing Person, owning admission number and ACTIVE/ARCHIVED status. Enrollment is one root per student/year; its SectionPlacement entities own nonoverlapping effective intervals. A student may have different yearly enrollments, but never two active placements for the same day within the year. Values: AdmissionNumber(1–40), RollNumber(0–30 string), DateRange, AcademicYearId. Events: StudentRegistered.v1, StudentEnrolled.v1, PlacementChanged.v1, StudentArchived.v1. Admission applications and guardian access are later modules.
+Student is a school-local aggregate referencing Person, owning admission number and ACTIVE/ARCHIVED status. Enrollment is one root per student/year; its SectionPlacement entities own nonoverlapping effective intervals. A student may have different yearly enrollments, but never two active placements for the same day within the year. Values: AdmissionNumber(1–40), RollNumber(0–30 string), DateRange, AcademicYearId. Events: StudentRegistered.v1, StudentEnrolled.v1, PlacementChanged.v1, StudentArchived.v1. Admission applications remain a separate owner; guardian authorization is owned by the implemented Guardians module and is never written by Students.
 
 ## Module decisions
 

@@ -37,7 +37,7 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-15 Reply to a permitted conversation | `#/flow/PAR-15` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Child-scoped participant grants, recipient resolution and delivery lifecycle | PENDING |
 | PAR-16 Request a teacher meeting | `#/flow/PAR-16` | Communication/calendar | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Proposed capability, availability source, confirmation and cancellation policy | PENDING |
 | PAR-17 Resolve an undelivered message | `#/flow/PAR-17` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Stable message/delivery attempt model and revoked-recipient handling | PENDING |
-| PAR-18 Plan with school calendar | `#/flow/PAR-18` and `#/timetable` | Academics/Events + TT-06 Parent | PARTIAL | DIRECT_TIMETABLE_COMPARISON | Published child Timetable is complete; Calendar/Events owner remains design-readiness work | PENDING |
+| PAR-18 Plan with school calendar | `#/flow/PAR-18` and `#/timetable` | Academics/Events + TT-06 Parent | PARTIAL | DIRECT_TIMETABLE_COMPARISON | Effective published child Timetable, including configured teaching days and lesson/break periods, is complete; Calendar/Events owner remains design-readiness work | PENDING |
 | PAR-19 Respond to a school event | `#/flow/PAR-19` | Events | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Proposed response authority, versioning, withdrawal and consent separation | PENDING |
 | PAR-20 Review published homework | `#/flow/PAR-20` | Learning | DESIGN_READINESS_REQUIRED | NOT_STARTED | Learning owner, published task projection and `learning.read_child` grant | PENDING |
 | PAR-21 Read returned feedback | `#/flow/PAR-21` | Learning | DESIGN_READINESS_REQUIRED | NOT_STARTED | Returned-version owner and private-draft exclusion | PENDING |
@@ -69,7 +69,7 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-47 Read school care note | `#/flow/PAR-47` | Health | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Restricted audience, safeguarding exclusions and emergency access | PENDING |
 | PAR-48 Request support discussion | `#/flow/PAR-48` | Student support | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Support authority, routing, restricted notes and retention | PENDING |
 | PAR-49 Update verified contact | `#/flow/PAR-49` | Access/People | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Step-up verification, compromise recovery and separation from relationship evidence | PENDING |
-| PAR-50 Review sessions/sign out | `#/flow/PAR-50` | Access | PARTIAL | BROWSER_VERIFIED | Account/help/current-session sign-out is complete; cross-session inventory/revocation is outside the authorized slice | PENDING |
+| PAR-50 Review sessions/sign out | `#/flow/PAR-50` | Access | PARTIAL | BROWSER_VERIFIED_SUPPORTED_SLICE | Current-session sign-out is complete; other-session inventory/revocation lacks an approved owner contract and implementation | PENDING |
 | PAR-51 Request privacy support | `#/flow/PAR-51` | Privacy/Requests | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Jurisdiction, authority, routing, retention and child/co-guardian rights | PENDING |
 | PAR-52 Ask school assistant | `#/flow/PAR-52` | Assistant | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Provider, allowed sources/data classes, grounding, evaluation and human action policy | PENDING |
 

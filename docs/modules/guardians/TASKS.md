@@ -4,7 +4,7 @@
 
 Implement the designated `family.access.manage` grant, explicit child authorization, fixed three-purpose bundle, dedicated invitation/acceptance, resend, revocation, account-wide recovery affiliation and minimal permitted-child query described in DESIGN.
 
-Acceptance requires real PostgreSQL negative/concurrency/replay evidence, no staff membership for guardians, and browser coverage of Administrator link → invitation → guardian entry plus failure/revocation states. Human review remains separate.
+Acceptance requires real PostgreSQL negative/concurrency/replay evidence, no staff membership for guardians, and browser coverage of Student registration receipt → guarded Parent setup → invitation plus failure/revocation states. A delivery failure must preserve the registered Student and one Guardian authorization on exact retry. Human review remains separate.
 
 Status: **ENGINEERING_VERIFIED**. Human review: **PENDING**.
 
@@ -22,6 +22,6 @@ Status: **ENGINEERING_VERIFIED**. Human review: **PENDING**.
 
 ## FAM-04 — Parent published Timetable read
 
-Complete the Parent slice of TT-06 through the Academics owner projection, active Enrollment/Placement and `timetable.read_child`; expose no drafts or Teacher actions.
+Complete the Parent slice of TT-06 through the Academics owner projection, active Enrollment/Placement and `timetable.read_child`; expose the effective published teaching days and ordered lesson/break periods without assuming five weekdays, and expose no drafts or Teacher actions.
 
 Status: **ENGINEERING_VERIFIED**. Human review: **PENDING**.
