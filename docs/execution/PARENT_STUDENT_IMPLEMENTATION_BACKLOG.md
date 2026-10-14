@@ -1,5 +1,7 @@
 # Combined Parent/Student implementation backlog
 
+The latest delivery checkpoint and the two currently actionable decision groups are summarized in [consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md) and [consolidated decisions](./PARENT_STUDENT_DECISION_LIST.md). This pointer does not change the detailed inventory or authorize blocked capabilities.
+
 Last reconciled: 15 October 2026. This is a planning export from the authoritative [Parent/Guardian workflow matrix](./PARENT_GUARDIAN_WORKFLOW_MATRIX.md) and [Student workflow matrix](./STUDENT_WORKFLOW_MATRIX.md). Those matrices remain the status authorities. This document groups their incomplete workflows by shared owner capability; it does not authorize a capability, grant, lifecycle, migration or implementation.
 
 Approved UX sources:

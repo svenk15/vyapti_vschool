@@ -2,6 +2,8 @@
 
 Last updated: 2026-10-15. This is an independent project checkpoint; no completion was imported.
 
+The combined Parent/Student handover, current build/migration provenance and manual walkthrough are recorded in [15 October consolidated evidence](../../evidence/parent-student-consolidated-2026-10-15/README.md). Consolidation changed no Student contract or implementation status.
+
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | STU-01 | VERIFIED | PENDING | Real PostgreSQL, desktop/mobile Playwright, repository checks and build passed; local demo available |

@@ -4,6 +4,8 @@ Last updated: 15 October 2026.
 
 COM-01 is **ENGINEERING_VERIFIED**. The portable domain/application boundary, Prisma adapter, composition/server gateway, forward migrations, Administrator staged publication, Parent Messages/read/acknowledgement and focused unit/PostgreSQL/browser checks are implemented. Human review is **PENDING**.
 
+The combined Parent/Student handover and decision ordering are recorded in [15 October consolidated evidence](../../evidence/parent-student-consolidated-2026-10-15/README.md). No Communication implementation changed during consolidation.
+
 ## Evidence so far
 
 - Unit: `test/unit/communication-notices.test.ts` 2/2 passed.

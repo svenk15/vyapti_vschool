@@ -1,8 +1,10 @@
 # Guardians — current state
 
-Last updated: 14 October 2026.
+Last updated: 15 October 2026.
 
 FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e2469`. FAM-05 is **ENGINEERING_VERIFIED** at `7d52491`. FAM-06 is engineering-verified with COM-01. Human review is **PENDING**.
+
+The combined Parent/Student handover, current build/migration provenance and manual walkthrough are recorded in [15 October consolidated evidence](../../evidence/parent-student-consolidated-2026-10-15/README.md). No Guardian contract or status changed during consolidation.
 
 ## Implemented
 

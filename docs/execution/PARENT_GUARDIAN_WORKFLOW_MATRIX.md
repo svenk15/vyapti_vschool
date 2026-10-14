@@ -181,3 +181,5 @@ No capability grant, migration, seed, route or UI for PAR-11/PAR-12/SA-29 is imp
 | **Total** | **52** |
 
 Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. PAR-14 is engineering-complete through COM-01 and its direct Administrator/Parent browser comparison; this does not complete SA-35's broader drafts, scheduling or provider-delivery programme. The only remaining partial is PAR-18 Calendar/Events; all other incomplete workflows are explicitly classified above. No independently implementable class A or E workflow remains after COM-01.
+
+Final combined Parent/Student delivery provenance is recorded in [15 October consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md). The counts and row statuses above are unchanged; the [consolidated decision list](./PARENT_STUDENT_DECISION_LIST.md) collects the two current authority/lifecycle gates without creating a grant or inferring human acceptance.

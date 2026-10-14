@@ -57,3 +57,5 @@ Last reconciled: 15 October 2026. Canonical inventory: Student Workspace Edition
 ## Current-release extension
 
 The authorized minimal `/student/profile` route is a Student self projection of existing Student, Person, Enrollment and Placement data. It adds no edit/correction authority and is tracked under STW-A01 because the Edition 01 catalog has no separate read-profile workflow.
+
+Final combined Parent/Student delivery provenance is recorded in [15 October consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md). The 47-row catalog remains 7 engineering complete, 3 partial, 2 blocked on product decisions and 35 blocked on absent owner capability/contracts; STW-A01 remains outside that catalog count. The [consolidated decision list](./PARENT_STUDENT_DECISION_LIST.md) keeps Student notice authority separate from the implemented Parent notice grant. Human review remains pending.
