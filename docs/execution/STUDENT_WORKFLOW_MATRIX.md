@@ -1,5 +1,7 @@
 # Student workspace workflow matrix
 
+Cross-workspace capability planning is consolidated in [Combined Parent/Student implementation backlog](./PARENT_STUDENT_IMPLEMENTATION_BACKLOG.md). This matrix remains authoritative for Student workflow status.
+
 Last reconciled: 14 October 2026. Canonical inventory: Student Workspace Edition 01, 47 workflows, source SHA-256 `74dc76af2e3b2000dfeb4b1258d49c6081aa255d6294f9ac6fe10ae59253cc9b`. Functional/security, visual comparison and human acceptance are independent.
 
 | Workflow | Area | Functional/security | Visual comparison | Dependency / next action | Human review | Overall |
