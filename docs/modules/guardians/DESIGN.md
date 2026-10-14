@@ -1,6 +1,6 @@
 # Guardians — detailed design
 
-Last reconciled: 13 October 2026. This live LLD implements the owner-approved simplified Parent/Guardian foundation and supersedes the five-state relationship proposal recorded at `20cdd8b`.
+Last reconciled: 14 October 2026. This live LLD implements the owner-approved simplified Parent/Guardian foundation and supersedes the five-state relationship proposal recorded at `20cdd8b`.
 
 ## Scope and invariants
 
@@ -40,6 +40,12 @@ The physical migration also adds the required scoped composite keys to Guardian 
 
 Browser-safe DTOs live in `shared/contracts/guardians.ts`; application ports/facade live in `backend/modules/guardians/application`; Prisma and email status persistence live in infrastructure; framework-free construction lives in `backend/composition`; Next authentication/origin/body/error adapters live in `lib/server`; pages/components contain presentation only.
 
+## FAM-05 — Parent account and current session composition
+
+PAR-50 composes existing Access-owned reads and hosting-session metadata inside the Parent shell. `/family/account` first performs the normal accepted child-link and purpose-neutral family workspace check, then reads only the signed-in account's safe email/status/creation time and the current JWT issue/expiry timestamps. It accepts no account, institution, branch or child authority from browser input and exposes no token, password, token version, lockout/security event or other-session inventory.
+
+The browser stages **My account → End access → Confirm**. Account details and current-session information are selectable; the approved optional “Other sessions if supported” choice is omitted because no session inventory owner exists. Back retains the in-flow selections. The final action alone either signs out this browser session or opens the existing generic account-wide recovery flow. Sign-out clears the authenticated cookie; browser Back re-enters the live server guard and cannot reveal protected child data. No durable draft, database write, transaction, idempotency key, table or migration is introduced.
+
 ## Transactions, locks and replay
 
 Commands use READ COMMITTED with `SELECT ... FOR UPDATE` in account → organization → school order, followed by the exact access/invitation row. Student is read with the scoped key after the school lock. Platform command receipt lookup is scoped by organization/school/actor/command/key; same key and canonical input replays, while changed input conflicts. Business rows and audit/outbox/receipt commit together. Email occurs after commit, and its result updates only a pending delivery record. Delivery failure does not roll back Student or guardian authorization.
@@ -54,4 +60,4 @@ Failures are `UNAUTHENTICATED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION`, `CONFLIC
 
 ## Verification contract
 
-Real PostgreSQL proves designated manager authorization, self-authorization denial, email-only denial, new/existing account acceptance, wrong account/expired/revoked/reused token handling, acceptance-versus-revocation serialization, exact replay, delivery failure persistence, per-child revocation, purpose/scope/date bounds and mixed recovery policy. Playwright proves Administrator link/resend/remove, guardian activation/sign-in/child selection, home, Attendance, Timetable and sign-out at desktop/mobile with keyboard focus. Human visual review, font portability, native accessibility, TEN-03 and production email remain separate gates.
+Real PostgreSQL proves designated manager authorization, self-authorization denial, email-only denial, new/existing account acceptance, wrong account/expired/revoked/reused token handling, acceptance-versus-revocation serialization, exact replay, delivery failure persistence, per-child revocation, purpose/scope/date bounds and mixed recovery policy. Playwright proves Administrator link/resend/remove, guardian activation/sign-in/child selection, home, Attendance, Timetable and the staged PAR-50 account/sign-out journey at desktop/mobile with keyboard focus and protected browser Back behavior. Direct PAR-50 comparison uses the approved entry and confirmation states at 1440×1000 and 390×844. Human visual review, font portability, native accessibility, TEN-03 and production email remain separate gates.

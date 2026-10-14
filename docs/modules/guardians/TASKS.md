@@ -25,3 +25,9 @@ Status: **ENGINEERING_VERIFIED**. Human review: **PENDING**.
 Complete the Parent slice of TT-06 through the Academics owner projection, active Enrollment/Placement and `timetable.read_child`; expose the effective published teaching days and ordered lesson/break periods without assuming five weekdays, and expose no drafts or Teacher actions.
 
 Status: **ENGINEERING_VERIFIED**. Human review: **PENDING**.
+
+## FAM-05 — Parent account and current-session composition
+
+Compose the existing Access safe-self projection, current hosting-session timestamps, generic account recovery and current-session sign-out through the approved PAR-50 staged Parent flow. Retain in-flow choices across Back/Continue, execute only on final confirmation, expose no token or other-session inventory, and prove that browser Back cannot reveal protected child data after sign-out. No schema or migration is required.
+
+Status: **ENGINEERING_VERIFIED** at `7d52491`. Human review: **PENDING**.
