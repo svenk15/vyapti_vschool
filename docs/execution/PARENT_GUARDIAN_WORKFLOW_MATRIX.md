@@ -141,21 +141,34 @@ The main matrix supplies each workflow's outcome, approved state, route, owner a
 | Care, support and restricted records | PAR-46–48 | Restricted reviewer and safeguarding boundary | Separately approved sensitive-data grants | Data classes, emergency access, routing and retention | Very high | Minimal protected request → authorized review with no sensitive general-audit payload |
 | Account, privacy and assistant | PAR-49, PAR-51–52 | Access contact verification; privacy owner; governed assistant | Own-account authority; no child-purpose inference | Step-up, jurisdiction/shared records, AI provider/data/action policy | High–very high | Verified contact change is the smallest; privacy and assistant remain separate gates |
 
-## Attendance explanation decision proposal
+## Attendance explanation decision boundary
 
-The approved PAR-11/12 screens define fields and the invariant “no automatic Excused status,” but they do not authorize a new write grant or settle the school-review lifecycle. SA-29 is also blocked on that authority and a live reviewer capability. Implementation therefore remains blocked on these narrow decisions:
+Sources: `workflow-tasks/WF-PAR-11.md`, `WF-PAR-12.md`, `WF-SA-29.md` and the matching approved Parent/Admin Attendance designs. These are approved UX/product statements, not live capability grants or persistence approval.
 
-1. **Submitter and child:** recommend an active accepted GuardianChildAccess with a separately stored `attendance.explanation.submit` purpose for the exact child. The current fixed three-purpose bundle must not imply it.
-2. **Eligibility:** decide whether a request targets only an existing submitted `ABSENT` record, or may cover future/planned absence dates. Recommend first release: one or more school-local dates containing at least one submitted ABSENT record, bounded by `access_from`; no attachments.
-3. **Reviewer:** recommend a current branch administrator with explicit `attendance.explanation.review`, never inferred from `attendance.read_school` or `attendance.correct`.
-4. **States:** recommend `PENDING`, `ACCEPTED`, `NOT_ACCEPTED`, and `WITHDRAWN`; terminal dispositions are immutable and retain reviewer/time/version.
-5. **Editing and withdrawal:** recommend no in-place edit. The originator may withdraw only `PENDING` using expected version, then submit a new request if still eligible.
-6. **Duplicates and co-guardians:** recommend idempotent same-actor intent plus at most one active request per child/date range/category. Another guardian may submit only if separately granted; visibility remains originator-only unless an explicit shared-request rule is approved.
-7. **Reason visibility and retention:** decide retention period. Recommend reason visible only to the originator and authorized reviewer, excluded from general audit/outbox text; audit stores identifiers, state transition and actor only.
-8. **Parent outcome:** show durable reference, current state and a short school response; never expose internal notes.
-9. **Attendance relationship:** recommend acceptance records the school's review but does **not** change the mark. Any correction remains a separate existing `attendance.correct` command with its own reason, version, immutable revision and authority.
+### Settled source behavior
 
-No capability grant, migration or UI for PAR-11/12/13 is implemented until these authority/lifecycle decisions are accepted.
+- PAR-11 collects a school-local From/Until range, one of the four named reason categories, a required bounded note and explicit confirmation. Same-day ranges are valid.
+- A successful submit returns a stable reference in **Pending review**; the Attendance record remains unchanged. Same-intent retry is idempotent and a lost response resolves through the same reference.
+- PAR-12 permits the owning Parent to read a response or withdraw only an eligible Pending version. A concurrent school review wins, the latest state is shown, and reviewed evidence is never deleted.
+- SA-29 offers **Accept explanation**, **Ask for more information**, or **Reject with explanation**, with a required school response. It rechecks the Guardian relationship and keeps Attendance correction as a separately authorized owner command.
+- Attachments and sensitive evidence are outside this slice and require a separately approved protected-upload contract.
+
+### Decisions still required
+
+| Question | Recommended first release | Alternatives and impact | Affected workflows |
+|---|---|---|---|
+| Who may submit? | An active accepted exact-child link with a separately granted `attendance.explanation.submit`; never infer it from the existing three read purposes. | Automatic grants broaden write authority; school-managed grants add setup but preserve least privilege. | PAR-11–13, SA-29 |
+| Which dates/records are eligible? | One or more school-local dates containing an existing submitted `ABSENT` mark, on/after `access_from`; define a school-local late-submission window. | Future planned absence needs a different request meaning; any historical range creates cases unrelated to authoritative Attendance. | PAR-11, SA-29 |
+| Who reviews? | A current branch Administrator with explicit `attendance.explanation.review`, distinct from `attendance.read_school` and `attendance.correct`. | Teacher review needs dated assignment scope and changes who may see the protected reason. | SA-29, PAR-12 |
+| Exact states/transitions? | `PENDING` → `ACCEPTED`, `MORE_INFORMATION_REQUESTED`, `REJECTED`; `PENDING` → `WITHDRAWN`. Terminal review decisions are immutable. | Amendments in the same record need versioned note revisions; one generic Reviewed state loses approved meaning. | PAR-11–12, SA-29 |
+| May a Parent edit? | No in-place edit. Withdraw Pending with expected version, then submit a new intent if still eligible. | Editable notes require immutable revisions, reviewer unread-state rules and additional sensitive history. | PAR-12 |
+| Duplicate/co-guardian behavior? | Same actor/key/payload replays; changed payload conflicts. At most one active request per child/date range/category. Another Guardian sees nothing unless shared-case visibility is approved. | Shared visibility reduces duplicate cases but broadens protected-note disclosure; separate requests need an Administrator duplicate disposition. | PAR-11–12, SA-29 |
+| Who sees the note/response? | Originating account and explicit branch reviewer only; recheck current child authority on each Parent read. Exclude free text from general audit/outbox payloads. | All Guardians or Teachers require new purpose/assignment rules and safeguarding review. | PAR-11–12, SA-29 |
+| Retention/deletion? | Product/legal decision required. Recommended structure: school-approved metadata/disposition retention; separately expire protected free text; legal hold overrides expiry. | A universal duration is unsupported. Immediate text deletion weakens evidence; indefinite retention increases privacy risk. | PAR-11–12, SA-29 |
+| Retry/concurrency? | Scope intent receipt to organization/school/child/actor/command/key; serialize review/withdraw by positive version; reauthorize before replay disclosure. | Async processing adds an UNKNOWN/job lifecycle not required by this bounded slice. | PAR-11–12, SA-29 |
+| Does acceptance alter Attendance? | No. It records only the disposition. A mark change uses the existing `attendance.correct` permission, version and immutable revision. | Automatic mutation contradicts every cited approved source. | PAR-11–12, SA-29 |
+
+No capability grant, migration, seed, route or UI for PAR-11/PAR-12/SA-29 is implemented until the submitter, eligibility, reviewer, state, visibility and retention decisions are accepted. PAR-13 remains a separate discrepancy-query contract.
 
 ## Counts and next action
 

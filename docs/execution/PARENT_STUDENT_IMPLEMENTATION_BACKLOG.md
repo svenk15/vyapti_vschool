@@ -196,6 +196,6 @@ The Student inventory contains no fee/payment workflows. This capability unlocks
 
 ## Next eligible action
 
-No incomplete Parent or Student workflow is currently ready for implementation under an already complete owner contract. The next smallest useful capability is PAR-11/PAR-12 plus the Administrator review counterpart, after explicit approval of the decision sheet above, including the reason-retention period. Once approved, the next action is a narrow Requests/Attendance LLD covering schema, grants, transactions, idempotency, concurrency, audit exclusions and the Administrator review route before any migration or UI code.
+No incomplete Parent or Student workflow is currently ready for implementation under an already complete owner contract. COM-01/PAR-14 is now engineering-complete. The next smallest useful capability is PAR-11/PAR-12 plus the Administrator review counterpart, after explicit approval of the decision boundary in `PARENT_GUARDIAN_WORKFLOW_MATRIX.md`, including submitter, eligibility, reviewer, states, visibility and retention. Once approved, the next action is a narrow Requests/Attendance LLD covering schema, grants, transactions, idempotency, concurrency, audit exclusions and the Administrator review route before any migration or UI code.
 
 Until then, the current Parent and Student checkpoints remain preserved. No new authority, lifecycle, migration, visual claim or test result is created by this planning export.
