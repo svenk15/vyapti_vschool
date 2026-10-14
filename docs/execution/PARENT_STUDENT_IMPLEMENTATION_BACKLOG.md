@@ -12,7 +12,8 @@ Approved UX sources:
 
 1. **COM-01 / PAR-14:** engineering-verified. Administrator publishes one immutable class notice; a Parent with the separately accepted notice purpose reads and acknowledges the exact version. Evidence is in `docs/evidence/communication-par-14-2026-10-15/`.
 2. **Attendance explanations PAR-11/PAR-12:** decision-ready contract only; no implementation until the unresolved authority, visibility and retention decisions are explicitly approved.
-3. **Next owner design:** assess the smallest remaining Parent-serving owner whose product semantics are already approved; do not infer the unresolved preference, request, event-response or provider rules.
+3. **COM-02 / STW-27–28:** same-owner Student projection is decision-ready but blocked on the independent Student purpose, frozen-audience and withdrawal-authority rules in `COMMUNICATION_STUDENT_PROJECTION_DECISION.md`; no Parent grant is substitutable.
+4. **Next Parent owner design:** Calendar/Events cannot start until its separate audience purpose, publisher, update/cancellation and retention rules are approved. Do not infer the unresolved preference, request, response or provider rules.
 
 Functional/security status, reference comparison and human acceptance remain separate. Human acceptance is pending for every workflow in this export.
 
@@ -196,6 +197,6 @@ The Student inventory contains no fee/payment workflows. This capability unlocks
 
 ## Next eligible action
 
-No incomplete Parent or Student workflow is currently ready for implementation under an already complete owner contract. COM-01/PAR-14 is now engineering-complete. The next smallest useful capability is PAR-11/PAR-12 plus the Administrator review counterpart, after explicit approval of the decision boundary in `PARENT_GUARDIAN_WORKFLOW_MATRIX.md`, including submitter, eligibility, reviewer, states, visibility and retention. Once approved, the next action is a narrow Requests/Attendance LLD covering schema, grants, transactions, idempotency, concurrency, audit exclusions and the Administrator review route before any migration or UI code.
+No incomplete Parent or Student workflow is currently ready for implementation under an already complete authority contract. COM-01/PAR-14 is engineering-complete. The nearest same-owner work is COM-02/STW-27–28 after approval of the Student notice-purpose, frozen-audience and withdrawal rules. The next Parent-facing alternatives remain PAR-11/PAR-12 after their recorded Attendance explanation decisions, or Calendar/Events after its audience/publisher/update contract. Technical task splits are ready; the unresolved authority rules are the actual gates.
 
 Until then, the current Parent and Student checkpoints remain preserved. No new authority, lifecycle, migration, visual claim or test result is created by this planning export.
