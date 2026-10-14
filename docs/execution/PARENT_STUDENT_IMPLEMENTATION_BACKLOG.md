@@ -78,10 +78,11 @@ The approved PAR-11/12 reference supplies presentation fields and the rule that 
 | Can a Parent edit or withdraw? | No accepted edit contract | No in-place edit; originator may withdraw only `PENDING` with expected version, then submit a new request if eligible | Editable Pending request; no withdrawal | PAR-12 |
 | How are retries and duplicates handled? | Existing commands use actor-scoped idempotent intent and optimistic versions | Same actor/key/payload replays; changed payload conflicts; at most one active request per child/date/category | Multiple active requests; school-wide key | PAR-11, PAR-12 |
 | What can co-guardians see? | Child access and purposes are independently granted | Submission requires a separate grant and request visibility is originator-only initially | All authorized guardians share requests; one guardian acts for all | PAR-11, PAR-12 |
-| How is sensitive text handled? | Student PII/reasons must not enter general logs, receipts or analytics | Reason visible only to originator and authorized reviewer; audit stores identifiers/state/actors; retention period still requires approval | Shared family visibility; include reason in general audit (rejected) | PAR-11–13 |
+| How is sensitive text handled? | Student PII/reasons must not enter general logs, receipts or analytics | Reason visible only to originator and authorized reviewer; audit stores identifiers/state/actors | Shared family visibility; include reason in general audit (rejected) | PAR-11–13 |
+| How long is the reason retained? | No approved reason-retention period exists | Keep the protected reason through the end of the second academic year after terminal disposition, then purge it while retaining minimal audit transition metadata | One academic year; a longer fixed legal-policy period; indefinite retention (not recommended) | PAR-11–13 |
 | Does acceptance change the Attendance mark? | Approved reference says no automatic `EXCUSED`; Attendance correction has separate authority/version/history | Acceptance records review only; any mark change uses existing `attendance.correct` | Automatic correction; bundled correction during review | PAR-11–13; Administrator SA-27/SA-29 |
 
-Unresolved decision within the recommendation: the protected explanation reason's retention period. No grant, migration or UI should be implemented until this sheet is accepted.
+No grant, migration or UI should be implemented until this decision sheet, including the retention recommendation, is accepted.
 
 ## 3. Calendar, announcements and communication
 
