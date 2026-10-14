@@ -16,7 +16,7 @@ export function normalizeProvision(input: ProvisionInput): ProvisionInput {
   try { new Intl.DateTimeFormat("en",{timeZone:result.timezone}); } catch { throw new AccessError("VALIDATION"); }
   return result;
 }
-const admin=["school.manage","user.manage","module.configure","branding.manage","class.manage","class.read","student.manage","student.read","attendance.read_class","attendance.read_school","attendance.correct","attendance.export","admissions.manage","timetable.manage","self.read"];
+const admin=["school.manage","user.manage","module.configure","branding.manage","class.manage","class.read","student.manage","student.read","attendance.read_class","attendance.read_school","attendance.correct","attendance.export","admissions.manage","timetable.manage","communication.publish","self.read"];
 const teacher=["class.read","student.read","attendance.mark","attendance.read_class","timetable.read","self.read"];
 export function capabilitiesFor(roles: readonly RoleCode[]): readonly string[] { return [...new Set(roles.flatMap(r=>r==="SCHOOL_ADMIN"?admin:r==="TEACHER"?teacher:[]))]; }
 export function currentIdentity(account:{status:string;tokenVersion:number}|null,tokenVersion:number):boolean { return !!account&&account.status==="ACTIVE"&&account.tokenVersion===tokenVersion; }

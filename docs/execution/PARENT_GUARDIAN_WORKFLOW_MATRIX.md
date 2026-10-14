@@ -2,7 +2,7 @@
 
 Cross-workspace capability planning is consolidated in [Combined Parent/Student implementation backlog](./PARENT_STUDENT_IMPLEMENTATION_BACKLOG.md). This matrix remains authoritative for Parent workflow status.
 
-Last updated: 14 October 2026. Baseline reconciliation started at 21:34 IST on 13 October. The owner decision received at 22:32 IST supersedes the former five-state proposal and authorizes the simplified foundation in `docs/modules/guardians/DESIGN.md`. The dependency reconciliation below replaces the earlier undifferentiated “later phase” treatment without authorizing a missing owner or write grant.
+Last updated: 15 October 2026. Baseline reconciliation started at 21:34 IST on 13 October. The owner decision received at 22:32 IST supersedes the former five-state proposal and authorizes the simplified foundation in `docs/modules/guardians/DESIGN.md`. The dependency reconciliation below replaces the earlier undifferentiated “later phase” treatment without authorizing a missing owner or write grant.
 
 Authoritative UX source: `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Parent_Guardian_Design/VSchool_Parent_Guardian_Review.html` (SHA-256 `3f5fdc44d4d48dbb794dfa9cef61b1f09adbafadb737d73cbc99cdb71cc21f9e`, matching `implementation-spec/SOURCE_MANIFEST.json`). The catalog is a 52-workflow **UX design proposal**. Its database worksheet explicitly says that its table names and physical design are proposals requiring reconciliation with the live schema.
 
@@ -18,7 +18,7 @@ Status meanings are mutually exclusive:
 - `BLOCKED_FOUNDATION`: the journey has usable product semantics but cannot be implemented until the shared guardian relationship/purpose authority exists.
 - `DESIGN_READINESS_REQUIRED`: an owning module or detailed lifecycle contract is absent in addition to the shared authority gate.
 
-Readiness classes for incomplete work are: **A** UI/wiring under an approved contract; **B** technical design under settled product rules; **C** missing product or authority decision; **D** missing owner-module capability; **E** verification or fixture gap. PAR-50 was the sole ready core UI gap and is now complete at `7d52491`; no remaining incomplete row is class A or E.
+Readiness classes for incomplete work are: **A** UI/wiring under an approved contract; **B** technical design under settled product rules; **C** missing product or authority decision; **D** missing owner-module capability; **E** verification or fixture gap. PAR-14 is now complete through COM-01; no remaining incomplete row is class A or E.
 
 Functional/security status, reference comparison, and human acceptance remain separate.
 
@@ -37,7 +37,7 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-11 Submit an absence explanation | `#/flow/PAR-11` | Family requests + Attendance | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Request category/date/note policy, transaction, replay and school routing | PENDING |
 | PAR-12 Track or withdraw an explanation | `#/flow/PAR-12` | Family requests | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Originator visibility, eligible states, optimistic version and retained history | PENDING |
 | PAR-13 Query an attendance discrepancy | `#/flow/PAR-13` | Family requests + Attendance | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Query owner/routing and disposition contract without correction authority | PENDING |
-| PAR-14 Read and acknowledge a notice | `#/flow/PAR-14` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Versioned notice audience and explicit acknowledgement owner | PENDING |
+| PAR-14 Read and acknowledge a notice | `#/flow/PAR-14` | Communication | ENGINEERING_COMPLETE | DIRECT_COMPARISON | Immutable version, frozen server-resolved audience, separate read evidence and exact-version acknowledgement complete through COM-01; broader Communication features remain separate | PENDING |
 | PAR-15 Reply to a permitted conversation | `#/flow/PAR-15` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Child-scoped participant grants, recipient resolution and delivery lifecycle | PENDING |
 | PAR-16 Request a teacher meeting | `#/flow/PAR-16` | Communication/calendar | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Proposed capability, availability source, confirmation and cancellation policy | PENDING |
 | PAR-17 Resolve an undelivered message | `#/flow/PAR-17` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Stable message/delivery attempt model and revoked-recipient handling | PENDING |
@@ -88,7 +88,6 @@ The main matrix supplies each workflow's outcome, approved state, route, owner a
 | PAR-11 | C | Scoped Parent Attendance read and owner session facts | Approve `attendance.explanation.submit`, eligible dates/records and school reviewer lifecycle | Submit exact child/date explanation idempotently; Pending reference persists; Attendance mark unchanged |
 | PAR-12 | C | PAR-11 proposal, version/replay patterns | Approve states, originator visibility, withdrawal and retained decision evidence | Read own status; withdraw only eligible Pending version; concurrent review wins safely |
 | PAR-13 | C | Exact submitted Attendance session/revision read | Approve family-request authority, school routing and disposition linkage | Query one authorized session; receive durable reference; no correction grant or mark change |
-| PAR-14 | D | Scoped Parent shell and access-date bound | Communication notice/audience/version/acknowledgement owner | Read an authorized notice and acknowledge exact version; revoked/cross-child access denied |
 | PAR-15 | D | Scoped Parent link | Communication conversation participants, recipient resolution and delivery lifecycle | Reply only in a permitted conversation; replay safe; revoked recipient cannot receive/read |
 | PAR-16 | C | Teacher identity and timetable reads | Approve meeting requester/recipient authority, availability source and cancellation | Request one permitted slot; school/Teacher sees it; conflict/cancel outcomes persist |
 | PAR-17 | D | Existing development delivery-state patterns | Communication message/delivery-attempt owner and retry policy | Show failed delivery without duplicate message; authorized retry/status survives reload |
@@ -162,10 +161,10 @@ No capability grant, migration or UI for PAR-11/12/13 is implemented until these
 
 | Functional/security status | Count |
 |---|---:|
-| `ENGINEERING_COMPLETE` | 9 |
+| `ENGINEERING_COMPLETE` | 10 |
 | `PARTIAL` | 1 |
 | `BLOCKED_PRODUCT_DECISION` | 24 |
-| `DESIGN_READINESS_REQUIRED` | 18 |
+| `DESIGN_READINESS_REQUIRED` | 17 |
 | **Total** | **52** |
 
-Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. PAR-50 is complete because its source contract makes other-session management optional. The only remaining partial is PAR-18 Calendar/Events; all other incomplete workflows are explicitly classified above. No independently implementable class A or E workflow remains after `7d52491`.
+Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. PAR-14 is engineering-complete through COM-01 and its direct Administrator/Parent browser comparison; this does not complete SA-35's broader drafts, scheduling or provider-delivery programme. The only remaining partial is PAR-18 Calendar/Events; all other incomplete workflows are explicitly classified above. No independently implementable class A or E workflow remains after COM-01.

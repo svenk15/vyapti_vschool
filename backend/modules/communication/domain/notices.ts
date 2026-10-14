@@ -1,0 +1,5 @@
+import {AccessError,uuidPattern} from '../../access/contracts/index';
+const clean=(value:unknown,max:number)=>{if(typeof value!=='string')throw new AccessError('VALIDATION');const result=value.normalize('NFC').trim();if(!result||result.length>max||/[\u0000-\u001f]/.test(result))throw new AccessError('VALIDATION');return result;};
+const id=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value;};
+export function publishNoticeInput(value:unknown){if(!value||typeof value!=='object'||Array.isArray(value))throw new AccessError('VALIDATION');const input=value as Record<string,unknown>,allowed=new Set(['sectionId','title','body','requiresAcknowledgement','key']);if(Object.keys(input).some(key=>!allowed.has(key))||typeof input.requiresAcknowledgement!=='boolean')throw new AccessError('VALIDATION');return {sectionId:id(input.sectionId),title:clean(input.title,120),body:clean(input.body,5000),requiresAcknowledgement:input.requiresAcknowledgement,key:id(input.key)};}
+export const communicationId=id;

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type {Ref} from 'react';
-export type PortalIconName='home'|'school'|'settings'|'modules'|'branding'|'staff'|'people'|'students'|'import'|'academics'|'classes'|'attendance'|'calendar'|'report'|'activity'|'account'|'menu'|'down';
+export type PortalIconName='home'|'school'|'settings'|'modules'|'branding'|'staff'|'people'|'students'|'import'|'academics'|'classes'|'attendance'|'calendar'|'mail'|'report'|'activity'|'account'|'menu'|'down';
 export type PortalNavigationItem=Readonly<{href:string;label:string;icon?:PortalIconName}>;
 export type PortalNavigationGroupData=Readonly<{label:string;items:readonly PortalNavigationItem[]}>;
 export function PortalIcon({name='home'}:{name?:PortalIconName}){
@@ -16,6 +16,7 @@ export function PortalIcon({name='home'}:{name?:PortalIconName}){
  if(name==='academics')return <svg {...common}><path d="M12 5c-3-2-6-2-10-1v15c4-1 7-1 10 1 3-2 6-2 10-1V4c-4-1-7-1-10 1v15"/></svg>;
  if(name==='classes')return <svg {...common}><path d="M4 5h16v14H4zM4 9h16M9 9v10"/></svg>;
  if(name==='calendar')return <svg {...common}><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z"/></svg>;
+ if(name==='mail')return <svg {...common}><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg>;
  if(name==='attendance')return <svg {...common}><path d="m5 12 4 4L19 6"/></svg>;
  if(name==='report')return <svg {...common}><path d="M4 3v18h17 M8 17v-5m5 5V7m5 10V9"/></svg>;
  if(name==='activity')return <svg {...common}><path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0 M12 6v6l4 2"/></svg>;

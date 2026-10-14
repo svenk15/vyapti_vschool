@@ -1498,3 +1498,97 @@ model AdmissionApplication {
  @@index([organizationId,schoolId,createdAt(sort: Desc),id(sort: Desc)],map:"vs_admissions_application_created_idx")
  @@map("vs_admissions_application")
 }
+
+model CommunicationPublisherGrant {
+ id String @id(map:"vs_communication_publisher_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,accountId],map:"vs_communication_publisher_scope_account_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_communication_publisher_active_idx")
+ @@map("vs_communication_publisher_grant")
+}
+
+model CommunicationNotice {
+ id String @id(map:"vs_communication_notice_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ status String @db.VarChar(20)
+ currentVersionId String? @map("current_version_id") @db.Uuid
+ revision Int
+ createdByAccountId String @map("created_by_account_id") @db.Uuid
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ versions CommunicationNoticeVersion[]
+ @@unique([organizationId,schoolId,id],map:"vs_communication_notice_scope_id_key")
+ @@index([organizationId,schoolId,status,updatedAt(sort:Desc),id],map:"vs_communication_notice_list_idx")
+ @@map("vs_communication_notice")
+}
+
+model CommunicationNoticeVersion {
+ id String @id(map:"vs_communication_notice_version_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ noticeId String @map("notice_id") @db.Uuid
+ versionNo Int @map("version_no")
+ title String @db.VarChar(120)
+ body String @db.VarChar(5000)
+ requiresAcknowledgement Boolean @map("requires_acknowledgement")
+ audienceSectionId String @map("audience_section_id") @db.Uuid
+ audienceLabel String @map("audience_label") @db.VarChar(160)
+ audienceDigest String @map("audience_digest") @db.Char(64)
+ publishedAt DateTime @map("published_at") @db.Timestamptz(3)
+ notice CommunicationNotice @relation(fields:[organizationId,schoolId,noticeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_notice_version_notice_fkey")
+ recipients CommunicationRecipient[]
+ @@unique([organizationId,schoolId,id],map:"vs_communication_notice_version_scope_id_key")
+ @@unique([organizationId,schoolId,noticeId,versionNo],map:"vs_communication_notice_version_number_key")
+ @@index([organizationId,schoolId,publishedAt(sort:Desc),id],map:"vs_communication_notice_version_published_idx")
+ @@map("vs_communication_notice_version")
+}
+
+model CommunicationRecipient {
+ id String @id(map:"vs_communication_recipient_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ noticeVersionId String @map("notice_version_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ firstReadAt DateTime? @map("first_read_at") @db.Timestamptz(3)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ version CommunicationNoticeVersion @relation(fields:[organizationId,schoolId,noticeVersionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_recipient_version_fkey")
+ bindings CommunicationRecipientBinding[]
+ @@unique([organizationId,schoolId,noticeVersionId,accountId],map:"vs_communication_recipient_version_account_key")
+ @@unique([organizationId,schoolId,id],map:"vs_communication_recipient_scope_id_key")
+ @@index([organizationId,schoolId,accountId,noticeVersionId],map:"vs_communication_recipient_inbox_idx")
+ @@map("vs_communication_recipient")
+}
+
+model CommunicationRecipientBinding {
+ id String @id(map:"vs_communication_recipient_binding_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ recipientId String @map("recipient_id") @db.Uuid
+ accessId String @map("access_id") @db.Uuid
+ studentId String @map("student_id") @db.Uuid
+ recipient CommunicationRecipient @relation(fields:[organizationId,schoolId,recipientId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_recipient_binding_recipient_fkey")
+ @@unique([recipientId,accessId],map:"vs_communication_recipient_binding_access_key")
+ @@index([organizationId,schoolId,studentId,recipientId],map:"vs_communication_recipient_binding_student_idx")
+ @@map("vs_communication_recipient_binding")
+}
+
+model CommunicationAcknowledgement {
+ id String @id(map:"vs_communication_acknowledgement_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ noticeVersionId String @map("notice_version_id") @db.Uuid
+ recipientAccountId String @map("recipient_account_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ acknowledgedAt DateTime @map("acknowledged_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,noticeVersionId,recipientAccountId],map:"vs_communication_ack_version_account_key")
+ @@index([organizationId,schoolId,recipientAccountId,acknowledgedAt(sort:Desc)],map:"vs_communication_ack_account_idx")
+ @@map("vs_communication_acknowledgement")
+}

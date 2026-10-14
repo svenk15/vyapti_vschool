@@ -31,3 +31,9 @@ Status: **ENGINEERING_VERIFIED**. Human review: **PENDING**.
 Compose the existing Access safe-self projection, current hosting-session timestamps, generic account recovery and current-session sign-out through the approved PAR-50 staged Parent flow. Retain in-flow choices across Back/Continue, execute only on final confirmation, expose no token or other-session inventory, and prove that browser Back cannot reveal protected child data after sign-out. No schema or migration is required.
 
 Status: **ENGINEERING_VERIFIED** at `7d52491`. Human review: **PENDING**.
+
+## FAM-06 — Independent school-notice purpose
+
+Allow a manager to select `communication.notice.read` independently during a new child-access invitation. Communication remains the owner of notices, audience snapshots and acknowledgements; Guardians only supplies the live exact-purpose check. Existing accepted links are not broadened automatically.
+
+Status: **ENGINEERING_VERIFIED** with COM-01. Human review: **PENDING**.

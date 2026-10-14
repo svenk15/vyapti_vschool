@@ -48,7 +48,10 @@ for(const match of prisma.matchAll(/model\s+(\w+)\s*\{([\s\S]*?)\n\}/g)){
 }
 for(const item of catalog.tables.filter(t=>t.status==="MIGRATED"))if(!new RegExp(`model\\s+${item.model}\\s*\\{`).test(prisma))errors.push(`Migrated catalog model missing ${item.model}`);
 const ruleDate=catalog.rlsPlan.futureMigrationRule.effectiveFrom;
-for(const migrationDir of fs.readdirSync("prisma/migrations").filter(name=>/^\d{14}_/.test(name)&&name.slice(0,8)>=ruleDate)){
+const migrationDirs=fs.readdirSync("prisma/migrations").filter(name=>/^\d{14}_/.test(name)&&name.slice(0,8)>=ruleDate);
+const forwardComments=new Map();
+for(const migrationDir of migrationDirs){const path=`prisma/migrations/${migrationDir}/migration.sql`;if(!fs.existsSync(path))continue;const sql=fs.readFileSync(path,"utf8");for(const match of sql.matchAll(/COMMENT\s+ON\s+TABLE\s+(?:public\.)?"?(vs_[a-z0-9_]+)"?\s+IS\s+'([^']*)'/gi))forwardComments.set(match[1],match[2]);}
+for(const migrationDir of migrationDirs){
  const path=`prisma/migrations/${migrationDir}/migration.sql`;
  if(!fs.existsSync(path))continue;
  const sql=fs.readFileSync(path,"utf8"),created=[...sql.matchAll(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:public\.)?"?(vs_[a-z0-9_]+)"?/gi)].map(match=>match[1]);
@@ -58,7 +61,7 @@ for(const migrationDir of fs.readdirSync("prisma/migrations").filter(name=>/^\d{
   if(item&&["GLOBAL_OPERATOR","DEPLOYMENT_ONLY"].includes(item.rls?.classification))continue;
   if(catalog.rlsPlan.enforcementImplemented){
    if(!new RegExp(`ALTER\\s+TABLE\\s+(?:public\\.)?"?${table}"?\\s+ENABLE\\s+ROW\\s+LEVEL\\s+SECURITY`,"i").test(sql)||!new RegExp(`ALTER\\s+TABLE\\s+(?:public\\.)?"?${table}"?\\s+FORCE\\s+ROW\\s+LEVEL\\s+SECURITY`,"i").test(sql)||!new RegExp(`CREATE\\s+POLICY\\s+[^;]+\\s+ON\\s+(?:public\\.)?"?${table}"?`,"i").test(sql))errors.push(`Enforced tenant table migration must ENABLE/FORCE RLS and create its policy ${table} (${migrationDir})`);
-  }else {const classification=item?.rls?.classification??"",owner=item?.owner??"",scope=item?.rls?.scopeColumns?.join(",")??"",canonical=tableComment.includes(`${classification} class`)&&tableComment.includes(`owner ${owner}`)&&tableComment.includes(`scope ${scope}`)&&tableComment.includes("closureGate TEN-03"),keyValue=tableComment.includes(`classification=${classification}`)&&tableComment.includes(`owner=${owner}`)&&tableComment.includes(`scope=${scope}`)&&tableComment.includes("closureGate=TEN-03");if(!tableComment.includes("TEN-ADR-006 Path A")||!canonical&&!keyValue)errors.push(`Path A tenant table migration comment must record class, owner, scope and TEN-03 closure ${table} (${migrationDir})`);}
+  }else {const classification=item?.rls?.classification??"",owner=item?.owner??"",scope=item?.rls?.scopeColumns?.join(",")??"",effectiveComment=forwardComments.get(table)??tableComment,canonical=effectiveComment.includes(`${classification} class`)&&effectiveComment.includes(`owner ${owner}`)&&effectiveComment.includes(`scope ${scope}`)&&effectiveComment.includes("closureGate TEN-03"),keyValue=effectiveComment.includes(`classification=${classification}`)&&effectiveComment.includes(`owner=${owner}`)&&effectiveComment.includes(`scope=${scope}`)&&effectiveComment.includes("closureGate=TEN-03");if(!effectiveComment.includes("TEN-ADR-006 Path A")||!canonical&&!keyValue)errors.push(`Path A tenant table migration comment must record class, owner, scope and TEN-03 closure ${table} (${migrationDir})`);}
  }
 }
 if(errors.length){console.error(errors.join("\n"));process.exit(1);}

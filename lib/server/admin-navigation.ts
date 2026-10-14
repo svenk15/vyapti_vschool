@@ -25,10 +25,11 @@ const routes:readonly Route[]=[
  {label:'Timetable',href:'/admin/timetable',icon:'calendar',permission:'timetable.manage',modules:['timetable','academic_core','staff_core']},
  {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
  {label:'Attendance',href:'/admin/attendance/sessions',icon:'attendance',permission:'attendance.read_school',modules:['attendance']},
+ {label:'Communication',href:'/admin/communication',icon:'mail',permission:'communication.publish',modules:['communication']},
  {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
 const sections:readonly Readonly<{label:string;hrefs:readonly string[]}>[]=[
- {label:'Operations',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/users','/admin/academics','/admin/timetable','/admin/reports/attendance']},
+ {label:'Operations',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/users','/admin/academics','/admin/timetable','/admin/reports/attendance','/admin/communication']},
  {label:'Management',hrefs:['/admin/teachers','/admin/imports','/admin/admissions','/admin/classes','/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
 ];
 

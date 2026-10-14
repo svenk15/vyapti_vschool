@@ -1021,7 +1021,7 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; module_id varchar(40); need varchar(1000); status SUBMITTED; submitted_by_account_id uuid; submitted_at timestamptz(3)",
       "responsibility": "Immutable, non-binding branch capability-interest submission for institution review; it has no entitlement, activation, purchase or payment effect.",
-      "constraints": "FK organization; composite scoped School FK; FK submitter account; module_id limited to attendance/family/fees/transport; need 5–1000; status SUBMITTED; UNIQUE(scope,id); branch-history, institution-review and submitter indexes",
+      "constraints": "FK organization; composite scoped School FK; FK submitter account; module_id limited to attendance/family/fees/transport; need 5\u20131000; status SUBMITTED; UNIQUE(scope,id); branch-history, institution-review and submitter indexes",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -1105,7 +1105,10 @@
       "constraints": "Scoped organization/school FKs and unique id/code; valid inclusive date range; OPEN/CLOSED state; positive version; open-cycle context index",
       "rls": {
         "classification": "BRANCH",
-        "scopeColumns": ["organization_id", "school_id"],
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
         "intendedPolicy": "Require verified organization and branch context plus current admissions.manage permission for every read/write.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "admissions",
@@ -1123,7 +1126,10 @@
       "constraints": "Scoped organization/school FKs and unique id; bounded text/email; scoped contact lookup index",
       "rls": {
         "classification": "BRANCH",
-        "scopeColumns": ["organization_id", "school_id"],
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
         "intendedPolicy": "Require verified organization and branch context plus current admissions.manage permission for every read/write.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "admissions",
@@ -1141,7 +1147,10 @@
       "constraints": "Scoped Applicant/Cycle/Grade FKs; actor FK; unique scoped id/reference and cycle/dedupe key; STARTED state; positive version; scoped created-at index",
       "rls": {
         "classification": "BRANCH",
-        "scopeColumns": ["organization_id", "school_id"],
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
         "intendedPolicy": "Require verified organization and branch context plus current admissions.manage permission for every read/write.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "admissions",
@@ -1157,7 +1166,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; name varchar(80); teaching_days smallint[]; state varchar(16); version int; created_at timestamptz(3); created_by_account_id uuid; updated_at timestamptz(3)",
       "responsibility": "Versioned branch/year weekly day-pattern draft owned by Academics.",
       "constraints": "Scoped Organization/School/AcademicYear FKs; creator FK; DRAFT/PUBLISHED state; positive version; one partial unique DRAFT per branch/year; scoped context index",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, current timetable.manage and live module eligibility for every read/write.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current timetable.manage and live module eligibility for every read/write.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "AcademicDayPeriod",
@@ -1168,7 +1187,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; day_pattern_id uuid; period_key uuid; label varchar(60); kind varchar(12); start_local time; end_local time; position smallint",
       "responsibility": "Ordered lesson/break intervals belonging to one Academics day-pattern version.",
       "constraints": "Scoped pattern FK; LESSON/BREAK kind; positive nonoverlapping interval and position; unique pattern/period key and position; scoped order index",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, current timetable.manage and live module eligibility through the owning pattern operation.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current timetable.manage and live module eligibility through the owning pattern operation.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "TimetableRevision",
@@ -1179,7 +1208,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; day_pattern_id uuid; revision_no int; state varchar(16); effective_from date; effective_until date nullable; validated_until date nullable; published_at timestamptz(3) nullable; published_by_account_id uuid nullable; based_on_revision_id uuid nullable; based_on_draft_version int nullable; source_command_id uuid nullable; calendar_revision_id uuid nullable; content_snapshot jsonb nullable; version int; created_at timestamptz(3); created_by_account_id uuid; updated_at timestamptz(3)",
       "responsibility": "Versioned private weekly draft plus immutable published timetable snapshots and half-open applicability metadata.",
       "constraints": "Scoped Organization/School/Year/Pattern, publisher, source-draft and calendar-revision FKs; DRAFT/DISCARDED/PUBLISHED state; positive revision/version; one live DRAFT and one open-ended PUBLISHED revision per branch/year; unique scoped revision number; complete publication metadata/snapshot check; immutable published content with controlled predecessor effective_until close; scoped resume and applicability indexes",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, current timetable.manage and live Timetable/Academics/Staff eligibility for every read/write.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current timetable.manage and live Timetable/Academics/Staff eligibility for every read/write.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "TimetableSlot",
@@ -1190,7 +1229,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; revision_id uuid; slot_key uuid; academic_year_id uuid; day_pattern_id uuid; class_section_id uuid; subject_offering_id uuid; teacher_assignment_id uuid; day_of_week smallint; period_key uuid; position smallint",
       "responsibility": "Recurring weekly lesson within a private draft or copied immutable published timetable snapshot.",
       "constraints": "Scoped Revision/Section/Offering/Assignment/Period FKs; day 1..7; positive position; unique stable slot key and unique class/day/period cell; scoped class-week index; update/delete guard when owned by a PUBLISHED revision",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context and authorization through the owning timetable draft operation.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context and authorization through the owning timetable draft operation.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "LessonOccurrence",
@@ -1201,7 +1250,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; class_section_id uuid; local_date date; period_key uuid; source_revision_id uuid; source_slot_key uuid; starts_at/ends_at timestamptz(3); subject_offering_id uuid; effective_teacher_assignment_id uuid; state varchar(20); generation_revision int; last_outcome varchar(40); last_error_code varchar(80) nullable; version int; created_at/updated_at timestamptz(3)",
       "responsibility": "Stable dated occurrence derived from one immutable timetable publication, retaining its latest Attendance reconciliation outcome.",
       "constraints": "Scoped School/Year/Section/Revision/Slot/Offering/Assignment FKs; starts_at<ends_at; constrained state/outcome; positive versions; UNIQUE(scope,year,section,local_date,period_key); source/date and class/date indexes",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, timetable.manage, and live Timetable/Academics/Staff eligibility; Attendance effects additionally require live Attendance eligibility.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, timetable.manage, and live Timetable/Academics/Staff eligibility; Attendance effects additionally require live Attendance eligibility.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "TimetableGenerationCheckpoint",
@@ -1212,7 +1271,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; academic_year_id uuid; source_revision_id uuid; horizon_from/horizon_until/cursor_date date; state varchar(16); counts jsonb; last_error_code varchar(80) nullable; source_command_id uuid; version int; created_at/updated_at timestamptz(3)",
       "responsibility": "Durable seven-day batch cursor and latest reconciliation summary for one immutable publication.",
       "constraints": "Scoped School/Year/Revision FKs; UNIQUE(scope,source_revision_id); bounded horizon/cursor check; constrained state; positive version; scope/state/update index",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context, timetable.manage, and live Timetable/Attendance eligibility for every read/write.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"academics","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, timetable.manage, and live Timetable/Attendance eligibility for every read/write.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "FamilyAccessManagerGrant",
@@ -1223,7 +1292,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
       "responsibility": "Trusted-operator provisioned branch capability allowing one active School Administrator to manage child-specific family access.",
       "constraints": "Scoped School and SchoolMembership FKs; unique scope/account; positive version; active capability lookup index; current administrator membership rechecked by application",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context plus current active School Administrator membership and active designated family.access.manage grant.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context plus current active School Administrator membership and active designated family.access.manage grant.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "guardians",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "GuardianChildAccess",
@@ -1234,7 +1313,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; display_name varchar(160); normalized_email varchar(254); account_id/person_id nullable; authorized_by_account_id uuid; authorized_at timestamptz(3); access_from date; accepted_at/revoked_at/revoked_by_account_id/revocation_reason nullable; version int; created_at timestamptz(3)",
       "responsibility": "One explicit school authorization and accepted account binding for the fixed read-only Parent bundle for one Student.",
       "constraints": "Scoped Student/Person and global account/actor FKs; coherent acceptance/revocation evidence; partial unique non-revoked child/email; scope/student and account indexes",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require current designated manager for administration or current accepted account plus exact child purpose for Parent reads.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require current designated manager for administration or current accepted account plus exact child purpose for Parent reads.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "guardians",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "GuardianPurposeGrant",
@@ -1245,7 +1334,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; student_id uuid; purpose varchar(40); granted_at timestamptz(3)",
       "responsibility": "Separately enforceable child.summary.read, attendance.read_child and timetable.read_child grants issued as one first-release bundle.",
       "constraints": "Scoped access+Student FK; allowed-purpose check; unique access/purpose; scoped purpose lookup index",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Visible only through a current non-revoked accepted child access and exact requested purpose.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Visible only through a current non-revoked accepted child access and exact requested purpose.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "guardians",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "FamilyInvitation",
@@ -1256,7 +1355,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; intended_account_id uuid; token_hash char(64); delivery_status varchar(24); delivered_at/delivery_failed_at/delivery_failure_reason nullable; created_by_account_id uuid; created_at/expires_at timestamptz(3); accepted_at/revoked_at nullable; version int",
       "responsibility": "Dedicated single-use expiring family invitation and delivery evidence for one already-authorized child access.",
       "constraints": "Scoped access FK; global intended-account/creator FKs; unique token hash; delivery-state/evidence and expiry checks; access history and account expiry indexes",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Admin reads require current designated manager; consumption requires exact intended account and live access authorization.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"guardians","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Admin reads require current designated manager; consumption requires exact intended account and live access authorization.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "guardians",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "OperatorAuditEntry",
@@ -1285,7 +1394,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
       "responsibility": "Trusted-operator provisioned branch capability allowing one active School Administrator to manage optional Student portal access.",
       "constraints": "Scoped School and SchoolMembership FKs; unique scope/account; positive version; active capability lookup index; current administrator membership rechecked by application",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified branch context plus current active School Administrator membership and active designated student.access.manage grant.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context plus current active School Administrator membership and active designated student.access.manage grant.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "students",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "StudentPortalAccess",
@@ -1296,7 +1415,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; normalized_email varchar(254); account_id nullable; authorized_by_account_id uuid; authorized_at timestamptz(3); accepted_at/revoked_at/revoked_by_account_id/revocation_reason nullable; version int; created_at timestamptz(3)",
       "responsibility": "One explicit school authorization and exact accepted account binding for one Student self-service identity.",
       "constraints": "Scoped Student and global account/actor FKs; coherent acceptance/revocation evidence; partial unique non-revoked Student access; scope/student and account indexes",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require current designated manager for administration or current accepted account plus exact Student purpose and active enrollment for self reads.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require current designated manager for administration or current accepted account plus exact Student purpose and active enrollment for self reads.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "students",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "StudentPortalPurposeGrant",
@@ -1307,7 +1436,17 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; student_id uuid; purpose varchar(40); granted_at timestamptz(3)",
       "responsibility": "Separately enforceable profile.read_self, attendance.read_self and timetable.read_self grants issued as one first-release bundle.",
       "constraints": "Scoped access+Student FK; allowed-purpose check; unique access/purpose; scoped purpose lookup index",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Visible only through a current non-revoked accepted Student access and the exact requested purpose.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Visible only through a current non-revoked accepted Student access and the exact requested purpose.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "students",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "StudentPortalInvitation",
@@ -1318,7 +1457,143 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; intended_account_id uuid; token_hash char(64); delivery_status varchar(24); delivered_at/delivery_failed_at/delivery_failure_reason nullable; created_by_account_id uuid; created_at/expires_at timestamptz(3); accepted_at/revoked_at nullable; version int",
       "responsibility": "Dedicated single-use expiring Student setup invitation and delivery evidence for one already-authorized Student access.",
       "constraints": "Scoped access FK; global intended-account/creator FKs; unique token hash; delivery-state/evidence and expiry checks; access history and account expiry indexes",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Admin reads require current designated manager; consumption requires exact intended account, Student Person binding and live access authorization.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"students","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Admin reads require current designated manager; consumption requires exact intended account, Student Person binding and live access authorization.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "students",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationPublisherGrant",
+      "owner": "communication",
+      "table": "vs_communication_publisher_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id uuid PK; organization_id/school_id/membership_id/account_id uuid; granted_by_operator_id uuid; granted_at/revoked_at timestamptz; version int",
+      "responsibility": "Explicit trusted-operator provisioned branch publisher authority.",
+      "constraints": "Scoped membership/account FK; unique scope/account; positive version; active lookup index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Current active Administrator membership plus active explicit publisher grant.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationNotice",
+      "owner": "communication",
+      "table": "vs_communication_notice",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school uuid; status; current_version_id; revision; creator and timestamps",
+      "responsibility": "Stable branch notice identity and current immutable version pointer.",
+      "constraints": "Scoped school/creator/current-version FKs; status/revision checks; branch list index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Publisher administration or current manifest recipient only.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationNoticeVersion",
+      "owner": "communication",
+      "table": "vs_communication_notice_version",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/notice uuid; version_no; title/body; requires_acknowledgement; audience section/label/digest; published_at",
+      "responsibility": "Immutable published notice content and reviewed audience identity.",
+      "constraints": "Scoped Notice and Section FKs; unique notice/version; published list index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Publisher administration or current authorized recipient of this exact version.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationRecipient",
+      "owner": "communication",
+      "table": "vs_communication_recipient",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/version/account uuid; first_read_at; created_at",
+      "responsibility": "Frozen deduplicated account manifest and separate first-read evidence.",
+      "constraints": "Scoped version and account FKs; unique version/account; account inbox index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Publisher summary or the exact recipient account with a still-live binding.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationRecipientBinding",
+      "owner": "communication",
+      "table": "vs_communication_recipient_binding",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/recipient/access/student uuid",
+      "responsibility": "Child-purpose provenance supporting a deduplicated recipient account.",
+      "constraints": "Scoped recipient and Guardian access+Student FKs; unique recipient/access; Student lookup index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Visible only within authorized publisher operations or as an internal live recipient guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationAcknowledgement",
+      "owner": "communication",
+      "table": "vs_communication_acknowledgement",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/version/recipient_account/actor_account uuid; acknowledged_at",
+      "responsibility": "One deliberate recipient action for an exact immutable notice version.",
+      "constraints": "Scoped version and account FKs; actor equals recipient; unique version/recipient; account history index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Publisher aggregate or the exact acknowledging account with current recipient authority.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

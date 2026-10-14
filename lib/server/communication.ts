@@ -1,0 +1,17 @@
+import 'server-only';
+import {AccessError} from '../../backend/modules/access/contracts';
+import {createCommunicationServices} from '../../backend/composition/communication';
+import type {Identity} from '../../shared/contracts/access';
+import {releasedModuleIds} from '../../backend/modules/tenancy/domain/entitlements';
+import {accountGateway} from './access';
+type Service=ReturnType<typeof createCommunicationServices>;let services:Service|undefined;try{services=createCommunicationServices({databaseUrl:process.env.DATABASE_URL??'',releasedModules:releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES),now:()=>new Date()});}catch{}
+const service=()=>{if(!services)throw new AccessError('UNAVAILABLE');return services;};const required=(identity:Identity|null)=>{if(!identity)throw new AccessError('UNAUTHENTICATED');return identity;};
+async function scope(identity:Identity|null){const actor=required(identity),home=await accountGateway.getHome(actor);return {actor,...home.scope};}
+export const communicationGateway={
+ async publish(identity:Identity|null,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().publish(actor,organizationId,schoolId,input,requestId);},
+ async listAdmin(identity:Identity|null){const {actor,organizationId,schoolId}=await scope(identity);return service().listAdmin(actor,organizationId,schoolId);},
+ listParent:(identity:Identity|null,studentId:unknown)=>service().listParent(required(identity),studentId),
+ detailParent:(identity:Identity|null,studentId:unknown,noticeId:unknown)=>service().detailParent(required(identity),studentId,noticeId),
+ markRead:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown})=>service().markRead(required(identity),input),
+ acknowledge:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown;key:unknown},requestId:string)=>service().acknowledge(required(identity),input,requestId),
+};

@@ -2,7 +2,7 @@
 
 Last updated: 14 October 2026.
 
-FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e2469`. FAM-05 is **ENGINEERING_VERIFIED** at `7d52491`. Human review is **PENDING**.
+FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e2469`. FAM-05 is **ENGINEERING_VERIFIED** at `7d52491`. FAM-06 is engineering-verified with COM-01. Human review is **PENDING**.
 
 ## Implemented
 
@@ -11,6 +11,7 @@ FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e
 - FAM-03: Attendance-owned submitted history projection, exact child-purpose verification and `access_from` lower bound.
 - FAM-04: Academics-owned effective published Timetable projection, exact child-purpose verification, active placement join, `access_from` lower bound, configured teaching days/LESSON/BREAK periods and navigable week selection.
 - FAM-05: approved PAR-50 My account → End access → Confirm composition using the Access-owned safe account projection and current hosting-session timestamps; final-only recovery/sign-out, retained Back state and no token or other-session inventory.
+- FAM-06: new invitations may independently grant `communication.notice.read`; existing accepted links are not widened, and Communication rechecks the exact live purpose for list, detail, read and acknowledgement.
 - Student registration remains independently atomic. Its receipt now enters the guarded Parent setup for the exact new Student; lack of `family.access.manage` or invitation-delivery failure cannot roll back or duplicate registration.
 - `pnpm demo:seed` incrementally prepares two accepted child links, a wrong-account pending invitation, retained revoked access and populated Attendance. Existing historical Timetable fixtures are preserved rather than moved to today.
 

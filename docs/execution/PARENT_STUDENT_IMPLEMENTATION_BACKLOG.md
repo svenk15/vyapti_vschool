@@ -1,6 +1,6 @@
 # Combined Parent/Student implementation backlog
 
-Last reconciled: 14 October 2026. This is a planning export from the authoritative [Parent/Guardian workflow matrix](./PARENT_GUARDIAN_WORKFLOW_MATRIX.md) and [Student workflow matrix](./STUDENT_WORKFLOW_MATRIX.md). Those matrices remain the status authorities. This document groups their incomplete workflows by shared owner capability; it does not authorize a capability, grant, lifecycle, migration or implementation.
+Last reconciled: 15 October 2026. This is a planning export from the authoritative [Parent/Guardian workflow matrix](./PARENT_GUARDIAN_WORKFLOW_MATRIX.md) and [Student workflow matrix](./STUDENT_WORKFLOW_MATRIX.md). Those matrices remain the status authorities. This document groups their incomplete workflows by shared owner capability; it does not authorize a capability, grant, lifecycle, migration or implementation.
 
 Approved UX sources:
 
@@ -8,17 +8,23 @@ Approved UX sources:
 - Student: `references/approved/packs/VSchool_Student_Design/VSchool_Student_Review.html`, SHA-256 `74dc76af2e3b2000dfeb4b1258d49c6081aa255d6294f9ac6fe10ae59253cc9b`.
 - Both hashes match `references/approved/implementation-spec/SOURCE_MANIFEST.json`.
 
+## Active queue — 15 October 2026
+
+1. **COM-01 / PAR-14:** engineering-verified. Administrator publishes one immutable class notice; a Parent with the separately accepted notice purpose reads and acknowledges the exact version. Evidence is in `docs/evidence/communication-par-14-2026-10-15/`.
+2. **Attendance explanations PAR-11/PAR-12:** decision-ready contract only; no implementation until the unresolved authority, visibility and retention decisions are explicitly approved.
+3. **Next owner design:** assess the smallest remaining Parent-serving owner whose product semantics are already approved; do not infer the unresolved preference, request, event-response or provider rules.
+
 Functional/security status, reference comparison and human acceptance remain separate. Human acceptance is pending for every workflow in this export.
 
 ## Current counts
 
 | Workspace | Engineering complete | Partial | Blocked/not started | Total | Incomplete in this backlog |
 |---|---:|---:|---:|---:|---:|
-| Parent/Guardian | 9 | 1 | 42 | 52 | 43 |
+| Parent/Guardian | 10 | 1 | 41 | 52 | 42 |
 | Student | 7 | 3 | 37 | 47 | 40 |
-| **Combined** | **16** | **4** | **79** | **99** | **83** |
+| **Combined** | **17** | **4** | **78** | **99** | **82** |
 
-The 83 incomplete workflows have a primary planning blocker of either **product** (36) or **technical design** (47). No row is blocked only by frontend implementation, visual comparison or missing verification. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
+The 82 incomplete workflows have a primary planning blocker of either **product** or **technical design**; PAR-14 has moved out of the technical-design backlog. No remaining row is blocked only by frontend implementation, visual comparison or missing verification. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
 
 ## Capability sequence and unlock map
 
@@ -89,7 +95,6 @@ No grant, migration or UI should be implemented until this decision sheet, inclu
 | Role / workflow | User outcome | Owner | Reusable functionality | Exact missing contract or implementation | Administrator/Teacher counterpart | Dependencies | Primary blocker |
 |---|---|---|---|---|---|---|---|
 | Parent PAR-09 | Manage notification preferences | Communication / Preferences | Global account and Parent shell | Preference keys, mandatory notices, channel verification and precedence | Authorized notice policy manager | FAM-01–04 | Product |
-| Parent PAR-14 | Read and acknowledge a notice | Communication | Child link and `access_from` bound | Versioned notice, audience projection and acknowledgement owner | Administrator/Teacher publisher with explicit audience | Communication owner | Technical design |
 | Parent PAR-15 | Reply to a permitted conversation | Communication | Scoped Parent identity | Participant grants, recipient resolution, delivery and revoked-recipient rules | Permitted Teacher/school recipient | PAR-14; Communication owner | Technical design |
 | Parent PAR-16 | Request a teacher meeting | Communication / Calendar | Teacher identity and timetable reads | Request authority, availability source, confirmation/cancellation and conflict rules | Teacher or school accepts/declines authorized slot | Communication/Calendar owner | Product |
 | Parent PAR-17 | Resolve an undelivered message | Communication | Development delivery-state patterns | Stable message/delivery-attempt owner and retry policy | Authorized recipient/delivery operations | PAR-15 | Technical design |
