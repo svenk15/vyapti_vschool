@@ -1,0 +1,9 @@
+import Link from 'next/link';
+import {StudentPortalFrame} from '@/components/student-portal-frame';
+import {BrandSurface,Card,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
+import {studentPageContext} from '@/lib/server/student-page';
+import {getIdentity} from '@/lib/server/auth';
+import {learningGateway} from '@/lib/server/learning';
+export const dynamic='force-dynamic';
+export default async function StudentAssignments({searchParams}:{searchParams:Promise<{student?:string|string[]}>}){const query=await searchParams,{workspace,selected}=await studentPageContext(Array.isArray(query.student)?undefined:query.student,'learning.assignment.read_self'),rows=await learningGateway.listStudent(await getIdentity(),selected.studentId),context=`student=${encodeURIComponent(selected.studentId)}`;return <BrandSurface><StudentPortalFrame workspace={workspace} selected={selected}><main id="main-content" className="container page-space"><PageStack><PageHeader title="Assignments" description="Published work for your current school context."/>{rows.length?<div className="stack">{rows.map(row=><Card className="padded" key={row.id}><div className="card-title"><div><h2>{row.title}</h2><p className="small muted">{row.offering.subject} · {row.offering.classLabel}</p></div><span className="badge badge-warning">Due</span></div><p className="small">{new Intl.DateTimeFormat('en-GB',{timeZone:selected.timezone,dateStyle:'medium',timeStyle:'short'}).format(new Date(row.dueAt))}</p><Link className="btn btn-secondary btn-small" href={`/student/assignments/${row.id}?${context}`}>Open assignment <span aria-hidden="true">→</span></Link></Card>)}</div>:<Card><EmptyState icon="document" title="No published assignments" description="Assignments published to your exact class and Student access will appear here."/></Card>}</PageStack></main></StudentPortalFrame></BrandSurface>;
+}

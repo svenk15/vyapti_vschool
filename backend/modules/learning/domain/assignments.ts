@@ -1,0 +1,12 @@
+import {AccessError,uuidPattern} from '../../access/contracts/index';
+
+const text=(value:unknown,min:number,max:number)=>{if(typeof value!=='string')throw new AccessError('VALIDATION');const result=value.normalize('NFC').trim().replace(/\s+/g,' ');if(result.length<min||result.length>max||/[\u0000-\u001f\u007f]/.test(result))throw new AccessError('VALIDATION');return result;};
+const uuid=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value.toLowerCase();};
+const instant=(value:unknown)=>{if(typeof value!=='string'||!/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}(?::[0-9]{2}(?:\.[0-9]{1,3})?)?(?:Z|[+-][0-9]{2}:[0-9]{2})$/.test(value)||Number.isNaN(Date.parse(value)))throw new AccessError('VALIDATION');return new Date(value).toISOString();};
+const revision=(value:unknown)=>{if(!Number.isInteger(value)||Number(value)<1)throw new AccessError('VALIDATION');return Number(value);};
+export const learningId=uuid;
+export type LearningFields={offeringId:string;title:string;instructions:string;dueAt:string};
+export function learningFields(value:unknown):LearningFields{if(!value||typeof value!=='object'||Array.isArray(value))throw new AccessError('VALIDATION');const input=value as Record<string,unknown>,allowed=new Set(['offeringId','title','instructions','dueAt']);if(Object.keys(input).some(key=>!allowed.has(key)))throw new AccessError('VALIDATION');return {offeringId:uuid(input.offeringId),title:text(input.title,1,120),instructions:text(input.instructions,1,2000),dueAt:instant(input.dueAt)};}
+export function createLearningInput(value:unknown){if(!value||typeof value!=='object'||Array.isArray(value))throw new AccessError('VALIDATION');const input=value as Record<string,unknown>;return {...learningFields(input.fields),key:uuid(input.key)};}
+export function updateLearningInput(value:unknown){if(!value||typeof value!=='object'||Array.isArray(value))throw new AccessError('VALIDATION');const input=value as Record<string,unknown>;return {...learningFields(input.fields),expectedRevision:revision(input.expectedRevision),key:uuid(input.key)};}
+export function publishLearningInput(value:unknown){if(!value||typeof value!=='object'||Array.isArray(value))throw new AccessError('VALIDATION');const input=value as Record<string,unknown>,allowed=new Set(['expectedRevision','key']);if(Object.keys(input).some(key=>!allowed.has(key)))throw new AccessError('VALIDATION');return {expectedRevision:revision(input.expectedRevision),key:uuid(input.key)};}

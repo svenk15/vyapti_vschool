@@ -1764,3 +1764,97 @@ model SchoolEventStudentBinding {
  @@index([organizationId,schoolId,studentId,accessId],map:"vs_events_student_binding_student_idx")
  @@map("vs_events_student_binding")
 }
+
+model LearningAssignment {
+  id               String                      @id(map: "vs_learning_assignment_pkey") @db.Uuid
+  organizationId   String                      @map("organization_id") @db.Uuid
+  schoolId         String                      @map("school_id") @db.Uuid
+  offeringId       String                      @map("offering_id") @db.Uuid
+  authorTeacherId  String                      @map("author_teacher_id") @db.Uuid
+  status           String                      @db.VarChar(16)
+  revision         Int
+  currentVersionId String?                     @map("current_version_id") @db.Uuid
+  title            String                      @db.VarChar(120)
+  instructions     String                      @db.VarChar(2000)
+  dueAt            DateTime                    @map("due_at") @db.Timestamptz(3)
+  createdAt        DateTime                    @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime                    @map("updated_at") @db.Timestamptz(3)
+  currentVersion   LearningAssignmentVersion?  @relation("CurrentLearningAssignmentVersion", fields: [organizationId, schoolId, currentVersionId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_learning_assignment_current_version_fkey")
+  versions         LearningAssignmentVersion[] @relation("LearningAssignmentVersions")
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_assignment_scope_id_key")
+  @@unique([organizationId, schoolId, currentVersionId], map: "vs_learning_assignment_current_version_key")
+  @@index([organizationId, schoolId, status, updatedAt(sort: Desc), id], map: "vs_learning_assignment_list_idx")
+  @@index([organizationId, schoolId, authorTeacherId, updatedAt(sort: Desc), id], map: "vs_learning_assignment_teacher_idx")
+  @@map("vs_learning_assignment")
+}
+
+model LearningAssignmentVersion {
+  id                   String                        @id(map: "vs_learning_assignment_version_pkey") @db.Uuid
+  organizationId       String                        @map("organization_id") @db.Uuid
+  schoolId             String                        @map("school_id") @db.Uuid
+  assignmentId         String                        @map("assignment_id") @db.Uuid
+  versionNo            Int                           @map("version_no")
+  offeringId           String                        @map("offering_id") @db.Uuid
+  yearId               String                        @map("year_id") @db.Uuid
+  sectionId            String                        @map("section_id") @db.Uuid
+  title                String                        @db.VarChar(120)
+  instructions         String                        @db.VarChar(2000)
+  dueAt                DateTime                      @map("due_at") @db.Timestamptz(3)
+  audienceDigest       String                        @map("audience_digest") @db.Char(64)
+  publishedByAccountId String                        @map("published_by_account_id") @db.Uuid
+  publishedAt          DateTime                      @map("published_at") @db.Timestamptz(3)
+  assignment           LearningAssignment            @relation("LearningAssignmentVersions", fields: [organizationId, schoolId, assignmentId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_learning_assignment_version_assignment_fkey")
+  currentForAssignment LearningAssignment?           @relation("CurrentLearningAssignmentVersion")
+  recipients           LearningAssignmentRecipient[]
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_assignment_version_scope_id_key")
+  @@unique([organizationId, schoolId, assignmentId, versionNo], map: "vs_learning_assignment_version_number_key")
+  @@index([organizationId, schoolId, dueAt, id], map: "vs_learning_assignment_version_due_idx")
+  @@map("vs_learning_assignment_version")
+}
+
+model LearningAssignmentRecipient {
+  id                  String                              @id(map: "vs_learning_assignment_recipient_pkey") @db.Uuid
+  organizationId      String                              @map("organization_id") @db.Uuid
+  schoolId            String                              @map("school_id") @db.Uuid
+  assignmentVersionId String                              @map("assignment_version_id") @db.Uuid
+  studentId           String                              @map("student_id") @db.Uuid
+  createdAt           DateTime                            @map("created_at") @db.Timestamptz(3)
+  version             LearningAssignmentVersion           @relation(fields: [organizationId, schoolId, assignmentVersionId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_learning_assignment_recipient_version_fkey")
+  guardianBindings    LearningAssignmentGuardianBinding[]
+  studentBindings     LearningAssignmentStudentBinding[]
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_assignment_recipient_scope_id_key")
+  @@unique([organizationId, schoolId, assignmentVersionId, studentId], map: "vs_learning_assignment_recipient_version_student_key")
+  @@index([organizationId, schoolId, studentId, assignmentVersionId], map: "vs_learning_assignment_recipient_student_idx")
+  @@map("vs_learning_assignment_recipient")
+}
+
+model LearningAssignmentGuardianBinding {
+  id             String                      @id(map: "vs_learning_guardian_binding_pkey") @db.Uuid
+  organizationId String                      @map("organization_id") @db.Uuid
+  schoolId       String                      @map("school_id") @db.Uuid
+  recipientId    String                      @map("recipient_id") @db.Uuid
+  accessId       String                      @map("access_id") @db.Uuid
+  studentId      String                      @map("student_id") @db.Uuid
+  recipient      LearningAssignmentRecipient @relation(fields: [organizationId, schoolId, recipientId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_learning_guardian_binding_recipient_fkey")
+
+  @@unique([recipientId, accessId], map: "vs_learning_guardian_binding_access_key")
+  @@index([organizationId, schoolId, studentId, accessId], map: "vs_learning_guardian_binding_student_idx")
+  @@map("vs_learning_guardian_binding")
+}
+
+model LearningAssignmentStudentBinding {
+  id             String                      @id(map: "vs_learning_student_binding_pkey") @db.Uuid
+  organizationId String                      @map("organization_id") @db.Uuid
+  schoolId       String                      @map("school_id") @db.Uuid
+  recipientId    String                      @map("recipient_id") @db.Uuid
+  accessId       String                      @map("access_id") @db.Uuid
+  studentId      String                      @map("student_id") @db.Uuid
+  recipient      LearningAssignmentRecipient @relation(fields: [organizationId, schoolId, recipientId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_learning_student_binding_recipient_fkey")
+
+  @@unique([recipientId, accessId], map: "vs_learning_student_binding_access_key")
+  @@index([organizationId, schoolId, studentId, accessId], map: "vs_learning_student_binding_student_idx")
+  @@map("vs_learning_student_binding")
+}

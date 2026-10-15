@@ -4,7 +4,9 @@ Last updated: 15 October 2026.
 
 FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e2469`. FAM-05 is **ENGINEERING_VERIFIED** at `7d52491`. FAM-06 is engineering-verified with COM-01. FAM-07 is engineering-verified with ATT-05 for fictional local/test data. Human review is **PENDING**.
 
-The combined Parent/Student handover, current build/migration provenance and manual walkthrough are recorded in [15 October consolidated evidence](../../evidence/parent-student-consolidated-2026-10-15/README.md). No Guardian contract or status changed during consolidation.
+The combined Parent/Student handover, current build/migration provenance and manual walkthrough are recorded in [15 October consolidated evidence](../../evidence/parent-student-consolidated-2026-10-15/README.md).
+
+**LEA-01 supported slice (15 October 2026):** Guardian access now supports the independent, non-backfilled `learning.assignment.read_child` purpose. Learning freezes the exact accepted Guardian binding at assignment publication and rechecks the same live access/purpose for every Parent read. Later grants do not add recipients retroactively. Focused Learning PostgreSQL and desktop/mobile browser evidence passed; PAR-20 remains a supported partial workflow because returned feedback, questions and its richer reference workflow are not implemented. See [Learning evidence](../../evidence/learning-publication-2026-10-15/README.md). Human review remains PENDING.
 
 ## Implemented
 

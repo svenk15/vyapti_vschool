@@ -43,7 +43,7 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-17 Resolve an undelivered message | `#/flow/PAR-17` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Stable message/delivery attempt model and revoked-recipient handling | PENDING |
 | PAR-18 Plan with school calendar | `#/flow/PAR-18` and `#/timetable` | Academics/Events + TT-06 Parent | PARTIAL_SUPPORTED_SLICE | DIRECT_PARTIAL | Effective published child Timetable plus frozen-audience one-off branch/class events and canceled-event visibility are implemented. The approved mixed agenda/category workflow, closures and advanced event interactions remain absent. | PENDING |
 | PAR-19 Respond to a school event | `#/flow/PAR-19` | Events | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Proposed response authority, versioning, withdrawal and consent separation | PENDING |
-| PAR-20 Review published homework | `#/flow/PAR-20` | Learning | DESIGN_READINESS_REQUIRED | NOT_STARTED | Learning owner, published task projection and `learning.read_child` grant | PENDING |
+| PAR-20 Review published homework | `#/flow/PAR-20` | Learning | PARTIAL_SUPPORTED_SLICE | REFERENCE_LESS_NARROW_EXTENSION | Immutable text assignment read is verified through exact frozen Guardian binding and independent live `learning.assignment.read_child`; returned feedback, questions and richer reference workflow remain absent. | PENDING |
 | PAR-21 Read returned feedback | `#/flow/PAR-21` | Learning | DESIGN_READINESS_REQUIRED | NOT_STARTED | Returned-version owner and private-draft exclusion | PENDING |
 | PAR-22 Ask a learning question | `#/flow/PAR-22` | Learning + Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Question routing and permitted recipient contract | PENDING |
 | PAR-23 Read published results | `#/flow/PAR-23` | Assessments | DESIGN_READINESS_REQUIRED | NOT_STARTED | Published result/version/scale owner and child-purpose read | PENDING |
@@ -93,7 +93,7 @@ The main matrix supplies each workflow's outcome, approved state, route, owner a
 | PAR-17 | D | Existing development delivery-state patterns | Communication message/delivery-attempt owner and retry policy | Show failed delivery without duplicate message; authorized retry/status survives reload |
 | PAR-18 | D | Effective published child Timetable and one-off scoped Events publication/read are complete | Mixed timetable/event agenda, closures and advanced calendar interactions | Mixed teaching/event calendar respects effective dates and child/school scope |
 | PAR-19 | C | Future Calendar/Events owner | Approve event-response signer, version, withdrawal and consent boundary | Respond to one eligible event; stale/duplicate/cross-child attempts fail safely |
-| PAR-20 | D | Scoped Parent link and published Academics context | Learning owner plus `learning.read_child` purpose | Only published homework for the selected child appears; drafts and siblings remain hidden |
+| PAR-20 | D | Scoped Parent link and published Academics context | Learning owner plus actual `learning.assignment.read_child` purpose | Only published homework for the selected child appears; drafts and siblings remain hidden |
 | PAR-21 | D | Same | Learning returned-feedback version and audience | Parent reads only returned feedback; later version replaces display without exposing drafts |
 | PAR-22 | D | Same | Learning question plus permitted Communication route | Ask against an authorized published task; recipient and status are traceable |
 | PAR-23 | D | Scoped Parent link | Assessments published result/version/scale owner and purpose | Published result visible for exact child; unpublished/revoked/cross-tenant data denied |
@@ -133,7 +133,7 @@ The main matrix supplies each workflow's outcome, approved state, route, owner a
 | Family request foundation + Attendance explanation | PAR-05, PAR-11–13, PAR-32–34 | SA-29 explanation review and SA-37 family-request review; Attendance correction stays separate | New explicit submit/read/withdraw purposes plus reviewer capability | Categories, eligibility, reviewer scope, states, co-guardian visibility, retention and correction relationship | High | Parent submits one absence explanation → administrator reviews → Parent sees disposition; mark unchanged |
 | Communication and preferences | PAR-09, PAR-14–17, PAR-22 | Notice publisher, conversation recipient and delivery operations | Per-audience notice/message grants; current guardian link | Mandatory channels, reply authority, meeting policy and delivery retry semantics | High | Publish one authorized notice → Parent reads/acknowledges → school sees exact acknowledgement |
 | Calendar and events | remaining PAR-18, PAR-19 | School event publisher and response review | Calendar read/respond child purposes | Event audiences, response/withdrawal and consent separation | Medium | Published event beside effective Timetable → eligible Parent response |
-| Learning and results | PAR-20–25 | Teacher/school publish and clarification review | `learning.read_child`, result/document purposes | Question routing, result publication, artifact and clarification lifecycles | High | Publish homework/result → Parent reads exact version → submits traceable clarification |
+| Learning and results | PAR-20–25 | Teacher/school publish and clarification review | Actual `learning.assignment.read_child`, result/document purposes | Question routing, result publication, artifact and clarification lifecycles | High | Publish homework/result → Parent reads exact version → submits traceable clarification |
 | Finance and payments | PAR-26–31 | Finance invoice, payment reconciliation and payer-access management | Verified payer authority independent of guardian read bundle | Payer identity, providers, settlement, uncertain outcomes and refund queries | Very high | Authorized payer reads and pays one invoice with replay-safe receipt |
 | Documents and consent | PAR-35–36 | Document issuer/reviewer and consent publisher | Document/consent grants | File governance, signer rules, supersession and retention | High | Parent responds to exact consent version and downloads one authorized artifact |
 | Admissions | PAR-37–39 | Admissions review/offer/conversion | Applicant self-scope distinct from current child links | Durable drafts, evidence review, offer authority and Student conversion | High | Applicant starts/resumes → school reviews → applicant responds to exact offer |
@@ -158,9 +158,9 @@ Sources: `workflow-tasks/WF-PAR-11.md`, `WF-PAR-12.md`, `WF-SA-29.md`, the match
 | Functional/security status | Count |
 |---|---:|
 | `ENGINEERING_COMPLETE` | 12 |
-| `PARTIAL` | 1 |
+| `PARTIAL` | 2 |
 | `BLOCKED_PRODUCT_DECISION` | 22 |
-| `DESIGN_READINESS_REQUIRED` | 17 |
+| `DESIGN_READINESS_REQUIRED` | 16 |
 | **Total** | **52** |
 
 Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. EV-01 adds the directly compared one-off Events subset, while PAR-18 remains partial for the broader approved mixed agenda. PAR-14 is engineering-complete through COM-01. PAR-11/PAR-12 are engineering-complete for the explicitly authorized fictional-data slice; protected-text retention still blocks real data.

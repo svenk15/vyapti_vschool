@@ -1,0 +1,9 @@
+import Link from 'next/link';
+import {StudentPortalFrame} from '@/components/student-portal-frame';
+import {Alert,BrandSurface,Card,PageHeader,PageStack} from '@/components/ui/primitives';
+import {studentPageContext} from '@/lib/server/student-page';
+import {getIdentity} from '@/lib/server/auth';
+import {learningGateway} from '@/lib/server/learning';
+export const dynamic='force-dynamic';
+export default async function StudentAssignment({params,searchParams}:{params:Promise<{id:string}>;searchParams:Promise<{student?:string|string[]}>}){const [{id},query]=await Promise.all([params,searchParams]),{workspace,selected}=await studentPageContext(Array.isArray(query.student)?undefined:query.student,'learning.assignment.read_self'),row=await learningGateway.detailStudent(await getIdentity(),selected.studentId,id),context=`student=${encodeURIComponent(selected.studentId)}`;return <BrandSurface><StudentPortalFrame workspace={workspace} selected={selected}><main id="main-content" className="container page-space"><PageStack><PageHeader title={row.title} description={`${row.offering.subject} · Due ${new Intl.DateTimeFormat('en-GB',{timeZone:selected.timezone,dateStyle:'medium',timeStyle:'short'}).format(new Date(row.dueAt))}`}/><div className="grid"><Card className="padded"><h2>What to do</h2><p>{row.instructions}</p></Card><Card className="padded"><h2>Assignment details</h2><dl className="record-facts"><div><dt>Class</dt><dd>{row.offering.classLabel}</dd></div><div><dt>Version</dt><dd>{row.version}</dd></div></dl><Alert title="Read-only assignment">Resources, saved responses and submission are not enabled in this first release slice.</Alert></Card></div><Link href={`/student/assignments?${context}`}>← Back to Assignments</Link></PageStack></main></StudentPortalFrame></BrandSurface>;
+}

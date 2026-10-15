@@ -1,5 +1,5 @@
 {
-  "revision": "4.5",
+  "revision": "4.6",
   "prefix": "vs_",
   "tables": [
     {
@@ -1781,6 +1781,111 @@
         "intendedPolicy": "Internal frozen recipient provenance; visible only through the exact live access and purpose guard.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "events",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningAssignment",
+      "owner": "learning",
+      "table": "vs_learning_assignment",
+      "fields": "id/org/school/offering/teacher uuid; status/revision/current_version; title/instructions/due_at; timestamps",
+      "responsibility": "Mutable Teacher-owned draft root and published-version pointer.",
+      "constraints": "Scoped Offering/Teacher FKs; DRAFT/PUBLISHED and positive revision checks; scoped/current version unique keys; teacher and status list indexes",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope, live Teacher assignment and learning write authority; WITH CHECK binds scope and offering.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningAssignmentVersion",
+      "owner": "learning",
+      "table": "vs_learning_assignment_version",
+      "fields": "id/org/school/assignment/offering/year/section uuid; version/title/instructions/due; digest/publisher/timestamp",
+      "responsibility": "Immutable exact published assignment version.",
+      "constraints": "Scoped assignment/Offering/account FKs; unique assignment/version; due index; append-only trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Published content is visible only through exact frozen recipient bindings and current access guards.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningAssignmentRecipient",
+      "owner": "learning",
+      "table": "vs_learning_assignment_recipient",
+      "fields": "id/org/school/version/student uuid; created_at",
+      "responsibility": "Frozen Student audience membership for an exact assignment version.",
+      "constraints": "Scoped version/Student FKs; unique version/Student; Student lookup index; append-only trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Internal audience provenance; require exact current publisher or recipient authority.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningAssignmentGuardianBinding",
+      "owner": "learning",
+      "table": "vs_learning_guardian_binding",
+      "fields": "id/org/school/recipient/access/student uuid",
+      "responsibility": "Frozen exact Guardian access provenance for one assignment recipient.",
+      "constraints": "Scoped recipient and Guardian access+Student FKs; unique recipient/access; lookup index; append-only",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Visible only through exact live Guardian access and learning purpose guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningAssignmentStudentBinding",
+      "owner": "learning",
+      "table": "vs_learning_student_binding",
+      "fields": "id/org/school/recipient/access/student uuid",
+      "responsibility": "Frozen exact Student portal access provenance for one assignment recipient.",
+      "constraints": "Scoped recipient and Student access+Student FKs; unique recipient/access; lookup index; append-only",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Visible only through exact live Student access and learning purpose guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
         "closureGate": "TEN-03"
       }
     }

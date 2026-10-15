@@ -16,6 +16,7 @@ Approved UX sources:
 2. **ATT-05 / PAR-11/PAR-12 / SA-29:** engineering-verified for fictional local/test data under the 15 October first-release decision. Protected-text retention remains a real-data release gate. Evidence: `docs/evidence/attendance-explanations-2026-10-15/`.
 3. **COM-02 / STW-27–28:** approved and engineering-verified for the bounded text-notice projection. STW-28 is complete; STW-27 remains partial only for attachments pending their separate file-owner/download contract. Evidence is in `docs/evidence/communication-stw-27-28-2026-10-15/`.
 4. **Calendar/Events checkpoint:** the bounded one-off draft → published → canceled EV-01 slice is engineering-verified. Advanced recurrence, RSVP, payments, consent, attachments, external delivery, mixed agenda and assessment dates remain excluded.
+5. **LEA-01 / TEA-27 / PAR-20 / STW-10–11:** the bounded text-only Teacher draft/resume/publish and exact frozen Parent/Student read slice is engineering-verified. The richer assignment workspace, resources, submissions, feedback and questions remain excluded. Evidence is in `docs/evidence/learning-publication-2026-10-15/`.
 
 Functional/security status, reference comparison and human acceptance remain separate. Human acceptance is pending for every workflow in this export.
 
@@ -23,9 +24,9 @@ Functional/security status, reference comparison and human acceptance remain sep
 
 | Workspace | Engineering complete | Partial | Blocked/not started | Total | Incomplete in this backlog |
 |---|---:|---:|---:|---:|---:|
-| Parent/Guardian | 12 | 1 | 39 | 52 | 40 |
-| Student | 8 | 4 | 35 | 47 | 39 |
-| **Combined** | **20** | **5** | **74** | **99** | **79** |
+| Parent/Guardian | 12 | 2 | 38 | 52 | 40 |
+| Student | 8 | 7 | 32 | 47 | 39 |
+| **Combined** | **20** | **9** | **70** | **99** | **79** |
 
 The 79 incomplete workflows include partial delivered slices and rows whose primary planning blocker is **product** or **technical design**. PAR-11, PAR-12, PAR-14 and STW-28 have moved out of the backlog; STW-27 remains only for attachments. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
 
@@ -113,13 +114,13 @@ No grant, migration or UI should be implemented until this decision sheet, inclu
 
 | Role / workflow | User outcome | Owner | Reusable functionality | Exact missing contract or implementation | Administrator/Teacher counterpart | Dependencies | Primary blocker |
 |---|---|---|---|---|---|---|---|
-| Parent PAR-20 | Review published homework | Learning | Child link and academic context | Published task projection and `learning.read_child` purpose | Teacher publishes exact task version | Learning owner | Technical design |
+| Parent PAR-20 | Review published homework | Learning | Exact immutable text assignment read, frozen Guardian binding and independent `learning.assignment.read_child` are verified | Returned feedback, questions and the richer reference workflow | Teacher text-only draft/resume/publish is verified | LEA-01 delivered slice; later Learning feedback/communication owners | Implementation/technical design for remaining scope |
 | Parent PAR-21 | Read returned feedback | Learning | Future published/submitted work | Returned-version owner, Parent audience and private-draft exclusion | Teacher returns authorized feedback | PAR-20; Student submission/feedback | Technical design |
 | Parent PAR-22 | Ask a learning question | Learning / Communication | Future task plus permitted conversation | Question target, routing and permitted recipient | Assigned/permitted Teacher response | PAR-20; Communication owner | Technical design |
 | Student STW-06 | Plan my school day | Day / Learning | Current class, timetable, Attendance entry and next published class | Published Learning-task projection | Teacher publishes assigned work | STW-10 | Technical design |
 | Student STW-09 | Open an assigned class space | Learning / Academics | Published timetable and class placement | Class-space membership and published content projection | Teacher manages assigned class space | STW-07, STW-10 | Technical design |
-| Student STW-10 | Find and organize assignments | Learning | Student academic context | Assignment owner, publication, learner allocation, query/sort/pagination | Teacher publishes to authorized class/Student | STW-04 | Technical design |
-| Student STW-11 | Understand an assignment | Learning | Future assignment list | Versioned instructions, criteria, deadline and visibility | Teacher authors/publishes exact version | STW-10 | Technical design |
+| Student STW-10 | Find and organize assignments | Learning | Exact published text-assignment list, frozen Student binding and independent `learning.assignment.read_self` are verified | Approved search/filter/sort/pagination and submission-status organization | Teacher text-only draft/resume/publish is verified | LEA-01 delivered slice; later submission/query contracts | Implementation/technical design for remaining scope |
+| Student STW-11 | Understand an assignment | Learning | Immutable title, instructions, due time, class context and version are verified | Resources, criteria and submission lifecycle | Teacher authors/publishes the exact immutable text version | STW-10 delivered slice; Files/submission owners | Implementation/technical design for remaining scope |
 | Student STW-12 | Open learning resources | Learning / Files | Bounded file/download patterns | Resource ownership, scanning, authorization and expiring delivery | Teacher attaches published resource | STW-11 | Technical design |
 | Student STW-13 | Save and resume my draft | Learning | Existing idempotency/version patterns | Private durable draft owner, versioning and resume boundaries | Teacher cannot read private draft before submission | STW-11 | Technical design |
 | Student STW-14 | Attach and check a file | Learning / Files | Bounded upload validation patterns | Upload/scan lifecycle tied to private draft | Teacher receives only committed submission files | STW-13 | Technical design |
@@ -198,6 +199,6 @@ The Student inventory contains no fee/payment workflows. This capability unlocks
 
 ## Next eligible action
 
-COM-01/PAR-14, the bounded COM-02 text-notice projection, ATT-05 Parent Attendance explanations and EV-01 one-off Calendar/Events are engineering-verified. STW-27 remains partial only for attachments, STW-28 is engineering-complete, PAR-18 remains partial for a mixed agenda/closures, and STW-31 remains partial for assessment dates. Technical design by itself is not an approval gate; unresolved product authority, sensitive-data retention and financial/consent rules remain the named gates.
+COM-01/PAR-14, the bounded COM-02 text-notice projection, ATT-05 Parent Attendance explanations, EV-01 one-off Calendar/Events and LEA-01 text-only Learning publication/read are engineering-verified supported slices. STW-27 remains partial only for attachments, STW-28 is engineering-complete, PAR-18 remains partial for a mixed agenda/closures, STW-31 remains partial for assessment dates, and PAR-20/STW-10/STW-11 remain partial for their richer Learning interactions. Technical design by itself is not an approval gate; unresolved product authority, sensitive-data retention and financial/consent rules remain the named gates.
 
 Until then, the current Parent and Student checkpoints remain preserved. No new authority, lifecycle, migration, visual claim or test result is created by this planning export.

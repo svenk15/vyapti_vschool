@@ -1,4 +1,4 @@
-export const studentPortalPurposes=['profile.read_self','attendance.read_self','timetable.read_self','communication.notice.read_self','calendar.event.read_self'] as const;
+export const studentPortalPurposes=['profile.read_self','attendance.read_self','timetable.read_self','communication.notice.read_self','calendar.event.read_self','learning.assignment.read_self'] as const;
 export type StudentPortalPurpose=typeof studentPortalPurposes[number];
 export type StudentPortalAccessStatus='INVITE_SENT'|'DELIVERY_FAILED'|'OPERATOR_REQUIRED'|'ACCESS_ENABLED'|'ACCESS_REMOVED';
 export type StudentPortalAccessRecord=Readonly<{accessId:string;studentId:string;studentName:string;email:string;status:StudentPortalAccessStatus;version:number;authorizedAt:string;acceptedAt:string|null;revokedAt:string|null;invitationId:string|null;deliveryFailureReason:string|null;purposes:readonly StudentPortalPurpose[]}>;

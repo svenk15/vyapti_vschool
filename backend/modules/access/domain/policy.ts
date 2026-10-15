@@ -17,7 +17,7 @@ export function normalizeProvision(input: ProvisionInput): ProvisionInput {
   return result;
 }
 const admin=["school.manage","user.manage","module.configure","branding.manage","class.manage","class.read","student.manage","student.read","attendance.read_class","attendance.read_school","attendance.correct","attendance.export","admissions.manage","timetable.manage","communication.publish","self.read"];
-const teacher=["class.read","student.read","attendance.mark","attendance.read_class","timetable.read","self.read"];
+const teacher=["class.read","student.read","attendance.mark","attendance.read_class","timetable.read","learning.assignment.write","learning.assignment.publish","self.read"];
 export function capabilitiesFor(roles: readonly RoleCode[]): readonly string[] { return [...new Set(roles.flatMap(r=>r==="SCHOOL_ADMIN"?admin:r==="TEACHER"?teacher:[]))]; }
 export function currentIdentity(account:{status:string;tokenVersion:number}|null,tokenVersion:number):boolean { return !!account&&account.status==="ACTIVE"&&account.tokenVersion===tokenVersion; }
 export function nextFailure(failedAttempts:number,lockedUntil:Date|null,now:Date) {

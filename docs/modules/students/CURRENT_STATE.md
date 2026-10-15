@@ -110,6 +110,8 @@ Proceed to EX-09 import preview and recovery adoption. Preserve the verified Stu
 
 ## Pending decisions / limitations
 
+**LEA-01 supported slice (15 October 2026):** Student portal access now supports the independent, non-backfilled `learning.assignment.read_self` purpose. Learning freezes the exact accepted Student portal binding at assignment publication and rechecks the same live access/purpose for every Student read. Later grants do not add recipients retroactively. Focused Learning PostgreSQL and desktop/mobile browser evidence passed. STW-10/11 remain supported partial workflows because the approved search/filter/sort workspace, resources, criteria and submission lifecycle are not implemented. See [Learning evidence](../../evidence/learning-publication-2026-10-15/README.md). Human review remains PENDING.
+
 TEN-03 must implement and verify RLS before multi-client production release. Migration 016 is installed locally but its tables are not RLS-enforced. Pilot provider, real-data privacy/retention and backup decisions remain release gates in FND-02.
 
 ## Evidence history
