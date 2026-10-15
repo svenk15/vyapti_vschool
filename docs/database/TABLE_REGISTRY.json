@@ -561,8 +561,8 @@
       "table": "vs_attendance_session",
       "status": "MIGRATED",
       "design": "docs/modules/attendance/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; school_date date; starts_at timestamptz(3); ends_at timestamptz(3); occurrence_key varchar(80); calendar_revision_id uuid; source_occurrence_id uuid nullable; status SCHEDULED/OPEN/SUBMITTED/CANCELLED; version int; roster_revision char(64) nullable; opened_at timestamptz(3) nullable; submitted_at timestamptz(3) nullable; submitted_by uuid nullable; cancelled_at timestamptz(3) nullable",
-      "responsibility": "One actual offering occurrence; retains calendar version and scope. A nullable trusted Academics occurrence link distinguishes timetable-generated sessions from manual sessions. School timezone validates local date.",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; offering_id uuid; school_date date; starts_at timestamptz(3); ends_at timestamptz(3); occurrence_key varchar(80); calendar_revision_id uuid; source_occurrence_id uuid nullable; status SCHEDULED/OPEN/SUBMITTED/CANCELLED; version int; roster_revision char(64) nullable; opened_at timestamptz(3) nullable; submitted_at timestamptz(3) nullable; submitted_by uuid nullable; cancelled_at timestamptz(3) nullable; state_updated_at timestamptz(3) nullable",
+      "responsibility": "One actual offering occurrence; retains calendar version and scope. A nullable trusted Academics occurrence link distinguishes timetable-generated sessions from manual sessions. state_updated_at records owner-written lifecycle freshness and remains null when legacy evidence is unavailable. School timezone validates local date.",
       "constraints": "Scoped Offering/CalendarRevision and optional LessonOccurrence FKs; UNIQUE(scope,offering_id,occurrence_key); UNIQUE(scope,source_occurrence_id); UNIQUE(scope,id); CHECK starts<ends, known status and version>=1; index(scope,school_date,status,starts_at,id).",
       "rls": {
         "classification": "BRANCH",

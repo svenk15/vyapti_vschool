@@ -36,3 +36,16 @@ Acceptance criteria:
 5. Foreign branch/institution, revoked Principal, future date, disabled/unlicensed/unreleased module and other roles fail without counts or sensitive detail.
 6. Home and Attendance oversight show populated, no-due, unavailable and mobile states through the shared Principal shell; there are no dead LDR-03 actions.
 7. Focused unit, real PostgreSQL, desktop/mobile Playwright, plan, build and required repository gates pass; direct reference comparison and human review remain separately recorded.
+
+## LDR-03 — Exact Attendance session evidence and freshness
+
+Dependencies: verified LDR-02 and the current Attendance session owner.
+
+Acceptance criteria:
+
+1. A Principal can open one exact awaiting row and see current scheduled context, expected teacher, lifecycle state/version, last trustworthy source update when available, and server observation time only.
+2. Every open/reload reauthorizes and re-reads current Attendance state; a newly submitted row displays received/no longer awaiting without exposing roster, marks, explanations, correction history or actors.
+3. Foreign scope, revoked Principal, disabled/unlicensed/unreleased Attendance and other roles fail without source detail.
+4. Attendance lifecycle writes maintain source freshness in their existing transaction; the forward migration preserves history, backfills only trustworthy evidence and leaves unknown legacy schedule freshness null.
+5. The detail preserves a date-qualified return path, mobile composition and keyboard focus, and is directly compared with the approved “Inspect the evidence” state.
+6. Focused real PostgreSQL, desktop/mobile Playwright, schema/design checks, build and required repository gates pass. LEA-08 filters/sort, human review, font portability, native accessibility and TEN-03 remain separate.

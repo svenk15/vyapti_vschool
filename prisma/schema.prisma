@@ -1393,6 +1393,7 @@ model AttendanceSession {
  submittedAt DateTime? @map("submitted_at") @db.Timestamptz(3)
  submittedBy String? @map("submitted_by") @db.Uuid
  cancelledAt DateTime? @map("cancelled_at") @db.Timestamptz(3)
+ stateUpdatedAt DateTime? @map("state_updated_at") @db.Timestamptz(3)
  sourceOccurrenceId String? @map("source_occurrence_id") @db.Uuid
  offering CourseOffering @relation(fields:[organizationId,schoolId,offeringId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_offering_fkey")
  calendarRevision CalendarRevision @relation("AttendanceSessionCalendarRevision",fields:[organizationId,schoolId,calendarRevisionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_session_calendar_revision_fkey")

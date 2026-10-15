@@ -20,3 +20,10 @@ export type LeadershipRegisterCoverage=Readonly<{
  counts:Readonly<{scheduled:number;due:number;received:number;awaiting:number;notDue:number;cancelled:number}>;
  awaiting:Readonly<{items:readonly LeadershipRegisterCoverageItem[];nextCursor:string|null}>;
 }>;
+export type LeadershipSessionEvidence=Readonly<{
+ id:string;version:number;schoolDate:string;timezone:string;startsAt:string;endsAt:string;
+ sectionName:string;subjectName:string;teacherName:string|null;
+ currentState:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';
+ evidenceState:'AWAITING'|'RECEIVED'|'CANCELLED'|'NOT_DUE';
+ stateUpdatedAt:string|null;observedAt:string;
+}>;

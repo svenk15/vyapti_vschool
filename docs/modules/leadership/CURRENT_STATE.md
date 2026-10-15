@@ -27,3 +27,17 @@ Verification: focused Access unit 10/10, real PostgreSQL Attendance 12/12 and de
 Remaining gates: LDR-03 exact session evidence is still absent, so LEA-08 remains partial. LEA-06 remains partial because unavailable data is fail-closed but a retained last-known stale snapshot is not implemented. Human review, exact font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
 
 Next action: LDR-03, a read-only exact-session evidence projection with independently rechecked Principal authority and no roster, marks or explanation disclosure.
+
+## 16 October 2026 — LDR-03 verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+An awaiting coverage row now opens a dedicated, read-only Principal source-evidence page. Attendance independently reauthorizes the exact branch-scoped session and returns only its scheduled class/subject/time, current dated expected Teacher, lifecycle state/version, server observation time and trustworthy owner update time. Reload always re-reads the source: a session submitted after the list snapshot becomes `RECEIVED` and explicitly says it is no longer awaiting. Rosters, pupil marks, explanations, correction history, actors, exports and mutation controls remain absent. The date-qualified return path, keyboard entry and mobile composition are verified.
+
+Schema: forward migration `20261016130000_attendance_session_state_update` adds nullable `state_updated_at` to `vs_attendance_session`. It is applied to `vyapti_vschool` and `vyapti_vschool_test`; both retain all 64 migrations without reset. Existing lifecycle timestamps and trustworthy schedule command receipts are backfilled. Unknown legacy scheduled evidence remains null. Attendance schedule/open/submit/correct/cancel and Timetable reconciliation/cancellation now update freshness atomically in their existing transactions. No index or authorization scope changed.
+
+Verification: the focused real-PostgreSQL Attendance file passed 12/12, including fresh SCHEDULED→SUBMITTED evidence, scope/role/revocation/module denial, field exclusion and owner timestamp writes. The normal and isolated production builds passed. Focused Principal Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker, including keyboard focus, exact route context, refresh-to-current behavior and populated/no-due states. `pnpm check` passed lint, type generation/checking, documentation, 96 database contracts, boundaries, portable-backend compilation and 164/164 unit tests. Direct inspection compared 1440×1000 and 390×844 application captures with the approved stage-2 “Inspect the evidence” dialog. The reference is a fictional review dialog; the application uses the production shell and a full read-only evidence page. See [evidence](../../evidence/principal-ldr-03-2026-10-16/README.md).
+
+Remaining gates: LEA-08 remains PARTIAL because its approved class/status/teacher filters and stable due/class sorting are not implemented. LEA-06 still lacks a retained last-known stale snapshot. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: complete the bounded LEA-08 filter/sort contract through the existing Attendance projection, without client-side page sorting or broader identity lookup.

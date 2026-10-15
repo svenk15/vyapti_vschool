@@ -1,9 +1,12 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {LeadershipRegisterCoverage} from '../../../../shared/contracts/attendance';
+import type {LeadershipRegisterCoverage,LeadershipSessionEvidence} from '../../../../shared/contracts/attendance';
 import {AccessError,uuidPattern} from '../../access/contracts/index';
 
 export type LeadershipCoverageQuery=Readonly<{date:string|null;afterDueAt:Date|null;afterId:string|null;limit:number}>;
-export interface LeadershipCoverageRepository { get(actor:Identity,organizationId:string,schoolId:string,query:LeadershipCoverageQuery):Promise<LeadershipRegisterCoverage>; }
+export interface LeadershipCoverageRepository {
+ get(actor:Identity,organizationId:string,schoolId:string,query:LeadershipCoverageQuery):Promise<LeadershipRegisterCoverage>;
+ detail(actor:Identity,organizationId:string,schoolId:string,sessionId:string):Promise<LeadershipSessionEvidence>;
+}
 
 const actor=(value:Identity|null)=>{if(!value||!uuidPattern.test(value.accountId)||!Number.isSafeInteger(value.tokenVersion))throw new AccessError('UNAUTHENTICATED');return value;};
 const id=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value;};
@@ -18,6 +21,7 @@ export function createLeadershipCoverageUseCases(repository:LeadershipCoverageRe
  get(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:Readonly<{date?:unknown;cursor?:unknown;limit?:unknown}>={}){
   const limit=input.limit===undefined?25:input.limit;if(typeof limit!=='number'||!Number.isInteger(limit)||limit<1||limit>50)throw new AccessError('VALIDATION');
   return repository.get(actor(actorValue),id(organizationId),id(schoolId),{date:date(input.date),...cursor(input.cursor),limit});
- }
+ },
+ evidence(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,sessionId:unknown){return repository.detail(actor(actorValue),id(organizationId),id(schoolId),id(sessionId));}
 };}
 export type LeadershipCoverageFacade=ReturnType<typeof createLeadershipCoverageUseCases>;

@@ -728,3 +728,7 @@ Principal is a separate fixed, branch-scoped Access grant provisioned only throu
 ### 16 October 2026 — Principal register-coverage metric
 
 The first Principal Attendance metric is `register-coverage.v1` with `SESSION_END_NO_GRACE`: a non-cancelled session is due when its scheduled end is at or before the server as-of instant. Received means a due submitted register; awaiting means a due scheduled or open register; future and cancelled sessions remain separate. Received plus awaiting must equal due, and the metric never represents pupil absence. This Principal-only read uses `attendance.read_leadership`, which does not grant the Administrator school-wide Attendance view, rosters, pupil marks, explanations, revision history, exports or writes. LDR-03 separately owns exact-session evidence.
+
+### 16 October 2026 — Principal exact Attendance source evidence
+
+Principal exact-session evidence is a fresh, read-only Attendance projection under the same narrow `attendance.read_leadership` authority. It exposes scheduled context, current lifecycle state/version and owner-maintained source freshness, while excluding rosters, pupil marks, explanations, correction history, actors, exports and mutations. AttendanceSession stores nullable `state_updated_at`; owner lifecycle writes maintain it atomically, trustworthy historical evidence is backfilled, and an unknown legacy value remains visibly unavailable rather than inferred from schedule or current time. LEA-08 filtering/sorting remains a separate incomplete slice.

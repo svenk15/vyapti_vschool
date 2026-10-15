@@ -11,7 +11,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-05 | Review my school today | daily | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 provides the approved first-release Attendance summary with current source time, exact denominator and no fabricated additional owner metrics; the reference is a fictional workflow dialog while the application uses the production shell |
 | LEA-06 | Recognize stale, incomplete or unavailable information | daily | 1 | PARTIAL | FOCUSED_APPLICATION_INSPECTION | PENDING | Current source time, metric definition and fail-closed unavailable state are verified; retained last-known stale data is not implemented |
 | LEA-07 | Run the weekly leadership review | daily | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-08 | Inspect register submission coverage | attendance | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 exact coverage/list is verified; the approved exact-session evidence action remains LDR-03 |
+| LEA-08 | Inspect register submission coverage | attendance | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 exact coverage and LDR-03 fresh exact-session evidence are verified; approved class/status/teacher filters and stable due/class sorting remain |
 | LEA-09 | Create an accountable missing-register follow-up | attendance | 2 | BLOCKED | NOT_STARTED | PENDING | Coordination owner persistence and authority are not implemented |
 | LEA-10 | Follow up multiple missing registers safely | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-11 | Verify, close or reopen a follow-up | attendance | 2 | BLOCKED | NOT_STARTED | PENDING | Coordination follow-up lifecycle is not implemented |
@@ -53,11 +53,11 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 2 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 37 NOT_STARTED. LEA-01 and LEA-05 are engineering-complete; LEA-08 remains partial until LDR-03. Human acceptance remains pending for all 46.
+Engineering: 2 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 37 NOT_STARTED. LEA-01 and LEA-05 are engineering-complete; LEA-08 remains partial because its filter/sort contract is not yet implemented. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
-1. Design and implement LDR-03 exact read-only session evidence for the LDR-02 awaiting list; do not disclose pupil marks, explanations or correction history.
+1. Complete LEA-08 class/status/teacher filtering and stable due/class sorting through the scoped Attendance projection; do not sort a loaded page in the browser.
 2. Extend LEA-02 stale-response proof around the real Attendance projection without simulating data in the Access shell.
 3. Complete LEA-06 stale-last-known behavior and LEA-46 preferences/support only after their exact persistence/owner contracts exist.
 
