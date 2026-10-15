@@ -23,3 +23,16 @@ Human acceptance remains PENDING.
 - [x] Directly compare the supported states with the approved STW-10 reference.
 
 Submission-status filters remain outside this task because their draft/attempt/feedback lifecycle is not implemented. Human acceptance remains PENDING.
+
+## LEA-03 — private text draft and on-time submission
+
+- [x] Add forward-only private draft and immutable submission tables with scoped keys, constraints, indexes and TEN-03 registry entries.
+- [x] Add private Student save/resume with optimistic version checks and safe evidence excluding response text.
+- [x] Add explicit on-time submission with immutable snapshot, exact-payload replay and concurrency protection.
+- [x] Add assignment-scoped Teacher submission list/detail without exposing unsubmitted drafts.
+- [x] Integrate supported Draft/Submitted states into Student detail, directory filters and My day priorities.
+- [x] Extend deterministic fictional seed data without replacing existing records.
+- [x] Pass focused real-PostgreSQL, desktop/mobile browser, migration, boundary, type/lint and build checks.
+- [x] Directly inspect approved Student/Teacher reference states and record supported extensions/deviations.
+
+Human acceptance remains PENDING. Files, late work, extensions, resubmission, grading, feedback, Returned/Closed/Excused semantics and durable browser storage remain separate tasks.

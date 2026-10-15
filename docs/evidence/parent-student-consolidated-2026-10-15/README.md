@@ -28,6 +28,7 @@ Private local credential files:
 | Administrator → Student | Authorize exact Student access, issue/resend setup and revoke one exact portal link independently | Designated `student.access.manage`; no staff/Guardian role substitution | Engineering complete: [Student workspace](../student-workspace-2026-10-14/README.md) |
 | Student | Activate/sign in, switch between two independently authorized school contexts, read own Profile, published Timetable and factual Attendance, then sign out | Exact account→Person→Student binding, active Enrollment/Placement and three independent self-read purposes | Engineering complete for STW-01–05, 07 and 25; [integration checkpoint](../parent-student-integration-2026-10-14/README.md) |
 | Student day | See current class and deterministic next published lesson, or an honest no-more-classes/unavailable state | Existing guarded Timetable self projection | Verified bounded slice; STW-06 remains partial pending Learning: [next-class evidence](../student-next-class-stw-06-2026-10-15/README.md) |
+| Teacher → Student → Teacher work | Publish immutable text work, save/resume one private draft, confirm an on-time immutable submission, retain the receipt and let only the authoring current Teacher read accepted content | Exact frozen Learning recipient, live Student self purpose and current Teacher offering assignment | Engineering complete for STW-13, text-only STW-15 and STW-16: [LEA-03 evidence](../learning-text-submission-lea-03-2026-10-15/README.md) |
 
 No Student notice screen or Attendance explanation request is represented as delivered. Their authority/lifecycle decisions remain open.
 
@@ -59,9 +60,9 @@ Reference-less security compositions remain labelled extensions. The approved fo
 
 ## Completion accounting
 
-- Parent: 52 workflows = 10 engineering complete, 1 partial, 24 blocked on product decisions and 17 requiring owner design. Human review is pending for every row.
-- Student: 47 workflows = 7 engineering complete, 3 partial, 2 blocked on product decisions and 35 blocked on absent owner capability/contracts. The read-only Profile extension remains outside the 47-item catalog.
-- Combined: 99 catalog workflows = 17 engineering complete, 4 partial and 78 blocked/not started. Each catalog workflow is counted once; bounded engineering tasks do not make their parent workflow complete.
+- Parent: 52 workflows = 12 engineering complete, 2 partial and 38 blocked on product decisions or owner design. Human review is pending for every row.
+- Student: 47 workflows = 11 engineering complete, 7 partial and 29 blocked. The read-only Profile extension remains outside the 47-item catalog.
+- Combined: 99 catalog workflows = 23 engineering complete, 9 partial and 67 blocked/not started. Each catalog workflow is counted once; bounded engineering tasks do not make their parent workflow complete.
 
 ## Manual walkthrough
 
