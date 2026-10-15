@@ -43,9 +43,11 @@ test.beforeAll(async()=>{
  await events.grantPublisher(operator,{organizationId:school.organizationId,schoolId:school.schoolId,accountId:school.accountId});
  const person=await db.person.create({data:{id:randomUUID(),organizationId:school.organizationId,firstName:'Asha',lastName:'Calendar',version:1,createdAt:now}}),student=await db.student.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,personId:person.id,admissionNumber:`CAL-${label}`,admittedOn:from,status:'ACTIVE',version:1,createdAt:now}}),year=await db.academicYear.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,code:`CY${label}`,name:'Calendar year',startsOn:from,endsOn:until,status:'OPEN',version:1}}),grade=await db.gradeLevel.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,code:`CG${label}`,name:'Grade 6',sortOrder:6,active:true,version:1}}),section=await db.section.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,yearId:year.id,gradeId:grade.id,code:`CA${label}`,name:'Section A',active:true,version:1}}),enrollment=await db.enrollment.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,studentId:student.id,yearId:year.id,validFrom:from,validTo:until,version:1}});
  await db.sectionPlacement.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,enrollmentId:enrollment.id,yearId:year.id,sectionId:section.id,validFrom:from,validTo:until}});
+ const weekDate=new Date(now),weekDay=weekDate.getUTCDay()||7;weekDate.setUTCHours(0,0,0,0);weekDate.setUTCDate(weekDate.getUTCDate()-(weekDay-1));const friday=new Date(weekDate),saturday=new Date(weekDate);friday.setUTCDate(friday.getUTCDate()+4);saturday.setUTCDate(saturday.getUTCDate()+5);
  const periodKey=randomUUID(),pattern=await db.academicDayPattern.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,academicYearId:year.id,name:'Calendar teaching week',teachingDays:[1,2,3,4,5,6],state:'PUBLISHED',version:1,createdAt:now,createdByAccountId:school.accountId,updatedAt:now,periods:{create:{id:randomUUID(),periodKey,label:'Morning lesson',kind:'LESSON',startLocal:new Date('1970-01-01T09:00:00.000Z'),endLocal:new Date('1970-01-01T09:40:00.000Z'),position:1}}}}),calendarId=randomUUID(),calendarRevisionId=randomUUID(),draftId=randomUUID();
  await db.schoolCalendar.create({data:{id:calendarId,organizationId:school.organizationId,schoolId:school.schoolId,yearId:year.id,version:1}});
- await db.calendarRevision.create({data:{id:calendarRevisionId,organizationId:school.organizationId,schoolId:school.schoolId,calendarId,number:1,teachingWeekdays:[1,2,3,4,5,6],publishedAt:now,publishedBy:school.accountId}});
+ await db.calendarRevision.create({data:{id:calendarRevisionId,organizationId:school.organizationId,schoolId:school.schoolId,calendarId,number:1,teachingWeekdays:[1,2,3,4,5],publishedAt:now,publishedBy:school.accountId}});
+ await db.calendarException.createMany({data:[{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,revisionId:calendarRevisionId,campusId:null,onDate:friday,isTeachingDay:false,label:'Local closure'},{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,revisionId:calendarRevisionId,campusId:null,onDate:saturday,isTeachingDay:true,label:'Extra teaching day'}]});
  await db.schoolCalendar.update({where:{id:calendarId},data:{currentRevisionId:calendarRevisionId}});
  await db.timetableRevision.create({data:{id:draftId,organizationId:school.organizationId,schoolId:school.schoolId,academicYearId:year.id,dayPatternId:pattern.id,revisionNo:1,state:'DRAFT',effectiveFrom:from,version:1,createdAt:now,createdByAccountId:school.accountId,updatedAt:now}});
  await db.timetableRevision.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,academicYearId:year.id,dayPatternId:pattern.id,revisionNo:2,state:'PUBLISHED',effectiveFrom:from,effectiveUntil:null,validatedUntil:until,publishedAt:now,publishedByAccountId:school.accountId,basedOnRevisionId:draftId,basedOnDraftVersion:1,sourceCommandId:randomUUID(),calendarRevisionId,contentSnapshot:{schemaVersion:1},version:1,createdAt:now,createdByAccountId:school.accountId,updatedAt:now}});
@@ -61,6 +63,7 @@ test.beforeAll(async()=>{
  fixture={adminEmail:input.adminEmail,adminPassword:input.password,parentEmail,parentPassword,studentEmail,studentPassword,sectionLabel:'Grade 6 · Section A'};
  mkdirSync('docs/evidence/events-student-agenda-stw-31-2026-10-16',{recursive:true});
  mkdirSync('docs/evidence/parent-combined-calendar-par-18-2026-10-16',{recursive:true});
+ mkdirSync('docs/evidence/parent-calendar-closures-par-18-2026-10-16',{recursive:true});
 });
 
 test.afterAll(async()=>{await students.disconnect();await guardians.disconnect();await events.disconnect();await access.disconnect();await db.$disconnect();});
@@ -95,6 +98,7 @@ test('publisher creates an exact class event and Parent and Student read the fro
  await page.getByRole('navigation',{name:'Family navigation'}).getByRole('link',{name:'School calendar'}).click();
  await expect(page.getByRole('heading',{name:'School calendar'})).toBeVisible();
  await expect(page.getByRole('heading',{name:'Teaching week'})).toBeVisible();
+ await expect(page.locator('.family-calendar-day')).toHaveCount(5);
  await expect(page.getByText('Sat',{exact:false})).toBeVisible();
  await expect(page.getByRole('link',{name:'View full timetable'})).toHaveAttribute('href',/week=/);
  await expect(page.getByText('Class learning showcase',{exact:true})).toBeVisible();
@@ -108,6 +112,7 @@ test('publisher creates an exact class event and Parent and Student read the fro
  const calendar=await exportResponse.text();expect(calendar).toContain('SUMMARY:Class learning showcase');expect(calendar).not.toContain('Kavya Calendar');
  await page.screenshot({path:`docs/evidence/events-student-agenda-stw-31-2026-10-16/parent-calendar-${testInfo.project.name}.png`,fullPage:true});
  await page.screenshot({path:`docs/evidence/parent-combined-calendar-par-18-2026-10-16/application-${testInfo.project.name}.png`,fullPage:true});
+ await page.screenshot({path:`docs/evidence/parent-calendar-closures-par-18-2026-10-16/application-${testInfo.project.name}.png`,fullPage:true});
  await page.getByRole('link',{name:/View event/}).click();
  await expect(page.getByRole('heading',{name:'Class learning showcase'})).toBeVisible();
  await expect(page.getByText(fixture.sectionLabel,{exact:true})).toBeVisible();

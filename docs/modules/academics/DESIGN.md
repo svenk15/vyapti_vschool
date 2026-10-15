@@ -366,6 +366,14 @@ sequenceDiagram
 
 Verification covers input validation; real PostgreSQL published-only projection, immutable break/unassigned-period display, trusted Attendance linking, branch isolation and current authority; and sequential desktop/mobile browser navigation, URL week state, responsive layout and register link. The exact reference is `VSchool_Teacher_Review.html#/planning`. Unsupported cover/request cards are recorded gaps rather than dead controls. Font portability and native assistive-technology evidence remain separate gates.
 
+### TT-06 Parent and Student calendar-effective day projection — 16 October 2026
+
+The existing Parent and Student weekly timetable reads must derive visible teaching days from both the effective immutable `TimetableRevision.dayPattern` and its server-pinned `calendarRevisionId`. For each civil date the read resolves the accepted Student's active Enrollment and SectionPlacement, obtains that Section's optional campus, and evaluates the pinned calendar with the existing precedence `campus exception > school exception > weekly rule`. A day appears only when the weekly pattern includes its ISO weekday and the pinned calendar evaluation says it is a teaching day. This preserves explicit closures and permits an approved extra teaching day only when the published pattern also has periods for that weekday.
+
+The read remains a repeatable-read, read-only projection behind the existing exact Parent-child or Student-self verifier. It accepts no calendar, campus, Section or scope authority from the browser. Publications created before calendar pinning remain compatible by using the immutable day pattern alone when `calendarRevisionId` is null; a non-null pinned ID that cannot be resolved in the same scope fails closed by omitting that date. Mixed-revision weeks resolve publication and calendar independently per date. No row, lock, receipt, schema or migration is added.
+
+Verification uses real PostgreSQL with a school-wide closure and an extra teaching day on the same pinned revision for both Parent and Student reads. Browser evidence exercises the combined Parent calendar with the same configured week and verifies desktop/mobile rendering, while existing authorization, purpose, context-isolation and revocation evidence remains applicable.
+
 ### STW-06 — Student next-class projection — 14 October 2026
 
 This narrow Student-home slice reuses the verified TT-06 Student weekly projection. The server derives the branch-local civil date and its Monday, calls the existing `timetable.read_self` use case, then selects the earliest `PLANNED` lesson for the accepted Student whose start instant has not passed. Ordering is `starts_at, occurrence_id`, so the result is deterministic. The browser supplies no organization, branch, Person, placement, occurrence or clock authority.

@@ -87,6 +87,8 @@ The current slice implements the independent Teacher/TEA-22 projection only. It 
 
 Acceptance: the Teacher sees only effective immutable published slots assigned through their dated TeacherAssignment; drafts and other Teachers remain absent. Every read rechecks current account/token, active scope, membership, Teacher/Employee identity, release, entitlement, activation and `timetable.read`. Attendance actions appear only for a session joined by trusted `source_occurrence_id`. A validated Monday drives URL-backed previous/next week navigation; desktop/mobile, keyboard navigation, empty/unavailable states and direct register navigation match the approved Teacher planning composition where supported. Unit, real PostgreSQL and sequential focused Playwright evidence are required. No migration is expected.
 
+Parent and Student follow-up acceptance: for every requested civil day, combine the effective immutable weekly pattern with the publication's pinned calendar revision and the active placement's campus. Apply campus exception, school exception and weekly-rule precedence without accepting browser scope or calendar authority. Prove a closure and an approved extra teaching day through the guarded Parent and Student reads with real PostgreSQL, then verify the combined Parent calendar at desktop and mobile widths. Preserve legacy null-calendar publications; fail closed for a missing non-null pin. No migration is expected.
+
 ## STW-06 — Show the next published class on Student home
 
 Depends on: verified Student self-access and TT-06 Student weekly projection.

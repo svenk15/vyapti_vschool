@@ -41,5 +41,6 @@ Human acceptance remains PENDING. STW-31 remains partial for published assessmen
 - [x] Omit the teaching section unless the selected child has the independent current timetable purpose.
 - [x] Verify the populated six-day teaching pattern and event agenda at desktop/mobile sizes with one browser worker.
 - [x] Inspect the application beside the unchanged PAR-18 reference and record remaining closure/advanced-interaction gaps.
+- [x] Evaluate the effective publication's pinned academic calendar per civil date and active placement campus; verify one closure and one approved extra teaching day through guarded Parent and Student reads.
 
-Human acceptance remains PENDING. PAR-18 remains partial for academic-closure semantics and advanced event interactions.
+Human acceptance remains PENDING. PAR-18 remains partial for advanced event interactions.
