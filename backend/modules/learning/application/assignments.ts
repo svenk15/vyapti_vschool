@@ -1,7 +1,7 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {LearningAssignmentSummary,LearningCommandResult,LearningTeacherWorkspace} from '../../../../shared/contracts/learning';
+import type {LearningAssignmentPage,LearningAssignmentSummary,LearningCommandResult,LearningTeacherWorkspace} from '../../../../shared/contracts/learning';
 import {AccessError} from '../../access/contracts/index';
-import {createLearningInput,learningId,publishLearningInput,updateLearningInput} from '../domain/assignments';
+import {createLearningInput,learningAssignmentQuery,learningId,publishLearningInput,updateLearningInput} from '../domain/assignments';
 
 export interface LearningRepository{
  teacherWorkspace(actor:Identity,input:{organizationId:string;schoolId:string}):Promise<LearningTeacherWorkspace>;
@@ -11,6 +11,7 @@ export interface LearningRepository{
  listParent(actor:Identity,input:{studentId:string}):Promise<LearningAssignmentSummary[]>;
  detailParent(actor:Identity,input:{studentId:string;assignmentId:string}):Promise<LearningAssignmentSummary>;
  listStudent(actor:Identity,input:{studentId:string}):Promise<LearningAssignmentSummary[]>;
+ queryStudent(actor:Identity,input:{studentId:string;q:string;by:'title'|'subject';sort:'due'|'title'|'subject';order:'asc'|'desc';cursor:string|null;limit:number}):Promise<LearningAssignmentPage>;
  detailStudent(actor:Identity,input:{studentId:string;assignmentId:string}):Promise<LearningAssignmentSummary>;
 }
 export function createLearningUseCases(repository:LearningRepository){const actor=(value:Identity|null)=>{if(!value)throw new AccessError('UNAUTHENTICATED');return value;};return {
@@ -21,6 +22,7 @@ export function createLearningUseCases(repository:LearningRepository){const acto
  listParent:(identity:Identity|null,studentId:unknown)=>repository.listParent(actor(identity),{studentId:learningId(studentId)}),
  detailParent:(identity:Identity|null,studentId:unknown,assignmentId:unknown)=>repository.detailParent(actor(identity),{studentId:learningId(studentId),assignmentId:learningId(assignmentId)}),
  listStudent:(identity:Identity|null,studentId:unknown)=>repository.listStudent(actor(identity),{studentId:learningId(studentId)}),
+ queryStudent:(identity:Identity|null,studentId:unknown,query:unknown)=>repository.queryStudent(actor(identity),{studentId:learningId(studentId),...learningAssignmentQuery(query)}),
  detailStudent:(identity:Identity|null,studentId:unknown,assignmentId:unknown)=>repository.detailStudent(actor(identity),{studentId:learningId(studentId),assignmentId:learningId(assignmentId)}),
 };}
 export type LearningFacade=ReturnType<typeof createLearningUseCases>;

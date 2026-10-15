@@ -1,5 +1,9 @@
 export type LearningAssignmentStatus='DRAFT'|'PUBLISHED';
 export type LearningOffering={id:string;code:string;subject:string;classLabel:string;yearName:string};
 export type LearningAssignmentSummary={id:string;status:LearningAssignmentStatus;revision:number;version:number|null;title:string;instructions:string;dueAt:string;offering:LearningOffering;recipientCount:number;publishedAt:string|null};
+export type LearningAssignmentSearchBy='title'|'subject';
+export type LearningAssignmentSort='due'|'title'|'subject';
+export type LearningAssignmentOrder='asc'|'desc';
+export type LearningAssignmentPage={items:LearningAssignmentSummary[];nextCursor:string|null};
 export type LearningTeacherWorkspace={timezone:string;offerings:LearningOffering[];assignments:LearningAssignmentSummary[]};
 export type LearningCommandResult={assignmentId:string;status:LearningAssignmentStatus;revision:number;version:number|null;recipientCount:number;replayed:boolean};

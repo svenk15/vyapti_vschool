@@ -39,6 +39,14 @@ All tables are Path A branch tenant tables registered for TEN-03 closure:
 
 Teacher list joins Assignment→Offering→Subject/Section and returns only assignments authored by the current Teacher for offerings they remain currently assigned to. Parent/Student list joins the exact binding→recipient→current AssignmentVersion and orders by `due_at,id`. Recipient resolution joins Offering→effective Enrollment→effective Placement; it does not resolve people by name/email or perform identity merging.
 
+### LEA-02 / STW-10 published-assignment directory query
+
+The supported Student directory query accepts `q` (0–100 normalized characters), `by=title|subject`, `sort=due|title|subject`, `order=asc|desc`, an opaque query-bound cursor and `limit` 1–50 (UI default 20). Assignment name is the default search attribute. Enter applies the draft query to the URL; changing search or sort clears a stale cursor. Ordering and pagination run in PostgreSQL across the complete authorized frozen-recipient set with assignment UUID as the deterministic tie-breaker. A cursor records only the normalized query signature, last sort value and assignment ID. It cannot grant access: the repository re-establishes current Student scope/purpose and repeats the exact binding joins on every page.
+
+The query joins `vs_learning_student_binding` → recipient → immutable current version → current published assignment → scoped CourseOffering → Subject. Every join carries organization and school scope. Title/subject substring search escapes SQL wildcard characters. Existing binding, recipient, due-date, assignment-list and scoped Academics keys support the predicates; the focused dataset does not justify another index or migration. Detail still reauthorizes independently.
+
+The UI uses the approved Assignment name/Subject search selector, separate Sort drawer, responsive table, no-results recovery and next-page link. Status filtering is not in LEA-02: the approved values Draft, Submitted, Returned, Closed and Excused require learner draft/submission/feedback policy. Due time alone never fabricates those states. Published work due in the future may be labelled **To do**; older immutable work is labelled **Published**, with no claim that it was missing or closed.
+
 ## Commands, queries and boundaries
 
 Portable `LearningFacade` operations are:
@@ -68,6 +76,7 @@ Validation preserves entered safe fields. Failure states distinguish unavailable
 - Unit: normalization, bounds, future due-date validation shape.
 - Real PostgreSQL: assigned Teacher create/update/publish, exact frozen Parent/Student audience, later-grant non-retroactivity, purpose revocation, cross-class/branch denial, replay, stale/concurrent mutation, immutable version/recipient enforcement and revoked Teacher denial.
 - Browser: Teacher draft/resume/publish → Parent list/detail → Student list/detail; persistence after reload; desktop 1440×1000 and mobile 390×844 with keyboard-visible actions.
+- LEA-02 query: real PostgreSQL proves title/subject search, database ordering, a Student beyond page one, cursor/query mismatch rejection and unchanged exact recipient scope; browser proves Enter-applied URL state, Back restoration, Sort Apply/focus and responsive table/detail navigation.
 - Repository: migration status, database registry, backend/boundary/docs checks, lint and build.
 
 Human acceptance, native VoiceOver/NVDA, font portability, TEN-03 enforcement and production readiness remain separate gates.

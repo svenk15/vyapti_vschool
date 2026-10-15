@@ -15,5 +15,6 @@ export const learningGateway={
  listParent:(identity:Identity|null,studentId:unknown)=>service().listParent(required(identity),studentId),
  detailParent:(identity:Identity|null,studentId:unknown,id:unknown)=>service().detailParent(required(identity),studentId,id),
  listStudent:(identity:Identity|null,studentId:unknown)=>service().listStudent(required(identity),studentId),
+ queryStudent:(identity:Identity|null,studentId:unknown,query:unknown)=>service().queryStudent(required(identity),studentId,query),
  detailStudent:(identity:Identity|null,studentId:unknown,id:unknown)=>service().detailStudent(required(identity),studentId,id),
 };
