@@ -467,6 +467,40 @@ sequenceDiagram
 
 The UI route is `/teacher/readiness?date=` and the JSON endpoint is `GET /api/v1/teacher/readiness?date=`. The three stages use the approved `Readiness`, `Handoff` and `Confirm` labels, preserve an in-flow next-step choice across Back/Continue, and offer either the existing school support channel or a live refresh. Errors are safe and retryable through existing academic error mapping. Verification covers all three incomplete-state classifications plus ready, cross-scope/current-authority denial, no mutation, stage retention, desktop/mobile reference comparison and keyboard focus. The exact authority is `VSchool_Teacher_Review.html#/flow/TEA-06`. Generic durable-draft semantics do not apply.
 
+## STW-09 — Current Student class-space projection — 16 October 2026
+
+This supported read slice lets a Student choose only the active CourseOfferings for their current dated Enrollment and SectionPlacement, then open a minimized class space that links to the already-authorized published-work and timetable projections. Academics owns the offering, subject, section and dated TeacherAssignment facts. Students owns exact portal access and enrollment/placement. Learning owns published assignments, submissions and returned feedback. The class-space query does not copy those owners' records or authorize a broader identity search.
+
+`studentClasses(identity, studentId)` first rechecks the live account/token and exact accepted Student access for `learning.assignment.read_self`, together with `student_core`, `academic_core`, `staff_core` and `homework` release, institution entitlement and branch activation. It derives the current civil date from the verified branch timezone, selects one current Enrollment and SectionPlacement, then reads only active same-scope CourseOfferings for that year and section. The optional Teacher label comes from a TeacherAssignment whose half-open dates contain that civil date. A route-supplied offering ID is only a candidate: the detail route must find it in this freshly authorized result or return not found.
+
+The DTO contains offering/subject identifiers and codes, subject name, class label and current Teacher display name. It contains no roster, classmates' marks, guardian contacts, private Teacher notes or foreign identity fields. The detail links to the existing Learning subject query, which performs its own exact Student authorization and frozen publication/audience checks, and to the existing Student timetable. Resource/file downloads remain absent until the Files owner supplies scanned assets and short-lived Student-scoped links. Ended Enrollment or Placement returns no class row, thereby default-denying new access; no historical-access rule is inferred.
+
+This is one repeatable-read transaction with no mutation locks, writes, receipts, audit entries or idempotency key. It uses the existing scope-leading Enrollment/Placement, CourseOffering and TeacherAssignment indexes; no schema or migration changes. Application authorization remains active on every read while TEN-03 remains an independent production gate.
+
+```mermaid
+sequenceDiagram
+  actor S as Student
+  participant H as Next host
+  participant A as Student class query
+  participant L as Learning query
+  participant D as PostgreSQL
+  S->>H: Open My classes / selected class
+  H->>A: Verified identity + candidate Student/offering
+  A->>D: Reauthorize exact Student access and current placement
+  A->>D: Read current scoped offerings and dated Teacher
+  alt offering belongs to current class
+    A-->>H: Minimized class facts
+    S->>H: View published work
+    H->>L: Existing subject-filtered Student query
+    L->>D: Reauthorize Student and frozen publications
+    L-->>S: Own published work and permitted feedback
+  else foreign, ended or revoked
+    A-->>H: Not found / empty; no class data
+  end
+```
+
+Verification requires current-class facts, cross-Student/scope denial and live access revocation in real PostgreSQL; sequential desktop/mobile directory/detail and subject-navigation journeys; keyboard focus on the class action; direct reference comparison; and unchanged database-design/boundary checks. The approved STW-09 resource step remains an explicit partial until its owner contract exists.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.

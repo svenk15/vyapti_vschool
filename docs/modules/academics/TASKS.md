@@ -109,6 +109,14 @@ Depends on: EX-04, ACA-03, ATT-01
 
 Acceptance: expose a dedicated three-stage Teacher route that derives, rather than accepts, eligibility-not-ready, no-active-assignment, session-changed/cancelled or ready from the current verified account, branch, dated Employee/Teacher identity, assignments and Attendance-owned session-status port. Require Teacher membership plus `self.read` and current release/entitlement/activation. Return only a non-sensitive support reference and school date/timezone. Preserve the selected next step across Back/Continue, recheck current authority and state on refresh, and never create/widen an assignment or reveal another Teacher's session. Verify classification, cross-scope/revoked denial, no mutation, desktop/mobile composition and keyboard focus. No schema, migration, ticket or durable draft is permitted.
 
+## STW-09 — Open a current assigned class space
+
+Depends on: STW-07, STW-10, ACA-03, LEA-01
+
+Acceptance: expose `/student/classes` and `/student/classes/[offeringId]` only to an exact accepted Student access with current `learning.assignment.read_self` and active Student/Academics/Staff/Homework module gates. Derive the branch-local civil date on the server, select the current Enrollment/Placement and return only active scoped Offerings for that year/section with an effective TeacherAssignment label. Reauthorize a candidate offering by membership in that result. The DTO and UI must omit rosters, classmates' marks, guardian contacts and private Teacher notes. Link published work through the existing Learning subject query and timetable through its existing guarded route. Ended enrollment/placement and revoked access fail closed; Files/resources remain absent until their owner contract exists.
+
+No write, receipt, audit row, mutation lock, durable browser state, schema or migration is permitted. Verify current facts, cross-Student denial and live revocation in real PostgreSQL; desktop/mobile directory, detail and subject-filtered work navigation with one browser worker; keyboard focus; direct approved-reference inspection; type/boundary/backend/document checks; and a production build. Human review, resource delivery, font portability, native accessibility and TEN-03 stay separate.
+
 ## Experience overlay consumption
 
 EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.

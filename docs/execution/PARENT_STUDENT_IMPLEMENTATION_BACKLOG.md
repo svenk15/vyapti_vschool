@@ -26,10 +26,10 @@ Functional/security status, reference comparison and human acceptance remain sep
 | Workspace | Engineering complete | Partial | Blocked/not started | Total | Incomplete in this backlog |
 |---|---:|---:|---:|---:|---:|
 | Parent/Guardian | 12 | 2 | 38 | 52 | 40 |
-| Student | 13 | 6 | 28 | 47 | 34 |
-| **Combined** | **25** | **8** | **66** | **99** | **74** |
+| Student | 13 | 7 | 27 | 47 | 34 |
+| **Combined** | **25** | **9** | **65** | **99** | **74** |
 
-The 79 incomplete workflows include partial delivered slices and rows whose primary planning blocker is **product** or **technical design**. PAR-11, PAR-12, PAR-14 and STW-28 have moved out of the backlog; STW-27 remains only for attachments. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
+The 74 incomplete workflows include partial delivered slices and rows whose primary planning blocker is **product** or **technical design**. PAR-11, PAR-12, PAR-14 and STW-28 have moved out of the backlog; STW-09 now has a verified current-class slice but remains incomplete for permitted file resources, and STW-27 remains only for attachments. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
 
 ## Capability sequence and unlock map
 
@@ -118,7 +118,7 @@ No grant, migration or UI should be implemented until this decision sheet, inclu
 | Parent PAR-21 | Read returned feedback | Learning | Future published/submitted work | Returned-version owner, Parent audience and private-draft exclusion | Teacher returns authorized feedback | PAR-20; Student submission/feedback | Technical design |
 | Parent PAR-22 | Ask a learning question | Learning / Communication | Future task plus permitted conversation | Question target, routing and permitted recipient | Assigned/permitted Teacher response | PAR-20; Communication owner | Technical design |
 | Student STW-06 | Plan my school day | Day / Learning | Current class, timetable, Attendance entry, next published class and bounded future-due Learning priority are verified | Returned-feedback, room/change and request priorities | Teacher text-only publication is verified; later counterparts own feedback/change/request states | STW-10 delivered slice; later owner projections | Implementation/technical design for remaining scope |
-| Student STW-09 | Open an assigned class space | Learning / Academics | Published timetable and class placement | Class-space membership and published content projection | Teacher manages assigned class space | STW-07, STW-10 | Technical design |
+| Student STW-09 | Open an assigned class space | Academics / Students / Learning / Files | Current dated class-space membership and published-work navigation are verified using existing owner projections | Permitted resource assets, scanning and short-lived scoped download links | Teacher publishes work through the existing Learning owner; Files counterpart remains absent | STW-07, STW-10; current class slice satisfied | PARTIAL implementation; remaining Files technical design |
 | Student STW-10 | Find and organize assignments | Learning | Exact published text-assignment list plus server-side title/subject search, due/title/subject sort and query-bound pagination are verified | Status Filters and submission-state organization | Teacher text-only draft/resume/publish is verified | LEA-01/02 delivered slices; later submission/feedback contracts | Technical design for remaining scope |
 | Student STW-11 | Understand an assignment | Learning | Immutable title, instructions, due time, class context and version are verified | Resources, criteria and submission lifecycle | Teacher authors/publishes the exact immutable text version | STW-10 delivered slice; Files/submission owners | Implementation/technical design for remaining scope |
 | Student STW-12 | Open learning resources | Learning / Files | Bounded file/download patterns | Resource ownership, scanning, authorization and expiring delivery | Teacher attaches published resource | STW-11 | Technical design |

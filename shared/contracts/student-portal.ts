@@ -11,3 +11,4 @@ export type StudentSelfTimetablePeriod=Readonly<{periodKey:string;label:string;k
 export type StudentSelfTimetableDay=Readonly<{date:string;periods:readonly StudentSelfTimetablePeriod[]}>;
 export type StudentSelfTimetableLesson=Readonly<{occurrenceId:string;date:string;periodKey:string;startsAt:string;endsAt:string;subjectName:string;sectionName:string;teacherName:string}>;
 export type StudentSelfTimetableWeek=Readonly<{studentId:string;timezone:string;weekStart:string;weekEndExclusive:string;days:readonly StudentSelfTimetableDay[];lessons:readonly StudentSelfTimetableLesson[]}>;
+export type StudentSelfClass=Readonly<{offeringId:string;offeringCode:string;subjectId:string;subjectCode:string;subjectName:string;classLabel:string;teacherName:string|null}>;

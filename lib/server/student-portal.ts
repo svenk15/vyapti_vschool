@@ -23,5 +23,6 @@ export const studentPortalGateway={
  accept:(identity:Identity|null,input:Parameters<StudentPortalAccessFacade['accept']>[1])=>service().accept(identity,input),
  workspace:(identity:Identity|null)=>service().workspace(required(identity)),
  attendance:(identity:Identity|null,studentId:string,from:string,until:string)=>service().attendance(required(identity),studentId,from,until),
- timetable:(identity:Identity|null,studentId:string,weekStart:string)=>service().timetable(required(identity),studentId,weekStart)
+ timetable:(identity:Identity|null,studentId:string,weekStart:string)=>service().timetable(required(identity),studentId,weekStart),
+ classes:(identity:Identity|null,studentId:string)=>service().classes(required(identity),studentId)
 };
