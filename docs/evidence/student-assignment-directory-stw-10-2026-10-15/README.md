@@ -27,3 +27,5 @@ The approved Filters action remains a documented difference. Its Draft, Submitte
 - Focused Mobile Chromium, one worker — 1/1 passed.
 
 The browser journey applies Subject search with Enter, verifies URL state and matching data, uses browser Back, applies Assignment name/Descending in the Sort drawer, captures the responsive directory and opens the independently authorized detail. One initial desktop run failed only because `getByLabel('Search assignments')` also matched the clear button; the selector was corrected to the searchbox role before the passing rerun. Native VoiceOver/NVDA, actual browser zoom, font portability, TEN-03 and human acceptance remain pending.
+
+The current local demo at `http://127.0.0.1:3400/sign-in` was rebuilt from application source `2c0e7aca123b88c472d9b2f8f5664345fad9a5de`; health returned ready and sign-in returned HTTP 200.
