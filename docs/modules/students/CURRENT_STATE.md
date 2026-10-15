@@ -2,6 +2,10 @@
 
 Last updated: 2026-10-15. This is an independent project checkpoint; no completion was imported.
 
+## STW-44 Student account sessions — 16 October 2026
+
+The Access-owned Student account workflow is engineering-complete; human review remains PENDING. `/student/account/sessions` lists only the authenticated global account's active privacy-safe sessions and uses the approved two-stage review/confirmation composition. Selection survives Back/Continue in memory; only final confirmation revokes. A second real browser loses protected access after its session is revoked, while the current session remains active until the separate Account sign-out action. No Student, enrollment or placement table changed and no new tenant authority was introduced. Evidence and focused unit/PostgreSQL/desktop/mobile results: [STW-44](../../evidence/student-sessions-stw-44-2026-10-16/README.md).
+
 The combined Parent/Student handover, current build/migration provenance and manual walkthrough are recorded in [15 October consolidated evidence](../../evidence/parent-student-consolidated-2026-10-15/README.md). Consolidation changed no Student contract or implementation status.
 
 | Task | Implementation | Human review | Evidence |

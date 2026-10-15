@@ -27,7 +27,10 @@ test("administrator signs in, sees current scope and setup, rejects foreign scho
  const denied=await page.request.get(`/api/v1/school?schoolId=${foreignIds.schoolId}`);expect(denied.status()).toBe(404);expect(await denied.json()).toEqual({error:"NOT_FOUND"});
  const schoolNavigation=page.getByRole("navigation",{name:"School administration"});if(test.info().project.name==="mobile")await page.getByRole("button",{name:"Open navigation"}).click();await schoolNavigation.getByRole("link",{name:"School setup",exact:true}).click();await expect(page.getByRole("heading",{name:"School setup",exact:true})).toBeVisible();if(test.info().project.name==="mobile")await page.getByRole("button",{name:"Open navigation"}).click();await schoolNavigation.getByRole("link",{name:"Today",exact:true}).click();await expect(page.getByRole("heading",{name:"A clear start to your school day",exact:true})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`artifacts/iam-admin-${test.info().project.name}.png`,fullPage:true});
- if(test.info().project.name==="mobile")await page.getByRole("button",{name:"Open navigation"}).click();await page.getByRole("button",{name:"Sign out",exact:true}).click();await expect(page).toHaveURL(/\/sign-in$/);await page.goto("/admin");await expect(page).toHaveURL(/\/sign-in$/);expect(errors).toEqual([]);
+ if(test.info().project.name==="mobile")await page.getByRole("button",{name:"Open navigation"}).click();
+ await page.getByRole("link",{name:"Sign out",exact:true}).click();await expect(page).toHaveURL(/\/admin\/context\?destination=sign-out$/);
+ await page.getByRole("button",{name:/^Continue/}).click();await page.getByRole("checkbox",{name:"I have reviewed any unsaved work."}).check();await page.getByRole("button",{name:/^Continue/}).click();await page.getByRole("button",{name:/^Confirm/}).click();
+ await expect(page).toHaveURL(/\/sign-in$/);await page.goto("/admin");await expect(page).toHaveURL(/\/sign-in$/);expect(errors).toEqual([]);
 });
 test("wrong, unknown, locked and disabled credentials share feedback and clear password",async({page})=>{
  const wrong=randomBytes(24).toString("hex"),messages:string[]=[];

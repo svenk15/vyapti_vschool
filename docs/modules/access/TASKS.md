@@ -1,5 +1,11 @@
 # School scope, authentication and permissions — execution tasks
 
+## ACC-01 / STW-44 — own session inventory and selective revocation
+
+Status: VERIFIED on 16 October 2026; human review PENDING. Dependency: STW-01 verified account entry and existing provider-backed sign-in.
+
+Implement the approved Student “Manage my sessions” outcome through an Access-owned global AccountSession root. Create a session before issuing a credential JWT, validate that session on every protected hosting request, list only the current account's bounded privacy-safe sessions, and revoke an own selected session idempotently with redacted security evidence. Keep current-session sign-out separate and preserve account-wide token-version recovery. Prove own/foreign isolation, expiry, selective versus global revocation, concurrent repeat behavior, current-session denial, reload persistence, desktop/mobile composition and keyboard focus. Existing JWTs without a trusted session ID are invalid and must sign in again. Human review remains pending.
+
 ## SA-01 — Sign in and choose an authorized workspace
 
 Presentation overlay on IAM-01 and TEN-01. Successful sign-in must route through an explicit branch selection when more than one current selectable branch exists; one branch skips the chooser. Use the existing context directory and guarded switch command. Preserve generic credential errors, allowlisted return paths, branch exclusion, session revocation and role-appropriate `/account` resolution. Verify retained in-flow selection, final-only context switch, responsive reference comparison and focused multi-branch PostgreSQL-backed browser behavior. No schema or migration is authorized by this slice.

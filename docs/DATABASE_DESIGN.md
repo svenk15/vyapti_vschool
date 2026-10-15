@@ -63,6 +63,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AccessInvite | `vs_access_invite` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivation | `vs_access_account_activation` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountActivationMembership | `vs_access_account_activation_membership` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| AccountSession | `vs_access_account_session` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccountPersonBinding | `vs_access_account_person_binding` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AuthSecurityEvent | `vs_access_auth_security_event` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | Campus | `vs_access_campus` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |

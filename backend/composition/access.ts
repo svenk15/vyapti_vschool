@@ -20,15 +20,18 @@ import { createPasswordResetUseCases, createStaffInviteUseCases, type AccessEmai
 import { PrismaStaffInviteRepository } from "../modules/access/infrastructure/staff-invites";
 import {PrismaVerifiedDatabaseContext} from '../modules/tenancy/infrastructure/verified-db-context';
 import {PrismaEmployeeAccessVerification} from '../modules/people/infrastructure/employee-access';
+import {createAccountSessionUseCases} from '../modules/access/application/sessions';
+import {PrismaAccountSessionRepository} from '../modules/access/infrastructure/sessions';
 export function createAccessServices(config:{databaseUrl:string;now?:()=>Date;cursorSecret?:string;emailSender?:AccessEmailSender}) {
  const db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]});
  const context=new PrismaVerifiedDatabaseContext(),repository=new PrismaAccessRepository(db,tx=>new PrismaProvisionEvidence(tx),context,config.now);
  const management=createManagementUseCases(new PrismaManagementRepository(db,tx=>new PrismaCommandEvidence(tx),config.cursorSecret??randomUUID(),config.now));
  const activation=createActivationUseCases(new PrismaActivationRepository(db,tx=>new PrismaAccessSecurityEvidence(tx),config.now??(()=>new Date())),new BcryptPasswords(),new OpaqueActivationTokens(),config.now??(()=>new Date()));
  const passwords=new BcryptPasswords(),core=createAccessUseCases(repository,passwords,randomUUID);
+ const sessions=createAccountSessionUseCases(new PrismaAccountSessionRepository(db,context),randomUUID,config.now);
  const emailSender=config.emailSender??{sendPasswordReset:async()=>({ok:false as const,reason:"Email delivery is not configured"}),sendStaffInvite:async()=>({ok:false as const,reason:"Email delivery is not configured"}),sendFamilyInvite:async()=>({ok:false as const,reason:"Email delivery is not configured"})};
  const passwordReset=createPasswordResetUseCases(new PrismaPasswordResetRepository(db,context,config.now),emailSender,new OpaqueActivationTokens(),passwords,config.now??(()=>new Date()));
  const staffInvites=createStaffInviteUseCases(new PrismaStaffInviteRepository(db,context,new PrismaEmployeeAccessVerification(),tx=>new PrismaCommandEvidence(tx),config.now),emailSender,new OpaqueActivationTokens(),passwords,config.now??(()=>new Date()));
  const institutions=createInstitutionUseCases(new PrismaInstitutionRepository(db,tx=>new PrismaInstitutionEvidence(tx),(identity,schoolId)=>core.getAccountHome(identity,schoolId),config.now));
- return {...institutions,...activation,...management,...passwordReset,...staffInvites,...core,disconnect:()=>db.$disconnect()};
+ return {...institutions,...activation,...management,...passwordReset,...staffInvites,...sessions,...core,disconnect:()=>db.$disconnect()};
 }

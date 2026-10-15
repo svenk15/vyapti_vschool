@@ -153,10 +153,26 @@ model UserAccount {
   revokedStudentPortalAccesses StudentPortalAccess[] @relation("StudentPortalAccessRevoker")
   intendedStudentInvitations StudentPortalInvitation[] @relation("StudentPortalInvitationAccount")
   createdStudentInvitations StudentPortalInvitation[] @relation("StudentPortalInvitationCreator")
+  accountSessions AccountSession[]
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
   @@map("vs_access_user_account")
+}
+
+model AccountSession {
+ id String @id(map:"vs_access_account_session_pkey") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ tokenVersion Int @map("token_version")
+ safeLabel String @map("safe_label") @db.VarChar(24)
+ startedAt DateTime @map("started_at") @db.Timestamptz(3)
+ expiresAt DateTime @map("expires_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ account UserAccount @relation(fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_session_account_fkey")
+ @@unique([accountId,id],map:"vs_access_account_session_account_id_key")
+ @@index([accountId,revokedAt,expiresAt,id],map:"vs_access_account_session_account_active_idx")
+ @@map("vs_access_account_session")
 }
 
 model AccountPersonBinding {

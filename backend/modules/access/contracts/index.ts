@@ -5,3 +5,4 @@ export type { ManagementFacade, ManagementRepository } from "../application/mana
 export type { ActivationFacade } from "../application/activation";
 
 export type { InstitutionFacade,InstitutionRepository } from "../application/institutions";
+export type {AccountSessionFacade, AccountSessionRepository} from '../application/sessions';

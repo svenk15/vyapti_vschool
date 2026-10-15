@@ -1,6 +1,14 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-13. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
+Last updated: 2026-10-16. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
+
+## ACC-01 / STW-44 own-session management — 16 October 2026
+
+Implementation and direct desktop/mobile comparison are VERIFIED; human review remains PENDING. Successful provider sign-in now creates an Access-owned global account-session row and embeds its opaque server-generated ID in the JWT. Every protected request rechecks active account state, token version, session ownership, expiry and revocation. The Student Account workspace lists only the current account's bounded privacy-safe sessions and implements a two-stage final-only selective revoke. Current-session sign-out remains separate; account-wide recovery still invalidates every session through `token_version`.
+
+Forward migrations `20261016110000_access_account_sessions` and `20261016111000_access_account_session_metadata` are applied to development and test databases without reset or history rewrite. The second migration only corrects physical-table metadata after the first migration had been applied. RLS remains the explicit TEN-03 production gate; application authorization and verified account context remain active.
+
+Focused unit passed 3/3 and real-PostgreSQL functional passed 2/2, including foreign-account isolation, concurrent repeat with one security event, expiry and account-wide invalidation. Production-mode browser verification passed 1/1 desktop and 1/1 mobile with one worker, proving two real sessions, retained staged selection, selective revoke, persistence after reload, denial in the revoked browser and separate current sign-out. The approved STW-44 reference and application states were directly inspected at desktop/mobile sizes. Evidence: [STW-44](../../evidence/student-sessions-stw-44-2026-10-16/README.md). Existing JWTs without a trusted session ID require a new sign-in. Font portability, native accessibility and TEN-03 remain pending.
 
 ## Parent/Guardian authority decision — 13 October 2026
 

@@ -1,5 +1,5 @@
 {
-  "revision": "4.6",
+  "revision": "4.7",
   "prefix": "vs_",
   "tables": [
     {
@@ -488,6 +488,26 @@
           "account_id"
         ],
         "intendedPolicy": "Runtime access self-scoped to app.account_id; exact account-wide lookup only through guarded Access authentication/recovery workflow.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AccountSession",
+      "owner": "access",
+      "table": "vs_access_account_session",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; account_id uuid; token_version int; safe_label DESKTOP_WEB/MOBILE_WEB varchar(24); started_at/expires_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Global account-owned provider session with a privacy-safe label; grants no tenant authority and stores no raw device or network identifier.",
+      "constraints": "FK account; UNIQUE(account_id,id); CHECK token_version>0, version>0, expires_at>started_at and allowed safe label; index(account_id,revoked_at,expires_at,id)",
+      "rls": {
+        "classification": "GLOBAL_IDENTITY",
+        "scopeColumns": [
+          "account_id"
+        ],
+        "intendedPolicy": "Runtime access is limited to the authenticated app.account_id; session validation and revocation use the guarded Access workflow.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "access",
         "closureGate": "TEN-03"
