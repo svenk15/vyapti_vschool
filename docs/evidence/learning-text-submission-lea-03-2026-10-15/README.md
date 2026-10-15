@@ -15,6 +15,8 @@ The feature seed is part of `pnpm demo:seed`. Private persona and scenario locat
 
 The current-source seed completed successfully against guarded `vyapti_vschool`, preserving existing records and producing or retaining an unsubmitted Learning scenario. Existing non-required TEN-02/ACA-01/Branding refresh warnings remained visible and did not prevent the required current-feature seeds from completing.
 
+The live demo is `http://127.0.0.1:3400/sign-in`. A normal production build completed at evidence HEAD `afe5a94e2a549bc2c2a2023b8e6f61c58072b6a9`, which contains executable implementation `c4f9014b`; health returned `ready: true` and sign-in returned HTTP 200 before handoff.
+
 ## Reference comparison
 
 Authoritative Student reference: `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Student_Design/VSchool_Student_Review.html`, states `#/work/a1`, its review dialog and receipt. It was served unchanged for capture. The Student application uses the approved separate **Your work** composition, private-draft notice, response editor, review dialog and receipt hierarchy.

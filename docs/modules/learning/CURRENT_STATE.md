@@ -38,4 +38,6 @@ Approved Student draft, review and receipt states were captured and directly com
 
 The incremental seed preserves an existing unsubmitted assignment and creates a new deterministic text-submission scenario only after the prior seeded assignment has been accepted; it never changes the accepted response or user credentials. Student matrix status is now 11 engineering complete, 7 partial and 29 blocked. Parent status is unchanged by LEA-03 because `learning.assignment.read_child` does not expose response content.
 
+Demo: `http://127.0.0.1:3400/sign-in` is reachable and serves the normal production build made at evidence HEAD `afe5a94e2a549bc2c2a2023b8e6f61c58072b6a9`; the executable application implementation is `c4f9014b`. Health returned `ready: true` and sign-in returned HTTP 200. `pnpm demo:seed` completed against guarded `vyapti_vschool`, preserving existing records and preparing an unsubmitted Learning walkthrough. Private credentials remain in the ignored persona files listed above.
+
 Next action: keep Human review PENDING and select the next independently eligible capability from the execution queue. Remaining Learning gaps are resources/files, criteria, late/extension rules, reopening/resubmission/withdrawal, grading/feedback and questions; none is implicitly authorized by LEA-03.
