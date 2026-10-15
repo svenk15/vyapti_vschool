@@ -33,3 +33,13 @@ Human acceptance remains PENDING. PAR-18 remains partial after EV-02 for mixed t
 - [x] Directly compare the populated composition with the approved Student Calendar reference and retain the established truthful empty-state recipe.
 
 Human acceptance remains PENDING. STW-31 remains partial for published assessment schedules and richer event context.
+
+## EV-04 — PAR-18 combined teaching and event calendar
+
+- [x] Record the independent Timetable and Events read-authority contract without introducing cross-owner persistence.
+- [x] Compose the effective week containing the selected From date with the bounded permitted event agenda.
+- [x] Omit the teaching section unless the selected child has the independent current timetable purpose.
+- [x] Verify the populated six-day teaching pattern and event agenda at desktop/mobile sizes with one browser worker.
+- [x] Inspect the application beside the unchanged PAR-18 reference and record remaining closure/advanced-interaction gaps.
+
+Human acceptance remains PENDING. PAR-18 remains partial for academic-closure semantics and advanced event interactions.

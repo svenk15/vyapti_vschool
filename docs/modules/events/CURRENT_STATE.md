@@ -79,3 +79,30 @@ Visual comparison: the live screen follows the approved Student shell, hierarchy
 Limitations: STW-31 remains partial until an Assessment owner defines and publishes schedule facts. Venue, participation requirements and contact are shown only when truthfully present in the bounded event description; they are not fabricated as new fields. STW-32 interest, capacity and consent remain an explicit unapproved extension. Font portability, native accessibility, TEN-03 and human review remain pending.
 
 Next action: checkpoint EV-03, serve that exact source and continue with the next independently eligible Parent/Student owner capability.
+
+## EV-04
+
+Status: ENGINEERING_VERIFIED_SUPPORTED_SLICE / DIRECT_COMPARISON_PARTIAL / HUMAN_REVIEW_PENDING
+
+EV-04 closes PAR-18's independently implementable combined-read gap. `/family/calendar` now shows the effective published teaching week containing the selected From date, followed by the permitted one-off Events agenda. Timetable and Events remain independently authorized on the server. The teaching section is omitted unless the selected exact child currently has `timetable.read_child`; event rows still require `calendar.event.read_child` and the frozen current-version recipient. Child/date changes resolve both projections again and the full-timetable/event links retain the authorized child context.
+
+Schema/migration: none. The read-only page composition adds no transaction, lock, receipt, purpose or cross-owner write. Development and test databases remain at 62 applied migrations.
+
+Verification on the EV-04 checkpoint source:
+
+- `pnpm typecheck` — PASS.
+- focused ESLint for `app/family/calendar/page.tsx` and `test/e2e/events-calendar.spec.ts` — PASS.
+- normal production build and isolated E2E production build — PASS.
+- focused Chromium Playwright — PASS, 1/1 with one worker.
+- focused mobile Playwright — PASS, 1/1 with one worker.
+- the browser fixture proves current accepted Parent access, required module dependencies, independent calendar/timetable purposes, one class-scoped published event and an effective six-day published teaching pattern.
+- unchanged real-PostgreSQL evidence remains applicable: EV-02 Events filtering/scope/revocation passed 3/3 and Guardian Timetable effective-day/scoped-access evidence passed on unchanged backend owners.
+- screenshots and the direct inspection record are in `docs/evidence/parent-combined-calendar-par-18-2026-10-16/`.
+
+The first browser attempt served a stale `.next-e2e` build; the trace identified the old page. After rebuilding the correct isolated artifact, the next attempt correctly failed because the focused fixture had omitted Timetable's documented `staff_core` entitlement dependency. Adding that test entitlement resolved the setup defect. No application permission or assertion was weakened.
+
+Visual comparison: the unchanged PAR-18 review prototype and current application were inspected at 1440×1000 and 390×844. The operational page follows the approved Parent shell, hierarchy, dimensions, controls, card density and responsive stacking. The reference has no exact mixed read screen, so this remains a transparent supported composition extension rather than exact fidelity. The day grid demonstrates six teaching days and does not assume Monday–Friday.
+
+Limitations: PAR-18 remains partial for academic-closure semantics and advanced event interactions. An Events `HOLIDAY` category never changes the academic calendar. Recurrence, response/withdrawal, capacity and consent remain separately owned gaps. Font portability, native accessibility, TEN-03 and human review remain pending.
+
+Next action: commit and serve EV-04, then select the smallest independently implementable Parent/Student gap whose product contract is already approved.

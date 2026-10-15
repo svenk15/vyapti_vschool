@@ -50,6 +50,16 @@ This slice deliberately does not add assessment schedules, venue/participation f
 
 Verification adds a real PostgreSQL Student date/category query under exact access and a desktop/mobile Administrator publication → Student upcoming agenda/detail journey. The Student reference Calendar page is the direct visual authority; its fictional assessment/event samples are not production data or authorization.
 
+## EV-04 — PAR-18 combined teaching and event calendar
+
+PAR-18 composes two already-approved read models on the Parent School calendar route: the effective published child Timetable for the week containing the selected **From date**, and the bounded Events agenda beginning on that date. It introduces no cross-owner persistence or merged authority. Events continues to authorize each event through the exact frozen Guardian binding and `calendar.event.read_child`; Academics independently authorizes the timetable through the current accepted Guardian access, `timetable.read_child`, selected Student, original branch and released/enabled Timetable module. The teaching section is omitted when that independent purpose is unavailable.
+
+The page presents a compact teaching-week summary with a guarded link to the full timetable, followed by the existing typed event agenda. Changing the event From date also selects the containing school week, preserving one useful planning context without changing either owner query. A child switch causes the server to resolve and authorize both projections again; no prior-child response is cached in the browser.
+
+This is read-only presentation composition. There is no transaction, idempotency key, lock or schema change. Academic closures are not inferred from an Events `HOLIDAY` category: only the effective published Timetable projection determines visible teaching days. Event response, recurrence, consent, capacity and merged chronological sorting remain separate contracts.
+
+Verification reuses the existing PostgreSQL owner evidence and adds a focused browser journey with both purposes and a six-day published pattern. It must show the effective teaching week and permitted event together, retain From/category URL state, reach the separately guarded timetable/detail routes, and remain usable at desktop/mobile widths with keyboard focus. The generic PAR-18 review prototype remains the visual authority for shell, hierarchy, controls and spacing; the operational combined read view is an explicit supported composition extension.
+
 ### Persistence
 
 | Table | Physical fields | Responsibility | Constraints and indexes |
