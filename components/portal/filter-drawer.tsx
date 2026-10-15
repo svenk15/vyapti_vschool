@@ -16,6 +16,6 @@ export function FilterDrawer({open,onClose,attributes,applied,onApply,title='Fil
   <div className="drawer-attributes">
    {attributes.map(attribute=><details className="drawer-attribute" open key={attribute.id}><summary>{attribute.label}</summary><div className="drawer-options">{attribute.options.map(option=>{const selected=(draft[attribute.id]??[]).includes(option.value);return <label className="check-control" key={option.value}><input type={attribute.mode==='single'?'radio':'checkbox'} name={attribute.mode==='single'?`filter-${attribute.id}`:undefined} checked={selected} onChange={event=>toggle(attribute,option.value,event.target.checked)}/><span>{option.label}</span></label>;})}</div></details>)}
   </div>
-  <div className="dialog-actions drawer-footer"><Button variant="secondary" onClick={close}>Cancel</Button><Button onClick={()=>{onApply(copied(draft));onClose();}}>Apply filters</Button></div>
+  <div className="dialog-actions drawer-footer" style={{flexDirection:'row'}}><Button variant="secondary" onClick={close}>Cancel</Button><Button onClick={()=>{onApply(copied(draft));onClose();}}>Apply filters</Button></div>
  </Dialog>;
 }

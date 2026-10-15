@@ -15,10 +15,13 @@ export type AttendanceHistory=Readonly<{sessionId:string;version:number;status:'
 export type TeacherAttendanceHistoryItem=Readonly<{id:string;offeringId:string;schoolDate:string;startsAt:string;endsAt:string;status:'SCHEDULED'|'OPEN'|'SUBMITTED';subjectName:string;sectionName:string}>;
 export type TeacherAttendanceHistory=Readonly<{items:readonly TeacherAttendanceHistoryItem[];nextCursor:string|null}>;
 export type LeadershipRegisterCoverageItem=Readonly<{id:string;version:number;schoolDate:string;startsAt:string;endsAt:string;dueAt:string;status:'SCHEDULED'|'OPEN';sectionName:string;subjectName:string;teacherName:string|null}>;
+export type LeadershipCoverageFilterOption=Readonly<{id:string;label:string}>;
 export type LeadershipRegisterCoverage=Readonly<{
  asOf:string;schoolDate:string;timezone:string;definitionVersion:'register-coverage.v1';duePolicy:'SESSION_END_NO_GRACE';
  counts:Readonly<{scheduled:number;due:number;received:number;awaiting:number;notDue:number;cancelled:number}>;
- awaiting:Readonly<{items:readonly LeadershipRegisterCoverageItem[];nextCursor:string|null}>;
+ query:Readonly<{classId:string|null;status:'SCHEDULED'|'OPEN'|null;teacherId:string|null;sort:'due'|'class';order:'asc'|'desc'}>;
+ filters:Readonly<{classes:readonly LeadershipCoverageFilterOption[];teachers:readonly LeadershipCoverageFilterOption[]}>;
+ awaiting:Readonly<{items:readonly LeadershipRegisterCoverageItem[];total:number;nextCursor:string|null}>;
 }>;
 export type LeadershipSessionEvidence=Readonly<{
  id:string;version:number;schoolDate:string;timezone:string;startsAt:string;endsAt:string;

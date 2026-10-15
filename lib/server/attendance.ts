@@ -21,6 +21,6 @@ export const attendanceGateway={
  detail(identity:Identity|null,id:string){return scope(identity).then(s=>attendance.detail(identity,s.organizationId,s.schoolId,id));},
 };
 export const leadershipAttendanceGateway={
- get(identity:Identity|null,input:Readonly<{date?:unknown;cursor?:unknown;limit?:unknown}>={}){return leadershipGateway.getHome(identity).then(home=>attendance.get(identity,home.scope.organizationId,home.scope.schoolId,input));},
+ get(identity:Identity|null,input:Readonly<{date?:unknown;classId?:unknown;status?:unknown;teacherId?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}>={}){return leadershipGateway.getHome(identity).then(home=>attendance.get(identity,home.scope.organizationId,home.scope.schoolId,input));},
  detail(identity:Identity|null,sessionId:string){return leadershipGateway.getHome(identity).then(home=>attendance.evidence(identity,home.scope.organizationId,home.scope.schoolId,sessionId));}
 };

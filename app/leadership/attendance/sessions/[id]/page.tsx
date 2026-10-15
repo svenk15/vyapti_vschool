@@ -8,11 +8,13 @@ export const dynamic='force-dynamic';
 const first=(value:string|string[]|undefined)=>Array.isArray(value)?value[0]:value;
 const time=(value:string,timezone:string)=>new Intl.DateTimeFormat('en-IN',{timeZone:timezone,hour:'2-digit',minute:'2-digit'}).format(new Date(value));
 const dateTime=(value:string,timezone:string)=>new Intl.DateTimeFormat('en-IN',{timeZone:timezone,dateStyle:'medium',timeStyle:'short'}).format(new Date(value));
+const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+function coverageHref(query:Record<string,string|string[]|undefined>){const params=new URLSearchParams(),date=first(query.date),classId=first(query.class),status=first(query.status),teacher=first(query.teacher),sort=first(query.sort),order=first(query.order);if(date&&/^\d{4}-\d{2}-\d{2}$/.test(date))params.set('date',date);if(classId&&uuid.test(classId))params.set('class',classId);if(status==='SCHEDULED'||status==='OPEN')params.set('status',status);if(teacher&&uuid.test(teacher))params.set('teacher',teacher);if(sort==='class')params.set('sort',sort);if(order==='desc')params.set('order',order);return `/leadership/attendance${params.size?`?${params}`:''}`;}
 
 export default async function LeadershipSessionEvidencePage({params,searchParams}:{params:Promise<{id:string}>;searchParams:Promise<Record<string,string|string[]|undefined>>}){
- const identity=await getIdentity();if(!identity)redirect('/sign-in');const {id}=await params,query=await searchParams,returnDate=first(query.date);let evidence,error=false;
+ const identity=await getIdentity();if(!identity)redirect('/sign-in');const {id}=await params,query=await searchParams;let evidence,error=false;
  try{evidence=await leadershipAttendanceGateway.detail(identity,id);}catch{error=true;}
- const backHref=returnDate?`/leadership/attendance?date=${encodeURIComponent(returnDate)}`:'/leadership/attendance';
+ const backHref=coverageHref(query);
  if(error||!evidence)return <main id="main-content" className="container page-space"><PageStack className="leadership-evidence-page"><Breadcrumbs items={[{label:'Attendance oversight',href:backHref},{label:'Source evidence'}]}/><PageHeader eyebrow="Attendance oversight" title="Register source evidence" description="A fresh, read-only view of the Attendance-owned session."/><Alert tone="danger" title="Session evidence unavailable">This source could not be read in the current authorized branch. Return to coverage and refresh.</Alert><Link className="btn btn-secondary" href={backHref}>Back to coverage</Link></PageStack></main>;
  const tone=evidence.evidenceState==='RECEIVED'?'success':evidence.evidenceState==='AWAITING'?'warning':evidence.evidenceState==='CANCELLED'?'danger':'info';
  const title=evidence.evidenceState==='RECEIVED'?'Register received':evidence.evidenceState==='AWAITING'?'Still awaiting submission':evidence.evidenceState==='CANCELLED'?'Session cancelled':'Register not due yet';

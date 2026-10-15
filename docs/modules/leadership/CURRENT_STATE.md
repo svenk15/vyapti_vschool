@@ -41,3 +41,17 @@ Verification: the focused real-PostgreSQL Attendance file passed 12/12, includin
 Remaining gates: LEA-08 remains PARTIAL because its approved class/status/teacher filters and stable due/class sorting are not implemented. LEA-06 still lacks a retained last-known stale snapshot. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
 
 Next action: complete the bounded LEA-08 filter/sort contract through the existing Attendance projection, without client-side page sorting or broader identity lookup.
+
+## 16 October 2026 — LEA-08 bounded controls verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+The Attendance-owned coverage query now applies class, `SCHEDULED|OPEN` state and exact responsible-Teacher filters to the complete authorized branch/date result set before pagination. Due-time order uses `(ends_at,id)` and class order uses `(section_name,ends_at,id)`, in either direction. Opaque cursors bind class/status/Teacher/sort/order, so a page token cannot be reused under a different query. Available class and Teacher choices are derived from the same scoped awaiting set; ambiguous or missing dated Teacher assignments are not guessed. Counts keep the unfiltered authoritative denominator while the list separately states its matching total.
+
+The production page uses the shared filter and sort drawers, URL-backed state, Back/Forward restoration, compact control buttons, explicit matching/no-match states and query-preserving source-detail return links. Draft drawer choices apply only on confirmation; Escape returns focus without applying. Visual inspection found and corrected a shared mobile rule that reversed the approved Cancel/Apply footer order. No Attendance write, permission, table or migration changed; both local databases retain the 64-migration LDR-03 schema.
+
+Verification: focused lint and TypeScript passed; the real-PostgreSQL Attendance file passed 12/12 with filters, deterministic order, query-bound cursors and existing scope/revocation checks. The first post-change rerun hit an unrelated transient `STALE_VERSION` in the pre-existing ATT-02 concurrency case after LEA-08 had passed; the justified unchanged rerun passed 12/12. The E2E build passed and focused one-worker Playwright passed 2/2 Chromium plus 2/2 mobile. Filter/sort drawers, populated, filtered, sorted, detail-return and no-due states were directly inspected against the approved Attendance-oversight dialog and shared component specification. See [evidence](../../evidence/principal-lea-08-controls-2026-10-16/README.md).
+
+Remaining gates: the approved fictional workflow dialog and production shell remain different compositions; font portability, native VoiceOver/NVDA, TEN-03, production controls and human visual acceptance remain pending. LEA-06 retained-last-known semantics and LEA-46 preferences/support still lack owner contracts.
+
+Next action: add focused stale-response isolation evidence for LEA-02 around the real Attendance projection if the existing full-navigation context switch does not already make stale replacement impossible; do not add client-side tenant authority.

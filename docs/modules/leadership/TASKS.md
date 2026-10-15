@@ -32,10 +32,10 @@ Acceptance criteria:
 1. `attendance.read_leadership` is granted only by the explicit Principal role and is narrower than administrator school-wide Attendance read.
 2. A current branch/date query returns one `REPEATABLE READ` snapshot with server as-of, timezone, `register-coverage.v1`, and `SESSION_END_NO_GRACE` disclosed.
 3. Counts satisfy `received + awaiting = due`; cancelled and not-due sessions remain separate, early submission remains not due, and no missing register becomes pupil absence.
-4. The exact awaiting list contains bounded, stable `(ends_at,id)` pages with class, subject, scheduled time, due time, current dated expected teacher and status only.
+4. The exact awaiting list contains bounded pages with class, subject, scheduled time, due time, current dated expected teacher and status only. Class/status/Teacher filters apply to the full scoped result before pagination; due/class sort uses a stable ID tie-breaker and a query-bound cursor.
 5. Foreign branch/institution, revoked Principal, future date, disabled/unlicensed/unreleased module and other roles fail without counts or sensitive detail.
 6. Home and Attendance oversight show populated, no-due, unavailable and mobile states through the shared Principal shell; there are no dead LDR-03 actions.
-7. Focused unit, real PostgreSQL, desktop/mobile Playwright, plan, build and required repository gates pass; direct reference comparison and human review remain separately recorded.
+7. Focused unit, real PostgreSQL, desktop/mobile Playwright, plan, build and required repository gates pass. URL-backed filters/sort preserve Back/Forward state and shared drawers preserve draft/Cancel/Apply/focus behavior; direct reference comparison and human review remain separately recorded.
 
 ## LDR-03 — Exact Attendance session evidence and freshness
 
