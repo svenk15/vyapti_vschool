@@ -8,10 +8,10 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-02 | Switch branches without losing context | access | 1 | PARTIAL | FOCUSED_APPLICATION_INSPECTION | PENDING | Authorized switch, focus return and revoked-destination removal are verified; later owner projections still need stale-response isolation proof when LDR-02 releases data |
 | LEA-03 | Work under a temporary leadership delegation | access | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-04 | Handle access changes during a leadership action | access | 1 | PARTIAL | NOT_STARTED | PENDING | Leadership home reauthorizes live access; later owner reads/writes still need their own denial states |
-| LEA-05 | Review my school today | daily | 1 | NOT_STARTED | NOT_STARTED | PENDING | LDR-02 owner projections and exact metrics required |
-| LEA-06 | Recognize stale, incomplete or unavailable information | daily | 1 | NOT_STARTED | NOT_STARTED | PENDING | LDR-02 freshness/completeness metadata required |
+| LEA-05 | Review my school today | daily | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 provides the approved first-release Attendance summary with current source time, exact denominator and no fabricated additional owner metrics; the reference is a fictional workflow dialog while the application uses the production shell |
+| LEA-06 | Recognize stale, incomplete or unavailable information | daily | 1 | PARTIAL | FOCUSED_APPLICATION_INSPECTION | PENDING | Current source time, metric definition and fail-closed unavailable state are verified; retained last-known stale data is not implemented |
 | LEA-07 | Run the weekly leadership review | daily | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-08 | Inspect register submission coverage | attendance | 1 | NOT_STARTED | NOT_STARTED | PENDING | Attendance due-register projection required |
+| LEA-08 | Inspect register submission coverage | attendance | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 exact coverage/list is verified; the approved exact-session evidence action remains LDR-03 |
 | LEA-09 | Create an accountable missing-register follow-up | attendance | 2 | BLOCKED | NOT_STARTED | PENDING | Coordination owner persistence and authority are not implemented |
 | LEA-10 | Follow up multiple missing registers safely | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-11 | Verify, close or reopen a follow-up | attendance | 2 | BLOCKED | NOT_STARTED | PENDING | Coordination follow-up lifecycle is not implemented |
@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 1 ENGINEERING_COMPLETE, 3 PARTIAL, 2 BLOCKED, 40 NOT_STARTED. LEA-01 has direct visual comparison with recorded composition deviations; human acceptance remains pending for all 46.
+Engineering: 2 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 37 NOT_STARTED. LEA-01 and LEA-05 are engineering-complete; LEA-08 remains partial until LDR-03. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
-1. Design and implement LDR-02 for LEA-05, LEA-06 and LEA-08 using Attendance-owned bounded queries and exact due/received/awaiting definitions.
-2. Extend LEA-02 stale-response proof only when that real owner projection exists; do not simulate data in the Access shell.
-3. Complete LEA-46 only after preferences/support has an approved owner contract; existing session inventory and revocation remain supported partial behavior.
+1. Design and implement LDR-03 exact read-only session evidence for the LDR-02 awaiting list; do not disclose pupil marks, explanations or correction history.
+2. Extend LEA-02 stale-response proof around the real Attendance projection without simulating data in the Access shell.
+3. Complete LEA-06 stale-last-known behavior and LEA-46 preferences/support only after their exact persistence/owner contracts exist.
 
 LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

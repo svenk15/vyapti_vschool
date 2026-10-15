@@ -5,6 +5,7 @@ import {PrincipalPortalFrame} from '@/components/principal-portal-frame';
 import {getIdentity} from '@/lib/server/auth';
 import {leadershipGateway} from '@/lib/server/access';
 import {brandingGateway} from '@/lib/server/branding';
+import {moduleGateway} from '@/lib/server/tenancy';
 
 export const dynamic='force-dynamic';
 
@@ -13,6 +14,6 @@ export default async function LeadershipLayout({children}:{children:ReactNode}){
  if(!identity)redirect('/sign-in');
  const home=await leadershipGateway.getHome(identity).catch(()=>null);
  if(!home)redirect('/choose-workspace');
- const palette=await brandingGateway.effectivePalette(identity).catch(()=>null);
- return <BrandSurface palette={palette??undefined}><PrincipalPortalFrame home={home}>{children}</PrincipalPortalFrame></BrandSurface>;
+ const [palette,canUseAttendance]=await Promise.all([brandingGateway.effectivePalette(identity).catch(()=>null),home.capabilities.includes('attendance.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'attendance','attendance.read_leadership').catch(()=>false):false]);
+ return <BrandSurface palette={palette??undefined}><PrincipalPortalFrame home={home} canUseAttendance={canUseAttendance}>{children}</PrincipalPortalFrame></BrandSurface>;
 }

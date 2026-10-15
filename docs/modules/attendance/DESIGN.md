@@ -18,6 +18,8 @@ ATT-ADR-002: complete atomic roster submission, no server-side partial draft. Ma
 
 ATT-ADR-003: correction is an admin command and immutable revision, not resubmission. A cancelled submitted session retains records, removes its contribution from metrics and records reason. Returning it to active is not supported in Phase 1.
 
+ATT-ADR-004: the Principal first-release `register-coverage.v1` projection uses scheduled session end with no hidden grace period as its explicit due policy. This is distinct from the existing Administrator RPT-01 “started sessions” report definition and does not alter it. Attendance owns the projection and independently requires the narrow `attendance.read_leadership` capability plus current module/scope checks. It never grants school-wide roster, mark, explanation, correction, export or mutation authority.
+
 ## Physical data contract
 
 All tables remain planned until their named task migrates them; ATT-01 installs only `AttendanceSession` in this module. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.

@@ -3,6 +3,7 @@ import {createAttendanceServices} from '../../backend/composition/attendance';
 import type {AttendanceFacade} from '../../backend/modules/attendance/application/sessions';
 import type {Identity} from '../../shared/contracts/access';
 import {accountGateway} from './access';
+import {leadershipGateway} from './access';
 const attendance=createAttendanceServices({databaseUrl:process.env.DATABASE_URL??''});
 async function scope(identity:Identity|null){return (await accountGateway.getHome(identity)).scope;}
 export const attendanceGateway={
@@ -19,3 +20,4 @@ export const attendanceGateway={
  teacherHistory(identity:Identity|null,query:Readonly<Record<string,unknown>>){return scope(identity).then(s=>attendance.teacherHistory(identity,s.organizationId,s.schoolId,query));},
  detail(identity:Identity|null,id:string){return scope(identity).then(s=>attendance.detail(identity,s.organizationId,s.schoolId,id));},
 };
+export const leadershipAttendanceGateway={get(identity:Identity|null,input:Readonly<{date?:unknown;cursor?:unknown;limit?:unknown}>={}){return leadershipGateway.getHome(identity).then(home=>attendance.get(identity,home.scope.organizationId,home.scope.schoolId,input));}};

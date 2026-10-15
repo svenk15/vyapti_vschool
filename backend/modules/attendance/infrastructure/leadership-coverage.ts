@@ -1,0 +1,36 @@
+import {Prisma,type PrismaClient} from '../../../../generated/prisma/client';
+import type {Identity,RoleCode} from '../../../../shared/contracts/access';
+import type {LeadershipRegisterCoverage,LeadershipRegisterCoverageItem} from '../../../../shared/contracts/attendance';
+import {AccessError,capabilitiesFor} from '../../access/contracts/index';
+import {moduleCatalog} from '../../../../shared/contracts/modules';
+import type {ReleaseManifest} from '../../tenancy/contracts/index';
+import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/verified-database-context';
+import type {LeadershipCoverageQuery,LeadershipCoverageRepository} from '../application/leadership-coverage';
+import {schoolDate} from '../domain/schedule';
+
+type CountRow={scheduled:number;due:number;received:number;awaiting:number;notDue:number;cancelled:number};
+type ItemRow={id:string;version:number;schoolDate:Date;startsAt:Date;endsAt:Date;status:string;sectionName:string;subjectName:string;teacherName:string|null};
+const dateText=(value:Date)=>value.toISOString().slice(0,10);
+const cursor=(row:LeadershipRegisterCoverageItem)=>Buffer.from(JSON.stringify({dueAt:row.dueAt,id:row.id})).toString('base64url');
+
+export class PrismaLeadershipCoverageRepository implements LeadershipCoverageRepository {
+ constructor(private readonly db:PrismaClient,private readonly manifest:ReleaseManifest,private readonly now:()=>Date=()=>new Date(),private readonly databaseContext?:VerifiedDatabaseContextPort){}
+ private run<T>(work:(tx:Prisma.TransactionClient)=>Promise<T>):Promise<T>{return this.db.$transaction(work,{isolationLevel:'RepeatableRead',timeout:20000,maxWait:10000}).catch(error=>{if(error instanceof AccessError)throw error;throw new AccessError('UNAVAILABLE');});}
+ async get(actor:Identity,organizationId:string,schoolId:string,query:LeadershipCoverageQuery):Promise<LeadershipRegisterCoverage>{return this.run(async tx=>{
+  if(!this.databaseContext)throw new AccessError('UNAVAILABLE');await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
+  const account=await tx.userAccount.findUnique({where:{id:actor.accountId},select:{status:true,tokenVersion:true}});if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');
+  if(!await tx.organization.findFirst({where:{id:organizationId,status:'ACTIVE'},select:{id:true}}))throw new AccessError('NOT_FOUND');
+  const school=await tx.school.findFirst({where:{organizationId,id:schoolId,status:'ACTIVE'},select:{timezone:true}});if(!school)throw new AccessError('NOT_FOUND');
+  const membership=await tx.schoolMembership.findFirst({where:{accountId:actor.accountId,organizationId,schoolId,status:'ACTIVE'},select:{grants:{select:{code:true}}}}),roles=membership?.grants.map(row=>row.code as RoleCode)??[];
+  if(!roles.includes('PRINCIPAL')||!capabilitiesFor(roles).includes('attendance.read_leadership'))throw new AccessError('FORBIDDEN');
+  const asOf=this.now(),requiredModules=['attendance',...moduleCatalog.attendance.dependencies] as const;
+  for(const moduleId of requiredModules){const entitlement=await tx.organizationEntitlement.findUnique({where:{organizationId_moduleId:{organizationId,moduleId}}}),activation=await tx.branchActivation.findUnique({where:{organizationId_schoolId_moduleId:{organizationId,schoolId,moduleId}}});if(!this.manifest[moduleId])throw new AccessError('RELEASE_UNAVAILABLE');if(!entitlement||entitlement.state!=='ACTIVE'||entitlement.startsAt>asOf||(entitlement.endsAt!==null&&entitlement.endsAt<=asOf))throw new AccessError('MODULE_NOT_LICENSED');if(!activation||activation.state!=='ACTIVE')throw new AccessError('MODULE_DISABLED');}
+  const today=schoolDate(asOf,school.timezone),selected=query.date??today;if(selected>today)throw new AccessError('VALIDATION');
+  const [counts]=await tx.$queryRaw<CountRow[]>`SELECT COUNT(*) FILTER (WHERE status<>'CANCELLED')::int AS scheduled,COUNT(*) FILTER (WHERE status<>'CANCELLED' AND ends_at<=${asOf})::int AS due,COUNT(*) FILTER (WHERE status='SUBMITTED' AND ends_at<=${asOf})::int AS received,COUNT(*) FILTER (WHERE status IN ('SCHEDULED','OPEN') AND ends_at<=${asOf})::int AS awaiting,COUNT(*) FILTER (WHERE status<>'CANCELLED' AND ends_at>${asOf})::int AS "notDue",COUNT(*) FILTER (WHERE status='CANCELLED')::int AS cancelled FROM vs_attendance_session WHERE organization_id=${organizationId}::uuid AND school_id=${schoolId}::uuid AND school_date=${selected}::date`;
+  const after=query.afterDueAt&&query.afterId?Prisma.sql`AND (s.ends_at>${query.afterDueAt} OR (s.ends_at=${query.afterDueAt} AND s.id>${query.afterId}::uuid))`:Prisma.empty;
+  const rows=await tx.$queryRaw<ItemRow[]>(Prisma.sql`SELECT s.id,s.version,s.school_date AS "schoolDate",s.starts_at AS "startsAt",s.ends_at AS "endsAt",s.status,sec.name AS "sectionName",sub.name AS "subjectName",teacher.display_name AS "teacherName" FROM vs_attendance_session s JOIN vs_academics_course_offering o ON o.organization_id=s.organization_id AND o.school_id=s.school_id AND o.id=s.offering_id JOIN vs_academics_section sec ON sec.organization_id=o.organization_id AND sec.school_id=o.school_id AND sec.id=o.section_id JOIN vs_academics_subject sub ON sub.organization_id=o.organization_id AND sub.school_id=o.school_id AND sub.id=o.subject_id LEFT JOIN LATERAL (SELECT CASE WHEN COUNT(*)=1 THEN MIN(CONCAT_WS(' ',p.first_name,p.last_name)) ELSE NULL END AS display_name FROM vs_academics_teacher_assignment a JOIN vs_academics_teacher t ON t.organization_id=a.organization_id AND t.school_id=a.school_id AND t.id=a.teacher_id AND t.active=true JOIN vs_people_employee e ON e.organization_id=t.organization_id AND e.school_id=t.school_id AND e.id=t.employee_id AND e.status='ACTIVE' JOIN vs_people_person p ON p.organization_id=e.organization_id AND p.id=e.person_id WHERE a.organization_id=s.organization_id AND a.school_id=s.school_id AND a.offering_id=s.offering_id AND a.valid_from<=s.school_date AND a.valid_to>s.school_date AND e.employed_from<=s.school_date AND (e.employed_to IS NULL OR e.employed_to>s.school_date)) teacher ON true WHERE s.organization_id=${organizationId}::uuid AND s.school_id=${schoolId}::uuid AND s.school_date=${selected}::date AND s.status IN ('SCHEDULED','OPEN') AND s.ends_at<=${asOf} ${after} ORDER BY s.ends_at,s.id LIMIT ${query.limit+1}`);
+  const items:LeadershipRegisterCoverageItem[]=rows.slice(0,query.limit).map(row=>({id:row.id,version:row.version,schoolDate:dateText(row.schoolDate),startsAt:row.startsAt.toISOString(),endsAt:row.endsAt.toISOString(),dueAt:row.endsAt.toISOString(),status:row.status as 'SCHEDULED'|'OPEN',sectionName:row.sectionName,subjectName:row.subjectName,teacherName:row.teacherName})),summary=counts??{scheduled:0,due:0,received:0,awaiting:0,notDue:0,cancelled:0};
+  if(summary.received+summary.awaiting!==summary.due)throw new AccessError('UNAVAILABLE');
+  return {asOf:asOf.toISOString(),schoolDate:selected,timezone:school.timezone,definitionVersion:'register-coverage.v1',duePolicy:'SESSION_END_NO_GRACE',counts:summary,awaiting:{items,nextCursor:rows.length>query.limit?cursor(items.at(-1)!):null}};
+ });}
+}

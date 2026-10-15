@@ -17,6 +17,7 @@ const demos = [
   { name: "ACA-03 offerings and teacher assignments", script: "scripts/demo-academics-03.ts" },
   { name: "STU-03 placements and student archive", script: "scripts/demo-students-03.ts" },
   { name: "ATT-02 submitted attendance and correction base", script: "scripts/demo-attendance-01.ts" },
+  { name: "LDR-02 Principal Attendance coverage", script: "scripts/demo-principal-attendance.ts", required: true },
   { name: "Administrator Today connected review queues", script: "scripts/demo-dashboard.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
   { name: "SA-38 Admissions intake", script: "scripts/demo-admissions.ts", required: true },

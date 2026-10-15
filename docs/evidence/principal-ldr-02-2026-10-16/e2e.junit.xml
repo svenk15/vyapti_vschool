@@ -1,0 +1,14 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="9.850014000000002">
+<testsuite name="principal-attendance.spec.ts" timestamp="2026-10-15T23:15:29.668Z" hostname="chromium" tests="2" failures="0" skipped="0" time="3.329" errors="0">
+<testcase name="shows reconciled Principal coverage and a truthful no-due date" classname="principal-attendance.spec.ts" time="3.133">
+</testcase>
+<testcase name="captures the approved due-register scenario without modifying it" classname="principal-attendance.spec.ts" time="0.196">
+</testcase>
+</testsuite>
+<testsuite name="principal-attendance.spec.ts" timestamp="2026-10-15T23:15:29.668Z" hostname="mobile" tests="2" failures="0" skipped="0" time="1.627" errors="0">
+<testcase name="shows reconciled Principal coverage and a truthful no-due date" classname="principal-attendance.spec.ts" time="1.453">
+</testcase>
+<testcase name="captures the approved due-register scenario without modifying it" classname="principal-attendance.spec.ts" time="0.174">
+</testcase>
+</testsuite>
+</testsuites>

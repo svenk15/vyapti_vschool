@@ -1,0 +1,15 @@
+{
+  "task": "LDR-02",
+  "profile": {
+    "branchDaySessions": 5,
+    "concurrency": 1
+  },
+  "query": "Scoped branch/date/status/end cutoff; keyset page ordered by ends_at,id",
+  "indexes": [
+    "vs_attendance_session_source_occurrence_key"
+  ],
+  "executionMs": 0.061,
+  "text": "Limit  (cost=8.32..8.32 rows=1 width=24) (actual time=0.036..0.037 rows=2 loops=1)\n  Buffers: shared hit=9\n  ->  Sort  (cost=8.32..8.32 rows=1 width=24) (actual time=0.036..0.036 rows=2 loops=1)\n        Sort Key: ends_at, id\n        Sort Method: quicksort  Memory: 25kB\n        Buffers: shared hit=9\n        ->  Index Scan using vs_attendance_session_source_occurrence_key on vs_attendance_session  (cost=0.28..8.31 rows=1 width=24) (actual time=0.011..0.013 rows=2 loops=1)\n              Index Cond: ((organization_id = '[scope-id]'::uuid) AND (school_id = '[scope-id]'::uuid))\n              Filter: (((status)::text = ANY ('{SCHEDULED,OPEN}'::text[])) AND (ends_at <= '2026-10-15 06:30:00+05:30'::timestamp with time zone) AND (school_date = '2026-10-15'::date))\n              Rows Removed by Filter: 3\n              Buffers: shared hit=3\nPlanning:\n  Buffers: shared hit=104\nPlanning Time: 0.659 ms\nExecution Time: 0.061 ms",
+  "measuredAt": "2026-10-15T23:07:15.956Z",
+  "limitation": "Small synthetic PostgreSQL query-shape evidence; not the TEN-03 scale profile."
+}

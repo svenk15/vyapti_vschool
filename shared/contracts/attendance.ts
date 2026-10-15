@@ -14,3 +14,9 @@ export type AttendanceHistoryRevision=Readonly<{number:number;kind:'SUBMIT'|'COR
 export type AttendanceHistory=Readonly<{sessionId:string;version:number;status:'SUBMITTED'|'CANCELLED';revisions:readonly AttendanceHistoryRevision[];nextCursor:string|null}>;
 export type TeacherAttendanceHistoryItem=Readonly<{id:string;offeringId:string;schoolDate:string;startsAt:string;endsAt:string;status:'SCHEDULED'|'OPEN'|'SUBMITTED';subjectName:string;sectionName:string}>;
 export type TeacherAttendanceHistory=Readonly<{items:readonly TeacherAttendanceHistoryItem[];nextCursor:string|null}>;
+export type LeadershipRegisterCoverageItem=Readonly<{id:string;version:number;schoolDate:string;startsAt:string;endsAt:string;dueAt:string;status:'SCHEDULED'|'OPEN';sectionName:string;subjectName:string;teacherName:string|null}>;
+export type LeadershipRegisterCoverage=Readonly<{
+ asOf:string;schoolDate:string;timezone:string;definitionVersion:'register-coverage.v1';duePolicy:'SESSION_END_NO_GRACE';
+ counts:Readonly<{scheduled:number;due:number;received:number;awaiting:number;notDue:number;cancelled:number}>;
+ awaiting:Readonly<{items:readonly LeadershipRegisterCoverageItem[];nextCursor:string|null}>;
+}>;
