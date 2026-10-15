@@ -1,0 +1,14 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="9.64674">
+<testsuite name="principal-foundation.spec.ts" timestamp="2026-10-15T22:57:25.870Z" hostname="chromium" tests="2" failures="0" skipped="0" time="3.382" errors="0">
+<testcase name="enters, switches and immediately loses the explicit Principal workspace" classname="principal-foundation.spec.ts" time="3.107">
+</testcase>
+<testcase name="captures the approved Principal reference state without modifying it" classname="principal-foundation.spec.ts" time="0.275">
+</testcase>
+</testsuite>
+<testsuite name="principal-foundation.spec.ts" timestamp="2026-10-15T22:57:25.870Z" hostname="mobile" tests="2" failures="0" skipped="0" time="1.926" errors="0">
+<testcase name="enters, switches and immediately loses the explicit Principal workspace" classname="principal-foundation.spec.ts" time="1.709">
+</testcase>
+<testcase name="captures the approved Principal reference state without modifying it" classname="principal-foundation.spec.ts" time="0.217">
+</testcase>
+</testsuite>
+</testsuites>

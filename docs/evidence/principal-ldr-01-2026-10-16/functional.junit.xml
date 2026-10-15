@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="8" failures="0" errors="0" time="5.851127875">
+    <testsuite name="test/functional/access-management.test.ts" timestamp="2026-10-15T22:46:54.850Z" hostname="Venkateshs-MacBook-Air.local" tests="8" failures="0" errors="0" skipped="0" time="5.851127875">
+        <testcase classname="test/functional/access-management.test.ts" name="settings persist with atomic envelopes, identical replay and stale/changed-key conflicts" time="1.153565583">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="rolls settings and all actual envelopes back after an enlisted evidence failure" time="0.362287792">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="creates pending staff, campuses and duplicate-safe retries without hashes in DTO/evidence" time="0.714288542">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="two concurrent self-revocations leave exactly one active administrator" time="0.833835708">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="current teacher membership/roles revoke immediately, replay reauthorizes and foreign attachment is denied" time="1.17532">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="provisions a narrow Principal grant only through trusted operator authority" time="0.627240666">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="rejects every existing-branch timezone change before writing evidence" time="0.303410333">
+        </testcase>
+        <testcase classname="test/functional/access-management.test.ts" name="opaque staff cursors are scoped, signed and bounded at 50 records" time="0.6767005">
+        </testcase>
+    </testsuite>
+</testsuites>

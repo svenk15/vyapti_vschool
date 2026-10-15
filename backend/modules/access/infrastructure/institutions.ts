@@ -1,6 +1,6 @@
 import { createHash,randomUUID } from 'node:crypto';
 import type { Prisma,PrismaClient } from '../../../../generated/prisma/client';
-import type { Identity,OperatorPrincipal } from '../../../../shared/contracts/access';
+import type { Identity,OperatorPrincipal,RoleCode } from '../../../../shared/contracts/access';
 import type { BranchInput,ContextDirectory,InstitutionCommand,InstitutionResult,SwitchedContext } from '../../../../shared/contracts/tenancy';
 import type { InstitutionRepository } from '../application/institutions';
 import type { InstitutionEvidenceWriter } from '../../tenancy/contracts/evidence';
@@ -13,11 +13,11 @@ export class PrismaInstitutionRepository implements InstitutionRepository {
  private async current(tx:Prisma.TransactionClient,identity:Identity){const a=await tx.userAccount.findUnique({where:{id:identity.accountId},select:{status:true,tokenVersion:true}});if(!a||a.status!=='ACTIVE'||a.tokenVersion!==identity.tokenVersion)throw new AccessError('UNAUTHENTICATED');}
  async directory(identity:Identity):Promise<ContextDirectory>{try{return await this.db.$transaction(async tx=>{
   await this.current(tx,identity);
-  const membership={accountId:identity.accountId,status:'ACTIVE',grants:{some:{code:{in:['SCHOOL_ADMIN','TEACHER']}}}};
+  const membership={accountId:identity.accountId,status:'ACTIVE',grants:{some:{code:{in:['SCHOOL_ADMIN','TEACHER','PRINCIPAL']}}}};
   const organizations=await tx.organization.findMany({where:{status:'ACTIVE',OR:[{institutionGrants:{some:{accountId:identity.accountId,status:'ACTIVE',role:'INSTITUTION_ADMIN'}}},{schools:{some:{status:'ACTIVE',memberships:{some:membership}}}}]},orderBy:[{name:'asc'},{id:'asc'}],take:101,include:{institutionGrants:{where:{accountId:identity.accountId,status:'ACTIVE',role:'INSTITUTION_ADMIN'},select:{id:true}}}});
   if(organizations.length>100)throw new AccessError('UNAVAILABLE');
   const institutions=[];
-  for(const o of organizations){const canManage=!!o.institutionGrants.length,schools=await tx.school.findMany({where:{organizationId:o.id,status:'ACTIVE',...(!canManage?{memberships:{some:membership}}:{})},orderBy:{code:'asc'},take:101,include:{memberships:{where:membership,select:{id:true}}}});if(schools.length>100)throw new AccessError('UNAVAILABLE');institutions.push({id:o.id,name:o.name,revision:o.configurationVersion,canManage,branches:schools.map(s=>({id:s.id,code:s.code,name:s.name,timezone:s.timezone,selectable:!!s.memberships.length}))});}
+  for(const o of organizations){const canManage=!!o.institutionGrants.length,schools=await tx.school.findMany({where:{organizationId:o.id,status:'ACTIVE',...(!canManage?{memberships:{some:membership}}:{})},orderBy:{code:'asc'},take:101,include:{memberships:{where:membership,select:{id:true,grants:{select:{code:true}}}}}});if(schools.length>100)throw new AccessError('UNAVAILABLE');institutions.push({id:o.id,name:o.name,revision:o.configurationVersion,canManage,branches:schools.map(s=>{const roles:RoleCode[]=s.memberships.flatMap(m=>m.grants).flatMap(g=>g.code==='SCHOOL_ADMIN'||g.code==='TEACHER'||g.code==='PRINCIPAL'?[g.code]:[]);return {id:s.id,code:s.code,name:s.name,timezone:s.timezone,selectable:roles.length>0,roles};})});}
   return {institutions};
  },{isolationLevel:'RepeatableRead'});}catch(e){return this.fail(e);}}
  async switchContext(identity:Identity,organizationId:string,schoolId:string){try{const home=await this.home(identity,schoolId);if(home.scope.organizationId!==organizationId)throw new AccessError('NOT_FOUND');return home;}catch(e){return this.fail(e);}}

@@ -1,4 +1,4 @@
-import type { AdminHome, Identity, OperatorPrincipal, ProvisionInput, ProvisionResult, SelfAccount } from "../../../../shared/contracts/access";
+import type { AdminHome, Identity, OperatorPrincipal, ProvisionInput, ProvisionResult, RoleCode, SelfAccount } from "../../../../shared/contracts/access";
 import { AccessError, capabilitiesFor, currentIdentity, normalizeEmail, normalizeProvision, uuidPattern, validPassword } from "../domain/policy";
 export type LoginRecord = { id:string; passwordHash:string|null; tokenVersion:number };
 export interface AccessRepository {
@@ -6,8 +6,9 @@ export interface AccessRepository {
  loginRecord(email:string):Promise<LoginRecord|null>;
  finishLogin(record:LoginRecord|null,verified:boolean,requestId:string):Promise<Identity|null>;
  account(identity:Identity):Promise<{status:string;tokenVersion:number;normalizedEmail:string;createdAt:Date}|null>;
- adminContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:("SCHOOL_ADMIN"|"TEACHER")[]})|null>;
- memberContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:("SCHOOL_ADMIN"|"TEACHER")[]})|null>;
+ adminContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:RoleCode[]})|null>;
+ leadershipContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:RoleCode[]})|null>;
+ memberContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:RoleCode[]})|null>;
 }
 export interface Passwords { hash(value:string):Promise<string>; verify(value:string,hash:string|null):Promise<boolean> }
 export interface AccessFacade {
@@ -15,6 +16,7 @@ export interface AccessFacade {
  provisionSchool(input:ProvisionInput,operator:OperatorPrincipal):Promise<ProvisionResult>;
  authenticate(email:unknown,password:unknown):Promise<Identity|null>;
  getAdminHome(identity:Identity|null,schoolId?:string):Promise<AdminHome>;
+ getLeadershipHome(identity:Identity|null,schoolId?:string):Promise<AdminHome>;
  getAccountHome(identity:Identity|null,schoolId?:string):Promise<AdminHome>;
  getSelfAccount(identity:Identity|null):Promise<SelfAccount>;
 }
@@ -56,6 +58,16 @@ export function createAccessUseCases(repository:AccessRepository,passwords:Passw
    if(!context)throw new AccessError("NOT_FOUND");
    const capabilities=capabilitiesFor(context.roles);
    if(!capabilities.includes("school.manage"))throw new AccessError("NOT_FOUND");
+   const {roles:discard,...safe}=context;void discard;
+   return {...safe,capabilities};
+  },
+  async getLeadershipHome(identity:Identity|null,schoolId?:string):Promise<AdminHome> {
+   if(!identity||!uuidPattern.test(identity.accountId)||!Number.isInteger(identity.tokenVersion)||!currentIdentity(await repository.account(identity),identity.tokenVersion))throw new AccessError("UNAUTHENTICATED");
+   if(schoolId&&!uuidPattern.test(schoolId))throw new AccessError("NOT_FOUND");
+   const context=await repository.leadershipContext(identity,schoolId);
+   if(!context)throw new AccessError("NOT_FOUND");
+   const capabilities=capabilitiesFor(context.roles);
+   if(!capabilities.includes("leadership.read"))throw new AccessError("NOT_FOUND");
    const {roles:discard,...safe}=context;void discard;
    return {...safe,capabilities};
   },

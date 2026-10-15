@@ -13,6 +13,7 @@ const demos = [
   { name: "TEN-02 entitlement contract", script: "scripts/demo-tenancy-modules.ts" },
   { name: "ACA-01 academic access", script: "scripts/demo-academics.ts" },
   { name: "PER-02 people and teacher eligibility", script: "scripts/demo-people.ts" },
+  { name: "LDR-01 explicit Principal branch access", script: "scripts/demo-principal.ts", required: true },
   { name: "ACA-03 offerings and teacher assignments", script: "scripts/demo-academics-03.ts" },
   { name: "STU-03 placements and student archive", script: "scripts/demo-students-03.ts" },
   { name: "ATT-02 submitted attendance and correction base", script: "scripts/demo-attendance-01.ts" },
@@ -100,6 +101,7 @@ function main(): void {
   console.log("- artifacts/iam-03/private-demo.json");
   console.log("- artifacts/iam-03/private-activation.json");
   console.log("- artifacts/people-02/private-demo.json");
+  console.log("- artifacts/leadership-01/private-demo.json");
   console.log("- artifacts/academics-03/private-demo.json");
   console.log("- artifacts/attendance-01/private-demo.json");
   console.log("- artifacts/dashboard-01/private-demo.json");

@@ -1,5 +1,5 @@
 import type { AdminHome,RoleCode } from './access';
-export type BranchSummary={id:string;code:string;name:string;timezone:string;selectable:boolean};
+export type BranchSummary={id:string;code:string;name:string;timezone:string;selectable:boolean;roles:RoleCode[]};
 export type InstitutionSummary={id:string;name:string;revision:number;canManage:boolean;branches:BranchSummary[]};
 export type ContextDirectory={institutions:InstitutionSummary[]};
 export type BranchInput={code:string;name:string;timezone:string;expectedRevision:number;key:string;reason:string};

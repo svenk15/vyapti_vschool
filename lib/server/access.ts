@@ -16,6 +16,7 @@ export async function selectedSchoolId(identity:Identity|null):Promise<string|un
 }
 export const contextGateway={getContexts:access.getContexts,switchContext:access.switchContext,createBranch:access.createBranch};
 export const accountGateway={getHome:async(identity:Identity|null,schoolId?:string)=>access.getAccountHome(identity,schoolId??await selectedSchoolId(identity)),getSelf:access.getSelfAccount};
+export const leadershipGateway={getHome:async(identity:Identity|null,schoolId?:string)=>access.getLeadershipHome(identity,schoolId??await selectedSchoolId(identity))};
 export const sessionGateway={list:access.listSessions,revoke:access.revokeSession};
 export const adminGateway = {
  getSettings:async(identity:Identity|null,schoolId?:string)=>access.getSettings(identity,schoolId??await selectedSchoolId(identity)),

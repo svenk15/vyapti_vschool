@@ -1,0 +1,64 @@
+# Principal workflow implementation matrix
+
+Updated 16 October 2026 from the approved 46-workflow catalog. The approved reference is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`. Status columns remain separate: engineering, direct visual comparison, and human review. This inventory does not authorize later-phase sensitive or approval semantics.
+
+| Workflow | Outcome | Owner area | Phase | Engineering status | Visual status | Human review | Exact gap / next dependency |
+|---|---|---|---:|---|---|---|---|
+| LEA-01 | Enter the correct leadership workspace | access | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-01 explicit branch role, role-aware entry, shell, immediate revocation and honest unavailable states are verified; the approved workflow explorer and production home are intentionally different compositions |
+| LEA-02 | Switch branches without losing context | access | 1 | PARTIAL | FOCUSED_APPLICATION_INSPECTION | PENDING | Authorized switch, focus return and revoked-destination removal are verified; later owner projections still need stale-response isolation proof when LDR-02 releases data |
+| LEA-03 | Work under a temporary leadership delegation | access | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-04 | Handle access changes during a leadership action | access | 1 | PARTIAL | NOT_STARTED | PENDING | Leadership home reauthorizes live access; later owner reads/writes still need their own denial states |
+| LEA-05 | Review my school today | daily | 1 | NOT_STARTED | NOT_STARTED | PENDING | LDR-02 owner projections and exact metrics required |
+| LEA-06 | Recognize stale, incomplete or unavailable information | daily | 1 | NOT_STARTED | NOT_STARTED | PENDING | LDR-02 freshness/completeness metadata required |
+| LEA-07 | Run the weekly leadership review | daily | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-08 | Inspect register submission coverage | attendance | 1 | NOT_STARTED | NOT_STARTED | PENDING | Attendance due-register projection required |
+| LEA-09 | Create an accountable missing-register follow-up | attendance | 2 | BLOCKED | NOT_STARTED | PENDING | Coordination owner persistence and authority are not implemented |
+| LEA-10 | Follow up multiple missing registers safely | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-11 | Verify, close or reopen a follow-up | attendance | 2 | BLOCKED | NOT_STARTED | PENDING | Coordination follow-up lifecycle is not implemented |
+| LEA-12 | Review factual pupil attendance patterns | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-13 | Review an absence explanation | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-14 | Review an attendance correction request | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-15 | Resolve an incorrect or duplicate scheduled session | attendance | 1 | NOT_STARTED | NOT_STARTED | PENDING | Requires its named owner LLD and implementation |
+| LEA-16 | Review timetable conflicts and uncovered classes | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-17 | Review assignment completion with the right denominator | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-18 | Review feedback awaiting return | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-19 | Coordinate an evidence-based learning concern | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-20 | Check assessment and report readiness | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-21 | Perform an explicitly delegated moderation decision | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-22 | Authorize or hand off report publication | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-23 | Review staffing availability without private reasons | staff | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-24 | Approve temporary cover when delegated | staff | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-25 | Decide an assigned staff request | staff | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-26 | Hand over open work when leadership changes | staff | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-27 | Work from a purpose-scoped decision inbox | decisions | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-28 | Request information before deciding | decisions | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-29 | Approve, reject or return an assigned item | decisions | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-30 | Recuse and route a conflict of interest | decisions | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-31 | Recover an uncertain or outdated decision | decisions | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-32 | Prepare a targeted school notice | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-33 | Approve or return a proposed communication | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-34 | Follow up delivery or acknowledgement gaps | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-35 | Handle an escalated family concern or complaint | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-36 | Run a family or staff meeting with follow-up actions | communication | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-37 | Refer a concern to an authorized specialist | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-38 | Follow the school’s urgent safety escalation procedure | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-39 | Drill into a metric and export permitted evidence | reports | 1 | NOT_STARTED | NOT_STARTED | PENDING | Requires its named owner LLD and implementation |
+| LEA-40 | Compare branches responsibly | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-41 | Prepare a leadership review brief | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-42 | Review decision and follow-up history | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-43 | Review financial exceptions under a separate grant | services | 5 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-44 | Coordinate a school service interruption | services | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-45 | Review a source-linked leadership draft | assistant | 7 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-46 | Manage sessions, preferences and school support | account | 1 | PARTIAL | NOT_STARTED | PENDING | Own session inventory/revocation and sign-out are wired; preferences/support configuration are absent |
+
+## Current counts
+
+Engineering: 1 ENGINEERING_COMPLETE, 3 PARTIAL, 2 BLOCKED, 40 NOT_STARTED. LEA-01 has direct visual comparison with recorded composition deviations; human acceptance remains pending for all 46.
+
+## Active sequence
+
+1. Design and implement LDR-02 for LEA-05, LEA-06 and LEA-08 using Attendance-owned bounded queries and exact due/received/awaiting definitions.
+2. Extend LEA-02 stale-response proof only when that real owner projection exists; do not simulate data in the Access shell.
+3. Complete LEA-46 only after preferences/support has an approved owner contract; existing session inventory and revocation remain supported partial behavior.
+
+LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

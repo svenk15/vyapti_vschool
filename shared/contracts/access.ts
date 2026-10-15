@@ -1,5 +1,5 @@
 export type Identity = Readonly<{ accountId: string; tokenVersion: number }>;
-export type RoleCode = "SCHOOL_ADMIN" | "TEACHER";
+export type RoleCode = "SCHOOL_ADMIN" | "TEACHER" | "PRINCIPAL";
 export type AdminHome = Readonly<{
   accountId: string; membershipId: string; scope: { organizationId: string; schoolId: string };
   institutionName: string; schoolName: string; schoolCode: string; timezone: string;

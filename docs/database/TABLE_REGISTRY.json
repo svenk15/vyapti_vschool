@@ -416,9 +416,9 @@
       "table": "vs_access_role_grant",
       "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER/PRINCIPAL",
       "responsibility": "Fixed permission mapping in code; no arbitrary permission JSON.",
-      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code)",
+      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code); role CHECK changed forward by `20261016000100_principal_branch_role`",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

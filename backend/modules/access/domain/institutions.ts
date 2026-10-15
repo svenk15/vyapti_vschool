@@ -13,6 +13,6 @@ export function institutionCommand(raw:InstitutionCommand):InstitutionCommand {
  if(raw.kind==='CreateInstitution')return {kind:raw.kind,...common,name:text(raw.name,1,160)};
  if(raw.status!=='ACTIVE'&&raw.status!=='REVOKED')throw new AccessError('VALIDATION');const expectedVersion=revision(raw.expectedVersion);
  if(raw.kind==='SetInstitutionGrant')return {kind:raw.kind,...common,status:raw.status,expectedVersion};
- if(raw.kind!=='SetBranchMembership'||!Array.isArray(raw.roles)||raw.roles.length<1||raw.roles.length>2||raw.roles.some(r=>!['SCHOOL_ADMIN','TEACHER'].includes(r)))throw new AccessError('VALIDATION');
+ if(raw.kind!=='SetBranchMembership'||!Array.isArray(raw.roles)||raw.roles.length<1||raw.roles.length>3||raw.roles.some(r=>!['SCHOOL_ADMIN','TEACHER','PRINCIPAL'].includes(r)))throw new AccessError('VALIDATION');
  return {kind:raw.kind,...common,status:raw.status,expectedVersion,schoolId:identifier(raw.schoolId),roles:[...new Set(raw.roles)].sort()};
 }

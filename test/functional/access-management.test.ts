@@ -44,6 +44,16 @@ it("current teacher membership/roles revoke immediately, replay reauthorizes and
  await expect(service.command(teacher.identity,"CreateCampus",{payload:{code:"NO",name:"Denied"}},randomUUID())).rejects.toThrow("NOT_FOUND");
  await db.schoolMembership.update({where:{id:ids.membershipId},data:{status:"SUSPENDED",version:{increment:1}}});await expect(service.command(identity,"UpdateMembership",{payload:{action:"SUSPEND",reason:"Synthetic access check"},expectedVersion:1},key,ids.schoolId,teacher.membershipId)).rejects.toThrow("NOT_FOUND");
 });
+it("provisions a narrow Principal grant only through trusted operator authority",async()=>{
+ const {identity,ids}=await setup(),operator={operatorId:randomUUID(),verified:true as const};
+ await expect(service.getLeadershipHome(identity)).rejects.toThrow("NOT_FOUND");
+ const granted=await service.institutionOperation({kind:'SetBranchMembership',organizationId:ids.organizationId,schoolId:ids.schoolId,accountId:ids.accountId,status:'ACTIVE',roles:['SCHOOL_ADMIN','PRINCIPAL'],expectedVersion:1,key:randomUUID(),reason:'Authorize synthetic branch Principal'},operator);
+ const leadership=await service.getLeadershipHome(identity);expect(leadership.scope).toEqual({organizationId:ids.organizationId,schoolId:ids.schoolId});expect(leadership.capabilities).toContain('leadership.read');
+ await expect(service.command(identity,'UpdateMembership',{payload:{action:'SET_ROLES',roles:['SCHOOL_ADMIN'],reason:'School admin cannot alter Principal authority'},expectedVersion:granted.version},randomUUID(),ids.schoolId,ids.membershipId)).rejects.toThrow('FORBIDDEN');
+ const foreign=await setup();await expect(service.getLeadershipHome(identity,foreign.ids.schoolId)).rejects.toThrow('NOT_FOUND');
+ const revoked=await service.institutionOperation({kind:'SetBranchMembership',organizationId:ids.organizationId,schoolId:ids.schoolId,accountId:ids.accountId,status:'ACTIVE',roles:['SCHOOL_ADMIN'],expectedVersion:granted.version,key:randomUUID(),reason:'Revoke synthetic branch Principal'},operator);
+ expect(revoked.version).toBe(granted.version+1);await expect(service.getLeadershipHome(identity)).rejects.toThrow('NOT_FOUND');
+});
 it("rejects every existing-branch timezone change before writing evidence",async()=>{
  const {identity,ids}=await setup();await expect(service.command(identity,"UpdateSchool",{payload:schoolDetails("Synthetic school","Europe/London"),expectedVersion:1},randomUUID())).rejects.toThrow("TIMEZONE_IN_USE");expect((await service.getSettings(identity)).version).toBe(1);expect(await db.auditEntry.count({where:{schoolId:ids.schoolId,command:"UpdateSchool"}})).toBe(0);
 });
