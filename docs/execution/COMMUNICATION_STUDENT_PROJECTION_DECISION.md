@@ -1,6 +1,6 @@
 # Student school-notice projection — decision boundary
 
-Last reconciled: 15 October 2026. Status: **BLOCKED_PRODUCT_DECISION**. No capability, purpose, migration, route or UI is authorized by this document.
+Last reconciled: 15 October 2026. Status: **APPROVED_AND_IMPLEMENTED** for the bounded text-notice slice. The eight-hour implementation programme explicitly approved the decisions below. Attachments remain excluded pending their separate file-owner contract.
 
 ## Selected shared capability
 
@@ -16,7 +16,7 @@ Approved Student reference: `docs/execution/VSchool_Execution_Pack/references/ap
 - A retracted notice becomes unavailable with safe context. Attachments require their own reauthorized file owner and are not supplied by COM-01.
 - The existing Administrator publisher remains the current `communication.publish` School Administrator plus explicit branch `CommunicationPublisherGrant`. Browser-provided audience identities never confer authority.
 
-## Decisions required
+## Approved decisions
 
 | Exact question | Recommended answer | Consequences and alternatives | Workflows |
 |---|---|---|---|
@@ -27,14 +27,14 @@ Approved Student reference: `docs/execution/VSchool_Execution_Pack/references/ap
 | How are corrections and retractions exposed? | Current-version detail only. A correction appends a new immutable version and new manifest; prior acknowledgement remains attached to the prior version. Withdrawal blocks body reads and shows a safe withdrawn state. No automatic expiry in this slice. | Hiding all trace after withdrawal contradicts the approved safe-context recovery. Mutable replacement destroys prior evidence. Expiry needs a separate retention/visibility rule. | SA-35/SA-36, STW-27, STW-28 |
 | Are attachments included? | No. Deliver text notices first and keep STW-27 explicitly partial for attachments until a scanned file owner, recipient grants and expiring download contract exist. | Treating a URL or database blob as an attachment bypasses the required owner and reauthorization. | STW-27 |
 
-## Narrow execution package after approval
+## Executed package
 
 1. **COM-02A — Student notice purpose:** extend the Students owner contract, authorization UI and purpose CHECK with a forward migration; verify no implicit grant/backfill and revocation isolation.
 2. **COM-02B — Typed Student recipients:** extend Communication recipient-binding provenance with a forward migration, publish Parent and Student manifests atomically and preserve existing Parent results/replay.
 3. **COM-02C — Student inbox/detail/read/acknowledge:** add thin Student routes/gateway/screens using the existing Student shell and exact current-version semantics; list/detail start from authenticated Student recipient bindings.
 4. **COM-02D — Safe withdrawal/current-version recovery:** add the approved Administrator command and safe Student unavailable state if withdrawal authority is confirmed. Attachments remain a separately blocked sub-slice.
 
-Focused acceptance after approval: class Student with exact purpose receives the notice; same-class Student without it, another class, branch and tenant do not; Parent and Student grants do not substitute for each other; transfer preserves frozen provenance; revocation denies an open page; same acknowledgement intent replays and changed payload conflicts; correction requires current-version review; withdrawal hides the body; desktop/mobile reference comparison is direct.
+Focused acceptance evidence: class Student with exact purpose receives the notice; same-class Student without it, another class, branch and tenant do not; Parent and Student grants do not substitute for each other; transfer preserves frozen provenance; revocation denies subsequent access; same acknowledgement intent replays and changed payload conflicts; withdrawal hides the body; desktop/mobile reference comparison is direct. See `docs/evidence/communication-stw-27-28-2026-10-15/README.md`.
 
 ## Calendar/Events fallback
 

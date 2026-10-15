@@ -13,10 +13,10 @@ The full SA-35/SA-36 programme remains partial: draft resume, scheduling, email/
 
 ## COM-02 — Student notice read and acknowledgement
 
-- [ ] Approve the independently granted Student Communication purpose and who may add/remove it.
-- [ ] Approve frozen class-audience behavior across transfer, later activation and revocation.
-- [ ] Approve the Administrator withdrawal authority needed for STW-27's safe retracted state.
-- [ ] Implement typed Student recipient provenance and the Student list/detail/read/acknowledge journey.
-- [ ] Verify exact-purpose, cross-class/branch/tenant, transfer, revocation, replay, current-version and withdrawal behavior with real PostgreSQL and desktop/mobile Playwright.
+- [x] Approve the independently granted Student Communication purpose and who may add/remove it.
+- [x] Approve frozen class-audience behavior across transfer, later activation and revocation.
+- [x] Approve the Administrator withdrawal authority needed for STW-27's safe retracted state.
+- [x] Implement typed Student recipient provenance and the Student list/detail/read/acknowledge journey.
+- [x] Verify exact-purpose, cross-class/branch/tenant, transfer, revocation, replay, current-version and withdrawal behavior with real PostgreSQL and desktop/mobile Playwright.
 
-Status: **BLOCKED_PRODUCT_DECISION**. Decision sheet: `docs/execution/COMMUNICATION_STUDENT_PROJECTION_DECISION.md`. Attachments remain outside this text-notice slice until their file-owner contract exists.
+Status: **ENGINEERING_VERIFIED** for the text-notice slice. The 15 October eight-hour programme approved the decision-sheet rules. Attachments remain outside this slice until their file-owner contract exists, so STW-27 is partial; STW-28 is engineering-complete. Human review remains pending.

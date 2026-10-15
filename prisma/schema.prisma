@@ -304,6 +304,7 @@ model StudentPortalAccess {
   revoker               UserAccount?                @relation("StudentPortalAccessRevoker", fields: [revokedByAccountId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_students_portal_access_revoker_fkey")
   purposes              StudentPortalPurposeGrant[]
   invitations           StudentPortalInvitation[]
+  communicationBindings CommunicationStudentRecipientBinding[]
 
   @@unique([organizationId, schoolId, id], map: "vs_students_portal_access_scope_id_key")
   @@unique([organizationId, schoolId, id, studentId], map: "vs_students_portal_access_scope_student_key")
@@ -1561,6 +1562,7 @@ model CommunicationRecipient {
  createdAt DateTime @map("created_at") @db.Timestamptz(3)
  version CommunicationNoticeVersion @relation(fields:[organizationId,schoolId,noticeVersionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_recipient_version_fkey")
  bindings CommunicationRecipientBinding[]
+ studentBindings CommunicationStudentRecipientBinding[]
  @@unique([organizationId,schoolId,noticeVersionId,accountId],map:"vs_communication_recipient_version_account_key")
  @@unique([organizationId,schoolId,id],map:"vs_communication_recipient_scope_id_key")
  @@index([organizationId,schoolId,accountId,noticeVersionId],map:"vs_communication_recipient_inbox_idx")
@@ -1578,6 +1580,20 @@ model CommunicationRecipientBinding {
  @@unique([recipientId,accessId],map:"vs_communication_recipient_binding_access_key")
  @@index([organizationId,schoolId,studentId,recipientId],map:"vs_communication_recipient_binding_student_idx")
  @@map("vs_communication_recipient_binding")
+}
+
+model CommunicationStudentRecipientBinding {
+ id String @id(map:"vs_communication_student_recipient_binding_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ recipientId String @map("recipient_id") @db.Uuid
+ accessId String @map("access_id") @db.Uuid
+ studentId String @map("student_id") @db.Uuid
+ recipient CommunicationRecipient @relation(fields:[organizationId,schoolId,recipientId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_student_binding_recipient_fkey")
+ access StudentPortalAccess @relation(fields:[organizationId,schoolId,accessId,studentId],references:[organizationId,schoolId,id,studentId],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_student_binding_access_fkey")
+ @@unique([recipientId,accessId],map:"vs_communication_student_binding_access_key")
+ @@index([organizationId,schoolId,studentId,recipientId],map:"vs_communication_student_binding_student_idx")
+ @@map("vs_communication_student_recipient_binding")
 }
 
 model CommunicationAcknowledgement {

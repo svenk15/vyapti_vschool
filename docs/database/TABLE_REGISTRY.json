@@ -1434,7 +1434,7 @@
       "status": "MIGRATED",
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; access_id uuid; student_id uuid; purpose varchar(40); granted_at timestamptz(3)",
-      "responsibility": "Separately enforceable profile.read_self, attendance.read_self and timetable.read_self grants issued as one first-release bundle.",
+      "responsibility": "Separately enforceable Student self-service purposes. The profile, Attendance and Timetable purposes form the initial access bundle; communication.notice.read_self is independently selected and may be added or removed by the designated Student access manager.",
       "constraints": "Scoped access+Student FK; allowed-purpose check; unique access/purpose; scoped purpose lookup index",
       "rls": {
         "classification": "BRANCH",
@@ -1569,6 +1569,27 @@
           "school_id"
         ],
         "intendedPolicy": "Visible only within authorized publisher operations or as an internal live recipient guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationStudentRecipientBinding",
+      "owner": "communication",
+      "table": "vs_communication_student_recipient_binding",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/recipient/access/student uuid",
+      "responsibility": "Frozen typed Student-purpose provenance supporting a deduplicated recipient account without conflating Student and Guardian authority.",
+      "constraints": "Scoped recipient and Student portal access+Student FKs; unique recipient/access; Student lookup index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Visible only within authorized publisher operations or as an internal live Student-recipient guard.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "communication",
         "closureGate": "TEN-03"

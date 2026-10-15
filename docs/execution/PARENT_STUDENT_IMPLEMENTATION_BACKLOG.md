@@ -14,7 +14,7 @@ Approved UX sources:
 
 1. **COM-01 / PAR-14:** engineering-verified. Administrator publishes one immutable class notice; a Parent with the separately accepted notice purpose reads and acknowledges the exact version. Evidence is in `docs/evidence/communication-par-14-2026-10-15/`.
 2. **Attendance explanations PAR-11/PAR-12:** decision-ready contract only; no implementation until the unresolved authority, visibility and retention decisions are explicitly approved.
-3. **COM-02 / STW-27–28:** same-owner Student projection is decision-ready but blocked on the independent Student purpose, frozen-audience and withdrawal-authority rules in `COMMUNICATION_STUDENT_PROJECTION_DECISION.md`; no Parent grant is substitutable.
+3. **COM-02 / STW-27–28:** approved and engineering-verified for the bounded text-notice projection. STW-28 is complete; STW-27 remains partial only for attachments pending their separate file-owner/download contract. Evidence is in `docs/evidence/communication-stw-27-28-2026-10-15/`.
 4. **Next Parent owner design:** Calendar/Events cannot start until its separate audience purpose, publisher, update/cancellation and retention rules are approved. Do not infer the unresolved preference, request, response or provider rules.
 
 Functional/security status, reference comparison and human acceptance remain separate. Human acceptance is pending for every workflow in this export.
@@ -24,10 +24,10 @@ Functional/security status, reference comparison and human acceptance remain sep
 | Workspace | Engineering complete | Partial | Blocked/not started | Total | Incomplete in this backlog |
 |---|---:|---:|---:|---:|---:|
 | Parent/Guardian | 10 | 1 | 41 | 52 | 42 |
-| Student | 7 | 3 | 37 | 47 | 40 |
-| **Combined** | **17** | **4** | **78** | **99** | **82** |
+| Student | 8 | 4 | 35 | 47 | 39 |
+| **Combined** | **18** | **5** | **76** | **99** | **81** |
 
-The 82 incomplete workflows have a primary planning blocker of either **product** or **technical design**; PAR-14 has moved out of the technical-design backlog. No remaining row is blocked only by frontend implementation, visual comparison or missing verification. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
+The 81 incomplete workflows include partial delivered slices and rows whose primary planning blocker is **product** or **technical design**. PAR-14 and STW-28 have moved out of the backlog; STW-27 remains only for attachments. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
 
 ## Capability sequence and unlock map
 
@@ -103,8 +103,7 @@ No grant, migration or UI should be implemented until this decision sheet, inclu
 | Parent PAR-17 | Resolve an undelivered message | Communication | Development delivery-state patterns | Stable message/delivery-attempt owner and retry policy | Authorized recipient/delivery operations | PAR-15 | Technical design |
 | Parent PAR-18 | Plan with school calendar | Calendar / Events + Timetable | Effective child timetable and configured teaching days are complete | Non-timetable event/closure publication and mixed calendar projection | Authorized event/calendar publisher | PAR-08; Calendar/Events owner | Technical design |
 | Parent PAR-19 | Respond to a school event | Events | Future event publication | Signer authority, event version, response/withdrawal and consent boundary | Administrator reviews response/capacity | PAR-18 | Product |
-| Student STW-27 | Read a school notice | Communication | Accepted Student context | Student audience/version/publication projection | Administrator/Teacher publishes to an authorized audience | STW-04 | Technical design |
-| Student STW-28 | Acknowledge a notice | Communication | Future STW-27 notice version | Idempotent acknowledgement and exact-version history | Publisher reads authorized acknowledgement aggregate | STW-27 | Technical design |
+| Student STW-27 | Read a school notice | Communication / Files | Text notice, independent purpose, frozen typed recipients, read evidence and safe withdrawal are verified | Attachment owner, scanning, recipient grant and expiring reauthorized download | Authorized publisher attaches an approved file | Delivered text slice; Files owner | Technical design |
 | Student STW-29 | Message a permitted teacher | Communication | Student/Teacher identities; assignment context | Participant/recipient projection, thread/message persistence and retention | Assigned/permitted Teacher receives and replies | STW-04; Communication owner | Technical design |
 | Student STW-30 | Recover a delivery problem | Communication | Future message intent/replay patterns | Delivery-attempt state, retry and uncertain-outcome recovery | Delivery operations and authorized recipient | STW-29 | Technical design |
 | Student STW-31 | Review published events and assessments | Calendar / Events | Effective published timetable | Calendar publication, audience and event/assessment projection | Administrator/Teacher publishes event/assessment date | STW-07 | Technical design |
@@ -199,6 +198,6 @@ The Student inventory contains no fee/payment workflows. This capability unlocks
 
 ## Next eligible action
 
-No incomplete Parent or Student workflow is currently ready for implementation under an already complete authority contract. COM-01/PAR-14 is engineering-complete. The nearest same-owner work is COM-02/STW-27–28 after approval of the Student notice-purpose, frozen-audience and withdrawal rules. The next Parent-facing alternatives remain PAR-11/PAR-12 after their recorded Attendance explanation decisions, or Calendar/Events after its audience/publisher/update contract. Technical task splits are ready; the unresolved authority rules are the actual gates.
+COM-01/PAR-14 and the bounded COM-02 text-notice projection are engineering-verified; STW-27 remains partial only for attachments and STW-28 is engineering-complete. The next authorized bounded slice is PAR-11/PAR-12 Attendance explanations using protected fictional demo/test text while the real-data retention decision remains an explicit production gate. Calendar/Events follows only after its audience/publisher/update contract is settled. Technical design by itself is not an approval gate; unresolved product authority and retention rules remain the named gates.
 
 Until then, the current Parent and Student checkpoints remain preserved. No new authority, lifecycle, migration, visual claim or test result is created by this planning export.

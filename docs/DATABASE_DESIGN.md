@@ -109,6 +109,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | CommunicationNoticeVersion | `vs_communication_notice_version` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationRecipient | `vs_communication_recipient` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationRecipientBinding | `vs_communication_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
+| CommunicationStudentRecipientBinding | `vs_communication_student_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationAcknowledgement | `vs_communication_acknowledgement` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 
 No business table is migrated simply because it is listed here. Fees, admissions, exams, learning, transport, HR/payroll, library, inventory, health, documents, analytics and AI retain Bible blueprints. Each gets a physical schema and its own DESIGN/TASKS/CURRENT_STATE pack before implementation. Reserve matching owner names such as `fees` and `admissions`; do not install speculative empty tables now. Fees can consume Student core through its owner contract without enabling Attendance.

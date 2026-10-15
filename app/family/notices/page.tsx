@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import {BrandSurface,Badge,Card,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
+import {BrandSurface,Card,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
 import {FamilyPortalFrame} from '@/components/family-portal-frame';
 import {familyPageContext} from '@/lib/server/family-page';
 import {getIdentity} from '@/lib/server/auth';

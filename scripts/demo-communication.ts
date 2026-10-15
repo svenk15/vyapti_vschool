@@ -17,6 +17,7 @@ const directory = 'artifacts/communication-01';
 const path = join(directory, 'private-demo.json');
 const peoplePath = 'artifacts/people-02/private-demo.json';
 const guardiansPath = 'artifacts/guardians-01/private-demo.json';
+const studentPath = 'artifacts/students-portal/private-demo.json';
 const modules = ['academic_core', 'admissions', 'attendance', 'communication', 'family', 'staff_core', 'student_core', 'timetable'] as const;
 
 type Demo = {
@@ -26,10 +27,12 @@ type Demo = {
   entitlementKey: string;
   activationKey: string;
   publishKey: string;
+  studentPublishKey?: string;
   accessId?: string;
   parentAccountId?: string;
   studentId?: string;
   noticeId?: string;
+  studentNoticeId?: string;
 };
 
 function save(value: Demo) {
@@ -48,6 +51,7 @@ function load(): Demo {
     entitlementKey: randomUUID(),
     activationKey: randomUUID(),
     publishKey: randomUUID(),
+    studentPublishKey: randomUUID(),
   };
   save(value);
   return value;
@@ -58,6 +62,8 @@ async function main() {
   const demo = load();
   const people = JSON.parse(readFileSync(peoplePath, 'utf8')) as {adminEmail: string; password: string; organizationId: string; schoolId: string};
   const guardianFixture = JSON.parse(readFileSync(guardiansPath, 'utf8')) as {studentId?: string};
+  const studentFixture = JSON.parse(readFileSync(studentPath, 'utf8')) as {studentId?: string};
+  demo.studentPublishKey ??= randomUUID();
   const db = new PrismaClient({adapter: new PrismaPg({connectionString: local.databaseUrl}), log: []});
   const tenancy = createTenancyServices({databaseUrl: local.databaseUrl, releasedModules: modules});
   let invitationToken = '';
@@ -124,8 +130,21 @@ async function main() {
       const published = await communication.publish(admin, people.organizationId, people.schoolId, {sectionId: placement.sectionId, title: 'Family learning evening', body: 'Please review the family learning evening arrangements and acknowledge this notice.', requiresAcknowledgement: true, key: demo.publishKey}, randomUUID());
       demo.noticeId = published.noticeId;
     }
+    const studentNotice = demo.studentNoticeId ? await db.communicationNotice.findFirst({where: {id: demo.studentNoticeId, organizationId: people.organizationId, schoolId: people.schoolId}}) : null;
+    if (!studentNotice) {
+      if (!studentFixture.studentId) throw new Error('SYNTHETIC_STUDENT_NOTICE_ACCESS_REQUIRED');
+      const studentPlacement = await db.sectionPlacement.findFirst({
+        where: {organizationId: people.organizationId, schoolId: people.schoolId, enrollment: {studentId: studentFixture.studentId}},
+        orderBy: [{validFrom: 'desc'}, {id: 'asc'}],
+        select: {sectionId: true},
+      });
+      const studentAccess = await db.studentPortalAccess.findFirst({where: {organizationId: people.organizationId, schoolId: people.schoolId, studentId: studentFixture.studentId, acceptedAt: {not: null}, revokedAt: null, purposes: {some: {purpose: 'communication.notice.read_self'}}}});
+      if (!studentPlacement || !studentAccess) throw new Error('SYNTHETIC_STUDENT_NOTICE_ACCESS_REQUIRED');
+      const published = await communication.publish(admin, people.organizationId, people.schoolId, {sectionId: studentPlacement.sectionId, title: 'Student learning update', body: 'Please review this school learning update and acknowledge the exact published version.', requiresAcknowledgement: true, key: demo.studentPublishKey!}, randomUUID());
+      demo.studentNoticeId = published.noticeId;
+    }
     save(demo);
-    console.log(`Prepared or preserved an immutable school notice and a separately authorized Parent recipient. Private credentials: ${path}`);
+    console.log(`Prepared or preserved immutable Parent and Student school notices with separately authorized recipients. Private credentials: ${path}`);
   } catch (error) {
     const code = error instanceof Error && /^[A-Z0-9_]+$/.test(error.message) ? error.message : 'LOCAL_DEMO_ERROR';
     throw new Error(`${stage.toUpperCase()}_${code}`);

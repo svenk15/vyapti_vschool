@@ -14,4 +14,9 @@ export const communicationGateway={
  detailParent:(identity:Identity|null,studentId:unknown,noticeId:unknown)=>service().detailParent(required(identity),studentId,noticeId),
  markRead:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown})=>service().markRead(required(identity),input),
  acknowledge:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown;key:unknown},requestId:string)=>service().acknowledge(required(identity),input,requestId),
+ listStudent:(identity:Identity|null,studentId:unknown)=>service().listStudent(required(identity),studentId),
+ detailStudent:(identity:Identity|null,studentId:unknown,noticeId:unknown)=>service().detailStudent(required(identity),studentId,noticeId),
+ markStudentRead:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown})=>service().markStudentRead(required(identity),input),
+ acknowledgeStudent:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown;key:unknown},requestId:string)=>service().acknowledgeStudent(required(identity),input,requestId),
+ async withdraw(identity:Identity|null,noticeId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().withdraw(actor,organizationId,schoolId,noticeId,input,requestId);},
 };

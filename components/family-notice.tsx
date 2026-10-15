@@ -14,12 +14,12 @@ export function FamilyNotice({notice, studentId, backHref}: {notice: NoticeDetai
   const acknowledgementKey = useRef(crypto.randomUUID());
 
   useEffect(() => {
-    if (readAt || readSent.current) return;
+    if (notice.status === 'WITHDRAWN' || readAt || readSent.current) return;
     readSent.current = true;
     void fetch(`/api/v1/family/notices/${notice.noticeId}/read`, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({studentId, versionId: notice.versionId})})
       .then(async response => { const payload = await response.json(); if (response.ok) setReadAt(payload.readAt); })
       .catch(() => {});
-  }, [notice.noticeId, notice.versionId, readAt, studentId]);
+  }, [notice.noticeId, notice.status, notice.versionId, readAt, studentId]);
 
   const acknowledge = async () => {
     setBusy(true);
@@ -39,9 +39,11 @@ export function FamilyNotice({notice, studentId, backHref}: {notice: NoticeDetai
   return <div className="family-notice-detail">
     {error && <Alert tone="danger" title="Acknowledgement not saved" onDismiss={() => setError('')}>{error}</Alert>}
     <Card className="padded notice-reading-card">
-      <p className="notice-reading-body">{notice.body}</p>
+      {notice.status === 'WITHDRAWN'
+        ? <Alert tone="warning" title="This notice was withdrawn">Protected notice content is no longer available. Contact the school if you need clarification.</Alert>
+        : <p className="notice-reading-body">{notice.body}</p>}
       <div className="section-divider"/>
-      {notice.requiresAcknowledgement ? (ack
+      {notice.status === 'WITHDRAWN' ? <p className="muted">Acknowledgement is no longer available.</p> : notice.requiresAcknowledgement ? (ack
         ? <Alert tone="success" title="Acknowledged">Your explicit response to version {notice.version} was recorded on {new Date(ack).toLocaleString()}.</Alert>
         : <div className="notice-ack-action"><Button loading={busy} onClick={acknowledge}><span aria-hidden="true">✓</span> Acknowledge notice</Button><p className="small muted">This records receipt, not consent or agreement to a separate activity.</p></div>)
         : <p className="muted">No acknowledgement is requested.</p>}
