@@ -1901,3 +1901,41 @@ model LearningSubmissionAttempt {
   @@index([organizationId, schoolId, assignmentVersionId, acceptedAt(sort: Desc), id], map: "vs_learning_submission_attempt_assignment_idx")
   @@map("vs_learning_submission_attempt")
 }
+
+model LearningFeedback {
+  id                       String    @id(map: "vs_learning_feedback_pkey") @db.Uuid
+  organizationId           String    @map("organization_id") @db.Uuid
+  schoolId                 String    @map("school_id") @db.Uuid
+  submissionId             String    @map("submission_id") @db.Uuid
+  reviewerTeacherId        String    @map("reviewer_teacher_id") @db.Uuid
+  revision                 Int
+  draftStrengthText        String?   @map("draft_strength_text") @db.VarChar(4000)
+  draftNextStepText        String?   @map("draft_next_step_text") @db.VarChar(4000)
+  currentVersionId         String?   @map("current_version_id") @db.Uuid
+  createdAt                DateTime  @map("created_at") @db.Timestamptz(3)
+  updatedAt                DateTime  @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_feedback_scope_id_key")
+  @@unique([organizationId, schoolId, submissionId], map: "vs_learning_feedback_submission_key")
+  @@unique([organizationId, schoolId, currentVersionId], map: "vs_learning_feedback_current_version_key")
+  @@index([organizationId, schoolId, reviewerTeacherId, updatedAt(sort: Desc), id], map: "vs_learning_feedback_reviewer_idx")
+  @@map("vs_learning_feedback")
+}
+
+model LearningFeedbackVersion {
+  id                   String   @id(map: "vs_learning_feedback_version_pkey") @db.Uuid
+  organizationId       String   @map("organization_id") @db.Uuid
+  schoolId             String   @map("school_id") @db.Uuid
+  feedbackId           String   @map("feedback_id") @db.Uuid
+  submissionId         String   @map("submission_id") @db.Uuid
+  versionNo            Int      @map("version_no")
+  strengthText         String   @map("strength_text") @db.VarChar(4000)
+  nextStepText         String   @map("next_step_text") @db.VarChar(4000)
+  publishedByAccountId String   @map("published_by_account_id") @db.Uuid
+  publishedAt          DateTime @map("published_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_feedback_version_scope_id_key")
+  @@unique([organizationId, schoolId, feedbackId, versionNo], map: "vs_learning_feedback_version_number_key")
+  @@index([organizationId, schoolId, submissionId, publishedAt(sort: Desc), id], map: "vs_learning_feedback_version_submission_idx")
+  @@map("vs_learning_feedback_version")
+}

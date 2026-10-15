@@ -22,4 +22,7 @@ export const learningGateway={
  submitStudentWork:(identity:Identity|null,id:unknown,input:unknown,requestId:string)=>service().submitStudentWork(required(identity),id,input,requestId),
  async teacherSubmissions(identity:Identity|null,id:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().teacherSubmissions(actor,organizationId,schoolId,id);},
  async teacherSubmission(identity:Identity|null,id:unknown,submissionId:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().teacherSubmission(actor,organizationId,schoolId,id,submissionId);},
+ async teacherFeedback(identity:Identity|null,id:unknown,submissionId:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().teacherFeedback(actor,organizationId,schoolId,id,submissionId);},
+ async saveFeedbackDraft(identity:Identity|null,id:unknown,submissionId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().saveFeedbackDraft(actor,organizationId,schoolId,id,submissionId,input,requestId);},
+ async publishFeedback(identity:Identity|null,id:unknown,submissionId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().publishFeedback(actor,organizationId,schoolId,id,submissionId,input,requestId);},
 };

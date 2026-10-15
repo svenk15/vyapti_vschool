@@ -11,7 +11,7 @@ export interface LearningRepository{
  listParent(actor:Identity,input:{studentId:string}):Promise<LearningAssignmentSummary[]>;
  detailParent(actor:Identity,input:{studentId:string;assignmentId:string}):Promise<LearningAssignmentSummary>;
  listStudent(actor:Identity,input:{studentId:string}):Promise<LearningAssignmentSummary[]>;
- queryStudent(actor:Identity,input:{studentId:string;q:string;by:'title'|'subject';sort:'due'|'title'|'subject';order:'asc'|'desc';cursor:string|null;limit:number;status:'all'|'draft'|'submitted'|'to_do'|'actionable'}):Promise<LearningAssignmentPage>;
+ queryStudent(actor:Identity,input:{studentId:string;q:string;by:'title'|'subject';sort:'due'|'title'|'subject';order:'asc'|'desc';cursor:string|null;limit:number;status:'all'|'draft'|'submitted'|'feedback'|'to_do'|'actionable'}):Promise<LearningAssignmentPage>;
  detailStudent(actor:Identity,input:{studentId:string;assignmentId:string}):Promise<LearningAssignmentSummary>;
 }
 export function createLearningUseCases(repository:LearningRepository){const actor=(value:Identity|null)=>{if(!value)throw new AccessError('UNAUTHENTICATED');return value;};return {

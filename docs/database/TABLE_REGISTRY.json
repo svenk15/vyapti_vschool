@@ -1930,6 +1930,48 @@
         "owner": "learning",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "LearningFeedback",
+      "owner": "learning",
+      "table": "vs_learning_feedback",
+      "fields": "id/org/school/submission/reviewer/current_version uuid; revision; private draft strength/next-step; timestamps",
+      "responsibility": "Mutable private Teacher feedback root and pointer to the current published version for one accepted submission.",
+      "constraints": "Scoped Submission/Teacher/current-version FKs; one root per submission; positive revision; paired bounded draft fields; reviewer/update index",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Private feedback draft fields are visible and writable only to the exact currently authorized reviewing Teacher.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningFeedbackVersion",
+      "owner": "learning",
+      "table": "vs_learning_feedback_version",
+      "fields": "id/org/school/feedback/submission/publisher uuid; version; immutable strength/next-step; published_at",
+      "responsibility": "Immutable Student-visible published feedback snapshot pinned to one accepted submission.",
+      "constraints": "Scoped Feedback/Submission/account FKs; unique feedback/version; bounded text checks; submission/publication index; append-only trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Teacher reads require current exact review authority; Student reads require exact live self binding to the pinned submission; Parent access is denied.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

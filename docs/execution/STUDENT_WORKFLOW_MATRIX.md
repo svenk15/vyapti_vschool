@@ -2,7 +2,7 @@
 
 Cross-workspace capability planning is consolidated in [Combined Parent/Student implementation backlog](./PARENT_STUDENT_IMPLEMENTATION_BACKLOG.md). This matrix remains authoritative for Student workflow status.
 
-Last reconciled: 15 October 2026. Canonical inventory: Student Workspace Edition 01, 47 workflows, source SHA-256 `74dc76af2e3b2000dfeb4b1258d49c6081aa255d6294f9ac6fe10ae59253cc9b`. Functional/security, visual comparison and human acceptance are independent.
+Last reconciled: 16 October 2026. Canonical inventory: Student Workspace Edition 01, 47 workflows, source SHA-256 `74dc76af2e3b2000dfeb4b1258d49c6081aa255d6294f9ac6fe10ae59253cc9b`. Functional/security, visual comparison and human acceptance are independent.
 
 | Workflow | Area | Functional/security | Visual comparison | Dependency / next action | Human review | Overall |
 |---|---|---|---|---|---|---|
@@ -27,7 +27,7 @@ Last reconciled: 15 October 2026. Canonical inventory: Student Workspace Edition
 | STW-19 — Withdraw a submission when allowed | assignments | NOT_STARTED | NOT_STARTED | Learning/assignment owner contract and persistence are absent. | PENDING | BLOCKED |
 | STW-20 — Request more time | assignments | NOT_STARTED | NOT_STARTED | Learning/assignment owner contract and persistence are absent. | PENDING | BLOCKED |
 | STW-21 — Continue safely on a poor connection | assignments | NOT_STARTED | NOT_STARTED | Learning/assignment owner contract and persistence are absent. | PENDING | BLOCKED |
-| STW-22 — Read returned teacher feedback | feedback | NOT_STARTED | NOT_STARTED | Learning/assignment owner contract and persistence are absent. | PENDING | BLOCKED |
+| STW-22 — Read returned teacher feedback | feedback | VERIFIED_CURRENT_RELEASE_CONTRACT — the exact submitting Student reads only the latest immutable published two-field guidance while the accepted response remains unchanged; Parent, other Student, unrelated Teacher and revoked authority are denied. The approved release uses publication and creates no Returned/resubmission state. | DIRECT_COMPARISON_WITH_EXTENSION — receipt-integrated desktop/mobile guidance was directly inspected; the static Student reference has no exact real receipt/recovery state. | LEA-04; Parent visibility, grades, replies, return/reopen and resubmission remain separate and are not implied. | PENDING | ENGINEERING_COMPLETE |
 | STW-23 — Understand criteria and subject progress | feedback | NOT_STARTED | NOT_STARTED | Learning/assignment owner contract and persistence are absent. | PENDING | BLOCKED |
 | STW-24 — Ask about feedback | feedback | NOT_STARTED | NOT_STARTED | Learning/assignment owner contract and persistence are absent. | PENDING | BLOCKED |
 | STW-25 — View my recorded attendance | attendance | VERIFIED — exact own roster history; OPEN is awaiting submission and never absence; no mark/correct/cancel authority. | VERIFIED — populated desktop/mobile table and factual status treatment directly compared. | Aggregate percentage and correction request stay absent because their owner semantics are unresolved. | PENDING | ENGINEERING_COMPLETE |
@@ -58,4 +58,4 @@ Last reconciled: 15 October 2026. Canonical inventory: Student Workspace Edition
 
 The authorized minimal `/student/profile` route is a Student self projection of existing Student, Person, Enrollment and Placement data. It adds no edit/correction authority and is tracked under STW-A01 because the Edition 01 catalog has no separate read-profile workflow.
 
-Final combined Parent/Student delivery provenance is recorded in [15 October consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md). The 47-row catalog is 11 engineering complete, 7 partial and 29 blocked; STW-A01 remains outside that catalog count. LEA-03 completes the approved text-only STW-13/15/16 outcomes while keeping the richer STW-10/11 and unsupported Learning capabilities explicit. The [consolidated decision list](./PARENT_STUDENT_DECISION_LIST.md) keeps Student notice authority separate from the implemented Parent notice grant. Human review remains pending.
+Final combined Parent/Student delivery provenance is recorded in [15 October consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md). The 47-row catalog is 12 engineering complete, 7 partial and 28 blocked; STW-A01 remains outside that catalog count. LEA-03 completes the approved text-only STW-13/15/16 outcomes; LEA-04 completes the current-release published-guidance outcome for STW-22 while keeping Returned/resubmission and richer Learning capabilities explicit. The [consolidated decision list](./PARENT_STUDENT_DECISION_LIST.md) keeps Student notice authority separate from the implemented Parent notice grant. Human review remains pending.

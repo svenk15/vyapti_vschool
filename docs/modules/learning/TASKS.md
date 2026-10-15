@@ -36,3 +36,16 @@ Submission-status filters remain outside this task because their draft/attempt/f
 - [x] Directly inspect approved Student/Teacher reference states and record supported extensions/deviations.
 
 Human acceptance remains PENDING. Files, late work, extensions, resubmission, grading, feedback, Returned/Closed/Excused semantics and durable browser storage remain separate tasks.
+
+## LEA-04 — private Teacher feedback and Student publication
+
+- [x] Add forward-only feedback root/version tables, constraints, indexes and TEN-03 registry entries.
+- [x] Add exact-submission Teacher private draft save with CAS, replay and safe text exclusions.
+- [x] Add explicit immutable feedback publication and versioned correction without changing submission state.
+- [x] Add Student-only current published feedback read; deny Parent, other Student and unauthorized Teacher access.
+- [x] Integrate feedback progress into Teacher submissions and Student detail/directory/My day navigation.
+- [x] Extend deterministic fictional seed data without replacing accepted responses or published feedback.
+- [x] Pass focused unit/PostgreSQL, desktop/mobile browser, migration, boundary, type/lint and build checks.
+- [x] Directly compare supported TEA-29/STW-22 states and record reference-less recovery deviations.
+
+Human acceptance remains PENDING. Marks, rubrics, return/reopen, Student reply, Parent feedback access and resubmission remain outside LEA-04.

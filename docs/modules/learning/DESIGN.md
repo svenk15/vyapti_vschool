@@ -112,3 +112,35 @@ Same command key and semantic payload returns the original authorized result; a 
 Student detail uses the approved `Write response` → `Review work` → `Receipt` stages. Back/Continue preserves in-tab text; only acknowledged Save draft persists, and only final Submit creates an attempt. A stale save retains attempted text and offers reload. Unknown submission outcome retains the exact payload/key for retry. Directory status supports only `DRAFT` and `SUBMITTED` in addition to existing open published work; absent Returned/Closed/Excused semantics remain visibly unavailable. My day excludes submitted work from actionable priorities.
 
 Verification requires real PostgreSQL evidence for isolation, CAS, deadline boundary, post-deadline receipt replay, concurrent duplicate and save/submit races, revocation/unavailability, immutable attempt content, scoped Teacher reads and Parent denial. Browser evidence covers the Teacher publication → Student save/reload/review/submit/receipt → Teacher list/detail journey at desktop and mobile, including keyboard focus and direct reference comparison. Every new tenant-table migration carries TEN-03 Path A metadata; enforcement remains the consolidated production gate.
+
+## LEA-04 — private Teacher feedback and Student publication
+
+### Design-readiness decision
+
+LEA-04 implements the approved TEA-29 → STW-22 text-only feedback slice. The current authoring Teacher for the exact published assignment and current CourseOffering assignment may save private feedback against one immutable accepted submission and explicitly publish it. The submitting Student may read the latest published feedback through the existing exact `learning.assignment.read_self` binding. Parent assignment access does not grant feedback or response access. Publication releases comments only: it does not mark work Returned, Graded, Closed or Excused and creates no resubmission, reply, mark or rubric authority.
+
+The two required fields are **What worked well** and **Next step for learning**, each normalized plain text from 1–4,000 characters. A private draft uses aggregate revision CAS. A published version is immutable. Publishing clears the private draft but retains the current published pointer; saving a later correction draft never hides or changes the current publication. The next explicit publication creates version `n+1`. This is the smallest conservative correction lifecycle authorized by the programme.
+
+### Physical schema, joins and ownership
+
+| Physical table (model) | Physical fields | Responsibility | Constraints and read indexes |
+|---|---|---|---|
+| `vs_learning_feedback` (LearningFeedback) | id/org/school/submission/reviewer/current_version uuid; revision; private draft strength/next-step; timestamps | Mutable private Teacher feedback root and pointer to the current published version for one accepted submission. | Scoped Submission/Teacher/current-version FKs; one root per submission; positive revision; paired bounded draft fields; reviewer/update index |
+| `vs_learning_feedback_version` (LearningFeedbackVersion) | id/org/school/feedback/submission/publisher uuid; version; immutable strength/next-step; published_at | Immutable Student-visible published feedback snapshot pinned to one accepted submission. | Scoped Feedback/Submission/account FKs; unique feedback/version; bounded text checks; submission/publication index; append-only trigger |
+
+Teacher reads start from live account/membership/capability → account/Person/active Teacher → exact authored published Assignment → current dated TeacherAssignment → exact accepted SubmissionAttempt → Feedback. Student reads start from live accepted StudentPortalAccess and `learning.assignment.read_self` → frozen Student binding/recipient → exact accepted SubmissionAttempt → Feedback.currentVersion. Every join carries organization and school scope. Guardian projections stop before Feedback and FeedbackVersion.
+
+### Ports, transactions and recovery
+
+- `teacherFeedback(identity, scope, assignmentId, submissionId)` returns the immutable submission plus only that Teacher's private draft and the current published version.
+- `saveFeedbackDraft(... expectedRevision, strength, nextStep, key)` locks account UPDATE → organization SHARE → school UPDATE → assignment SHARE → submission UPDATE → feedback UPDATE, repeats live Teacher/resource/module checks, then creates or CAS-updates the private draft. Audit and command receipts contain IDs/revisions only.
+- `publishFeedback(... expectedRevision, reviewedSubmissionId, key)` repeats the same guard and lock order, reauthorizes before replay disclosure, requires a non-empty unchanged draft and explicit final confirmation at the UI, inserts immutable version `n+1`, updates the current pointer, clears the draft, and appends safe audit/outbox/receipt evidence atomically.
+- `studentFeedback(identity, studentId, assignmentId)` returns only the latest published version for that exact submitting Student. It never returns private feedback drafts.
+
+Same actor/key/payload replays the original result; changed payload conflicts. Concurrent draft saves use revision CAS. Draft save versus publish locks the same root so one wins and the other receives `STALE_VERSION`. Because the Student submission table is immutable, feedback always remains pinned to the accepted content reviewed by the Teacher. Revoked Teacher or Student authority denies the next protected request.
+
+### UI and verification
+
+The Teacher submission reader links to an approved two-stage **Feedback → Return review** composition. Entered text survives Back/Continue in the active flow; only Save draft persists privately, and only the final **Publish feedback** action releases a version. Unknown publication retains the exact key/payload for receipt recovery. The Student receipt displays the latest published feedback, attempt number and publication time with a safe link back to assignment details. Teacher submission lists show Not started, Draft or Published without exposing text.
+
+Focused verification covers validation, draft privacy, exact submission scope, Teacher authority/revocation, Parent/other-Student denial, stale save, publish replay after response loss, concurrent save/publication, immutable versions, correction versioning and unchanged Student submission content. Desktop/mobile comparison uses TEA-29 and STW-22 reference states; where their generic prototype cannot show the real receipt/recovery state, the established feedback/action patterns form a labelled narrow extension. Human review, font portability, native accessibility, TEN-03 and production readiness remain separate gates.
