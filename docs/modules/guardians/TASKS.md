@@ -37,3 +37,9 @@ Status: **ENGINEERING_VERIFIED** at `7d52491`. Human review: **PENDING**.
 Allow a manager to select `communication.notice.read` independently during a new child-access invitation. Communication remains the owner of notices, audience snapshots and acknowledgements; Guardians only supplies the live exact-purpose check. Existing accepted links are not broadened automatically.
 
 Status: **ENGINEERING_VERIFIED** with COM-01. Human review: **PENDING**.
+
+## FAM-07 — Independent Attendance explanation purpose
+
+Allow the designated manager to select or version-change `attendance.explanation.submit` for one exact GuardianChildAccess. Do not infer it from the fixed read bundle and do not backfill existing links. Attendance remains the case/disposition owner and consumes the live exact-purpose verifier.
+
+Status: **ENGINEERING_VERIFIED** with ATT-05 for the authorized fictional-data slice. Human review: **PENDING**. Real-data protected-text retention remains a release gate.

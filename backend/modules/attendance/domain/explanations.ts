@@ -1,0 +1,8 @@
+import {attendanceExplanationCategories,type AttendanceExplanationCategory,type AttendanceExplanationStatus} from '../../../../shared/contracts/attendance-explanations';
+export class AttendanceExplanationError extends Error{constructor(public readonly code:'UNAUTHENTICATED'|'FORBIDDEN'|'NOT_FOUND'|'VALIDATION'|'CONFLICT'|'STALE_VERSION'|'IDEMPOTENCY_CONFLICT'|'RELEASE_UNAVAILABLE'|'MODULE_NOT_LICENSED'|'MODULE_DISABLED'|'UNAVAILABLE'){super(code);this.name='AttendanceExplanationError';}}
+const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+export function requiredUuid(value:unknown){if(typeof value!=='string'||!uuid.test(value))throw new AttendanceExplanationError('VALIDATION');return value.toLowerCase();}
+export function category(value:unknown):AttendanceExplanationCategory{if(typeof value!=='string'||!attendanceExplanationCategories.includes(value as AttendanceExplanationCategory))throw new AttendanceExplanationError('VALIDATION');return value as AttendanceExplanationCategory;}
+export function narrative(value:unknown,min=10){if(typeof value!=='string')throw new AttendanceExplanationError('VALIDATION');const text=value.normalize('NFC').trim().replace(/\r\n/g,'\n');if(text.length<min||text.length>1000||/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(text))throw new AttendanceExplanationError('VALIDATION');return text;}
+export function positiveVersion(value:unknown){const parsed=Number(value);if(!Number.isInteger(parsed)||parsed<1)throw new AttendanceExplanationError('VALIDATION');return parsed;}
+export function decision(value:unknown):Extract<AttendanceExplanationStatus,'ACCEPTED'|'DECLINED'>{if(value!=='ACCEPTED'&&value!=='DECLINED')throw new AttendanceExplanationError('VALIDATION');return value;}

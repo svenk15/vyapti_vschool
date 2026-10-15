@@ -13,9 +13,9 @@ Approved UX sources:
 ## Active queue — 15 October 2026
 
 1. **COM-01 / PAR-14:** engineering-verified. Administrator publishes one immutable class notice; a Parent with the separately accepted notice purpose reads and acknowledges the exact version. Evidence is in `docs/evidence/communication-par-14-2026-10-15/`.
-2. **Attendance explanations PAR-11/PAR-12:** decision-ready contract only; no implementation until the unresolved authority, visibility and retention decisions are explicitly approved.
+2. **ATT-05 / PAR-11/PAR-12 / SA-29:** engineering-verified for fictional local/test data under the 15 October first-release decision. Protected-text retention remains a real-data release gate. Evidence: `docs/evidence/attendance-explanations-2026-10-15/`.
 3. **COM-02 / STW-27–28:** approved and engineering-verified for the bounded text-notice projection. STW-28 is complete; STW-27 remains partial only for attachments pending their separate file-owner/download contract. Evidence is in `docs/evidence/communication-stw-27-28-2026-10-15/`.
-4. **Next Parent owner design:** Calendar/Events cannot start until its separate audience purpose, publisher, update/cancellation and retention rules are approved. Do not infer the unresolved preference, request, response or provider rules.
+4. **Next shared owner slice:** Calendar/Events is authorized under the bounded one-off draft → published → canceled contract in the eight-hour programme. Advanced recurrence, RSVP, payments, consent, attachments and external delivery remain excluded.
 
 Functional/security status, reference comparison and human acceptance remain separate. Human acceptance is pending for every workflow in this export.
 
@@ -23,18 +23,18 @@ Functional/security status, reference comparison and human acceptance remain sep
 
 | Workspace | Engineering complete | Partial | Blocked/not started | Total | Incomplete in this backlog |
 |---|---:|---:|---:|---:|---:|
-| Parent/Guardian | 10 | 1 | 41 | 52 | 42 |
+| Parent/Guardian | 12 | 1 | 39 | 52 | 40 |
 | Student | 8 | 4 | 35 | 47 | 39 |
-| **Combined** | **18** | **5** | **76** | **99** | **81** |
+| **Combined** | **20** | **5** | **74** | **99** | **79** |
 
-The 81 incomplete workflows include partial delivered slices and rows whose primary planning blocker is **product** or **technical design**. PAR-14 and STW-28 have moved out of the backlog; STW-27 remains only for attachments. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
+The 79 incomplete workflows include partial delivered slices and rows whose primary planning blocker is **product** or **technical design**. PAR-11, PAR-12, PAR-14 and STW-28 have moved out of the backlog; STW-27 remains only for attachments. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
 
 ## Capability sequence and unlock map
 
 | Sequence | Shared owner capability | Parent workflows unlocked | Student workflows unlocked | Current gate |
 |---:|---|---|---|---|
 | 1 | Existing Access/Timetable core completion | — | STW-08, STW-44–46 | Owner contract or product policy; no immediate code-only gap |
-| 2 | Family/Student requests with Attendance explanation and discrepancy categories | PAR-05, PAR-11–13, PAR-32–34 | STW-26, STW-36–38 | Product authority/lifecycle decision, then Requests owner LLD |
+| 2 | Family/Student requests with Attendance explanation and discrepancy categories | PAR-05, PAR-11–13, PAR-32–34 | STW-26, STW-36–38 | PAR-11/12 implemented through ATT-05; remaining generic request/discrepancy workflows still need their named product authority and Requests owner LLD |
 | 3 | Communication, announcements, calendar and events | PAR-09, PAR-14–19 | STW-27–32 | Communication/Events owners plus named response and preference policies |
 | 4 | Learning, assignments and feedback | PAR-20–22 | STW-06, STW-09–24 | Learning/Files owner and Teacher publish/review/return counterparts |
 | 5 | Assessments, results and reports | PAR-23–25 | STW-33–35 | Assessment publication, moderation, artifact and clarification owners |
@@ -63,8 +63,8 @@ The smallest complete new capability is **Parent absence explanation submission 
 | Role / workflow | User outcome | Owner | Reusable functionality | Exact missing contract or implementation | Administrator/Teacher counterpart | Dependencies | Primary blocker |
 |---|---|---|---|---|---|---|---|
 | Parent PAR-05 | Ask about a missing child link | Family Requests / Guardians | Non-enumerating public responses; managed child links | Request owner, verifier routing, retention and safe disposition | Authorized family-access verifier | FAM-01–04 | Product |
-| Parent PAR-11 | Submit an absence explanation | Family Requests / Attendance | Exact child/date Attendance history and replay patterns | Submit purpose, eligible records/dates, protected reason, routing, transaction and idempotency | Administrator reviews under an explicit capability; no Teacher correction authority implied | PAR-10; Attendance read | Product |
-| Parent PAR-12 | Track or withdraw an explanation | Family Requests | Proposed PAR-11 receipt and optimistic-version patterns | States, originator/co-guardian visibility, withdrawal, response and retained history | Administrator disposition with expected version | PAR-11 | Product |
+| Parent PAR-11 | Submit an absence explanation | Guardians / Attendance | Exact submitted-ABSENT session, independent purpose and scoped replay are implemented | No fictional-data implementation gap; protected-text retention blocks real-data release | Designated Administrator reviewer; no Teacher correction authority | PAR-10, FAM-07, ATT-02 | Release policy |
+| Parent PAR-12 | Track or withdraw an explanation | Guardians / Attendance | Originator-only status, disposition and versioned submitted-only withdrawal are implemented | No fictional-data implementation gap; protected-text retention blocks real-data release | Administrator disposition with expected version | PAR-11 | Release policy |
 | Parent PAR-13 | Query an attendance discrepancy | Family Requests / Attendance | Exact submitted session/revision read | Separate discrepancy category, routing and disposition link without correction authority | Administrator reviews; correction remains existing guarded Attendance operation | PAR-10; request foundation | Product |
 | Parent PAR-32 | Submit a school request | Family Requests | Scoped Parent link and intent replay | Category registry, enabled routes, payload, visibility and retention | Category-specific authorized school team | FAM-01–04 | Product |
 | Parent PAR-33 | Track or withdraw a request | Family Requests | Version/replay patterns | Originator/co-guardian visibility, transitions, withdrawal and retained evidence | Authorized reviewer transition | PAR-32 | Product |

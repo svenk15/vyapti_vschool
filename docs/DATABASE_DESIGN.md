@@ -77,6 +77,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AttendanceRevision | `vs_attendance_revision` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceSession | `vs_attendance_session` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | SessionRosterEntry | `vs_attendance_session_roster_entry` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
+| AttendanceExplanationReviewerGrant | `vs_attendance_explanation_reviewer_grant` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
+| AttendanceExplanation | `vs_attendance_explanation` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandRevision | `vs_branding_brand_revision` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |

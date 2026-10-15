@@ -19,20 +19,20 @@ The full boundary and COM-02A–D split are in [Student notice projection decisi
 
 ## Priority 2 — Parent Attendance explanations
 
-Existing implementation: the Parent can read submitted Attendance history and the Administrator has separate immutable correction authority. The approved UX defines a request and school review, but it does not grant the write or settle protected-reason governance.
+The owner’s 15 October 2026 first-release decision authorized the bounded fictional-data slice. ATT-05 now provides the independent Parent purpose, exact submitted-ABSENT eligibility, originator-only case, designated branch review, versioned lifecycle and safe evidence. The table records the implemented decision; retention remains unresolved for real data.
 
 | Exact decision | Recommended option | Material alternative / consequence | Workflows unlocked |
 |---|---|---|---|
 | Who submits? | Active accepted exact-child link with a separately granted `attendance.explanation.submit`. | Reusing read purposes silently creates write authority. | PAR-11–13, SA-29 |
 | Which records qualify? | Existing submitted `ABSENT` marks on/after `access_from`, within an explicit school-local late window; no future planned absence in this slice. | Future or arbitrary ranges introduce a different request meaning. | PAR-11, SA-29 |
 | Who reviews? | Current branch Administrator with explicit `attendance.explanation.review`, distinct from read/correct. | Teacher review requires dated assignment and protected-note visibility rules. | SA-29, PAR-12 |
-| What is the lifecycle? | `PENDING` to `ACCEPTED`, `MORE_INFORMATION_REQUESTED`, `REJECTED` or originator `WITHDRAWN`; terminal decisions immutable; no in-place Parent edit. | Editable/reopened requests require versioned note history and unread rules. | PAR-11–12, SA-29 |
+| What is the lifecycle? | `SUBMITTED` to `ACCEPTED`, `DECLINED` or originator `WITHDRAWN`; terminal decisions immutable; no in-place Parent edit. | More-information/reopen states require a separate approved lifecycle. | PAR-11–12, SA-29 |
 | Who sees the case? | Originating account and explicit branch reviewer only; recheck child authority for every Parent read; exclude free text from general audit/outbox. | Shared co-guardian/Teacher visibility broadens protected-note disclosure. | PAR-11–13, SA-29 |
 | How long is protected free text retained? | A product/legal duration is still required. Keep state/actor transition metadata separately and allow legal hold to override expiry. | Immediate deletion weakens evidence; indefinite retention increases privacy risk. | PAR-11–13, SA-29 |
 | What does acceptance do to Attendance? | Record disposition only. Any mark change remains a separate `attendance.correct` command with its existing version/history rules. | Automatic correction contradicts the approved separation of authority. | PAR-11–13, SA-27/29 |
 
-The exact retry, concurrency and duplicate boundary remains as recorded in [Parent workflow matrix](./PARENT_GUARDIAN_WORKFLOW_MATRIX.md#attendance-explanation-decision-boundary). Existing Parent Attendance reads and Administrator corrections proceed independently.
+The exact retry, concurrency and duplicate boundary is implemented as recorded in [Parent workflow matrix](./PARENT_GUARDIAN_WORKFLOW_MATRIX.md#attendance-explanation-decision-boundary). Protected-text storage defaults off and is enabled only for fictional local/test data. A retention decision is still mandatory before real data or production release.
 
 ## Next action after a decision
 
-Approve the Student notice contract first. It reuses the already verified COM-01 publisher and acknowledgement owner, unlocks two complete Student workflows and needs no new large owner module. If that is not approved, the next useful capability still needs one of the named product/authority decisions above; ordinary technical design is not being treated as an approval gate.
+COM-02 Student notices and ATT-05 Parent Attendance explanations are engineering-verified under their approved bounded contracts. The next authorized shared slice is Calendar/Events; its narrow owner LLD must preserve explicit publisher and independent Parent/Student purposes before implementation.

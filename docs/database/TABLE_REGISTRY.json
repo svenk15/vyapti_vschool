@@ -1615,6 +1615,48 @@
         "owner": "communication",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "AttendanceExplanationReviewerGrant",
+      "owner": "attendance",
+      "table": "vs_attendance_explanation_reviewer_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id/org/school/membership/account/operator uuid; granted/revoked timestamps; version",
+      "responsibility": "Explicit operator-provisioned branch reviewer authority for protected Parent absence explanations.",
+      "constraints": "Scoped active administrator membership FK; unique scope/account; active reviewer index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Visible only to operator provisioning and the exact current designated reviewer guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AttendanceExplanation",
+      "owner": "attendance",
+      "table": "vs_attendance_explanation",
+      "status": "MIGRATED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id/org/school/session/student/access/submitter uuid; category/explanation/status/version; review/withdraw timestamps and response",
+      "responsibility": "Protected Parent absence explanation and immutable disposition lifecycle, separate from the Attendance mark.",
+      "constraints": "Scoped roster and Guardian access FKs; category/state/length checks; one active or accepted case per session/student; Parent and review queue indexes",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Exact submitting Guardian with live purpose or current explicitly designated branch reviewer; narrative excluded from general evidence.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

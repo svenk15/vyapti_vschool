@@ -1,6 +1,6 @@
 # Session attendance and accountable corrections — current state
 
-Last updated: 2026-10-05. No imported task completion or active execution timer. IAM-03 human acceptance is recorded separately in Access CURRENT_STATE for the exact reviewed source.
+Last updated: 2026-10-15. No imported task completion or active execution timer. IAM-03 human acceptance is recorded separately in Access CURRENT_STATE for the exact reviewed source.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
@@ -8,8 +8,11 @@ Last updated: 2026-10-05. No imported task completion or active execution timer.
 | ATT-02 | VERIFIED | PENDING | Source checkpoint recorded below; full checks, 99 PostgreSQL functional tests, desktop/mobile Playwright and production build passed |
 | ATT-03 | VERIFIED | PENDING | Full repository checks, 99 PostgreSQL functional tests, desktop/mobile Playwright and production build passed; frozen demo and source identity below |
 | ATT-04 | VERIFIED | PENDING | Source `a59de23ee180b97a3d92dd6c41c97b4ad48b657f`; evidence below |
+| ATT-05 | ENGINEERING_VERIFIED (fictional-data slice) | PENDING | Parent submit/status/withdraw and designated branch review; real PostgreSQL, direct desktop/mobile comparison and build evidence in `docs/evidence/attendance-explanations-2026-10-15/` |
 
 ## Current checkpoint
+
+**ATT-05 checkpoint (15 October 2026):** Parent PAR-11/PAR-12 and Administrator SA-29 now use a separate explicitly granted Guardian purpose and designated branch reviewer. Attendance owns the protected case lifecycle, exact submitted-ABSENT eligibility, active-case exclusion, versioned withdrawal/review, scoped idempotency receipts and safe audit evidence. Review never changes the mark. Migration `20261015140000_attendance_explanations` is applied forward-only to development and test; 54 migrations are current. Focused real-PostgreSQL tests passed 2/2, TypeScript and DB-design checks passed, the final production build passed, and the focused Parent/Admin browser journey passed after direct inspection of valid approved-reference/application captures at desktop/mobile. The application uses the accepted exact-session contract rather than the prototype's arbitrary date range and adds authorized register facts to the staged Administrator review. Protected narrative storage defaults off and is enabled only for fictional local/test data. Real-data retention, TEN-03, font portability, native accessibility and human review remain **PENDING**. Evidence: [ATT-05](../../evidence/attendance-explanations-2026-10-15/README.md).
 
 **Design readiness (4 October 2026):** ATT-01 LLD/task align ownership, scoped session constraints/indexes, guarded schedule/calendar serialization, teacher-time clash rejection, current authorization, retry/failure behavior and Path A metadata. The dated snapshot then was ACA-03 IN_PROGRESS/NOT_REQUESTED; STU-02 NOT_STARTED. Current task table is authoritative. **Dependency snapshot (5 October 2026):** ACA-03 VERIFIED/PENDING; STU-02 VERIFIED/PENDING. Their implementation dependencies are satisfied; these tasks do not require human PASSED as an ATT-01 gate.
 

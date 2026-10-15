@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-15T03:01:14.320Z",
+  "application": "http://127.0.0.1:3400",
+  "referenceParent": "http://127.0.0.1:3473/VSchool_Parent_Guardian_Design/VSchool_Parent_Guardian_Review.html#/attendance/explain",
+  "referenceAdmin": "http://127.0.0.1:3473/VSchool_School_Admin_Design/VSchool_School_Admin_Review.html#/flow/SA-29",
+  "checks": [
+    "Parent staged reason/explanation/review flow preserved focus and submitted persisted data.",
+    "Designated reviewer queue/detail, staged disposition, focus movement and register-separation confirmation are actionable.",
+    "Pending explanation withdrew through the UI and the exact absence became eligible again."
+  ]
+}

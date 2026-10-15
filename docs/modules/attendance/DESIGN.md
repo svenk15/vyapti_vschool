@@ -362,6 +362,77 @@ Correction uses explicit editable, submitting, confirmed-success, confirmed-reje
 
 Acceptance requires focused unit/browser coverage of state transitions, real-PostgreSQL replay/concurrency/authorization evidence from the existing owner tests, desktop/mobile reference comparison at 1440×1000 and 390×844, actual persistence after reload, visible focus/keyboard operation and a production build. Human visual acceptance, native assistive-technology checks and TEN-03 remain separate gates.
 
+## ATT-05 / PAR-11–12 / SA-29 — Parent absence explanations
+
+**Design-readiness note (15 October 2026):** The eight-hour Parent/Student programme authorizes the bounded first-release lifecycle below. Attendance owns the case because eligibility starts from one immutable submitted register outcome and school disposition must stay separate from correction. Guardians owns only the exact child-purpose authorization. This contract supersedes the older prototype options `PENDING`, `MORE_INFORMATION_REQUESTED` and `REJECTED`: the implemented states are `SUBMITTED`, `ACCEPTED`, `DECLINED` and `WITHDRAWN`. Attachments, future/planned absence, rich text, co-guardian disclosure, editing and external notification are excluded.
+
+**Protected-text release boundary:** no applicable approved retention period exists. Portable composition therefore requires an explicitly injected `protectedExplanationStorageEnabled` switch. Production/default configuration is disabled; the local demo and dedicated tests may enable it only for fictional records. This is an implementation gate, not a retention policy. The stored `explanation` and `school_response` cannot be used with real client data until a retention/purge/legal-hold contract is approved and implemented by a forward migration.
+
+### Domain, authorization and lifecycle
+
+- `attendance.explanation.submit` is an optional independent `GuardianPurposeGrant`. Only the already-designated `family.access.manage` Administrator may grant/remove it through a versioned Guardian access command. It is not inferred from `attendance.read_child`, is not in the fixed bundle and is not backfilled.
+- Submission requires the current account/token, exact accepted non-revoked GuardianChildAccess/account/Student, the independent purpose, active modules/scope, a session in `SUBMITTED`, an `ABSENT` record for that Student, `school_date >= access_from` and `school_date <= branch-local today`. The session ID is server-authoritative; browser date/child labels are not.
+- Categories are `HEALTH_RELATED`, `FAMILY_COMMITMENT`, `SCHOOL_APPROVED_ACTIVITY`, `OTHER`. The normalized plain-text explanation is 10–1000 characters; control characters, HTML semantics and attachments are rejected. UI warns against medical/legal detail.
+- The submitter alone may read and withdraw their case while the same exact child access and purpose remain live. Another Guardian receives generic unavailability and cannot learn the author identity, text or status. `SUBMITTED` may become `WITHDRAWN` by its author or `ACCEPTED`/`DECLINED` by a reviewer. No state is edited or reopened.
+- A branch reviewer is an active School Administrator with an operator-provisioned `AttendanceExplanationReviewerGrant`; it is not inferred from role or Attendance read/correct. The reviewer cannot be the submitter. Review requires a 5–1000 character plain-text school response and rechecks the original Guardian link/purpose before disclosing text or deciding.
+- A partial unique index allows at most one `SUBMITTED` or `ACCEPTED` case for one scoped Student/session. `DECLINED` and `WITHDRAWN` permit a later new submission under current eligibility. Disposition does not update AttendanceSession, AttendanceRecord or AttendanceRevision; any mark change uses the existing guarded correction command.
+
+### Browser-safe operations and failure states
+
+- Parent: `eligibleAbsences(identity, studentId)`, `listOwn`, `detailOwn`, `submit(sessionId, category, explanation, confirmed, key)`, `withdraw(id, expectedVersion, key)`.
+- Reviewer: `listReviewQueue(scope)`, `detailForReview(scope,id)`, `review(id, expectedVersion, decision, schoolResponse, key)`. Operator-only `grantReviewer` provisions the resource grant.
+- DTOs expose safe case reference, exact session/date/time/subject/class, category, status, version, timestamps and the permitted narrative/response. Parent list/detail never expose reviewer identity; reviewer list shows a generic submitting-family label until detail has been authorized.
+- Validation, permission loss and stale version preserve safe in-flow values. Unknown command outcome retains exact normalized payload/key for retry. Duplicate competing submission returns generic conflict. Revoked access clears protected text and returns not found. No missing case or another Guardian case is enumerable.
+
+### Physical schema and read joins
+
+| Model / physical table | Fields | Constraints / indexes / joins |
+|---|---|---|
+
+### Physical schema contracts
+
+| Physical table (model) | Fields | Responsibility | Constraints |
+|---|---|---|---|
+| `vs_attendance_explanation_reviewer_grant` (AttendanceExplanationReviewerGrant) | id/org/school/membership/account/operator uuid; granted/revoked timestamps; version | Explicit operator-provisioned branch reviewer authority for protected Parent absence explanations. | Scoped active administrator membership FK; unique scope/account; active reviewer index |
+| `vs_attendance_explanation` (AttendanceExplanation) | id/org/school/session/student/access/submitter uuid; category/explanation/status/version; review/withdraw timestamps and response | Protected Parent absence explanation and immutable disposition lifecycle, separate from the Attendance mark. | Scoped roster and Guardian access FKs; category/state/length checks; one active or accepted case per session/student; Parent and review queue indexes |
+
+| `AttendanceExplanationReviewerGrant` / `vs_attendance_explanation_reviewer_grant` | id; organization_id; school_id; membership_id; account_id; granted_by_operator_id; granted_at; revoked_at nullable; version | Scoped SchoolMembership/account FK; unique scope/account; positive version; active reviewer lookup index |
+| `AttendanceExplanation` / `vs_attendance_explanation` | id; organization_id; school_id; session_id; student_id; guardian_access_id; submitter_account_id; category; explanation varchar(1000); status; version; submitted_at; reviewed_at/by; school_response varchar(1000); withdrawn_at; updated_at | Scoped Session+Student roster FK and Guardian access+Student FK; actor/reviewer FKs; category/status/state checks; partial unique active/accepted session case; parent history, reviewer queue and session indexes |
+
+Parent eligibility reads `Guardian access verifier → AttendanceSession(scope,id,status=SUBMITTED,school_date bounds) → SessionRosterEntry(student) → AttendanceRecord(status=ABSENT) → Offering/Subject/Section`. Reviewer queue reads the explanation queue index, then scoped Session/Offering labels and live original Guardian access/purpose. Counts and pages never start from a global Student or Person search.
+
+### Transactions, locks, replay and evidence
+
+All commands are `SERIALIZABLE` and use the existing Attendance write order: account `UPDATE` → Organization `UPDATE` → School `UPDATE`, followed by exact Guardian access, session and explanation locks as applicable. Eligibility is re-read after locks. Submit/withdraw/review use actor/scope/command/key receipts: same canonical payload replays, changed payload conflicts. Expected explanation version guards withdraw/review. The active-case partial index closes concurrent different-key submit races. Reviewer decision versus Parent withdrawal has one winner; the loser receives stale/current safe state.
+
+Audit/outbox/receipt payloads contain case/session/Student IDs, category, state, version and actors only. Raw Parent explanation and school response never enter general audit, outbox, receipt, logs or analytics. The protected columns remain in the Attendance-owned case row only. Evidence failure rolls back the business transition.
+
+```mermaid
+sequenceDiagram
+  actor P as Parent
+  actor A as Designated reviewer
+  participant H as Next host
+  participant U as Attendance application
+  participant G as Guardian access port
+  participant D as PostgreSQL
+  P->>H: Submit exact absent session + explanation + key
+  H->>U: Validated command and verified identity
+  U->>D: Lock account, organization and school
+  U->>G: Recheck exact child access and purpose in transaction
+  U->>D: Lock/recheck submitted ABSENT session; insert case + safe evidence
+  D-->>P: Stable SUBMITTED receipt
+  A->>H: Open authorized review queue/case
+  H->>U: Review decision + expected version + key
+  U->>D: Recheck reviewer grant and live Guardian link; lock case
+  U->>D: ACCEPTED or DECLINED + safe transition evidence
+  D-->>A: Persisted decision
+  P->>H: Reload own case
+  H->>U: Recheck exact current child purpose
+  U-->>P: Own status and permitted response; Attendance mark unchanged
+```
+
+**Verification:** unit validation/lifecycle; real PostgreSQL exact-purpose/no-backfill, submitted-ABSENT/date bounds, duplicate and concurrent submit, other Guardian/Student/branch/tenant denial, reviewer designation/self-review denial, withdraw-vs-review race, exact replay, stale version, revoked-link denial, no Attendance mutation and no raw narrative in general evidence. Playwright covers Administrator grant → Parent exact-session staged submit → stable receipt/reload → Administrator staged review → Parent status, plus withdrawal and protected denial at desktop/mobile. Direct comparison uses approved PAR-11/PAR-12 Parent and SA-29 Administrator references; reference-less denied/unknown states use shared patterns. Human review, retention decision, font/native accessibility, TEN-03 and production readiness stay pending.
+
 ## Migration, retention and handoff
 
 Implement tables only in the task that first uses them; migrate from empty database and the previous task checkpoint. Add scoped unique indexes before composite FKs; detect existing duplicates before adding constraints. SQL append-only/null-campus/range safeguards must appear in reviewed migrations and real-DB tests. No seed may erase prior data. Use synthetic fixtures and clean only owned test records. Preserve schema-compatible app rollback; use a reviewed forward migration when incompatible. Retention changes must preserve required immutable evidence and legal holds under the school-approved policy, not an ad hoc DELETE.

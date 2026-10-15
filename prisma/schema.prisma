@@ -1435,7 +1435,49 @@ model AttendanceRevision {
  session AttendanceSession @relation(fields:[organizationId,schoolId,sessionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_revision_session_fkey")
  actor UserAccount @relation("AttendanceRevisionActor",fields:[actorAccountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_attendance_revision_actor_fkey")
  @@unique([organizationId,schoolId,sessionId,number],map:"vs_attendance_revision_number_key")
- @@map("vs_attendance_revision")
+  @@map("vs_attendance_revision")
+}
+
+model AttendanceExplanationReviewerGrant {
+  id                  String    @id(map: "vs_attendance_explanation_reviewer_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, accountId], map: "vs_attendance_explanation_reviewer_scope_account_key")
+  @@index([organizationId, schoolId, accountId, revokedAt], map: "vs_attendance_explanation_reviewer_active_idx")
+  @@map("vs_attendance_explanation_reviewer_grant")
+}
+
+model AttendanceExplanation {
+  id                  String    @id(map: "vs_attendance_explanation_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  sessionId           String    @map("session_id") @db.Uuid
+  studentId           String    @map("student_id") @db.Uuid
+  guardianAccessId    String    @map("guardian_access_id") @db.Uuid
+  submitterAccountId  String    @map("submitter_account_id") @db.Uuid
+  category            String    @db.VarChar(40)
+  explanation         String    @db.VarChar(1000)
+  status              String    @db.VarChar(16)
+  version             Int
+  submittedAt         DateTime  @map("submitted_at") @db.Timestamptz(3)
+  reviewedAt          DateTime? @map("reviewed_at") @db.Timestamptz(3)
+  reviewedByAccountId String?   @map("reviewed_by_account_id") @db.Uuid
+  schoolResponse      String?   @map("school_response") @db.VarChar(1000)
+  withdrawnAt         DateTime? @map("withdrawn_at") @db.Timestamptz(3)
+  updatedAt           DateTime  @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_attendance_explanation_scope_id_key")
+  @@index([guardianAccessId, submittedAt(sort: Desc), id], map: "vs_attendance_explanation_parent_idx")
+  @@index([organizationId, schoolId, status, submittedAt, id], map: "vs_attendance_explanation_review_idx")
+  @@index([organizationId, schoolId, sessionId, studentId], map: "vs_attendance_explanation_session_student_idx")
+  @@map("vs_attendance_explanation")
 }
 
 model AdmissionCycle {

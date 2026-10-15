@@ -163,3 +163,15 @@ Depends on: ATT-02, ATT-03, TEA-07. Human acceptance is not an implementation de
 - [x] Inspect matched approved/application desktop and mobile captures; keep font/native accessibility and human acceptance separate.
 
 No schema or migration is required. Demo data reuses the deterministic fictional Teacher attendance fixture and must not overwrite a manually created register.
+
+## ATT-05 — Parent absence explanation and branch review
+
+Depends on: FAM-03, ATT-02. Human acceptance is not an implementation dependency.
+
+- [x] Record the bounded PAR-11/PAR-12/SA-29 lifecycle, independent purpose/reviewer grants, schema, locks, replay, protected-text boundary and verification criteria in DESIGN.md.
+- [x] Add forward-only Guardian-purpose and Attendance case/reviewer persistence with registry coverage; keep production/default protected-text composition disabled while retention is unresolved.
+- [x] Implement versioned explanation-purpose management, exact submitted-ABSENT eligibility, Parent submit/list/detail/withdraw and designated Administrator list/detail/review through portable owner boundaries.
+- [x] Prove exact scope/purpose, active-case exclusion, replay, revocation, no register mutation and narrative exclusion from general evidence with real PostgreSQL.
+- [x] Compare the approved Parent/Admin compositions directly at desktop/mobile, complete the focused browser journey, seed fictional data and record current-source evidence.
+
+Status: **ENGINEERING_VERIFIED** for the authorized fictional-data slice. Human review is **PENDING**. Protected-text retention remains a real-data release blocker.

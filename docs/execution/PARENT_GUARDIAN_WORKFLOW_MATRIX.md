@@ -34,8 +34,8 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-08 Switch child and school context | `#/flow/PAR-08` | Guardians | ENGINEERING_COMPLETE | DIRECT_COMPARISON | Server-issued child context, URL state and protected reload verified | PENDING |
 | PAR-09 Manage notification preferences | `#/flow/PAR-09` | Communication | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Preference persistence, mandatory notice policy and channel verification | PENDING |
 | PAR-10 Read child attendance | `#/flow/PAR-10` | Guardians + Attendance | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_SCOPED_OMISSIONS | Read-only submitted history is complete; absence/query controls await their own request-owner contracts | PENDING |
-| PAR-11 Submit an absence explanation | `#/flow/PAR-11` | Family requests + Attendance | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Request category/date/note policy, transaction, replay and school routing | PENDING |
-| PAR-12 Track or withdraw an explanation | `#/flow/PAR-12` | Family requests | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Originator visibility, eligible states, optimistic version and retained history | PENDING |
+| PAR-11 Submit an absence explanation | `#/flow/PAR-11` | Guardians + Attendance | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_CONTRACT_EXTENSION | Exact submitted-ABSENT session flow is complete for fictional data; real-data protected-text retention remains a release gate | PENDING |
+| PAR-12 Track or withdraw an explanation | `#/flow/PAR-12` | Guardians + Attendance | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_CONTRACT_EXTENSION | Originator-only status and versioned withdrawal are complete; real-data protected-text retention remains a release gate | PENDING |
 | PAR-13 Query an attendance discrepancy | `#/flow/PAR-13` | Family requests + Attendance | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Query owner/routing and disposition contract without correction authority | PENDING |
 | PAR-14 Read and acknowledge a notice | `#/flow/PAR-14` | Communication | ENGINEERING_COMPLETE | DIRECT_COMPARISON | Immutable version, frozen server-resolved audience, separate read evidence and exact-version acknowledgement complete through COM-01; broader Communication features remain separate | PENDING |
 | PAR-15 Reply to a permitted conversation | `#/flow/PAR-15` | Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Child-scoped participant grants, recipient resolution and delivery lifecycle | PENDING |
@@ -143,43 +143,26 @@ The main matrix supplies each workflow's outcome, approved state, route, owner a
 
 ## Attendance explanation decision boundary
 
-Sources: `workflow-tasks/WF-PAR-11.md`, `WF-PAR-12.md`, `WF-SA-29.md` and the matching approved Parent/Admin Attendance designs. These are approved UX/product statements, not live capability grants or persistence approval.
+Sources: `workflow-tasks/WF-PAR-11.md`, `WF-PAR-12.md`, `WF-SA-29.md`, the matching approved Parent/Admin Attendance designs, and the owner’s 15 October 2026 first-release authorization. The later authorization supersedes the prototype’s arbitrary date range, “Ask for more information” state and generic draft behavior for this bounded slice.
 
-### Settled source behavior
-
-- PAR-11 collects a school-local From/Until range, one of the four named reason categories, a required bounded note and explicit confirmation. Same-day ranges are valid.
-- A successful submit returns a stable reference in **Pending review**; the Attendance record remains unchanged. Same-intent retry is idempotent and a lost response resolves through the same reference.
-- PAR-12 permits the owning Parent to read a response or withdraw only an eligible Pending version. A concurrent school review wins, the latest state is shown, and reviewed evidence is never deleted.
-- SA-29 offers **Accept explanation**, **Ask for more information**, or **Reject with explanation**, with a required school response. It rechecks the Guardian relationship and keeps Attendance correction as a separately authorized owner command.
-- Attachments and sensitive evidence are outside this slice and require a separately approved protected-upload contract.
-
-### Decisions still required
-
-| Question | Recommended first release | Alternatives and impact | Affected workflows |
-|---|---|---|---|
-| Who may submit? | An active accepted exact-child link with a separately granted `attendance.explanation.submit`; never infer it from the existing three read purposes. | Automatic grants broaden write authority; school-managed grants add setup but preserve least privilege. | PAR-11–13, SA-29 |
-| Which dates/records are eligible? | One or more school-local dates containing an existing submitted `ABSENT` mark, on/after `access_from`; define a school-local late-submission window. | Future planned absence needs a different request meaning; any historical range creates cases unrelated to authoritative Attendance. | PAR-11, SA-29 |
-| Who reviews? | A current branch Administrator with explicit `attendance.explanation.review`, distinct from `attendance.read_school` and `attendance.correct`. | Teacher review needs dated assignment scope and changes who may see the protected reason. | SA-29, PAR-12 |
-| Exact states/transitions? | `PENDING` → `ACCEPTED`, `MORE_INFORMATION_REQUESTED`, `REJECTED`; `PENDING` → `WITHDRAWN`. Terminal review decisions are immutable. | Amendments in the same record need versioned note revisions; one generic Reviewed state loses approved meaning. | PAR-11–12, SA-29 |
-| May a Parent edit? | No in-place edit. Withdraw Pending with expected version, then submit a new intent if still eligible. | Editable notes require immutable revisions, reviewer unread-state rules and additional sensitive history. | PAR-12 |
-| Duplicate/co-guardian behavior? | Same actor/key/payload replays; changed payload conflicts. At most one active request per child/date range/category. Another Guardian sees nothing unless shared-case visibility is approved. | Shared visibility reduces duplicate cases but broadens protected-note disclosure; separate requests need an Administrator duplicate disposition. | PAR-11–12, SA-29 |
-| Who sees the note/response? | Originating account and explicit branch reviewer only; recheck current child authority on each Parent read. Exclude free text from general audit/outbox payloads. | All Guardians or Teachers require new purpose/assignment rules and safeguarding review. | PAR-11–12, SA-29 |
-| Retention/deletion? | Product/legal decision required. Recommended structure: school-approved metadata/disposition retention; separately expire protected free text; legal hold overrides expiry. | A universal duration is unsupported. Immediate text deletion weakens evidence; indefinite retention increases privacy risk. | PAR-11–12, SA-29 |
-| Retry/concurrency? | Scope intent receipt to organization/school/child/actor/command/key; serialize review/withdraw by positive version; reauthorize before replay disclosure. | Async processing adds an UNKNOWN/job lifecycle not required by this bounded slice. | PAR-11–12, SA-29 |
-| Does acceptance alter Attendance? | No. It records only the disposition. A mark change uses the existing `attendance.correct` permission, version and immutable revision. | Automatic mutation contradicts every cited approved source. | PAR-11–12, SA-29 |
-
-No capability grant, migration, seed, route or UI for PAR-11/PAR-12/SA-29 is implemented until the submitter, eligibility, reviewer, state, visibility and retention decisions are accepted. PAR-13 remains a separate discrepancy-query contract.
+- Submission requires an active accepted exact-child link with independently granted `attendance.explanation.submit`; there is no inference or backfill.
+- The case targets one existing submitted `ABSENT` session on/after `access_from`, never a future or browser-invented occurrence. Category and bounded plain text are required; attachments and rich text are excluded.
+- States are `SUBMITTED`, `ACCEPTED`, `DECLINED` and `WITHDRAWN`. Only the originator may read/withdraw while submitted; another Guardian cannot read the narrative or author identity. Active or accepted cases block a competing submission; declined/withdrawn permits a new one.
+- A separately designated branch reviewer may accept/decline and cannot review their own submission. Review/withdraw use current authority, versioning and scoped exact-key replay. Narrative is excluded from general evidence.
+- A disposition never changes Attendance. Correction stays a separate `attendance.correct` command.
+- Protected narrative storage is disabled by default and enabled only for fictional local/test data. Real-data release remains blocked until a protected-text retention policy is approved; this does not make the fictional-data implementation incomplete.
+- PAR-13 remains a separate discrepancy-query contract.
 
 ## Counts and next action
 
 | Functional/security status | Count |
 |---|---:|
-| `ENGINEERING_COMPLETE` | 10 |
+| `ENGINEERING_COMPLETE` | 12 |
 | `PARTIAL` | 1 |
-| `BLOCKED_PRODUCT_DECISION` | 24 |
+| `BLOCKED_PRODUCT_DECISION` | 22 |
 | `DESIGN_READINESS_REQUIRED` | 17 |
 | **Total** | **52** |
 
-Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. PAR-14 is engineering-complete through COM-01 and its direct Administrator/Parent browser comparison; this does not complete SA-35's broader drafts, scheduling or provider-delivery programme. The only remaining partial is PAR-18 Calendar/Events; all other incomplete workflows are explicitly classified above. No independently implementable class A or E workflow remains after COM-01.
+Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. PAR-14 is engineering-complete through COM-01. PAR-11/PAR-12 are engineering-complete for the explicitly authorized fictional-data slice; protected-text retention still blocks real data. The only remaining partial is PAR-18 Calendar/Events, whose minimal shared slice is next under the 15 October execution authorization.
 
-Final combined Parent/Student delivery provenance is recorded in [15 October consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md). The counts and row statuses above are unchanged; the [consolidated decision list](./PARENT_STUDENT_DECISION_LIST.md) collects the two current authority/lifecycle gates without creating a grant or inferring human acceptance.
+Earlier combined Parent/Student provenance is recorded in [15 October consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md). ATT-05 evidence is recorded separately above; the latest row counts are authoritative. Human acceptance is not inferred.

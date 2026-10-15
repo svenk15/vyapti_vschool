@@ -1,11 +1,11 @@
 # School administrator completion batch
 
-Batch `SA-COMP`, started and integrated 10 October 2026. The approved Edition 03 catalog contains 63 School Administrator workflows and admits 29 to Phase 1. After SA-COMP-14, all 29 are implemented and engineering-verified; human review remains pending. The other 34 are explicitly assigned to phases 2–7.
+Batch `SA-COMP`, started and integrated 10 October 2026. The approved Edition 03 catalog contains 63 School Administrator workflows and admitted 29 to the original Phase 1 batch. Those 29 remain engineering-verified. The separately authorized shared Parent/Attendance batch now also completes SA-29 for fictional data; human review remains pending. The other 33 workflows remain outside the implemented set.
 
 | Classification | Workflows | Current decision |
 |---|---|---|
-| `COMPLETE_AND_VERIFIED` | SA-01–SA-21, SA-23–SA-28, SA-30, SA-62 | Owner and integrated evidence is current; human review remains pending. |
-| `OUT_OF_RELEASE_SCOPE` | SA-22, SA-29, SA-31–SA-61, SA-63 | Preserve catalog records; no production route or speculative backend in this batch. |
+| `COMPLETE_AND_VERIFIED` | SA-01–SA-21, SA-23–SA-30, SA-62 | Owner and integrated evidence is current; SA-29 is limited to fictional protected text until retention is approved. Human review remains pending. |
+| `OUT_OF_RELEASE_SCOPE` | SA-22, SA-31–SA-61, SA-63 | Preserve catalog records; no production route or speculative backend in this batch. |
 
 The authoritative per-workflow objective, reference, owner, route, persistence and prior evidence remain in [WORKFLOW_IMPLEMENTATION_MATRIX](WORKFLOW_IMPLEMENTATION_MATRIX.md). This batch adds the missing task/evidence links without replacing that matrix.
 

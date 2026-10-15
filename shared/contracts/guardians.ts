@@ -1,7 +1,7 @@
-export const guardianPurposes=['child.summary.read','attendance.read_child','timetable.read_child','communication.notice.read'] as const;
+export const guardianPurposes=['child.summary.read','attendance.read_child','timetable.read_child','communication.notice.read','attendance.explanation.submit'] as const;
 export type GuardianPurpose=typeof guardianPurposes[number];
 export type GuardianAccessStatus='INVITE_SENT'|'DELIVERY_FAILED'|'OPERATOR_REQUIRED'|'ACCESS_ENABLED'|'ACCESS_REMOVED';
-export type GuardianAccessRecord=Readonly<{accessId:string;studentId:string;displayName:string;email:string;status:GuardianAccessStatus;accessFrom:string;version:number;authorizedAt:string;acceptedAt:string|null;revokedAt:string|null;invitationId:string|null;deliveryFailureReason:string|null}>;
+export type GuardianAccessRecord=Readonly<{accessId:string;studentId:string;displayName:string;email:string;status:GuardianAccessStatus;accessFrom:string;version:number;authorizedAt:string;acceptedAt:string|null;revokedAt:string|null;invitationId:string|null;deliveryFailureReason:string|null;purposes:readonly GuardianPurpose[]}>;
 export type GuardianAuthorizationResult=Readonly<{accessId:string;invitationId:string;status:GuardianAccessStatus;version:number;replayed:boolean}>;
 export type GuardianChildSummary=Readonly<{accessId:string;studentId:string;displayName:string;admissionNumber:string;institutionName:string;schoolName:string;schoolCode:string;timezone:string;classLabel:string|null;accessFrom:string;purposes:readonly GuardianPurpose[]}>;
 export type GuardianWorkspace=Readonly<{accountId:string;accountDisplayName:string|null;children:readonly GuardianChildSummary[]}>;
