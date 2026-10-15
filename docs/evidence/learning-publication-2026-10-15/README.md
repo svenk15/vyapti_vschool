@@ -60,6 +60,16 @@ Repository evidence for the implementation source:
 
 `pnpm demo:seed` completed after a seed-composition correction ensured the Learning step treats branch activation as a full desired set and preserves all implemented demo modules. It prepared or preserved the Learning assignment, Parent/Student access purposes and the preceding connected demo records without resetting or overwriting them. Older independent TEN-02/ACA-01/branding refreshes reported their existing non-required local-fixture warnings and were preserved; the command continued through every required current feature and exited successfully.
 
+The running demo at `http://127.0.0.1:3400/sign-in` serves source `5f0d6810e5a8d97a49b62575a74e76073a0c7b72`. Health and sign-in returned HTTP 200; the protected Teacher Learning route redirected an unauthenticated request to sign-in. Private persona files are `artifacts/people-02/private-demo.json`, `artifacts/guardians-01/private-demo.json`, `artifacts/students-portal/private-demo.json` and `artifacts/learning-01/private-demo.json`.
+
+Manual walkthrough:
+
+1. Sign in as the Teacher and open **Learning**. Expect the seeded published assignment and its immutable version/recipient count.
+2. Open **New assignment**, choose the assigned class, enter a future due time, title and instructions, then save. Expect a resumable draft; update it once and publish only at the final action.
+3. Sign out, sign in as the Parent, select the seeded child and open **Learning**. Expect only the exact published assignment; no Teacher draft appears.
+4. Sign out, sign in as the Student and open **Work**. Expect the same immutable assignment and detail after reload.
+5. Re-run `pnpm demo:seed`. Expect existing records and credentials to be preserved and the command to continue through Learning without duplicate assignments.
+
 ## Remaining scope and gates
 
 Files/resources, learner drafts, submissions, late/extension rules, withdrawal, grading, criteria, feedback, questions, external delivery and offline storage are not implemented. They require their own owner contracts and are not presented as functional. Human acceptance is PENDING. TEN-03 RLS, font portability, native accessibility and production readiness remain separate gates.
