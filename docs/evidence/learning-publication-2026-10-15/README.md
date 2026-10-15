@@ -41,6 +41,8 @@ The documented font-portability exception remains. Native VoiceOver/NVDA evidenc
 
 ## Persistence and security evidence
 
+Implementation commit: `0e91106b64bafe99f5524439831c016b7df9c3ce`.
+
 Forward migration `20261015170000_learning_assignment_publication` is applied to the designated development and test databases. Both migration ledgers reported 57 migrations applied with none pending. The database registry contains 91 table contracts, including the five Path A Learning tables. No database was reset and no migration was rewritten.
 
 Focused real-PostgreSQL tests passed 3/3. They cover assigned-Teacher draft/update/publication, exact immutable frozen audiences, later-grant non-retroactivity, live purpose revocation, concurrent stale mutation, revoked Teacher denial and scoped Parent/Student reads. Persistence tests use the real `vyapti_vschool_test` database.
@@ -55,6 +57,8 @@ Repository evidence for the implementation source:
 - `pnpm build` — passed.
 - isolated Playwright production build with `VSCHOOL_E2E=1` — passed.
 - focused Chromium and Mobile Chromium Playwright journeys — passed sequentially.
+
+`pnpm demo:seed` completed after a seed-composition correction ensured the Learning step treats branch activation as a full desired set and preserves all implemented demo modules. It prepared or preserved the Learning assignment, Parent/Student access purposes and the preceding connected demo records without resetting or overwriting them. Older independent TEN-02/ACA-01/branding refreshes reported their existing non-required local-fixture warnings and were preserved; the command continued through every required current feature and exited successfully.
 
 ## Remaining scope and gates
 
