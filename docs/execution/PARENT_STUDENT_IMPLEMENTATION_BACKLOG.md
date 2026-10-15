@@ -2,7 +2,7 @@
 
 The latest delivery checkpoint and the two currently actionable decision groups are summarized in [consolidated evidence](../evidence/parent-student-consolidated-2026-10-15/README.md) and [consolidated decisions](./PARENT_STUDENT_DECISION_LIST.md). This pointer does not change the detailed inventory or authorize blocked capabilities.
 
-Last reconciled: 15 October 2026. This is a planning export from the authoritative [Parent/Guardian workflow matrix](./PARENT_GUARDIAN_WORKFLOW_MATRIX.md) and [Student workflow matrix](./STUDENT_WORKFLOW_MATRIX.md). Those matrices remain the status authorities. This document groups their incomplete workflows by shared owner capability; it does not authorize a capability, grant, lifecycle, migration or implementation.
+Last reconciled: 16 October 2026. This is a planning export from the authoritative [Parent/Guardian workflow matrix](./PARENT_GUARDIAN_WORKFLOW_MATRIX.md) and [Student workflow matrix](./STUDENT_WORKFLOW_MATRIX.md). Those matrices remain the status authorities. This document groups their incomplete workflows by shared owner capability; it does not authorize a capability, grant, lifecycle, migration or implementation.
 
 Approved UX sources:
 
@@ -17,6 +17,7 @@ Approved UX sources:
 3. **COM-02 / STW-27–28:** approved and engineering-verified for the bounded text-notice projection. STW-28 is complete; STW-27 remains partial only for attachments pending their separate file-owner/download contract. Evidence is in `docs/evidence/communication-stw-27-28-2026-10-15/`.
 4. **Calendar/Events checkpoint:** the bounded one-off draft → published → canceled EV-01 slice is engineering-verified. Advanced recurrence, RSVP, payments, consent, attachments, external delivery, mixed agenda and assessment dates remain excluded.
 5. **LEA-01 / TEA-27 / PAR-20 / STW-10–11:** the bounded text-only Teacher draft/resume/publish and exact frozen Parent/Student read slice is engineering-verified. The richer assignment workspace, resources, submissions, feedback and questions remain excluded. Evidence is in `docs/evidence/learning-publication-2026-10-15/`.
+6. **ACC-01 / STW-44 / PAR-50:** Access-owned privacy-safe session inventory and selective revocation are engineering-verified. Student and Parent staged journeys use the same global account authority; current-session sign-out and account-wide recovery remain separate. Evidence: `docs/evidence/student-sessions-stw-44-2026-10-16/` and `docs/evidence/parent-sessions-par-50-2026-10-16/`.
 
 Functional/security status, reference comparison and human acceptance remain separate. Human acceptance is pending for every workflow in this export.
 
@@ -25,8 +26,8 @@ Functional/security status, reference comparison and human acceptance remain sep
 | Workspace | Engineering complete | Partial | Blocked/not started | Total | Incomplete in this backlog |
 |---|---:|---:|---:|---:|---:|
 | Parent/Guardian | 12 | 2 | 38 | 52 | 40 |
-| Student | 8 | 7 | 32 | 47 | 39 |
-| **Combined** | **20** | **9** | **70** | **99** | **79** |
+| Student | 13 | 6 | 28 | 47 | 34 |
+| **Combined** | **25** | **8** | **66** | **99** | **74** |
 
 The 79 incomplete workflows include partial delivered slices and rows whose primary planning blocker is **product** or **technical design**. PAR-11, PAR-12, PAR-14 and STW-28 have moved out of the backlog; STW-27 remains only for attachments. A row becomes implementation-ready only after its named product decisions and owner contract are settled; visual and verification work then follow the implementation.
 
@@ -34,7 +35,7 @@ The 79 incomplete workflows include partial delivered slices and rows whose prim
 
 | Sequence | Shared owner capability | Parent workflows unlocked | Student workflows unlocked | Current gate |
 |---:|---|---|---|---|
-| 1 | Existing Access/Timetable core completion | — | STW-08, STW-44–46 | Owner contract or product policy; no immediate code-only gap |
+| 1 | Existing Access/Timetable core completion | PAR-50 complete | STW-08, STW-45–46; STW-44 complete | Remaining rows require their named owner contract or product policy |
 | 2 | Family/Student requests with Attendance explanation and discrepancy categories | PAR-05, PAR-11–13, PAR-32–34 | STW-26, STW-36–38 | PAR-11/12 implemented through ATT-05; remaining generic request/discrepancy workflows still need their named product authority and Requests owner LLD |
 | 3 | Communication, announcements, calendar and events | PAR-09, PAR-14–19 | STW-27–32 | Communication/Events owners plus named response and preference policies |
 | 4 | Learning, assignments and feedback | PAR-20–22 | STW-06, STW-09–24 | Learning/Files owner and Teacher publish/review/return counterparts |
@@ -46,16 +47,15 @@ The 79 incomplete workflows include partial delivered slices and rows whose prim
 
 ## 1. Existing-core gaps
 
-There is no independently implementable code-only gap in the current matrices. Existing core reads and current-session sign-out are already delivered. The remaining core rows need a missing owner contract or product rule before new authority can be added.
+ACC-01 has closed STW-44 and the optional PAR-50 cross-session path. The remaining core rows need a missing owner contract or product rule before new authority can be added.
 
 | Role / workflow | User outcome | Owner | Reusable functionality | Exact missing contract or implementation | Administrator/Teacher counterpart | Dependencies | Primary blocker |
 |---|---|---|---|---|---|---|---|
 | Student STW-08 | Respond to a changed class | Timetable | Self-only effective published timetable | Dated room/change/substitution projection and response semantics are absent from the owner schema | Administrator publishes a dated change; Teacher authority reflects that occurrence | STW-07; Timetable change owner | Technical design |
-| Student STW-44 | Manage my sessions | Access | Current-session metadata and sign-out | Other-session inventory, device-safe labels, revocation command and capability mapping | Account security support/recovery only; no Teacher counterpart | STW-01; Access session inventory | Technical design |
 | Student STW-45 | Set preferences or request contact change | Access / Preferences / People | Global account and verified-address recovery | Preference keys/precedence and step-up verified contact-change lifecycle are not approved | Authorized identity support for compromised or failed verification | STW-44 | Product |
 | Student STW-46 | Get help with privacy or accessibility | Requests / Privacy | Static account-help guidance | Actionable request categories, authority, routing, response, retention and accessibility-support policy | Authorized school/privacy reviewer | STW-36 | Product |
 
-Immediate result: none of these four can be completed safely as presentation-only work. STW-44 can proceed after a narrow Access session-inventory LLD; the other three require the named product rules first.
+Immediate result: STW-44 and PAR-50 are complete through ACC-01. The remaining three rows cannot be completed safely as presentation-only work and require the named product or owner rules.
 
 ## 2. Requests and Attendance explanations
 

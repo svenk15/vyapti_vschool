@@ -1,6 +1,6 @@
 # Guardians — current state
 
-Last updated: 15 October 2026.
+Last updated: 16 October 2026.
 
 FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e2469`. FAM-05 is **ENGINEERING_VERIFIED** at `7d52491`. FAM-06 is engineering-verified with COM-01. FAM-07 is engineering-verified with ATT-05 for fictional local/test data. Human review is **PENDING**.
 
@@ -14,7 +14,7 @@ The combined Parent/Student handover, current build/migration provenance and man
 - FAM-02: authenticated Parent shell, minimal child/current-school summary and multi-child selection from server-authorized links.
 - FAM-03: Attendance-owned submitted history projection, exact child-purpose verification and `access_from` lower bound.
 - FAM-04: Academics-owned effective published Timetable projection, exact child-purpose verification, active placement join, `access_from` lower bound, configured teaching days/LESSON/BREAK periods and navigable week selection.
-- FAM-05: approved PAR-50 My account → End access → Confirm composition using the Access-owned safe account projection and current hosting-session timestamps; final-only recovery/sign-out, retained Back state and no token or other-session inventory.
+- FAM-05: approved PAR-50 My account → End access → Confirm composition using the Access-owned safe account projection and session directory; final-only current/selected-session sign-out, retained Back state, privacy-safe labels and no token material.
 - FAM-06: new invitations may independently grant `communication.notice.read`; existing accepted links are not widened, and Communication rechecks the exact live purpose for list, detail, read and acknowledgement.
 - FAM-07: a designated manager can independently enable or revoke `attendance.explanation.submit` for one exact accepted child link. Existing links are not widened automatically; Attendance rechecks the live purpose on every Parent explanation read/write.
 - Student registration remains independently atomic. Its receipt now enters the guarded Parent setup for the exact new Student; lack of `family.access.manage` or invitation-delivery failure cannot roll back or duplicate registration.
@@ -26,6 +26,7 @@ The combined Parent/Student handover, current build/migration provenance and man
 - Real PostgreSQL: `test/functional/guardians.test.ts` passes 6/6 against `vyapti_vschool_test`, covering designated-manager/self denial, no staff membership, exact replay/conflict, new/existing/wrong-account/expired/revoked/reused invitation behavior, acceptance/removal serialization, safe delivery failure after Student registration, per-child removal, cross-child tampering, authorization-date bounds, a six-day published pattern and mixed staff/family recovery policy.
 - Playwright: `test/e2e/guardians.spec.ts` passes sequential Chromium desktop and mobile journeys for Administrator link, activation/sign-in, child home, Attendance, configured six-day Timetable, mobile drawer focus return, sign-out, delivery failure/resend/removal and access loss after an open Parent page reload. The registration journey separately proves receipt → Parent setup and persistence through delivery failure.
 - At `7d52491`, the focused Parent Playwright journey passes 1/1 separately in desktop Chromium and mobile Chromium with one worker after 48 migrations. It proves PAR-50 stage focus, retained selection after Back, final-only sign-out and protected browser Back. `VSCHOOL_E2E=1 pnpm build`, TypeScript, focused ESLint, `check:backend` and `check:boundaries` pass. No database contract changed. Evidence: [PAR-50 account](../../evidence/parent-account-par-50-2026-10-14/README.md).
+- The 16 October PAR-50 extension passes 1/1 focused Parent journey separately at desktop and mobile sizes after 61 migrations. It proves two real Parent sessions, retained non-current selection through Back, final-only selective revoke and denial in the revoked browser. Existing ACC-01 PostgreSQL evidence supplies foreign-account isolation, concurrent idempotency, expiry and account-wide invalidation. Evidence: [PAR-50 cross-session extension](../../evidence/parent-sessions-par-50-2026-10-16/README.md).
 - Build and repository boundary/design checks are recorded in [checkpoint evidence](../../evidence/parent-guardian-foundation-2026-10-13/README.md).
 - ATT-05 focused evidence covers versioned purpose management, current-purpose revocation, active-case exclusion, real PostgreSQL lifecycle checks and desktop/mobile Parent/Admin comparison: [Attendance explanations](../../evidence/attendance-explanations-2026-10-15/README.md).
 - Direct screenshots compare the approved home, invitation, Attendance and published Timetable states with the real application at desktop/mobile sizes. The current integration evidence directly inspects registration handoff and six-day Timetable presentation. Unsupported prototype review tools, Messages, Requests, absence explanations and attendance queries are excluded because their owner contracts are outside this approved slice. The application uses configured break periods but does not fabricate rooms or change notices.
@@ -41,5 +42,5 @@ ATT-05 migration `20261015140000_attendance_explanations` extends the purpose ch
 - The shipped reference uses embedded font assets whose redistribution provenance is not established; the application retains the documented Inter/system fallback. Exact font portability and human visual acceptance remain pending.
 - Native VoiceOver/NVDA, production email/provider review and TEN-03 remain release gates.
 - PAR-18 is partial: published child Timetable is implemented, while the broader Calendar/Events owner is absent.
-- PAR-50 is engineering-complete. Its approved contract explicitly makes other-session revocation an extension “unless already supported”; no inventory exists, so the UI truthfully omits that optional choice.
+- PAR-50 is engineering-complete. Its approved optional other-session path is now supported through ACC-01 without adding Parent/child authority. Human review remains pending.
 - Other Parent workflows remain at their existing product-decision or owner-design gates. The next implementation action is the smallest independently authorized workflow after consolidated human review or a resolved owner contract; do not infer approval for later Fees, messaging, consent, custody or wellbeing behavior.

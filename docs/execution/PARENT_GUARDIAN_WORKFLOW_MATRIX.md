@@ -2,7 +2,7 @@
 
 Cross-workspace capability planning is consolidated in [Combined Parent/Student implementation backlog](./PARENT_STUDENT_IMPLEMENTATION_BACKLOG.md). This matrix remains authoritative for Parent workflow status.
 
-Last updated: 15 October 2026. Baseline reconciliation started at 21:34 IST on 13 October. The owner decision received at 22:32 IST supersedes the former five-state proposal and authorizes the simplified foundation in `docs/modules/guardians/DESIGN.md`. The dependency reconciliation below replaces the earlier undifferentiated “later phase” treatment without authorizing a missing owner or write grant.
+Last updated: 16 October 2026. Baseline reconciliation started at 21:34 IST on 13 October. The owner decision received at 22:32 IST supersedes the former five-state proposal and authorizes the simplified foundation in `docs/modules/guardians/DESIGN.md`. The dependency reconciliation below replaces the earlier undifferentiated “later phase” treatment without authorizing a missing owner or write grant.
 
 Authoritative UX source: `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Parent_Guardian_Design/VSchool_Parent_Guardian_Review.html` (SHA-256 `3f5fdc44d4d48dbb794dfa9cef61b1f09adbafadb737d73cbc99cdb71cc21f9e`, matching `implementation-spec/SOURCE_MANIFEST.json`). The catalog is a 52-workflow **UX design proposal**. Its database worksheet explicitly says that its table names and physical design are proposals requiring reconciliation with the live schema.
 
@@ -73,7 +73,7 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-47 Read school care note | `#/flow/PAR-47` | Health | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Restricted audience, safeguarding exclusions and emergency access | PENDING |
 | PAR-48 Request support discussion | `#/flow/PAR-48` | Student support | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Support authority, routing, restricted notes and retention | PENDING |
 | PAR-49 Update verified contact | `#/flow/PAR-49` | Access/People | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Step-up verification, compromise recovery and separation from relationship evidence | PENDING |
-| PAR-50 Review sessions/sign out | `#/flow/PAR-50` | Access | ENGINEERING_COMPLETE | DIRECT_COMPARISON | Approved staged safe-account/current-session/recovery/sign-out outcome complete at `7d52491`; “Other sessions if supported” is an optional extension and is truthfully omitted | PENDING |
+| PAR-50 Review sessions/sign out | `#/flow/PAR-50` | Access | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_EXTENSION | Approved staged safe-account/current-session/recovery/sign-out outcome complete at `7d52491`; the now-supported optional other-session path uses ACC-01 and focused desktop/mobile evidence | PENDING |
 | PAR-51 Request privacy support | `#/flow/PAR-51` | Privacy/Requests | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Jurisdiction, authority, routing, retention and child/co-guardian rights | PENDING |
 | PAR-52 Ask school assistant | `#/flow/PAR-52` | Assistant | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Provider, allowed sources/data classes, grounding, evaluation and human action policy | PENDING |
 
