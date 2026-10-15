@@ -5,7 +5,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | Workflow | Outcome | Owner area | Phase | Engineering status | Visual status | Human review | Exact gap / next dependency |
 |---|---|---|---:|---|---|---|---|
 | LEA-01 | Enter the correct leadership workspace | access | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-01 explicit branch role, role-aware entry, shell, immediate revocation and honest unavailable states are verified; the approved workflow explorer and production home are intentionally different compositions |
-| LEA-02 | Switch branches without losing context | access | 1 | PARTIAL | FOCUSED_APPLICATION_INSPECTION | PENDING | Authorized switch, focus return and revoked-destination removal are verified; later owner projections still need stale-response isolation proof when LDR-02 releases data |
+| LEA-02 | Switch branches without losing context | access | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Two authorized branches with distinct Attendance records prove staged destination reauthorization, fresh-document reload, cleared query/data and denial of the prior branch session ID; the approved source is a fictional workflow dialog while the application uses production pages |
 | LEA-03 | Work under a temporary leadership delegation | access | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-04 | Handle access changes during a leadership action | access | 1 | PARTIAL | NOT_STARTED | PENDING | Leadership home reauthorizes live access; later owner reads/writes still need their own denial states |
 | LEA-05 | Review my school today | daily | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 provides the approved first-release Attendance summary with current source time, exact denominator and no fabricated additional owner metrics; the reference is a fictional workflow dialog while the application uses the production shell |
@@ -53,11 +53,11 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 3 ENGINEERING_COMPLETE, 4 PARTIAL, 2 BLOCKED, 37 NOT_STARTED. LEA-01, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 4 ENGINEERING_COMPLETE, 3 PARTIAL, 2 BLOCKED, 37 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
-1. Extend LEA-02 stale-response proof around the real Attendance projection without simulating data in the Access shell.
+1. Close LEA-04 with focused current-owner denial/recovery evidence; do not cache protected data after access changes.
 2. Complete LEA-06 retained-last-known behavior only after its exact persistence, freshness and disclosure contract exists.
 3. Keep LEA-46 preferences/support partial until those owner contracts exist; LDR-04–06 remain blocked on the Coordination owner.
 

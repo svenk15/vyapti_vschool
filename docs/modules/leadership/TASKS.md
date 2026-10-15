@@ -49,3 +49,16 @@ Acceptance criteria:
 4. Attendance lifecycle writes maintain source freshness in their existing transaction; the forward migration preserves history, backfills only trustworthy evidence and leaves unknown legacy schedule freshness null.
 5. The detail preserves a date-qualified return path, mobile composition and keyboard focus, and is directly compared with the approved “Inspect the evidence” state.
 6. Focused real PostgreSQL, desktop/mobile Playwright, schema/design checks, build and required repository gates pass. LEA-08 filters/sort, human review, font portability, native accessibility and TEN-03 remain separate.
+
+## LEA-02 — Branch context isolation over owner data
+
+Dependencies: verified LDR-01 context switching and an independently authorized owner projection in two explicit Principal branches.
+
+Acceptance criteria:
+
+1. The selector contains only live server-returned branch destinations and the server rejects a stale or revoked destination.
+2. Confirmation uses the staged exit flow and reauthorizes the destination; it does not treat a browser school ID or acknowledgement as authority.
+3. The destination loads through a fresh document and independent Leadership/owner reads, with prior route filters and branch data cleared.
+4. Distinct Attendance records from the old branch never render in the destination, and manually reusing an old session ID fails the destination's scoped owner query.
+5. Desktop/mobile Playwright covers both real branches, query clearing, deep-link denial and the exact approved LEA-02 contract; screenshots are directly inspected.
+6. No draft lifecycle, schema, migration, permission or owner write is added. Human review, native accessibility, font portability and TEN-03 remain separate.

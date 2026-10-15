@@ -1,0 +1,8 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="6.769309999999999">
+<testsuite name="principal-context-isolation.spec.ts" timestamp="2026-10-15T23:57:29.791Z" hostname="mobile" tests="2" failures="0" skipped="0" time="3.38" errors="0">
+<testcase name="re-resolves the destination and clears old branch query and records" classname="principal-context-isolation.spec.ts" time="3.195">
+</testcase>
+<testcase name="captures the approved branch-switch contract without modifying it" classname="principal-context-isolation.spec.ts" time="0.185">
+</testcase>
+</testsuite>
+</testsuites>

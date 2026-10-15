@@ -55,3 +55,15 @@ Verification: focused lint and TypeScript passed; the real-PostgreSQL Attendance
 Remaining gates: the approved fictional workflow dialog and production shell remain different compositions; font portability, native VoiceOver/NVDA, TEN-03, production controls and human visual acceptance remain pending. LEA-06 retained-last-known semantics and LEA-46 preferences/support still lack owner contracts.
 
 Next action: add focused stale-response isolation evidence for LEA-02 around the real Attendance projection if the existing full-navigation context switch does not already make stale replacement impossible; do not add client-side tenant authority.
+
+## 16 October 2026 — LEA-02 branch-context isolation verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+The existing staged Access switch was exercised with two explicitly granted Principal branches and distinct real Attendance records. Confirmation reauthorizes the destination, uses a full-document `location.replace('/leadership')`, clears the old coverage filters and page state, and makes the destination Leadership and Attendance reads resolve from the new authorized branch. The destination shows only its own class and Teacher. Reusing the old branch's session ID in the destination returns the safe unavailable state without leaking the old class. The full-document boundary plus existing `pageshow`/cross-tab reload guards prevents late responses from the destroyed old page from replacing destination data.
+
+No product source, schema, migration, permission, draft lifecycle or owner write changed. Both development and test databases retain all 64 migrations. Focused Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker. It proves the allowed destination, staged review and confirmation, destination summary, cleared `status/sort/order` query, destination-only records and prior-branch deep-link denial. The unchanged Access and Attendance real-PostgreSQL evidence from LDR-01/LEA-08 remains applicable. Direct inspection compared the approved LEA-02 workflow dialog and all West/East/denial application states at 1440×1000 and 390×844. See [evidence](../../evidence/principal-lea-02-context-2026-10-16/README.md).
+
+Remaining gates: the approved fictional workflow dialog and production pages are different compositions; human review, exact font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: LEA-04, focused proof that a protected owner surface removes data and safe actions when Principal access or its required module becomes unavailable during use. It can reuse the existing live authorization contracts without adding authority.
