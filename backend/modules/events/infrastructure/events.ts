@@ -48,6 +48,6 @@ export class PrismaEventsRepository implements EventsRepository{
  listParent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}){return this.listFor('parent',actor,input.studentId,input.query);}
  async exportParent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}){try{return await this.db.$transaction(async tx=>{const result=await this.readerRows(tx,'parent',actor,input.studentId,undefined,input.query);return calendarExport(result.summaries,result.school.name,result.from);},{isolationLevel:'RepeatableRead'});}catch(error){return fail(error);}}
  detailParent(actor:Identity,input:{studentId:string;eventId:string}){return this.detailFor('parent',actor,input.studentId,input.eventId);}
- listStudent(actor:Identity,input:{studentId:string}){return this.listFor('student',actor,input.studentId);}
+ listStudent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}){return this.listFor('student',actor,input.studentId,input.query);}
  detailStudent(actor:Identity,input:{studentId:string;eventId:string}){return this.detailFor('student',actor,input.studentId,input.eventId);}
 }

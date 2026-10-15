@@ -53,7 +53,7 @@ test.beforeAll(async()=>{
  await students.accept(null,{token:studentToken,initialPassword:studentPassword,confirmation:studentPassword,requestId:randomUUID()});
  await students.setCalendarPurpose(admin,{organizationId:school.organizationId,schoolId:school.schoolId,accessId:studentAccess.accessId,expectedVersion:studentAccess.version+1,enabled:true,key:randomUUID(),requestId:randomUUID()});
  fixture={adminEmail:input.adminEmail,adminPassword:input.password,parentEmail,parentPassword,studentEmail,studentPassword,sectionLabel:'Grade 6 · Section A'};
- mkdirSync('docs/evidence/events-agenda-par-18-2026-10-16',{recursive:true});
+ mkdirSync('docs/evidence/events-student-agenda-stw-31-2026-10-16',{recursive:true});
 });
 
 test.afterAll(async()=>{await students.disconnect();await guardians.disconnect();await events.disconnect();await access.disconnect();await db.$disconnect();});
@@ -72,7 +72,7 @@ test('publisher creates an exact class event and Parent and Student read the fro
  await page.getByLabel('Ends on').fill('2026-10-22');
  await page.getByLabel('Audience').selectOption('SECTION');
  await page.getByLabel('Class').selectOption({label:fixture.sectionLabel});
- await page.screenshot({path:`docs/evidence/events-agenda-par-18-2026-10-16/admin-compose-${testInfo.project.name}.png`,fullPage:true});
+ await page.screenshot({path:`docs/evidence/events-student-agenda-stw-31-2026-10-16/admin-compose-${testInfo.project.name}.png`,fullPage:true});
  await page.getByRole('button',{name:/Continue/}).click();
  await expect(page.getByRole('heading',{name:'Review the event'})).toBeFocused();
  await page.getByRole('button',{name:/Continue/}).click();
@@ -81,7 +81,7 @@ test('publisher creates an exact class event and Parent and Student read the fro
  await expect(page).toHaveURL(/\/admin\/events$/);
  const row=page.getByRole('row').filter({hasText:'Class learning showcase'});
  await expect(row).toContainText('PUBLISHED');
- await page.screenshot({path:`docs/evidence/events-agenda-par-18-2026-10-16/admin-published-${testInfo.project.name}.png`,fullPage:true});
+ await page.screenshot({path:`docs/evidence/events-student-agenda-stw-31-2026-10-16/admin-published-${testInfo.project.name}.png`,fullPage:true});
 
  await signIn(page,fixture.parentEmail,fixture.parentPassword);
  if((page.viewportSize()?.width??0)<700)await page.getByRole('button',{name:'Open parent navigation'}).click();
@@ -96,7 +96,7 @@ test('publisher creates an exact class event and Parent and Student read the fro
  expect(exportResponse.ok()).toBeTruthy();
  expect(exportResponse.headers()['content-type']).toContain('text/calendar');
  const calendar=await exportResponse.text();expect(calendar).toContain('SUMMARY:Class learning showcase');expect(calendar).not.toContain('Kavya Calendar');
- await page.screenshot({path:`docs/evidence/events-agenda-par-18-2026-10-16/parent-calendar-${testInfo.project.name}.png`,fullPage:true});
+ await page.screenshot({path:`docs/evidence/events-student-agenda-stw-31-2026-10-16/parent-calendar-${testInfo.project.name}.png`,fullPage:true});
  await page.getByRole('link',{name:/View event/}).click();
  await expect(page.getByRole('heading',{name:'Class learning showcase'})).toBeVisible();
  await expect(page.getByText(fixture.sectionLabel,{exact:true})).toBeVisible();
@@ -106,7 +106,8 @@ test('publisher creates an exact class event and Parent and Student read the fro
  await page.getByRole('navigation',{name:'Student navigation'}).getByRole('link',{name:'School calendar'}).click();
  await expect(page.getByRole('heading',{name:'School calendar'})).toBeVisible();
  await expect(page.getByText('Class learning showcase',{exact:true})).toBeVisible();
- await page.screenshot({path:`docs/evidence/events-agenda-par-18-2026-10-16/student-calendar-${testInfo.project.name}.png`,fullPage:true});
+ await expect(page.getByText('Class event',{exact:true})).toBeVisible();
+ await page.screenshot({path:`docs/evidence/events-student-agenda-stw-31-2026-10-16/student-calendar-${testInfo.project.name}.png`,fullPage:true});
  await page.getByRole('link',{name:/View event/}).click();
  await expect(page.getByRole('heading',{name:'Class learning showcase'})).toBeVisible();
  await expect(page.getByText(fixture.sectionLabel,{exact:true})).toBeVisible();

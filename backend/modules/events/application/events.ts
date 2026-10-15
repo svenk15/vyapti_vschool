@@ -16,7 +16,7 @@ export interface EventsRepository{
  listParent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}):Promise<readonly EventSummary[]>;
  exportParent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}):Promise<EventCalendarExport>;
  detailParent(actor:Identity,input:{studentId:string;eventId:string}):Promise<EventDetail>;
- listStudent(actor:Identity,input:{studentId:string}):Promise<readonly EventSummary[]>;
+ listStudent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}):Promise<readonly EventSummary[]>;
  detailStudent(actor:Identity,input:{studentId:string;eventId:string}):Promise<EventDetail>;
 }
 const actor=(identity:Identity|null)=>{if(!identity)throw new AccessError('UNAUTHENTICATED');return identity;};
@@ -32,7 +32,7 @@ export function createEventsUseCases(repository:EventsRepository){return {
  listParent:(identity:Identity|null,studentId:unknown,query:unknown={})=>repository.listParent(actor(identity),{studentId:eventId(studentId),query:agendaQuery(query)}),
  exportParent:(identity:Identity|null,studentId:unknown,query:unknown={})=>repository.exportParent(actor(identity),{studentId:eventId(studentId),query:agendaQuery(query)}),
  detailParent:(identity:Identity|null,studentId:unknown,id:unknown)=>repository.detailParent(actor(identity),{studentId:eventId(studentId),eventId:eventId(id)}),
- listStudent:(identity:Identity|null,studentId:unknown)=>repository.listStudent(actor(identity),{studentId:eventId(studentId)}),
+ listStudent:(identity:Identity|null,studentId:unknown,query:unknown={})=>repository.listStudent(actor(identity),{studentId:eventId(studentId),query:agendaQuery(query)}),
  detailStudent:(identity:Identity|null,studentId:unknown,id:unknown)=>repository.detailStudent(actor(identity),{studentId:eventId(studentId),eventId:eventId(id)}),
 };}
 export type EventsFacade=ReturnType<typeof createEventsUseCases>;

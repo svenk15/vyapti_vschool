@@ -18,6 +18,6 @@ export const eventsGateway={
  listParent:(identity:Identity|null,studentId:unknown,query:unknown={})=>service().listParent(required(identity),studentId,query),
  exportParent:(identity:Identity|null,studentId:unknown,query:unknown={})=>service().exportParent(required(identity),studentId,query),
  detailParent:(identity:Identity|null,studentId:unknown,id:unknown)=>service().detailParent(required(identity),studentId,id),
- listStudent:(identity:Identity|null,studentId:unknown)=>service().listStudent(required(identity),studentId),
+ listStudent:(identity:Identity|null,studentId:unknown,query:unknown={})=>service().listStudent(required(identity),studentId,query),
  detailStudent:(identity:Identity|null,studentId:unknown,id:unknown)=>service().detailStudent(required(identity),studentId,id),
 };

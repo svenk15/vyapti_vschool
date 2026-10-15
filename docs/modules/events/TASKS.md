@@ -23,3 +23,13 @@ Human acceptance remains PENDING.
 - [x] Verify domain, real PostgreSQL, desktop/mobile browser, database-design, boundary and build gates.
 
 Human acceptance remains PENDING. PAR-18 remains partial after EV-02 for mixed timetable/academic closures and advanced event interactions.
+
+## EV-03 — STW-31 typed Student upcoming agenda
+
+- [x] Apply the guarded branch-local upcoming predicate to the exact Student event projection.
+- [x] Display immutable category, schedule, audience and canceled status in the Student agenda.
+- [x] Preserve independent detail authorization and omit unsupported assessment/interest controls.
+- [x] Pass focused PostgreSQL, desktop/mobile browser, type/lint and build checks.
+- [x] Directly compare the populated composition with the approved Student Calendar reference and retain the established truthful empty-state recipe.
+
+Human acceptance remains PENDING. STW-31 remains partial for published assessment schedules and richer event context.

@@ -55,3 +55,27 @@ Visual comparison: the approved PAR-18 Calendar stage and the populated live Par
 Limitations: PAR-18 remains partial for a combined Timetable/Event agenda, academic closure semantics and advanced event interactions. EV-02 does not add recurrence, RSVP, consent, capacity, payments, attachments or assessment-date ownership. Native accessibility, font portability, TEN-03 and human review remain pending.
 
 Next action: checkpoint EV-02, serve that exact source and select the next independently eligible Parent/Student capability.
+
+## EV-03
+
+Status: ENGINEERING_VERIFIED_SUPPORTED_SLICE / DIRECT_COMPARISON_PARTIAL / HUMAN_REVIEW_PENDING
+
+EV-03 applies the approved STW-31 upcoming-agenda rule to the exact Student Events projection. The page sends the current branch-local civil date; the repository repeats live Student account/access/purpose/module and frozen-recipient checks, then includes only current versions whose all-day or timed interval has not ended. The Student sees the immutable category, school-local schedule, audience label, description and canceled state. Direct event detail retains its independent authorization and is not hidden merely because the event has moved outside the list window.
+
+No schema, migration, purpose or write path changed. Both databases remain at 62 applied migrations. The existing EV-02 indexes support the predicate.
+
+Verification:
+
+- `pnpm typecheck` and focused ESLint — PASS.
+- `pnpm test:functional test/functional/events-calendar.test.ts` — PASS, 3/3 against PostgreSQL, including the Student From/category boundary.
+- focused Chromium desktop Playwright — PASS, 1/1 with one worker.
+- focused mobile Playwright — PASS, 1/1 with one worker.
+- `pnpm check:docs`, `pnpm check:boundaries` and `pnpm check:backend` — PASS.
+- isolated E2E and final normal production builds — PASS.
+- Direct desktop/mobile inspection against the approved `STW-31` workflow and Calendar shell is recorded in `docs/evidence/events-student-agenda-stw-31-2026-10-16/`.
+
+Visual comparison: the live screen follows the approved Student shell, hierarchy, content width, card/button sizing and mobile stacking. The approved `STW-31` state is a generic guided-review form; the live screen is an operational, authorized populated agenda. That difference is a labelled composition extension, not a claim of exact screen parity. Fictional reference assessment details were not copied into production.
+
+Limitations: STW-31 remains partial until an Assessment owner defines and publishes schedule facts. Venue, participation requirements and contact are shown only when truthfully present in the bounded event description; they are not fabricated as new fields. STW-32 interest, capacity and consent remain an explicit unapproved extension. Font portability, native accessibility, TEN-03 and human review remain pending.
+
+Next action: checkpoint EV-03, serve that exact source and continue with the next independently eligible Parent/Student owner capability.

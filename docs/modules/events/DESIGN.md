@@ -42,6 +42,14 @@ sequenceDiagram
 
 Verification requires domain validation/export escaping, real PostgreSQL legacy-category preservation, category filtering, date overlap, purpose revocation and cross-child denial, plus an Administrator publish → Parent filter/detail/export browser journey at desktop/mobile sizes. Mixed timetable, academic-calendar closures, recurrence and event response remain separately owned gaps; EV-02 does not claim them complete.
 
+## EV-03 — typed Student upcoming agenda
+
+STW-31's approved owner-aligned event slice uses the same immutable publication and exact frozen Student audience as EV-01/EV-02. The Student calendar requests the branch-local current civil date and returns only permitted current versions whose all-day or timed interval has not ended. It displays the immutable category, effective school-local schedule, audience label and canceled state. There is no browser-supplied authority and no new purpose, table or write path.
+
+This slice deliberately does not add assessment schedules, venue/participation fields that Events does not own, or interest actions. Published assessment dates require their Assessment owner and draft/publication boundary; STW-32 interest remains an explicit scope extension with unsettled capacity, consent and allocation rules. An upcoming Events agenda can therefore be verified without implying those capabilities.
+
+Verification adds a real PostgreSQL Student date/category query under exact access and a desktop/mobile Administrator publication → Student upcoming agenda/detail journey. The Student reference Calendar page is the direct visual authority; its fictional assessment/event samples are not production data or authorization.
+
 ### Persistence
 
 | Table | Physical fields | Responsibility | Constraints and indexes |
