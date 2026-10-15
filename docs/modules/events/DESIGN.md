@@ -14,13 +14,41 @@ Events owns one-off school calendar publication. It uses the existing `communica
 - Commands use actor/scope/command/key receipts. Same key and same normalized payload replays the result; changed payload conflicts. Mutation lock order is account `UPDATE`, Organization `SHARE`, School `UPDATE`, then Event row `UPDATE`. Reads do not acquire mutation locks.
 - Recurrence, RSVP/interest, consent, capacity, attachments, external delivery, assessment dates and payments are outside EV-01. Therefore PAR-18 and STW-31 remain partial where their approved references include mixed/advanced calendar content.
 
+## EV-02 — typed Parent agenda and authorized export
+
+PAR-18's approved current-release contract adds a school-local **From date**, the filters **All permitted events / Holidays / Meetings / Class events**, and a minimal calendar export. Events remains the owner. This slice does not create RSVP, consent, payment, attendance or transport meaning, and it does not make an event category proof that the academic calendar is closed.
+
+New writes require `HOLIDAY`, `MEETING` or `CLASS_EVENT`. Existing EV-01 records are forward-migrated to `GENERAL` so they remain truthful rather than being silently relabelled; `GENERAL` appears in **All permitted events** only. Category and audience are independent: a category never grants scope, and the frozen recipient/version contract remains authoritative. Publication copies category into the immutable version. Revision may change category only by publishing a new version.
+
+Parent agenda reads accept an optional ISO civil `from` day and one supported category. The default is the current branch-local day. The repository rechecks the live account, exact accepted Guardian binding, independent calendar purpose, original branch, module state and frozen current-version recipient before applying the date/category predicate. Results are bounded to 100 and ordered by effective start then stable event ID. Canceled events stay visible and clearly labelled.
+
+Calendar export is a query, not stored state. It invokes the same guarded projection for every included current version and returns a bounded RFC 5545-compatible `text/calendar` representation containing only title, non-sensitive description, permitted schedule, current version and canceled status. It contains no child identity, other recipient, staff-private schedule or token. A stale downloaded file never overrides the live page; users must regenerate it to receive revisions or cancellations.
+
+The forward migration adds `category` to `vs_events_event` and `vs_events_event_version`, category checks and scoped agenda indexes. Both tables retain their `BRANCH` classification and TEN-03 closure gate. No new table or authorization grant is introduced.
+
+```mermaid
+sequenceDiagram
+  participant P as Parent
+  participant E as Events facade
+  participant R as Events repository
+  participant DB as PostgreSQL
+  P->>E: list/export(student candidate, from, category)
+  E->>R: validated agenda query
+  R->>DB: live account + exact Guardian purpose + module guards
+  R->>DB: frozen current-version recipients + date/category predicate
+  DB-->>R: bounded permitted versions
+  R-->>P: agenda DTO or minimal calendar file
+```
+
+Verification requires domain validation/export escaping, real PostgreSQL legacy-category preservation, category filtering, date overlap, purpose revocation and cross-child denial, plus an Administrator publish → Parent filter/detail/export browser journey at desktop/mobile sizes. Mixed timetable, academic-calendar closures, recurrence and event response remain separately owned gaps; EV-02 does not claim them complete.
+
 ### Persistence
 
 | Table | Physical fields | Responsibility | Constraints and indexes |
 | --- | --- | --- | --- |
 | `vs_events_publisher_grant` (EventPublisherGrant) | id/org/school/membership/account/operator uuid; granted/revoked timestamps; version | Explicit branch publisher designation for one-off school events. | Scoped active membership FK; unique scope/account; active publisher index |
-| `vs_events_event` (SchoolEvent) | id/org/school uuid; status/revision/current_version; title/description; one-off schedule; audience; created/updated/canceled metadata | Versioned one-off event root and current draft/published state. | Scoped school/section/current-version FKs; status/audience/schedule checks; scoped ID and current-version uniqueness; list index |
-| `vs_events_event_version` (SchoolEventVersion) | id/org/school/event uuid; version; title/description; schedule; audience label/digest; publisher/time | Immutable published event snapshot and audience evidence. | Scoped event FK; unique event/version and scoped ID; schedule/audience checks; append-only trigger |
+| `vs_events_event` (SchoolEvent) | id/org/school uuid; status/revision/current_version; title/description/category; one-off schedule; audience; created/updated/canceled metadata | Versioned one-off event root and current draft/published state. | Scoped school/section/current-version FKs; status/category/audience/schedule checks; scoped ID and current-version uniqueness; list and typed agenda indexes |
+| `vs_events_event_version` (SchoolEventVersion) | id/org/school/event uuid; version; title/description/category; schedule; audience label/digest; publisher/time | Immutable published event snapshot and audience evidence. | Scoped event FK; unique event/version and scoped ID; category/schedule/audience checks; append-only trigger |
 | `vs_events_recipient` (SchoolEventRecipient) | id/org/school/version/student uuid; created_at | Frozen Student audience membership for an exact published event version. | Scoped version/Student FKs; unique version/Student; Student inbox index; append-only trigger |
 | `vs_events_guardian_binding` (SchoolEventGuardianBinding) | id/org/school/recipient/access/student uuid | Frozen exact Guardian access provenance for one event recipient. | Scoped recipient and Guardian access+Student FKs; unique recipient/access; Student/access lookup index; append-only |
 | `vs_events_student_binding` (SchoolEventStudentBinding) | id/org/school/recipient/access/student uuid | Frozen exact Student portal access provenance for one event recipient. | Scoped recipient and Student access+Student FKs; unique recipient/access; Student/access lookup index; append-only |

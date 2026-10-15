@@ -1692,6 +1692,7 @@ model SchoolEvent {
  currentVersionId String? @map("current_version_id") @db.Uuid
  title String @db.VarChar(120)
  description String @db.VarChar(500)
+ category String @default("GENERAL") @db.VarChar(20)
  scheduleKind String @map("schedule_kind") @db.VarChar(20)
  startsOn DateTime? @map("starts_on") @db.Date
  endsOnExclusive DateTime? @map("ends_on_exclusive") @db.Date
@@ -1708,6 +1709,8 @@ model SchoolEvent {
  @@unique([organizationId,schoolId,id],map:"vs_events_event_scope_id_key")
  @@unique([organizationId,schoolId,currentVersionId],map:"vs_events_event_current_version_key")
  @@index([organizationId,schoolId,status,updatedAt(sort:Desc),id],map:"vs_events_event_list_idx")
+ @@index([organizationId,schoolId,status,category,startsOn,endsOnExclusive,id],map:"vs_events_event_agenda_day_idx")
+ @@index([organizationId,schoolId,status,category,startsAt,endsAt,id],map:"vs_events_event_agenda_time_idx")
  @@map("vs_events_event")
 }
 
@@ -1719,6 +1722,7 @@ model SchoolEventVersion {
  versionNo Int @map("version_no")
  title String @db.VarChar(120)
  description String @db.VarChar(500)
+ category String @default("GENERAL") @db.VarChar(20)
  scheduleKind String @map("schedule_kind") @db.VarChar(20)
  startsOn DateTime? @map("starts_on") @db.Date
  endsOnExclusive DateTime? @map("ends_on_exclusive") @db.Date

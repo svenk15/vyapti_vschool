@@ -1703,9 +1703,9 @@
       "model": "SchoolEvent",
       "owner": "events",
       "table": "vs_events_event",
-      "fields": "id/org/school uuid; status/revision/current_version; title/description; one-off schedule; audience; created/updated/canceled metadata",
+      "fields": "id/org/school uuid; status/revision/current_version; title/description/category; one-off schedule; audience; created/updated/canceled metadata",
       "responsibility": "Versioned one-off event root and current draft/published state.",
-      "constraints": "Scoped school/section/current-version FKs; status/audience/schedule checks; scoped ID and current-version uniqueness; list index",
+      "constraints": "Scoped school/section/current-version FKs; status/category/audience/schedule checks; scoped ID and current-version uniqueness; list and typed agenda indexes",
       "status": "MIGRATED",
       "design": "docs/modules/events/DESIGN.md",
       "rls": {
@@ -1724,9 +1724,9 @@
       "model": "SchoolEventVersion",
       "owner": "events",
       "table": "vs_events_event_version",
-      "fields": "id/org/school/event uuid; version; title/description; schedule; audience label/digest; publisher/time",
+      "fields": "id/org/school/event uuid; version; title/description/category; schedule; audience label/digest; publisher/time",
       "responsibility": "Immutable published event snapshot and audience evidence.",
-      "constraints": "Scoped event FK; unique event/version and scoped ID; schedule/audience checks; append-only trigger",
+      "constraints": "Scoped event FK; unique event/version and scoped ID; category/schedule/audience checks; append-only trigger",
       "status": "MIGRATED",
       "design": "docs/modules/events/DESIGN.md",
       "rls": {

@@ -29,3 +29,29 @@ Visual comparison: the Parent PAR-18 and Student STW-31 references were opened u
 Limitations: recurrence, RSVP/interest, consent, capacity, attachments, external delivery, mixed timetable/event agenda, assessment dates and payments are excluded. Font portability, native accessibility, TEN-03 and human review remain pending.
 
 Next action: create the focused checkpoint, restart the demo from that commit and select the smallest eligible shared capability from the recorded backlog.
+
+## EV-02
+
+Status: ENGINEERING_VERIFIED_SUPPORTED_SLICE / DIRECT_COMPARISON_PARTIAL / HUMAN_REVIEW_PENDING
+
+EV-02 adds the approved Parent agenda controls without changing EV-01 audience authority. New drafts require `HOLIDAY`, `MEETING` or `CLASS_EVENT`; pre-EV-02 records remain `GENERAL`. Category is copied into each immutable publication version. Parent From/category reads and calendar export reauthorize the exact accepted Guardian access, independent purpose, original branch, module state and frozen current-version recipient. Export contains permitted event facts only and does not include child identity, other recipients, staff data or tokens.
+
+Schema/migration: forward migration `20261016120000_events_agenda_categories` is applied to both `vyapti_vschool` and `vyapti_vschool_test`. Each reports 62 applied migrations. It adds category checks and scoped agenda indexes to the existing BRANCH-classified Events tables. TEN-03 remains the RLS enforcement gate.
+
+Verification on the EV-02 checkpoint source:
+
+- `pnpm test:unit test/unit/events.test.ts` — PASS, 2/2.
+- `pnpm test:functional test/functional/events-calendar.test.ts` — PASS, 3/3 against PostgreSQL. Covers typed publication, school-local From/category filtering, minimal export, frozen recipients, purpose revocation, cross-scope denial, replay, stale version and concurrent draft protection.
+- focused desktop Chromium Playwright — PASS, 1/1 with one worker.
+- focused mobile Playwright — PASS, 1/1 with one worker.
+- `pnpm typecheck`, focused ESLint, `pnpm check:db-design` and the E2E-mode production build — PASS.
+- `pnpm check:docs`, `pnpm check:boundaries`, `pnpm check:backend` and the final normal `pnpm build` — PASS.
+- Database-design validation reports 96 physical table contracts in agreement.
+- `pnpm demo:seed` — the Events fixtures completed idempotently and preserved prior records; private data remains in the ignored `artifacts/events-01/private-demo.json`. Independent TEN-02, ACA-01 and BRD-02 refresh steps reported preservation warnings and continued; they are not represented as Events failures or successful refreshes.
+- New screenshots and the comparison record are in `docs/evidence/events-agenda-par-18-2026-10-16/`.
+
+Visual comparison: the approved PAR-18 Calendar stage and the populated live Parent agenda were inspected side by side at desktop and mobile sizes. The application follows the shared Parent shell, content width, typography scale, field/button sizing and responsive stacking. The approved artifact is a three-stage review prototype; the live current-release route is a real read-only agenda with From/category filtering, privacy-minimal export and authorized detail navigation. That structural difference remains explicitly unaccepted rather than being described as exact fidelity. The standard font portability exception remains.
+
+Limitations: PAR-18 remains partial for a combined Timetable/Event agenda, academic closure semantics and advanced event interactions. EV-02 does not add recurrence, RSVP, consent, capacity, payments, attachments or assessment-date ownership. Native accessibility, font portability, TEN-03 and human review remain pending.
+
+Next action: checkpoint EV-02, serve that exact source and select the next independently eligible Parent/Student capability.

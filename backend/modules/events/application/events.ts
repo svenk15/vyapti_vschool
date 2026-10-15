@@ -1,7 +1,7 @@
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
-import type {EventCommandResult,EventDetail,EventSummary} from '../../../../shared/contracts/events';
+import type {EventAgendaQuery,EventCalendarExport,EventCommandResult,EventDetail,EventSummary} from '../../../../shared/contracts/events';
 import {AccessError} from '../../access/contracts/index';
-import {createDraftInput,eventId,reviseInput,transitionInput,updateDraftInput} from '../domain/events';
+import {agendaQuery,createDraftInput,eventId,reviseInput,transitionInput,updateDraftInput} from '../domain/events';
 
 type Scope={organizationId:string;schoolId:string};
 export interface EventsRepository{
@@ -13,7 +13,8 @@ export interface EventsRepository{
  cancel(actor:Identity,input:Scope&{eventId:string}&ReturnType<typeof transitionInput>&{requestId:string}):Promise<EventCommandResult>;
  listAdmin(actor:Identity,input:Scope):Promise<readonly EventSummary[]>;
  detailAdmin(actor:Identity,input:Scope&{eventId:string}):Promise<EventDetail>;
- listParent(actor:Identity,input:{studentId:string}):Promise<readonly EventSummary[]>;
+ listParent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}):Promise<readonly EventSummary[]>;
+ exportParent(actor:Identity,input:{studentId:string;query:EventAgendaQuery}):Promise<EventCalendarExport>;
  detailParent(actor:Identity,input:{studentId:string;eventId:string}):Promise<EventDetail>;
  listStudent(actor:Identity,input:{studentId:string}):Promise<readonly EventSummary[]>;
  detailStudent(actor:Identity,input:{studentId:string;eventId:string}):Promise<EventDetail>;
@@ -28,7 +29,8 @@ export function createEventsUseCases(repository:EventsRepository){return {
  cancel:(identity:Identity|null,organizationId:unknown,schoolId:unknown,id:unknown,input:unknown,requestId:string)=>repository.cancel(actor(identity),{organizationId:eventId(organizationId),schoolId:eventId(schoolId),eventId:eventId(id),...transitionInput(input),requestId:eventId(requestId)}),
  listAdmin:(identity:Identity|null,organizationId:unknown,schoolId:unknown)=>repository.listAdmin(actor(identity),{organizationId:eventId(organizationId),schoolId:eventId(schoolId)}),
  detailAdmin:(identity:Identity|null,organizationId:unknown,schoolId:unknown,id:unknown)=>repository.detailAdmin(actor(identity),{organizationId:eventId(organizationId),schoolId:eventId(schoolId),eventId:eventId(id)}),
- listParent:(identity:Identity|null,studentId:unknown)=>repository.listParent(actor(identity),{studentId:eventId(studentId)}),
+ listParent:(identity:Identity|null,studentId:unknown,query:unknown={})=>repository.listParent(actor(identity),{studentId:eventId(studentId),query:agendaQuery(query)}),
+ exportParent:(identity:Identity|null,studentId:unknown,query:unknown={})=>repository.exportParent(actor(identity),{studentId:eventId(studentId),query:agendaQuery(query)}),
  detailParent:(identity:Identity|null,studentId:unknown,id:unknown)=>repository.detailParent(actor(identity),{studentId:eventId(studentId),eventId:eventId(id)}),
  listStudent:(identity:Identity|null,studentId:unknown)=>repository.listStudent(actor(identity),{studentId:eventId(studentId)}),
  detailStudent:(identity:Identity|null,studentId:unknown,id:unknown)=>repository.detailStudent(actor(identity),{studentId:eventId(studentId),eventId:eventId(id)}),
