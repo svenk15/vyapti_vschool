@@ -1888,6 +1888,48 @@
         "owner": "learning",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "LearningAssignmentDraft",
+      "owner": "learning",
+      "table": "vs_learning_assignment_draft",
+      "fields": "id/org/school/version/recipient/student/access uuid; status/version; private response_text; saved/submitted timestamps",
+      "responsibility": "Student-owned private text draft for one exact published assignment recipient.",
+      "constraints": "Scoped recipient/version/Student-access FKs; one draft per version/Student; positive version and bounded text checks; Student and assignment indexes",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Private response text is visible and writable only through the exact live Student access; Teachers and Guardians cannot read drafts.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningSubmissionAttempt",
+      "owner": "learning",
+      "table": "vs_learning_submission_attempt",
+      "fields": "id/org/school/version/recipient/student/access/draft uuid; attempt_no; immutable response_text; effective_due/accepted timestamps; receipt reference",
+      "responsibility": "Immutable on-time Student text submission snapshot and receipt.",
+      "constraints": "Scoped recipient/version/access/draft FKs; one attempt per version/Student; on-time and bounded text checks; unique receipt; append-only trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Student reads require exact live recipient access; Teacher reads require current exact assignment authority; Parent access never exposes response content.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

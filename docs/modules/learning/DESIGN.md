@@ -80,3 +80,35 @@ Validation preserves entered safe fields. Failure states distinguish unavailable
 - Repository: migration status, database registry, backend/boundary/docs checks, lint and build.
 
 Human acceptance, native VoiceOver/NVDA, font portability, TEN-03 enforcement and production readiness remain separate gates.
+
+## LEA-03 — private text draft and on-time submission
+
+### Narrow release contract
+
+LEA-03 adds one text-only response lifecycle to the immutable assignment version published by LEA-01. A frozen Student recipient with the same live `learning.assignment.read_self` access may save one private draft, review it, and explicitly submit it while the authoritative server instant is at or before `due_at`. The accepted snapshot is immutable. The authoring Teacher may read accepted submissions only while the Teacher retains the exact current CourseOffering assignment and Learning module authority. Parents, other Students and unrelated Teachers never receive response text. Files, late work, extensions, resubmission, reopening, grading, feedback, returned/excused/closed policy and offline storage remain outside this slice.
+
+The branch timezone is presentation context for the absolute `due_at` instant. The server clock decides acceptance; a browser-supplied clock or status is never authoritative. A successful receipt replay remains readable after the deadline when the same live Student access still authorizes the assignment.
+
+### Tables and joins
+
+| Physical table | Scope and ownership | Invariants and indexes |
+|---|---|---|
+| `vs_learning_assignment_draft` (LearningAssignmentDraft) | id/org/school/version/recipient/student/access uuid; status/version; private response_text; saved/submitted timestamps | Student-owned private text draft for one exact published assignment recipient. | Scoped recipient/version/Student-access FKs; one draft per version/Student; positive version and bounded text checks; Student and assignment indexes |
+| `vs_learning_submission_attempt` (LearningSubmissionAttempt) | id/org/school/version/recipient/student/access/draft uuid; attempt_no; immutable response_text; effective_due/accepted timestamps; receipt reference | Immutable on-time Student text submission snapshot and receipt. | Scoped recipient/version/access/draft FKs; one attempt per version/Student; on-time and bounded text checks; unique receipt; append-only trigger |
+
+Student reads join the live accepted portal access → frozen student binding → recipient → current immutable assignment version → draft/attempt. Teacher reads join assignment → current version → accepted attempt and independently re-establish the author Teacher's current exact offering assignment. Parent assignment projection deliberately stops before draft/attempt tables.
+
+### Commands, queries and transaction protocol
+
+- `studentWork(identity, studentId, assignmentId)` returns published assignment metadata plus only that Student's draft version/text and accepted receipt.
+- `saveStudentDraft(identity, studentId, assignmentId, expectedVersion, text, key)` locks account → organization SHARE → school UPDATE → assignment SHARE → recipient → draft, repeats live Student purpose/module/enrollment and exact frozen-binding checks, and creates or CAS-updates the private draft. A submitted draft rejects writes. Audit/receipt payloads contain identifiers, state and version only; response text is excluded.
+- `submitStudentWork(identity, studentId, assignmentId, reviewedAssignmentVersion, expectedDraftVersion, key)` uses the same lock prefix and locks the draft. It reauthorizes before receipt disclosure. A matching accepted receipt is returned before deadline validation so a lost on-time response can be recovered later. A new command requires the assignment still published/current, the exact reviewed version, the unchanged non-empty draft and `server_now <= due_at`. It inserts one immutable attempt, marks the draft `SUBMITTED`, appends safe audit/outbox/command receipt evidence and commits atomically.
+- `teacherSubmissions(identity, assignmentId)` and `teacherSubmission(identity, assignmentId, submissionId)` are bounded (maximum 100 for this slice), assignment-scoped reads. They return accepted content and time only after live account, branch/module, author Teacher and exact current offering-assignment checks.
+
+Same command key and semantic payload returns the original authorized result; a changed payload conflicts. Concurrent saves use draft version CAS. Save versus submit locks the same draft: one winner commits, and the loser receives `STALE_VERSION`/`CONFLICT` without changing the accepted snapshot. The unique assignment-version/Student attempt constraint prevents two distinct submission intents from creating duplicate attempts.
+
+### UI, errors and verification
+
+Student detail uses the approved `Write response` → `Review work` → `Receipt` stages. Back/Continue preserves in-tab text; only acknowledged Save draft persists, and only final Submit creates an attempt. A stale save retains attempted text and offers reload. Unknown submission outcome retains the exact payload/key for retry. Directory status supports only `DRAFT` and `SUBMITTED` in addition to existing open published work; absent Returned/Closed/Excused semantics remain visibly unavailable. My day excludes submitted work from actionable priorities.
+
+Verification requires real PostgreSQL evidence for isolation, CAS, deadline boundary, post-deadline receipt replay, concurrent duplicate and save/submit races, revocation/unavailability, immutable attempt content, scoped Teacher reads and Parent denial. Browser evidence covers the Teacher publication → Student save/reload/review/submit/receipt → Teacher list/detail journey at desktop and mobile, including keyboard focus and direct reference comparison. Every new tenant-table migration carries TEN-03 Path A metadata; enforcement remains the consolidated production gate.

@@ -1,9 +1,15 @@
 export type LearningAssignmentStatus='DRAFT'|'PUBLISHED';
 export type LearningOffering={id:string;code:string;subject:string;classLabel:string;yearName:string};
-export type LearningAssignmentSummary={id:string;status:LearningAssignmentStatus;revision:number;version:number|null;title:string;instructions:string;dueAt:string;offering:LearningOffering;recipientCount:number;publishedAt:string|null};
+export type LearningWorkStatus='TO_DO'|'DRAFT'|'SUBMITTED'|'PUBLISHED';
+export type LearningAssignmentSummary={id:string;status:LearningAssignmentStatus;revision:number;version:number|null;title:string;instructions:string;dueAt:string;offering:LearningOffering;recipientCount:number;publishedAt:string|null;workStatus?:LearningWorkStatus};
 export type LearningAssignmentSearchBy='title'|'subject';
 export type LearningAssignmentSort='due'|'title'|'subject';
 export type LearningAssignmentOrder='asc'|'desc';
 export type LearningAssignmentPage={items:LearningAssignmentSummary[];nextCursor:string|null};
 export type LearningTeacherWorkspace={timezone:string;offerings:LearningOffering[];assignments:LearningAssignmentSummary[]};
 export type LearningCommandResult={assignmentId:string;status:LearningAssignmentStatus;revision:number;version:number|null;recipientCount:number;replayed:boolean};
+export type LearningStudentDraft={id:string;version:number;text:string;savedAt:string;status:'ACTIVE'|'SUBMITTED'};
+export type LearningSubmissionReceipt={submissionId:string;assignmentId:string;attemptNo:1;receiptReference:string;acceptedAt:string;effectiveDueAt:string;replayed:boolean};
+export type LearningStudentWork={assignment:LearningAssignmentSummary;draft:LearningStudentDraft|null;submission:(LearningSubmissionReceipt&{text:string})|null;timezone:string};
+export type LearningTeacherSubmissionSummary={submissionId:string;studentId:string;studentName:string;attemptNo:1;acceptedAt:string;receiptReference:string};
+export type LearningTeacherSubmissionDetail=LearningTeacherSubmissionSummary&{assignmentId:string;assignmentTitle:string;text:string;effectiveDueAt:string;timezone:string};

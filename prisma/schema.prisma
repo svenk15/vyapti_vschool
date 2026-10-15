@@ -1858,3 +1858,46 @@ model LearningAssignmentStudentBinding {
   @@index([organizationId, schoolId, studentId, accessId], map: "vs_learning_student_binding_student_idx")
   @@map("vs_learning_student_binding")
 }
+
+model LearningAssignmentDraft {
+  id                  String   @id(map: "vs_learning_assignment_draft_pkey") @db.Uuid
+  organizationId      String   @map("organization_id") @db.Uuid
+  schoolId            String   @map("school_id") @db.Uuid
+  assignmentVersionId String   @map("assignment_version_id") @db.Uuid
+  recipientId         String   @map("recipient_id") @db.Uuid
+  studentId           String   @map("student_id") @db.Uuid
+  studentAccessId     String   @map("student_access_id") @db.Uuid
+  status              String   @db.VarChar(16)
+  version             Int
+  responseText        String   @map("response_text") @db.VarChar(10000)
+  savedAt             DateTime @map("saved_at") @db.Timestamptz(3)
+  submittedAt         DateTime? @map("submitted_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_assignment_draft_scope_id_key")
+  @@unique([organizationId, schoolId, assignmentVersionId, studentId], map: "vs_learning_assignment_draft_student_key")
+  @@index([organizationId, schoolId, studentId, savedAt(sort: Desc), id], map: "vs_learning_assignment_draft_student_idx")
+  @@index([organizationId, schoolId, assignmentVersionId, status, id], map: "vs_learning_assignment_draft_assignment_idx")
+  @@map("vs_learning_assignment_draft")
+}
+
+model LearningSubmissionAttempt {
+  id                  String   @id(map: "vs_learning_submission_attempt_pkey") @db.Uuid
+  organizationId      String   @map("organization_id") @db.Uuid
+  schoolId            String   @map("school_id") @db.Uuid
+  assignmentVersionId String   @map("assignment_version_id") @db.Uuid
+  recipientId         String   @map("recipient_id") @db.Uuid
+  studentId           String   @map("student_id") @db.Uuid
+  studentAccessId     String   @map("student_access_id") @db.Uuid
+  draftId             String   @map("draft_id") @db.Uuid
+  attemptNo           Int      @map("attempt_no")
+  responseText        String   @map("response_text") @db.VarChar(10000)
+  effectiveDueAt      DateTime @map("effective_due_at") @db.Timestamptz(3)
+  acceptedAt          DateTime @map("accepted_at") @db.Timestamptz(3)
+  receiptReference    String   @unique(map: "vs_learning_submission_attempt_receipt_key") @map("receipt_reference") @db.VarChar(40)
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_submission_attempt_scope_id_key")
+  @@unique([organizationId, schoolId, assignmentVersionId, studentId], map: "vs_learning_submission_attempt_student_key")
+  @@index([organizationId, schoolId, studentId, acceptedAt(sort: Desc), id], map: "vs_learning_submission_attempt_student_idx")
+  @@index([organizationId, schoolId, assignmentVersionId, acceptedAt(sort: Desc), id], map: "vs_learning_submission_attempt_assignment_idx")
+  @@map("vs_learning_submission_attempt")
+}

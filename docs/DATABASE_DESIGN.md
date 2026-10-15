@@ -120,6 +120,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | LearningAssignmentRecipient | `vs_learning_assignment_recipient` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | LearningAssignmentGuardianBinding | `vs_learning_guardian_binding` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | LearningAssignmentStudentBinding | `vs_learning_student_binding` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
+| LearningAssignmentDraft | `vs_learning_assignment_draft` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
+| LearningSubmissionAttempt | `vs_learning_submission_attempt` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | CommunicationRecipient | `vs_communication_recipient` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationRecipientBinding | `vs_communication_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationStudentRecipientBinding | `vs_communication_student_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |

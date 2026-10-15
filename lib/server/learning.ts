@@ -17,4 +17,9 @@ export const learningGateway={
  listStudent:(identity:Identity|null,studentId:unknown)=>service().listStudent(required(identity),studentId),
  queryStudent:(identity:Identity|null,studentId:unknown,query:unknown)=>service().queryStudent(required(identity),studentId,query),
  detailStudent:(identity:Identity|null,studentId:unknown,id:unknown)=>service().detailStudent(required(identity),studentId,id),
+ studentWork:(identity:Identity|null,studentId:unknown,id:unknown)=>service().studentWork(required(identity),studentId,id),
+ saveStudentDraft:(identity:Identity|null,id:unknown,input:unknown,requestId:string)=>service().saveStudentDraft(required(identity),id,input,requestId),
+ submitStudentWork:(identity:Identity|null,id:unknown,input:unknown,requestId:string)=>service().submitStudentWork(required(identity),id,input,requestId),
+ async teacherSubmissions(identity:Identity|null,id:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().teacherSubmissions(actor,organizationId,schoolId,id);},
+ async teacherSubmission(identity:Identity|null,id:unknown,submissionId:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().teacherSubmission(actor,organizationId,schoolId,id,submissionId);},
 };
