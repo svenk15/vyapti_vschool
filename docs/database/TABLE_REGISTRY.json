@@ -1,5 +1,5 @@
 {
-  "revision": "4.4",
+  "revision": "4.5",
   "prefix": "vs_",
   "tables": [
     {
@@ -157,7 +157,7 @@
       "design": "docs/modules/academics/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; year_id uuid; grade_id uuid; campus_id uuid nullable; code varchar(40); name varchar(160); active boolean; version int",
       "responsibility": "Section in one year/grade/campus, including school-wide no-campus scope.",
-      "constraints": "Scoped FKs year/grade/campus; UNIQUE(scope,id,year_id); two partial UNIQUE indexes (scope,year_id,grade_id,code) WHERE campus_id IS NULL and (scope,year_id,grade_id,campus_id,code) WHERE NOT NULL",
+      "constraints": "Scoped FKs year/grade/campus; UNIQUE(scope,id) and UNIQUE(scope,id,year_id); two partial UNIQUE indexes (scope,year_id,grade_id,code) WHERE campus_id IS NULL and (scope,year_id,grade_id,campus_id,code) WHERE NOT NULL",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -1655,6 +1655,132 @@
         "intendedPolicy": "Exact submitting Guardian with live purpose or current explicitly designated branch reviewer; narrative excluded from general evidence.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "EventPublisherGrant",
+      "owner": "events",
+      "table": "vs_events_publisher_grant",
+      "fields": "id/org/school/membership/account/operator uuid; granted/revoked timestamps; version",
+      "responsibility": "Explicit branch publisher designation for one-off school events.",
+      "constraints": "Scoped active membership FK; unique scope/account; active publisher index",
+      "status": "MIGRATED",
+      "design": "docs/modules/events/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus the exact current publisher or recipient access contract; WITH CHECK binds both scope keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "SchoolEvent",
+      "owner": "events",
+      "table": "vs_events_event",
+      "fields": "id/org/school uuid; status/revision/current_version; title/description; one-off schedule; audience; created/updated/canceled metadata",
+      "responsibility": "Versioned one-off event root and current draft/published state.",
+      "constraints": "Scoped school/section/current-version FKs; status/audience/schedule checks; scoped ID and current-version uniqueness; list index",
+      "status": "MIGRATED",
+      "design": "docs/modules/events/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus the exact current publisher or recipient access contract; WITH CHECK binds both scope keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "SchoolEventVersion",
+      "owner": "events",
+      "table": "vs_events_event_version",
+      "fields": "id/org/school/event uuid; version; title/description; schedule; audience label/digest; publisher/time",
+      "responsibility": "Immutable published event snapshot and audience evidence.",
+      "constraints": "Scoped event FK; unique event/version and scoped ID; schedule/audience checks; append-only trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/events/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus the exact current publisher or recipient access contract; WITH CHECK binds both scope keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "SchoolEventRecipient",
+      "owner": "events",
+      "table": "vs_events_recipient",
+      "fields": "id/org/school/version/student uuid; created_at",
+      "responsibility": "Frozen Student audience membership for an exact published event version.",
+      "constraints": "Scoped version/Student FKs; unique version/Student; Student inbox index; append-only trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/events/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus the exact current publisher or recipient access contract; WITH CHECK binds both scope keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "SchoolEventGuardianBinding",
+      "owner": "events",
+      "table": "vs_events_guardian_binding",
+      "fields": "id/org/school/recipient/access/student uuid",
+      "responsibility": "Frozen exact Guardian access provenance for one event recipient.",
+      "constraints": "Scoped recipient and Guardian access+Student FKs; unique recipient/access; Student/access lookup index; append-only",
+      "status": "MIGRATED",
+      "design": "docs/modules/events/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Internal frozen recipient provenance; visible only through the exact live access and purpose guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "SchoolEventStudentBinding",
+      "owner": "events",
+      "table": "vs_events_student_binding",
+      "fields": "id/org/school/recipient/access/student uuid",
+      "responsibility": "Frozen exact Student portal access provenance for one event recipient.",
+      "constraints": "Scoped recipient and Student access+Student FKs; unique recipient/access; Student/access lookup index; append-only",
+      "status": "MIGRATED",
+      "design": "docs/modules/events/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Internal frozen recipient provenance; visible only through the exact live access and purpose guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
         "closureGate": "TEN-03"
       }
     }

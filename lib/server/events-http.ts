@@ -1,0 +1,13 @@
+import 'server-only';
+import {randomUUID} from 'node:crypto';
+import {AccessError} from '../../backend/modules/access/contracts';
+import {getIdentity} from './auth';
+import {eventsGateway} from './events';
+const headers={'Cache-Control':'private, no-store'};
+function errorResponse(error:unknown){const code=error instanceof AccessError?error.code:'UNAVAILABLE',status=code==='UNAUTHENTICATED'?401:code==='FORBIDDEN'?403:code==='NOT_FOUND'?404:code==='VALIDATION'?422:['RELEASE_UNAVAILABLE','MODULE_NOT_LICENSED','MODULE_DISABLED','UNAVAILABLE'].includes(code)?503:409,messages:Record<string,string>={UNAUTHENTICATED:'Sign in to continue.',FORBIDDEN:'Your current authority does not allow this calendar action.',NOT_FOUND:'This event is unavailable.',VALIDATION:'Check the event details and date or time range.',CONFLICT:'The audience is empty or the event state no longer permits this action.',STALE_VERSION:'The event changed. Refresh and review the current version.',IDEMPOTENCY_CONFLICT:'This retry key belongs to different event details.',RELEASE_UNAVAILABLE:'Calendar publication is unavailable in this release.',MODULE_NOT_LICENSED:'Calendar publication is not licensed for this institution.',MODULE_DISABLED:'Calendar publication is not active in this branch.',UNAVAILABLE:'Calendar publication is temporarily unavailable.'};return Response.json({error:code,message:messages[code]??messages.UNAVAILABLE},{status,headers});}
+async function json(request:Request){const length=Number(request.headers.get('content-length')??0);if(length>32*1024)throw new AccessError('VALIDATION');return request.json();}
+export async function createEvent(request:Request){try{return Response.json(await eventsGateway.createDraft(await getIdentity(),await json(request),randomUUID()),{status:201,headers});}catch(error){return errorResponse(error);}}
+export async function updateEvent(request:Request,id:string){try{return Response.json(await eventsGateway.updateDraft(await getIdentity(),id,await json(request),randomUUID()),{headers});}catch(error){return errorResponse(error);}}
+export async function publishEvent(request:Request,id:string){try{return Response.json(await eventsGateway.publish(await getIdentity(),id,await json(request),randomUUID()),{headers});}catch(error){return errorResponse(error);}}
+export async function reviseEvent(request:Request,id:string){try{return Response.json(await eventsGateway.revise(await getIdentity(),id,await json(request),randomUUID()),{headers});}catch(error){return errorResponse(error);}}
+export async function cancelEvent(request:Request,id:string){try{return Response.json(await eventsGateway.cancel(await getIdentity(),id,await json(request),randomUUID()),{headers});}catch(error){return errorResponse(error);}}

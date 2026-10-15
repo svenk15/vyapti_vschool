@@ -1,4 +1,4 @@
-export const guardianPurposes=['child.summary.read','attendance.read_child','timetable.read_child','communication.notice.read','attendance.explanation.submit'] as const;
+export const guardianPurposes=['child.summary.read','attendance.read_child','timetable.read_child','communication.notice.read','attendance.explanation.submit','calendar.event.read_child'] as const;
 export type GuardianPurpose=typeof guardianPurposes[number];
 export type GuardianAccessStatus='INVITE_SENT'|'DELIVERY_FAILED'|'OPERATOR_REQUIRED'|'ACCESS_ENABLED'|'ACCESS_REMOVED';
 export type GuardianAccessRecord=Readonly<{accessId:string;studentId:string;displayName:string;email:string;status:GuardianAccessStatus;accessFrom:string;version:number;authorizedAt:string;acceptedAt:string|null;revokedAt:string|null;invitationId:string|null;deliveryFailureReason:string|null;purposes:readonly GuardianPurpose[]}>;

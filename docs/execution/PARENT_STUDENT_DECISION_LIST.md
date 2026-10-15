@@ -35,4 +35,4 @@ The exact retry, concurrency and duplicate boundary is implemented as recorded i
 
 ## Next action after a decision
 
-COM-02 Student notices and ATT-05 Parent Attendance explanations are engineering-verified under their approved bounded contracts. The next authorized shared slice is Calendar/Events; its narrow owner LLD must preserve explicit publisher and independent Parent/Student purposes before implementation.
+COM-02 Student notices, ATT-05 Parent Attendance explanations and EV-01 one-off Calendar/Events are engineering-verified under their approved bounded contracts. EV-01 preserves explicit publisher designation, independent Parent/Student purposes, frozen exact audiences and live access rechecks. PAR-18 and STW-31 remain partial for their wider approved workflows. The next shared slice must be selected from the recorded backlog by satisfied dependencies and settled product semantics.

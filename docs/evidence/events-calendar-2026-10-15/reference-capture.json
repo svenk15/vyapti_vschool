@@ -1,0 +1,33 @@
+{
+  "capturedAt": "2026-10-15T03:42:17.441Z",
+  "viewports": {
+    "parent-desktop": {
+      "viewportWidth": 1440,
+      "contentWidth": 1440,
+      "overflow": false,
+      "title": "VSchool · Parent & Guardian design review",
+      "heading": "Plan with the school calendar"
+    },
+    "parent-mobile": {
+      "viewportWidth": 390,
+      "contentWidth": 390,
+      "overflow": false,
+      "title": "VSchool · Parent & Guardian design review",
+      "heading": "Plan with the school calendar"
+    },
+    "student-desktop": {
+      "viewportWidth": 1440,
+      "contentWidth": 1440,
+      "overflow": false,
+      "title": "VSchool · Student workspace review",
+      "heading": "Review published events and assessments"
+    },
+    "student-mobile": {
+      "viewportWidth": 390,
+      "contentWidth": 390,
+      "overflow": false,
+      "title": "VSchool · Student workspace review",
+      "heading": "Review published events and assessments"
+    }
+  }
+}

@@ -109,6 +109,12 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | CommunicationPublisherGrant | `vs_communication_publisher_grant` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNotice | `vs_communication_notice` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNoticeVersion | `vs_communication_notice_version` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
+| EventPublisherGrant | `vs_events_publisher_grant` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| SchoolEvent | `vs_events_event` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| SchoolEventVersion | `vs_events_event_version` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| SchoolEventRecipient | `vs_events_recipient` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| SchoolEventGuardianBinding | `vs_events_guardian_binding` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| SchoolEventStudentBinding | `vs_events_student_binding` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
 | CommunicationRecipient | `vs_communication_recipient` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationRecipientBinding | `vs_communication_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationStudentRecipientBinding | `vs_communication_student_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
