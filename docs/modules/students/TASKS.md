@@ -10,7 +10,15 @@ Implement the designated `student.access.manage` grant, dedicated StudentAccount
 
 Acceptance: real PostgreSQL proves designated-manager and self-grant denial, exact Person binding, no SchoolMembership/RoleGrant/Guardian authority, wrong/expired/revoked/reused invitation denial, acceptance-versus-revocation serialization, replay, delivery failure, current enrollment bounds, own/classmate/foreign denial, two independently accepted contexts, per-context revocation and strict mixed-role recovery. Browser proves Administrator setup, activation, sign-in, multi-context switching with stale-data clearance, profile, effective published teaching days/periods including a configured sixth day, mobile navigation, sign-out and immediate scoped access loss after revocation. Direct desktop/mobile reference comparison uses the unmodified Student Edition 01 HTML. Human review remains separate.
 
-Status: **VERIFIED** for the access foundation, self profile, published timetable and factual attendance slices. Human review: **PENDING**. Learning, communication, requests, results, preferences and other absent owners remain separate blocked workflows in the Student matrix.
+Status: **VERIFIED** for the access foundation, self profile, published timetable, factual attendance and STW-06 due-assignment priority slices. Human review: **PENDING**. Returned feedback, requests, results, preferences and other absent owners remain separate workflows in the Student matrix.
+
+## STW-06 — Compose next class and prioritized published work
+
+Depends on: STW-A01, STW-07, LEA-01
+
+Consume the existing guarded next-class and `learning.assignment.read_self` projections without adding Student persistence. Keep future-due assignments in owner order, bound the home projection to three and link directly to the authorized assignment detail. Treat empty and unavailable states separately and keep one failed owner projection from hiding the other. Match the approved Student home hierarchy at desktop/mobile sizes; do not fabricate returned feedback, notices, room changes or requests.
+
+Acceptance: the existing real-PostgreSQL Learning journey publishes an exact frozen-recipient assignment; desktop and mobile Student sessions show it first in **Focus on next**, preserve keyboard focus on **Open assignment**, reach the immutable detail, and retain honest empty/unavailable copy. Directly inspect reference and application captures. Reuse unchanged Learning persistence/security evidence; run focused lint/type, the current production build and the affected one-worker browser journey. Human review remains separate.
 
 ## STU-01 — Register and inspect students
 
