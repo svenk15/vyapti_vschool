@@ -1,0 +1,1 @@
+COMMENT ON TABLE "vs_reporting_export_grant" IS 'TEN-ADR-006 Path A; BRANCH class; owner reporting; scope organization_id,school_id; closureGate TEN-03; RLS enforcement deferred to TEN-03; application authorization remains required. Operator-designated Principal aggregate export authority.';

@@ -45,6 +45,17 @@ Open a day with submitted and pending sessions; explain numerator/denominator; d
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## LEA-39 — Principal aggregate CSV export
+
+- [x] Resolve the first supported source, exact fields, 50-evidence-row bound and non-truncation behavior.
+- [x] Add the operator-designated branch `reporting.export` grant with a forward Path A migration and registry entry.
+- [x] Generate formula-safe direct CSV from Attendance-owned `register-coverage.v1` through a cross-owner port.
+- [x] Reauthorize report-read and export authority before atomically recording safe ExportRun/audit metadata.
+- [x] Add Reports preview/download UI with current filters, private/no-store delivery and honest unauthorized/too-large recovery.
+- [x] Verify real PostgreSQL security/consistency, sequential desktop/mobile reference comparison and seed data; repository-wide gates are recorded in the checkpoint evidence.
+
+Engineering status: Attendance-coverage export slice VERIFIED. Full LEA-39 remains PARTIAL until the other supported Principal aggregate reports have equivalent owner export ports. Human review PENDING.
+
 ## Experience overlay consumption
 
 EX-12 adopts the existing attendance overview, server-filtered detail and authorized CSV export. Preserve owner denominator/as-of semantics, formula-safe export and ExportRun audit; never compute school totals from one cursor page or export rendered DOM rows.

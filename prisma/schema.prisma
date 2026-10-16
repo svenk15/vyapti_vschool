@@ -617,6 +617,21 @@ model ExportRun {
  @@map("vs_reporting_export_run")
 }
 
+model ReportingExportGrant {
+ id String @id(map:"vs_reporting_export_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,accountId],map:"vs_reporting_export_grant_scope_account_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_reporting_export_grant_active_idx")
+ @@map("vs_reporting_export_grant")
+}
+
 model OperatorAuditEntry {
  id String @id @db.Uuid
  operatorId String @map("operator_id") @db.Uuid

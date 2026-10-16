@@ -145,3 +145,15 @@ No schema or migration changed; development and test retain 64 migrations. Focus
 Remaining gap: the approved workflow's subject-lead coordination requires an owner, assignee authority, operational-note lifecycle and verified outcome contract. No dead action is rendered. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
 
 Next action: implement LEA-39 aggregate CSV export under the newly approved separate `reporting.export` authority, without widening the underlying Principal report projections.
+
+## 16 October 2026 — LEA-39 Attendance aggregate export checkpoint
+
+The Attendance coverage export slice is VERIFIED; full LEA-39 remains PARTIAL; human review is PENDING.
+
+The Principal Reports page carries the current `register-coverage.v1` scope, definition, as-of and exact filters into a preview, names all excluded pupil/private facts and downloads only the bounded already-visible aggregate evidence. A separate operator-designated branch grant realizes `reporting.export`; Principal membership or report-read authority alone does not expose the route or authorize generation. The no-store server route rechecks both authorities and records only safe count/hash/filter metadata.
+
+Forward migrations `20261016140000_reporting_export_grant` and additive metadata correction `20261016141000_reporting_export_grant_metadata` are applied to development and test with 66 migrations retained. The original applied migration remains unchanged. Focused unit passed 7/7, real PostgreSQL passed 12/12 and sequential one-worker browser comparison passed 2/2 desktop plus 2/2 mobile. Direct inspection found no application overflow or hierarchy/action-placement defect in the final matched states. See [evidence](../../evidence/principal-lea-39-export-2026-10-16/README.md).
+
+Remaining gap: other Principal aggregate projections require equivalent owner export ports before full LEA-39 can complete. Font portability, native accessibility, human review, TEN-03 and production controls remain pending.
+
+Next action: implement the approved synthetic-only LEA-06 retained aggregate snapshot foundation with its independent `reporting.snapshot.manage` designation; retain the real-data release gate until retention and backup-deletion policy is approved.

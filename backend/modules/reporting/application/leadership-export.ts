@@ -1,0 +1,27 @@
+import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
+import type {LeadershipRegisterCoverage} from '../../../../shared/contracts/attendance';
+import type {LeadershipAttendanceExportInput,LeadershipExportAvailability} from '../../../../shared/contracts/reporting';
+import {AccessError,uuidPattern} from '../../access/contracts/index';
+import {encodeLeadershipAttendanceCoverageCsv} from '../domain/export-csv';
+
+export type LeadershipAttendanceExportResult=Readonly<{csv:string;filename:string;rowCount:number;contentHash:string;exportRunId:string;generatedAt:string;sourceAsOf:string}>;
+export interface LeadershipAggregateSourcePort {
+ attendanceCoverage(actor:Identity,organizationId:string,schoolId:string,input:LeadershipAttendanceExportInput&Readonly<{limit:50}>):Promise<LeadershipRegisterCoverage>;
+}
+export interface LeadershipExportRepository {
+ availability(actor:Identity,organizationId:string,schoolId:string):Promise<LeadershipExportAvailability>;
+ record(actor:Identity,organizationId:string,schoolId:string,input:Readonly<{query:LeadershipAttendanceExportInput;sourceAsOf:string;rowCount:number;csv:string}>):Promise<Readonly<{exportRunId:string;contentHash:string;generatedAt:string}>>;
+ grant(operator:OperatorPrincipal,input:Readonly<{organizationId:string;schoolId:string;accountId:string}>):Promise<Readonly<{grantId:string;version:number}>>;
+ revoke(operator:OperatorPrincipal,input:Readonly<{organizationId:string;schoolId:string;accountId:string}>):Promise<Readonly<{grantId:string;version:number}>>;
+}
+
+const actor=(value:Identity|null)=>{if(!value||!uuidPattern.test(value.accountId)||!Number.isSafeInteger(value.tokenVersion))throw new AccessError('UNAUTHENTICATED');return value;};
+const id=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value;};
+
+export function createLeadershipExportUseCases(source:LeadershipAggregateSourcePort,repository:LeadershipExportRepository){return {
+ availability(actorValue:Identity|null,organizationId:unknown,schoolId:unknown){return repository.availability(actor(actorValue),id(organizationId),id(schoolId));},
+ async exportLeadershipAttendance(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:LeadershipAttendanceExportInput):Promise<LeadershipAttendanceExportResult>{const current=actor(actorValue),organization=id(organizationId),school=id(schoolId),report=await source.attendanceCoverage(current,organization,school,{...input,limit:50});if(report.awaiting.total>report.awaiting.items.length)throw new AccessError('VALIDATION');const csv=encodeLeadershipAttendanceCoverageCsv(report),rowCount=1+report.awaiting.items.length,record=await repository.record(current,organization,school,{query:input,sourceAsOf:report.asOf,rowCount,csv});return {...record,csv,rowCount,sourceAsOf:report.asOf,filename:`leadership-attendance-coverage-${report.schoolDate.replaceAll('-','')}.csv`};},
+ grantExporter(operator:OperatorPrincipal,input:{organizationId:unknown;schoolId:unknown;accountId:unknown}){return repository.grant(operator,{organizationId:id(input.organizationId),schoolId:id(input.schoolId),accountId:id(input.accountId)});},
+ revokeExporter(operator:OperatorPrincipal,input:{organizationId:unknown;schoolId:unknown;accountId:unknown}){return repository.revoke(operator,{organizationId:id(input.organizationId),schoolId:id(input.schoolId),accountId:id(input.accountId)});}
+};}
+export type LeadershipExportFacade=ReturnType<typeof createLeadershipExportUseCases>;

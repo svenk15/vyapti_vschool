@@ -2,6 +2,8 @@ export type AttendanceReportCounts=Readonly<{expectedSessions:number;submittedSe
 export type AttendanceReportRow=Readonly<{id:string;schoolDate:string;startsAt:string;status:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';sectionName:string;subjectName:string;teacherName:string|null;present:number;late:number;absent:number;excused:number}>;
 export type AttendanceReport=Readonly<{asOf:string;filters:Readonly<{fromDate:string;toDate:string;yearId:string|null;sectionId:string|null;subjectId:string|null}>;counts:AttendanceReportCounts;rate:Readonly<{numerator:number;denominator:number;value:number|null}>;sessions:Readonly<{items:readonly AttendanceReportRow[];nextCursor:string|null}>;explanation:string}>;
 export type AttendanceReportInput=Readonly<{fromDate:string;toDate:string;yearId?:string;sectionId?:string;subjectId?:string;cursor?:string;limit?:number}>;
+export type LeadershipAttendanceExportInput=Readonly<{date?:string;classId?:string;status?:'SCHEDULED'|'OPEN';teacherId?:string;sort?:'due'|'class';order?:'asc'|'desc'}>;
+export type LeadershipExportAvailability=Readonly<{canExport:boolean;reportTypes:readonly 'attendance-register-coverage.v1'[]}>;
 
 export type SchoolReadinessItemId='school'|'academics'|'staff'|'students'|'attendance';
 export type SetupResponsibleRole='SCHOOL_ADMIN'|'INSTITUTION_ADMIN'|'ASSIGNED_TEACHER';

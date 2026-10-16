@@ -130,3 +130,13 @@ Engineering status: supported read slice VERIFIED; full LEA-34 PARTIAL. The remi
 - [ ] Add coordination only after its owner and authority contract exists.
 
 Engineering status: supported descriptive read slice VERIFIED; full LEA-18 PARTIAL. Human review PENDING.
+
+## LEA-39 — Drill into a metric and export permitted evidence
+
+- [x] Keep Principal report read distinct from operator-designated branch export authority.
+- [x] Carry the exact Attendance coverage definition, as-of, scope and filters into the preview and direct CSV.
+- [x] Show only allowlisted aggregate and already-visible awaiting-register fields, with explicit exclusions and bound recovery.
+- [x] Verify desktop/mobile production/reference states and keyboard-reachable download/back actions.
+- [ ] Add other supported Principal metric exports only through equivalent owner ports and disclosure checks.
+
+Engineering status: Attendance-coverage export slice VERIFIED; full LEA-39 PARTIAL. Human review PENDING.

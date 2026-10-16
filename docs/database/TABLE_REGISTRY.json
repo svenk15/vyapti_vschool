@@ -929,6 +929,27 @@
       }
     },
     {
+      "model": "ReportingExportGrant",
+      "owner": "reporting",
+      "table": "vs_reporting_export_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Operator-designated branch authority for Principal aggregate export; Principal role or report-read authority never creates this grant automatically.",
+      "constraints": "Composite FK(scope,membership_id,account_id)->SchoolMembership; UNIQUE(scope,account_id); CHECK version>0; active lookup index(scope,account_id,revoked_at)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and the currently designated account; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "reporting",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
       "model": "Enrollment",
       "owner": "students",
       "table": "vs_students_enrollment",

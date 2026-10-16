@@ -2,6 +2,16 @@
 
 Last updated: 2026-10-11. No active execution timer.
 
+## LEA-39 Principal Attendance aggregate export — 16 October 2026
+
+Status: ENGINEERING_VERIFIED_SUPPORTED_SLICE / FULL_WORKFLOW_PARTIAL / HUMAN_REVIEW_PENDING.
+
+Reporting now owns an independent operator-designated branch `reporting.export` grant and a direct export of Attendance-owned `register-coverage.v1`. The export carries the exact date/class/status/Teacher/order predicates, definition and owner as-of, contains one summary plus at most 50 already-visible awaiting-register rows, refuses overflow without truncation and excludes pupils, rosters, marks, explanations, correction history and private content. Generation rechecks the live Principal report-read authority, export designation and Attendance module chain before atomically writing safe ExportRun/Platform audit metadata. CSV bytes are formula-safe, private/no-store and never persisted or exposed through a reusable URL.
+
+Forward migrations `20261016140000_reporting_export_grant` and additive `20261016141000_reporting_export_grant_metadata` are applied to both designated local databases; 66 migrations are retained. The second migration adds the canonical Path A closure metadata without rewriting the applied table migration. The new BRANCH table is registered for TEN-03 closure. Focused unit passed 7/7 and real-PostgreSQL Attendance/Reporting passed 12/12, covering no automatic Principal grant, operator designation/revocation, cross-scope denial, owner-total/row consistency and sensitive-field exclusion. Sequential one-worker Playwright passed 2/2 desktop and 2/2 mobile; the matched captures were directly inspected against the immutable LEA-39 workflow dialog. `pnpm exec tsx scripts/demo-principal-attendance.ts` passed and preserves the connected export persona in ignored `artifacts/leadership-01/private-demo.json`. See [evidence](../../evidence/principal-lea-39-export-2026-10-16/README.md).
+
+Full LEA-39 remains PARTIAL because Assignment completion, feedback turnaround, timetable exception and notice coverage do not yet expose equivalent owner export ports. The approved dialog and production Reports page are different compositions. Font portability, native VoiceOver/NVDA, human review, TEN-03 and production gates remain pending.
+
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | RPT-01 | VERIFIED | PENDING | Source `370c7d703a9e4209ca5db406c22400f4eccf5519`; entitlement test follow-up `a92501b048160673a40771ee5ddd3d11305fa5cf`; live build `LCX3HkLL1u3jYJ1THM-GR` at port 3428 |

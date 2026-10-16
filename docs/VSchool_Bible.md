@@ -736,3 +736,7 @@ Principal exact-session evidence is a fresh, read-only Attendance projection und
 ### 16 October 2026 — Principal notice-coverage read
 
 Communication may grant the explicit Principal-only `communication.read_leadership` capability without granting `communication.publish`. Its first bounded projection, `notice-coverage.v1`, reports frozen eligible audience, first portal read and explicit acknowledgement as separate facts for current immutable publication versions. It excludes recipients, contacts, message bodies and family relationship detail. Reminder/resend remains a separate owner command requiring trusted delivery outcomes, current-recipient reauthorization, channel policy and deduplication/replay semantics; no such action is implied by this read capability.
+
+### 16 October 2026 — Principal aggregate export authority
+
+`reporting.export` is an independent operator-designated branch authority and is never implied by the Principal role or an aggregate-read capability. The first supported Principal export is Attendance `register-coverage.v1`: it carries the same filters, definition and as-of metadata, includes only the already-visible aggregate and bounded awaiting-register evidence, refuses more than 50 evidence rows without truncation, and never adds pupil-level facts. Generation rechecks both source-read and export authority, returns a direct private/no-store formula-safe CSV, stores only safe ExportRun/audit metadata and creates no reusable public file URL. Other Principal metrics require their own owner export port before becoming exportable.

@@ -42,7 +42,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-36 | Run a family or staff meeting with follow-up actions | communication | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-37 | Refer a concern to an authorized specialist | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-38 | Follow the school’s urgent safety escalation procedure | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-39 | Drill into a metric and export permitted evidence | reports | 1 | NOT_STARTED | NOT_STARTED | PENDING | Requires its named owner LLD and implementation |
+| LEA-39 | Drill into a metric and export permitted evidence | reports | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | The operator-designated Attendance `register-coverage.v1` slice carries exact filters/definition/as-of into a bounded preview and formula-safe private CSV with current authority recheck and safe metadata; other supported Principal aggregate reports do not yet expose equivalent owner export ports |
 | LEA-40 | Compare branches responsibly | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-41 | Prepare a leadership review brief | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-42 | Review decision and follow-up history | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 4 ENGINEERING_COMPLETE, 7 PARTIAL, 2 BLOCKED, 33 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 4 ENGINEERING_COMPLETE, 8 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. LEA-34's supported read slice is complete; reminder/resend requires an owner command, delivery outcome source, per-recipient reauthorization and deduplication/replay contract.
 2. LEA-18's approved descriptive read slice is complete. Subject-lead coordination remains separate and requires an owner, assignee authority, note lifecycle and verified outcome contract.
-3. LEA-39 is next under the approved separate `reporting.export` authority. Its export must remain bounded to existing aggregates, reauthorize at generation time and cannot widen an owner projection. LEA-06 retained-last-known behavior remains a later independent snapshot contract.
+3. LEA-39's first Attendance coverage export is verified; other aggregates require equivalent owner export ports and remain partial. LEA-06 retained-last-known behavior is the next priority under its independent snapshot contract.
 
 LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

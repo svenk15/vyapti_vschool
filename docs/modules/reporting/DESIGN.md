@@ -47,11 +47,12 @@ RPT-ADR-002: bounded direct CSV response, not public file hosting. Authorize bef
 
 ## Physical data contract
 
-Reporting tables are planned except the RPT-02 ExportRun; `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+Reporting tables are planned except the implemented RPT-02 ExportRun and LEA-39 ReportingExportGrant; `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
 | `vs_reporting_export_run` (ExportRun) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; filters jsonb; requested_at timestamptz(3); state GENERATED/FAILED; row_count int; content_hash char(64) nullable; request_id uuid | Synchronous bounded export metadata, no public stored CSV. GENERATED means the bytes were prepared, not that browser received them. | Composite FK(scope)->School and FK(actor_account_id)->UserAccount; CHECK state in GENERATED/FAILED, row_count>=0, object filters and null-or-lowercase-SHA256 content_hash; index(scope,requested_at,id); no raw exported CSV, pupil data, or credentials |
+| `vs_reporting_export_grant` (ReportingExportGrant) | id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int | Operator-designated branch authority for Principal aggregate export; Principal role or report-read authority never creates this grant automatically. | Composite FK(scope,membership_id,account_id)->SchoolMembership; UNIQUE(scope,account_id); CHECK version>0; active lookup index(scope,account_id,revoked_at) |
 
 ## Read workflows and joins
 
@@ -176,6 +177,38 @@ sequenceDiagram
 ```
 
 **Verification:** Unit — CSV quoting/BOM policy and dangerous prefix neutralization; no raw staff notes. Functional PostgreSQL — scoped session/roster/record joins; export/read permission and entitlement denial; foreign filters/scope; row bound; current authorization recheck before metadata commit; ExportRun+Platform audit atomic commit/rollback; FAILED metadata after an authorized query failure; safe metadata; revision cursor pages. E2E — browser download matches selected range and submitted records; formula-safe synthetic text; admin sees correction/cancellation reason and changes; teacher is denied audit history; unknown/revoked access fails safely. `EXPLAIN (ANALYZE, BUFFERS)` captures the submitted session→roster→record/student join using scope/date/status and optional offering filters; small test data is query/index evidence only, not pilot or TEN-03 scale proof.
+
+## LEA-39 — Principal aggregate CSV export
+
+**Design-readiness note (16 October 2026):** The approved first slice exports only Attendance-owned `register-coverage.v1`, because it is the supported Principal aggregate with a bounded evidence list and settled disclosure rules. It does not reuse Administrator `attendance.export`, grant pupil-level attendance, or imply exports for later metrics. The approved workflow reference is LEA-39 in the Principal pack; the production composition carries the exact selected Attendance filters into an export preview and direct private download.
+
+Reporting owns export designation, CSV encoding, ExportRun metadata and safe audit. Attendance continues to own and authorize the aggregate. `LeadershipAggregateSourcePort.attendanceCoverage` calls the existing `LeadershipCoverageFacade.get`; Reporting does not query Attendance tables. The first export contains one aggregate row followed by at most 50 already-visible awaiting-register rows. Its allowlisted columns are row kind, definition/version, as-of, branch date/timezone/due policy, aggregate counts and the visible session/class/subject/Teacher/status/schedule facts. It contains no pupil identity, roster, mark, explanation, correction history, private Learning content or hidden operational note. If more than 50 evidence rows match, generation fails with `VALIDATION` and tells the leader to narrow the class/status/Teacher filters; no truncation occurs.
+
+The capability is an independent operator-designated branch grant represented by `vs_reporting_export_grant`. A live `PRINCIPAL` membership and `attendance.read_leadership` remain required, but neither grants `reporting.export` automatically. Only a verified operator may grant or revoke the designation for an active Principal membership. The grant has `(organization_id, school_id, account_id)` uniqueness, a composite membership/account FK, positive version, nullable revocation time and an active lookup index. It is a TEN-ADR-006 Path A BRANCH table registered for TEN-03 closure; application authorization remains mandatory.
+
+`exportLeadershipAttendance(actor, organizationId, schoolId, query)` validates the same date/class/status/Teacher/sort contract as Attendance, reads the owner snapshot with a 50-row bound, verifies that no matching evidence was omitted, encodes formula-safe UTF-8 CSV, then enters a short account → Organization → School guarded transaction. That transaction re-establishes verified tenant context and rechecks account/token, active Principal membership, `attendance.read_leadership`, the non-revoked export designation and current Attendance module release/entitlement/activation. It atomically records an existing `ExportRun` plus a Platform-owned audit event containing only report type, safe filters, source as-of, row count and content hash. CSV bytes and source records never enter the audit. Each generation is a fresh read/action rather than a durable download permission; the response is a direct attachment with `private, no-store`, no public URL and no persisted file.
+
+```mermaid
+sequenceDiagram
+  actor P as Principal
+  participant W as Reports page / route
+  participant R as Reporting export use case
+  participant A as Attendance coverage port
+  participant D as Reporting persistence
+  P->>W: Review exact filters, fields and scope
+  W->>R: Generate attendance coverage CSV
+  R->>A: Read authorized register-coverage.v1 (limit 50)
+  A-->>R: Snapshot, counts and visible evidence
+  alt Evidence exceeds bound
+    R-->>W: Narrow filters; no file or silent truncation
+  else Within bound
+    R->>D: Reauthorize export + report read; record metadata/audit
+    D-->>R: ExportRun id/hash/generatedAt
+    R-->>W: Private no-store CSV attachment
+  end
+```
+
+Verification requires pure CSV formula/quote tests; real PostgreSQL grant/no-auto-grant, revocation, foreign-scope, module denial, owner-total consistency, bound refusal and safe ExportRun/audit metadata; and a one-worker desktop/mobile journey that carries filter state, previews columns/scope, downloads the CSV and compares aggregate totals. Human review, native accessibility, font portability and TEN-03 remain separate gates. Other Principal aggregate exports keep LEA-39 partial until implemented through their owner ports.
 
 ## Migration, retention and handoff
 

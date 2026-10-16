@@ -6,6 +6,7 @@ import {getIdentity} from '@/lib/server/auth';
 import {leadershipGateway} from '@/lib/server/access';
 import {brandingGateway} from '@/lib/server/branding';
 import {moduleGateway} from '@/lib/server/tenancy';
+import {reportingGateway} from '@/lib/server/reporting';
 
 export const dynamic='force-dynamic';
 
@@ -14,6 +15,6 @@ export default async function LeadershipLayout({children}:{children:ReactNode}){
  if(!identity)redirect('/sign-in');
  const home=await leadershipGateway.getHome(identity).catch(()=>null);
  if(!home)redirect('/choose-workspace');
- const [palette,canUseAttendance,canUseTimetable,canUseLearning,canUseCommunication]=await Promise.all([brandingGateway.effectivePalette(identity).catch(()=>null),home.capabilities.includes('attendance.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'attendance','attendance.read_leadership').catch(()=>false):false,home.capabilities.includes('timetable.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'timetable','timetable.read_leadership').catch(()=>false):false,home.capabilities.includes('learning.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'homework','learning.read_leadership').catch(()=>false):false,home.capabilities.includes('communication.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'communication','communication.read_leadership').catch(()=>false):false]);
- return <BrandSurface palette={palette??undefined}><PrincipalPortalFrame home={home} canUseAttendance={canUseAttendance} canUseTimetable={canUseTimetable} canUseLearning={canUseLearning} canUseCommunication={canUseCommunication}>{children}</PrincipalPortalFrame></BrandSurface>;
+ const [palette,canUseAttendance,canUseTimetable,canUseLearning,canUseCommunication,exportAvailability]=await Promise.all([brandingGateway.effectivePalette(identity).catch(()=>null),home.capabilities.includes('attendance.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'attendance','attendance.read_leadership').catch(()=>false):false,home.capabilities.includes('timetable.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'timetable','timetable.read_leadership').catch(()=>false):false,home.capabilities.includes('learning.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'homework','learning.read_leadership').catch(()=>false):false,home.capabilities.includes('communication.read_leadership')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'communication','communication.read_leadership').catch(()=>false):false,reportingGateway.leadershipExportAvailability(identity).catch(()=>null)]);
+ return <BrandSurface palette={palette??undefined}><PrincipalPortalFrame home={home} canUseAttendance={canUseAttendance} canUseTimetable={canUseTimetable} canUseLearning={canUseLearning} canUseCommunication={canUseCommunication} canUseReports={exportAvailability?.canExport===true}>{children}</PrincipalPortalFrame></BrandSurface>;
 }
