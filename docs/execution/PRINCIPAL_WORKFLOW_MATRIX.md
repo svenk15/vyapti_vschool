@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 4 ENGINEERING_COMPLETE, 4 PARTIAL, 2 BLOCKED, 36 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 4 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 35 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
-1. Select the next smallest approved read-only owner projection whose exact source facts and Principal permission boundary already exist; do not infer approval or mutation authority.
-2. Complete LEA-06 retained-last-known behavior only after its exact persistence, freshness and disclosure contract exists.
-3. Keep LEA-04 receipt recovery and LEA-46 preferences/support partial until their owner operations exist; LDR-04–06 remain blocked on the Coordination owner.
+1. LEA-18 is the next useful Learning projection, but requires the versioned feedback-turnaround start/end, school-time basis and withdrawn-publication rule before an awaiting/overdue count can be truthful.
+2. LEA-39 requires a distinct Principal export permission plus approved columns, suppression, job expiry and audit contract; aggregate `learning.read_leadership` cannot be widened implicitly.
+3. LEA-06 retained-last-known behavior requires an exact owner snapshot retention/freshness/disclosure contract. Keep LEA-04 receipt recovery, LEA-46 preferences/support and LDR-04–06 partial/blocked until their named owner operations exist.
 
 LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.
