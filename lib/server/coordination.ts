@@ -1,0 +1,23 @@
+import 'server-only';
+import {createCoordinationServices} from '../../backend/composition/coordination';
+import type {Identity} from '../../shared/contracts/access';
+import {releasedModuleIds} from '../../backend/modules/tenancy/domain/entitlements';
+import {accountGateway} from './access';
+
+const coordination=createCoordinationServices({databaseUrl:process.env.DATABASE_URL??'',releasedModules:releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES),mode:process.env.VSCHOOL_COORDINATION_MODE==='synthetic'?'synthetic':'disabled'});
+const scoped=async(identity:Identity|null)=>{const scope=(await accountGateway.getHome(identity)).scope;return {identity,organizationId:scope.organizationId,schoolId:scope.schoolId};};
+export const coordinationGateway={
+ availability:async(identity:Identity|null)=>{const s=await scoped(identity);return coordination.availability(s.identity,s.organizationId,s.schoolId);},
+ list:async(identity:Identity|null,input:Parameters<typeof coordination.list>[3]={})=>{const s=await scoped(identity);return coordination.list(s.identity,s.organizationId,s.schoolId,input);},
+ get:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.get(s.identity,s.organizationId,s.schoolId,id);},
+ eligibleAssignees:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.eligibleAssignees(s.identity,s.organizationId,s.schoolId,id);},
+ create:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.create(s.identity,s.organizationId,s.schoolId,input);},
+ assign:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.assign(s.identity,s.organizationId,s.schoolId,input);},
+ start:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.start(s.identity,s.organizationId,s.schoolId,input);},
+ submit:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.submit(s.identity,s.organizationId,s.schoolId,input);},
+ verify:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.verify(s.identity,s.organizationId,s.schoolId,input);},
+ returnResolution:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.returnResolution(s.identity,s.organizationId,s.schoolId,input);},
+ withdraw:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.withdraw(s.identity,s.organizationId,s.schoolId,input);},
+ reopen:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.reopen(s.identity,s.organizationId,s.schoolId,input);},
+};
+export {coordination as coordinationServices};

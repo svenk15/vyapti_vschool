@@ -1,0 +1,16 @@
+export const coordinationCapabilities=['coordination.create','coordination.assign','coordination.work','coordination.verify','coordination.manage'] as const;
+export type CoordinationCapability=typeof coordinationCapabilities[number];
+export const coordinationStatuses=['OPEN','IN_PROGRESS','AWAITING_VERIFICATION','RESOLVED','WITHDRAWN'] as const;
+export type CoordinationStatus=typeof coordinationStatuses[number];
+export type CoordinationRequestKind='MISSING_REGISTER'|'SESSION_SETUP_REVIEW';
+export type CoordinationConcern='MISSING_REGISTER'|'WRONG_TIME'|'WRONG_OFFERING'|'DUPLICATE'|'OTHER';
+export type CoordinationEvidenceKind='ATTENDANCE_CORRECTION'|'ATTENDANCE_CANCELLATION'|'NO_CHANGE_NEEDED';
+export type CoordinationSourceSummary=Readonly<{type:'ATTENDANCE_SESSION';id:string;version:number;schoolDate:string;startsAt:string;endsAt:string;sectionName:string;subjectName:string;teacherName:string|null;state:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';eligible:boolean}>;
+export type CoordinationActorSummary=Readonly<{accountId:string;displayName:string}>;
+export type CoordinationEvent=Readonly<{number:number;type:string;fromStatus:CoordinationStatus|null;toStatus:CoordinationStatus|null;actor:CoordinationActorSummary;previousAssignee:CoordinationActorSummary|null;assignee:CoordinationActorSummary|null;reason:string|null;evidenceKind:CoordinationEvidenceKind|null;evidenceRevision:number|null;occurredAt:string}>;
+export type CoordinationRequest=Readonly<{id:string;version:number;kind:CoordinationRequestKind;concern:CoordinationConcern;status:CoordinationStatus;source:CoordinationSourceSummary;creator:CoordinationActorSummary;assignee:CoordinationActorSummary|null;dueAt:string|null;overdue:boolean;note:string|null;resolution:{proposer:CoordinationActorSummary;kind:CoordinationEvidenceKind;revision:number|null;reason:string}|null;createdAt:string;updatedAt:string;resolvedAt:string|null;withdrawnAt:string|null;can:{assign:boolean;work:boolean;verify:boolean;manage:boolean};history:readonly CoordinationEvent[]}>;
+export type CoordinationRequestSummary=Omit<CoordinationRequest,'history'>;
+export type CoordinationQueue=Readonly<{items:readonly CoordinationRequestSummary[];nextCursor:string|null;timezone:string;capabilities:readonly CoordinationCapability[]}>;
+export type CoordinationAvailability=Readonly<{enabled:boolean;capabilities:readonly CoordinationCapability[];reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null}>;
+export type CoordinationMutationResult=Readonly<{requestId:string;version:number;status:CoordinationStatus;replayed:boolean}>;
+export type CoordinationAssignee=Readonly<{accountId:string;displayName:string}>;

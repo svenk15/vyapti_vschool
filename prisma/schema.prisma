@@ -675,6 +675,88 @@ model ReportingSnapshot {
  @@map("vs_reporting_snapshot")
 }
 
+model CoordinationCapabilityGrant {
+ id String @id(map:"vs_coordination_capability_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ capability String @db.VarChar(40)
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,accountId,capability],map:"vs_coordination_capability_grant_scope_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_coordination_capability_grant_active_idx")
+ @@map("vs_coordination_capability_grant")
+}
+
+model CoordinationRequest {
+ id String @id(map:"vs_coordination_request_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ kind String @db.VarChar(40)
+ sourceType String @map("source_type") @db.VarChar(40)
+ sourceId String @map("source_id") @db.Uuid
+ sourceVersion Int @map("source_version")
+ concern String @db.VarChar(40)
+ status String @db.VarChar(30)
+ creatorAccountId String @map("creator_account_id") @db.Uuid
+ assigneeAccountId String? @map("assignee_account_id") @db.Uuid
+ dueAt DateTime? @map("due_at") @db.Timestamptz(3)
+ note String? @db.VarChar(1000)
+ resolutionProposerAccountId String? @map("resolution_proposer_account_id") @db.Uuid
+ resolutionKind String? @map("resolution_kind") @db.VarChar(40)
+ resolutionRevision Int? @map("resolution_revision")
+ resolutionReason String? @map("resolution_reason") @db.VarChar(1000)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ resolvedAt DateTime? @map("resolved_at") @db.Timestamptz(3)
+ withdrawnAt DateTime? @map("withdrawn_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,id],map:"vs_coordination_request_scope_id_key")
+ @@index([organizationId,schoolId,status,updatedAt(sort: Desc),id(sort: Desc)],map:"vs_coordination_request_queue_idx")
+ @@index([organizationId,schoolId,assigneeAccountId,status,updatedAt(sort: Desc),id(sort: Desc)],map:"vs_coordination_request_assignee_idx")
+ @@map("vs_coordination_request")
+}
+
+model CoordinationRequestEvent {
+ id String @id(map:"vs_coordination_request_event_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ requestId String @map("request_id") @db.Uuid
+ number Int
+ eventType String @map("event_type") @db.VarChar(40)
+ fromStatus String? @map("from_status") @db.VarChar(30)
+ toStatus String? @map("to_status") @db.VarChar(30)
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ previousAssigneeAccountId String? @map("previous_assignee_account_id") @db.Uuid
+ assigneeAccountId String? @map("assignee_account_id") @db.Uuid
+ reason String? @db.VarChar(1000)
+ evidenceKind String? @map("evidence_kind") @db.VarChar(40)
+ evidenceRevision Int? @map("evidence_revision")
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,requestId,number],map:"vs_coordination_request_event_number_key")
+ @@index([organizationId,schoolId,requestId,occurredAt,id],map:"vs_coordination_request_event_list_idx")
+ @@map("vs_coordination_request_event")
+}
+
+model CoordinationCommandReceipt {
+ id String @id(map:"vs_coordination_command_receipt_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ command String @db.VarChar(50)
+ idempotencyKey String @map("idempotency_key") @db.VarChar(100)
+ inputHash String @map("input_hash") @db.Char(64)
+ requestId String @map("request_id") @db.Uuid
+ result Json
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,actorAccountId,command,idempotencyKey],map:"vs_coordination_command_receipt_intent_key")
+ @@index([organizationId,schoolId,requestId,occurredAt],map:"vs_coordination_command_receipt_request_idx")
+ @@map("vs_coordination_command_receipt")
+}
+
 model OperatorAuditEntry {
  id String @id @db.Uuid
  operatorId String @map("operator_id") @db.Uuid

@@ -2055,6 +2055,90 @@
         "owner": "learning",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "CoordinationCapabilityGrant",
+      "owner": "coordination",
+      "table": "vs_coordination_capability_grant",
+      "fields": "id/org/school/membership/account uuid; capability; operator/grant/revoke timestamps; version",
+      "responsibility": "Operator-designated branch capability for the Attendance-scoped Coordination owner.",
+      "constraints": "Scoped membership FK; capability/version checks; unique account/capability; active lookup index",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only current designated request managers and the currently eligible assignee may access the exact branch request; source authority is rechecked independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CoordinationRequest",
+      "owner": "coordination",
+      "table": "vs_coordination_request",
+      "fields": "id/org/school/source/actor/assignee uuid; kind/concern/status; due/note/resolution; timestamps/version",
+      "responsibility": "Attendance-scoped operational follow-up aggregate with current assignment and verified outcome.",
+      "constraints": "Scoped School/Attendance FKs; state/text/evidence/version checks; partial unique active source/kind; queue/assignee indexes",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only current designated request managers and the currently eligible assignee may access the exact branch request; source authority is rechecked independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CoordinationRequestEvent",
+      "owner": "coordination",
+      "table": "vs_coordination_request_event",
+      "fields": "id/org/school/request/actor/assignee uuid; number/event/states/reason/evidence/timestamp",
+      "responsibility": "Immutable authorized request assignment and lifecycle history.",
+      "constraints": "Scoped request FK; unique request/number; text/evidence checks; immutable update/delete trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only current designated request managers and the currently eligible assignee may access the exact branch request; source authority is rechecked independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CoordinationCommandReceipt",
+      "owner": "coordination",
+      "table": "vs_coordination_command_receipt",
+      "fields": "id/org/school/actor/request uuid; command/key/hash/result/timestamp",
+      "responsibility": "Exact-key replay and unknown-outcome recovery for Coordination mutations.",
+      "constraints": "Scoped request FK; unique actor/command/key; request lookup index; safe bounded result contract",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only current designated request managers and the currently eligible assignee may access the exact branch request; source authority is rechecked independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {
