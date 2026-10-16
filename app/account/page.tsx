@@ -1,0 +1,27 @@
+import { BranchSwitcher } from "@/components/institution-context";
+import { redirect,notFound } from "next/navigation";
+import { accountGateway,contextGateway } from "@/lib/server/access";
+import { getIdentity } from "@/lib/server/auth";
+import { AccessError } from "@/backend/modules/access/contracts";
+import { AccessSignOut } from "@/components/access-login";
+import { BrandSurface,PageHeader,PageStack,Card,Alert,ButtonLink,Badge,Button } from "@/components/ui/primitives";
+import { moduleGateway } from "@/lib/server/tenancy";
+import {brandingGateway} from '@/lib/server/branding';
+import {TeacherPortalFrame} from '@/components/teacher-portal-frame';
+import {academicsGateway} from '@/lib/server/academics';
+import {attendanceGateway} from '@/lib/server/attendance';
+import {schoolDate} from '@/backend/modules/attendance/domain/schedule';
+export const dynamic="force-dynamic";
+function SchoolOutline(){return <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M3 21V8l9-5 9 5v13M1 21h22M9 21v-6h6v6M7 10h1m8 0h1"/></svg>;}
+function ShieldOutline(){return <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 3 20 6v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6Zm-3 9 2 2 4-5"/></svg>;}
+export default async function AccountPage(){
+ const identity=await getIdentity();let home;try{home=await accountGateway.getHome(identity);}catch(error){if(error instanceof AccessError){if(error.code==="UNAUTHENTICATED")redirect("/sign-in");if(error.code==="NOT_FOUND"){const contexts=await contextGateway.getContexts(identity).catch(()=>null);if(contexts?.institutions.some(i=>i.canManage))redirect("/institutions");notFound();}}return <main id="main-content" className="container page-space"><Alert tone="danger" title="School service unavailable">Try again later.</Alert></main>;}
+ if(home.capabilities.includes("school.manage"))redirect("/admin");
+ if(home.capabilities.includes("leadership.read"))redirect("/leadership/account");
+ const today=schoolDate(new Date(),home.timezone);
+ const [canTeach,directory,canUseTimetable,canUseClasses,canUseHistory]=await Promise.all([home.capabilities.includes("attendance.mark")?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,"attendance","attendance.mark"):Promise.resolve(false),contextGateway.getContexts(identity).catch(()=>null),home.capabilities.includes('timetable.read')?moduleGateway.canUseAtScope(identity,home.scope.organizationId,home.scope.schoolId,'timetable','timetable.read').catch(()=>false):false,home.capabilities.includes('class.read')&&home.capabilities.includes('student.read')?academicsGateway.teacherClasses(identity,today).then(()=>true).catch(()=>false):false,home.capabilities.includes('attendance.read_class')?attendanceGateway.teacherHistory(identity,{}).then(()=>true).catch(()=>false):false]);
+ const branches=directory?.institutions.flatMap(institution=>institution.branches.filter(branch=>branch.selectable).map(branch=>({institution,branch})))??[];
+ const account=<main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow={home.institutionName} title="My account" description="Your identity and authorized teaching workspace." actions={canTeach?undefined:<AccessSignOut staged stagedHref="/account/context?destination=sign-out"/>}/>{!canTeach&&<BranchSwitcher home={home} contextHref="/account/context"/>}<div className="teacher-account-grid"><Card className="padded teacher-account-card"><div className="teacher-account-person"><span className="portal-identity-avatar" aria-hidden="true">T</span><div><strong>Teacher account</strong><span>Authorized school identity</span></div></div><div className="section-divider"/><dl className="teacher-account-details"><dt>Institution</dt><dd>{home.institutionName}</dd><dt>Current branch</dt><dd>{home.schoolName}</dd><dt>Teaching role</dt><dd>Teacher</dd><dt>Account status</dt><dd><Badge tone="success">Active</Badge></dd></dl><div className="section-divider"/><ButtonLink href="/account/review" variant="secondary"><ShieldOutline/>Account help</ButtonLink></Card><Card className="padded teacher-account-card"><h2>Authorized branches</h2><div className="teacher-authorized-branches">{branches.map(({institution,branch})=>{const current=branch.id===home.scope.schoolId;return <div className="teacher-branch-row" key={branch.id}><span className="teacher-branch-icon"><SchoolOutline/></span><div><strong>{branch.name}</strong><span>{institution.name} · {current?'Current workspace':'Teacher membership'}</span></div>{current?<Button variant="secondary" disabled>Current</Button>:<ButtonLink href={`/account/context?destination=${encodeURIComponent(branch.id)}`} variant="secondary">Switch</ButtonLink>}</div>;})}</div><p className="section-note">School administrators manage verified staff binding, roles and dated teaching assignments.</p></Card></div></PageStack></main>;
+ if(canTeach){const palette=await brandingGateway.effectivePalette(identity).catch(()=>null);return <BrandSurface palette={palette??undefined}><TeacherPortalFrame home={home} canUseClasses={canUseClasses} canUseTimetable={canUseTimetable} canUseHistory={canUseHistory}>{account}</TeacherPortalFrame></BrandSurface>;}
+ return <BrandSurface>{account}</BrandSurface>;
+}

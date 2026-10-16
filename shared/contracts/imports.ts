@@ -1,0 +1,15 @@
+export type ImportYearChoice=Readonly<{id:string;code:string;name:string;startsOn:string;endsOn:string}>;
+export type ImportCampusChoice=Readonly<{id:string;code:string;name:string}>;
+export type ImportOptions=Readonly<{years:readonly ImportYearChoice[];campuses:readonly ImportCampusChoice[]}>;
+export type ImportRowDecision='CREATE'|'NO_CHANGE'|'ERROR'|'CONFLICT';
+export type ImportRowError=Readonly<{column:string;code:string;message:string}>;
+export type ImportPreviewFields=Readonly<{externalStudentId:string;firstName:string;lastName:string;admissionNumber:string;admittedOn:string;gradeCode:string;sectionCode:string;rollNumber:string|null}>;
+export type ImportPreviewRow=Readonly<{rowNumber:number;decision:ImportRowDecision;fields:ImportPreviewFields|null;errors:readonly ImportRowError[];status:'PENDING'|'SUCCEEDED'|'FAILED'|'SKIPPED';errorCode:string|null}>;
+export type ImportState='UPLOADED'|'REVIEW'|'CONFIRMED'|'RUNNING'|'COMPLETED'|'COMPLETED_WITH_ERRORS'|'FAILED'|'CANCELLED';
+export type ImportJobChoice=Readonly<{jobId:string;reference:string;state:ImportState;rowCount:number;createdAt:string}>;
+export type ImportJobPage=Readonly<{items:readonly ImportJobChoice[];nextCursor:string|null}>;
+export type ImportPreview=Readonly<{jobId:string;version:number;previewRevision:number;fileHash:string;state:ImportState;replayed:boolean;counts:Readonly<{create:number;noChange:number;error:number;conflict:number}>;nextCursor:string|null}>;
+export type ImportRowPage=Readonly<{items:readonly ImportPreviewRow[];nextCursor:string|null}>;
+export type ImportConfirmation=Readonly<{jobId:string;version:number;state:ImportState;approvedCount:number;skippedCount:number;replayed:boolean}>;
+export type ImportProcessResult=Readonly<{jobId:string;state:ImportState;counts:Readonly<{pending:number;succeeded:number;failed:number;skipped:number}>;hasMore:boolean;replayed:boolean}>;
+export type ImportJobStatus=Omit<ImportProcessResult,'state'>&Readonly<{state:ImportState;version:number;previewRevision:number;fileHash:string;decisions:Readonly<{create:number;noChange:number;error:number;conflict:number}>;approvedCount:number;skippedCount:number;sourceExpired:boolean;detailsPurged:boolean}>;

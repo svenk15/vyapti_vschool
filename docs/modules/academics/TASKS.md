@@ -1,0 +1,201 @@
+# Academic setup and teaching context — execution tasks
+
+Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
+
+## SA-COMP-02 — Review dependencies and retire academic catalog records
+
+Workflow: SA-10. Depends on the verified ACA-01/02/03, STU-03 and ATT-04 owner behavior.
+
+Outcome: a School Administrator sees complete dependency counts for grades, sections and subjects, confirms a prospective retirement with a reason, and retains all historical references. Current/future student placements and unresolved attendance sessions block the affected retirement with a direct recovery path; safe related sections/offerings retire atomically.
+
+Acceptance: current scope, `class.manage`, academic release/license/activation and expected version are rechecked inside the existing School-guard transaction; replay is actor/scoped/input exact; no row is deleted; cross-branch IDs are hidden; PostgreSQL proves blocker/cascade/history/concurrency; desktop/mobile browser evidence proves explicit confirmation and useful dependency feedback. No schema migration is planned.
+
+## ACA-01 — Configure academic year, terms, grades and sections
+
+Depends on: IAM-02, TEN-02
+
+Design: [flow ACA-01](DESIGN.md). Scope and API: POST /api/v1/academics/years; PUT /api/v1/academics/years/:id/terms; POST /api/v1/academics/grades|subjects|sections.
+
+### Implementation instructions
+
+1. Authorize school.manage for year/terms and class.manage for catalogs.
+2. Lock account then School; replay receipt only after authorization.
+3. Create DRAFT year and unpublished calendar atomically; terms replace only while DRAFT, within year and nonoverlapping.
+4. Create school grade/subject and section after validating active references and matching year/campus.
+5. Return joined display DTO; audit/outbox/receipt commit with version change.
+6. Require the trusted `academic_core` release, active institution entitlement and branch activation on every read/write; do not enable it through browser input. Default deployment release remains deny-all. The local ACA-01 demo may explicitly pass `academic_core` to its server process and must use TEN-02 application commands to provision its synthetic contract/activation.
+
+Files: extend `backend/modules/academics/application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/academics`, `test/functional/academics` and `test/e2e/academics` as the suite grows.
+
+### Acceptance and test strategy
+
+- Unit / application: Civil dates, term overlap, state rules, code normalization.
+- Real PostgreSQL: Parallel no-campus duplicates: exactly one; cross-year/scope FK rejection; atomic year+calendar creation.
+- Browser: Create year/terms/grade/subject/section then refresh; actionable duplicate and overlap errors.
+- Failure contract: Duplicate code/section →409; invalid range/overlap→422; terms after OPEN→409; foreign/inactive references→404/409.
+- Required DB effect: AcademicYear + SchoolCalendar on create; AcademicTerm replacement under year; GradeLevel, Subject, Section; transactional envelopes.
+
+Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
+
+### Demo and checkpoint
+
+Create AY2026, Grade 8, Section A and Mathematics; add two adjacent terms; try an overlapping term and duplicate Section A; refresh and verify stored values.
+
+Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
+
+## TT-00 — Reconcile timetable ownership and readiness
+
+Depends on verified Academic setup, existing Attendance pinning semantics and Tenancy module configuration. Add the read-only readiness route described in DESIGN. It must obtain release, entitlement, activation and current permission from server-owned contracts, remain outside operational navigation while unavailable, and perform no planning write. Record the weekly-only reference deviation and the exact first-cut request/generation bounds.
+
+Acceptance: denied and unavailable states are honest; no timetable/attendance row changes; lint, typecheck, boundary/backend and focused browser rendering at desktop/mobile. Human review remains PENDING. TT-01 follows only after its two scoped day-pattern tables, constraints, indexes, mutation guard and migration test are reconciled into the live LLD. SA-41 remains incomplete until draft editing, conflict preview, immutable publication and idempotent Attendance occurrence handoff are implemented.
+
+## TT-01 — Configure a versioned weekly day pattern
+
+Depends on TT-00, verified Academic setup, the trusted Timetable release, active institution entitlement and active branch activation. The Administrator outcome is one current branch/year draft containing teaching weekdays plus ordered lesson and break intervals. This task does not publish a timetable, assign lessons, create dated exceptions or generate Attendance sessions.
+
+Acceptance: validate unique teaching days 1–7, 1–32 contiguous ordered periods, valid local times, nonoverlap and at least one lesson. Every protected read/write rechecks current account/token, membership, `timetable.manage`, release, entitlement and activation. Mutations use account→Organization→School guards, expected-version CAS, exact scoped idempotency and atomic audit/outbox/receipt evidence. Preserve published history while replacing only the one draft. Real PostgreSQL proves scope/FKs, replay, stale conflict, rollback and published-row preservation. Focused desktop/mobile browser journeys prove overlap recovery, save/reload, navigation visibility and responsive composition. The approved reference comparison remains partial until TT-02 supplies the weekly draft canvas and effective-date publication contract.
+
+## TT-02 — Save, resume and discard a weekly timetable draft
+
+Depends on TT-01. Implement the branch/year draft aggregate and slots exactly as reconciled in DESIGN. Use real scoped Sections, Offerings and effective TeacherAssignments; use the current TT-01 pattern and lesson period keys. The first cut is weekly and roomless under TT-00's accepted nullable-room boundary. Do not publish, validate TT-03 whole-branch clashes or generate Attendance occurrences.
+
+Acceptance: at most 100 unique class/day/lesson-period slots; effective date within the academic year; each offering matches its section/year and each assignment matches the offering and covers effective date. Save/reopen and explicit discard use current authorization, module eligibility, account→Organization→School guards, version CAS and exact idempotency with atomic evidence. Discard retains the row and slots. The Administrator UI has a grid plus accessible list semantics, preserves in-flow edits, warns before abandoning changes, enables Save only after change and never exposes an unsupported two-week or room choice. Unit, real-PostgreSQL and sequential one-worker desktop/mobile browser evidence are required; human review remains PENDING.
+
+## TT-03 — Preview whole-branch conflicts and publication impact
+
+Depends on TT-02. Implement the read-only preview exactly as reconciled in DESIGN. Recheck the current draft/version, current calendar revision, assignment eligibility across the 42-day bounded horizon, class intervals and Teacher Person intervals across every class in the draft. Use current application authorization, tenant/branch scope, release, entitlement, activation and `timetable.manage`; reads do not acquire mutation locks. Count protected Attendance sessions only as an impact warning. Do not publish, generate/cancel sessions, infer occurrence reuse or persist a validation token.
+
+Acceptance: same Teacher Person through two assignments at overlapping class periods blocks readiness; adjacent half-open periods pass; nonteaching calendar dates do not generate candidates; an assignment ending within the horizon produces an actionable issue; stale/foreign/permission paths are safe. The result distinguishes added/changed/removed candidate slots and protected-session count, with added-only comparison until TT-04 supplies a published baseline. Room validation is explicitly not applicable while the accepted nullable-room boundary has no room owner/column; do not claim it tested. Unit, real-PostgreSQL and sequential focused desktop/mobile preview evidence are required. TT-04 must reauthorize/recompute under the mutation guard and remains blocked until TT-03 passes.
+
+## TT-04 — Publish an immutable timetable revision
+
+Depends on verified TT-03. Reauthorize and recompute the reviewed preview inside the existing account → Organization → School guarded serializable transaction. Require draft expected version, exact preview digest, explicit acknowledgement and scoped command key. Copy the day pattern, periods, recurring slots and a complete JSON reproduction snapshot into a new immutable `PUBLISHED` revision. Close only the prior published revision's applicability metadata; never rewrite its content. Publication validates the bounded 42-day window and records `validated_until`; it does not claim validity beyond that window or perform TT-05 Attendance reconciliation.
+
+Acceptance: applicability is half-open from `effective_from` to the next publication (or academic-year end); a successor must start after the current published revision. Exact replay returns the original publication, changed payload conflicts, stale review requires a renewed preview, concurrent publish yields one successor, and rollback leaves no partial snapshot/evidence. Published patterns/periods/slots are database-immutable. The receipt says Attendance reconciliation is `PENDING`. Real PostgreSQL, focused desktop/mobile review → confirm → receipt tests, repository gates and a production demo are required. SA-41 remains partial until TT-05.
+
+## TT-05 — Reconcile bounded Attendance occurrences
+
+Status: VERIFIED / human review PENDING (12 October 2026).
+
+Depends on verified TT-04 and an accepted Attendance-owner planning contract. The coordinated contract settles stable occurrence identity, seven-day batches within the published `validated_until` horizon, resumable generation checkpoints, idempotent owner commands, cancellation rather than deletion of removed future generated sessions, and preservation of open/submitted sessions. It does not settle how to handle a pre-existing manually scheduled Attendance session occupying the same branch/year/class/date/period when no trusted timetable-source link exists.
+
+Status: **IN_PROGRESS**. The owner approved an actionable per-occurrence block on 12 October 2026. Implement the narrow enlisted Attendance planning port and trusted source link; do not reuse the actor-facing manual schedule/cancel facade as an implicit system port. Verify creation/replay, mixed partial result, authorized manual cancellation then retry, frozen-session protection, concurrency, scope/revocation and lost-response recovery with real PostgreSQL; verify receipt → reconcile → conflict review → supported resolution → retry at desktop/mobile with one worker.
+
+## TT-06 — Project published timetable to authorized users
+
+The current slice implements the independent Teacher/TEA-22 projection only. It depends on verified TT-04 publication, TT-05 trusted occurrence linkage, the existing Teacher identity binding and the approved `timetable.read` policy for current assignments. Student and Parent projections remain future TT-06 work and must not be inferred from this checkpoint.
+
+Acceptance: the Teacher sees only effective immutable published slots assigned through their dated TeacherAssignment; drafts and other Teachers remain absent. Every read rechecks current account/token, active scope, membership, Teacher/Employee identity, release, entitlement, activation and `timetable.read`. Attendance actions appear only for a session joined by trusted `source_occurrence_id`. A validated Monday drives URL-backed previous/next week navigation; desktop/mobile, keyboard navigation, empty/unavailable states and direct register navigation match the approved Teacher planning composition where supported. Unit, real PostgreSQL and sequential focused Playwright evidence are required. No migration is expected.
+
+Parent and Student follow-up acceptance: for every requested civil day, combine the effective immutable weekly pattern with the publication's pinned calendar revision and the active placement's campus. Apply campus exception, school exception and weekly-rule precedence without accepting browser scope or calendar authority. Prove a closure and an approved extra teaching day through the guarded Parent and Student reads with real PostgreSQL, then verify the combined Parent calendar at desktop and mobile widths. Preserve legacy null-calendar publications; fail closed for a missing non-null pin. No migration is expected.
+
+## STW-06 — Show the next published class on Student home
+
+Depends on: verified Student self-access and TT-06 Student weekly projection.
+
+Acceptance: derive the school-local day on the server; display the deterministic earliest not-yet-started published lesson for the exact accepted Student; link to the scoped timetable; show honest no-more-classes and retryable-unavailable states; preserve all existing purpose/module/current-access checks. Add no schema or browser clock authority. Verify deterministic selection, a populated real-data desktop/mobile journey, keyboard reachability and direct screenshot comparison. Prioritized Learning work remains a separate missing owner capability, so this task closes only the next-class slice of STW-06.
+
+## TT-07 / TEA-23 — Assign and respond to dated cover
+
+Status: **DESIGN PREPARED / BLOCKED ON PRODUCT DECISIONS**. The narrow LLD is in DESIGN. Its technical dependency is TT-05 plus the verified TT-06 Teacher projection; Student and Parent timetable projections are not command dependencies. Do not add tables, capabilities, grants or browser actions until the authority timing, response lifecycle, original-Teacher access, dated eligibility and Attendance-state decisions in the LLD are accepted. When unblocked, implement the exact occurrence-scoped command through Academics and Attendance owner ports with current authorization, guarded locking, optimistic versioning, exact replay and immutable audit/history evidence.
+
+## TEA-07/TEA-08 — Review assigned classes and a minimal dated roster
+
+Depends on: ACA-03, STU-02, PER-02
+
+Acceptance: resolve the signed-in account through its active Employee/Teacher identity and return only Offerings covered by a dated assignment in the current branch. A selected Offering must be in that result. Students supplies only active name, school reference and roll for Enrollment/SectionPlacement effective on the chosen date through the same authorized read transaction. Recheck `class.read`, `student.read`, release, entitlement and activation; deny foreign offerings, branches, other Teachers and generic Student directory/detail access. Bound assigned classes at 100 and a roster at 200. Provide URL-backed class/subject search and deterministic sorting, class detail and roster-date refresh, with approved desktop/mobile compositions and explicit empty/unavailable states. No write, receipt, audit row, migration or durable browser pupil cache is permitted. Verify validation, real PostgreSQL date/scope/revocation behavior and sequential focused browser journeys.
+
+## TEA-06 — Resolve a missing or changed assignment
+
+Depends on: EX-04, ACA-03, ATT-01
+
+Acceptance: expose a dedicated three-stage Teacher route that derives, rather than accepts, eligibility-not-ready, no-active-assignment, session-changed/cancelled or ready from the current verified account, branch, dated Employee/Teacher identity, assignments and Attendance-owned session-status port. Require Teacher membership plus `self.read` and current release/entitlement/activation. Return only a non-sensitive support reference and school date/timezone. Preserve the selected next step across Back/Continue, recheck current authority and state on refresh, and never create/widen an assignment or reveal another Teacher's session. Verify classification, cross-scope/revoked denial, no mutation, desktop/mobile composition and keyboard focus. No schema, migration, ticket or durable draft is permitted.
+
+## STW-09 — Open a current assigned class space
+
+Depends on: STW-07, STW-10, ACA-03, LEA-01
+
+Acceptance: expose `/student/classes` and `/student/classes/[offeringId]` only to an exact accepted Student access with current `learning.assignment.read_self` and active Student/Academics/Staff/Homework module gates. Derive the branch-local civil date on the server, select the current Enrollment/Placement and return only active scoped Offerings for that year/section with an effective TeacherAssignment label. Reauthorize a candidate offering by membership in that result. The DTO and UI must omit rosters, classmates' marks, guardian contacts and private Teacher notes. Link published work through the existing Learning subject query and timetable through its existing guarded route. Ended enrollment/placement and revoked access fail closed; Files/resources remain absent until their owner contract exists.
+
+No write, receipt, audit row, mutation lock, durable browser state, schema or migration is permitted. Verify current facts, cross-Student denial and live revocation in real PostgreSQL; desktop/mobile directory, detail and subject-filtered work navigation with one browser worker; keyboard focus; direct approved-reference inspection; type/boundary/backend/document checks; and a production build. Human review, resource delivery, font portability, native accessibility and TEN-03 stay separate.
+
+## Experience overlay consumption
+
+EX-07 adopts the existing setup, calendar, offering and dated-assignment operations. It adds no recurring timetable engine or schema. Current versions, half-open dates, School guard and Attendance impact checks remain authoritative.
+
+## ACA-02 — Publish calendar and open or close the year
+
+Depends on: ACA-01
+
+Design: [flow ACA-02](DESIGN.md). Scope and API: POST /api/v1/academics/calendars/:id/publish; POST /api/v1/academics/years/:id/open|close; GET /api/v1/academics/calendars/:id/evaluate?date=.
+
+### Implementation instructions
+
+1. Authorize school.manage and acquire guards.
+2. Validate complete policy, dates/campuses and expected calendar/year version.
+3. Compare affected existing sessions through attendance CalendarImpact port; no-op adapter allowed only before attendance tables exist, then replace it in ATT-01.
+4. Append immutable revision and exceptions, then change current pointer/version in one transaction.
+5. Open year requires published calendar; close requires no noncancelled scheduled/open session on or after school-local today. Persist events/audit/receipt.
+
+Files: extend `backend/modules/academics/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/academics`, `test/functional/academics` and `test/e2e/academics` as the suite grows.
+
+### Acceptance and test strategy
+
+- Unit / application: Campus-over-school precedence; all weekdays validation; state transitions.
+- Real PostgreSQL: Publication failure leaves pointer unchanged; deferred pointer FK; immutable records; close-vs-schedule serialization.
+- Browser: Publish holiday/campus exception and evaluate dates; open year; term edit denied; close empty disposable year.
+- Failure contract: Affected existing future session→409 CALENDAR_IN_USE; no calendar on open→409; pending future sessions on close→409; stale revision→409.
+- Required DB effect: CalendarRevision, CalendarException, SchoolCalendar pointer/version; AcademicYear state/version; envelopes. No editing old revisions.
+
+Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
+
+### Demo and checkpoint
+
+Publish weekdays and one holiday; inspect a teaching day and holiday; open the year; confirm term editing is disabled and old revision remains visible after a valid future revision.
+
+Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
+
+## LEA-16 — Principal timetable exception read slice
+
+- [x] Add a framework-independent bounded query over the current effective publication and persisted exception outcomes.
+- [x] Enforce live Principal capability, tenant/branch scope, and Timetable/Academics/Staff/Attendance availability in the repository.
+- [x] Return exact class, subject, time, current Teacher and trusted manual-conflict evidence without absence reasons, roster, marks or write authority.
+- [x] Prove pagination, mixed outcome counts, retry clearing, cross-scope denial and existing reconciliation safety in real PostgreSQL.
+- [x] Wire the Principal route/navigation and compare populated desktop/mobile states with LEA-16.
+- [ ] Implement general uncovered/absence and cover resolution only under a later approved owner contract.
+
+Status: supported read slice VERIFIED; full workflow PARTIAL; human review PENDING.
+
+## ACA-03 — Create offerings and assign teachers
+
+Depends on: ACA-02, PER-02
+
+Design: [flow ACA-03](DESIGN.md). Scope and API: POST /api/v1/offerings; POST /api/v1/teacher-assignments; PATCH /api/v1/teacher-assignments/:id/end.
+
+### Implementation instructions
+
+1. Reauthorize class.manage plus trusted release, institution entitlement and branch activation on each protected read/write; mutations use account→Organization→School guards and recheck before replay/commit.
+2. Create offerings only in an OPEN year with an active same-year section and active same-school subject.
+3. Assign only an active Academics Teacher with an active People Employee for the entire half-open interval inside both the year and employment period. AccountPersonBinding is not required for an instructional assignment; it controls portal access separately.
+4. Enforce one primary assignment per offering/date using the documented offering/date predicate under the shared School guard. End via expected-version CAS and an exclusive `valid_to`; reject surviving assignments when People offboards the Employee.
+5. Use a zero-impact Attendance session port only while sessions cannot be scheduled. ATT-01 replaces it before scheduling release; ATT-02 owns actual end-assignment versus teacher-submit reauthorization evidence.
+6. Persist Academics-owned Offering/Assignment changes and shared envelopes atomically; class list joins current scoped Section/Grade/Subject and date-effective Teacher/Employee/Person.
+
+Files: extend `backend/modules/academics/domain`, `application`, `contracts` and `infrastructure`; wire in `backend/composition`; add thin routes/screens named in DESIGN; add reviewed `prisma/migrations` only for listed writes. For cross-owner work, call enlisted public facades and change those owners through their contracts. Tests belong in `test/unit/academics`, `test/functional/academics` and `test/e2e/academics` as the suite grows.
+
+### Acceptance and test strategy
+
+- Unit / application: Half-open effective-date endpoints, teacher eligibility and transition rules.
+- Real PostgreSQL: Scoped offering/assignment keys and FKs; concurrent same-offering assignment race; assignment-end CAS; Employee offboarding rollback when assignments survive; authorization and replay.
+- Browser: Read current-year offerings, create offering, assign teacher, inspect effective dates; reject overlap and assignment outside employment.
+- Failure contract: Overlapping assignment, inactive teacher/employee, closed year or impacted session→409; section/year mismatch→422; foreign references→404; missing capability→403; invalid range→422.
+- Required DB effect: CourseOffering, TeacherAssignment; may create Teacher through academic owner when Employee already exists; envelopes.
+- Persistence/security gate: preserve scoped composite FKs/unique keys and both offering/date and teacher/date indexes; serialize effective-range checks under School guard and reauthorize before replay/commit. Capture `EXPLAIN (ANALYZE, BUFFERS)` plans at the Bible §20 pilot profile and record actual plans/cardinality/timing; do not impose TEN-03's larger scale thresholds as the pilot gate. Under TEN-ADR-006 Path A, record class, scope, constraints, indexes, intended policy and TEN-03 closure in the LLD/registry; defer database enforcement to TEN-03 while application authorization stays active.
+
+Run `pnpm check`, applicable `pnpm test:functional`, `pnpm test:e2e`, and `pnpm build`. Extend test filters when the suite grows; do not skip the risk named above. Write actual commands/results, source revision and limitations in CURRENT_STATE.md. No acceptance from an unexecuted test description.
+
+### Demo and checkpoint
+
+Create Grade 8 A Mathematics, assign the teacher for the year, then attempt an overlapping primary assignment and confirm it is rejected.
+
+Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.

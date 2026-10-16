@@ -1,0 +1,13 @@
+export const guardianPurposes=['child.summary.read','attendance.read_child','timetable.read_child','communication.notice.read','attendance.explanation.submit','calendar.event.read_child','learning.assignment.read_child'] as const;
+export type GuardianPurpose=typeof guardianPurposes[number];
+export type GuardianAccessStatus='INVITE_SENT'|'DELIVERY_FAILED'|'OPERATOR_REQUIRED'|'ACCESS_ENABLED'|'ACCESS_REMOVED';
+export type GuardianAccessRecord=Readonly<{accessId:string;studentId:string;displayName:string;email:string;status:GuardianAccessStatus;accessFrom:string;version:number;authorizedAt:string;acceptedAt:string|null;revokedAt:string|null;invitationId:string|null;deliveryFailureReason:string|null;purposes:readonly GuardianPurpose[]}>;
+export type GuardianAuthorizationResult=Readonly<{accessId:string;invitationId:string;status:GuardianAccessStatus;version:number;replayed:boolean}>;
+export type GuardianChildSummary=Readonly<{accessId:string;studentId:string;displayName:string;admissionNumber:string;institutionName:string;schoolName:string;schoolCode:string;timezone:string;classLabel:string|null;accessFrom:string;purposes:readonly GuardianPurpose[]}>;
+export type GuardianWorkspace=Readonly<{accountId:string;accountDisplayName:string|null;children:readonly GuardianChildSummary[]}>;
+export type GuardianAttendanceItem=Readonly<{sessionId:string;date:string;startsAt:string;subjectName:string;sectionName:string;status:'PRESENT'|'ABSENT'|'LATE'|'EXCUSED';lateMinutes:number|null;sessionState:'SUBMITTED'|'CANCELLED'}>;
+export type GuardianAttendanceHistory=Readonly<{studentId:string;timezone:string;from:string;until:string;items:readonly GuardianAttendanceItem[]}>;
+export type GuardianTimetablePeriod=Readonly<{periodKey:string;label:string;kind:'LESSON'|'BREAK';startLocal:string;endLocal:string;position:number}>;
+export type GuardianTimetableDay=Readonly<{date:string;periods:readonly GuardianTimetablePeriod[]}>;
+export type GuardianTimetableLesson=Readonly<{occurrenceId:string;date:string;periodKey:string;startsAt:string;endsAt:string;subjectName:string;sectionName:string;teacherName:string}>;
+export type GuardianTimetableWeek=Readonly<{studentId:string;timezone:string;weekStart:string;weekEndExclusive:string;days:readonly GuardianTimetableDay[];lessons:readonly GuardianTimetableLesson[]}>;

@@ -1,0 +1,2 @@
+import Link from "next/link";
+export function SiteHeader() {return <header className="site-header"><Link className="wordmark" href="/" aria-label="VSchool home"><span className="logo-mark">v</span>VSchool<span className="wordmark-dot">.</span></Link><nav aria-label="Main navigation"><Link href="/configure">Your school, your setup</Link><Link href="/design-system">Design system</Link><Link href="/sign-in" className="nav-signin">School sign in <span aria-hidden="true">↗</span></Link></nav></header>;}

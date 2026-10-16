@@ -1,0 +1,9 @@
+import {redirect} from 'next/navigation';
+import {getIdentity} from '@/lib/server/auth';
+import {accountGateway} from '@/lib/server/access';
+import {admissionsGateway} from '@/lib/server/admissions';
+import {AccessError} from '@/backend/modules/access/contracts';
+import {AdmissionApplicationFlow} from '@/components/admission-application-flow';
+import {Alert,BrandSurface,Card,PageHeader,PageStack} from '@/components/ui/primitives';
+export const dynamic='force-dynamic';
+export default async function AdmissionsPage(){const identity=await getIdentity();let home:Awaited<ReturnType<typeof accountGateway.getHome>>|undefined,context:Awaited<ReturnType<typeof admissionsGateway.context>>|undefined,failure:unknown;try{[home,context]=await Promise.all([accountGateway.getHome(identity),admissionsGateway.context(identity)]);}catch(error){failure=error;}if(failure instanceof AccessError&&failure.code==='UNAUTHENTICATED')redirect('/sign-in');if(home&&context)return <BrandSurface><main id="main-content" className="container page-space context-workflow-page"><PageStack><PageHeader title="Capture inquiry and start an application" description={`${home.institutionName} · ${home.schoolName}`}/><AdmissionApplicationFlow context={context}/></PageStack></main></BrandSurface>;const unavailable=failure instanceof AccessError&&['RELEASE_UNAVAILABLE','MODULE_NOT_LICENSED','MODULE_DISABLED'].includes(failure.code);return <BrandSurface><main id="main-content" className="container page-space"><PageHeader title="Capture inquiry and start an application" description="Admissions"/><Card className="padded"><Alert tone={unavailable?'info':'danger'} title={unavailable?'Admissions is not enabled':'Admissions unavailable'}>{unavailable?'This branch does not currently have the released Admissions capability.':'Refresh after confirming your current branch access.'}</Alert></Card></main></BrandSurface>;}

@@ -1,0 +1,8 @@
+import type {Identity} from '../../../../shared/contracts/access';
+import type {ReconcileTimetable,TimetableReconciliationResult} from '../../../../shared/contracts/timetable';
+import {AccessError,uuidPattern} from '../../access/contracts/index';
+
+export interface TimetableReconciliationRepository { status(actor:Identity,organizationId:string,schoolId:string,publicationId:string):Promise<TimetableReconciliationResult|null>;reconcile(actor:Identity,organizationId:string,schoolId:string,input:ReconcileTimetable):Promise<TimetableReconciliationResult> }
+const actor=(value:Identity|null)=>{if(!value||!uuidPattern.test(value.accountId)||!Number.isSafeInteger(value.tokenVersion))throw new AccessError('UNAUTHENTICATED');return value;};
+const id=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value;};
+export function createTimetableReconciliationUseCases(repository:TimetableReconciliationRepository){return {reconciliationStatus(raw:Identity|null,organizationId:unknown,schoolId:unknown,publicationId:unknown){return repository.status(actor(raw),id(organizationId),id(schoolId),id(publicationId));},reconcileTimetable(raw:Identity|null,organizationId:unknown,schoolId:unknown,input:ReconcileTimetable){if(!uuidPattern.test(input.publicationId)||!uuidPattern.test(input.key)||typeof input.reason!=='string'||input.reason.normalize('NFC').trim().length<5||input.reason.trim().length>500)throw new AccessError('VALIDATION');return repository.reconcile(actor(raw),id(organizationId),id(schoolId),{...input,reason:input.reason.normalize('NFC').trim()});}};}

@@ -1,0 +1,121 @@
+# Principal leadership current state
+
+## 16 October 2026 — LDR-01 verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+The distinct branch-scoped `PRINCIPAL` role has only `leadership.read` and `self.read`. A verified operator can provision it through the existing versioned, replay-safe branch-membership command; ordinary staff management cannot create or alter Principal-bearing memberships. Workspace choices come from live server-returned branch/role facts, `/leadership` independently reauthorizes access, and revoked scope is denied immediately. Shared Principal home, context switch and self-account routes show an honest unavailable state until owner projections are released.
+
+Schema: forward migration `20261016000100_principal_branch_role` changes only the existing RoleGrant CHECK to include `PRINCIPAL`; it is applied to both `vyapti_vschool` and `vyapti_vschool_test` with all 63 migrations retained and no reset. `pnpm demo:seed` invokes the guarded incremental Principal seed and writes credentials only to ignored mode-0600 `artifacts/leadership-01/private-demo.json`.
+
+Verification: focused unit 10/10, real PostgreSQL Access 8/8, and desktop/mobile Principal Playwright 4/4 passed. `pnpm build` and the isolated E2E build passed. The repository checkpoint passed lint, type generation, docs, database design (96 contracts), boundaries, portable-backend compilation and 164 unit tests; the database registry mismatch found on the first checkpoint was corrected before the database and remaining gates were rerun. Reference and application captures were directly inspected at 1440×1000 and 390×844. The approved HTML is a workflow explorer, while the production home is the authorized application shell and deliberately contains no unreleased metrics or prototype review controls. See [evidence](../../evidence/principal-ldr-01-2026-10-16/README.md).
+
+Remaining gates: human review, native VoiceOver/NVDA, font portability, TEN-03 and production controls remain pending. LEA-02, LEA-04 and LEA-46 are only partial; LDR-01 does not complete later owner actions or preferences/support.
+
+Next action: LDR-02, the Attendance-owned bounded due-register projection for LEA-05/06/08, after recording its exact query/metric contract. It must preserve current Attendance authorization and may not infer missing counts.
+
+## 16 October 2026 — LDR-02 verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+The Attendance-owned `register-coverage.v1` query now gives a current Principal an exact branch/date snapshot under `attendance.read_leadership`. `SESSION_END_NO_GRACE` makes a non-cancelled session due only after its scheduled end. Received plus awaiting reconciles to due; future and cancelled sessions remain separate; missing registers are never described as pupil absence. The stable bounded awaiting list contains only class, subject, schedule, due time, current dated expected Teacher and state. It excludes rosters, pupil marks, explanations, revisions and exports.
+
+No schema or migration changed. The development and test databases retain all 63 migrations. `pnpm demo:seed` now verifies the existing connected fictional Principal fixture has received, awaiting and not-due states without changing manually created records, and writes no new credentials outside the existing ignored mode-0600 file.
+
+Verification: focused Access unit 10/10, real PostgreSQL Attendance 12/12 and desktop/mobile Principal Playwright 4/4 passed. `pnpm check` passed lint, type generation/checking, documentation, 96 database contracts, boundaries, portable-backend compilation and 164/164 unit tests; isolated E2E and normal production builds passed. The functional suite proves metric arithmetic, early/future/cancelled handling, stable pagination, current teacher resolution, sensitive-field exclusion, cross-scope denial, revocation and module disablement. The focused browser journey proves populated and no-due states, navigation and mobile composition. Its first visual capture exposed stacked metrics and an unstyled table; the shared composition was corrected and the focused journey passed again. Final reference/application captures were directly inspected at 1440×1000 and 390×844. The approved source is a fictional workflow dialog; the application uses the production Principal shell and real seeded counts, with the same three-metric hierarchy and explanatory meaning. See [evidence](../../evidence/principal-ldr-02-2026-10-16/README.md).
+
+Remaining gates: LDR-03 exact session evidence is still absent, so LEA-08 remains partial. LEA-06 remains partial because unavailable data is fail-closed but a retained last-known stale snapshot is not implemented. Human review, exact font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: LDR-03, a read-only exact-session evidence projection with independently rechecked Principal authority and no roster, marks or explanation disclosure.
+
+## 16 October 2026 — LDR-03 verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+An awaiting coverage row now opens a dedicated, read-only Principal source-evidence page. Attendance independently reauthorizes the exact branch-scoped session and returns only its scheduled class/subject/time, current dated expected Teacher, lifecycle state/version, server observation time and trustworthy owner update time. Reload always re-reads the source: a session submitted after the list snapshot becomes `RECEIVED` and explicitly says it is no longer awaiting. Rosters, pupil marks, explanations, correction history, actors, exports and mutation controls remain absent. The date-qualified return path, keyboard entry and mobile composition are verified.
+
+Schema: forward migration `20261016130000_attendance_session_state_update` adds nullable `state_updated_at` to `vs_attendance_session`. It is applied to `vyapti_vschool` and `vyapti_vschool_test`; both retain all 64 migrations without reset. Existing lifecycle timestamps and trustworthy schedule command receipts are backfilled. Unknown legacy scheduled evidence remains null. Attendance schedule/open/submit/correct/cancel and Timetable reconciliation/cancellation now update freshness atomically in their existing transactions. No index or authorization scope changed.
+
+Verification: the focused real-PostgreSQL Attendance file passed 12/12, including fresh SCHEDULED→SUBMITTED evidence, scope/role/revocation/module denial, field exclusion and owner timestamp writes. The normal and isolated production builds passed. Focused Principal Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker, including keyboard focus, exact route context, refresh-to-current behavior and populated/no-due states. `pnpm check` passed lint, type generation/checking, documentation, 96 database contracts, boundaries, portable-backend compilation and 164/164 unit tests. Direct inspection compared 1440×1000 and 390×844 application captures with the approved stage-2 “Inspect the evidence” dialog. The reference is a fictional review dialog; the application uses the production shell and a full read-only evidence page. See [evidence](../../evidence/principal-ldr-03-2026-10-16/README.md).
+
+Remaining gates: LEA-08 remains PARTIAL because its approved class/status/teacher filters and stable due/class sorting are not implemented. LEA-06 still lacks a retained last-known stale snapshot. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: complete the bounded LEA-08 filter/sort contract through the existing Attendance projection, without client-side page sorting or broader identity lookup.
+
+## 16 October 2026 — LEA-08 bounded controls verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+The Attendance-owned coverage query now applies class, `SCHEDULED|OPEN` state and exact responsible-Teacher filters to the complete authorized branch/date result set before pagination. Due-time order uses `(ends_at,id)` and class order uses `(section_name,ends_at,id)`, in either direction. Opaque cursors bind class/status/Teacher/sort/order, so a page token cannot be reused under a different query. Available class and Teacher choices are derived from the same scoped awaiting set; ambiguous or missing dated Teacher assignments are not guessed. Counts keep the unfiltered authoritative denominator while the list separately states its matching total.
+
+The production page uses the shared filter and sort drawers, URL-backed state, Back/Forward restoration, compact control buttons, explicit matching/no-match states and query-preserving source-detail return links. Draft drawer choices apply only on confirmation; Escape returns focus without applying. Visual inspection found and corrected a shared mobile rule that reversed the approved Cancel/Apply footer order. No Attendance write, permission, table or migration changed; both local databases retain the 64-migration LDR-03 schema.
+
+Verification: focused lint and TypeScript passed; the real-PostgreSQL Attendance file passed 12/12 with filters, deterministic order, query-bound cursors and existing scope/revocation checks. The first post-change rerun hit an unrelated transient `STALE_VERSION` in the pre-existing ATT-02 concurrency case after LEA-08 had passed; the justified unchanged rerun passed 12/12. The E2E build passed and focused one-worker Playwright passed 2/2 Chromium plus 2/2 mobile. Filter/sort drawers, populated, filtered, sorted, detail-return and no-due states were directly inspected against the approved Attendance-oversight dialog and shared component specification. See [evidence](../../evidence/principal-lea-08-controls-2026-10-16/README.md).
+
+Remaining gates: the approved fictional workflow dialog and production shell remain different compositions; font portability, native VoiceOver/NVDA, TEN-03, production controls and human visual acceptance remain pending. LEA-06 retained-last-known semantics and LEA-46 preferences/support still lack owner contracts.
+
+Next action: add focused stale-response isolation evidence for LEA-02 around the real Attendance projection if the existing full-navigation context switch does not already make stale replacement impossible; do not add client-side tenant authority.
+
+## 16 October 2026 — LEA-02 branch-context isolation verified checkpoint
+
+Implementation is VERIFIED; human review is PENDING.
+
+The existing staged Access switch was exercised with two explicitly granted Principal branches and distinct real Attendance records. Confirmation reauthorizes the destination, uses a full-document `location.replace('/leadership')`, clears the old coverage filters and page state, and makes the destination Leadership and Attendance reads resolve from the new authorized branch. The destination shows only its own class and Teacher. Reusing the old branch's session ID in the destination returns the safe unavailable state without leaking the old class. The full-document boundary plus existing `pageshow`/cross-tab reload guards prevents late responses from the destroyed old page from replacing destination data.
+
+No product source, schema, migration, permission, draft lifecycle or owner write changed. Both development and test databases retain all 64 migrations. Focused Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker. It proves the allowed destination, staged review and confirmation, destination summary, cleared `status/sort/order` query, destination-only records and prior-branch deep-link denial. The unchanged Access and Attendance real-PostgreSQL evidence from LDR-01/LEA-08 remains applicable. Direct inspection compared the approved LEA-02 workflow dialog and all West/East/denial application states at 1440×1000 and 390×844. See [evidence](../../evidence/principal-lea-02-context-2026-10-16/README.md).
+
+Remaining gates: the approved fictional workflow dialog and production pages are different compositions; human review, exact font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: LEA-04, focused proof that a protected owner surface removes data and safe actions when Principal access or its required module becomes unavailable during use. It can reuse the existing live authorization contracts without adding authority.
+
+## 16 October 2026 — LEA-04 live-read access-change checkpoint
+
+The existing read subset is VERIFIED; the full workflow remains PARTIAL; human review is PENDING.
+
+An authorized Principal opened an exact Attendance source, then the Attendance branch module was deactivated while the page remained open. Reload removed the prior class and Teacher facts and showed the generic source-unavailable state. Reactivation restored the same owner record on a fresh read, proving deactivation did not erase it. Removing only the Principal role then removed the Leadership page and routed to the account's still-authorized School Administrator workspace. Reusing the former Leadership source URL repeated the server checks and returned to that permitted workspace without disclosing the source.
+
+No product source, schema, migration, permission, lock, transaction or seed contract changed. Focused Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker against all 64 migrations. Two preceding Chromium attempts established the application's authorized `/admin` fallback and automatic single-workspace routing; assertions were corrected to the approved “another permitted context” outcome without weakening data-removal checks. Direct inspection compared authorized, module-unavailable and Principal-removed states with the approved LEA-04 dialog at 1440×1000 and 390×844. See [evidence](../../evidence/principal-lea-04-access-change-2026-10-16/README.md).
+
+Remaining gap: the approved workflow also requires reauthorization of a saved command/status receipt. The first-release Principal workspace has no write command or receipt. This cannot be proven by borrowing School Administrator authority and remains dependent on a future approved Principal write workflow. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: select the smallest approved read-only owner projection whose semantics and permission boundary already exist; do not open a Principal write/approval workflow merely to manufacture receipt evidence.
+
+## 16 October 2026 — LEA-16 timetable exception read checkpoint
+
+The supported read slice is VERIFIED; full LEA-16 remains PARTIAL; human review is PENDING.
+
+The Principal shell now exposes Timetable exceptions only when `timetable.read_leadership` and the released, entitled, active Timetable dependency chain are current. The page reads the one current effective immutable publication, durable reconciliation counts, and a bounded server-ordered list of manual conflicts, protected owner blocks, and technical failures. Rows show exact occurrence/class/subject/current Teacher facts and a separately guarded Attendance source link where present. They expose no roster, marks, private staff reason, draft, other-Teacher schedule, cover action, Attendance mutation, or performance inference.
+
+No schema or migration changed; development and test retain all 64 migrations. The existing deterministic TT-05 seed already creates a publication and manual conflict, and `pnpm demo:seed` now runs a guarded LEA-16 verifier after that owner seed. It preserves existing data and credentials in ignored `artifacts/leadership-01/private-demo.json`. The full command exited 0 and LEA-16 passed; optional TEN-02, ACA-01 and BRD-02 refreshes reported existing fixture conflicts/unavailability and preserved their prior records.
+
+Verification: focused lint and TypeScript passed; Access unit 10/10 passed; real PostgreSQL Timetable reconciliation 6/6 passed with current Principal scope, stable continuation, mixed outcomes, cross-branch/role denial, safe retry clearing and existing concurrency/replay behavior. Focused one-worker Playwright passed 2/2 Chromium and 2/2 mobile sequentially against all 64 migrations. Direct inspection compared the approved LEA-16 reference and production route at 1440×1000 and 390×844; the first mobile capture exposed a clipped desktop table, which was corrected using the established responsive Leadership list composition before final recapture. See [evidence](../../evidence/principal-lea-16-timetable-2026-10-16/README.md).
+
+Remaining gap: the approved reference includes general uncovered/absence and cover acknowledgement/action states. The current owner model provides trusted reconciliation exceptions but no general Teacher absence source or delegated cover/change lifecycle. TT-07/TEA-23 product authority decisions remain required; the application renders no dead action. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
+Executable demo: product commit `b9949be2807c97352e61b6111c3727f3e2d25fba`, normal production build `zNKU0AcTmBhnuU4smql1w`, served at `http://127.0.0.1:3400`. A focused authenticated smoke check confirmed Principal workspace selection and the populated `/leadership/timetable` route from this build. Credentials remain only in ignored mode-0600 `artifacts/leadership-01/private-demo.json`.
+
+Next action: select the next independently approved read projection; do not infer cover or staff-absence semantics from reconciliation outcomes.
+
+## 16 October 2026 — LEA-46 Principal account/session checkpoint
+
+The supported session-security slice is VERIFIED; full LEA-46 remains PARTIAL; human review is PENDING.
+
+`/leadership/account` reuses the global Access-owned own-session boundary. The focused journey lists only privacy-safe active sessions for the signed-in account, retains one selection through the two in-flow stages, revokes a non-current session only on final confirmation, proves that session is absent after reload, then separately signs out the current browser and proves the protected Principal account route returns through sign-in. No Principal grant, arbitrary account selector, other-account data, preference, support setting or durable draft was added.
+
+No schema or migration changed; both databases retain all 64 migrations. Existing Access unit and real-PostgreSQL evidence remains applicable for account isolation, lock/replay behavior, one security event, expiry and token-version invalidation. Focused Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker. The approved LEA-46 dialog and the production session/confirmation states were opened and directly inspected at 1440×1000 and 390×844. The production page implements the approved session-security subset in the real Principal shell; preference keys and school-support configuration remain absent because no approved owner contract exists. See [evidence](../../evidence/principal-lea-46-account-2026-10-16/README.md).
+
+Remaining gates: full LEA-46 remains partial, and font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
+Next action: select the next bounded Principal owner projection whose denominator and disclosure rules are fully represented by current source data; do not invent extension/excused, sensitive staff or approval semantics.
+
+## 16 October 2026 — LEA-17 assignment-completion checkpoint
+
+The supported read slice is VERIFIED; full LEA-17 remains PARTIAL; human review is PENDING.
+
+The Principal shell now exposes Assignment completion only under the exact current Learning owner capability and module chain. The Learning projection reports immutable frozen-recipient pairs due by the server cutoff, one accepted attempt per pair, the derived awaiting count and future pairs separately. Class, subject and bounded school-date predicates run server-side before stable pagination. No private draft, response text, learner identity, staff-performance inference or mutation control crosses the owner boundary.
+
+No schema or migration changed; both databases retain all 64 migrations. Commit `2e03897` passed focused Access unit 10/10, real-PostgreSQL Learning 15/15, lint, TypeScript, normal build, and focused one-worker Playwright 2/2 Chromium plus 2/2 mobile. The final captures were directly inspected against the immutable LEA-17 reference. `pnpm demo:seed` now preserves a connected fictional submitted/awaiting denominator scenario. See [evidence](../../evidence/principal-lea-17-learning-2026-10-16/README.md).
+
+Remaining gap: the approved reference requires extension/excused policy, permitted pupil evidence and a scoped teaching follow-up. Those owner/product contracts do not exist and no dead action is shown. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
+Next action: choose the next independently supported Principal read projection; do not infer extension, excusal, follow-up or approval authority.

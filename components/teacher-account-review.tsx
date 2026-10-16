@@ -1,0 +1,35 @@
+'use client';
+
+import {useRef,useState} from 'react';
+import {signOut} from 'next-auth/react';
+import {useRouter} from 'next/navigation';
+import type {CurrentSessionInfo,SelfAccount} from '@/shared/contracts/access';
+import type {ContextDirectory} from '@/shared/contracts/tenancy';
+import {SelectField} from '@/components/ui/forms';
+import {Alert,Badge,Button,Card,Stepper} from '@/components/ui/primitives';
+
+type View='account'|'branches'|'session';
+type Action='recovery'|'contact'|'sign-out';
+
+function dateTime(value:string){return new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(value));}
+
+export function TeacherAccountReview({account,session,directory,currentSchoolId}:{account:SelfAccount;session:CurrentSessionInfo;directory:ContextDirectory;currentSchoolId:string}){
+ const router=useRouter(),heading=useRef<HTMLHeadingElement>(null);
+ const [stage,setStage]=useState<0|1|2|3>(0),[view,setView]=useState<View|'active'>('active'),[action,setAction]=useState<Action|'active'>('active'),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const branches=directory.institutions.flatMap(institution=>institution.branches.filter(branch=>branch.selectable).map(branch=>({institution:institution.name,...branch})));
+ function move(next:0|1|2){setStage(next);setError('');requestAnimationFrame(()=>heading.current?.focus());}
+ async function complete(){setBusy(true);setError('');if(action==='sign-out'){try{await signOut({callbackUrl:'/sign-in'});return;}catch{setError('The current session could not be ended. It remains active; try again.');setBusy(false);return;}}if(action==='recovery'){router.push('/forgot-password');return;}setStage(3);setBusy(false);requestAnimationFrame(()=>heading.current?.focus());}
+ const viewLabel={account:'Account details',branches:'Authorized branches',session:'Session information',active:'Choose a view'}[view],actionLabel={recovery:'Use password recovery',contact:'Contact school administrator','sign-out':'Sign out of this session',active:'Choose an action'}[action];
+ return <div className="context-workflow-layout teacher-self-review">
+  <div className="context-workflow-main">
+   <Stepper steps={['My account','Account action','Confirm']} current={Math.min(stage,2)}/>
+   <Card className="context-workflow-card">
+    {stage===0&&<section className="workspace-choice-stage"><div className="section-header"><div><h2 ref={heading} tabIndex={-1}>My account</h2><p className="muted">Review only your own safe account and branch memberships.</p></div></div><SelectField label="View" required value={view==='active'?'':view} onChange={event=>setView(event.target.value as View)}><option value="">Choose a view</option><option value="account">Account details</option><option value="branches">Authorized branches</option><option value="session">Session information</option></SelectField>{view==='account'&&<dl className="workspace-choice-review"><div><dt>Account email</dt><dd>{account.email}</dd></div><div><dt>Account status</dt><dd><Badge tone="success">{account.status==='ACTIVE'?'Active':account.status}</Badge></dd></div><div><dt>Account created</dt><dd><time dateTime={account.createdAt}>{dateTime(account.createdAt)}</time></dd></div></dl>}{view==='branches'&&<div className="teacher-self-branches">{branches.map(branch=><div key={branch.id}><span><strong>{branch.name}</strong><small>{branch.institution}</small></span><Badge tone={branch.id===currentSchoolId?'success':'neutral'}>{branch.id===currentSchoolId?'Current':'Authorized'}</Badge></div>)}</div>}{view==='session'&&<dl className="workspace-choice-review"><div><dt>Session</dt><dd>Current signed-in browser</dd></div><div><dt>Started</dt><dd><time dateTime={session.startedAt}>{dateTime(session.startedAt)}</time></dd></div><div><dt>Expires</dt><dd><time dateTime={session.expiresAt}>{dateTime(session.expiresAt)}</time></dd></div></dl>}<div className="workspace-choice-actions"><Button variant="secondary" onClick={()=>router.push('/account')}>Cancel</Button><Button disabled={view==='active'} onClick={()=>move(1)}>Continue <span aria-hidden="true">→</span></Button></div></section>}
+    {stage===1&&<section className="workspace-choice-stage"><div className="section-header"><div><h2 ref={heading} tabIndex={-1}>Account action</h2><p className="muted">Role, employee identity and permissions are changed by their authorized owner.</p></div></div><SelectField label="Next action" required value={action==='active'?'':action} onChange={event=>setAction(event.target.value as Action)}><option value="">Choose an action</option><option value="recovery">Use password recovery</option><option value="contact">Contact school administrator</option><option value="sign-out">Sign out of this session</option></SelectField><div className="workspace-choice-actions"><Button variant="secondary" onClick={()=>move(0)}>← Back</Button><Button disabled={action==='active'} onClick={()=>move(2)}>Continue <span aria-hidden="true">→</span></Button></div></section>}
+    {stage===2&&<section className="workspace-choice-stage"><div className="section-header"><div><h2 ref={heading} tabIndex={-1}>Review and confirm</h2><p className="muted">Check the selected view and permitted account action.</p></div></div><dl className="workspace-choice-review"><div><dt>View</dt><dd>{viewLabel}</dd></div><div><dt>Next action</dt><dd>{actionLabel}</dd></div></dl><div className="section-divider"/><h3>Expected outcome</h3><p className="muted small">You understand your identity, current access and permitted account actions.</p>{error&&<Alert tone="danger" title="Account action unavailable">{error}</Alert>}<div className="workspace-choice-actions"><Button variant="secondary" disabled={busy} onClick={()=>move(1)}>← Back</Button><Button loading={busy} onClick={()=>void complete()}>{busy?'Confirming…':'Confirm'} <span aria-hidden="true">✓</span></Button></div></section>}
+    {stage===3&&<section className="workspace-choice-stage"><div className="section-header"><div><h2 ref={heading} tabIndex={-1}>Account action ready</h2><p className="muted">No account, role or permission was changed.</p></div></div><Alert tone="info" title="Contact your school administrator">Use your school’s approved support channel. Share your account email and current branch; never share a password or session token.</Alert><div className="workspace-choice-actions"><Button onClick={()=>router.push('/account')}>Return to My account</Button></div></section>}
+   </Card>
+  </div>
+  <aside className="context-workflow-notes" aria-label="Account guidance"><Card className="padded"><h2>What this changes</h2><p>Only the final selected account action runs. Reviewing details does not edit your identity, role or branch access.</p><hr/><h3>Permission boundary</h3><p>You cannot add branches, change roles or edit the global account identity here.</p></Card><Card className="padded"><h3>If something changes</h3><p>An expired or revoked session returns to sign-in. Session tokens and internal identifiers are never displayed.</p></Card></aside>
+ </div>;
+}
