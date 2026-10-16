@@ -63,19 +63,20 @@ Acceptance criteria:
 5. Desktop/mobile Playwright covers both real branches, query clearing, deep-link denial and the exact approved LEA-02 contract; screenshots are directly inspected.
 6. No draft lifecycle, schema, migration, permission or owner write is added. Human review, native accessibility, font portability and TEN-03 remain separate.
 
-## LEA-04 — Live access changes on a protected owner read
+## LEA-04 — Live access changes during protected owner work
 
 Dependencies: verified LDR-01 Principal reauthorization and LDR-03 Attendance source reauthorization.
 
-Acceptance criteria for the existing read subset:
+Acceptance criteria:
 
 1. An open exact source page rechecks current Attendance availability and removes the prior class/Teacher data when the module becomes unavailable.
 2. Module deactivation does not delete the Attendance record; reactivation permits a fresh authorized read of the same source.
 3. Removing the Principal role while the source is open removes all Leadership content and routes only to another currently authorized workspace.
 4. Reusing the old Leadership URL repeats server authorization and cannot restore the hidden source or offer a client override.
 5. Desktop/mobile captures are compared directly with the approved LEA-04 state and focused one-worker journeys pass.
+6. A committed Principal snapshot whose response is lost keeps its exact payload/key; removing Principal authority denies replay without disclosing the receipt, and restoring authority recovers the original result without a duplicate write.
 
-Remaining criterion: a Principal-owned write/status receipt must be reauthorized after revocation. No Principal write command exists in this release, so this workflow remains PARTIAL until such an owner operation is approved and implemented; School Administrator receipts must not be treated as Principal authority.
+Engineering status: VERIFIED through the Attendance read and Reporting snapshot write boundaries. Human review PENDING.
 
 ## LEA-16 — Published timetable exception oversight
 

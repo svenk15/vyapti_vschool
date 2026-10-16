@@ -1,5 +1,13 @@
 # Principal leadership current state
 
+## 16 October 2026 — LEA-04 live-access completion
+
+LEA-04 is ENGINEERING_COMPLETE; human review remains PENDING.
+
+The earlier protected-read evidence already proved that Attendance source facts disappear when the module or Principal role is removed and that restored authority causes a fresh owner read. LEA-06 now supplies the previously missing real Principal write/replay boundary. A browser journey commits a retained snapshot while its response is deliberately lost, preserves the exact body/key, removes the Principal role, and proves the protected delivery path returns its established 404 concealment response without snapshot receipt data. After operator restoration, the same body/key returns the original snapshot with `replayed: true`; no duplicate row or audit event is created. The real-PostgreSQL application test independently proves current authorization returns `FORBIDDEN` before prior-result disclosure.
+
+No new authority, schema or migration was introduced by this closure; it reuses Access role transitions and Reporting's verified snapshot transaction. Focused current-source results and new desktop/mobile unknown/recovered states are recorded in [principal-lea-04-access-change-2026-10-16](../../evidence/principal-lea-04-access-change-2026-10-16/README.md). The approved workflow dialog and production owner pages remain different compositions. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
 ## 16 October 2026 — LEA-06 retained evidence checkpoint
 
 LEA-06 is ENGINEERING_COMPLETE for its approved synthetic local/test scope; human review is PENDING.

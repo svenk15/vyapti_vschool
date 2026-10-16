@@ -7,7 +7,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-01 | Enter the correct leadership workspace | access | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-01 explicit branch role, role-aware entry, shell, immediate revocation and honest unavailable states are verified; the approved workflow explorer and production home are intentionally different compositions |
 | LEA-02 | Switch branches without losing context | access | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Two authorized branches with distinct Attendance records prove staged destination reauthorization, fresh-document reload, cleared query/data and denial of the prior branch session ID; the approved source is a fictional workflow dialog while the application uses production pages |
 | LEA-03 | Work under a temporary leadership delegation | access | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-04 | Handle access changes during a leadership action | access | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Exact Attendance source data is removed on module/Principal loss, module restoration re-reads the retained record, and old URLs cannot override the authorized workspace fallback; the required Principal write/status-receipt reauthorization remains unavailable because no Principal write command exists |
+| LEA-04 | Handle access changes during a leadership action | access | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Exact Attendance source data is removed on module/Principal loss, and Reporting snapshot replay proves a committed unknown-outcome write is denied after Principal revocation and recovered from the original key without duplication only after authority is restored; the reference dialog and production owner pages differ |
 | LEA-05 | Review my school today | daily | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 provides the approved first-release Attendance summary with current source time, exact denominator and no fabricated additional owner metrics; the reference is a fictional workflow dialog while the application uses the production shell |
 | LEA-06 | Recognize stale, incomplete or unavailable information | daily | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Current source time, fail-closed unavailability and immutable retained-last-known Attendance coverage are verified; retained evidence is explicitly non-live, bounded, independently managed and synthetic-only until retention/backup-deletion policy is approved; the reference workflow dialog and production Reports composition differ |
 | LEA-07 | Run the weekly leadership review | daily | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,7 +53,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 5 ENGINEERING_COMPLETE, 7 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-05, LEA-06 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 6 ENGINEERING_COMPLETE, 6 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-04, LEA-05, LEA-06 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
