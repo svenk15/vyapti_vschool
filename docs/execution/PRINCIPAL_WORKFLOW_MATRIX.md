@@ -19,7 +19,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-13 | Review an absence explanation | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-14 | Review an attendance correction request | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-15 | Resolve an incorrect or duplicate scheduled session | attendance | 1 | NOT_STARTED | NOT_STARTED | PENDING | Requires its named owner LLD and implementation |
-| LEA-16 | Review timetable conflicts and uncovered classes | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-16 | Review timetable conflicts and uncovered classes | academics | 3 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Current effective publication, stored reconciliation exceptions, current assignment and separately guarded Attendance evidence are verified; general Teacher absence/uncovered facts and cover acknowledgement/action remain blocked on the TT-07/TEA-23 owner and authority decisions |
 | LEA-17 | Review assignment completion with the right denominator | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-18 | Review feedback awaiting return | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-19 | Coordinate an evidence-based learning concern | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,11 +53,11 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 4 ENGINEERING_COMPLETE, 3 PARTIAL, 2 BLOCKED, 37 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 4 ENGINEERING_COMPLETE, 4 PARTIAL, 2 BLOCKED, 36 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
-1. Reconcile the smallest approved read-only academic/timetable owner projection and implement it if its Principal permission boundary is settled.
+1. Select the next smallest approved read-only owner projection whose exact source facts and Principal permission boundary already exist; do not infer approval or mutation authority.
 2. Complete LEA-06 retained-last-known behavior only after its exact persistence, freshness and disclosure contract exists.
 3. Keep LEA-04 receipt recovery and LEA-46 preferences/support partial until their owner operations exist; LDR-04–06 remain blocked on the Coordination owner.
 

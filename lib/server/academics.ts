@@ -1,7 +1,7 @@
 import 'server-only';
 import {createAcademicServices} from '../../backend/composition/academics';
 import type {AcademicSetupFacade} from '../../backend/modules/academics/application/setup';
-import {accountGateway} from './access';
+import {accountGateway,leadershipGateway} from './access';
 import type {Identity} from '../../shared/contracts/access';
 import {AccessError} from '../../backend/modules/access/contracts';
 import {academicRuntimeConfiguration} from './academic-runtime-configuration';
@@ -37,4 +37,8 @@ export const academicsGateway={
  async teacherTimetableWeek(identity:Identity|null,weekStart:string){const s=await scope(identity);return service().teacherTimetableWeek(identity,s.organizationId,s.schoolId,weekStart);},
  async teacherClasses(identity:Identity|null,date:string,offeringId?:string){const s=await scope(identity);return service().teacherClasses(identity,s.organizationId,s.schoolId,date,offeringId);},
  async teacherReadiness(identity:Identity|null,date:string){const s=await scope(identity);return service().teacherReadiness(identity,s.organizationId,s.schoolId,date);},
+};
+
+export const leadershipTimetableGateway={
+ async overview(identity:Identity|null,input:{cursor?:unknown;limit?:unknown}={}){const home=await leadershipGateway.getHome(identity);return service().leadershipTimetableOverview(identity,home.scope.organizationId,home.scope.schoolId,input);},
 };

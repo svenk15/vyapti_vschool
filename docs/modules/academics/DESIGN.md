@@ -509,6 +509,16 @@ sequenceDiagram
 
 Verification requires current-class facts, cross-Student/scope denial and live access revocation in real PostgreSQL; sequential desktop/mobile directory/detail and subject-navigation journeys; keyboard focus on the class action; direct reference comparison; and unchanged database-design/boundary checks. The approved STW-09 resource step remains an explicit partial until its owner contract exists.
 
+## LEA-16 — Principal timetable exception projection
+
+Timetable remains the owner of immutable publications, generation checkpoints, occurrence identity, reconciliation outcomes, and current Teacher assignment. The portable `LeadershipTimetableRepository` exposes only the current effective publication and its unresolved stored occurrence outcomes through a typed read use case. It does not call Attendance writes or alter reconciliation state. The Leadership host resolves its server-owned scope and the repository independently applies live `timetable.read_leadership` plus Timetable, Academics, Staff, and Attendance release/entitlement/activation gates.
+
+The exception read uses the existing scope-leading publication and occurrence predicates. Its stable order is `local_date, starts_at, id`; the cursor candidate must resolve in the same branch, publication, and exception outcome set. The safe read joins are `LessonOccurrence.subject_offering_id → CourseOffering → Section/Subject`, `effective_teacher_assignment_id → TeacherAssignment → Teacher/Employee/Person`, and, for manual conflicts only, a same-scope overlapping Attendance session matching the occurrence class or current Teacher. No private absence reason, roster, mark, draft, other-Teacher schedule, or mutation authority is returned.
+
+No schema or migration changes. Transaction isolation is repeatable read; reads acquire no write locks. Existing TT-05 serializable reconciliation and Attendance guards remain the only writers. PostgreSQL verification must cover current-publication selection, mixed exception outcomes, stable continuation, role/branch denial, resolution on owner retry, and the absence of duplicate Attendance sessions. Browser verification covers the Principal route, safe source link, no mutation controls, and desktop/mobile direct reference inspection.
+
+General absence/uncovered facts and cover assignment remain outside this slice because their owner lifecycle and authority transitions are not yet approved.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.

@@ -155,6 +155,17 @@ Publish weekdays and one holiday; inspect a teaching day and holiday; open the y
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+## LEA-16 — Principal timetable exception read slice
+
+- [x] Add a framework-independent bounded query over the current effective publication and persisted exception outcomes.
+- [x] Enforce live Principal capability, tenant/branch scope, and Timetable/Academics/Staff/Attendance availability in the repository.
+- [x] Return exact class, subject, time, current Teacher and trusted manual-conflict evidence without absence reasons, roster, marks or write authority.
+- [x] Prove pagination, mixed outcome counts, retry clearing, cross-scope denial and existing reconciliation safety in real PostgreSQL.
+- [x] Wire the Principal route/navigation and compare populated desktop/mobile states with LEA-16.
+- [ ] Implement general uncovered/absence and cover resolution only under a later approved owner contract.
+
+Status: supported read slice VERIFIED; full workflow PARTIAL; human review PENDING.
+
 ## ACA-03 — Create offerings and assign teachers
 
 Depends on: ACA-02, PER-02

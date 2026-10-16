@@ -79,3 +79,17 @@ No product source, schema, migration, permission, lock, transaction or seed cont
 Remaining gap: the approved workflow also requires reauthorization of a saved command/status receipt. The first-release Principal workspace has no write command or receipt. This cannot be proven by borrowing School Administrator authority and remains dependent on a future approved Principal write workflow. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
 
 Next action: select the smallest approved read-only owner projection whose semantics and permission boundary already exist; do not open a Principal write/approval workflow merely to manufacture receipt evidence.
+
+## 16 October 2026 — LEA-16 timetable exception read checkpoint
+
+The supported read slice is VERIFIED; full LEA-16 remains PARTIAL; human review is PENDING.
+
+The Principal shell now exposes Timetable exceptions only when `timetable.read_leadership` and the released, entitled, active Timetable dependency chain are current. The page reads the one current effective immutable publication, durable reconciliation counts, and a bounded server-ordered list of manual conflicts, protected owner blocks, and technical failures. Rows show exact occurrence/class/subject/current Teacher facts and a separately guarded Attendance source link where present. They expose no roster, marks, private staff reason, draft, other-Teacher schedule, cover action, Attendance mutation, or performance inference.
+
+No schema or migration changed; development and test retain all 64 migrations. The existing deterministic TT-05 seed already creates a publication and manual conflict, and `pnpm demo:seed` now runs a guarded LEA-16 verifier after that owner seed. It preserves existing data and credentials in ignored `artifacts/leadership-01/private-demo.json`. The full command exited 0 and LEA-16 passed; optional TEN-02, ACA-01 and BRD-02 refreshes reported existing fixture conflicts/unavailability and preserved their prior records.
+
+Verification: focused lint and TypeScript passed; Access unit 10/10 passed; real PostgreSQL Timetable reconciliation 6/6 passed with current Principal scope, stable continuation, mixed outcomes, cross-branch/role denial, safe retry clearing and existing concurrency/replay behavior. Focused one-worker Playwright passed 2/2 Chromium and 2/2 mobile sequentially against all 64 migrations. Direct inspection compared the approved LEA-16 reference and production route at 1440×1000 and 390×844; the first mobile capture exposed a clipped desktop table, which was corrected using the established responsive Leadership list composition before final recapture. See [evidence](../../evidence/principal-lea-16-timetable-2026-10-16/README.md).
+
+Remaining gap: the approved reference includes general uncovered/absence and cover acknowledgement/action states. The current owner model provides trusted reconciliation exceptions but no general Teacher absence source or delegated cover/change lifecycle. TT-07/TEA-23 product authority decisions remain required; the application renders no dead action. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
+Next action: select the next independently approved read projection; do not infer cover or staff-absence semantics from reconciliation outcomes.

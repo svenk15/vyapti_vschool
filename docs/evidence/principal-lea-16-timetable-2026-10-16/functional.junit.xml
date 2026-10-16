@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="6" failures="0" errors="0" time="2.435461417">
+    <testsuite name="test/functional/timetable-reconciliation.test.ts" timestamp="2026-10-16T00:14:15.587Z" hostname="Venkateshs-MacBook-Air.local" tests="6" failures="0" errors="0" skipped="0" time="2.435461417">
+        <testcase classname="test/functional/timetable-reconciliation.test.ts" name="TT-05 PostgreSQL reconciliation &gt; projects only the signed-in Teacher published commitments and denies foreign or revoked scope" time="0.0200685">
+        </testcase>
+        <testcase classname="test/functional/timetable-reconciliation.test.ts" name="TT-05 PostgreSQL reconciliation &gt; projects only assigned classes and their dated minimal roster" time="0.018040542">
+        </testcase>
+        <testcase classname="test/functional/timetable-reconciliation.test.ts" name="TT-05 PostgreSQL reconciliation &gt; reports a mixed batch, serializes concurrent manual scheduling, and resumes safely after guarded cancellation" time="0.253092583">
+        </testcase>
+        <testcase classname="test/functional/timetable-reconciliation.test.ts" name="TT-05 PostgreSQL reconciliation &gt; links the trusted Attendance session and keeps a submitted source-linked register frozen when its occurrence changes" time="0.010616458">
+        </testcase>
+        <testcase classname="test/functional/timetable-reconciliation.test.ts" name="TT-05 PostgreSQL reconciliation &gt; denies reconciliation after current branch authority is revoked" time="0.002386291">
+        </testcase>
+        <testcase classname="test/functional/timetable-reconciliation.test.ts" name="TT-05 PostgreSQL reconciliation &gt; returns durable per-occurrence failures when a non-retryable owner error affects a batch" time="0.075349708">
+        </testcase>
+    </testsuite>
+</testsuites>

@@ -34,6 +34,16 @@ Verification requires fixed-capability unit checks, real PostgreSQL grant/revoca
 
 LDR-02 owns the Attendance due-register read projection and exact metric definition. LDR-03 owns session evidence freshness. LDR-04 through LDR-06 require the approved Coordination write owner. No later approval or sensitive-record authority is inferred from this foundation.
 
+## LEA-16 — Published timetable exception oversight
+
+The independently releasable LEA-16 slice is a read-only projection of facts already owned by Timetable and Attendance. A live Principal receives `timetable.read_leadership`; this grants no Timetable draft/publication write, cover assignment, Attendance mutation, Teacher absence reason, pupil mark, or staff-performance inference. Every read rechecks the account token, active Institution/Branch and exact Principal membership, plus release, entitlement and branch activation for `timetable`, `academic_core`, `staff_core`, and `attendance`.
+
+`leadershipTimetableOverview(actor, organizationId, schoolId, {cursor?,limit?})` selects the one current effective immutable publication on the branch-local date. It reports the publication/reconciliation identity and current persisted occurrence outcomes. Only `BLOCKED_MANUAL_CONFLICT`, `BLOCKED_DOMAIN_RULE`, and `FAILED_TECHNICAL` occurrences enter the bounded exception list. Ordering is `(local_date, starts_at, id)`; the UUID cursor is re-resolved inside the same branch/publication/exception predicate before it may advance the query. Offering and dated assignment joins stay organization/branch scoped. A manual-session evidence link is returned only when the Attendance-owned overlap matches the exact class or current Teacher; the target independently reauthorizes and withholds roster and marks.
+
+The query runs in one repeatable-read transaction and performs no write or mutation lock. It reuses `vs_academics_timetable_revision`, `vs_academics_generation_checkpoint`, `vs_academics_lesson_occurrence`, scoped Offering/Teacher assignment reads, and the existing Attendance conflict evidence. No table, migration, receipt, or browser-supplied authority is added. Existing occurrence/source uniqueness and reconciliation serialization remain authoritative.
+
+The full approved workflow remains partial. Current owners provide trusted reconciliation conflicts and safe evidence, but do not provide a general Teacher-absence/uncovered-class source or delegated cover/change command. Those actions remain blocked on the separately prepared TT-07/TEA-23 authority decisions and must not appear as working controls.
+
 ## LDR-02 / LEA-05, LEA-06 and LEA-08 design delta
 
 Attendance owns `register-coverage.v1`; Leadership only presents its browser-safe DTO. The Principal capability is `attendance.read_leadership`, granted only by the explicit `PRINCIPAL` branch role. It is narrower than `attendance.read_school`: it permits the exact session-level completeness projection below and does not permit roster/pupil marks, absence explanations, correction history, exports, schedule/open/submit/correct/cancel, or administrator routes. Every read rechecks the live Principal role, account token version, Organization/School state, Attendance release, institution entitlement, branch activation and Attendance dependencies.

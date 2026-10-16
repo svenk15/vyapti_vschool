@@ -22,6 +22,7 @@ const demos = [
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
   { name: "SA-38 Admissions intake", script: "scripts/demo-admissions.ts", required: true },
   { name: "TT-01 weekly timetable pattern", script: "scripts/demo-timetable.ts", required: true },
+  { name: "LEA-16 Principal timetable exceptions", script: "scripts/demo-principal-timetable.ts", required: true },
   { name: "Parent/Guardian child access", script: "scripts/demo-guardians.ts", required: true },
   { name: "Student self-service workspace", script: "scripts/demo-student-portal.ts", required: true },
   { name: "Parent/Guardian and Student school notices", script: "scripts/demo-communication.ts", required: true },

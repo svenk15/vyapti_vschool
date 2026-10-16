@@ -1,0 +1,12 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="39.171395">
+<testsuite name="principal-timetable.spec.ts" timestamp="2026-10-16T00:25:50.152Z" hostname="chromium" tests="2" failures="0" skipped="0" time="3.31" errors="0">
+<testcase name="Principal inspects a current published timetable conflict without receiving mutation authority" classname="principal-timetable.spec.ts" time="3.108">
+<system-err>
+<![CDATA[(node:66363) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+]]>
+</system-err>
+</testcase>
+<testcase name="captures the approved Timetable exception oversight reference without modifying it" classname="principal-timetable.spec.ts" time="0.202">
+</testcase>
+</testsuite>
+</testsuites>

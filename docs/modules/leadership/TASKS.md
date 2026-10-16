@@ -76,3 +76,14 @@ Acceptance criteria for the existing read subset:
 5. Desktop/mobile captures are compared directly with the approved LEA-04 state and focused one-worker journeys pass.
 
 Remaining criterion: a Principal-owned write/status receipt must be reauthorized after revocation. No Principal write command exists in this release, so this workflow remains PARTIAL until such an owner operation is approved and implemented; School Administrator receipts must not be treated as Principal authority.
+
+## LEA-16 — Published timetable exception oversight
+
+- [x] Reauthorize exact Principal scope and all four owner-module availability gates on every read.
+- [x] Project the current effective immutable publication and durable reconciliation outcome counts without staff-performance inference.
+- [x] List only unresolved current-publication occurrences with stable server pagination, exact class/subject/time/current assignment, and a separately guarded Attendance evidence link where available.
+- [x] Verify real PostgreSQL scope, pagination, mixed outcomes, retry clearing, role/branch denial, and unchanged Timetable reconciliation behavior.
+- [x] Verify production route, navigation, evidence drill-down, keyboard focus, responsive composition, and direct desktop/mobile reference comparison.
+- [ ] Add general uncovered-class/Teacher-absence facts and delegated cover/change action only after their approved owner and authority lifecycle exist.
+
+Engineering status: supported read slice VERIFIED; full LEA-16 PARTIAL. Human review PENDING.
