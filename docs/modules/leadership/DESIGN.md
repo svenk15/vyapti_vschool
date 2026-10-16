@@ -34,6 +34,20 @@ Verification requires fixed-capability unit checks, real PostgreSQL grant/revoca
 
 LDR-02 owns the Attendance due-register read projection and exact metric definition. LDR-03 owns session evidence freshness. LDR-04 through LDR-06 require the approved Coordination write owner. No later approval or sensitive-record authority is inferred from this foundation.
 
+## Coordination owner boundary — LEA-09, LEA-11 and LEA-15
+
+The approved Principal workflows establish an owner boundary but do not yet establish a complete product contract. Leadership may inspect the exact Attendance session through the existing `attendance.read_leadership` projection. It may not cancel, correct, relink or delete that session. Attendance retains all session lifecycle invariants and independently authorizes any later administrator action. A Coordination owner would persist the request/follow-up, versioned lifecycle, intent receipt and safe audit; it would refer to the exact scoped Attendance session and revision without copying its roster, marks, explanations or correction history.
+
+The following decisions remain unresolved and block schema or command implementation:
+
+1. Whether one shared Coordination owner serves missing-register follow-ups and setup-review requests, or Attendance owns a distinct setup-review request. The shared owner is recommended because assignment, evidence-ready, verification, rejection and reopen semantics recur in LEA-09/11/15, while Attendance should remain the source-record owner.
+2. The exact branch capabilities for creating, assigning, verifying, rejecting and reopening requests. `PRINCIPAL` and `attendance.read_leadership` alone must not imply any of them; the administrator who may act must still pass the live Attendance command guard.
+3. The eligible assignee population and reassignment authority. General account search, name-only identity matching and authority inferred from a displayed role are prohibited.
+4. The active-request uniqueness rule, concern taxonomy, due-time policy and bounded operational-note rules. The references describe the required facts but do not approve whether uniqueness is per session, per session and concern, or per source revision.
+5. The verified-resolution rules. A submitted session may satisfy a missing-register follow-up, while a setup-review request may require an allowed Attendance cancellation/correction or an explicit rejection. UI acknowledgement cannot close either request, and submitted/frozen evidence cannot be erased.
+
+Until these decisions are approved, the safe application behavior is the verified read-only source view with no dead request or mutation control. Historical exports and retained snapshots keep their recorded definition/as-of semantics after later source changes.
+
 ## LEA-16 — Published timetable exception oversight
 
 The independently releasable LEA-16 slice is a read-only projection of facts already owned by Timetable and Attendance. A live Principal receives `timetable.read_leadership`; this grants no Timetable draft/publication write, cover assignment, Attendance mutation, Teacher absence reason, pupil mark, or staff-performance inference. Every read rechecks the account token, active Institution/Branch and exact Principal membership, plus release, entitlement and branch activation for `timetable`, `academic_core`, `staff_core`, and `attendance`.

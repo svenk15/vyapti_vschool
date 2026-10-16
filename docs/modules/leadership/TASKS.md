@@ -144,3 +144,14 @@ Engineering status: supported descriptive read slice VERIFIED; full LEA-18 PARTI
 - [x] Add Communication notice coverage through an exact-total bounded owner port with no recipient/body disclosure.
 
 Engineering status: every currently supported Principal aggregate export slice VERIFIED; LEA-39 ENGINEERING_COMPLETE. Human review PENDING.
+
+## Coordination owner readiness — LEA-09, LEA-11 and LEA-15
+
+- [x] Reconcile the approved Leadership/Attendance boundary: Principal inspection and routing do not authorize an Attendance mutation.
+- [x] Identify the reusable existing source read: exact scoped Attendance session/revision through `attendance.read_leadership`.
+- [x] Identify the missing owner contract: request/follow-up persistence, assignment, versioned lifecycle, intent recovery and verification evidence.
+- [ ] Approve the Coordination ownership model and exact create/assign/verify/reject/reopen capabilities.
+- [ ] Approve eligible assignees, active-request uniqueness, concern/note/due-time rules and outcome-specific closure evidence.
+- [ ] Only then define forward DDL, guarded commands, owner ports and focused PostgreSQL/browser verification.
+
+Engineering status: DESIGN_BOUNDARY_RECONCILED / IMPLEMENTATION_BLOCKED. No source command, schema or capability was added. Human review PENDING.

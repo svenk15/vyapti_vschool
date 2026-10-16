@@ -18,7 +18,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-12 | Review factual pupil attendance patterns | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-13 | Review an absence explanation | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-14 | Review an attendance correction request | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-15 | Resolve an incorrect or duplicate scheduled session | attendance | 1 | NOT_STARTED | NOT_STARTED | PENDING | Requires its named owner LLD and implementation |
+| LEA-15 | Resolve an incorrect or duplicate scheduled session | attendance | 1 | BLOCKED | NOT_STARTED | PENDING | The approved contract permits the Principal to inspect and route only; the Attendance administrator retains correction/cancellation. The shared Coordination request owner, lifecycle, assignee authority and verified-resolution contract are not approved or implemented. |
 | LEA-16 | Review timetable conflicts and uncovered classes | academics | 3 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Current effective publication, stored reconciliation exceptions, current assignment and separately guarded Attendance evidence are verified; general Teacher absence/uncovered facts and cover acknowledgement/action remain blocked on the TT-07/TEA-23 owner and authority decisions |
 | LEA-17 | Review assignment completion with the right denominator | academics | 3 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Learning now supplies exact frozen-recipient due/submitted/awaiting/future counts with server-side period/class/subject filters and no private learner work; extension/excused policy, permitted pupil evidence and teaching follow-up remain without owner contracts |
 | LEA-18 | Review feedback awaiting return | academics | 3 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Learning supplies the approved accepted-submission cohort, first-publication/awaiting counts, median elapsed clock time and class/subject filters without private content or identities; subject-lead coordination remains absent because its owner, assignee authority, note lifecycle and verified outcome contract are not approved |
@@ -53,7 +53,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 7 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-04, LEA-05, LEA-06, LEA-08 and LEA-39 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 7 ENGINEERING_COMPLETE, 5 PARTIAL, 3 BLOCKED, 31 NOT_STARTED. LEA-01, LEA-02, LEA-04, LEA-05, LEA-06, LEA-08 and LEA-39 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
@@ -61,4 +61,4 @@ Engineering: 7 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-0
 2. LEA-18's approved descriptive read slice is complete. Subject-lead coordination remains separate and requires an owner, assignee authority, note lifecycle and verified outcome contract.
 3. LEA-39 is engineering-complete for every currently supported Principal aggregate after the exact-total bounded Communication export. LEA-06 current, unavailable and retained-last-known states are verified for synthetic local/test data; real-data snapshot release remains gated by retention and backup-deletion policy.
 
-LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.
+LEA-09/11/15 require the Coordination owner. LEA-15 cannot be implemented as a direct Principal Attendance mutation: its approved workflow says leadership writes only a request and an independently authorized administrator applies any allowed owner command. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.
