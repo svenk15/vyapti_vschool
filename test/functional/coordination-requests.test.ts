@@ -1,5 +1,5 @@
 import {afterAll,beforeAll,describe,expect,it} from 'vitest';
-import {randomUUID} from 'node:crypto';
+import {createHash,randomUUID} from 'node:crypto';
 import {PrismaClient} from '../../generated/prisma/client';
 import {PrismaPg} from '@prisma/adapter-pg';
 import {createAccessServices} from '../../backend/composition/access';
@@ -149,5 +149,34 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   await db.attendanceRevision.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,sessionId:other.id,number:2,kind:'CORRECT',actorAccountId:worker.accountId,occurredAt:now,reason:'Correction on a different register',changes:{schemaVersion:1}}});
   await expect(coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:started.version,kind:'ATTENDANCE_CORRECTION',revision:2,reason:'Claim evidence from the wrong register.',key:commandKey()})).rejects.toMatchObject({code:'CONFLICT'});
   expect(await coordination.get(worker,scope.organizationId,scope.schoolId,created.requestId)).toMatchObject({status:'IN_PROGRESS',version:started.version,resolution:null});
+ });
+
+ it('returns honest mixed bulk outcomes, exact replay and unchanged existing assignment',async()=>{
+  const fresh=await source(),duplicate=await source(),existing=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:duplicate.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Preserve this assignment',key:commandKey()}),key=commandKey(),input={sourceIds:[fresh.id,duplicate.id,randomUUID()],kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'Synthetic bulk reason that must stay out of general audit.',dueLocal:null,assigneeAccountId:secondWorker.accountId,assignmentReason:'Assign eligible batch items',key} as const;
+  const result=await coordination.submitBatch(creator,scope.organizationId,scope.schoolId,input);
+  expect(result).toMatchObject({state:'PARTIAL',counts:{total:3,created:1,alreadyExists:1,failed:1,pending:0}});
+  expect(result.items.map(item=>item.status)).toEqual(['CREATED','ALREADY_EXISTS','FAILED']);
+  expect(result.items[2]).toMatchObject({source:null,error:{code:'SOURCE_UNAVAILABLE'}});
+  expect((await coordination.get(creator,scope.organizationId,scope.schoolId,existing.requestId)).assignee?.accountId).toBe(worker.accountId);
+  expect(await coordination.submitBatch(creator,scope.organizationId,scope.schoolId,input)).toMatchObject({id:result.id,replayed:true,counts:result.counts});
+  await expect(coordination.submitBatch(creator,scope.organizationId,scope.schoolId,{...input,note:'Changed payload'})).rejects.toMatchObject({code:'IDEMPOTENCY_CONFLICT'});
+  const audits=await db.auditEntry.findMany({where:{module:'coordination',resourceType:{in:['CoordinationBatch','CoordinationRequest']}}});expect(JSON.stringify(audits)).not.toContain('Synthetic bulk reason');
+ });
+
+ it('recovers a request committed before its batch item receipt and denies results after revocation',async()=>{
+  const attendance=await source(),batchId=randomUUID(),key=commandKey(),input={sourceIds:[attendance.id],kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:null,assignmentReason:null,key} as const,inputHash=createHash('sha256').update(JSON.stringify({schemaVersion:1,organizationId:scope.organizationId,schoolId:scope.schoolId,actor:creator.accountId,...input})).digest('hex'),at=now;
+  await db.coordinationBatch.create({data:{id:batchId,organizationId:scope.organizationId,schoolId:scope.schoolId,actorAccountId:creator.accountId,idempotencyKey:key,inputHash,payload:input,state:'PROCESSING',itemCount:1,createdAt:at,updatedAt:at,version:1}});
+  await db.coordinationBatchItem.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,batchId,ordinal:1,sourceId:attendance.id,status:'PENDING',createdAt:at}});
+  const committed=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:null,assignmentReason:null,key:`${batchId}:1`});
+  const recovered=await coordination.submitBatch(creator,scope.organizationId,scope.schoolId,input);expect(recovered).toMatchObject({id:batchId,state:'COMPLETED',counts:{created:1,pending:0}});expect(recovered.items[0]?.requestId).toBe(committed.requestId);expect(await db.coordinationRequest.count({where:{sourceId:attendance.id,kind:'MISSING_REGISTER'}})).toBe(1);
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.create'});
+  await expect(coordination.getBatch(creator,scope.organizationId,scope.schoolId,batchId)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.create'});
+ });
+
+ it('serializes overlapping batches without duplicating an active request',async()=>{
+  const attendance=await source(),make=(key:string)=>coordination.submitBatch(creator,scope.organizationId,scope.schoolId,{sourceIds:[attendance.id],kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:null,assignmentReason:null,key}),[left,right]=await Promise.all([make(commandKey()),make(commandKey())]);
+  expect([left.items[0]?.status,right.items[0]?.status].sort()).toEqual(['ALREADY_EXISTS','CREATED']);
+  expect(await db.coordinationRequest.count({where:{organizationId:scope.organizationId,schoolId:scope.schoolId,sourceId:attendance.id,kind:'MISSING_REGISTER',status:{notIn:['RESOLVED','WITHDRAWN']}}})).toBe(1);
  });
 });

@@ -1,10 +1,10 @@
 # Coordination — low-level design
 
-Status: approved Attendance-scoped first delivery · 16 October 2026.
+Status: approved Attendance-scoped first delivery plus LEA-10 bulk follow-up · 17 October 2026.
 
 ## Scope and ownership
 
-Coordination owns operational follow-up requests, current assignment, lifecycle, notes, evidence references and immutable history for LEA-09, LEA-11 and LEA-15. Attendance remains the owner of sessions, registers, correction revisions and cancellation. A Coordination command never changes Attendance data. The first release accepts only `ATTENDANCE_SESSION` sources and request kinds `MISSING_REGISTER` and `SESSION_SETUP_REVIEW`; it is not a generic workflow, messaging, safeguarding, disciplinary, assessment or approval engine.
+Coordination owns operational follow-up requests, current assignment, lifecycle, notes, evidence references and immutable history for LEA-09, LEA-10, LEA-11 and LEA-15. Attendance remains the owner of sessions, registers, correction revisions and cancellation. A Coordination command never changes Attendance data. The first release accepts only `ATTENDANCE_SESSION` sources and request kinds `MISSING_REGISTER` and `SESSION_SETUP_REVIEW`; it is not a generic workflow, messaging, safeguarding, disciplinary, assessment or approval engine.
 
 The runtime defaults to disabled. `VSCHOOL_COORDINATION_MODE=synthetic` enables this slice only for fictional local/test data because no approved retention and backup-deletion policy currently covers the operational note bodies. Production and real-client data remain blocked independently of application verification.
 
@@ -73,6 +73,60 @@ Immutable event rows: `id`, scope, request, sequential `number`, `event_type`, o
 `id`, scope, actor, `command`, `idempotency_key`, `input_hash`, request, bounded JSON `result`, `occurred_at`. Unique scope/actor/command/key and request lookup index. Result contains identifiers, version/status/timestamps and replay marker only; it contains no notes or protected Attendance content.
 
 All four tables are `BRANCH` classified with `organization_id, school_id`. Application authorization remains mandatory. Their migration records the TEN-ADR-006 Path A exception; TEN-03 remains the RLS closure gate and blocks production release.
+
+## LEA-10 bounded bulk follow-up
+
+LEA-10 composes the proven single-request command. A Principal explicitly selects 1–50 currently visible Attendance sources. The reviewed payload contains ordered unique source IDs, request kind, concern, optional common assignee and due time, optional operational note, and an assignment reason when assigned. Filter or branch changes clear browser selection with an explanation; there is no implicit all-results operation. The server validates the whole selection again.
+
+The batch lifecycle is `PROCESSING → COMPLETED|PARTIAL`. Items start `PENDING` and finish once as `CREATED`, `ALREADY_EXISTS`, or `FAILED`. `CREATED` points to the request created by the existing command. `ALREADY_EXISTS` points to the unchanged active request only when current manager authority permits reading it. `FAILED` stores only an allowlisted code and safe explanation. Unauthorized or foreign sources use `SOURCE_UNAVAILABLE`; no source label, Student information, or foreign-scope metadata is retained in the result.
+
+The same actor, branch and batch key with the same normalized payload resumes the original batch. A changed payload returns `IDEMPOTENCY_CONFLICT`. Each item receives a stable derived single-command key based on the batch ID and ordinal. Processing is bounded and sequential. Each existing create command commits independently; a separate short transaction then records the item outcome. If the process stops after request commit but before item recording, recovery replays the same derived key and records the original result without a second request. Terminal failed items do not run again and require a new explicitly reviewed batch. Current authority is checked before every item and again before results are disclosed.
+
+| Physical table (Prisma model) | Physical columns | Responsibility | Constraints and indexes |
+|---|---|---|---|
+| `vs_coordination_batch` (CoordinationBatch) | id/org/school/actor uuid; key/hash; normalized payload; state/count/timestamps/version | Durable reviewed batch intent and recovery root. | Scoped School/actor FKs; unique actor/key; item-count/state/version checks; scoped status index |
+| `vs_coordination_batch_item` (CoordinationBatchItem) | id/org/school/batch/source/request uuid; ordinal/status/error/timestamps | Explicit selected source candidate and terminal per-item result. | Scoped batch/request FKs; source is an untrusted candidate reauthorized per item; unique batch ordinal/source; status/error pairing; batch/status index |
+
+Both tables are `BRANCH` classified under TEN-ADR-006 Path A. Application authorization remains mandatory and TEN-03 is their production closure gate. The normalized payload may contain restricted operational text, so the existing synthetic-only retention restriction applies.
+
+### Interfaces, transactions and privacy
+
+`previewBatch(actor, scope, {sourceIds, kind})` returns only reauthorized Attendance summaries, their safe eligibility disposition and currently eligible assignees. `submitBatch(actor, scope, input)` creates or resumes the durable batch and returns totals plus authorized per-item outcomes. `getBatch(actor, scope, batchId)` reauthorizes the actor before returning its reviewed input and results. Hosting uses thin routes under `/api/v1/coordination/batches`; body/header batch-key equality is required.
+
+Batch initialization is one short serializable transaction. Every item calls the existing serializable create command and records its item outcome in another short transaction. No transaction spans the full batch. An invalid common assignee fails that item and never creates an unassigned request. Existing active requests remain unchanged.
+
+General audit contains batch/request/source identifiers, counts, statuses and safe codes only. It never receives note or reason bodies. Batch reads, retries and replay recheck live account, branch, module and Coordination capability. Revocation denies the whole protected receipt rather than returning results committed before revocation.
+
+### Submission and interrupted recovery
+
+```mermaid
+sequenceDiagram
+  actor P as Principal
+  participant B as Coordination batch
+  participant S as Existing single create command
+  participant DB as PostgreSQL
+  P->>B: reviewed payload + batch key
+  B->>DB: authorize; create/load batch and PENDING items
+  loop bounded sequential items
+    B->>S: source payload + stable derived key
+    S->>DB: authorize, recheck source/assignee, commit request+receipt
+    B->>DB: record CREATED/ALREADY_EXISTS/FAILED
+  end
+  B->>DB: reauthorize and summarize
+  B-->>P: honest partial or completed receipt
+```
+
+```mermaid
+sequenceDiagram
+  actor P as Principal
+  participant B as Coordination batch
+  participant S as Existing single create command
+  P->>B: same normalized payload + same batch key
+  B->>B: reject changed hash; load original PENDING items
+  B->>S: replay stable item key
+  S-->>B: original committed result or current guarded outcome
+  B-->>P: recovered receipt; successful items are not recreated
+```
 
 ## Transactions, locking and audit
 

@@ -18,7 +18,7 @@ const directory='artifacts/coordination-01';
 const path=`${directory}/private-demo.json`;
 
 type People={adminEmail:string;password:string;teacherEmail:string;teacherPassword:string;organizationId:string;schoolId:string;accountId:string;teacherAccountId:string};
-type Demo={roleKey:string;missingCreateKey:string;resolvedCreateKey:string;resolvedStartKey:string;resolvedSubmitKey:string;resolvedVerifyKey:string;missingRequestId?:string;resolvedRequestId?:string;unassignedRequestId?:string;inProgressRequestId?:string;awaitingRequestId?:string;returnedRequestId?:string;withdrawnRequestId?:string;sourceDate?:string};
+type Demo={roleKey:string;missingCreateKey:string;resolvedCreateKey:string;resolvedStartKey:string;resolvedSubmitKey:string;resolvedVerifyKey:string;fullBatchKey?:string;mixedBatchKey?:string;fullBatchId?:string;mixedBatchId?:string;missingRequestId?:string;resolvedRequestId?:string;unassignedRequestId?:string;inProgressRequestId?:string;awaitingRequestId?:string;returnedRequestId?:string;withdrawnRequestId?:string;sourceDate?:string};
 
 const key=(value:string)=>{const hash=createHash('sha256').update(value).digest('hex').slice(0,32);return `${hash.slice(0,8)}-${hash.slice(8,12)}-4${hash.slice(13,16)}-a${hash.slice(17,20)}-${hash.slice(20)}`;};
 const initial=(scope:string):Demo=>({roleKey:key(`coord-role:${scope}`),missingCreateKey:key(`coord-missing:${scope}`),resolvedCreateKey:key(`coord-resolved:${scope}`),resolvedStartKey:key(`coord-start:${scope}`),resolvedSubmitKey:key(`coord-submit:${scope}`),resolvedVerifyKey:key(`coord-verify:${scope}`)});
@@ -123,10 +123,16 @@ async function main(){
    demo.withdrawnRequestId=created.requestId;
   }
 
+  stage='bulk-followups';
+  demo.fullBatchKey??=command('bulk-full','submit');demo.mixedBatchKey??=command('bulk-mixed','submit');
+  const activeMissing=new Set((await db.coordinationRequest.findMany({where:{organizationId:people.organizationId,schoolId:people.schoolId,kind:'MISSING_REGISTER',status:{notIn:['RESOLVED','WITHDRAWN']}},select:{sourceId:true}})).map(item=>item.sourceId)),past=sessions.filter(session=>(session.status==='SCHEDULED'||session.status==='OPEN')&&session.endsAt<now),submitted=sessions.filter(session=>session.status==='SUBMITTED');
+  if(!demo.fullBatchId){const eligible=past.filter(session=>!activeMissing.has(session.id)).slice(0,2);if(eligible.length){const result=await coordination.submitBatch(principal,people.organizationId,people.schoolId,{sourceIds:eligible.map(session=>session.id),kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'Review the selected fictional registers.',dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Assign the eligible fictional bulk follow-ups.',key:demo.fullBatchKey});demo.fullBatchId=result.id;for(const item of eligible)activeMissing.add(item.id);}}
+  if(!demo.mixedBatchId){const eligible=past.find(session=>!activeMissing.has(session.id)),duplicate=past.find(session=>activeMissing.has(session.id)),unavailable=submitted.find(session=>!activeMissing.has(session.id)),selected=[eligible,duplicate,unavailable].filter((value):value is NonNullable<typeof value>=>Boolean(value));if(selected.length>=2){const result=await coordination.submitBatch(principal,people.organizationId,people.schoolId,{sourceIds:selected.map(session=>session.id),kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'Demonstrate honest mixed bulk outcomes with fictional data.',dueLocal:null,assigneeAccountId:null,assignmentReason:null,key:demo.mixedBatchKey});demo.mixedBatchId=result.id;}}
+
   demo.sourceDate=sessions[0].schoolDate.toISOString().slice(0,10);
   mkdirSync(directory,{recursive:true,mode:0o700});
   writeFileSync(path,`${JSON.stringify({...demo,organizationId:people.organizationId,schoolId:people.schoolId,principalEmail:people.adminEmail,workerEmail:people.teacherEmail},null,2)}\n`,{mode:0o600});
-  console.log(`Prepared or preserved six synthetic Coordination lifecycle examples. Private scenario: ${path}`);
+  console.log(`Prepared or preserved Coordination lifecycle and LEA-10 batch examples. Private scenario: ${path}`);
  }catch(error){
   throw new Error(`${stage.toUpperCase()}_${error instanceof Error&&/^[A-Z0-9_]+$/.test(error.message)?error.message:'LOCAL_DEMO_ERROR'}`);
  }finally{

@@ -15,3 +15,17 @@ Visual comparison directly inspected the unchanged approved LEA-09, LEA-11 and L
 Production remains blocked: `VSCHOOL_COORDINATION_MODE` defaults to disabled and only `synthetic` is supported until operational-note retention and backup-deletion policy is approved. TEN-03, provider, restore/load and accessibility release gates remain open.
 
 Next action: owner review of the three Coordination journeys, then select the next independently approved Principal slice. Do not broaden Coordination beyond the approved Attendance scope without a new owner contract.
+
+## 17 October 2026 — COORD-02 / LEA-10 engineering-complete
+
+LEA-10 now composes the verified single-request command into a bounded bulk workflow. A Principal selects 1–50 visible due Attendance registers, reviews server-authorized source dispositions and an optional common eligible assignee, and performs the first mutation only at final confirmation. Every item commits independently as `CREATED`, `ALREADY_EXISTS` or `FAILED`; durable batch and item receipts preserve exact-key replay and resume after a committed response is lost. Changed payloads conflict, prior successes are not recreated, and protected results disappear after current authority is revoked.
+
+Forward migration `20261017100000_coordination_bulk_followups` is applied to both `vyapti_vschool` and `vyapti_vschool_test`; both report 69 applied migrations and no pending migration. It adds registered branch-scoped `vs_coordination_batch` and `vs_coordination_batch_item` tables. No migration history was changed. Application authorization remains active and TEN-03 is the production enforcement gate.
+
+Focused verification on the current implementation: unit 4/4; real-PostgreSQL functional 10/10; focused Playwright LEA-10 desktop 1/1 plus reference 1/1 and mobile 1/1 plus reference 1/1, sequentially with one worker. The browser evidence covers explicit selection, staged review, final-only mutation, mixed outcome, committed-response recovery, preserved filtered return context, query-change selection clearing, focus and desktop/mobile overflow. Dedicated E2E and normal production builds passed. Backend extraction, boundary, database-design, documentation, type and focused lint checks passed.
+
+The approved LEA-10 workflow-dialog reference and real application were directly inspected at 1280 px desktop and 390 px mobile. The application preserves the approved order and interaction contract in the production Principal shell, with a routed staged composition and durable result receipt rather than a workflow-explorer modal. The documented portable-font exception remains. Native accessibility and human visual review are PENDING.
+
+`pnpm demo:seed` passed and adds or preserves an overdue fictional register plus durable successful/mixed batch examples without changing credentials or existing Attendance outcomes. Private scenario IDs remain in ignored `artifacts/coordination-01/private-demo.json`; administrator credentials remain in ignored `artifacts/people-02/private-demo.json`.
+
+Production remains blocked by the Coordination operational-note retention/backup-deletion decision, TEN-03, native accessibility and the other recorded release gates. Next action: select the next independently approved Principal capability; do not infer bulk behavior for other owner modules.

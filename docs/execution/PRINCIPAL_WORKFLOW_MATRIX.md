@@ -1,6 +1,6 @@
 # Principal workflow implementation matrix
 
-Updated 16 October 2026 from the approved 46-workflow catalog. The approved reference is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`. Status columns remain separate: engineering, direct visual comparison, and human review. This inventory does not authorize later-phase sensitive or approval semantics.
+Updated 17 October 2026 from the approved 46-workflow catalog. The approved reference is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`. Status columns remain separate: engineering, direct visual comparison, and human review. This inventory does not authorize later-phase sensitive or approval semantics.
 
 | Workflow | Outcome | Owner area | Phase | Engineering status | Visual status | Human review | Exact gap / next dependency |
 |---|---|---|---:|---|---|---|---|
@@ -13,7 +13,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-07 | Run the weekly leadership review | daily | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-08 | Inspect register submission coverage | attendance | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Exact coverage/evidence plus server-side class/status/Teacher filters, deterministic due/class sorting, query-bound pagination and URL Back/Forward behavior are verified; the approved source is a fictional workflow dialog while the application uses the production Principal shell |
 | LEA-09 | Create an accountable missing-register follow-up | attendance | 2 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Exact scoped Attendance source → staged create/assign → receipt, queue and persisted detail are verified, including exact-key committed-response recovery; the approved workflow-dialog source and routed production composition differ |
-| LEA-10 | Follow up multiple missing registers safely | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-10 | Follow up multiple missing registers safely | attendance | 2 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Explicit 1–50 visible selection, server review, optional eligible assignee, final-only independent commands, durable mixed outcomes and exact-key interrupted recovery are verified; the production application uses a routed staged composition and durable receipt instead of the approved workflow-explorer dialog |
 | LEA-11 | Verify, close or reopen a follow-up | attendance | 2 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Assigned work, exact evidence, independent verify/return, withdraw/reopen, stale-version and revoked-access behavior are verified; the application uses routed queue/detail compositions instead of the reference workflow dialog |
 | LEA-12 | Review factual pupil attendance patterns | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-13 | Review an absence explanation | attendance | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 7 ENGINEERING_COMPLETE, 5 PARTIAL, 3 BLOCKED, 31 NOT_STARTED. LEA-01, LEA-02, LEA-04, LEA-05, LEA-06, LEA-08 and LEA-39 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 11 ENGINEERING_COMPLETE, 5 PARTIAL, 30 NOT_STARTED. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
-1. LEA-34's supported read slice is complete; reminder/resend requires an owner command, delivery outcome source, per-recipient reauthorization and deduplication/replay contract.
+1. LEA-10 is engineering-complete through COORD-02. Production release still requires the Coordination retention decision and TEN-03 enforcement evidence.
 2. LEA-18's approved descriptive read slice is complete. Subject-lead coordination remains separate and requires an owner, assignee authority, note lifecycle and verified outcome contract.
 3. LEA-39 is engineering-complete for every currently supported Principal aggregate after the exact-total bounded Communication export. LEA-06 current, unavailable and retained-last-known states are verified for synthetic local/test data; real-data snapshot release remains gated by retention and backup-deletion policy.
 
-LEA-09/11/15 require the Coordination owner. LEA-15 cannot be implemented as a direct Principal Attendance mutation: its approved workflow says leadership writes only a request and an independently authorized administrator applies any allowed owner command. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.
+LEA-09/10/11/15 use the implemented Coordination owner. LEA-15 remains an independently authorized Attendance operation rather than a direct Principal mutation. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

@@ -1,7 +1,7 @@
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
-import type {CoordinationAssignee,CoordinationAvailability,CoordinationCapability,CoordinationMutationResult,CoordinationQueue,CoordinationRequest} from '../../../../shared/contracts/coordination';
+import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPreview,CoordinationBatchReceipt,CoordinationCapability,CoordinationMutationResult,CoordinationQueue,CoordinationRequest} from '../../../../shared/contracts/coordination';
 import {AccessError} from '../../access/contracts/index';
-import {assignInput,createInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
+import {assignInput,batchInput,batchPreviewInput,createInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
 
 export type CoordinationListInput=Readonly<{status?:unknown;kind?:unknown;assignment?:unknown;cursor?:unknown;limit?:unknown}>;
 export interface CoordinationRepository {
@@ -10,6 +10,9 @@ export interface CoordinationRepository {
  get(actor:Identity,organizationId:string,schoolId:string,requestId:string):Promise<CoordinationRequest>;
  eligibleAssignees(actor:Identity,organizationId:string,schoolId:string,requestId:string):Promise<readonly CoordinationAssignee[]>;
  sourceAssignees(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof sourceAssigneeInput>):Promise<readonly CoordinationAssignee[]>;
+ previewBatch(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof batchPreviewInput>):Promise<CoordinationBatchPreview>;
+ submitBatch(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof batchInput>):Promise<CoordinationBatchReceipt>;
+ getBatch(actor:Identity,organizationId:string,schoolId:string,batchId:string):Promise<CoordinationBatchReceipt>;
  create(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof createInput>):Promise<CoordinationMutationResult>;
  assign(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof assignInput>):Promise<CoordinationMutationResult>;
  start(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof transitionInput>):Promise<CoordinationMutationResult>;
@@ -29,6 +32,9 @@ export function createCoordinationUseCases(repository:CoordinationRepository){re
  get(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,requestId:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.get(s.actor,s.organizationId,s.schoolId,id(requestId));},
  eligibleAssignees(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,requestId:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.eligibleAssignees(s.actor,s.organizationId,s.schoolId,id(requestId));},
  sourceAssignees(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.sourceAssignees(s.actor,s.organizationId,s.schoolId,sourceAssigneeInput(record(input)));},
+ previewBatch(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.previewBatch(s.actor,s.organizationId,s.schoolId,batchPreviewInput(record(input)));},
+ submitBatch(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.submitBatch(s.actor,s.organizationId,s.schoolId,batchInput(record(input)));},
+ getBatch(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,batchId:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.getBatch(s.actor,s.organizationId,s.schoolId,id(batchId));},
  create(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.create(s.actor,s.organizationId,s.schoolId,createInput(record(input)));},
  assign(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.assign(s.actor,s.organizationId,s.schoolId,assignInput(record(input)));},
  start(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.start(s.actor,s.organizationId,s.schoolId,transitionInput(record(input)));},

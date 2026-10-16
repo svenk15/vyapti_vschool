@@ -2139,6 +2139,48 @@
         "owner": "coordination",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "CoordinationBatch",
+      "owner": "coordination",
+      "table": "vs_coordination_batch",
+      "fields": "id/org/school/actor uuid; key/hash; normalized payload; state/count/timestamps/version",
+      "responsibility": "Durable reviewed LEA-10 batch intent and recovery root.",
+      "constraints": "Scoped School/actor FKs; unique actor/key; item-count/state/version checks; scoped status index",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only the current authorized initiating manager may resume or read the exact batch; every item independently rechecks source and assignment authority.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CoordinationBatchItem",
+      "owner": "coordination",
+      "table": "vs_coordination_batch_item",
+      "fields": "id/org/school/batch/source/request uuid; ordinal/status/error/timestamps",
+      "responsibility": "Explicit selected Attendance source and safe terminal per-item bulk outcome.",
+      "constraints": "Scoped batch/request FKs; source is an untrusted candidate reauthorized per item; unique batch ordinal/source; status/error pairing; batch/status index",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Item visibility follows the protected initiating batch and never grants source or request access independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

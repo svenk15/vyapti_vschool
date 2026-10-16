@@ -17,3 +17,17 @@ Dependencies: verified Principal Attendance source read; existing Attendance cor
 - [x] Update LEA-09, LEA-11 and LEA-15 accounting without inferring human acceptance.
 
 Human review, production retention, TEN-03, font portability and native accessibility remain PENDING.
+
+## COORD-02 — LEA-10 bounded bulk Attendance follow-ups
+
+Dependencies: COORD-01 engineering verification; approved LEA-10 contract dated 17 October 2026.
+
+- [x] Persist reviewed batch intent and explicit 1–50 source items with a forward migration and registry entries.
+- [x] Implement preview, submit/resume and protected receipt through the Coordination facade.
+- [x] Reuse the guarded single-request command with stable derived item keys and independent transactions.
+- [x] Add explicit selection, staged review, partial result and recovery UI.
+- [x] Verify mixed outcomes, concurrency, interruption, revocation, forged scope, ineligible assignment, replay and redaction in real PostgreSQL.
+- [x] Verify desktop/mobile selection, filter/context clearing, final-only mutation, lost response and focus behavior.
+- [x] Extend duplicate-safe synthetic demo data and update LEA-10 evidence and matrix.
+
+Human review, production retention, TEN-03, font portability and native accessibility remain PENDING.

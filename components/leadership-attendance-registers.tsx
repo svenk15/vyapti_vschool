@@ -1,0 +1,19 @@
+'use client';
+
+import Link from 'next/link';
+import {useRouter} from 'next/navigation';
+import {useState} from 'react';
+import type {LeadershipRegisterCoverage} from '@/shared/contracts/attendance';
+import {Alert,Badge,Button,Card,EmptyState} from '@/components/ui/primitives';
+
+type Item=LeadershipRegisterCoverage['awaiting']['items'][number];
+const time=(value:string,timezone:string)=>new Intl.DateTimeFormat('en-IN',{timeZone:timezone,hour:'2-digit',minute:'2-digit'}).format(new Date(value));
+
+export function LeadershipAttendanceRegisters({items,total,awaitingTotal,timezone,sourceQuery}:{items:readonly Item[];total:number;awaitingTotal:number;timezone:string;sourceQuery:string}){
+ const router=useRouter(),[selected,setSelected]=useState<readonly string[]>([]),selectedSet=new Set(selected),allVisible=items.length>0&&items.every(item=>selectedSet.has(item.id));
+ const toggle=(id:string)=>setSelected(current=>current.includes(id)?current.filter(value=>value!==id):current.length<50?[...current,id]:current);
+ const begin=()=>{if(!selected.length)return;const query=new URLSearchParams();for(const id of selected)query.append('session',id);query.set('return',`/leadership/attendance?${sourceQuery}`);router.push(`/leadership/coordination/bulk?${query}`);};
+ return <><Card className="leadership-register-list"><div className="leadership-register-heading padded"><div><h2>Awaiting submission</h2><p className="muted">{total}{total!==awaitingTotal?` matching of ${awaitingTotal}`:''} exact register{total===1?'':'s'} due in this snapshot.</p></div><Badge tone={total?'warning':'success'}>{total?'Needs attention':'Up to date'}</Badge></div>
+  {items.length?<><div className="bulk-selection-bar" aria-live="polite"><div><strong>{selected.length} selected</strong><span>Select up to 50 visible records. Changing filters, page or branch clears this selection.</span></div><Button disabled={!selected.length} onClick={begin}>Follow up selected</Button></div><div className="table-scroll"><table className="data-table"><caption className="sr-only">Due attendance registers awaiting submission</caption><thead><tr><th className="bulk-check" scope="col"><input aria-label="Select all visible registers" type="checkbox" checked={allVisible} onChange={()=>setSelected(allVisible?[]:items.slice(0,50).map(item=>item.id))}/></th><th scope="col">Class and subject</th><th scope="col">Session</th><th scope="col">Expected teacher</th><th scope="col">Status</th><th scope="col">Action</th></tr></thead><tbody>{items.map(item=><tr key={item.id}><td className="bulk-check" data-label="Select"><input aria-label={`Select ${item.sectionName} ${item.subjectName}`} type="checkbox" checked={selectedSet.has(item.id)} onChange={()=>toggle(item.id)}/></td><th scope="row"><strong>{item.sectionName}</strong><span className="sub">{item.subjectName}</span></th><td data-label="Session">{time(item.startsAt,timezone)}–{time(item.endsAt,timezone)}<span className="sub">Due {time(item.dueAt,timezone)}</span></td><td data-label="Expected teacher">{item.teacherName??'Assignment unavailable'}</td><td data-label="Status"><Badge tone="warning">{item.status==='OPEN'?'Open · awaiting':'Not opened'}</Badge></td><td data-label="Action"><Link className="leadership-source-link" href={`/leadership/attendance/sessions/${item.id}?${sourceQuery}`}>Inspect source</Link></td></tr>)}</tbody></table></div></>:<EmptyState icon="calendar" title={total===0&&awaitingTotal>0?'No matching awaiting registers':'No due registers awaiting submission'} description={total===0&&awaitingTotal>0?'Clear filters or choose another permitted value.':'Received plus awaiting still reconciles to the due total. Future sessions remain listed as not due.'}/>}</Card>
+  {selected.length===50?<Alert tone="warning" title="Selection limit reached">Confirm these 50 records before starting another batch.</Alert>:null}</>;
+}

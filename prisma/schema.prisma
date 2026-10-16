@@ -757,6 +757,45 @@ model CoordinationCommandReceipt {
  @@map("vs_coordination_command_receipt")
 }
 
+model CoordinationBatch {
+ id String @id(map:"vs_coordination_batch_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ idempotencyKey String @map("idempotency_key") @db.VarChar(100)
+ inputHash String @map("input_hash") @db.Char(64)
+ payload Json
+ state String @db.VarChar(20)
+ itemCount Int @map("item_count")
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ completedAt DateTime? @map("completed_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,id],map:"vs_coordination_batch_scope_id_key")
+ @@unique([organizationId,schoolId,actorAccountId,idempotencyKey],map:"vs_coordination_batch_intent_key")
+ @@index([organizationId,schoolId,state,updatedAt(sort: Desc),id(sort: Desc)],map:"vs_coordination_batch_state_idx")
+ @@map("vs_coordination_batch")
+}
+
+model CoordinationBatchItem {
+ id String @id(map:"vs_coordination_batch_item_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ batchId String @map("batch_id") @db.Uuid
+ ordinal Int
+ sourceId String @map("source_id") @db.Uuid
+ status String @db.VarChar(24)
+ requestId String? @map("request_id") @db.Uuid
+ errorCode String? @map("error_code") @db.VarChar(40)
+ errorMessage String? @map("error_message") @db.VarChar(240)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ completedAt DateTime? @map("completed_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,batchId,ordinal],map:"vs_coordination_batch_item_ordinal_key")
+ @@unique([organizationId,schoolId,batchId,sourceId],map:"vs_coordination_batch_item_source_key")
+ @@index([organizationId,schoolId,batchId,status,ordinal],map:"vs_coordination_batch_item_status_idx")
+ @@map("vs_coordination_batch_item")
+}
+
 model OperatorAuditEntry {
  id String @id @db.Uuid
  operatorId String @map("operator_id") @db.Uuid
