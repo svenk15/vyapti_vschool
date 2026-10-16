@@ -23,6 +23,8 @@ let scope:Awaited<ReturnType<typeof access.provisionSchool>>;
 let creator:{accountId:string;tokenVersion:number};
 let worker:{accountId:string;tokenVersion:number};
 let workerAccountId:string;
+let secondWorker:{accountId:string;tokenVersion:number};
+let undesignated:{accountId:string;tokenVersion:number};
 let offeringId:string;
 let calendarRevisionId:string;
 
@@ -49,8 +51,11 @@ beforeAll(async()=>{
  offeringId=(await academics.create(worker,scope.organizationId,scope.schoolId,{yearId:year.id,sectionId:section.id,subjectId:subject.id,code:'CO-A',key:randomUUID(),reason})).id;
  calendarRevisionId=(await db.schoolCalendar.findUniqueOrThrow({where:{id:year.calendarId},select:{currentRevisionId:true}})).currentRevisionId!;
  const principal=await activeStaffFixture(db,scope,['PRINCIPAL']);creator=principal.identity;
+ const second=await activeStaffFixture(db,scope,['SCHOOL_ADMIN']);secondWorker=second.identity;
+ const withoutCoordination=await activeStaffFixture(db,scope,['SCHOOL_ADMIN']);undesignated=withoutCoordination.identity;
  for(const capability of ['coordination.create','coordination.assign','coordination.verify','coordination.manage'] as const)await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability});
  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:worker.accountId,capability:'coordination.work'});
+ await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:secondWorker.accountId,capability:'coordination.work'});
 });
 
 afterAll(async()=>{await coordination.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
@@ -70,10 +75,11 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
  });
 
  it('supports assignment, return, independent verification, reopen and current-authority denial',async()=>{
-  const attendance=await source(),created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,key:commandKey()});
-  const assigned=await coordination.assign(creator,scope.organizationId,scope.schoolId,{requestId:created.requestId,assigneeAccountId:worker.accountId,dueLocal:'2026-10-16T18:30',expectedVersion:created.version,reason:'Assign to attendance administrator',key:commandKey()});
+  const attendance=await source(),eligible=await coordination.sourceAssignees(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER'});expect(eligible.map(item=>item.accountId).sort()).toEqual([worker.accountId,secondWorker.accountId].sort());
+  const created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:'2026-10-16T18:30',assigneeAccountId:worker.accountId,assignmentReason:'Assign to attendance administrator',key:commandKey()});
+  expect(created.version).toBe(2);
   expect((await coordination.list(worker,scope.organizationId,scope.schoolId,{assignment:'mine'})).items).toHaveLength(1);
-  const started=await coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:assigned.version,reason:null,key:commandKey()});
+  const started=await coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:created.version,reason:null,key:commandKey()});
   const submitted=await coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:started.version,kind:'NO_CHANGE_NEEDED',revision:null,reason:'Register is now present; no correction needed.',key:commandKey()});
   await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:worker.accountId,capability:'coordination.verify'});
   await expect(coordination.verify(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:submitted.version,reason:null,key:commandKey()})).rejects.toMatchObject({code:'FORBIDDEN'});
@@ -96,6 +102,10 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   await expect(coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:correctionRequest.requestId,expectedVersion:started.version,kind:'ATTENDANCE_CORRECTION',revision:2,reason:'Correction completed.',key:commandKey()})).rejects.toMatchObject({code:'CONFLICT'});
   await db.attendanceRevision.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,sessionId:submittedSource.id,number:2,kind:'CORRECT',actorAccountId:worker.accountId,occurredAt:now,reason:'Synthetic correction',changes:{schemaVersion:1}}});
   expect(await coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:correctionRequest.requestId,expectedVersion:started.version,kind:'ATTENDANCE_CORRECTION',revision:2,reason:'Correction completed.',key:commandKey()})).toMatchObject({status:'AWAITING_VERIFICATION'});
+  const scheduledSource=await source(),cancellationRequest=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:scheduledSource.id,kind:'SESSION_SETUP_REVIEW',concern:'DUPLICATE',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Review the duplicate session',key:commandKey()}),cancellationStarted=await coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:cancellationRequest.requestId,expectedVersion:cancellationRequest.version,reason:null,key:commandKey()});
+  await db.attendanceSession.update({where:{id:scheduledSource.id},data:{status:'CANCELLED',cancelledAt:now,version:2,stateUpdatedAt:now}});
+  await db.attendanceRevision.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,sessionId:scheduledSource.id,number:1,kind:'CANCEL',actorAccountId:worker.accountId,occurredAt:now,reason:'Synthetic cancellation',changes:{schemaVersion:1}}});
+  expect(await coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:cancellationRequest.requestId,expectedVersion:cancellationStarted.version,kind:'ATTENDANCE_CANCELLATION',revision:1,reason:'Cancellation completed.',key:commandKey()})).toMatchObject({status:'AWAITING_VERIFICATION'});
   const cancelledSource=await source('CANCELLED'),cancelRequest=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:cancelledSource.id,kind:'SESSION_SETUP_REVIEW',concern:'DUPLICATE',note:null,dueLocal:null,key:commandKey()}).catch(error=>error);
   expect(cancelRequest).toMatchObject({code:'CONFLICT'});
  });
@@ -104,5 +114,40 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   const attendance=await source(),create=(key:string)=>coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,key}),results=await Promise.allSettled([create(commandKey()),create(commandKey())]);
   expect(results.filter(result=>result.status==='fulfilled')).toHaveLength(1);
   expect(await db.coordinationRequest.count({where:{organizationId:scope.organizationId,schoolId:scope.schoolId,sourceId:attendance.id,kind:'MISSING_REGISTER',status:{in:['OPEN','IN_PROGRESS','AWAITING_VERIFICATION']}}})).toBe(1);
+ });
+
+ it('removes assignment-derived access immediately and protects replay after authority revocation',async()=>{
+  const attendance=await source(),createKey=commandKey(),input={sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Initial fictional assignment',key:createKey} as const;
+  const created=await coordination.create(creator,scope.organizationId,scope.schoolId,input);
+  expect((await coordination.get(worker,scope.organizationId,scope.schoolId,created.requestId)).assignee?.accountId).toBe(worker.accountId);
+  const reassigned=await coordination.assign(creator,scope.organizationId,scope.schoolId,{requestId:created.requestId,assigneeAccountId:secondWorker.accountId,dueLocal:null,expectedVersion:created.version,reason:'Move to another eligible coordinator',key:commandKey()});
+  await expect(coordination.get(worker,scope.organizationId,scope.schoolId,created.requestId)).rejects.toMatchObject({code:'NOT_FOUND'});
+  expect((await coordination.get(secondWorker,scope.organizationId,scope.schoolId,created.requestId)).version).toBe(reassigned.version);
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:secondWorker.accountId,capability:'coordination.work'});
+  await expect(coordination.get(secondWorker,scope.organizationId,scope.schoolId,created.requestId)).rejects.toMatchObject({code:'NOT_FOUND'});
+  await expect(coordination.list(secondWorker,scope.organizationId,scope.schoolId,{})).rejects.toMatchObject({code:'FORBIDDEN'});
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.create'});
+  await expect(coordination.create(creator,scope.organizationId,scope.schoolId,input)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.create'});
+  expect(await coordination.create(creator,scope.organizationId,scope.schoolId,input)).toMatchObject({...created,replayed:true});
+  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:secondWorker.accountId,capability:'coordination.work'});
+ });
+
+ it('denies undesignated and forged scope access and keeps withdrawn requests terminal',async()=>{
+  const attendance=await source();
+  await expect(coordination.create(undesignated,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,key:commandKey()})).rejects.toMatchObject({code:'FORBIDDEN'});
+  await expect(coordination.get(creator,randomUUID(),randomUUID(),randomUUID())).rejects.toMatchObject({code:'FORBIDDEN'});
+  const created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Create a terminal-state example',key:commandKey()});
+  const withdrawn=await coordination.withdraw(creator,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:created.version,reason:'The follow-up is no longer needed.',key:commandKey()});
+  await expect(coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:withdrawn.version,reason:null,key:commandKey()})).rejects.toMatchObject({code:'CONFLICT'});
+ });
+
+ it('rejects evidence from another register without changing the request',async()=>{
+  const target=await source('SUBMITTED'),other=await source('SUBMITTED');
+  const created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:target.id,kind:'SESSION_SETUP_REVIEW',concern:'WRONG_TIME',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Review the target register',key:commandKey()});
+  const started=await coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:created.version,reason:null,key:commandKey()});
+  await db.attendanceRevision.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,sessionId:other.id,number:2,kind:'CORRECT',actorAccountId:worker.accountId,occurredAt:now,reason:'Correction on a different register',changes:{schemaVersion:1}}});
+  await expect(coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:started.version,kind:'ATTENDANCE_CORRECTION',revision:2,reason:'Claim evidence from the wrong register.',key:commandKey()})).rejects.toMatchObject({code:'CONFLICT'});
+  expect(await coordination.get(worker,scope.organizationId,scope.schoolId,created.requestId)).toMatchObject({status:'IN_PROGRESS',version:started.version,resolution:null});
  });
 });

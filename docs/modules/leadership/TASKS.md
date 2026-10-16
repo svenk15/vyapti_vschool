@@ -150,8 +150,8 @@ Engineering status: every currently supported Principal aggregate export slice V
 - [x] Reconcile the approved Leadership/Attendance boundary: Principal inspection and routing do not authorize an Attendance mutation.
 - [x] Identify the reusable existing source read: exact scoped Attendance session/revision through `attendance.read_leadership`.
 - [x] Identify the missing owner contract: request/follow-up persistence, assignment, versioned lifecycle, intent recovery and verification evidence.
-- [ ] Approve the Coordination ownership model and exact create/assign/verify/reject/reopen capabilities.
-- [ ] Approve eligible assignees, active-request uniqueness, concern/note/due-time rules and outcome-specific closure evidence.
-- [ ] Only then define forward DDL, guarded commands, owner ports and focused PostgreSQL/browser verification.
+- [x] Approve the Coordination ownership model and exact create/assign/verify/return/withdraw/reopen capabilities.
+- [x] Approve eligible assignees, active-request uniqueness, concern/note/due-time rules and outcome-specific closure evidence.
+- [x] Define forward DDL, guarded commands, owner ports and focused PostgreSQL/browser verification.
 
-Engineering status: DESIGN_BOUNDARY_RECONCILED / IMPLEMENTATION_BLOCKED. No source command, schema or capability was added. Human review PENDING.
+Engineering status: COORD-01 VERIFIED for the approved Attendance scope; LEA-09, LEA-11 and LEA-15 are ENGINEERING_COMPLETE. Human review PENDING. Synthetic-only retention and the separate production gates remain open.

@@ -11,6 +11,7 @@ export const coordinationGateway={
  list:async(identity:Identity|null,input:Parameters<typeof coordination.list>[3]={})=>{const s=await scoped(identity);return coordination.list(s.identity,s.organizationId,s.schoolId,input);},
  get:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.get(s.identity,s.organizationId,s.schoolId,id);},
  eligibleAssignees:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.eligibleAssignees(s.identity,s.organizationId,s.schoolId,id);},
+ sourceAssignees:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.sourceAssignees(s.identity,s.organizationId,s.schoolId,input);},
  create:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.create(s.identity,s.organizationId,s.schoolId,input);},
  assign:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.assign(s.identity,s.organizationId,s.schoolId,input);},
  start:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.start(s.identity,s.organizationId,s.schoolId,input);},

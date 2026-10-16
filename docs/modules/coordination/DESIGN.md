@@ -40,6 +40,7 @@ Coordination depends on a narrow `AttendanceCoordinationEvidencePort`, implement
 
 - `ATTENDANCE_CORRECTION` must identify an immutable `CORRECTION` revision number belonging to the exact session.
 - `ATTENDANCE_CANCELLATION` must identify an immutable `CANCEL` revision number for the exact session and current cancelled result.
+- A `SESSION_SETUP_REVIEW` already assigned and started while the source was eligible remains workable after an authorized Attendance cancellation so the assignee can submit that exact `CANCEL` revision. Creating a new review for an already-cancelled source remains blocked. `MISSING_REGISTER` work never remains eligible after cancellation.
 - `NO_CHANGE_NEEDED` carries no external receipt and requires a bounded operational reason plus independent verifier acceptance.
 
 Failed or foreign evidence throws before the Coordination transition, so no partial status/history/receipt is committed. `RESOLVED` means the follow-up was independently verified; it does not assert an Attendance change unless the checked owner evidence proves one.
@@ -79,7 +80,7 @@ Writes run `SERIALIZABLE` with the established account UPDATE → Organization S
 
 ## Queries and API contracts
 
-The browser-safe contract exposes request ID/version/kind/status, safe Attendance summary, creator/assignee display names, due/overdue state, note and authorized lifecycle history. Lists are ordered by `(updated_at DESC, id DESC)`, default 25/max 50, with a query-bound opaque cursor and filters for state/kind/assignment. Eligible assignees return only active branch members satisfying work and source-authority checks; no general person/account search is exposed.
+The browser-safe contract exposes request ID/version/kind/status, safe Attendance summary, creator/assignee display names, due/overdue state, note and authorized lifecycle history. Lists are ordered by `(updated_at DESC, id DESC)`, default 25/max 50, with a query-bound opaque cursor and filters for state/kind/assignment. Eligible assignees return only active branch members satisfying work and source-authority checks; no general person/account search is exposed. The single-request composition may create and initially assign in one guarded transaction when the actor holds both `coordination.create` and `coordination.assign`; it appends distinct CREATED and ASSIGNED events and returns version 2. A failed eligibility recheck creates neither event nor request.
 
 Hosting routes are thin same-origin wrappers under `/api/v1/coordination`. Bodies are limited to 16 KiB, require exact allowed properties and require header/body idempotency-key equality for mutations. Error mapping preserves `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `STALE_VERSION`, `IDEMPOTENCY_CONFLICT`, `VALIDATION`, module availability and safe retryable `UNAVAILABLE` states.
 
