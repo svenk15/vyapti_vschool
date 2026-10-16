@@ -15,13 +15,13 @@ const url=process.env.TEST_DATABASE_URL??'';
 if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated Principal Learning E2E PostgreSQL DB required');
 const released=['academic_core','homework','staff_core','student_core'] as const;
 const access=createAccessServices({databaseUrl:url}),students=createStudentPortalServices({databaseUrl:url,releasedModules:released,emailSender:{sendStudentInvite:async input=>{studentToken=input.token;return {ok:true};}}}),reporting=createReportingServices({databaseUrl:url,releasedModules:released});
-const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},input={...schoolInput(),organizationName:`Principal Learning ${randomUUID().slice(0,6)}`,schoolName:'Riverbank School'},evidence='docs/evidence/principal-lea-17-learning-2026-10-16',feedbackEvidence='docs/evidence/principal-lea-18-feedback-2026-10-16',exportEvidence='docs/evidence/principal-lea-39-learning-export-2026-10-16';
+const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},input={...schoolInput(),organizationName:`Principal Learning ${randomUUID().slice(0,6)}`,schoolName:'Riverbank School'},evidence='docs/evidence/principal-lea-17-learning-2026-10-16',feedbackEvidence='docs/evidence/principal-lea-18-feedback-2026-10-16',exportEvidence='docs/evidence/principal-lea-39-learning-export-2026-10-16',feedbackExportEvidence='docs/evidence/principal-lea-39-feedback-export-2026-10-16';
 let school:Awaited<ReturnType<typeof access.provisionSchool>>,studentToken='';
 const addDays=(value:Date,days:number)=>new Date(value.getTime()+days*86400_000);
 
 test.setTimeout(120000);
 test.beforeAll(async()=>{
- mkdirSync(evidence,{recursive:true});mkdirSync(feedbackEvidence,{recursive:true});mkdirSync(exportEvidence,{recursive:true});
+ mkdirSync(evidence,{recursive:true});mkdirSync(feedbackEvidence,{recursive:true});mkdirSync(exportEvidence,{recursive:true});mkdirSync(feedbackExportEvidence,{recursive:true});
  school=await access.provisionSchool(input,operator);const admin={accountId:school.accountId,tokenVersion:1},now=new Date(),from=addDays(now,-365),until=addDays(now,365);
  await access.institutionOperation({kind:'SetBranchMembership',organizationId:school.organizationId,schoolId:school.schoolId,accountId:school.accountId,status:'ACTIVE',roles:['SCHOOL_ADMIN','PRINCIPAL'],expectedVersion:1,key:randomUUID(),reason:'Synthetic Principal Learning authority'},operator);
  await reporting.grantExporter(operator,{organizationId:school.organizationId,schoolId:school.schoolId,accountId:school.accountId});
@@ -53,6 +53,10 @@ test('captures the approved assignment-completion reference without modifying it
 
 test('previews and downloads the exact bounded assignment-completion export',async({page},testInfo)=>{
  if(testInfo.project.name==='chromium')await page.setViewportSize({width:1440,height:1000});await signIn(page);await page.goto('/leadership/learning');await page.getByRole('link',{name:'Export report'}).click();await expect(page).toHaveURL(/\/leadership\/reports\/learning/);await expect(page.getByRole('heading',{name:'Export assignment completion'})).toBeVisible();await expect(page.getByText('One summary row plus 4 matching assignment rows.')).toBeVisible();await expect(page.getByText(/Student identities, drafts, response text, feedback/)).toBeVisible();const downloadPromise=page.waitForEvent('download');await page.getByRole('link',{name:'Download private CSV'}).click();const download=await downloadPromise;expect(download.suggestedFilename()).toMatch(/^leadership-assignment-completion-/);await page.screenshot({path:`${exportEvidence}/application-${testInfo.project.name}.png`,fullPage:true});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+
+test('previews and downloads feedback turnaround as an aggregate-only export',async({page},testInfo)=>{
+ if(testInfo.project.name==='chromium')await page.setViewportSize({width:1440,height:1000});await signIn(page);await page.goto('/leadership/learning/feedback');await page.getByRole('link',{name:'Export report'}).click();await expect(page).toHaveURL(/\/leadership\/reports\/feedback/);await expect(page.getByRole('heading',{name:'Export feedback turnaround'})).toBeVisible();await expect(page.getByText('One aggregate summary row; no learner or Teacher evidence rows.')).toBeVisible();await expect(page.getByText(/Student and Teacher identities, assignments, drafts/)).toBeVisible();await expect(page.getByText('2.0 hr',{exact:true})).toBeVisible();const downloadPromise=page.waitForEvent('download');await page.getByRole('link',{name:'Download private CSV'}).click();const download=await downloadPromise;expect(download.suggestedFilename()).toMatch(/^leadership-feedback-turnaround-/);await page.screenshot({path:`${feedbackExportEvidence}/application-${testInfo.project.name}.png`,fullPage:true});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
 test('shows descriptive first-feedback turnaround without private content or rankings',async({page},testInfo)=>{

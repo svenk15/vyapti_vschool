@@ -30,7 +30,15 @@ The verified LEA-17 owner projection now has an equivalent Reporting export port
 
 Focused current-source evidence: reporting CSV unit passed 10/10; the real-PostgreSQL Learning case passed 1/1 and covered no automatic grant, operator designation, exact totals, private-response exclusion, safe metadata and revocation denial; isolated production build passed; sequential one-worker Playwright passed 1/1 desktop and 1/1 mobile for preview and download. The resulting application captures were directly inspected against the existing immutable LEA-39 workflow reference. See [evidence](../../evidence/principal-lea-39-learning-export-2026-10-16/README.md).
 
-Full LEA-39 remains PARTIAL because feedback turnaround, timetable exceptions and notice coverage still lack equivalent export ports. Human review remains PENDING; the established font, native accessibility, TEN-03 and production gates remain open.
+That Assignment-completion slice remains verified. Human review remains PENDING; the established font, native accessibility, TEN-03 and production gates remain open.
+
+### Feedback-turnaround export extension — 16 October 2026
+
+The verified LEA-18 owner projection now has an aggregate-only export. Its exact accepted-submission cohort, branch-timezone interval, first-publication clock, as-of, counts and median seconds are carried into one CSV summary row. No identity, assignment, response, feedback text, target, ranking or overdue state is exported. The same independent operator designation and live Learning read/module checks guard preview and generation. No schema changed; both designated databases remain at 67 applied migrations.
+
+Focused current-source evidence: reporting CSV unit passed 11/11; the real-PostgreSQL feedback cohort case passed 1/1 with no-auto-grant, designation, exact aggregate, private-content exclusion and revocation checks; isolated build passed; sequential one-worker Playwright passed 1/1 desktop and 1/1 mobile. Captures were directly inspected against the immutable LEA-39 workflow reference. The local PostgreSQL postmaster became unresponsive before the focused test, was shut down normally and restarted without reset or data/migration change, after which the test passed. See [evidence](../../evidence/principal-lea-39-feedback-export-2026-10-16/README.md).
+
+Full LEA-39 remains PARTIAL pending equivalent timetable-exception and notice-coverage ports. Human review and established release gates remain pending.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|

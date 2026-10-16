@@ -139,6 +139,7 @@ Engineering status: supported descriptive read slice VERIFIED; full LEA-18 PARTI
 - [x] Show only allowlisted aggregate and already-visible awaiting-register fields, with explicit exclusions and bound recovery.
 - [x] Verify desktop/mobile production/reference states and keyboard-reachable download/back actions.
 - [x] Add the Assignment-completion owner export with the exact interval/class/subject filters, 50-row refusal, safe allowlist and independent live export authorization.
+- [x] Add the Feedback-turnaround owner export as a one-row cohort/clock aggregate with no identities or private Learning content.
 - [ ] Add other supported Principal metric exports only through equivalent owner ports and disclosure checks.
 
-Engineering status: Attendance-coverage and Assignment-completion export slices VERIFIED; full LEA-39 PARTIAL. Human review PENDING.
+Engineering status: Attendance-coverage, Assignment-completion and Feedback-turnaround export slices VERIFIED; full LEA-39 PARTIAL. Human review PENDING.

@@ -180,6 +180,14 @@ Learning `assignment-completion.v1` is now the second verified owner export. The
 
 Focused current-source verification passed: 10/10 CSV unit tests, 1/1 real-PostgreSQL owner/export integration test, isolated production build, and 1/1 desktop plus 1/1 mobile one-worker Playwright preview/download journeys. The application captures were directly inspected against the immutable LEA-39 workflow reference. No schema changed; both designated databases remain at 67 applied migrations. See [evidence](../../evidence/principal-lea-39-learning-export-2026-10-16/README.md).
 
-Full LEA-39 remains PARTIAL pending equivalent feedback-turnaround, timetable-exception and notice-coverage export ports. Human review and all established release gates remain pending.
+That Assignment-completion slice remains verified. Human review and all established release gates remain pending.
+
+### LEA-39 Learning feedback-turnaround export extension
+
+The LEA-18 aggregate is now the third verified owner export. The Principal reviews the exact cohort, clock, interval, cutoff and allowlist, then downloads one aggregate-only row. Current Learning read and the independent export designation are rechecked; identities, evidence rows and private content remain absent.
+
+Focused current-source verification passed: 11/11 CSV unit tests, 1/1 real-PostgreSQL cohort/export integration test, isolated build, and 1/1 desktop plus 1/1 mobile one-worker Playwright journeys. Captures were directly inspected against LEA-39. No schema changed; both databases retain 67 migrations. See [evidence](../../evidence/principal-lea-39-feedback-export-2026-10-16/README.md).
+
+Full LEA-39 remains PARTIAL pending Timetable-exception and Communication notice-coverage export ports. Human review and all established release gates remain pending.
 
 Next action: implement the approved synthetic-only LEA-06 retained aggregate snapshot foundation with its independent `reporting.snapshot.manage` designation; retain the real-data release gate until retention and backup-deletion policy is approved.

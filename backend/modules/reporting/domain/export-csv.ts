@@ -1,5 +1,5 @@
 import type {LeadershipRegisterCoverage} from '../../../../shared/contracts/attendance';
-import type {LeadershipLearningOverview} from '../../../../shared/contracts/learning';
+import type {LeadershipFeedbackTurnaroundOverview,LeadershipLearningOverview} from '../../../../shared/contracts/learning';
 
 export type AttendanceExportRow=Readonly<{
  schoolDate:string;sessionId:string;sectionCode:string;subjectCode:string;studentAdmissionNumber:string;
@@ -29,4 +29,10 @@ export function encodeLeadershipAssignmentCompletionCsv(report:LeadershipLearnin
  const summary:(string|number|null)[]=['SUMMARY',report.definitionVersion,report.asOf,report.timezone,report.query.fromDate,report.query.toDate,report.denominatorPolicy,report.counts.assignments,report.counts.expectedPairs,report.counts.submittedPairs,report.counts.awaitingPairs,report.counts.upcomingPairs,null,null,null,null,null,null,null,null,null,null];
  const evidence:(string|number|null)[][]=report.assignments.items.map(item=>['ASSIGNMENT',report.definitionVersion,report.asOf,report.timezone,report.query.fromDate,report.query.toDate,report.denominatorPolicy,null,null,null,null,null,item.assignmentId,item.assignmentVersionId,item.title,item.classLabel,item.subjectName,item.dueAt,item.due?'true':'false',item.expectedPairs,item.submittedPairs,item.awaitingPairs]);
  return [header,summary,...evidence].map(row=>row.map(value=>csvCell(value)).join(',')).join('\r\n')+'\r\n';
+}
+
+export function encodeLeadershipFeedbackTurnaroundCsv(report:LeadershipFeedbackTurnaroundOverview):string{
+ const header=['rowKind','definitionVersion','asOf','timezone','fromDate','toDateExclusive','cohortPolicy','clockPolicy','acceptedSubmissions','firstFeedbackPublished','awaitingFeedback','medianTurnaroundSeconds'];
+ const summary:(string|number|null)[]=['SUMMARY',report.definitionVersion,report.asOf,report.timezone,report.query.fromDate,report.query.toDate,report.cohortPolicy,report.clockPolicy,report.counts.acceptedSubmissions,report.counts.firstFeedbackPublished,report.counts.awaitingFeedback,report.medianTurnaroundSeconds];
+ return [header,summary].map(row=>row.map(value=>csvCell(value)).join(',')).join('\r\n')+'\r\n';
 }
