@@ -154,6 +154,14 @@ The shared boundary for LEA-09, LEA-11 and LEA-15 is now recorded in the Leaders
 
 Current inventory remains fully accounted for: 7 ENGINEERING_COMPLETE, 5 PARTIAL, 3 BLOCKED and 31 NOT_STARTED. Human review remains pending for every Principal workflow. The font, native accessibility, TEN-03, provider, restore/load and production gates remain unchanged.
 
+## 16 October 2026 — Attendance Coordination journeys verified
+
+The approved Coordination decisions supersede the earlier implementation blocker for LEA-09, LEA-11 and LEA-15. COORD-01 now supplies persisted scoped requests, independently designated create/assign/work/verify/manage authority, current-assignee visibility, optimistic lifecycle commands, exact replay and Attendance-owned evidence verification. Principal and designated administrator routes expose the complete supported journey without moving Attendance writes into Leadership or Coordination.
+
+Focused real-PostgreSQL evidence verifies designation denial, forged scope and ID handling, concurrent active uniqueness, reassignment visibility removal, current capability revocation, receipt protection after revocation, stale transitions, cross-register evidence rejection, independent verification and terminal withdrawal. The one-worker desktop/mobile browser journey verifies create/assign with committed-response retry, assigned work, no-change closure, reopen, existing guarded Attendance cancellation, exact cancellation evidence and independent closure. Reference and application images were directly inspected; the source uses workflow dialogs while production uses the shared routed shell, queue and detail compositions, so visual status records this explicit deviation rather than identical-modal parity.
+
+The 46-row Principal inventory is now 10 ENGINEERING_COMPLETE, 5 PARTIAL and 31 NOT_STARTED; human review remains PENDING throughout. Coordination remains synthetic-only pending operational-note retention and backup-deletion policy. Font portability, native accessibility, TEN-03, provider, restore/load and production gates are unchanged.
+
 ## 16 October 2026 — LEA-39 timetable-exceptions export checkpoint
 
 The Timetable export slice is ENGINEERING_VERIFIED; full LEA-39 remains PARTIAL for Communication notice coverage; human review is PENDING. `/leadership/timetable` now offers the export only when the current Principal also has the independent branch exporter designation. `/leadership/reports/timetable` previews the exact current immutable publication, owner definition/as-of, reconciliation counts, one summary row and the bounded unresolved occurrences before the private/no-store download. It names excluded Student, Attendance and private-staff facts and provides no mutation action.
