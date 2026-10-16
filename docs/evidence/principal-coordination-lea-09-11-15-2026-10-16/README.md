@@ -1,6 +1,6 @@
 # LEA-09, LEA-11 and LEA-15 Coordination evidence
 
-Tested implementation source: commits `616b61a` (`Complete Attendance coordination journeys`) through `7568ed9` (`Align Coordination routes with lint rules`). Evidence was captured across 16–17 October 2026 against the dedicated `vyapti_vschool_test` PostgreSQL database with all 68 migrations applied.
+Tested implementation source: commits `616b61a` (`Complete Attendance coordination journeys`) through `351300c` (`Cover Coordination recovery and presentation states`). Evidence was captured across 16–17 October 2026 against the dedicated `vyapti_vschool_test` PostgreSQL database with all 68 migrations applied.
 
 ## Authority and comparison
 
@@ -13,7 +13,7 @@ Tested implementation source: commits `616b61a` (`Complete Attendance coordinati
 
 Reference: `reference-lea-09-{chromium,mobile}.png`, `reference-lea-11-{chromium,mobile}.png`, `reference-lea-15-{chromium,mobile}.png`.
 
-Application: `application-create-receipt-{chromium,mobile}.png`, `application-verified-{chromium,mobile}.png`, `application-setup-resolved-{chromium,mobile}.png`.
+Application: `application-empty-{chromium,mobile}.png`, `application-populated-{chromium,mobile}.png`, `application-create-receipt-{chromium,mobile}.png`, `application-awaiting-{chromium,mobile}.png`, `application-verified-{chromium,mobile}.png`, `application-setup-resolved-{chromium,mobile}.png`.
 
 The final captures were directly inspected for hierarchy, spacing, actions, responsive stacking, long receipt values and horizontal overflow. Mobile navigation focus return is exercised in the browser journey. The documented font exception remains; native VoiceOver/NVDA testing was not performed.
 
@@ -22,13 +22,15 @@ The final captures were directly inspected for hierarchy, spacing, actions, resp
 - `pnpm test:unit test/unit/coordination-requests.test.ts`: 3/3 passed.
 - `pnpm test:functional test/functional/coordination-requests.test.ts`: 7/7 passed against real PostgreSQL.
 - `VSCHOOL_E2E=1 pnpm build`: passed and produced the isolated Playwright candidate.
-- `VSCHOOL_E2E_BUILT=1 node scripts/database.mjs e2e test/e2e/coordination.spec.ts --project=chromium --workers=1`: 2/2 passed.
-- The same command with `--project=mobile`: 2/2 passed.
+- `VSCHOOL_E2E_BUILT=1 node scripts/database.mjs e2e test/e2e/coordination.spec.ts --project=chromium --workers=1`: 3/3 passed.
+- The same command with `--project=mobile`: 3/3 passed.
 - `pnpm demo:seed`: passed; rerunning the Coordination seed preserved the six existing examples without duplicates.
 - `pnpm typecheck`, focused ESLint, `pnpm check:backend`, `pnpm check:boundaries`, `pnpm check:db-design` and `pnpm check:docs`: passed.
 - `pnpm build`: passed for the normal local production candidate.
 
 An earlier command mistakenly passed a literal `--` to `pnpm test:functional`; it began the broad suite and was stopped after one unrelated file passed. That interrupted run is not claimed as suite evidence. The corrected focused command above is the recorded result.
+
+The browser journey directly exercises empty/populated queues, client validation, duplicate-active-request feedback, stale-version recovery with retained values, capability revocation and exact retry after restoration, no eligible assignee, unavailable source, committed-response recovery, submitted, returned and verified states. Backend PostgreSQL evidence remains authoritative for cross-scope constraints, locking, rollback and concurrency.
 
 ## Remaining gates
 
