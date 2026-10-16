@@ -81,6 +81,20 @@ Validation preserves entered safe fields. Failure states distinguish unavailable
 
 Human acceptance, native VoiceOver/NVDA, font portability, TEN-03 enforcement and production readiness remain separate gates.
 
+## LEA-17 — bounded Principal assignment-completion oversight
+
+### Supported owner contract
+
+Learning owns `leadershipLearningOverview(identity, organizationId, schoolId, query)`. The query accepts an optional paired school-date range (maximum 93 days), exact class and subject UUID filters, a query-bound opaque cursor and a 1–50 page limit. The default window is school-local today minus 30 days through today plus 31 days, with the upper date exclusive. A current branch `PRINCIPAL` receives `learning.read_leadership`; School Administrator, Teacher, Parent and Student roles do not inherit it. Every read repeats live account/token, Principal membership, active School, release, entitlement and activation checks for Homework and its Academic, Staff and Student dependencies.
+
+The read-only PostgreSQL transaction joins the current immutable published AssignmentVersion to CourseOffering, Section, Grade, Subject, its frozen AssignmentRecipient rows and at most one immutable accepted SubmissionAttempt per recipient. It returns class/subject assignment rows plus `expected due`, `submitted`, `awaiting` and `upcoming` counts under definition `assignment-completion.v1`. Due expected pairs are frozen recipients whose immutable due instant is at or before the server cutoff. Submitted counts one accepted attempt per pair. Awaiting is expected minus submitted. Future pairs remain separate and do not enter the due denominator. Private Student drafts and response text, learner identities, Teacher feedback drafts and performance inference are absent from the DTO.
+
+The stable ordering is `(due_at, assignment_id)` and its cursor is bound to the effective dates and class/subject filters. Existing scoped due and assignment-version keys support this bounded query; no schema, migration or write transaction changes. Reads acquire no mutation locks.
+
+### Explicit incomplete contract
+
+The current owner model has no extension/excusal policy, pupil-level permitted-evidence projection or teaching follow-up lifecycle. Those reference stages remain visible as unsupported limitations and no dead action is rendered. The supported slice therefore does not claim full LEA-17 completion. Verification requires real PostgreSQL denominator, pagination, cross-scope and revocation cases; direct desktop/mobile reference comparison; private-content exclusion; current-source build; and a repeat-safe fictional submitted/awaiting seed scenario.
+
 ## LEA-03 — private text draft and on-time submission
 
 ### Narrow release contract

@@ -57,3 +57,13 @@ The approved Teacher `#/learning/review/w1` private and review states were captu
 The incremental Learning seed preserves existing manual records, credentials, accepted submissions and published feedback. It prepares a new deterministic assignment only after the preceding seeded submission already has published feedback, so repeated `pnpm demo:seed` runs do not overwrite the review scenario.
 
 Next action: preserve LEA-04 and select the next independently eligible Parent/Student capability from the authorized programme. Parent feedback remains explicitly excluded from this release decision; PAR-21 therefore stays deferred rather than inheriting Student feedback access.
+
+## LEA-17
+
+Status: ENGINEERING_VERIFIED_SUPPORTED_SLICE / FULL_WORKFLOW_PARTIAL / HUMAN_REVIEW_PENDING
+
+Commit `2e03897` adds the Learning-owned Principal completion projection and `/leadership/learning`. It counts frozen published learner-assignment pairs due by the server cutoff, counts at most one immutable accepted attempt per pair, keeps not-yet-due pairs separate, and exposes only assignment, class, subject, due and aggregate counts. It never returns Student identity, private drafts or response text. Exact class/subject/date filters run in PostgreSQL before stable query-bound pagination. Live Principal, branch, release, entitlement, activation and dependency checks repeat on every read. No schema or migration changed; development and test retain 64 migrations.
+
+Verification passed: Access unit 10/10; Learning real-PostgreSQL 15/15; focused lint and TypeScript; normal production build; and sequential one-worker Playwright 2/2 Chromium plus 2/2 mobile against the isolated build. The first browser attempt served the stale `.next-e2e` target and returned a truthful 404; the corrected harness invocation rebuilt that target, after which both projects passed. Reference and application captures were directly inspected at 1440×1000 and 390×844. `pnpm demo:seed` completed after the historical fixture clock was bounded by the real synthetic entitlement start; it preserved existing records and prepared submitted plus awaiting due pairs. Evidence: [LEA-17 Principal Learning](../../evidence/principal-lea-17-learning-2026-10-16/README.md).
+
+Full LEA-17 remains PARTIAL. Extension/excusal policy, permitted pupil-level evidence and the teaching follow-up owner do not exist, so the production page states those limits and offers no fabricated actions. Human review, font portability, native accessibility, TEN-03 and production controls remain pending.

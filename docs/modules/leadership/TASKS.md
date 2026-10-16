@@ -99,3 +99,13 @@ Engineering status: supported read slice VERIFIED; full LEA-16 PARTIAL. Human re
 - [ ] Add school support only after an authorized source/configuration owner and safe presentation contract exists.
 
 Engineering status: supported session-security slice VERIFIED; full LEA-46 PARTIAL. Human review PENDING.
+
+## LEA-17 — Assignment completion with the right denominator
+
+- [x] Expose navigation only when the current Principal has the Learning owner capability and module chain.
+- [x] Present the owner-supplied period, class and subject filters, server cutoff and exact denominator definition.
+- [x] Render submitted, awaiting and not-yet-due facts without private drafts, response content or learner identities.
+- [x] Verify desktop/mobile composition, keyboard focus, URL filter state and direct approved-reference comparison.
+- [ ] Complete extension/excused groups, permitted evidence and teaching follow-up after their owner contracts exist.
+
+Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PARTIAL. Human review PENDING.

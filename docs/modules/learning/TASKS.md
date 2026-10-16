@@ -49,3 +49,16 @@ Human acceptance remains PENDING. Files, late work, extensions, resubmission, gr
 - [x] Directly compare supported TEA-29/STW-22 states and record reference-less recovery deviations.
 
 Human acceptance remains PENDING. Marks, rubrics, return/reopen, Student reply, Parent feedback access and resubmission remain outside LEA-04.
+
+## LEA-17 — Principal assignment-completion oversight
+
+- [x] Add the narrow `learning.read_leadership` capability only to the explicit Principal branch role.
+- [x] Implement a transport-neutral bounded query over immutable published audiences and accepted attempts.
+- [x] Apply date, class and subject predicates before stable PostgreSQL pagination and bind the cursor to the query.
+- [x] Exclude private drafts, response text and learner identity from the browser-safe projection.
+- [x] Add the Principal navigation/page with cutoff, denominator definition, filters, responsive rows and truthful unavailable/empty states.
+- [x] Extend `pnpm demo:seed` with repeat-safe submitted and awaiting fictional pairs.
+- [x] Pass focused unit, real-PostgreSQL, build and sequential desktop/mobile browser checks and directly inspect the reference/application captures.
+- [ ] Add extension/excused rules, permitted pupil evidence and a scoped teaching follow-up only after their owner/product contracts exist.
+
+Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PARTIAL. Human review PENDING.

@@ -107,3 +107,15 @@ No schema or migration changed; both databases retain all 64 migrations. Existin
 Remaining gates: full LEA-46 remains partial, and font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
 
 Next action: select the next bounded Principal owner projection whose denominator and disclosure rules are fully represented by current source data; do not invent extension/excused, sensitive staff or approval semantics.
+
+## 16 October 2026 — LEA-17 assignment-completion checkpoint
+
+The supported read slice is VERIFIED; full LEA-17 remains PARTIAL; human review is PENDING.
+
+The Principal shell now exposes Assignment completion only under the exact current Learning owner capability and module chain. The Learning projection reports immutable frozen-recipient pairs due by the server cutoff, one accepted attempt per pair, the derived awaiting count and future pairs separately. Class, subject and bounded school-date predicates run server-side before stable pagination. No private draft, response text, learner identity, staff-performance inference or mutation control crosses the owner boundary.
+
+No schema or migration changed; both databases retain all 64 migrations. Commit `2e03897` passed focused Access unit 10/10, real-PostgreSQL Learning 15/15, lint, TypeScript, normal build, and focused one-worker Playwright 2/2 Chromium plus 2/2 mobile. The final captures were directly inspected against the immutable LEA-17 reference. `pnpm demo:seed` now preserves a connected fictional submitted/awaiting denominator scenario. See [evidence](../../evidence/principal-lea-17-learning-2026-10-16/README.md).
+
+Remaining gap: the approved reference requires extension/excused policy, permitted pupil evidence and a scoped teaching follow-up. Those owner/product contracts do not exist and no dead action is shown. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
+Next action: choose the next independently supported Principal read projection; do not infer extension, excusal, follow-up or approval authority.
