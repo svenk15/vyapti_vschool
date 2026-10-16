@@ -138,6 +138,7 @@ Engineering status: supported descriptive read slice VERIFIED; full LEA-18 PARTI
 - [x] Carry the exact Attendance coverage definition, as-of, scope and filters into the preview and direct CSV.
 - [x] Show only allowlisted aggregate and already-visible awaiting-register fields, with explicit exclusions and bound recovery.
 - [x] Verify desktop/mobile production/reference states and keyboard-reachable download/back actions.
+- [x] Add the Assignment-completion owner export with the exact interval/class/subject filters, 50-row refusal, safe allowlist and independent live export authorization.
 - [ ] Add other supported Principal metric exports only through equivalent owner ports and disclosure checks.
 
-Engineering status: Attendance-coverage export slice VERIFIED; full LEA-39 PARTIAL. Human review PENDING.
+Engineering status: Attendance-coverage and Assignment-completion export slices VERIFIED; full LEA-39 PARTIAL. Human review PENDING.

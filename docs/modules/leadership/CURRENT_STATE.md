@@ -174,4 +174,12 @@ Forward migrations `20261016140000_reporting_export_grant` and additive metadata
 
 Remaining gap: other Principal aggregate projections require equivalent owner export ports before full LEA-39 can complete. Font portability, native accessibility, human review, TEN-03 and production controls remain pending.
 
+### LEA-39 Learning assignment-completion export extension
+
+Learning `assignment-completion.v1` is now the second verified owner export. The Principal opens the export from the filtered Assignment completion page, reviews the exact interval, cutoff, denominator, aggregate and allowlisted assignment fields, then downloads through a fresh server-authorized route. Reporting rechecks both current `learning.read_leadership` and the separate branch export designation. More than 50 matching assignments are refused rather than truncated; Student identities and private Learning content remain absent.
+
+Focused current-source verification passed: 10/10 CSV unit tests, 1/1 real-PostgreSQL owner/export integration test, isolated production build, and 1/1 desktop plus 1/1 mobile one-worker Playwright preview/download journeys. The application captures were directly inspected against the immutable LEA-39 workflow reference. No schema changed; both designated databases remain at 67 applied migrations. See [evidence](../../evidence/principal-lea-39-learning-export-2026-10-16/README.md).
+
+Full LEA-39 remains PARTIAL pending equivalent feedback-turnaround, timetable-exception and notice-coverage export ports. Human review and all established release gates remain pending.
+
 Next action: implement the approved synthetic-only LEA-06 retained aggregate snapshot foundation with its independent `reporting.snapshot.manage` designation; retain the real-data release gate until retention and backup-deletion policy is approved.

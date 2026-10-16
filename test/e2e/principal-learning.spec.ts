@@ -7,22 +7,24 @@ import {PrismaClient} from '../../generated/prisma/client';
 import {PrismaPg} from '@prisma/adapter-pg';
 import {createAccessServices} from '../../backend/composition/access';
 import {createLearningServices} from '../../backend/composition/learning';
+import {createReportingServices} from '../../backend/composition/reporting';
 import {createStudentPortalServices} from '../../backend/composition/student-portal';
 import {schoolInput} from '../fixtures/access-management';
 
 const url=process.env.TEST_DATABASE_URL??'';
 if(new URL(url).pathname!=='/vyapti_vschool_test')throw new Error('Dedicated Principal Learning E2E PostgreSQL DB required');
 const released=['academic_core','homework','staff_core','student_core'] as const;
-const access=createAccessServices({databaseUrl:url}),students=createStudentPortalServices({databaseUrl:url,releasedModules:released,emailSender:{sendStudentInvite:async input=>{studentToken=input.token;return {ok:true};}}});
-const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},input={...schoolInput(),organizationName:`Principal Learning ${randomUUID().slice(0,6)}`,schoolName:'Riverbank School'},evidence='docs/evidence/principal-lea-17-learning-2026-10-16',feedbackEvidence='docs/evidence/principal-lea-18-feedback-2026-10-16';
+const access=createAccessServices({databaseUrl:url}),students=createStudentPortalServices({databaseUrl:url,releasedModules:released,emailSender:{sendStudentInvite:async input=>{studentToken=input.token;return {ok:true};}}}),reporting=createReportingServices({databaseUrl:url,releasedModules:released});
+const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]}),operator={operatorId:randomUUID(),verified:true as const},input={...schoolInput(),organizationName:`Principal Learning ${randomUUID().slice(0,6)}`,schoolName:'Riverbank School'},evidence='docs/evidence/principal-lea-17-learning-2026-10-16',feedbackEvidence='docs/evidence/principal-lea-18-feedback-2026-10-16',exportEvidence='docs/evidence/principal-lea-39-learning-export-2026-10-16';
 let school:Awaited<ReturnType<typeof access.provisionSchool>>,studentToken='';
 const addDays=(value:Date,days:number)=>new Date(value.getTime()+days*86400_000);
 
 test.setTimeout(120000);
 test.beforeAll(async()=>{
- mkdirSync(evidence,{recursive:true});mkdirSync(feedbackEvidence,{recursive:true});
+ mkdirSync(evidence,{recursive:true});mkdirSync(feedbackEvidence,{recursive:true});mkdirSync(exportEvidence,{recursive:true});
  school=await access.provisionSchool(input,operator);const admin={accountId:school.accountId,tokenVersion:1},now=new Date(),from=addDays(now,-365),until=addDays(now,365);
  await access.institutionOperation({kind:'SetBranchMembership',organizationId:school.organizationId,schoolId:school.schoolId,accountId:school.accountId,status:'ACTIVE',roles:['SCHOOL_ADMIN','PRINCIPAL'],expectedVersion:1,key:randomUUID(),reason:'Synthetic Principal Learning authority'},operator);
+ await reporting.grantExporter(operator,{organizationId:school.organizationId,schoolId:school.schoolId,accountId:school.accountId});
  await db.organization.update({where:{id:school.organizationId},data:{trustMode:'EMAIL'}});
  await students.grantManager(operator,{organizationId:school.organizationId,schoolId:school.schoolId,accountId:school.accountId});
  for(const moduleId of released){await db.organizationEntitlement.create({data:{id:randomUUID(),organizationId:school.organizationId,moduleId,state:'ACTIVE',startsAt:from,endsAt:null,limits:{},manifestVersion:1,version:1}});await db.branchActivation.create({data:{id:randomUUID(),organizationId:school.organizationId,schoolId:school.schoolId,moduleId,state:'ACTIVE',version:1,enabledAt:now}});}
@@ -35,7 +37,7 @@ test.beforeAll(async()=>{
   const submitted=await create('Submitted habitat journal',addDays(now,-2)),saved=await learning.saveStudentDraft(studentIdentity,submitted.assignmentId,{studentId:student.id,expectedVersion:0,text:'A private accepted response that leadership must not see.',key:randomUUID()},randomUUID()),receipt=await learning.submitStudentWork(studentIdentity,submitted.assignmentId,{studentId:student.id,reviewedAssignmentVersion:1,expectedDraftVersion:saved.version,key:randomUUID()},randomUUID()),publisher=createLearningServices({databaseUrl:url,releasedModules:released,now:()=>new Date(pastClock.getTime()+2*3600_000)});try{const feedback=await publisher.saveFeedbackDraft(teacherIdentity,school.organizationId,school.schoolId,submitted.assignmentId,receipt.submissionId,{expectedRevision:0,strength:'Private published feedback that leadership must not see.',nextStep:'Private next step that leadership must not see.',key:randomUUID()},randomUUID());await publisher.publishFeedback(teacherIdentity,school.organizationId,school.schoolId,submitted.assignmentId,receipt.submissionId,{expectedRevision:feedback.revision,reviewedSubmissionId:receipt.submissionId,key:randomUUID()},randomUUID());}finally{await publisher.disconnect();}const awaiting=await create('Awaiting feedback field note',addDays(now,-1)),awaitingDraft=await learning.saveStudentDraft(studentIdentity,awaiting.assignmentId,{studentId:student.id,expectedVersion:0,text:'A second private response awaiting feedback.',key:randomUUID()},randomUUID());await learning.submitStudentWork(studentIdentity,awaiting.assignmentId,{studentId:student.id,reviewedAssignmentVersion:1,expectedDraftVersion:awaitingDraft.version,key:randomUUID()},randomUUID());await create('Due ecosystem diagram',addDays(now,-1));await create('Future field observation',addDays(now,7));
  }finally{await learning.disconnect();}
 });
-test.afterAll(async()=>{await students.disconnect();await access.disconnect();await db.$disconnect();});
+test.afterAll(async()=>{await reporting.disconnect();await students.disconnect();await access.disconnect();await db.$disconnect();});
 
 async function signIn(page:Page){await page.goto('/sign-in');await page.getByLabel('Email address').fill(input.adminEmail);await page.getByLabel(/^Password/).fill(input.password);await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.getByLabel('Branch').selectOption(`${school.schoolId}:leadership`);await page.getByRole('button',{name:/Continue/}).click();await page.getByRole('button',{name:/Confirm/}).click();await expect(page).toHaveURL(/\/leadership$/);}
 
@@ -47,6 +49,10 @@ test('shows the bounded assignment denominator without private learner work',asy
 
 test('captures the approved assignment-completion reference without modifying it',async({page},testInfo)=>{
  const reference=pathToFileURL(resolve('docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html')).href;await page.goto(reference);await page.evaluate(()=>{(window as unknown as {WorkflowReview:{read:(id:string)=>void}}).WorkflowReview.read('LEA-17');});if(testInfo.project.name==='chromium')await page.setViewportSize({width:1440,height:1000});await expect(page.getByRole('heading',{name:'Review assignment completion with the right denominator'})).toBeVisible();await page.screenshot({path:`${evidence}/reference-${testInfo.project.name}.png`,fullPage:true});
+});
+
+test('previews and downloads the exact bounded assignment-completion export',async({page},testInfo)=>{
+ if(testInfo.project.name==='chromium')await page.setViewportSize({width:1440,height:1000});await signIn(page);await page.goto('/leadership/learning');await page.getByRole('link',{name:'Export report'}).click();await expect(page).toHaveURL(/\/leadership\/reports\/learning/);await expect(page.getByRole('heading',{name:'Export assignment completion'})).toBeVisible();await expect(page.getByText('One summary row plus 4 matching assignment rows.')).toBeVisible();await expect(page.getByText(/Student identities, drafts, response text, feedback/)).toBeVisible();const downloadPromise=page.waitForEvent('download');await page.getByRole('link',{name:'Download private CSV'}).click();const download=await downloadPromise;expect(download.suggestedFilename()).toMatch(/^leadership-assignment-completion-/);await page.screenshot({path:`${exportEvidence}/application-${testInfo.project.name}.png`,fullPage:true});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
 test('shows descriptive first-feedback turnaround without private content or rankings',async({page},testInfo)=>{

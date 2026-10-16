@@ -22,7 +22,15 @@ Reporting now owns an independent operator-designated branch `reporting.export` 
 
 Forward migrations `20261016140000_reporting_export_grant` and additive `20261016141000_reporting_export_grant_metadata` are applied to both designated local databases; 66 migrations are retained. The second migration adds the canonical Path A closure metadata without rewriting the applied table migration. The new BRANCH table is registered for TEN-03 closure. Focused unit passed 7/7 and real-PostgreSQL Attendance/Reporting passed 12/12, covering no automatic Principal grant, operator designation/revocation, cross-scope denial, owner-total/row consistency and sensitive-field exclusion. Sequential one-worker Playwright passed 2/2 desktop and 2/2 mobile; the matched captures were directly inspected against the immutable LEA-39 workflow dialog. `pnpm exec tsx scripts/demo-principal-attendance.ts` passed and preserves the connected export persona in ignored `artifacts/leadership-01/private-demo.json`. See [evidence](../../evidence/principal-lea-39-export-2026-10-16/README.md).
 
-Full LEA-39 remains PARTIAL because Assignment completion, feedback turnaround, timetable exception and notice coverage do not yet expose equivalent owner export ports. The approved dialog and production Reports page are different compositions. Font portability, native VoiceOver/NVDA, human review, TEN-03 and production gates remain pending.
+That Attendance slice remains verified. The approved dialog and production Reports page are different compositions. Font portability, native VoiceOver/NVDA, human review, TEN-03 and production gates remain pending.
+
+### Assignment-completion export extension — 16 October 2026
+
+The verified LEA-17 owner projection now has an equivalent Reporting export port. The production flow carries its exact period/class/subject query, frozen-recipient denominator, definition and source as-of into a preview and bounded CSV. It refuses more than 50 matching assignments, uses formula-safe encoding, excludes learner identity and private Learning content, and rechecks both `learning.read_leadership` and the independent export designation before recording the existing safe ExportRun/audit metadata. No migration was added; both designated databases remain at 67 applied migrations.
+
+Focused current-source evidence: reporting CSV unit passed 10/10; the real-PostgreSQL Learning case passed 1/1 and covered no automatic grant, operator designation, exact totals, private-response exclusion, safe metadata and revocation denial; isolated production build passed; sequential one-worker Playwright passed 1/1 desktop and 1/1 mobile for preview and download. The resulting application captures were directly inspected against the existing immutable LEA-39 workflow reference. See [evidence](../../evidence/principal-lea-39-learning-export-2026-10-16/README.md).
+
+Full LEA-39 remains PARTIAL because feedback turnaround, timetable exceptions and notice coverage still lack equivalent export ports. Human review remains PENDING; the established font, native accessibility, TEN-03 and production gates remain open.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|

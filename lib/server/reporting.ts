@@ -2,7 +2,7 @@ import 'server-only';
 import {createReportingServices} from '../../backend/composition/reporting';
 import type {AttendanceReportInput} from '../../backend/modules/reporting/application/attendance-report';
 import type {Identity} from '../../shared/contracts/access';
-import type {LeadershipAttendanceExportInput} from '../../shared/contracts/reporting';
+import type {LeadershipAttendanceExportInput,LeadershipLearningExportInput} from '../../shared/contracts/reporting';
 import {accountGateway,leadershipGateway} from './access';
 import {reportingRuntimeConfiguration} from './reporting-runtime-configuration';
 const reporting=createReportingServices(reportingRuntimeConfiguration());
@@ -12,6 +12,7 @@ export const reportingGateway={
  schoolAdminOverview:async(identity:Identity|null)=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.schoolAdminOverview(identity,scope.organizationId,scope.schoolId);},
  leadershipExportAvailability:async(identity:Identity|null)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.availability(identity,scope.organizationId,scope.schoolId);},
  exportLeadershipAttendance:async(identity:Identity|null,input:LeadershipAttendanceExportInput)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.exportLeadershipAttendance(identity,scope.organizationId,scope.schoolId,input);},
+ exportLeadershipAssignmentCompletion:async(identity:Identity|null,input:LeadershipLearningExportInput)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.exportLeadershipAssignmentCompletion(identity,scope.organizationId,scope.schoolId,input);},
  leadershipSnapshotAvailability:async(identity:Identity|null)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.snapshotAvailability(identity,scope.organizationId,scope.schoolId);},
  listLeadershipSnapshots:async(identity:Identity|null)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.listSnapshots(identity,scope.organizationId,scope.schoolId);},
  getLeadershipSnapshot:async(identity:Identity|null,id:string)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.getSnapshot(identity,scope.organizationId,scope.schoolId,id);},
