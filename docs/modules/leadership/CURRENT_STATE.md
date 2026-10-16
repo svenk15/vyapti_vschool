@@ -67,3 +67,15 @@ No product source, schema, migration, permission, draft lifecycle or owner write
 Remaining gates: the approved fictional workflow dialog and production pages are different compositions; human review, exact font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
 
 Next action: LEA-04, focused proof that a protected owner surface removes data and safe actions when Principal access or its required module becomes unavailable during use. It can reuse the existing live authorization contracts without adding authority.
+
+## 16 October 2026 — LEA-04 live-read access-change checkpoint
+
+The existing read subset is VERIFIED; the full workflow remains PARTIAL; human review is PENDING.
+
+An authorized Principal opened an exact Attendance source, then the Attendance branch module was deactivated while the page remained open. Reload removed the prior class and Teacher facts and showed the generic source-unavailable state. Reactivation restored the same owner record on a fresh read, proving deactivation did not erase it. Removing only the Principal role then removed the Leadership page and routed to the account's still-authorized School Administrator workspace. Reusing the former Leadership source URL repeated the server checks and returned to that permitted workspace without disclosing the source.
+
+No product source, schema, migration, permission, lock, transaction or seed contract changed. Focused Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker against all 64 migrations. Two preceding Chromium attempts established the application's authorized `/admin` fallback and automatic single-workspace routing; assertions were corrected to the approved “another permitted context” outcome without weakening data-removal checks. Direct inspection compared authorized, module-unavailable and Principal-removed states with the approved LEA-04 dialog at 1440×1000 and 390×844. See [evidence](../../evidence/principal-lea-04-access-change-2026-10-16/README.md).
+
+Remaining gap: the approved workflow also requires reauthorization of a saved command/status receipt. The first-release Principal workspace has no write command or receipt. This cannot be proven by borrowing School Administrator authority and remains dependent on a future approved Principal write workflow. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: select the smallest approved read-only owner projection whose semantics and permission boundary already exist; do not open a Principal write/approval workflow merely to manufacture receipt evidence.

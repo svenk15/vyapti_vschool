@@ -1,0 +1,8 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="7.392148">
+<testsuite name="principal-access-change.spec.ts" timestamp="2026-10-16T00:04:43.203Z" hostname="mobile" tests="2" failures="0" skipped="0" time="3.786" errors="0">
+<testcase name="removes protected owner data after module and Principal access changes" classname="principal-access-change.spec.ts" time="3.584">
+</testcase>
+<testcase name="captures the approved access-change contract without modifying it" classname="principal-access-change.spec.ts" time="0.202">
+</testcase>
+</testsuite>
+</testsuites>
