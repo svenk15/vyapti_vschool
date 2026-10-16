@@ -87,3 +87,15 @@ Remaining criterion: a Principal-owned write/status receipt must be reauthorized
 - [ ] Add general uncovered-class/Teacher-absence facts and delegated cover/change action only after their approved owner and authority lifecycle exist.
 
 Engineering status: supported read slice VERIFIED; full LEA-16 PARTIAL. Human review PENDING.
+
+## LEA-46 — Own account and session security
+
+- [x] Reuse the Access-owned global own-session directory without accepting an account identifier or widening Principal permissions.
+- [x] Preserve staged selection and confirmation; revoke only on the final action and keep current-browser sign-out separate.
+- [x] Verify another own session is removed after reload while the current session remains authorized.
+- [x] Verify current-browser sign-out invalidates that session and a protected Principal account route returns through sign-in.
+- [x] Compare the approved reference with production desktop/mobile session and confirmation states, including focus and viewport containment.
+- [ ] Add preferences only after the approved key/value, validation, portability and persistence contract exists.
+- [ ] Add school support only after an authorized source/configuration owner and safe presentation contract exists.
+
+Engineering status: supported session-security slice VERIFIED; full LEA-46 PARTIAL. Human review PENDING.

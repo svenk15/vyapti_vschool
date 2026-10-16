@@ -49,7 +49,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-43 | Review financial exceptions under a separate grant | services | 5 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-44 | Coordinate a school service interruption | services | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-45 | Review a source-linked leadership draft | assistant | 7 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-46 | Manage sessions, preferences and school support | account | 1 | PARTIAL | NOT_STARTED | PENDING | Own session inventory/revocation and sign-out are wired; preferences/support configuration are absent |
+| LEA-46 | Manage sessions, preferences and school support | account | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Own non-current session revocation, persistence after reload, current-session sign-out and protected-route denial are verified in the Principal shell; preferences and school-approved support configuration remain absent because their owner contracts do not exist |
 
 ## Current counts
 

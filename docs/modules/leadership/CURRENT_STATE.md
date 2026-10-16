@@ -95,3 +95,15 @@ Remaining gap: the approved reference includes general uncovered/absence and cov
 Executable demo: product commit `b9949be2807c97352e61b6111c3727f3e2d25fba`, normal production build `zNKU0AcTmBhnuU4smql1w`, served at `http://127.0.0.1:3400`. A focused authenticated smoke check confirmed Principal workspace selection and the populated `/leadership/timetable` route from this build. Credentials remain only in ignored mode-0600 `artifacts/leadership-01/private-demo.json`.
 
 Next action: select the next independently approved read projection; do not infer cover or staff-absence semantics from reconciliation outcomes.
+
+## 16 October 2026 — LEA-46 Principal account/session checkpoint
+
+The supported session-security slice is VERIFIED; full LEA-46 remains PARTIAL; human review is PENDING.
+
+`/leadership/account` reuses the global Access-owned own-session boundary. The focused journey lists only privacy-safe active sessions for the signed-in account, retains one selection through the two in-flow stages, revokes a non-current session only on final confirmation, proves that session is absent after reload, then separately signs out the current browser and proves the protected Principal account route returns through sign-in. No Principal grant, arbitrary account selector, other-account data, preference, support setting or durable draft was added.
+
+No schema or migration changed; both databases retain all 64 migrations. Existing Access unit and real-PostgreSQL evidence remains applicable for account isolation, lock/replay behavior, one security event, expiry and token-version invalidation. Focused Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker. The approved LEA-46 dialog and the production session/confirmation states were opened and directly inspected at 1440×1000 and 390×844. The production page implements the approved session-security subset in the real Principal shell; preference keys and school-support configuration remain absent because no approved owner contract exists. See [evidence](../../evidence/principal-lea-46-account-2026-10-16/README.md).
+
+Remaining gates: full LEA-46 remains partial, and font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
+Next action: select the next bounded Principal owner projection whose denominator and disclosure rules are fully represented by current source data; do not invent extension/excused, sensitive staff or approval semantics.
