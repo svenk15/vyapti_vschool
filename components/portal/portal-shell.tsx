@@ -26,7 +26,7 @@ const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),i
 
 export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,contextHref='/admin/context',stagedSignOutHref='/admin/context?destination=sign-out',children,contentClassName}:PortalShellProps){
  const pathname=usePathname(),[openOnPath,setOpenOnPath]=useState<string|null>(null),toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
- const currentItem=groups.flatMap(group=>group.items).find(item=>item.href===homeHref?pathname===homeHref:pathname===item.href||pathname.startsWith(`${item.href}/`));
+ const currentItem=groups.flatMap(group=>group.items).filter(item=>item.href===homeHref?pathname===homeHref:pathname===item.href||pathname.startsWith(`${item.href}/`)).sort((left,right)=>right.href.length-left.href.length)[0];
  const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>toggle.current?.focus());},[]);
  useEffect(()=>{
   if(!open)return;
@@ -60,7 +60,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
     <button type="button" className="portal-sidebar-close" onClick={()=>close(true)}><span aria-hidden="true">×</span><span className="sr-only">Close menu panel</span></button>
    </div>
    <div className="portal-school-identity"><strong>{home.institutionName}</strong><span>{home.schoolName} · School workspace</span></div>
-   <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.map((group,index)=><PortalNavigationGroup key={group.label} group={group} pathname={pathname} onNavigate={()=>close()} firstItemRef={index===0?firstItem:undefined}/>)}</nav></div>
+   <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.map((group,index)=><PortalNavigationGroup key={group.label} group={group} activeHref={currentItem?.href??null} onNavigate={()=>close()} firstItemRef={index===0?firstItem:undefined}/>)}</nav></div>
    <footer className="portal-sidebar-footer">
     <Link className="portal-identity" href="/account" aria-label={`${identityLabel}, ${roleLabel} account`} onClick={()=>close()}>
      <span className="portal-identity-avatar" aria-hidden="true">{initials}</span>

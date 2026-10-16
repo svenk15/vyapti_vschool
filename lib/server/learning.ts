@@ -26,4 +26,5 @@ export const learningGateway={
  async saveFeedbackDraft(identity:Identity|null,id:unknown,submissionId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().saveFeedbackDraft(actor,organizationId,schoolId,id,submissionId,input,requestId);},
  async publishFeedback(identity:Identity|null,id:unknown,submissionId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().publishFeedback(actor,organizationId,schoolId,id,submissionId,input,requestId);},
  async leadershipOverview(identity:Identity|null,query:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().leadershipLearningOverview(actor,home.scope.organizationId,home.scope.schoolId,query);},
+ async leadershipFeedbackTurnaround(identity:Identity|null,query:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().leadershipFeedbackTurnaround(actor,home.scope.organizationId,home.scope.schoolId,query);},
 };

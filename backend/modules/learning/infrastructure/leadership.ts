@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import {Prisma,type PrismaClient} from '../../../../generated/prisma/client';
 import type {Identity,RoleCode} from '../../../../shared/contracts/access';
-import type {LeadershipLearningAssignment,LeadershipLearningOverview} from '../../../../shared/contracts/learning';
+import type {LeadershipFeedbackTurnaroundOverview,LeadershipLearningAssignment,LeadershipLearningOverview} from '../../../../shared/contracts/learning';
 import {AccessError,capabilitiesFor} from '../../access/contracts/index';
 import type {LeadershipLearningRepository} from '../application/leadership';
 import type {ReleaseManifest,VerifiedDatabaseContextPort} from '../../tenancy/contracts/index';
@@ -10,6 +10,7 @@ type Scope={organizationId:string;schoolId:string};
 type Row={assignment_id:string;version_id:string;title:string;due_at:Date;class_id:string;class_label:string;subject_id:string;subject_name:string;expected_pairs:number;submitted_pairs:number};
 type Counts={assignments:number;expected_pairs:number;submitted_pairs:number;upcoming_pairs:number};
 type FilterRow={class_id:string;class_label:string;subject_id:string;subject_name:string};
+type TurnaroundCounts={accepted_submissions:number;first_feedback_published:number;awaiting_feedback:number;median_turnaround_seconds:number|null};
 const modules=['homework','student_core','academic_core','staff_core'] as const;
 const date=(value:Date)=>value.toISOString().slice(0,10);
 const add=(value:string,days:number)=>{const result=new Date(`${value}T00:00:00.000Z`);result.setUTCDate(result.getUTCDate()+days);return date(result);};
@@ -59,5 +60,26 @@ WHERE v.organization_id=${input.organizationId}::uuid AND v.school_id=${input.sc
    tx.$queryRaw<FilterRow[]>(Prisma.sql`SELECT DISTINCT sec.id AS class_id,concat(grade.name,' · ',sec.name) AS class_label,sub.id AS subject_id,sub.name AS subject_name ${base} ORDER BY class_label,subject_name`),
   ]),counts=countRows[0]??{assignments:0,expected_pairs:0,submitted_pairs:0,upcoming_pairs:0},page=rows.slice(0,input.query.limit),items:LeadershipLearningAssignment[]=page.map(row=>({assignmentId:row.assignment_id,assignmentVersionId:row.version_id,title:row.title,dueAt:row.due_at.toISOString(),classId:row.class_id,classLabel:row.class_label,subjectId:row.subject_id,subjectName:row.subject_name,expectedPairs:row.expected_pairs,submittedPairs:row.submitted_pairs,awaitingPairs:row.due_at<=asOf?row.expected_pairs-row.submitted_pairs:0,due:row.due_at<=asOf})),last=page.at(-1),classes=[...new Map(filterRows.map(row=>[row.class_id,{id:row.class_id,label:row.class_label}])).values()],subjects=[...new Map(filterRows.map(row=>[row.subject_id,{id:row.subject_id,label:row.subject_name}])).values()];
   return {asOf:asOf.toISOString(),timezone,definitionVersion:'assignment-completion.v1',denominatorPolicy:'FROZEN_PUBLISHED_RECIPIENTS_DUE_BY_SERVER_CUTOFF',query:{fromDate,toDate,classId:input.query.classId,subjectId:input.query.subjectId,cursor:input.query.cursor,limit:input.query.limit},filters:{classes,subjects},counts:{assignments:counts.assignments,expectedPairs:counts.expected_pairs,submittedPairs:counts.submitted_pairs,awaitingPairs:counts.expected_pairs-counts.submitted_pairs,upcomingPairs:counts.upcoming_pairs},assignments:{items,total:counts.assignments,nextCursor:rows.length>input.query.limit&&last?encode(last.due_at,last.assignment_id,sig):null},limitations:{extensionsSupported:false,excusedSupported:false,pupilDetailSupported:false,followUpSupported:false}};
+ },{isolationLevel:'RepeatableRead'});}catch(error){return fail(error);}}
+ async feedbackTurnaround(actor:Identity,input:Scope&{query:import('../domain/leadership').LeadershipFeedbackTurnaroundInput}):Promise<LeadershipFeedbackTurnaroundOverview>{try{return await this.db.$transaction(async tx=>{
+  const timezone=await this.authorize(tx,actor,{organizationId:input.organizationId,schoolId:input.schoolId}),asOf=this.now(),today=civil(asOf,timezone),fromDate=input.query.fromDate??add(today,-30),toDate=input.query.toDate??add(today,1),from=localStart(fromDate,timezone),to=localStart(toDate,timezone),classFilter=input.query.classId?Prisma.sql`AND sec.id=${input.query.classId}::uuid`:Prisma.empty,subjectFilter=input.query.subjectId?Prisma.sql`AND sub.id=${input.query.subjectId}::uuid`:Prisma.empty;
+  const cohort=Prisma.sql`
+FROM vs_learning_submission_attempt attempt
+JOIN vs_learning_assignment_version v ON v.organization_id=attempt.organization_id AND v.school_id=attempt.school_id AND v.id=attempt.assignment_version_id
+JOIN vs_academics_course_offering o ON o.organization_id=v.organization_id AND o.school_id=v.school_id AND o.id=v.offering_id
+JOIN vs_academics_section sec ON sec.organization_id=o.organization_id AND sec.school_id=o.school_id AND sec.id=o.section_id
+JOIN vs_academics_grade_level grade ON grade.organization_id=sec.organization_id AND grade.school_id=sec.school_id AND grade.id=sec.grade_id
+JOIN vs_academics_subject sub ON sub.organization_id=o.organization_id AND sub.school_id=o.school_id AND sub.id=o.subject_id
+LEFT JOIN LATERAL (
+ SELECT MIN(fv.published_at) AS first_published_at
+ FROM vs_learning_feedback_version fv
+ WHERE fv.organization_id=attempt.organization_id AND fv.school_id=attempt.school_id AND fv.submission_id=attempt.id AND fv.published_at<=${asOf}
+) first_feedback ON TRUE
+WHERE attempt.organization_id=${input.organizationId}::uuid AND attempt.school_id=${input.schoolId}::uuid AND attempt.accepted_at>=${from} AND attempt.accepted_at<${to} AND attempt.accepted_at<=${asOf}`;
+  const [countRows,filterRows]=await Promise.all([
+   tx.$queryRaw<TurnaroundCounts[]>(Prisma.sql`SELECT COUNT(*)::int AS accepted_submissions,COUNT(first_feedback.first_published_at)::int AS first_feedback_published,COUNT(*) FILTER (WHERE first_feedback.first_published_at IS NULL)::int AS awaiting_feedback,percentile_cont(0.5) WITHIN GROUP (ORDER BY EXTRACT(EPOCH FROM (first_feedback.first_published_at-attempt.accepted_at))) FILTER (WHERE first_feedback.first_published_at IS NOT NULL)::double precision AS median_turnaround_seconds ${cohort} ${classFilter} ${subjectFilter}`),
+   tx.$queryRaw<FilterRow[]>(Prisma.sql`SELECT DISTINCT sec.id AS class_id,concat(grade.name,' · ',sec.name) AS class_label,sub.id AS subject_id,sub.name AS subject_name ${cohort} ORDER BY class_label,subject_name`),
+  ]),counts=countRows[0]??{accepted_submissions:0,first_feedback_published:0,awaiting_feedback:0,median_turnaround_seconds:null},classes=[...new Map(filterRows.map(row=>[row.class_id,{id:row.class_id,label:row.class_label}])).values()],subjects=[...new Map(filterRows.map(row=>[row.subject_id,{id:row.subject_id,label:row.subject_name}])).values()];
+  return {asOf:asOf.toISOString(),timezone,definitionVersion:'feedback-turnaround.v1',cohortPolicy:'ACCEPTED_SUBMISSIONS_IN_INTERVAL',clockPolicy:'ELAPSED_CLOCK_TIME_TO_FIRST_PUBLICATION',query:{fromDate,toDate,classId:input.query.classId,subjectId:input.query.subjectId},filters:{classes,subjects},counts:{acceptedSubmissions:counts.accepted_submissions,firstFeedbackPublished:counts.first_feedback_published,awaitingFeedback:counts.awaiting_feedback},medianTurnaroundSeconds:counts.median_turnaround_seconds===null?null:Number(counts.median_turnaround_seconds),limitations:{privateDraftsExcluded:true,laterRevisionsIgnored:true,studentDetailSupported:false,coordinationSupported:false}};
  },{isolationLevel:'RepeatableRead'});}catch(error){return fail(error);}}
 }

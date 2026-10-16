@@ -21,7 +21,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-15 | Resolve an incorrect or duplicate scheduled session | attendance | 1 | NOT_STARTED | NOT_STARTED | PENDING | Requires its named owner LLD and implementation |
 | LEA-16 | Review timetable conflicts and uncovered classes | academics | 3 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Current effective publication, stored reconciliation exceptions, current assignment and separately guarded Attendance evidence are verified; general Teacher absence/uncovered facts and cover acknowledgement/action remain blocked on the TT-07/TEA-23 owner and authority decisions |
 | LEA-17 | Review assignment completion with the right denominator | academics | 3 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Learning now supplies exact frozen-recipient due/submitted/awaiting/future counts with server-side period/class/subject filters and no private learner work; extension/excused policy, permitted pupil evidence and teaching follow-up remain without owner contracts |
-| LEA-18 | Review feedback awaiting return | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-18 | Review feedback awaiting return | academics | 3 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Learning supplies the approved accepted-submission cohort, first-publication/awaiting counts, median elapsed clock time and class/subject filters without private content or identities; subject-lead coordination remains absent because its owner, assignee authority, note lifecycle and verified outcome contract are not approved |
 | LEA-19 | Coordinate an evidence-based learning concern | academics | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-20 | Check assessment and report readiness | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-21 | Perform an explicitly delegated moderation decision | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 4 ENGINEERING_COMPLETE, 6 PARTIAL, 2 BLOCKED, 34 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 4 ENGINEERING_COMPLETE, 7 PARTIAL, 2 BLOCKED, 33 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. LEA-34's supported read slice is complete; reminder/resend requires an owner command, delivery outcome source, per-recipient reauthorization and deduplication/replay contract.
-2. LEA-18 requires the versioned feedback-turnaround start/end, school-time basis and withdrawn-publication rule before an awaiting/overdue count can be truthful.
-3. LEA-39 requires a distinct Principal export permission plus approved columns, suppression, job expiry and audit contract; aggregate `learning.read_leadership` cannot be widened implicitly. LEA-06 retained-last-known behavior likewise requires an exact owner snapshot retention/freshness/disclosure contract.
+2. LEA-18's approved descriptive read slice is complete. Subject-lead coordination remains separate and requires an owner, assignee authority, note lifecycle and verified outcome contract.
+3. LEA-39 is next under the approved separate `reporting.export` authority. Its export must remain bounded to existing aggregates, reauthorize at generation time and cannot widen an owner projection. LEA-06 retained-last-known behavior remains a later independent snapshot contract.
 
 LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

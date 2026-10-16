@@ -95,6 +95,16 @@ The stable ordering is `(due_at, assignment_id)` and its cursor is bound to the 
 
 The current owner model has no extension/excusal policy, pupil-level permitted-evidence projection or teaching follow-up lifecycle. Those reference stages remain visible as unsupported limitations and no dead action is rendered. The supported slice therefore does not claim full LEA-17 completion. Verification requires real PostgreSQL denominator, pagination, cross-scope and revocation cases; direct desktop/mobile reference comparison; private-content exclusion; current-source build; and a repeat-safe fictional submitted/awaiting seed scenario.
 
+## LEA-18 — descriptive feedback-turnaround projection
+
+Learning owns `leadershipFeedbackTurnaround(identity, organizationId, schoolId, query)`. It reuses the explicit branch Principal `learning.read_leadership` capability and repeats the same live account, token, membership, school, release, entitlement, activation and dependency checks as assignment completion. The query accepts a paired school-date interval of at most 93 days and exact class/subject filters. The default cohort runs from branch-local today minus 30 days through tomorrow, with the upper boundary exclusive.
+
+Definition `feedback-turnaround.v1` includes immutable `LearningSubmissionAttempt` rows whose `accepted_at` lies within the explicit branch-timezone timestamp boundaries and is no later than the server as-of instant. First feedback is `MIN(LearningFeedbackVersion.published_at)` for the exact submission at or before that as-of instant. Private `LearningFeedback` draft fields never enter the query. Later immutable publication versions do not reset the first-publication instant. Accepted submissions without a publication are **awaiting feedback** and do not enter the median. Unsubmitted recipients never enter the cohort. Turnaround is elapsed clock seconds from acceptance to first publication; the UI rounds exact seconds to minutes, hours or days and displays **Not available** when no published-feedback result exists.
+
+The read executes in one `REPEATABLE READ` transaction and returns accepted, first-published and awaiting counts, median elapsed seconds, branch timezone, interval, cutoff, filter options and definition metadata. It returns no Student, Teacher or account identifier; response, draft and feedback text; ranking; target; SLA; overdue flag; or comparative performance label. Existing submission accepted-time, feedback-version submission/publication, offering, section and subject indexes support the bounded query. There is no schema, migration, mutation, lock or duplicated report table.
+
+The current owner model has no assignment-cancellation or published-feedback withdrawal lifecycle, so the projection fabricates neither. LEA-18 coordination, assignee and operational-note stages remain absent because their owner and authority contract is still unresolved. Verification covers exact cohort boundaries, private-draft exclusion, first publication despite later revisions, awaiting and empty cohorts, filtering, cross-scope/revoked authority, no sensitive fields, and desktop/mobile comparison with the approved LEA-18 workflow. The supported descriptive slice remains PARTIAL until the coordination stage is designed and implemented.
+
 ## LEA-03 — private text draft and on-time submission
 
 ### Narrow release contract

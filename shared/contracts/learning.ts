@@ -33,3 +33,17 @@ export type LeadershipLearningOverview={
  assignments:{items:readonly LeadershipLearningAssignment[];total:number;nextCursor:string|null};
  limitations:{extensionsSupported:false;excusedSupported:false;pupilDetailSupported:false;followUpSupported:false};
 };
+
+export type LeadershipFeedbackTurnaroundQuery={fromDate:string;toDate:string;classId:string|null;subjectId:string|null};
+export type LeadershipFeedbackTurnaroundOverview={
+ asOf:string;
+ timezone:string;
+ definitionVersion:'feedback-turnaround.v1';
+ cohortPolicy:'ACCEPTED_SUBMISSIONS_IN_INTERVAL';
+ clockPolicy:'ELAPSED_CLOCK_TIME_TO_FIRST_PUBLICATION';
+ query:LeadershipFeedbackTurnaroundQuery;
+ filters:{classes:readonly LeadershipLearningFilter[];subjects:readonly LeadershipLearningFilter[]};
+ counts:{acceptedSubmissions:number;firstFeedbackPublished:number;awaitingFeedback:number};
+ medianTurnaroundSeconds:number|null;
+ limitations:{privateDraftsExcluded:true;laterRevisionsIgnored:true;studentDetailSupported:false;coordinationSupported:false};
+};

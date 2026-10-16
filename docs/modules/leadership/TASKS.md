@@ -120,3 +120,13 @@ Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PART
 - [x] Verify populated desktop/mobile states, unavailable rendering and direct LEA-34 workflow-reference comparison. The approved pack has no exact production page composition, so the application is recorded as a bounded design extension rather than exact visual fidelity.
 
 Engineering status: supported read slice VERIFIED; full LEA-34 PARTIAL. The reminder/resend portion remains blocked on its owner command, channel outcomes and deduplication contract. Human review remains separate.
+
+## LEA-18 — Feedback turnaround
+
+- [x] Reuse the exact branch Principal Learning read capability and owner projection boundary.
+- [x] Present accepted, first-published, awaiting and median elapsed-clock facts with explicit interval/cutoff metadata.
+- [x] Exclude private Learning content, identities, rankings, targets and overdue labels.
+- [x] Complete focused PostgreSQL and desktop/mobile reference verification.
+- [ ] Add coordination only after its owner and authority contract exists.
+
+Engineering status: supported descriptive read slice VERIFIED; full LEA-18 PARTIAL. Human review PENDING.

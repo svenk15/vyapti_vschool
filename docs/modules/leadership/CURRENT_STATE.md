@@ -133,3 +133,15 @@ No schema or migration changed; both databases retain all 64 migrations. Commit 
 Remaining gap: the approved reference requires extension/excused policy, permitted pupil evidence and a scoped teaching follow-up. Those owner/product contracts do not exist and no dead action is shown. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
 
 Next action: choose the next independently supported Principal read projection; do not infer extension, excusal, follow-up or approval authority.
+
+## 16 October 2026 — LEA-18 feedback-turnaround checkpoint
+
+The supported descriptive read slice is VERIFIED; full LEA-18 remains PARTIAL; human review is PENDING.
+
+Learning now owns `feedback-turnaround.v1`: accepted submissions within explicit branch-timezone boundaries, earliest successful feedback publication for each exact submission, awaiting-publication count and median elapsed clock time for only the measured subset. Private drafts, unsubmitted work, later-revision resets, Student/Teacher identities, response/feedback text, targets, overdue flags, rankings and staff-performance labels are excluded. The Principal route rechecks the live Learning capability and complete module chain on every read and offers exact class/subject filters.
+
+No schema or migration changed; development and test retain 64 migrations. Focused real-PostgreSQL passed 16/16. Sequential one-worker desktop/mobile reference/application checks passed, and direct screenshot inspection corrected nested active navigation, top-bar naming, four-card desktop alignment and narrow-card flow. See [evidence](../../evidence/principal-lea-18-feedback-2026-10-16/README.md).
+
+Remaining gap: the approved workflow's subject-lead coordination requires an owner, assignee authority, operational-note lifecycle and verified outcome contract. No dead action is rendered. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending.
+
+Next action: implement LEA-39 aggregate CSV export under the newly approved separate `reporting.export` authority, without widening the underlying Principal report projections.

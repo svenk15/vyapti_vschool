@@ -62,3 +62,14 @@ Human acceptance remains PENDING. Marks, rubrics, return/reopen, Student reply, 
 - [ ] Add extension/excused rules, permitted pupil evidence and a scoped teaching follow-up only after their owner/product contracts exist.
 
 Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PARTIAL. Human review PENDING.
+
+## LEA-18 — Principal feedback-turnaround oversight
+
+- [x] Adopt the explicitly approved accepted-submission cohort, first-publication and elapsed-clock definitions.
+- [x] Add a bounded Learning-owned query with branch-timezone boundaries and exact class/subject filters.
+- [x] Exclude private drafts, content, learner/Teacher identity, later-revision resets and staff-performance inference.
+- [x] Pass focused real-PostgreSQL and sequential desktop/mobile browser verification; the current-source repository and production-build gates are recorded with the checkpoint evidence.
+- [x] Directly inspect the approved LEA-18 reference against the application states and record remaining deviations.
+- [ ] Add subject-lead coordination only after its owner, assignee authority and note lifecycle are approved.
+
+Engineering status: supported descriptive read slice VERIFIED. Full LEA-18 remains PARTIAL until coordination is authorized and implemented. Human review PENDING.
