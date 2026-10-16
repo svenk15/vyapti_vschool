@@ -1,7 +1,7 @@
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
 import type {CoordinationAssignee,CoordinationAvailability,CoordinationCapability,CoordinationMutationResult,CoordinationQueue,CoordinationRequest} from '../../../../shared/contracts/coordination';
 import {AccessError} from '../../access/contracts/index';
-import {assignInput,createInput,id,key,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
+import {assignInput,createInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
 
 export type CoordinationListInput=Readonly<{status?:unknown;kind?:unknown;assignment?:unknown;cursor?:unknown;limit?:unknown}>;
 export interface CoordinationRepository {

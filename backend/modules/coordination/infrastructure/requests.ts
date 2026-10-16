@@ -11,7 +11,6 @@ import {assertState,localInstant} from '../domain/requests';
 
 type Scope={organizationId:string;schoolId:string};
 type Auth={membershipId:string;roles:RoleCode[];capabilities:CoordinationCapability[];timezone:string};
-type RequestRow=Awaited<ReturnType<Prisma.TransactionClient['coordinationRequest']['findFirst']>> & Record<string,unknown>;
 const managerCaps:readonly CoordinationCapability[]=['coordination.create','coordination.assign','coordination.verify','coordination.manage'];
 const digest=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const safeResult=(requestId:string,version:number,status:CoordinationStatus):Omit<CoordinationMutationResult,'replayed'>=>({requestId,version,status});
