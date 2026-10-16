@@ -25,3 +25,7 @@ The images were opened and compared directly at 1440×1000 and 390×844. The fir
 The approved reference includes general uncovered-class, absence-driven cover, acknowledgement and coordinator/delegated action states. The live owner schema currently provides trusted reconciliation exceptions but no general Teacher absence source or settled cover authority lifecycle. The production page therefore implements the smallest consistent read-only subset and does not render dead cover actions. Exact font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
 
 Seed credentials remain only in ignored mode-0600 `artifacts/leadership-01/private-demo.json`; no secret is included here.
+
+## Current-source demo
+
+The normal production build for product commit `b9949be2807c97352e61b6111c3727f3e2d25fba` completed with build ID `zNKU0AcTmBhnuU4smql1w`. That build is served at `http://127.0.0.1:3400`; a focused authenticated smoke check confirmed Principal workspace selection and the populated `/leadership/timetable` route, including the durable manual-session conflict. This smoke check did not replace the isolated functional or browser evidence above.

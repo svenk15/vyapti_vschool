@@ -92,4 +92,6 @@ Verification: focused lint and TypeScript passed; Access unit 10/10 passed; real
 
 Remaining gap: the approved reference includes general uncovered/absence and cover acknowledgement/action states. The current owner model provides trusted reconciliation exceptions but no general Teacher absence source or delegated cover/change lifecycle. TT-07/TEA-23 product authority decisions remain required; the application renders no dead action. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
 
+Executable demo: product commit `b9949be2807c97352e61b6111c3727f3e2d25fba`, normal production build `zNKU0AcTmBhnuU4smql1w`, served at `http://127.0.0.1:3400`. A focused authenticated smoke check confirmed Principal workspace selection and the populated `/leadership/timetable` route from this build. Credentials remain only in ignored mode-0600 `artifacts/leadership-01/private-demo.json`.
+
 Next action: select the next independently approved read projection; do not infer cover or staff-absence semantics from reconciliation outcomes.
