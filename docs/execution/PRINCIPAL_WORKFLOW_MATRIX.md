@@ -57,8 +57,8 @@ Engineering: 11 ENGINEERING_COMPLETE, 5 PARTIAL, 30 NOT_STARTED. Human acceptanc
 
 ## Active sequence
 
-1. LEA-10 is engineering-complete through COORD-02. Production release still requires the Coordination retention decision and TEN-03 enforcement evidence.
-2. LEA-18's approved descriptive read slice is complete. Subject-lead coordination remains separate and requires an owner, assignee authority, note lifecycle and verified outcome contract.
-3. LEA-39 is engineering-complete for every currently supported Principal aggregate after the exact-total bounded Communication export. LEA-06 current, unavailable and retained-last-known states are verified for synthetic local/test data; real-data snapshot release remains gated by retention and backup-deletion policy.
+1. Principal completion F00 and the current-equivalent F01/WF-10 are engineering-complete. The production L/D/W/R mapping is recorded in `docs/execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md`.
+2. LEA-10 remains production-gated by Coordination retention/backup-deletion policy and TEN-03; these gates do not reduce its engineering status.
+3. Every remaining programme task depends on at least one of D02–D19. Those rules remain recommended pending explicit user approval; no dependent authority is inferred.
 
 LEA-09/10/11/15 use the implemented Coordination owner. LEA-15 remains an independently authorized Attendance operation rather than a direct Principal mutation. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

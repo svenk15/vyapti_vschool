@@ -1,0 +1,860 @@
+{
+  "version": 1,
+  "approval": "PENDING_FOR_NEW_DECISIONS",
+  "baselineComplete": 11,
+  "baselinePartial": 5,
+  "baselineNotStarted": 30,
+  "tasks": [
+    {
+      "id": "F00",
+      "title": "Reconcile and establish production screen specimens",
+      "dependsOn": [],
+      "decisions": [],
+      "status": "ENGINEERING_COMPLETE",
+      "scope": "Correct stale matrix summary; map actual routes and owners; preserve accepted contracts; produce L/D/W/R specimens using shared tokens and legal existing font. No feature claim from docs.",
+      "demo": "Use existing verified journeys to demonstrate specimens; capture desktop/mobile; record source manifest.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F01",
+      "title": "Finish bounded Coordination bulk contract",
+      "dependsOn": [
+        "F00"
+      ],
+      "decisions": [
+        "D01"
+      ],
+      "status": "ENGINEERING_COMPLETE_CURRENT_EQUIVALENT",
+      "scope": "Implement existing COORD-02 design and real resumable owner receipts; no new generic workflow engine.",
+      "demo": "Three selected records produce created/existing/failed; kill-response recovery yields no duplicates.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F02",
+      "title": "Access delegated authority",
+      "dependsOn": [
+        "F00"
+      ],
+      "decisions": [
+        "D02"
+      ],
+      "status": "PLANNED",
+      "scope": "Dated action grants, runtime evaluation, trusted provision/revoke and eligible target query.",
+      "demo": "Future/active/expired/revoked persona; same account across roles cannot self-issue.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F03",
+      "title": "Typed decision facade and first owner adapter",
+      "dependsOn": [
+        "F00"
+      ],
+      "decisions": [
+        "D03"
+      ],
+      "status": "PLANNED",
+      "scope": "Register Coordination verification as real first adapter; owner-specific action/status and protected routing; no universal business decision persistence.",
+      "demo": "Principal opens actual pending verification through inbox and owner commits result; unknown/revoked replay proved.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F04",
+      "title": "Coordination owner extensions and safe history",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D04"
+      ],
+      "status": "PLANNED",
+      "scope": "Typed source/evidence registration, academic-assignee policy seam, bounded handover and event projections.",
+      "demo": "Existing Attendance follow-up remains unchanged; foreign source kind denied; handover preserves history.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F05",
+      "title": "Reporting briefs and comparison contracts",
+      "dependsOn": [
+        "F00"
+      ],
+      "decisions": [
+        "D06"
+      ],
+      "status": "PLANNED",
+      "scope": "Enumerated aggregate branches, compatible metrics, brief revisions/recipients and snapshot gating.",
+      "demo": "Different branch grants/calendars show qualified comparison; withdrawn recipient cannot read brief.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F06",
+      "title": "Attendance pupil/review/request contracts",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D07",
+        "D08"
+      ],
+      "status": "PLANNED",
+      "scope": "Distinct pupil detail and explanation reviewer grants; correction request and clarification counterpart; retain Attendance mutations in owner.",
+      "demo": "Parent flags own record; reviewer clarifies/corrects via owner; other guardian denied; explanation acceptance changes no mark.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F07",
+      "title": "People availability and Timetable cover",
+      "dependsOn": [
+        "F02",
+        "F03"
+      ],
+      "decisions": [
+        "D09"
+      ],
+      "status": "PLANNED",
+      "scope": "Availability records and privacy projection; exact occurrence cover with approval+acceptance; scheduled Attendance atomic change.",
+      "demo": "Substitute accepts before class; marking changes only after activation; open register conflicts.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F08",
+      "title": "Learning recipient rules and academic evidence",
+      "dependsOn": [
+        "F04"
+      ],
+      "decisions": [
+        "D10"
+      ],
+      "status": "PLANNED",
+      "scope": "Recipient extensions/excusal, status evidence grant and academic follow-up evidence adapter.",
+      "demo": "Extend one recipient, excuse another, submit work; aggregate reconciles without Parent feedback access.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F09",
+      "title": "Requests categories and restricted participants",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D12",
+        "D08"
+      ],
+      "status": "PLANNED",
+      "scope": "Operational staff requests and family complaint scope; originator response, independent routing, category state machine.",
+      "demo": "Staff request approved without payroll effect; complaint about Principal excluded from their inbox/count.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F10",
+      "title": "Communication review and reminders",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D13"
+      ],
+      "status": "PLANNED",
+      "scope": "Versioned author/reviewer/publisher workflow and durable in-app reminder; provider attempt seam without fake email.",
+      "demo": "Publish reviewed exact version; remind one eligible unacknowledged recipient; revoke another before dispatch.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F11",
+      "title": "Assessments minimum owner",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D11"
+      ],
+      "status": "PLANNED",
+      "scope": "Subtasks: plan+scale+cohort; teacher mark revisions; independent moderation; report revision/audience. Each checkpoint demo-able; register a distinct owner.",
+      "demo": "Teacher records marks, reviewer returns then approves revised set, publisher prepares report; no missing-as-zero.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F12",
+      "title": "Documents safe implementation",
+      "dependsOn": [
+        "F00"
+      ],
+      "decisions": [
+        "D15"
+      ],
+      "status": "PLANNED",
+      "scope": "Follow DOC-00/01/02 etc canonical tasks: metadata/quarantine, private adapter, real scanning, conditional owner links, authenticated serving and deletion policy.",
+      "demo": "Safe file serves; EICAR-style safe test fixture per scanner docs quarantined; scanner failure blocks download; no real personal files.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F13",
+      "title": "Meetings and participant responses",
+      "dependsOn": [
+        "F04"
+      ],
+      "decisions": [
+        "D14"
+      ],
+      "status": "PLANNED",
+      "scope": "Event-owner scheduling lifecycle, explicit purpose-granted participants, versioned responses and agreed actions.",
+      "demo": "Family invite accepted, changed time resets response, completed meeting creates one reviewed action.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F14",
+      "title": "School-configured restricted support",
+      "dependsOn": [
+        "F09"
+      ],
+      "decisions": [
+        "D16"
+      ],
+      "status": "PLANNED",
+      "scope": "Restricted referral, reviewed procedure/contact configuration and safe status; no invented emergency service.",
+      "demo": "Synthetic referral to specialist; referrer status-only; missing urgent procedure honestly unavailable.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F15",
+      "title": "Finance prerequisites and leadership boundary",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D17"
+      ],
+      "status": "PLANNED",
+      "scope": "Subtasks: full Finance LLD; exact-money ledger and charge/receipt facts; allocation/reconciliation; bounded independent decision; safe oversight port. No live payments.",
+      "demo": "Synthetic posted charge/payment/reconciliation drives real aggregate; simulated provider adapter labelled, not real settlement.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F16",
+      "title": "Facilities service incidents",
+      "dependsOn": [
+        "F04",
+        "F10"
+      ],
+      "decisions": [
+        "D18"
+      ],
+      "status": "PLANNED",
+      "scope": "Concrete facility/service owner, incident lifecycle and independent restoration evidence; Coordination/notice handoffs.",
+      "demo": "Outage routed, restored and independently verified; notice acknowledgement remains unchanged.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F17",
+      "title": "Reviewed AI adapter",
+      "dependsOn": [
+        "F05"
+      ],
+      "decisions": [
+        "D19"
+      ],
+      "status": "PLANNED",
+      "scope": "Source-minimized retrieval, no mutation tools, provider configuration gate, citation validator and draft lifecycle.",
+      "demo": "Configured approved provider produces cited draft; injected source ignored; revoked source blocks reopen. Test-double only remains partial.",
+      "kind": "foundation"
+    },
+    {
+      "id": "F18",
+      "title": "Account preferences and support configuration",
+      "dependsOn": [
+        "F00"
+      ],
+      "decisions": [
+        "D05"
+      ],
+      "status": "PLANNED",
+      "scope": "Own allowlisted preference persistence and trusted published branch support contact.",
+      "demo": "Reload density preference and separate sign-out; wrong-account write denied; unconfigured support honest.",
+      "kind": "foundation"
+    },
+    {
+      "id": "WF-03",
+      "title": "Work under a temporary leadership delegation",
+      "dependsOn": [
+        "F02"
+      ],
+      "decisions": [
+        "D02"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-03.md",
+      "kind": "workflow",
+      "workflow": "LEA-03"
+    },
+    {
+      "id": "WF-07",
+      "title": "Run the weekly leadership review",
+      "dependsOn": [
+        "F01",
+        "F04",
+        "F05"
+      ],
+      "decisions": [
+        "D04",
+        "D06"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-07.md",
+      "kind": "workflow",
+      "workflow": "LEA-07"
+    },
+    {
+      "id": "WF-10",
+      "title": "Follow up multiple missing registers safely",
+      "dependsOn": [
+        "F01"
+      ],
+      "decisions": [
+        "D01"
+      ],
+      "status": "ENGINEERING_COMPLETE_CURRENT_EQUIVALENT",
+      "definition": "workflows/LEA-10.md",
+      "kind": "workflow",
+      "workflow": "LEA-10"
+    },
+    {
+      "id": "WF-12",
+      "title": "Review factual pupil attendance patterns",
+      "dependsOn": [
+        "F06",
+        "F04"
+      ],
+      "decisions": [
+        "D07"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-12.md",
+      "kind": "workflow",
+      "workflow": "LEA-12"
+    },
+    {
+      "id": "WF-13",
+      "title": "Review an absence explanation",
+      "dependsOn": [
+        "F06",
+        "F03"
+      ],
+      "decisions": [
+        "D07",
+        "D08"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-13.md",
+      "kind": "workflow",
+      "workflow": "LEA-13"
+    },
+    {
+      "id": "WF-14",
+      "title": "Review an attendance correction request",
+      "dependsOn": [
+        "F06",
+        "F03",
+        "F04"
+      ],
+      "decisions": [
+        "D07",
+        "D08"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-14.md",
+      "kind": "workflow",
+      "workflow": "LEA-14"
+    },
+    {
+      "id": "WF-16",
+      "title": "Review timetable conflicts and uncovered classes",
+      "dependsOn": [
+        "F07"
+      ],
+      "decisions": [
+        "D09"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-16.md",
+      "kind": "workflow",
+      "workflow": "LEA-16"
+    },
+    {
+      "id": "WF-17",
+      "title": "Review assignment completion with the right denominator",
+      "dependsOn": [
+        "F08",
+        "F04"
+      ],
+      "decisions": [
+        "D10"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-17.md",
+      "kind": "workflow",
+      "workflow": "LEA-17"
+    },
+    {
+      "id": "WF-18",
+      "title": "Review feedback awaiting return",
+      "dependsOn": [
+        "F08",
+        "F04"
+      ],
+      "decisions": [
+        "D10"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-18.md",
+      "kind": "workflow",
+      "workflow": "LEA-18"
+    },
+    {
+      "id": "WF-19",
+      "title": "Coordinate an evidence-based learning concern",
+      "dependsOn": [
+        "F08",
+        "F04"
+      ],
+      "decisions": [
+        "D10"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-19.md",
+      "kind": "workflow",
+      "workflow": "LEA-19"
+    },
+    {
+      "id": "WF-20",
+      "title": "Check assessment and report readiness",
+      "dependsOn": [
+        "F11"
+      ],
+      "decisions": [
+        "D11"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-20.md",
+      "kind": "workflow",
+      "workflow": "LEA-20"
+    },
+    {
+      "id": "WF-21",
+      "title": "Perform an explicitly delegated moderation decision",
+      "dependsOn": [
+        "F11",
+        "F03"
+      ],
+      "decisions": [
+        "D11"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-21.md",
+      "kind": "workflow",
+      "workflow": "LEA-21"
+    },
+    {
+      "id": "WF-22",
+      "title": "Authorize or hand off report publication",
+      "dependsOn": [
+        "F11",
+        "F12",
+        "F03"
+      ],
+      "decisions": [
+        "D11",
+        "D15"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-22.md",
+      "kind": "workflow",
+      "workflow": "LEA-22"
+    },
+    {
+      "id": "WF-23",
+      "title": "Review staffing availability without private reasons",
+      "dependsOn": [
+        "F07"
+      ],
+      "decisions": [
+        "D09"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-23.md",
+      "kind": "workflow",
+      "workflow": "LEA-23"
+    },
+    {
+      "id": "WF-24",
+      "title": "Approve temporary cover when delegated",
+      "dependsOn": [
+        "F02",
+        "F07",
+        "F03"
+      ],
+      "decisions": [
+        "D02",
+        "D09"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-24.md",
+      "kind": "workflow",
+      "workflow": "LEA-24"
+    },
+    {
+      "id": "WF-25",
+      "title": "Decide an assigned staff request",
+      "dependsOn": [
+        "F09",
+        "F03"
+      ],
+      "decisions": [
+        "D12"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-25.md",
+      "kind": "workflow",
+      "workflow": "LEA-25"
+    },
+    {
+      "id": "WF-26",
+      "title": "Hand over open work when leadership changes",
+      "dependsOn": [
+        "F02",
+        "F04"
+      ],
+      "decisions": [
+        "D02",
+        "D03"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-26.md",
+      "kind": "workflow",
+      "workflow": "LEA-26"
+    },
+    {
+      "id": "WF-27",
+      "title": "Work from a purpose-scoped decision inbox",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D03"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-27.md",
+      "kind": "workflow",
+      "workflow": "LEA-27"
+    },
+    {
+      "id": "WF-28",
+      "title": "Request information before deciding",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D03",
+        "D08"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-28.md",
+      "kind": "workflow",
+      "workflow": "LEA-28"
+    },
+    {
+      "id": "WF-29",
+      "title": "Approve, reject or return an assigned item",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D03"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-29.md",
+      "kind": "workflow",
+      "workflow": "LEA-29"
+    },
+    {
+      "id": "WF-30",
+      "title": "Recuse and route a conflict of interest",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D03"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-30.md",
+      "kind": "workflow",
+      "workflow": "LEA-30"
+    },
+    {
+      "id": "WF-31",
+      "title": "Recover an uncertain or outdated decision",
+      "dependsOn": [
+        "F03"
+      ],
+      "decisions": [
+        "D03"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-31.md",
+      "kind": "workflow",
+      "workflow": "LEA-31"
+    },
+    {
+      "id": "WF-32",
+      "title": "Prepare a targeted school notice",
+      "dependsOn": [
+        "F10",
+        "F12"
+      ],
+      "decisions": [
+        "D13",
+        "D15"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-32.md",
+      "kind": "workflow",
+      "workflow": "LEA-32"
+    },
+    {
+      "id": "WF-33",
+      "title": "Approve or return a proposed communication",
+      "dependsOn": [
+        "F10",
+        "F03"
+      ],
+      "decisions": [
+        "D03",
+        "D13"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-33.md",
+      "kind": "workflow",
+      "workflow": "LEA-33"
+    },
+    {
+      "id": "WF-34",
+      "title": "Follow up delivery or acknowledgement gaps",
+      "dependsOn": [
+        "F10"
+      ],
+      "decisions": [
+        "D13"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-34.md",
+      "kind": "workflow",
+      "workflow": "LEA-34"
+    },
+    {
+      "id": "WF-35",
+      "title": "Handle an escalated family concern or complaint",
+      "dependsOn": [
+        "F09",
+        "F03"
+      ],
+      "decisions": [
+        "D12",
+        "D16"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-35.md",
+      "kind": "workflow",
+      "workflow": "LEA-35"
+    },
+    {
+      "id": "WF-36",
+      "title": "Run a family or staff meeting with follow-up actions",
+      "dependsOn": [
+        "F13",
+        "F04"
+      ],
+      "decisions": [
+        "D14"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-36.md",
+      "kind": "workflow",
+      "workflow": "LEA-36"
+    },
+    {
+      "id": "WF-37",
+      "title": "Refer a concern to an authorized specialist",
+      "dependsOn": [
+        "F14"
+      ],
+      "decisions": [
+        "D16"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-37.md",
+      "kind": "workflow",
+      "workflow": "LEA-37"
+    },
+    {
+      "id": "WF-38",
+      "title": "Follow the school\u2019s urgent safety escalation procedure",
+      "dependsOn": [
+        "F14"
+      ],
+      "decisions": [
+        "D16"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-38.md",
+      "kind": "workflow",
+      "workflow": "LEA-38"
+    },
+    {
+      "id": "WF-40",
+      "title": "Compare branches responsibly",
+      "dependsOn": [
+        "F05"
+      ],
+      "decisions": [
+        "D06"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-40.md",
+      "kind": "workflow",
+      "workflow": "LEA-40"
+    },
+    {
+      "id": "WF-41",
+      "title": "Prepare a leadership review brief",
+      "dependsOn": [
+        "F05"
+      ],
+      "decisions": [
+        "D06"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-41.md",
+      "kind": "workflow",
+      "workflow": "LEA-41"
+    },
+    {
+      "id": "WF-42",
+      "title": "Review decision and follow-up history",
+      "dependsOn": [
+        "F04",
+        "F03"
+      ],
+      "decisions": [
+        "D04"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-42.md",
+      "kind": "workflow",
+      "workflow": "LEA-42"
+    },
+    {
+      "id": "WF-43",
+      "title": "Review financial exceptions under a separate grant",
+      "dependsOn": [
+        "F15",
+        "F03"
+      ],
+      "decisions": [
+        "D17"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-43.md",
+      "kind": "workflow",
+      "workflow": "LEA-43"
+    },
+    {
+      "id": "WF-44",
+      "title": "Coordinate a school service interruption",
+      "dependsOn": [
+        "F16",
+        "F04",
+        "F10"
+      ],
+      "decisions": [
+        "D18"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-44.md",
+      "kind": "workflow",
+      "workflow": "LEA-44"
+    },
+    {
+      "id": "WF-45",
+      "title": "Review a source-linked leadership draft",
+      "dependsOn": [
+        "F17",
+        "F05"
+      ],
+      "decisions": [
+        "D19"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-45.md",
+      "kind": "workflow",
+      "workflow": "LEA-45"
+    },
+    {
+      "id": "WF-46",
+      "title": "Manage sessions, preferences and school support",
+      "dependsOn": [
+        "F18"
+      ],
+      "decisions": [
+        "D05"
+      ],
+      "status": "PLANNED",
+      "definition": "workflows/LEA-46.md",
+      "kind": "workflow",
+      "workflow": "LEA-46"
+    },
+    {
+      "id": "G99",
+      "title": "Consolidated full-scope review",
+      "dependsOn": [
+        "WF-03",
+        "WF-07",
+        "WF-10",
+        "WF-12",
+        "WF-13",
+        "WF-14",
+        "WF-16",
+        "WF-17",
+        "WF-18",
+        "WF-19",
+        "WF-20",
+        "WF-21",
+        "WF-22",
+        "WF-23",
+        "WF-24",
+        "WF-25",
+        "WF-26",
+        "WF-27",
+        "WF-28",
+        "WF-29",
+        "WF-30",
+        "WF-31",
+        "WF-32",
+        "WF-33",
+        "WF-34",
+        "WF-35",
+        "WF-36",
+        "WF-37",
+        "WF-38",
+        "WF-40",
+        "WF-41",
+        "WF-42",
+        "WF-43",
+        "WF-44",
+        "WF-45",
+        "WF-46"
+      ],
+      "decisions": [],
+      "status": "PLANNED",
+      "kind": "gate",
+      "scope": "All46 matrix rows reconciled; no partial erased; visual/human/production dimensions separate."
+    }
+  ]
+}

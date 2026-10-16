@@ -219,3 +219,11 @@ Focused current-source verification passed: 11/11 CSV unit tests, 1/1 real-Postg
 Full LEA-39 remains PARTIAL pending Timetable-exception and Communication notice-coverage export ports. Human review and all established release gates remain pending.
 
 Next action: implement the approved synthetic-only LEA-06 retained aggregate snapshot foundation with its independent `reporting.snapshot.manage` designation; retain the real-data release gate until retention and backup-deletion policy is approved.
+
+## 17 October 2026 — Principal completion F00 checkpoint
+
+F00 is ENGINEERING_COMPLETE; human review remains PENDING. The imported completion package was reconciled against executable source `f75ad4f3e3b036132d0c72bbe6c95eceea296b1c` and the live 46-row matrix. The current mutually exclusive counts are 11 ENGINEERING_COMPLETE, five PARTIAL and 30 NOT_STARTED. LEA-10 is complete through the existing verified COORD-02 implementation, so F01 and WF-10 are recorded as current equivalents rather than duplicated work.
+
+The [production screen map](../../execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md) maps real Principal routes to the L/D/W/R recipes. Current-source captures at 1440×1000 and 390×844 were directly inspected and measured; all specimens retained the shared shell and reported no horizontal overflow. Evidence is in [principal-f00-production-recipes-2026-10-17](../../evidence/principal-f00-production-recipes-2026-10-17/README.md). This checkpoint changes no application code, business contract, schema, migration or database data, so the existing LEA-10 functional/security evidence remains applicable.
+
+D01 is the only approved package decision. Every remaining graph task depends on at least one of D02–D19, which remain recommendations pending one consolidated explicit user decision. Human acceptance for all 46 workflows, font portability, native VoiceOver/NVDA, real-browser 200% zoom, retention/provider/restore/load controls, TEN-03 and production release remain pending. The exact continuation point is recorded in [RESUME](../../execution/PRINCIPAL_COMPLETION_PACK/RESUME.md).

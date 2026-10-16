@@ -2,6 +2,12 @@
 
 Status: active first-release design · 16 October 2026.
 
+## Principal completion F00 — production screen recipes
+
+The Principal completion package's approved HTML is a workflow explorer: it defines outcomes, stages, labels and failure semantics, but it is not a complete production-page composition. Production routes use the established VSchool portal shell and shared components. The four reusable compositions are the directory/operational report (L), detail/evidence route (D), staged operation (W) and durable receipt/recovery route (R). The authoritative route-to-recipe map, measured geometry, source hashes and recorded deviations are in [the F00 screen map](../../execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md).
+
+This presentation mapping adds no business capability, permission, schema, transaction or owner write. Each route continues to invoke its owner facade and current server-side tenant, branch, purpose, module and permission checks. Exact workflow-explorer pixel identity is not a completion criterion. Direct inspection at the required desktop and mobile viewports, shared-shell consistency and honest deviation recording are required. Human visual acceptance, font portability, native accessibility and TEN-03 remain separate gates.
+
 ## LDR-01 / LEA-01 design delta
 
 The Access module owns Principal identity and branch membership. `PRINCIPAL` is a fixed `RoleGrant` code on an active `SchoolMembership`; it is not an operator, institution administrator, school administrator, or teacher alias. Only the existing verified operator `SetBranchMembership` command may add or remove this code in the first release. School staff-management commands reject any target membership containing `PRINCIPAL`, preventing self-grant, delegated grant, suspension, role replacement, or privilege expansion through the administrator UI.

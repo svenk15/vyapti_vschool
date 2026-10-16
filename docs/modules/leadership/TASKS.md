@@ -155,3 +155,16 @@ Engineering status: every currently supported Principal aggregate export slice V
 - [x] Define forward DDL, guarded commands, owner ports and focused PostgreSQL/browser verification.
 
 Engineering status: COORD-01 VERIFIED for the approved Attendance scope; LEA-09, LEA-11 and LEA-15 are ENGINEERING_COMPLETE. Human review PENDING. Synthetic-only retention and the separate production gates remain open.
+
+## Principal completion programme foundation
+
+### F00 — Reconcile coverage and establish production screen recipes
+
+- [x] Reconcile all 46 live Principal workflows against the imported package without advancing unsupported journeys.
+- [x] Record the current 11 ENGINEERING_COMPLETE, five PARTIAL and 30 NOT_STARTED statuses; keep human acceptance separate and PENDING.
+- [x] Recognize the verified COORD-02/LEA-10 implementation as the current equivalent of F01/WF-10 instead of rebuilding it.
+- [x] Map real Principal routes to L, D, W and R production compositions without treating the workflow explorer as a complete page design.
+- [x] Capture and directly inspect current-source desktop and mobile specimens, record computed geometry, source hashes and explicit deviations.
+- [x] Preserve D01 as the only approved package decision; keep D02–D19 pending and retain all production gates.
+
+Engineering status: ENGINEERING_COMPLETE. This documentation/evidence checkpoint changes no product code, schema, migration or database data. Human visual acceptance remains PENDING.

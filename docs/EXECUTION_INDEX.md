@@ -1,5 +1,9 @@
 # Phase 1 execution index — v4.6
 
+## Principal completion programme — 17 October 2026
+
+The active Principal continuation graph is [PRINCIPAL_COMPLETION_PACK](execution/PRINCIPAL_COMPLETION_PACK/00_START_HERE.md). F00 reconciles the imported snapshot against the live repository, and its [SCREEN_MAP](execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md) defines production L/D/W/R compositions without treating the workflow explorer as a complete page design. The canonical [Principal workflow matrix](execution/PRINCIPAL_WORKFLOW_MATRIX.md) currently records 11 ENGINEERING_COMPLETE, five PARTIAL and 30 NOT_STARTED workflows. F01/WF-10 are satisfied by the verified COORD-02/LEA-10 implementation. D02–D19 remain recommendations pending an explicit user decision; production retention, TEN-03, font portability, native accessibility and human acceptance remain separate gates.
+
 ## Complete School Administrator directive (10 October 2026)
 
 The owner has authorized implementation of all 63 workflows in the approved School Administrator Edition 03 catalog. [SCHOOL_ADMIN_WORKFLOW_MATRIX](execution/SCHOOL_ADMIN_WORKFLOW_MATRIX.md) is the canonical Administrator inventory and records functional implementation, direct visual comparison, automated evidence, human review and blockers separately. The earlier Phase 1 and `SA-COMP` queues below remain historical sequencing and evidence; their former `OUT_OF_CURRENT_RELEASE` labels no longer exclude an Administrator workflow from implementation.

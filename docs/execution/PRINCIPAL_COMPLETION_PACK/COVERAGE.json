@@ -1,0 +1,324 @@
+[
+  {
+    "workflow": "LEA-01",
+    "title": "Enter the correct leadership workspace",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-02",
+    "title": "Switch branches without losing context",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-03",
+    "title": "Work under a temporary leadership delegation",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-03.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-04",
+    "title": "Handle access changes during a leadership action",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-05",
+    "title": "Review my school today",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-06",
+    "title": "Recognize stale, incomplete or unavailable information",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-07",
+    "title": "Run the weekly leadership review",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-07.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-08",
+    "title": "Inspect register submission coverage",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-09",
+    "title": "Create an accountable missing-register follow-up",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-10",
+    "title": "Follow up multiple missing registers safely",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": "workflows/LEA-10.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-11",
+    "title": "Verify, close or reopen a follow-up",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-12",
+    "title": "Review factual pupil attendance patterns",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-12.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-13",
+    "title": "Review an absence explanation",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-13.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-14",
+    "title": "Review an attendance correction request",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-14.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-15",
+    "title": "Resolve an incorrect or duplicate scheduled session",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-16",
+    "title": "Review timetable conflicts and uncovered classes",
+    "baseline": "PARTIAL",
+    "definition": "workflows/LEA-16.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-17",
+    "title": "Review assignment completion with the right denominator",
+    "baseline": "PARTIAL",
+    "definition": "workflows/LEA-17.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-18",
+    "title": "Review feedback awaiting return",
+    "baseline": "PARTIAL",
+    "definition": "workflows/LEA-18.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-19",
+    "title": "Coordinate an evidence-based learning concern",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-19.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-20",
+    "title": "Check assessment and report readiness",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-20.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-21",
+    "title": "Perform an explicitly delegated moderation decision",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-21.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-22",
+    "title": "Authorize or hand off report publication",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-22.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-23",
+    "title": "Review staffing availability without private reasons",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-23.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-24",
+    "title": "Approve temporary cover when delegated",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-24.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-25",
+    "title": "Decide an assigned staff request",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-25.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-26",
+    "title": "Hand over open work when leadership changes",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-26.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-27",
+    "title": "Work from a purpose-scoped decision inbox",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-27.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-28",
+    "title": "Request information before deciding",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-28.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-29",
+    "title": "Approve, reject or return an assigned item",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-29.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-30",
+    "title": "Recuse and route a conflict of interest",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-30.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-31",
+    "title": "Recover an uncertain or outdated decision",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-31.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-32",
+    "title": "Prepare a targeted school notice",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-32.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-33",
+    "title": "Approve or return a proposed communication",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-33.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-34",
+    "title": "Follow up delivery or acknowledgement gaps",
+    "baseline": "PARTIAL",
+    "definition": "workflows/LEA-34.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-35",
+    "title": "Handle an escalated family concern or complaint",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-35.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-36",
+    "title": "Run a family or staff meeting with follow-up actions",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-36.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-37",
+    "title": "Refer a concern to an authorized specialist",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-37.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-38",
+    "title": "Follow the school\u2019s urgent safety escalation procedure",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-38.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-39",
+    "title": "Drill into a metric and export permitted evidence",
+    "baseline": "ENGINEERING_COMPLETE",
+    "definition": null,
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-40",
+    "title": "Compare branches responsibly",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-40.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-41",
+    "title": "Prepare a leadership review brief",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-41.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-42",
+    "title": "Review decision and follow-up history",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-42.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-43",
+    "title": "Review financial exceptions under a separate grant",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-43.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-44",
+    "title": "Coordinate a school service interruption",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-44.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-45",
+    "title": "Review a source-linked leadership draft",
+    "baseline": "NOT_STARTED",
+    "definition": "workflows/LEA-45.md",
+    "humanAcceptance": "PENDING"
+  },
+  {
+    "workflow": "LEA-46",
+    "title": "Manage sessions, preferences and school support",
+    "baseline": "PARTIAL",
+    "definition": "workflows/LEA-46.md",
+    "humanAcceptance": "PENDING"
+  }
+]
