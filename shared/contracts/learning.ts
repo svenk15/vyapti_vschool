@@ -18,3 +18,18 @@ export type LearningStudentWork={assignment:LearningAssignmentSummary;draft:Lear
 export type LearningTeacherSubmissionSummary={submissionId:string;studentId:string;studentName:string;attemptNo:1;acceptedAt:string;receiptReference:string;feedbackStatus:'NOT_STARTED'|'DRAFT'|'PUBLISHED'};
 export type LearningTeacherSubmissionDetail=LearningTeacherSubmissionSummary&{assignmentId:string;assignmentTitle:string;text:string;effectiveDueAt:string;timezone:string};
 export type LearningTeacherFeedback=LearningTeacherSubmissionDetail&{feedbackRevision:number;draft:LearningFeedbackDraft|null;published:LearningPublishedFeedback|null};
+
+export type LeadershipLearningQuery={fromDate:string;toDate:string;classId:string|null;subjectId:string|null;cursor:string|null;limit:number};
+export type LeadershipLearningFilter={id:string;label:string};
+export type LeadershipLearningAssignment={assignmentId:string;assignmentVersionId:string;title:string;dueAt:string;classId:string;classLabel:string;subjectId:string;subjectName:string;expectedPairs:number;submittedPairs:number;awaitingPairs:number;due:boolean};
+export type LeadershipLearningOverview={
+ asOf:string;
+ timezone:string;
+ definitionVersion:'assignment-completion.v1';
+ denominatorPolicy:'FROZEN_PUBLISHED_RECIPIENTS_DUE_BY_SERVER_CUTOFF';
+ query:LeadershipLearningQuery;
+ filters:{classes:readonly LeadershipLearningFilter[];subjects:readonly LeadershipLearningFilter[]};
+ counts:{assignments:number;expectedPairs:number;submittedPairs:number;awaitingPairs:number;upcomingPairs:number};
+ assignments:{items:readonly LeadershipLearningAssignment[];total:number;nextCursor:string|null};
+ limitations:{extensionsSupported:false;excusedSupported:false;pupilDetailSupported:false;followUpSupported:false};
+};

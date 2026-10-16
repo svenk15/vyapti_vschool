@@ -3,7 +3,7 @@ import {AccessError} from '../../backend/modules/access/contracts';
 import {createLearningServices} from '../../backend/composition/learning';
 import {releasedModuleIds} from '../../backend/modules/tenancy/domain/entitlements';
 import type {Identity} from '../../shared/contracts/access';
-import {accountGateway} from './access';
+import {accountGateway,leadershipGateway} from './access';
 type Services=ReturnType<typeof createLearningServices>;let services:Services|undefined;try{services=createLearningServices({databaseUrl:process.env.DATABASE_URL??'',releasedModules:releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES),now:()=>new Date()});}catch{}
 const service=()=>{if(!services)throw new AccessError('UNAVAILABLE');return services;},required=(identity:Identity|null)=>{if(!identity)throw new AccessError('UNAUTHENTICATED');return identity;};
 async function scope(identity:Identity|null){const actor=required(identity),home=await accountGateway.getHome(actor);return {actor,...home.scope};}
@@ -25,4 +25,5 @@ export const learningGateway={
  async teacherFeedback(identity:Identity|null,id:unknown,submissionId:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().teacherFeedback(actor,organizationId,schoolId,id,submissionId);},
  async saveFeedbackDraft(identity:Identity|null,id:unknown,submissionId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().saveFeedbackDraft(actor,organizationId,schoolId,id,submissionId,input,requestId);},
  async publishFeedback(identity:Identity|null,id:unknown,submissionId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().publishFeedback(actor,organizationId,schoolId,id,submissionId,input,requestId);},
+ async leadershipOverview(identity:Identity|null,query:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().leadershipLearningOverview(actor,home.scope.organizationId,home.scope.schoolId,query);},
 };
