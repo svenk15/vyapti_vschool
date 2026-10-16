@@ -732,3 +732,7 @@ The first Principal Attendance metric is `register-coverage.v1` with `SESSION_EN
 ### 16 October 2026 — Principal exact Attendance source evidence
 
 Principal exact-session evidence is a fresh, read-only Attendance projection under the same narrow `attendance.read_leadership` authority. It exposes scheduled context, current lifecycle state/version and owner-maintained source freshness, while excluding rosters, pupil marks, explanations, correction history, actors, exports and mutations. AttendanceSession stores nullable `state_updated_at`; owner lifecycle writes maintain it atomically, trustworthy historical evidence is backfilled, and an unknown legacy value remains visibly unavailable rather than inferred from schedule or current time. LEA-08 filtering/sorting remains a separate incomplete slice.
+
+### 16 October 2026 — Principal notice-coverage read
+
+Communication may grant the explicit Principal-only `communication.read_leadership` capability without granting `communication.publish`. Its first bounded projection, `notice-coverage.v1`, reports frozen eligible audience, first portal read and explicit acknowledgement as separate facts for current immutable publication versions. It excludes recipients, contacts, message bodies and family relationship detail. Reminder/resend remains a separate owner command requiring trusted delivery outcomes, current-recipient reauthorization, channel policy and deduplication/replay semantics; no such action is implied by this read capability.

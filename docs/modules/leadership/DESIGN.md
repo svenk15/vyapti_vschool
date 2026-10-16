@@ -87,3 +87,7 @@ No schema, migration, owner write, draft or new persistence is introduced. Exist
 ## LEA-17 — Learning-owned completion projection
 
 Leadership presents the browser-safe `assignment-completion.v1` DTO and does not calculate or persist Learning facts. The explicit Principal role grants `learning.read_leadership`; every route and owner query independently rechecks it and current module availability. The production composition supports the approved period/class/subject selection and aggregate due/submitted/awaiting review while keeping private learner work absent. Extension, excused, learner drill-down and follow-up stages remain unavailable until their owners and disclosure rules are approved. See the Learning LLD for exact joins, cutoff, cursor and verification contract.
+
+## LEA-34 — Communication notice coverage
+
+The independently releasable read slice delegates all data access to Communication's `notice-coverage.v1` projection. Leadership presents only frozen audience, first-read and explicit acknowledgement aggregates with the owner cutoff and definition. It does not read Communication tables, calculate browser totals from recipient rows, expose message bodies or identities, or grant notice publication/reminder authority. The Principal navigation item appears only when the live role capability and Communication module gate both pass; the route independently reauthorizes through Communication on every request. Full LEA-34 remains partial until the owner defines and implements safe reminder/resend behavior.

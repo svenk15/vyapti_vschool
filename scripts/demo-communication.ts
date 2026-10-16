@@ -143,8 +143,15 @@ async function main() {
       const published = await communication.publish(admin, people.organizationId, people.schoolId, {sectionId: studentPlacement.sectionId, title: 'Student learning update', body: 'Please review this school learning update and acknowledge the exact published version.', requiresAcknowledgement: true, key: demo.studentPublishKey!}, randomUUID());
       demo.studentNoticeId = published.noticeId;
     }
+
+    stage = 'leadership-coverage';
+    const coverage = await communication.listLeadership(admin, people.organizationId, people.schoolId);
+    if (!coverage.items.some(item => item.noticeId === demo.noticeId)
+      || !coverage.items.some(item => item.noticeId === demo.studentNoticeId)) {
+      throw new Error('SYNTHETIC_PRINCIPAL_NOTICE_COVERAGE_REQUIRED');
+    }
     save(demo);
-    console.log(`Prepared or preserved immutable Parent and Student school notices with separately authorized recipients. Private credentials: ${path}`);
+    console.log(`Prepared or preserved immutable Parent and Student school notices and verified Principal aggregate coverage. Private credentials: ${path}`);
   } catch (error) {
     const code = error instanceof Error && /^[A-Z0-9_]+$/.test(error.message) ? error.message : 'LOCAL_DEMO_ERROR';
     throw new Error(`${stage.toUpperCase()}_${code}`);

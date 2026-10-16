@@ -37,7 +37,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-31 | Recover an uncertain or outdated decision | decisions | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-32 | Prepare a targeted school notice | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-33 | Approve or return a proposed communication | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-34 | Follow up delivery or acknowledgement gaps | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-34 | Follow up delivery or acknowledgement gaps | communication | 2 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | The exact Principal-only `notice-coverage.v1` read projection is verified with separate frozen audience/read/acknowledgement facts and no recipient/body disclosure; reminder/resend remains absent because provider outcomes, recipient reauthorization and deduplication command semantics are not approved or implemented; the approved pack supplies a workflow dialog rather than an exact production page composition |
 | LEA-35 | Handle an escalated family concern or complaint | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-36 | Run a family or staff meeting with follow-up actions | communication | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-37 | Refer a concern to an authorized specialist | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 4 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 35 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 4 ENGINEERING_COMPLETE, 6 PARTIAL, 2 BLOCKED, 34 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
-1. LEA-18 is the next useful Learning projection, but requires the versioned feedback-turnaround start/end, school-time basis and withdrawn-publication rule before an awaiting/overdue count can be truthful.
-2. LEA-39 requires a distinct Principal export permission plus approved columns, suppression, job expiry and audit contract; aggregate `learning.read_leadership` cannot be widened implicitly.
-3. LEA-06 retained-last-known behavior requires an exact owner snapshot retention/freshness/disclosure contract. Keep LEA-04 receipt recovery, LEA-46 preferences/support and LDR-04–06 partial/blocked until their named owner operations exist.
+1. LEA-34's supported read slice is complete; reminder/resend requires an owner command, delivery outcome source, per-recipient reauthorization and deduplication/replay contract.
+2. LEA-18 requires the versioned feedback-turnaround start/end, school-time basis and withdrawn-publication rule before an awaiting/overdue count can be truthful.
+3. LEA-39 requires a distinct Principal export permission plus approved columns, suppression, job expiry and audit contract; aggregate `learning.read_leadership` cannot be widened implicitly. LEA-06 retained-last-known behavior likewise requires an exact owner snapshot retention/freshness/disclosure contract.
 
 LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

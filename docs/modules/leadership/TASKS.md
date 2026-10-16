@@ -109,3 +109,14 @@ Engineering status: supported session-security slice VERIFIED; full LEA-46 PARTI
 - [ ] Complete extension/excused groups, permitted evidence and teaching follow-up after their owner contracts exist.
 
 Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PARTIAL. Human review PENDING.
+
+## LEA-34 — Notice delivery and acknowledgement coverage
+
+- [x] Grant only the exact Principal read capability; retain separate publisher authority.
+- [x] Return one bounded repeatable-read owner snapshot with timezone, cutoff and `notice-coverage.v1`.
+- [x] Keep eligible audience, first portal read and explicit acknowledgement separate for every current immutable version.
+- [x] Exclude recipient identities, notice bodies, contact details, relationship restrictions and all reminder/resend controls.
+- [x] Verify Principal scope, cross-branch/role/revocation/module denial and aggregate consistency in real PostgreSQL.
+- [x] Verify populated desktop/mobile states, unavailable rendering and direct LEA-34 workflow-reference comparison. The approved pack has no exact production page composition, so the application is recorded as a bounded design extension rather than exact visual fidelity.
+
+Engineering status: supported read slice VERIFIED; full LEA-34 PARTIAL. The reminder/resend portion remains blocked on its owner command, channel outcomes and deduplication contract. Human review remains separate.

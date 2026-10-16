@@ -80,6 +80,20 @@ Remaining gap: the approved workflow also requires reauthorization of a saved co
 
 Next action: select the smallest approved read-only owner projection whose semantics and permission boundary already exist; do not open a Principal write/approval workflow merely to manufacture receipt evidence.
 
+## 16 October 2026 — LEA-34 Communication notice-coverage checkpoint
+
+The supported read slice is VERIFIED; full LEA-34 remains PARTIAL; human review is PENDING.
+
+Communication now owns a bounded `notice-coverage.v1` snapshot for the current Principal branch. The exact `communication.read_leadership` capability is separate from publication authority, and every read rechecks the live account/token, Principal membership, Organization/School state and Communication release, entitlement, activation and dependency chain. The projection keeps frozen eligible accounts, first portal reads and explicit acknowledgements separate for each current immutable notice version. It excludes recipient identities, notice bodies, contacts and family relationship detail.
+
+The Principal shell exposes `/leadership/communication` only when the same role/module conditions are current. The page provides honest populated, empty and unavailable compositions and deliberately offers no reminder/resend action. The synthetic Communication seed now verifies that both existing fictional Parent and Student publications appear in the Principal aggregate without overwriting existing credentials or notice records.
+
+No schema or migration changed; development and test retain all 64 migrations. Focused Access unit tests passed 10/10. The real-PostgreSQL Communication file passed 3/3, including aggregate consistency, field exclusion and denial after Principal revocation. Sequential one-worker Playwright passed 3/3 Chromium and 3/3 mobile for Administrator publication, Parent acknowledgement, Student read/withdrawal and Principal coverage. The initial browser attempt exposed a test-helper race at the transient personal-workspace chooser; the helper was corrected to wait for the intended Parent/Student workspace and both current-source projects then passed. Direct inspection compared the application with the approved LEA-34 workflow dialog at 1440×1000 and 390×844. The pack does not provide an exact production notice-coverage page, so the production composition is a bounded design extension rather than an exact-fidelity claim. See [evidence](../../evidence/principal-lea-34-communication-2026-10-16/README.md).
+
+Remaining gap: the approved follow-up journey requires safe reminder/resend behavior. Communication has no trusted provider-delivery outcome projection or owner command defining recipient reauthorization, channel selection, deduplication, replay or durable per-recipient outcomes. No such action is shown. Human review, font portability, native VoiceOver/NVDA, TEN-03 and production provider controls remain pending.
+
+Next action: prepare the shared Files-owner contract requested by the current Principal/Parent/Student programme. Do not implement storage or scanner behavior until the ownership, malware state, scoped grants and expiring download rules are accepted.
+
 ## 16 October 2026 — LEA-16 timetable exception read checkpoint
 
 The supported read slice is VERIFIED; full LEA-16 remains PARTIAL; human review is PENDING.

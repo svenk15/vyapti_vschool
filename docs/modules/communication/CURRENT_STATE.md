@@ -19,3 +19,11 @@ The Student projection and direct reference comparison are recorded in [COM-02 e
 ## Remaining limitations and next action
 
 SA-35 remains partial beyond the delivered publication/withdrawal slices: durable drafts, tabs for drafts/delivery follow-up, scheduling, email/provider delivery, corrections, teacher authoring and private conversations are unimplemented and were not represented as working controls. PAR-14 and STW-28 are engineering-complete for their approved text-notice acknowledgement outcomes. STW-27 is partial only for attachments pending a scanned-file owner, recipient grant and expiring download contract. The approved-reference font has unresolved redistribution provenance, so the documented application fallback remains. Human review, native accessibility, TEN-03 and production provider review remain pending.
+
+## 16 October 2026 — Principal notice coverage
+
+The Communication-owned `notice-coverage.v1` read projection is VERIFIED; the complete LEA-34 follow-up workflow remains PARTIAL and human review is PENDING. A current Principal with the distinct `communication.read_leadership` capability can read one repeatable branch snapshot of current immutable publication versions and their separate eligible, first-read and explicit-acknowledgement counts. The DTO and route contain no recipient identity, notice body, contact or family relationship detail. Publication authority remains independently granted and is not implied by the Principal role.
+
+Focused evidence: Access unit 10/10, real PostgreSQL Communication 3/3, and the combined current-source Communication journey 3/3 Chromium plus 3/3 mobile, sequentially with one worker. Desktop/mobile reference and application captures were directly inspected. No schema or migration changed; both local databases retain all 64 migrations. `pnpm demo:seed` continues to create or preserve the existing fictional Parent/Student notices and now verifies their Principal aggregate coverage. See [evidence](../../evidence/principal-lea-34-communication-2026-10-16/README.md).
+
+Reminder/resend is not implemented: provider delivery outcomes, per-recipient reauthorization, channel policy and idempotent deduplication/replay are not yet an approved owner command. Production-provider review, TEN-03, font portability, native accessibility and human review remain pending.
