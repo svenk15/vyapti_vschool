@@ -10,7 +10,7 @@ async function scope(identity:Identity|null){const actor=required(identity),home
 export const communicationGateway={
  async publish(identity:Identity|null,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().publish(actor,organizationId,schoolId,input,requestId);},
  async listAdmin(identity:Identity|null){const {actor,organizationId,schoolId}=await scope(identity);return service().listAdmin(actor,organizationId,schoolId);},
- async listLeadership(identity:Identity|null){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().listLeadership(actor,home.scope.organizationId,home.scope.schoolId);},
+ async listLeadership(identity:Identity|null,input:Readonly<{limit?:number}>={}){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().listLeadership(actor,home.scope.organizationId,home.scope.schoolId,input);},
  listParent:(identity:Identity|null,studentId:unknown)=>service().listParent(required(identity),studentId),
  detailParent:(identity:Identity|null,studentId:unknown,noticeId:unknown)=>service().detailParent(required(identity),studentId,noticeId),
  markRead:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown})=>service().markRead(required(identity),input),

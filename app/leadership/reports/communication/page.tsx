@@ -1,0 +1,21 @@
+import Link from 'next/link';
+import {redirect} from 'next/navigation';
+import {Alert,Badge,Card,PageHeader,PageStack,StatCard} from '@/components/ui/primitives';
+import {getIdentity} from '@/lib/server/auth';
+import {communicationGateway} from '@/lib/server/communication';
+import {reportingGateway} from '@/lib/server/reporting';
+
+export const dynamic='force-dynamic';
+const instant=(value:string,timezone:string)=>new Intl.DateTimeFormat('en-IN',{dateStyle:'medium',timeStyle:'short',timeZone:timezone}).format(new Date(value));
+
+export default async function CommunicationExportPreview(){
+ const identity=await getIdentity();if(!identity)redirect('/sign-in');const [availability,report]=await Promise.all([reportingGateway.leadershipExportAvailability(identity).catch(()=>null),communicationGateway.listLeadership(identity,{limit:50}).catch(()=>null)]);
+ if(!availability?.reportTypes.includes('notice-coverage.v1'))return <main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow="Reports" title="Notice coverage export"/><Alert tone="warning" title="Aggregate export unavailable">Your current Principal context does not hold both Communication report-read and the separate branch export designation.</Alert></PageStack></main>;
+ if(!report)return <main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow="Reports" title="Notice coverage export"/><Alert tone="danger" title="Communication report unavailable">The authorized owner projection could not be read. No export was generated.</Alert></PageStack></main>;
+ const bounded=report.total<=report.items.length,eligible=report.items.reduce((sum,item)=>sum+item.eligibleAccounts,0),read=report.items.reduce((sum,item)=>sum+item.readAccounts,0),acknowledged=report.items.reduce((sum,item)=>sum+item.acknowledgedAccounts,0);
+ return <main id="main-content" className="container page-space"><PageStack className="leadership-report-export-page"><PageHeader eyebrow="Reports" title="Export notice coverage" description="Review the frozen publication coverage, exact owner cutoff and allowlisted evidence before creating a private CSV." actions={<Link className="btn btn-secondary" href="/leadership/communication">Back to notice coverage</Link>}/>
+  <Card className="padded"><div className="section-header"><div><h2>Report scope</h2><p className="muted">{report.definitionVersion} · Current immutable publication versions · {report.timezone}</p></div><Badge tone="info">As of {instant(report.asOf,report.timezone)}</Badge></div><p className="footer-note">Eligible audience, first portal read and explicit acknowledgement remain separate facts.</p></Card>
+  <section className="leadership-coverage-metrics" aria-label="Exported aggregate preview"><StatCard label="Eligible accounts" value={String(eligible)} detail={`${report.total} current publication${report.total===1?'':'s'}.`}/><StatCard label="Read" value={String(read)} detail="First reads of the exact versions."/><StatCard label="Acknowledged" value={String(acknowledged)} detail="Explicit acknowledgements only."/></section>
+  <Card className="padded"><div className="section-header"><div><h2>CSV field preview</h2><p className="muted">One summary row plus {report.total} notice coverage {report.total===1?'row':'rows'}.</p></div><Badge tone={bounded?'success':'warning'}>{bounded?'Within 50-row bound':'Export refused'}</Badge></div><dl className="branch-review"><div><dt>Included</dt><dd>Definition, as-of, timezone, immutable notice/version references, safe title and audience label, publication state and eligible/read/acknowledged counts.</dd></div><div><dt>Excluded</dt><dd>Recipient, account and Student identities, notice body, contact or family details, delivery inference and reminder/resend authority.</dd></div></dl>{bounded?<div className="workflow-actions"><Link className="btn btn-primary" href="/api/v1/leadership/reports/communication.csv" download>Download private CSV</Link></div>:<Alert tone="warning" title="Export exceeds the supported bound">More than 50 current publications exist. The export will not silently omit records.</Alert>}<p className="footer-note">The server rechecks current Principal Communication read, module dependencies and branch export authority.</p></Card>
+ </PageStack></main>;
+}

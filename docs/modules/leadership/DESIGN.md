@@ -106,6 +106,8 @@ The Feedback-turnaround extension at `/leadership/reports/feedback` carries the 
 
 The Timetable extension at `/leadership/reports/timetable` carries the current immutable publication/reconciliation identity, definition, source cutoff and bounded unresolved-occurrence count into its field preview. It links back to `/leadership/timetable`, refuses an incomplete owner page, explicitly names Student/Attendance/private exclusions and offers a direct private download only under the independent export designation. It adds no Timetable action or Attendance authority.
 
+The Communication extension at `/leadership/reports/communication` carries `notice-coverage.v1`, the exact owner total/cutoff and separate eligible/read/acknowledged facts into its preview. It refuses more than 50 current publications rather than silently truncating, links back to Notice coverage and names recipient/body/contact/delivery/reminder exclusions. It grants no publication or follow-up action.
+
 ## LEA-06 — Retained last-known aggregate presentation
 
 Leadership presents Reporting's immutable Attendance coverage snapshot without reading Reporting or Attendance tables. `/leadership/reports/snapshots` separates the current authorized source from retained history; `/leadership/reports/snapshots/[id]` labels the payload `Retained · not live`, discloses source cutoff and capture time, and instructs the Principal to reopen the current report before making a decision that needs fresh evidence. The retained view exposes only the bounded aggregate and safe class/session evidence already authorized by `register-coverage.v1`; it excludes pupil identities, rosters, marks, explanations, private responses and feedback.

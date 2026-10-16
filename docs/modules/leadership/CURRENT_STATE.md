@@ -140,6 +140,12 @@ Remaining gates: full LEA-46 remains partial, and font portability, native Voice
 
 Next action: select the next bounded Principal owner projection whose denominator and disclosure rules are fully represented by current source data; do not invent extension/excused, sensitive staff or approval semantics.
 
+## 16 October 2026 — LEA-39 current-release export completion
+
+LEA-39 is ENGINEERING_COMPLETE for all currently supported Principal aggregates; human review is PENDING. Communication notice coverage now joins Attendance coverage, Learning assignment completion/feedback turnaround and Timetable exceptions under the same independently designated, report-specific export boundary. The owner query applies current-version selection before its bound and returns an exact total; the UI refuses more than 50 rows without truncation, previews safe fields/exclusions and downloads a private/no-store formula-safe CSV. No recipient identity, body, contact/family detail, delivery inference or follow-up authority crosses the boundary.
+
+No schema or migration changed; both databases retain 67 migrations. Focused reporting unit passed 14/14; real PostgreSQL Communication/Reporting passed 1/1; sequential Communication browser journeys passed 3/3 desktop and 3/3 mobile with one worker, including the export preview/download; Playwright's isolated production build passed. Desktop/mobile application and immutable LEA-39 captures were directly inspected. Evidence: [principal-lea-39-communication-export-2026-10-16](../../evidence/principal-lea-39-communication-export-2026-10-16/README.md). Font portability, native accessibility, TEN-03, production-provider controls and human review remain pending.
+
 ## 16 October 2026 — LEA-39 timetable-exceptions export checkpoint
 
 The Timetable export slice is ENGINEERING_VERIFIED; full LEA-39 remains PARTIAL for Communication notice coverage; human review is PENDING. `/leadership/timetable` now offers the export only when the current Principal also has the independent branch exporter designation. `/leadership/reports/timetable` previews the exact current immutable publication, owner definition/as-of, reconciliation counts, one summary row and the bounded unresolved occurrences before the private/no-store download. It names excluded Student, Attendance and private-staff facts and provides no mutation action.

@@ -141,6 +141,6 @@ Engineering status: supported descriptive read slice VERIFIED; full LEA-18 PARTI
 - [x] Add the Assignment-completion owner export with the exact interval/class/subject filters, 50-row refusal, safe allowlist and independent live export authorization.
 - [x] Add the Feedback-turnaround owner export as a one-row cohort/clock aggregate with no identities or private Learning content.
 - [x] Add the Timetable-exceptions owner export with the current immutable publication, exact outcome counts, 50-row refusal and no Student/Attendance record disclosure.
-- [ ] Add other supported Principal metric exports only through equivalent owner ports and disclosure checks.
+- [x] Add Communication notice coverage through an exact-total bounded owner port with no recipient/body disclosure.
 
-Engineering status: Attendance-coverage, Assignment-completion, Feedback-turnaround and Timetable-exceptions export slices VERIFIED; full LEA-39 PARTIAL pending notice coverage. Human review PENDING.
+Engineering status: every currently supported Principal aggregate export slice VERIFIED; LEA-39 ENGINEERING_COMPLETE. Human review PENDING.

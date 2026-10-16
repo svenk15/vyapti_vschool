@@ -44,7 +44,13 @@ The verified LEA-16 owner projection now exposes the versioned `timetable-except
 
 Focused current-source evidence: TypeScript passed; reporting CSV unit passed 12/12; the real-PostgreSQL mixed Timetable reconciliation case passed 1/1 with no automatic export grant, explicit designation, exact owner totals, sensitive-field exclusion and revocation denial; isolated production build passed; sequential one-worker preview/download Playwright passed 1/1 desktop and 1/1 mobile after correcting one assertion to the actual exclusion copy. Captures were directly inspected against the immutable LEA-39 workflow reference. See [evidence](../../evidence/principal-lea-39-timetable-export-2026-10-16/README.md).
 
-Full LEA-39 remains PARTIAL pending the equivalent Communication notice-coverage export. Human review and established release gates remain pending.
+### Notice-coverage export extension — 16 October 2026
+
+Communication now returns an exact total with its current-version-first bounded page. Reporting exports one summary plus at most 50 safe notice coverage rows and refuses an incomplete page. It exposes no recipient identity, message body, contact/family detail or delivery/reminder authority. The same report-specific Principal Communication and independent export checks guard preview and direct private download. No schema changed; both designated databases retain 67 migrations.
+
+Focused current-source evidence: reporting CSV unit passed 14/14; real-PostgreSQL Communication/Reporting passed 1/1 with a two-notice total, one-row bounded query, explicit designation/revocation, formula neutralization and private-content exclusion; Playwright's isolated build passed; sequential one-worker Communication journeys passed 3/3 desktop and 3/3 mobile. Captures were directly inspected against immutable LEA-39. See [evidence](../../evidence/principal-lea-39-communication-export-2026-10-16/README.md).
+
+LEA-39 is ENGINEERING_COMPLETE for every currently supported Principal aggregate. Human review, font portability, native accessibility, TEN-03 and production controls remain pending.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|

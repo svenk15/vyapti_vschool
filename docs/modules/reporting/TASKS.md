@@ -54,9 +54,9 @@ Start and verify the server, give the user the URL and this script, record human
 - [x] Add Reports preview/download UI with current filters, private/no-store delivery and honest unauthorized/too-large recovery.
 - [x] Verify real PostgreSQL security/consistency, sequential desktop/mobile reference comparison and seed data; repository-wide gates are recorded in the checkpoint evidence.
 - [x] Extend the same report-specific boundary to Learning assignment completion, Learning feedback turnaround and Timetable exceptions through their authorized owner ports.
-- [ ] Add Communication notice coverage only after its owner port returns a complete bounded result rather than a silently truncated list.
+- [x] Add Communication notice coverage after fixing its owner port to return an exact total and complete bounded current-version page.
 
-Engineering status: Attendance, assignment-completion, feedback-turnaround and Timetable slices VERIFIED. Full LEA-39 remains PARTIAL pending Communication notice coverage. Human review PENDING.
+Engineering status: current-release Attendance, assignment-completion, feedback-turnaround, Timetable and Communication export slices VERIFIED; LEA-39 ENGINEERING_COMPLETE. Human review PENDING.
 
 ## LEA-06 — Retained aggregate snapshot slice
 

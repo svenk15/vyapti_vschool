@@ -1,6 +1,7 @@
 import type {LeadershipRegisterCoverage} from '../../../../shared/contracts/attendance';
 import type {LeadershipFeedbackTurnaroundOverview,LeadershipLearningOverview} from '../../../../shared/contracts/learning';
 import type {LeadershipTimetableOverview} from '../../../../shared/contracts/timetable';
+import type {LeadershipNoticeCoverage} from '../../../../shared/contracts/communication';
 
 export type AttendanceExportRow=Readonly<{
  schoolDate:string;sessionId:string;sectionCode:string;subjectCode:string;studentAdmissionNumber:string;
@@ -42,5 +43,12 @@ export function encodeLeadershipTimetableExceptionsCsv(report:LeadershipTimetabl
  const header=['rowKind','definitionVersion','asOf','timezone','publicationId','publicationRevision','effectiveFrom','effectiveUntil','reconciliationState','created','alreadyReconciled','blockedManualConflict','blockedDomainRule','failedTechnical','cancelledRemoved','occurrenceId','occurrenceVersion','schoolDate','startsAt','endsAt','class','subject','currentTeacher','outcome','errorCode','updatedAt','existingSessionId','existingSessionState'];
  const summary:(string|number|null)[]=['SUMMARY',report.definitionVersion,report.asOf,report.timezone,report.publication?.id??null,report.publication?.revisionNo??null,report.publication?.effectiveFrom??null,report.publication?.effectiveUntil??null,report.reconciliation?.state??null,report.counts.created,report.counts.alreadyReconciled,report.counts.blockedManualConflict,report.counts.blockedDomainRule,report.counts.failedTechnical,report.counts.cancelledRemoved,null,null,null,null,null,null,null,null,null,null,null,null,null];
  const evidence:(string|number|null)[][]=report.exceptions.items.map(item=>['EXCEPTION',report.definitionVersion,report.asOf,report.timezone,report.publication?.id??null,report.publication?.revisionNo??null,report.publication?.effectiveFrom??null,report.publication?.effectiveUntil??null,report.reconciliation?.state??null,null,null,null,null,null,null,item.occurrenceId,item.occurrenceVersion,item.schoolDate,item.startsAt,item.endsAt,item.sectionName,item.subjectName,item.teacherName,item.outcome,item.errorCode,item.updatedAt,item.existingSession?.id??null,item.existingSession?.status??null]);
+ return [header,summary,...evidence].map(row=>row.map(value=>csvCell(value)).join(',')).join('\r\n')+'\r\n';
+}
+
+export function encodeLeadershipNoticeCoverageCsv(report:LeadershipNoticeCoverage):string{
+ const header=['rowKind','definitionVersion','asOf','timezone','publications','eligibleAccounts','readAccounts','acknowledgedAccounts','noticeId','versionId','version','title','audience','publishedAt','status','requiresAcknowledgement','noticeEligible','noticeRead','noticeAcknowledged'];
+ const summary:(string|number|null)[]=['SUMMARY',report.definitionVersion,report.asOf,report.timezone,report.total,report.items.reduce((sum,item)=>sum+item.eligibleAccounts,0),report.items.reduce((sum,item)=>sum+item.readAccounts,0),report.items.reduce((sum,item)=>sum+item.acknowledgedAccounts,0),null,null,null,null,null,null,null,null,null,null,null];
+ const evidence:(string|number|null)[][]=report.items.map(item=>['NOTICE',report.definitionVersion,report.asOf,report.timezone,null,null,null,null,item.noticeId,item.versionId,item.version,item.title,item.audienceLabel,item.publishedAt,item.status,item.requiresAcknowledgement?'true':'false',item.eligibleAccounts,item.readAccounts,item.acknowledgedAccounts]);
  return [header,summary,...evidence].map(row=>row.map(value=>csvCell(value)).join(',')).join('\r\n')+'\r\n';
 }

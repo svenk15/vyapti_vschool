@@ -42,7 +42,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-36 | Run a family or staff meeting with follow-up actions | communication | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-37 | Refer a concern to an authorized specialist | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-38 | Follow the school’s urgent safety escalation procedure | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-39 | Drill into a metric and export permitted evidence | reports | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Operator-designated exports are verified for Attendance `register-coverage.v1`, Learning `assignment-completion.v1`, aggregate-only `feedback-turnaround.v1` and Timetable `timetable-exceptions.v1`; Communication notice coverage still lacks its equivalent bounded owner export port |
+| LEA-39 | Drill into a metric and export permitted evidence | reports | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Operator-designated, exact-definition exports are verified for every currently supported Principal aggregate: Attendance coverage, Learning assignment completion/feedback turnaround, Timetable exceptions and Communication notice coverage. Unsupported future owner metrics are not implied. |
 | LEA-40 | Compare branches responsibly | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-41 | Prepare a leadership review brief | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-42 | Review decision and follow-up history | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 6 ENGINEERING_COMPLETE, 6 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-04, LEA-05, LEA-06 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 7 ENGINEERING_COMPLETE, 5 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-04, LEA-05, LEA-06, LEA-08 and LEA-39 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. LEA-34's supported read slice is complete; reminder/resend requires an owner command, delivery outcome source, per-recipient reauthorization and deduplication/replay contract.
 2. LEA-18's approved descriptive read slice is complete. Subject-lead coordination remains separate and requires an owner, assignee authority, note lifecycle and verified outcome contract.
-3. LEA-39 Attendance coverage, Learning assignment-completion/feedback-turnaround and Timetable-exceptions exports are verified; Communication notice coverage still requires an equivalent bounded owner export port, so the parent stays partial. LEA-06 current, unavailable and retained-last-known states are verified for synthetic local/test data; real-data snapshot release remains gated by retention and backup-deletion policy.
+3. LEA-39 is engineering-complete for every currently supported Principal aggregate after the exact-total bounded Communication export. LEA-06 current, unavailable and retained-last-known states are verified for synthetic local/test data; real-data snapshot release remains gated by retention and backup-deletion policy.
 
 LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.
