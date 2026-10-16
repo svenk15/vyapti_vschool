@@ -53,8 +53,10 @@ Start and verify the server, give the user the URL and this script, record human
 - [x] Reauthorize report-read and export authority before atomically recording safe ExportRun/audit metadata.
 - [x] Add Reports preview/download UI with current filters, private/no-store delivery and honest unauthorized/too-large recovery.
 - [x] Verify real PostgreSQL security/consistency, sequential desktop/mobile reference comparison and seed data; repository-wide gates are recorded in the checkpoint evidence.
+- [x] Extend the same report-specific boundary to Learning assignment completion, Learning feedback turnaround and Timetable exceptions through their authorized owner ports.
+- [ ] Add Communication notice coverage only after its owner port returns a complete bounded result rather than a silently truncated list.
 
-Engineering status: Attendance-coverage export slice VERIFIED. Full LEA-39 remains PARTIAL until the other supported Principal aggregate reports have equivalent owner export ports. Human review PENDING.
+Engineering status: Attendance, assignment-completion, feedback-turnaround and Timetable slices VERIFIED. Full LEA-39 remains PARTIAL pending Communication notice coverage. Human review PENDING.
 
 ## LEA-06 — Retained aggregate snapshot slice
 

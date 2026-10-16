@@ -38,7 +38,13 @@ The verified LEA-18 owner projection now has an aggregate-only export. Its exact
 
 Focused current-source evidence: reporting CSV unit passed 11/11; the real-PostgreSQL feedback cohort case passed 1/1 with no-auto-grant, designation, exact aggregate, private-content exclusion and revocation checks; isolated build passed; sequential one-worker Playwright passed 1/1 desktop and 1/1 mobile. Captures were directly inspected against the immutable LEA-39 workflow reference. The local PostgreSQL postmaster became unresponsive before the focused test, was shut down normally and restarted without reset or data/migration change, after which the test passed. See [evidence](../../evidence/principal-lea-39-feedback-export-2026-10-16/README.md).
 
-Full LEA-39 remains PARTIAL pending equivalent timetable-exception and notice-coverage ports. Human review and established release gates remain pending.
+### Timetable-exceptions export extension — 16 October 2026
+
+The verified LEA-16 owner projection now exposes the versioned `timetable-exceptions.v1` definition through an equivalent Reporting export port. The export carries the current immutable publication and reconciliation source-as-of, one aggregate summary and at most 50 already-visible unresolved occurrences. It refuses owner totals above that bound and excludes Student identities, rosters, marks, absence explanations, private staff data, drafts and all mutation authority. Preview and generation recheck current Principal Timetable read, the Timetable module chain and the independent export designation. No schema changed; development and test retain 67 applied migrations.
+
+Focused current-source evidence: TypeScript passed; reporting CSV unit passed 12/12; the real-PostgreSQL mixed Timetable reconciliation case passed 1/1 with no automatic export grant, explicit designation, exact owner totals, sensitive-field exclusion and revocation denial; isolated production build passed; sequential one-worker preview/download Playwright passed 1/1 desktop and 1/1 mobile after correcting one assertion to the actual exclusion copy. Captures were directly inspected against the immutable LEA-39 workflow reference. See [evidence](../../evidence/principal-lea-39-timetable-export-2026-10-16/README.md).
+
+Full LEA-39 remains PARTIAL pending the equivalent Communication notice-coverage export. Human review and established release gates remain pending.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|

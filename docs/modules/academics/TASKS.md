@@ -162,6 +162,7 @@ Start and verify the server, give the user the URL and this script, record human
 - [x] Return exact class, subject, time, current Teacher and trusted manual-conflict evidence without absence reasons, roster, marks or write authority.
 - [x] Prove pagination, mixed outcome counts, retry clearing, cross-scope denial and existing reconciliation safety in real PostgreSQL.
 - [x] Wire the Principal route/navigation and compare populated desktop/mobile states with LEA-16.
+- [x] Expose the versioned, bounded Principal projection to Reporting for the separately authorized LEA-39 Timetable export without widening its fields or authority.
 - [ ] Implement general uncovered/absence and cover resolution only under a later approved owner contract.
 
 Status: supported read slice VERIFIED; full workflow PARTIAL; human review PENDING.

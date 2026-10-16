@@ -156,6 +156,8 @@ The read-only supported slice is VERIFIED; full LEA-16 and human review remain P
 
 Focused Access unit 10/10, real PostgreSQL Timetable 6/6, and sequential one-worker Playwright 2/2 Chromium plus 2/2 mobile passed. The final desktop/mobile application and approved LEA-16 captures were directly inspected after correcting the mobile exception list composition. Evidence is in [principal LEA-16](../../evidence/principal-lea-16-timetable-2026-10-16/README.md). General Teacher absence/uncovered facts and cover/change authority remain outside the current owner contract.
 
+The additive LEA-39 export seam declares `timetable-exceptions.v1` on the same authorized bounded DTO and lets Reporting request only the first 50 unresolved occurrences. Academics still owns every Timetable/Attendance join and current authority check; no persistence or migration changed. Focused real-PostgreSQL mixed reconciliation and sequential desktop/mobile export journeys passed. Evidence: [Principal timetable export](../../evidence/principal-lea-39-timetable-export-2026-10-16/README.md).
+
 ### TT-06 Teacher projection completion boundary — 13 October 2026
 
 TEA-22 is a supported partial workflow. The existing authorized published projection now includes its immutable pattern periods so desktop/mobile views display real breaks and unassigned lesson periods alongside assigned lessons and trusted Attendance links. It still exposes no draft, other Teacher schedule or browser-asserted session link. Room data remains unavailable because the accepted owner schema has no room source. Dated exceptions require later Timetable owner projections. Cover/change actions remain separate TEA-23/24 authority workflows and are not rendered as dead controls.

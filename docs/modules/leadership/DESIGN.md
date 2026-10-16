@@ -104,6 +104,8 @@ The Assignment-completion extension follows the same presentation contract at `/
 
 The Feedback-turnaround extension at `/leadership/reports/feedback` carries the exact accepted-submission cohort, elapsed-clock definition, period, filters and owner as-of into a one-row aggregate CSV. It intentionally exposes no evidence rows or identities and links back to the live turnaround source. The owner read and independent export designation are rechecked for both preview and generation.
 
+The Timetable extension at `/leadership/reports/timetable` carries the current immutable publication/reconciliation identity, definition, source cutoff and bounded unresolved-occurrence count into its field preview. It links back to `/leadership/timetable`, refuses an incomplete owner page, explicitly names Student/Attendance/private exclusions and offers a direct private download only under the independent export designation. It adds no Timetable action or Attendance authority.
+
 ## LEA-06 — Retained last-known aggregate presentation
 
 Leadership presents Reporting's immutable Attendance coverage snapshot without reading Reporting or Attendance tables. `/leadership/reports/snapshots` separates the current authorized source from retained history; `/leadership/reports/snapshots/[id]` labels the payload `Retained · not live`, discloses source cutoff and capture time, and instructs the Principal to reopen the current report before making a decision that needs fresh evidence. The retained view exposes only the bounded aggregate and safe class/session evidence already authorized by `register-coverage.v1`; it excludes pupil identities, rosters, marks, explanations, private responses and feedback.

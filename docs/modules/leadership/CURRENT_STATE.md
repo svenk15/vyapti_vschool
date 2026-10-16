@@ -140,6 +140,12 @@ Remaining gates: full LEA-46 remains partial, and font portability, native Voice
 
 Next action: select the next bounded Principal owner projection whose denominator and disclosure rules are fully represented by current source data; do not invent extension/excused, sensitive staff or approval semantics.
 
+## 16 October 2026 — LEA-39 timetable-exceptions export checkpoint
+
+The Timetable export slice is ENGINEERING_VERIFIED; full LEA-39 remains PARTIAL for Communication notice coverage; human review is PENDING. `/leadership/timetable` now offers the export only when the current Principal also has the independent branch exporter designation. `/leadership/reports/timetable` previews the exact current immutable publication, owner definition/as-of, reconciliation counts, one summary row and the bounded unresolved occurrences before the private/no-store download. It names excluded Student, Attendance and private-staff facts and provides no mutation action.
+
+No schema or migration changed; both local databases retain 67 migrations. TypeScript, 12/12 focused export units, the 1/1 real-PostgreSQL mixed reconciliation/export case, isolated production build and sequential 1/1 desktop plus 1/1 mobile preview/download journeys passed. The captures were inspected directly against immutable LEA-39 at 1440×1000 and 390×844. Evidence: [principal-lea-39-timetable-export-2026-10-16](../../evidence/principal-lea-39-timetable-export-2026-10-16/README.md). Font portability, native accessibility, TEN-03, production controls and human review remain pending.
+
 ## 16 October 2026 — LEA-17 assignment-completion checkpoint
 
 The supported read slice is VERIFIED; full LEA-17 remains PARTIAL; human review is PENDING.

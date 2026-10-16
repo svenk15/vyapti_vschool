@@ -519,6 +519,8 @@ No schema or migration changes. Transaction isolation is repeatable read; reads 
 
 General absence/uncovered facts and cover assignment remain outside this slice because their owner lifecycle and authority transitions are not yet approved.
 
+For LEA-39, this owner projection declares `timetable-exceptions.v1` and is available to Reporting only through the typed application facade. Reporting requests `{cursor:null,limit:50}` and must refuse export when `exceptions.total` exceeds the returned items. Academics retains all Timetable/Attendance joins and authorization; Reporting receives only the safe Principal DTO and cannot broaden occurrence evidence or create a session. The contract adds no owner write, table, migration or lock.
+
 ## v4.1 integration requirements
 
 School means operational Branch and Organization means client Institution. Every protected flow checks current release availability, institution entitlement, branch activation and user/resource permission; foundational commands remain available only through their required capability projection. Apply the revised account → Organization shared guard → School guard protocol from Tenancy DESIGN. Use the shared components/tokens and current branch context; never invent a second visual system. No operational access is implied by institution administrator role.
