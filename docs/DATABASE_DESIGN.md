@@ -99,6 +99,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SetupCheck | `vs_platform_setup_check` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |
 | ExportRun | `vs_reporting_export_run` | reporting | PLANNED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingExportGrant | `vs_reporting_export_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingSnapshotManagerGrant | `vs_reporting_snapshot_manager_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingSnapshot | `vs_reporting_snapshot` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | Enrollment | `vs_students_enrollment` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |
 | SectionPlacement | `vs_students_section_placement` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |
 | Student | `vs_students_student` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |

@@ -1,5 +1,15 @@
 # Principal leadership current state
 
+## 16 October 2026 — LEA-06 retained evidence checkpoint
+
+LEA-06 is ENGINEERING_COMPLETE for its approved synthetic local/test scope; human review is PENDING.
+
+The Principal can distinguish a current owner projection, a fail-closed unavailable source and an explicitly retained last-known Attendance coverage snapshot. Retained evidence displays definition, source cutoff, capture time, branch/date scope, aggregate counts and only the bounded class/session facts already permitted by `register-coverage.v1`. It is labelled non-live and does not recalculate after Attendance changes. Current report-read authority gates every list/detail read; capture and removal require the independent operator-designated `reporting.snapshot.manage` grant. Explicit removal leaves minimal audit metadata and makes the stale URL unavailable without touching Attendance records.
+
+Migration `20261016142000_reporting_snapshots` is applied to development and test; both retain 67 migrations. Focused unit passed 9/9, real PostgreSQL passed 12/12, and the sequential one-worker Principal suite passed 6/6 on desktop plus 6/6 on mobile. The Playwright production build passed for the implementation source. Reference and application captures were inspected directly at 1440×1000 and 390×844; the workflow dialog and production Reports page remain different compositions, and the full-page confirmation capture's stitched fixed-header position is a screenshot artifact. Incremental fictional seed completed without overwriting existing records. Evidence: [principal-lea-06-snapshots-2026-10-16](../../evidence/principal-lea-06-snapshots-2026-10-16/README.md).
+
+The feature remains unavailable for real data until retention and backup-deletion policy is approved. Font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
+
 ## 16 October 2026 — LDR-01 verified checkpoint
 
 Implementation is VERIFIED; human review is PENDING.

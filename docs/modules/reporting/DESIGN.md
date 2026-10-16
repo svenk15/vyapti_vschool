@@ -45,14 +45,18 @@ RPT-ADR-001: derived queries rather than mutable daily summary tables for the pi
 
 RPT-ADR-002: bounded direct CSV response, not public file hosting. Authorize before generation and immediately before response; headers no-store and attachment. Formula-safe encoding handles leading whitespace/control characters followed by =,+,-,@ and correct quote escaping. Export metadata logs filters/count/hash only.
 
+RPT-ADR-003: retained Principal aggregates are immutable Reporting-owned snapshots, separately designated from report read/export. First release is synthetic-only until retention and backup-deletion policy is approved for real school data. Removal clears the snapshot payload and denies stale URLs while preserving minimal deletion audit metadata; it never mutates owner source records.
+
 ## Physical data contract
 
-Reporting tables are planned except the implemented RPT-02 ExportRun and LEA-39 ReportingExportGrant; `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
+Reporting tables are planned except the implemented RPT-02 ExportRun, LEA-39 ReportingExportGrant and LEA-06 retained-snapshot tables; `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.
 
 | Table | Fields and data stored | Meaning | Keys / constraints / query support |
 |---|---|---|---|
 | `vs_reporting_export_run` (ExportRun) | id uuid PK; organization_id uuid; school_id uuid; actor_account_id uuid; filters jsonb; requested_at timestamptz(3); state GENERATED/FAILED; row_count int; content_hash char(64) nullable; request_id uuid | Synchronous bounded export metadata, no public stored CSV. GENERATED means the bytes were prepared, not that browser received them. | Composite FK(scope)->School and FK(actor_account_id)->UserAccount; CHECK state in GENERATED/FAILED, row_count>=0, object filters and null-or-lowercase-SHA256 content_hash; index(scope,requested_at,id); no raw exported CSV, pupil data, or credentials |
 | `vs_reporting_export_grant` (ReportingExportGrant) | id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int | Operator-designated branch authority for Principal aggregate export; Principal role or report-read authority never creates this grant automatically. | Composite FK(scope,membership_id,account_id)->SchoolMembership; UNIQUE(scope,account_id); CHECK version>0; active lookup index(scope,account_id,revoked_at) |
+| `vs_reporting_snapshot_manager_grant` (ReportingSnapshotManagerGrant) | id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int | Operator-designated branch authority for Principal aggregate snapshot capture/removal; report-read alone never creates this grant. | Composite FK(scope,membership_id,account_id)->SchoolMembership; UNIQUE(scope,account_id); CHECK version>0; active lookup index(scope,account_id,revoked_at) |
+| `vs_reporting_snapshot` (ReportingSnapshot) | id/scope/actor uuid; report_type/definition_version; query jsonb; school_date; source_as_of/captured_at; payload jsonb nullable; payload_hash; row_count; capture/removal intent metadata; version | Immutable bounded aggregate Principal report snapshot; explicit removal clears only the protected payload and retains minimal deletion metadata. | Scoped School and actor/remover Account FKs; UNIQUE(scope,id) and capture intent; CHECK version, row bound and active/removed payload state; list and actor indexes |
 
 ## Read workflows and joins
 
@@ -209,6 +213,38 @@ sequenceDiagram
 ```
 
 Verification requires pure CSV formula/quote tests; real PostgreSQL grant/no-auto-grant, revocation, foreign-scope, module denial, owner-total consistency, bound refusal and safe ExportRun/audit metadata; and a one-worker desktop/mobile journey that carries filter state, previews columns/scope, downloads the CSV and compares aggregate totals. Human review, native accessibility, font portability and TEN-03 remain separate gates. Other Principal aggregate exports keep LEA-39 partial until implemented through their owner ports.
+
+## LEA-06 — Retained aggregate snapshots and stale-evidence recognition
+
+**Design-readiness note (16 October 2026):** The approved Principal LEA-06 workflow requires source cutoff, completeness and unavailable states to remain distinct; the explicit retained-snapshot policy authorizes a narrow last-known evidence store. The first slice captures Attendance-owned `register-coverage.v1` only. Reporting owns the snapshot and its separate manager designation; Attendance continues to own the live repeatable-read projection and all source records. No pupil identity, roster, mark, explanation, private response/feedback, raw owner row or new decision authority enters the snapshot.
+
+`captureAttendanceSnapshot(actor, scope, {query,key})` calls `LeadershipSnapshotSourcePort.attendanceCoverage` with the same bounded filters and limit 50. Attendance returns its own repeatable-read report plus server `asOf`; the Reporting transaction then records that exact projection, definition version, safe filters, school date, source as-of, capture time, actor, row count and payload hash. Because the owner read and Reporting write are separate owner transactions, the snapshot claims the explicit source `asOf` boundary rather than a cross-owner atomic instant. Capture uses `(scope,actor,key)` uniqueness and a canonical request hash: exact retries return the original immutable snapshot after current reauthorization; a changed request with the same key conflicts. More than 50 evidence rows is refused without truncation.
+
+Current Principal `attendance.read_leadership`, exact branch scope, active identity/token and Attendance release/entitlement/activation are required for every list/detail read. Capture/removal additionally require the independent operator-designated `reporting.snapshot.manage` grant. Snapshot export is not offered by this slice; any future export must also pass the separate `reporting.export` check. A removed snapshot returns not found from its former URL. Removal is versioned/idempotent, locks account → Organization → School → snapshot, sets payload/hash to SQL NULL and appends a safe Platform audit event. Source Attendance records and prior audit entries never change.
+
+Runtime composition defaults snapshots to disabled. Only the explicit `synthetic` mode enables persistence for fictional local/test data. Real school-data availability remains blocked until retention and backup-deletion policy is approved; no statutory period or legal hold is implied. Tables are Path A BRANCH-classified and retain application authorization while TEN-03 RLS is pending.
+
+```mermaid
+sequenceDiagram
+  actor P as Principal
+  participant W as Snapshot page / route
+  participant R as Reporting snapshot use case
+  participant A as Attendance coverage port
+  participant D as Reporting persistence
+  P->>W: Capture current bounded aggregate with intent key
+  W->>R: Verified session, scope candidate, filters and key
+  R->>A: Current authorized register-coverage.v1 (limit 50)
+  A-->>R: Repeatable-read projection + source asOf
+  R->>D: Reauthorize manager; lock scope; replay or insert snapshot
+  D-->>R: Immutable snapshot receipt
+  R-->>W: Snapshot detail with last-known warning
+  P->>W: Confirm payload removal
+  W->>R: id + expected version + retained key
+  R->>D: Reauthorize manager; clear payload; append safe audit
+  D-->>W: Removal receipt; stale detail URL denied
+```
+
+Verification: pure use-case bound and exact-retry tests; real PostgreSQL proves no automatic manager grant, synthetic-mode gate, current read/manage authority, immutable payload after source change, cross-branch and revoked denial, duplicate-click replay/conflict, safe audit, explicit removal/replay and stale-link denial. One-worker desktop/mobile browser evidence covers capture, reload, source change without recalculation, current-vs-retained labels, keyboard focus, confirmation/removal and the approved LEA-06 reference state. Font portability, native accessibility, TEN-03, retention/backup deletion, production data and human review remain pending.
 
 ## Migration, retention and handoff
 

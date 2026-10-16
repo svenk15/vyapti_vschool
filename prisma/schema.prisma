@@ -632,6 +632,49 @@ model ReportingExportGrant {
  @@map("vs_reporting_export_grant")
 }
 
+model ReportingSnapshotManagerGrant {
+ id String @id(map:"vs_reporting_snapshot_manager_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,accountId],map:"vs_reporting_snapshot_manager_grant_scope_account_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_reporting_snapshot_manager_grant_active_idx")
+ @@map("vs_reporting_snapshot_manager_grant")
+}
+
+model ReportingSnapshot {
+ id String @id(map:"vs_reporting_snapshot_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ reportType String @map("report_type") @db.VarChar(80)
+ definitionVersion String @map("definition_version") @db.VarChar(80)
+ query Json
+ schoolDate DateTime @map("school_date") @db.Date
+ sourceAsOf DateTime @map("source_as_of") @db.Timestamptz(3)
+ capturedAt DateTime @map("captured_at") @db.Timestamptz(3)
+ payload Json?
+ payloadHash String? @map("payload_hash") @db.Char(64)
+ rowCount Int @map("row_count")
+ idempotencyKey String @map("idempotency_key") @db.VarChar(100)
+ inputHash String @map("input_hash") @db.Char(64)
+ version Int
+ removedAt DateTime? @map("removed_at") @db.Timestamptz(3)
+ removedByAccountId String? @map("removed_by_account_id") @db.Uuid
+ removalKey String? @map("removal_key") @db.VarChar(100)
+ removalInputHash String? @map("removal_input_hash") @db.Char(64)
+ @@unique([organizationId,schoolId,id],map:"vs_reporting_snapshot_scope_id_key")
+ @@unique([organizationId,schoolId,actorAccountId,idempotencyKey],map:"vs_reporting_snapshot_capture_intent_key")
+ @@index([organizationId,schoolId,capturedAt(sort: Desc),id(sort: Desc)],map:"vs_reporting_snapshot_list_idx")
+ @@index([actorAccountId],map:"vs_reporting_snapshot_actor_idx")
+ @@map("vs_reporting_snapshot")
+}
+
 model OperatorAuditEntry {
  id String @id @db.Uuid
  operatorId String @map("operator_id") @db.Uuid

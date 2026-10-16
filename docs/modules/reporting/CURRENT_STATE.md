@@ -1,6 +1,18 @@
 # Attendance review, completeness and exports — current state
 
-Last updated: 2026-10-11. No active execution timer.
+Last updated: 2026-10-16. Principal completion batch started 08:19 IST; intended handover 16:19 IST.
+
+## LEA-06 retained aggregate snapshots — 16 October 2026
+
+Status: ENGINEERING_VERIFIED / HUMAN_REVIEW_PENDING / REAL_DATA_RELEASE_BLOCKED.
+
+Reporting now owns an operator-designated branch `reporting.snapshot.manage` grant and immutable, bounded `register-coverage.v1` snapshots. Attendance remains the live source owner and is reached only through its authorized application port. Capture records the exact definition, scope, filters, source as-of, capture time, actor and safe aggregate rows; it excludes pupils, rosters, marks, explanations, response/feedback content and raw source rows. Current Principal report-read authority is required for every list/detail read, while capture and explicit payload removal also require the independent manager designation. Capture and removal are exact-key replay safe. Removal nulls the protected payload/hash, retains minimal audit metadata and denies the old detail URL without changing Attendance.
+
+Forward migration `20261016142000_reporting_snapshots` is applied to both `vyapti_vschool` and `vyapti_vschool_test`; 67 migrations are retained. The two Reporting tables are registered as Path A BRANCH tables for TEN-03 closure. Synthetic local/test mode is explicit; the default remains disabled and real-data use is blocked until retention and backup-deletion policy is approved.
+
+Verification: focused unit 9/9; real-PostgreSQL Attendance/Reporting 12/12; one-worker Principal browser 6/6 desktop and 6/6 mobile after correcting one ambiguous test locator; current-source Playwright production build passed. The database tests cover no automatic grant, operator designation/revocation, foreign scope, exact replay/conflict, immutable payload after source mutation, manager revocation with retained read, removal/replay, stale-link denial and safe audit metadata. Direct screenshot inspection covered the immutable retained view and removal confirmation at 1440×1000 and 390×844 against the immutable LEA-06 workflow reference. The approved source is a workflow dialog, while the production Reports pages are a reference-less shared-shell extension; the full-page confirmation captures contain Playwright's stitched fixed-header artifact and are not treated as an application layout state. The guarded incremental seed passed and preserves its private data in ignored `artifacts/leadership-01/private-demo.json`. See [evidence](../../evidence/principal-lea-06-snapshots-2026-10-16/README.md).
+
+Human review, exact font portability, native VoiceOver/NVDA, TEN-03 and production controls remain pending. Real-data snapshot availability remains deliberately disabled.
 
 ## LEA-39 Principal Attendance aggregate export — 16 October 2026
 

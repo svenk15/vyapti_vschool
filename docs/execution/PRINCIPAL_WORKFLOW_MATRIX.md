@@ -9,7 +9,7 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-03 | Work under a temporary leadership delegation | access | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-04 | Handle access changes during a leadership action | access | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Exact Attendance source data is removed on module/Principal loss, module restoration re-reads the retained record, and old URLs cannot override the authorized workspace fallback; the required Principal write/status-receipt reauthorization remains unavailable because no Principal write command exists |
 | LEA-05 | Review my school today | daily | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | LDR-02 provides the approved first-release Attendance summary with current source time, exact denominator and no fabricated additional owner metrics; the reference is a fictional workflow dialog while the application uses the production shell |
-| LEA-06 | Recognize stale, incomplete or unavailable information | daily | 1 | PARTIAL | FOCUSED_APPLICATION_INSPECTION | PENDING | Current source time, metric definition and fail-closed unavailable state are verified; retained last-known stale data is not implemented |
+| LEA-06 | Recognize stale, incomplete or unavailable information | daily | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Current source time, fail-closed unavailability and immutable retained-last-known Attendance coverage are verified; retained evidence is explicitly non-live, bounded, independently managed and synthetic-only until retention/backup-deletion policy is approved; the reference workflow dialog and production Reports composition differ |
 | LEA-07 | Run the weekly leadership review | daily | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-08 | Inspect register submission coverage | attendance | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Exact coverage/evidence plus server-side class/status/Teacher filters, deterministic due/class sorting, query-bound pagination and URL Back/Forward behavior are verified; the approved source is a fictional workflow dialog while the application uses the production Principal shell |
 | LEA-09 | Create an accountable missing-register follow-up | attendance | 2 | BLOCKED | NOT_STARTED | PENDING | Coordination owner persistence and authority are not implemented |
@@ -53,12 +53,12 @@ Updated 16 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 4 ENGINEERING_COMPLETE, 8 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-05 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
+Engineering: 5 ENGINEERING_COMPLETE, 7 PARTIAL, 2 BLOCKED, 32 NOT_STARTED. LEA-01, LEA-02, LEA-05, LEA-06 and LEA-08 are engineering-complete. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. LEA-34's supported read slice is complete; reminder/resend requires an owner command, delivery outcome source, per-recipient reauthorization and deduplication/replay contract.
 2. LEA-18's approved descriptive read slice is complete. Subject-lead coordination remains separate and requires an owner, assignee authority, note lifecycle and verified outcome contract.
-3. LEA-39's first Attendance coverage export is verified; other aggregates require equivalent owner export ports and remain partial. LEA-06 retained-last-known behavior is the next priority under its independent snapshot contract.
+3. LEA-39's first Attendance coverage export is verified; other aggregates require equivalent owner export ports and remain partial. LEA-06 current, unavailable and retained-last-known states are verified for synthetic local/test data; real-data snapshot release remains gated by retention and backup-deletion policy.
 
 LEA-09/11 require the Coordination owner. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

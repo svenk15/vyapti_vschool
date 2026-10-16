@@ -56,6 +56,21 @@ Start and verify the server, give the user the URL and this script, record human
 
 Engineering status: Attendance-coverage export slice VERIFIED. Full LEA-39 remains PARTIAL until the other supported Principal aggregate reports have equivalent owner export ports. Human review PENDING.
 
+## LEA-06 — Retained aggregate snapshot slice
+
+- [x] Record the independent `reporting.snapshot.manage` authority, synthetic-only release gate, bounded payload, source-as-of consistency statement, removal semantics and Path A tables.
+- [x] Capture Attendance-owned `register-coverage.v1` through its application port without direct Attendance writes or raw/pupil source duplication.
+- [x] Preserve exact-key duplicate-click/lost-response replay, immutable payload/version and safe capture audit.
+- [x] Require current Principal report-read for list/detail and current manager designation for capture/removal; deny foreign/revoked/module-unavailable access.
+- [x] Clear only the payload on explicit confirmed removal, retain minimal deletion metadata/audit and deny the stale detail URL.
+- [x] Apply the migration to development/test and verify immutable-after-source-change, replay/conflict, removal/replay and tenant/branch security with real PostgreSQL.
+- [x] Verify the current/retained/unavailable browser states and LEA-06 reference at desktop/mobile with one worker; inspect screenshots directly.
+- [x] Extend the fictional Principal seed, run required gates, update state/evidence and checkpoint the verified source/demo.
+
+Design readiness: complete under [LEA-06](DESIGN.md#lea-06--retained-aggregate-snapshots-and-stale-evidence-recognition). Real-data retention and backup-deletion policy remains an explicit release gate, not an implementation blocker for fictional local/test data. Human review PENDING.
+
+Engineering status: the approved LEA-06 current, unavailable and retained-last-known states are VERIFIED for synthetic local/test data. Real-data use remains disabled pending retention and backup-deletion policy. Human review PENDING.
+
 ## Experience overlay consumption
 
 EX-12 adopts the existing attendance overview, server-filtered detail and authorized CSV export. Preserve owner denominator/as-of semantics, formula-safe export and ExportRun audit; never compute school totals from one cursor page or export rendered DOM rows.

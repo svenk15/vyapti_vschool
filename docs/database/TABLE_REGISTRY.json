@@ -1,5 +1,5 @@
 {
-  "revision": "4.7",
+  "revision": "4.8",
   "prefix": "vs_",
   "tables": [
     {
@@ -944,6 +944,48 @@
           "school_id"
         ],
         "intendedPolicy": "Require both verified tenant keys and the currently designated account; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "reporting",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "ReportingSnapshotManagerGrant",
+      "owner": "reporting",
+      "table": "vs_reporting_snapshot_manager_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Operator-designated branch authority for Principal aggregate snapshot capture/removal; report-read alone never creates this grant.",
+      "constraints": "Composite FK(scope,membership_id,account_id)->SchoolMembership; UNIQUE(scope,account_id); CHECK version>0; active lookup index(scope,account_id,revoked_at)",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and the currently designated account; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "reporting",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "ReportingSnapshot",
+      "owner": "reporting",
+      "table": "vs_reporting_snapshot",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "fields": "id/scope/actor uuid; report_type/definition_version; query jsonb; school_date; source_as_of/captured_at; payload jsonb nullable; payload_hash; row_count; capture/removal intent metadata; version",
+      "responsibility": "Immutable bounded aggregate Principal report snapshot; explicit removal clears only the protected payload and retains minimal deletion metadata.",
+      "constraints": "Scoped School and actor/remover Account FKs; UNIQUE(scope,id) and capture intent; CHECK version, row bound and active/removed payload state; list and actor indexes",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Current report-read authority may read active payloads in the exact branch; snapshot managers may insert/remove only in the verified scope.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "reporting",
         "closureGate": "TEN-03"

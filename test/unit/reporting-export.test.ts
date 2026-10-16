@@ -2,6 +2,7 @@ import {describe,expect,it,vi} from 'vitest';
 import {encodeAttendanceCsv,encodeLeadershipAttendanceCoverageCsv,type AttendanceExportRow} from '../../backend/modules/reporting/domain/export-csv';
 import type {LeadershipRegisterCoverage} from '../../shared/contracts/attendance';
 import {createLeadershipExportUseCases} from '../../backend/modules/reporting/application/leadership-export';
+import {createLeadershipSnapshotUseCases} from '../../backend/modules/reporting/application/leadership-snapshot';
 import {AccessError} from '../../backend/modules/access/contracts';
 
 const row:AttendanceExportRow={schoolDate:'2026-10-05',sessionId:'f39c4ebc-e782-40e8-8799-d4579264cf95',sectionCode:'G8-A',subjectCode:'MATH',studentAdmissionNumber:'A-10',studentName:'Avery Example',status:'LATE',lateMinutes:5,sessionState:'SUBMITTED'};
@@ -11,6 +12,17 @@ describe('RPT-02 attendance CSV',()=>{
  });
  it.each(['=1+1',' +SUM(A1:A2)','\t@cmd','-2+3'])('neutralizes spreadsheet formula prefix %s after leading whitespace/control characters',value=>{
   expect(encodeAttendanceCsv([{...row,studentName:value}])).toContain(`"'${value}"`);
+ });
+});
+
+describe('LEA-06 retained aggregate snapshots',()=>{
+ it('passes the exact bounded owner projection and intent key to persistence',async()=>{
+  const id='f39c4ebc-e782-40e8-8799-d4579264cf95',report:LeadershipRegisterCoverage={asOf:'2026-10-16T06:30:00.000Z',schoolDate:'2026-10-16',timezone:'Asia/Kolkata',definitionVersion:'register-coverage.v1',duePolicy:'SESSION_END_NO_GRACE',counts:{scheduled:1,due:1,received:1,awaiting:0,notDue:0,cancelled:0},query:{classId:null,status:null,teacherId:null,sort:'due',order:'asc'},filters:{classes:[],teachers:[]},awaiting:{total:0,nextCursor:null,items:[]}},capture=vi.fn(async()=>({id,reportType:'attendance-register-coverage.v1' as const,definitionVersion:report.definitionVersion,schoolDate:report.schoolDate,sourceAsOf:report.asOf,capturedAt:report.asOf,rowCount:1,version:1,removedAt:null,query:{date:report.schoolDate},payload:report,replayed:false})),service=createLeadershipSnapshotUseCases({attendanceCoverage:async()=>report},{availability:async()=>({enabled:true,canManage:true,reason:null}),list:async()=>[],get:async()=>capture(),capture,remove:async()=>({id,version:2,removedAt:report.asOf,replayed:false}),grant:async()=>({grantId:id,version:1}),revoke:async()=>({grantId:id,version:2})});
+  await expect(service.captureAttendanceSnapshot({accountId:id,tokenVersion:1},id,id,{query:{date:report.schoolDate},key:id})).resolves.toMatchObject({id,replayed:false});expect(capture).toHaveBeenCalledWith(expect.anything(),id,id,{query:{date:report.schoolDate},key:id,payload:report});
+ });
+ it('refuses an incomplete 50-row source page before persistence',async()=>{
+  const id='f39c4ebc-e782-40e8-8799-d4579264cf95',item={id,version:1,schoolDate:'2026-10-16',startsAt:'2026-10-16T04:00:00.000Z',endsAt:'2026-10-16T04:40:00.000Z',dueAt:'2026-10-16T04:40:00.000Z',status:'OPEN' as const,sectionName:'Section A',subjectName:'Science',teacherName:null},report:LeadershipRegisterCoverage={asOf:'2026-10-16T06:30:00.000Z',schoolDate:'2026-10-16',timezone:'Asia/Kolkata',definitionVersion:'register-coverage.v1',duePolicy:'SESSION_END_NO_GRACE',counts:{scheduled:51,due:51,received:0,awaiting:51,notDue:0,cancelled:0},query:{classId:null,status:null,teacherId:null,sort:'due',order:'asc'},filters:{classes:[],teachers:[]},awaiting:{total:51,nextCursor:'more',items:Array.from({length:50},()=>item)}},capture=vi.fn(),service=createLeadershipSnapshotUseCases({attendanceCoverage:async()=>report},{availability:async()=>({enabled:true,canManage:true,reason:null}),list:async()=>[],get:async()=>{throw new Error();},capture,remove:async()=>({id,version:2,removedAt:report.asOf,replayed:false}),grant:async()=>({grantId:id,version:1}),revoke:async()=>({grantId:id,version:2})});
+  await expect(service.captureAttendanceSnapshot({accountId:id,tokenVersion:1},id,id,{query:{date:report.schoolDate},key:id})).rejects.toEqual(new AccessError('VALIDATION'));expect(capture).not.toHaveBeenCalled();
  });
 });
 
