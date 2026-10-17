@@ -6,7 +6,7 @@ Approved D-IDs and evidence: D01 preserves the existing COORD-02/LEA-10 contract
 
 Current matrix: 12 ENGINEERING_COMPLETE, four PARTIAL and 30 NOT_STARTED. Human review remains PENDING for all 46.
 
-Current executable source/build: F18 product source passed `pnpm build` and the rebuilt isolated `.next-e2e` bundle; record the focused checkpoint commit after commit creation. The development demo is to be restarted from that checkpoint at `http://127.0.0.1:3400`.
+Current executable source/build: F18 product commit `8682e900c4157986eac25e78a2736dbd0137e0ae` passed `pnpm build` (build `Er99P6-uYVG-6WXKIDKPZ`) and the rebuilt isolated `.next-e2e` bundle. The development demo is to be restarted from that checkpoint at `http://127.0.0.1:3400`.
 
 Development migrations / test migrations: 70 applied and none pending in each database. Latest migration is `20261017130000_access_preferences_support`. No reset or migration rewrite occurred.
 

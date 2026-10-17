@@ -17,7 +17,7 @@ The approved authority is `docs/execution/VSchool_Execution_Pack/references/appr
 - Targeted unit: `pnpm test:unit test/unit/access-preferences.test.ts test/unit/access-management.test.ts` — 7/7 passed.
 - Real PostgreSQL F18 cases: 2/2 passed within the functional run, covering default/readback, wrong-account isolation, exact replay, changed-payload conflict, stale and concurrent versions, single evidence writes, support publication, cross-branch/revoked denial, redaction and the database completeness constraint.
 - The inadvertently broad functional wrapper run completed 192/194. Its two failures are unrelated stale expectations: institution context now includes `roles`, and Learning report availability now includes `feedback-turnaround.v1`. They are not reported as passed.
-- `pnpm typecheck`, `pnpm check:db-design`, `pnpm check:backend`, `pnpm check:boundaries` and `pnpm build` passed for the current source.
+- Product commit `8682e900c4157986eac25e78a2736dbd0137e0ae` passed `pnpm typecheck`, `pnpm check:db-design`, `pnpm check:backend`, `pnpm check:boundaries` and `pnpm build` (build `Er99P6-uYVG-6WXKIDKPZ`).
 - Focused Playwright passed 2/2 Chromium and 2/2 mobile sequentially with one worker against the current `.next-e2e` build. It publishes support from School settings, saves preferences, reloads their shell attributes, verifies trusted support, revokes the other session and signs out the current session.
 - The first browser attempt was invalid evidence because `VSCHOOL_E2E_BUILT=1` started an older `.next-e2e` bundle. The trace identified that source mismatch; the isolated E2E bundle was rebuilt before the passing runs.
 
