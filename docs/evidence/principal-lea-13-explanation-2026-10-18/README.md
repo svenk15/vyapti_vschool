@@ -14,7 +14,7 @@ Implemented behavior:
 - Acceptance changes only the explanation case. The source `AttendanceRecord` remains `ABSENT` at the same revision.
 - Question, answer, Parent explanation and school response stay out of general audit/receipt evidence. Protected storage remains synthetic-only.
 
-Verification on the implementation working tree based on `4968bba`:
+Verification applies to implementation commit `098dfdc` (`Complete assigned attendance explanation review`):
 
 - `pnpm check`: passed, including 223/223 unit tests, documentation, TypeScript/lint, backend boundaries and 153 registered database contracts.
 - `pnpm test:functional test/functional/attendance-explanations.test.ts`: 2/2 passed against real `vyapti_vschool_test`; covers exact replay, open-child blocking, refreshed evidence, stale disposition, revoked-originator denial, raw-text exclusion and unchanged Attendance mark.
