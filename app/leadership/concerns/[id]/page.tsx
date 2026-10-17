@@ -1,0 +1,8 @@
+import Link from 'next/link';
+import {notFound,redirect} from 'next/navigation';
+import {Badge,Card,PageHeader,PageStack} from '@/components/ui/primitives';
+import {RequestDecisionWorkflow} from '@/components/request-workflow';
+import {getIdentity} from '@/lib/server/auth';
+import {requestsGateway} from '@/lib/server/requests';
+export const dynamic='force-dynamic';
+export default async function LeadershipConcernDetail({params}:{params:Promise<{id:string}>}){const identity=await getIdentity();if(!identity)redirect('/sign-in');const request=await requestsGateway.get(identity,(await params).id).catch(()=>null);if(!request||request.kind!=='FAMILY_COMPLAINT')notFound();return <main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow={request.reference} title={request.title} description="Restricted family concern" actions={<Link className="btn btn-secondary" href="/leadership/concerns">Back to concerns</Link>}/><Card className="padded"><Badge>{request.state.replaceAll('_',' ').toLowerCase()}</Badge><dl className="record-facts"><div><dt>Category</dt><dd>{request.category.label}</dd></div><div><dt>Submitted</dt><dd>{new Date(request.submittedAt).toLocaleString('en-IN')}</dd></div><div><dt>Version</dt><dd>{request.version}</dd></div></dl><div className="coordination-note"><strong>Protected details</strong><p>{request.narrative}</p></div>{request.desiredOutcome&&<div className="coordination-note"><strong>Requested outcome</strong><p>{request.desiredOutcome}</p></div>}</Card><RequestDecisionWorkflow request={request}/></PageStack></main>;}

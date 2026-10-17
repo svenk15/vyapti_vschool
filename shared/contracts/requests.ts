@@ -1,0 +1,14 @@
+export type RequestCategoryCode='STAFF_AVAILABILITY'|'CLASSROOM_RESOURCE'|'FAMILY_COMPLAINT';
+export type RequestKind='STAFF_OPERATIONAL'|'FAMILY_COMPLAINT';
+export type RequestState='SUBMITTED'|'WAITING_INFORMATION'|'APPROVED'|'DECLINED'|'WITHDRAWN';
+export type RequestAction='APPROVE'|'DECLINE'|'RETURN';
+export type RequestCategorySummary=Readonly<{id:string;code:RequestCategoryCode;kind:RequestKind;label:string;version:number}>;
+export type RequestCaseSummary=Readonly<{id:string;reference:string;category:RequestCategorySummary;kind:RequestKind;state:RequestState;title:string;updatedAt:string;version:number;role:'ORIGINATOR'|'REVIEWER'}>;
+export type RequestDecisionSummary=Readonly<{id:string;number:number;action:RequestAction;reason:string|null;result:'NO_DOWNSTREAM_CHANGE'|null;occurredAt:string}>;
+export type RequestCaseDetail=Readonly<{id:string;reference:string;category:RequestCategorySummary;kind:RequestKind;state:RequestState;title:string;narrative:string;desiredOutcome:string|null;publicOutcome:string|null;studentId:string|null;submittedAt:string;updatedAt:string;closedAt:string|null;version:number;role:'ORIGINATOR'|'REVIEWER';can:{decide:boolean;respond:boolean;withdraw:boolean};history:readonly RequestDecisionSummary[]}>;
+export type RequestQueue=Readonly<{items:readonly RequestCaseSummary[];categories:readonly RequestCategorySummary[]}>;
+export type RequestMutationResult=Readonly<{caseId:string;reference:string;state:RequestState;version:number;replayed:boolean}>;
+export type RequestCreateInput=Readonly<{categoryCode:RequestCategoryCode;title:string;narrative:string;desiredOutcome?:string|null;studentId?:string|null;implicatesReviewer:boolean;key:string}>;
+export type RequestDecisionInput=Readonly<{action:RequestAction;expectedVersion:number;reason?:string|null;publicOutcome?:string|null;key:string}>;
+export type RequestResponseInput=Readonly<{expectedVersion:number;response:string;key:string}>;
+export type RequestWithdrawInput=Readonly<{expectedVersion:number;reason:string;key:string}>;

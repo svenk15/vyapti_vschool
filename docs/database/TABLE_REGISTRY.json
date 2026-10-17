@@ -2991,6 +2991,111 @@
         "owner": "documents",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "RequestsCategory",
+      "table": "vs_requests_category",
+      "fields": "id uuid PK; organization_id/school_id/reviewer_account_id/steward_account_id uuid; code/kind/label/retention_class/status text; appeal_days/version int; created_at/updated_at timestamptz",
+      "responsibility": "Trusted synthetic branch request category and separated ordinary/independent reviewer configuration.",
+      "constraints": "Scoped School/account FKs; kind/code/status/text/window/version/separation CHECKs; scoped id/code uniqueness; kind/status and reviewer indexes",
+      "owner": "requests",
+      "status": "MIGRATED",
+      "design": "docs/modules/requests/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context and current case-participant authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "requests",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "RequestsCase",
+      "table": "vs_requests_case",
+      "fields": "id uuid PK; organization_id/school_id/category_id/originator_account_id/subject_account_id/implicated_account_id/reviewer_account_id/student_id uuid; kind/state/title/narrative/desired_outcome/public_outcome text; submitted_at/updated_at/closed_at timestamptz; version int",
+      "responsibility": "Protected operational request or family complaint aggregate with exact participants and assigned reviewer.",
+      "constraints": "Scoped Category/School/Student and account FKs; kind/state/text/version/lifecycle/participant/separation CHECKs; scoped id uniqueness; reviewer/state, originator and Student indexes",
+      "owner": "requests",
+      "status": "MIGRATED",
+      "design": "docs/modules/requests/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context and current case-participant authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "requests",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "RequestsDecision",
+      "table": "vs_requests_decision",
+      "fields": "id uuid PK; organization_id/school_id/case_id/reviewer_account_id uuid; number/case_version int; action/reason/result text; occurred_at timestamptz",
+      "responsibility": "Immutable reviewer outcome or information request for a protected case.",
+      "constraints": "Scoped Case/account FKs; action/reason/result/version CHECKs; scoped id and case/number uniqueness; case/time index; append-only trigger",
+      "owner": "requests",
+      "status": "MIGRATED",
+      "design": "docs/modules/requests/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context and current case-participant authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "requests",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "RequestsResponse",
+      "table": "vs_requests_response",
+      "fields": "id uuid PK; organization_id/school_id/case_id/decision_id/originator_account_id uuid; response text; case_version int; occurred_at timestamptz",
+      "responsibility": "Immutable originator response to the current information request.",
+      "constraints": "Scoped Case/Decision/account FKs; text/version CHECKs; scoped id and decision uniqueness; case/time index; append-only trigger",
+      "owner": "requests",
+      "status": "MIGRATED",
+      "design": "docs/modules/requests/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context and current case-participant authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "requests",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "RequestsCommandReceipt",
+      "table": "vs_requests_command_receipt",
+      "fields": "id uuid PK; organization_id/school_id/actor_account_id/case_id uuid; command/key/input_hash text; result jsonb; occurred_at timestamptz",
+      "responsibility": "Exact owner-scoped replay receipt reauthorized before protected result disclosure.",
+      "constraints": "Scoped Case/account FKs; hash CHECK; scoped id and actor/command/key uniqueness; case/time index; append-only trigger",
+      "owner": "requests",
+      "status": "MIGRATED",
+      "design": "docs/modules/requests/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context and current case-participant authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "requests",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

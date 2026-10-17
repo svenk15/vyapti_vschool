@@ -1,7 +1,8 @@
 # LEA-25 — Decide an assigned staff request
 
 ## Identity and readiness
-- Baseline: NOT_STARTED; human review PENDING.
+- Current status: ENGINEERING_COMPLETE for the approved synthetic-only F09 scope; human review PENDING.
+- Evidence: `docs/evidence/principal-f09-requests-2026-10-18/README.md`.
 - Owner: Requests + People. This names responsibility, not proof that an owner module exists.
 - Product decisions: D12. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F09,F03. See execution queue.

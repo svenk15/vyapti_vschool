@@ -209,6 +209,121 @@ model AccountPreferenceReceipt {
  @@map("vs_access_account_preference_receipt")
 }
 
+model RequestsCategory {
+  id                String         @id(map: "vs_requests_category_pkey") @db.Uuid
+  organizationId    String         @map("organization_id") @db.Uuid
+  schoolId          String         @map("school_id") @db.Uuid
+  reviewerAccountId String         @map("reviewer_account_id") @db.Uuid
+  stewardAccountId  String         @map("steward_account_id") @db.Uuid
+  code              String         @db.VarChar(40)
+  kind              String         @db.VarChar(24)
+  label             String         @db.VarChar(120)
+  appealDays        Int            @map("appeal_days")
+  retentionClass    String         @map("retention_class") @db.VarChar(40)
+  status            String         @db.VarChar(16)
+  version           Int
+  createdAt         DateTime       @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime       @map("updated_at") @db.Timestamptz(3)
+  cases             RequestsCase[]
+
+  @@unique([organizationId, schoolId, id], map: "vs_requests_category_scope_id_key")
+  @@unique([organizationId, schoolId, code], map: "vs_requests_category_scope_code_key")
+  @@index([organizationId, schoolId, kind, status], map: "vs_requests_category_kind_status_idx")
+  @@index([organizationId, schoolId, reviewerAccountId, status], map: "vs_requests_category_reviewer_idx")
+  @@map("vs_requests_category")
+}
+
+model RequestsCase {
+  id                  String                   @id(map: "vs_requests_case_pkey") @db.Uuid
+  organizationId      String                   @map("organization_id") @db.Uuid
+  schoolId            String                   @map("school_id") @db.Uuid
+  categoryId          String                   @map("category_id") @db.Uuid
+  originatorAccountId String                   @map("originator_account_id") @db.Uuid
+  subjectAccountId    String?                  @map("subject_account_id") @db.Uuid
+  implicatedAccountId String?                  @map("implicated_account_id") @db.Uuid
+  reviewerAccountId   String                   @map("reviewer_account_id") @db.Uuid
+  studentId           String?                  @map("student_id") @db.Uuid
+  kind                String                   @db.VarChar(24)
+  state               String                   @db.VarChar(24)
+  title               String                   @db.VarChar(160)
+  narrative           String                   @db.VarChar(4000)
+  desiredOutcome      String?                  @map("desired_outcome") @db.VarChar(1000)
+  publicOutcome       String?                  @map("public_outcome") @db.VarChar(1000)
+  submittedAt         DateTime                 @map("submitted_at") @db.Timestamptz(3)
+  updatedAt           DateTime                 @map("updated_at") @db.Timestamptz(3)
+  closedAt            DateTime?                @map("closed_at") @db.Timestamptz(3)
+  version             Int
+  category            RequestsCategory         @relation(fields: [organizationId, schoolId, categoryId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_requests_case_category_fkey")
+  decisions           RequestsDecision[]
+  responses           RequestsResponse[]
+  receipts            RequestsCommandReceipt[]
+
+  @@unique([organizationId, schoolId, id], map: "vs_requests_case_scope_id_key")
+  @@index([organizationId, schoolId, reviewerAccountId, state, updatedAt(sort: Desc), id(sort: Desc)], map: "vs_requests_case_reviewer_state_idx")
+  @@index([organizationId, schoolId, originatorAccountId, updatedAt(sort: Desc), id(sort: Desc)], map: "vs_requests_case_originator_idx")
+  @@index([organizationId, schoolId, studentId, updatedAt(sort: Desc)], map: "vs_requests_case_student_idx")
+  @@map("vs_requests_case")
+}
+
+model RequestsDecision {
+  id                String             @id(map: "vs_requests_decision_pkey") @db.Uuid
+  organizationId    String             @map("organization_id") @db.Uuid
+  schoolId          String             @map("school_id") @db.Uuid
+  caseId            String             @map("case_id") @db.Uuid
+  reviewerAccountId String             @map("reviewer_account_id") @db.Uuid
+  number            Int
+  action            String             @db.VarChar(24)
+  reason            String?            @db.VarChar(1000)
+  result            String?            @db.VarChar(40)
+  caseVersion       Int                @map("case_version")
+  occurredAt        DateTime           @map("occurred_at") @db.Timestamptz(3)
+  case              RequestsCase       @relation(fields: [organizationId, schoolId, caseId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_requests_decision_case_fkey")
+  responses         RequestsResponse[]
+
+  @@unique([organizationId, schoolId, id], map: "vs_requests_decision_scope_id_key")
+  @@unique([organizationId, schoolId, caseId, number], map: "vs_requests_decision_case_number_key")
+  @@index([organizationId, schoolId, caseId, occurredAt(sort: Desc)], map: "vs_requests_decision_case_idx")
+  @@map("vs_requests_decision")
+}
+
+model RequestsResponse {
+  id                  String           @id(map: "vs_requests_response_pkey") @db.Uuid
+  organizationId      String           @map("organization_id") @db.Uuid
+  schoolId            String           @map("school_id") @db.Uuid
+  caseId              String           @map("case_id") @db.Uuid
+  decisionId          String           @map("decision_id") @db.Uuid
+  originatorAccountId String           @map("originator_account_id") @db.Uuid
+  response            String           @db.VarChar(2000)
+  caseVersion         Int              @map("case_version")
+  occurredAt          DateTime         @map("occurred_at") @db.Timestamptz(3)
+  case                RequestsCase     @relation(fields: [organizationId, schoolId, caseId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_requests_response_case_fkey")
+  decision            RequestsDecision @relation(fields: [organizationId, schoolId, decisionId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_requests_response_decision_fkey")
+
+  @@unique([organizationId, schoolId, id], map: "vs_requests_response_scope_id_key")
+  @@unique([organizationId, schoolId, decisionId], map: "vs_requests_response_decision_key")
+  @@index([organizationId, schoolId, caseId, occurredAt(sort: Desc)], map: "vs_requests_response_case_idx")
+  @@map("vs_requests_response")
+}
+
+model RequestsCommandReceipt {
+  id             String       @id(map: "vs_requests_command_receipt_pkey") @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  schoolId       String       @map("school_id") @db.Uuid
+  actorAccountId String       @map("actor_account_id") @db.Uuid
+  command        String       @db.VarChar(80)
+  key            String       @db.VarChar(100)
+  inputHash      String       @map("input_hash") @db.Char(64)
+  caseId         String       @map("case_id") @db.Uuid
+  result         Json
+  occurredAt     DateTime     @map("occurred_at") @db.Timestamptz(3)
+  case           RequestsCase @relation(fields: [organizationId, schoolId, caseId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_requests_command_receipt_case_fkey")
+
+  @@unique([organizationId, schoolId, id], map: "vs_requests_command_receipt_scope_id_key")
+  @@unique([organizationId, schoolId, actorAccountId, command, key], map: "vs_requests_command_receipt_actor_command_key")
+  @@index([organizationId, schoolId, caseId, occurredAt(sort: Desc)], map: "vs_requests_command_receipt_case_idx")
+  @@map("vs_requests_command_receipt")
+}
+
 model AccountPersonBinding {
  id String @id(map:"vs_access_account_person_binding_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid

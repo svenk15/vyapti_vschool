@@ -6,7 +6,7 @@ import {AccessSignOut} from './access-login';
 import {PortalIcon,type PortalIconName} from './portal-navigation-group';
 import type {GuardianChildSummary,GuardianWorkspace} from '@/shared/contracts/guardians';
 
-const nav:[string,string,PortalIconName][]=[['Home','/family','home'],['My children','/family/children','students'],['Attendance','/family/attendance','attendance'],['Messages','/family/notices','mail'],['School calendar','/family/calendar','calendar'],['Learning','/family/learning','academics'],["Child's timetable",'/family/timetable','calendar'],['My account','/family/account','account']];
+const nav:[string,string,PortalIconName][]=[['Home','/family','home'],['My children','/family/children','students'],['Attendance','/family/attendance','attendance'],['Messages','/family/notices','mail'],['School calendar','/family/calendar','calendar'],['Learning','/family/learning','academics'],["Child's timetable",'/family/timetable','calendar'],['Concerns','/family/concerns','mail'],['My account','/family/account','account']];
 export function FamilyPortalFrame({workspace,selected,children}:{workspace:GuardianWorkspace;selected:GuardianChildSummary;children:ReactNode}){
  const pathname=usePathname(),[open,setOpen]=useState(false),toggle=useRef<HTMLButtonElement>(null),more=useRef<HTMLButtonElement>(null),returnFocus=useRef<HTMLButtonElement|null>(null),first=useRef<HTMLAnchorElement>(null),panel=useRef<HTMLElement>(null);
  const closeNavigation=()=>{setOpen(false);requestAnimationFrame(()=>returnFocus.current?.focus());};

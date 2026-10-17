@@ -64,7 +64,7 @@ export class PrismaFamilyAccessRepository implements FamilyAccessRepository{
       const enrollment=row.student.enrollments[0],placement=enrollment?.placements[0];
       const classLabel=placement?`${placement.section.grade.name} · ${placement.section.name}`:enrollment?.year.name??null;
       const available=new Set(row.purposes.map(item=>item.purpose));
-      return {accessId:row.id,studentId:row.studentId,displayName:[row.student.person.firstName,row.student.person.lastName].filter(Boolean).join(' '),admissionNumber:row.student.admissionNumber,institutionName:row.student.school.organization.name,schoolName:row.student.school.name,schoolCode:row.student.school.code,timezone:row.student.school.timezone,classLabel,accessFrom:row.accessFrom.toISOString().slice(0,10),purposes:guardianPurposes.filter((purpose):purpose is GuardianPurpose=>available.has(purpose))};
+      return {accessId:row.id,organizationId:row.organizationId,schoolId:row.schoolId,studentId:row.studentId,displayName:[row.student.person.firstName,row.student.person.lastName].filter(Boolean).join(' '),admissionNumber:row.student.admissionNumber,institutionName:row.student.school.organization.name,schoolName:row.student.school.name,schoolCode:row.student.school.code,timezone:row.student.school.timezone,classLabel,accessFrom:row.accessFrom.toISOString().slice(0,10),purposes:guardianPurposes.filter((purpose):purpose is GuardianPurpose=>available.has(purpose))};
      });
     return {accountId:identity.accountId,accountDisplayName:rows[0]?.displayName??null,children};
    },{isolationLevel:'RepeatableRead'});

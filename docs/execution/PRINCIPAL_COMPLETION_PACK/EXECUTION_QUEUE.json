@@ -142,10 +142,11 @@
         "D12",
         "D08"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Operational staff requests and family complaint scope; originator response, independent routing, category state machine.",
       "demo": "Staff request approved without payroll effect; complaint about Principal excluded from their inbox/count.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "Owner-typed staff requests and restricted family concerns with server-resolved reviewers, separated independent routing, response/withdrawal, exact replay and immutable owner evidence."
     },
     {
       "id": "F10",
@@ -517,10 +518,11 @@
       "decisions": [
         "D12"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-25.md",
       "kind": "workflow",
-      "workflow": "LEA-25"
+      "workflow": "LEA-25",
+      "completedSlice": "Assigned operational request review, information return/response, no-downstream-change decision receipt, withdrawal and protected replay are verified."
     },
     {
       "id": "WF-26",
@@ -670,10 +672,12 @@
         "D12",
         "D16"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "definition": "workflows/LEA-35.md",
       "kind": "workflow",
-      "workflow": "LEA-35"
+      "workflow": "LEA-35",
+      "completedSlice": "Protected family submission, implicated-reviewer omission, independent assigned review, information response, public outcome and withdrawal are verified.",
+      "remaining": "Explicit acknowledgement, investigation owner/review date, and independent appeal/reopen lifecycle."
     },
     {
       "id": "WF-36",

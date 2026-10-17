@@ -1,0 +1,10 @@
+import Link from 'next/link';
+import {notFound} from 'next/navigation';
+import {FamilyPortalFrame} from '@/components/family-portal-frame';
+import {RequestDecisionWorkflow} from '@/components/request-workflow';
+import {Badge,BrandSurface,Card,PageHeader,PageStack} from '@/components/ui/primitives';
+import {getIdentity} from '@/lib/server/auth';
+import {familyPageContext} from '@/lib/server/family-page';
+import {requestsGateway} from '@/lib/server/requests';
+export const dynamic='force-dynamic';
+export default async function FamilyConcernDetail({params,searchParams}:{params:Promise<{id:string}>;searchParams:Promise<{child?:string|string[]}>}){const query=await searchParams,{workspace,selected}=await familyPageContext(Array.isArray(query.child)?undefined:query.child),identity=await getIdentity(),request=await requestsGateway.familyGet(identity,selected.studentId,(await params).id).catch(()=>null);if(!request||request.kind!=='FAMILY_COMPLAINT')notFound();return <BrandSurface><FamilyPortalFrame workspace={workspace} selected={selected}><main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow={request.reference} title={request.title} description="Protected family concern" actions={<Link className="btn btn-secondary" href={`/family/concerns?child=${encodeURIComponent(selected.studentId)}`}>Back to concerns</Link>}/><Card className="padded"><Badge>{request.state.replaceAll('_',' ').toLowerCase()}</Badge><dl className="record-facts"><div><dt>Child</dt><dd>{selected.displayName}</dd></div><div><dt>Submitted</dt><dd>{new Date(request.submittedAt).toLocaleString('en-IN')}</dd></div><div><dt>Version</dt><dd>{request.version}</dd></div></dl><div className="coordination-note"><strong>Concern</strong><p>{request.narrative}</p></div>{request.publicOutcome&&<div className="coordination-note"><strong>Public outcome</strong><p>{request.publicOutcome}</p></div>}</Card><RequestDecisionWorkflow request={request} endpointBase="/api/v1/family/concerns" child={selected.studentId}/></PageStack></main></FamilyPortalFrame></BrandSurface>;}

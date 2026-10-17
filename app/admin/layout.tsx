@@ -9,6 +9,7 @@ import {academicsGateway} from '@/lib/server/academics';
 import {peopleAvailabilityGateway,peopleGateway} from '@/lib/server/people';
 import {redirect} from 'next/navigation';
 import {coordinationGateway} from '@/lib/server/coordination';
+import {requestsGateway} from '@/lib/server/requests';
 export const dynamic='force-dynamic';
 
 export default async function AdminLayout({children}:{children:ReactNode}){
@@ -17,8 +18,8 @@ export default async function AdminLayout({children}:{children:ReactNode}){
  const home=await accountGateway.getHome(identity).catch(()=>null);
  if(!home)return children;
  const today=new Intl.DateTimeFormat('en-CA',{timeZone:home.timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
- const [baseGroups,palette,academics,accountDisplayName,coordinationAvailability,availabilityRecorder]=await Promise.all([getAdminNavigation(identity,home),brandingGateway.effectivePalette(identity).catch(()=>null),academicsGateway.workspace(identity).catch(()=>null),peopleGateway.currentAccountDisplayName(identity).catch(()=>null),coordinationGateway.availability(identity).catch(()=>null),peopleAvailabilityGateway.recorder(identity,today).catch(()=>null)]);
- const groups=baseGroups.map(group=>({...group,items:[...group.items,...(group.label==='Operations'&&coordinationAvailability?.enabled&&coordinationAvailability.capabilities.includes('coordination.work')?[{label:'Assigned follow-ups',href:'/admin/coordination',icon:'activity' as const}]:[]),...(group.label==='Management'&&availabilityRecorder?[{label:'Staff availability',href:'/admin/teachers/availability',icon:'people' as const}]:[])]}));
+ const [baseGroups,palette,academics,accountDisplayName,coordinationAvailability,availabilityRecorder,requestQueue]=await Promise.all([getAdminNavigation(identity,home),brandingGateway.effectivePalette(identity).catch(()=>null),academicsGateway.workspace(identity).catch(()=>null),peopleGateway.currentAccountDisplayName(identity).catch(()=>null),coordinationGateway.availability(identity).catch(()=>null),peopleAvailabilityGateway.recorder(identity,today).catch(()=>null),requestsGateway.list(identity).catch(()=>null)]);
+ const groups=baseGroups.map(group=>({...group,items:[...group.items,...(group.label==='Operations'&&requestQueue?.categories.length?[{label:'My requests',href:'/admin/requests',icon:'mail' as const}]:[]),...(group.label==='Operations'&&coordinationAvailability?.enabled&&coordinationAvailability.capabilities.includes('coordination.work')?[{label:'Assigned follow-ups',href:'/admin/coordination',icon:'activity' as const}]:[]),...(group.label==='Management'&&availabilityRecorder?[{label:'Staff availability',href:'/admin/teachers/availability',icon:'people' as const}]:[])]}));
  const academicYear=academics?.years.find(year=>year.status==='OPEN'&&year.startsOn<=today&&year.endsOn>today)??academics?.years.find(year=>year.status==='OPEN');
  return <BrandSurface palette={palette??undefined}><AdminPortalFrame home={home} groups={groups} academicYearLabel={academicYear?.name??null} accountDisplayName={accountDisplayName}>{children}</AdminPortalFrame></BrandSurface>;
 }
