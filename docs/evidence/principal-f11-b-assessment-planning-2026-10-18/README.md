@@ -14,7 +14,7 @@ The workflow explorer contains LEA-20 readiness rather than an exact Administrat
 - Real PostgreSQL planning/security/concurrency: 3/3 passed against `vyapti_vschool_test`.
 - Database design: 167 registered contracts passed.
 - Prisma generation, TypeScript and focused ESLint passed.
-- Isolated production build passed with `NODE_OPTIONS=--max-old-space-size=4096`; build ID `rgwLvxYAKxxef2acPH7FA`.
+- Isolated E2E build passed with `NODE_OPTIONS=--max-old-space-size=4096`; build ID `rgwLvxYAKxxef2acPH7FA`. The normal demo build from commit `6aa7a4b` also passed with build ID `7HIqyszW3O4hChyKbhbQT` and is reachable at `http://127.0.0.1:3402`.
 - One-worker Chromium: 3/3 passed.
 - One-worker mobile (390px project): 3/3 passed after correcting the cohort-table overflow.
 - Focused `scripts/demo-assessments.ts` seed passed twice and retained one deterministic planning fixture. Aggregate `pnpm demo:seed` stopped earlier in its unchanged LDR-01 authentication step and is not recorded as passed.
