@@ -24,6 +24,8 @@ Verification performed on 17 October 2026:
 - Mobile: creation/detail 1/1 after scoping navigation to the open menu; approved reference capture 1/1 from the preceding unchanged application build.
 - Screenshots were directly inspected. The application uses the agreed persistent Principal shell and routed recipe rather than copying the explorer dialog. Source-specific withdrawal wording was corrected after inspection.
 
+Verified product source: `73086935338e239a62d74fd48ffb1c4dbb2abf8c`. Normal production build: `miRoGyaK2EZu7RqO1yF8l`. Isolated browser build: `ao0aU9POFdiPXXZXwRCjy`.
+
 Evidence files:
 
 - `reference-chromium.png`, `reference-mobile.png`
