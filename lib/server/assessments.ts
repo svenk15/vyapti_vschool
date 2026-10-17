@@ -18,5 +18,9 @@ export const assessmentsGateway={
  async markWorkspace(identity:Identity|null){const scope=await teacherScope(identity);return service().markWorkspace(scope.identity,scope.organizationId,scope.schoolId);},
  async saveMark(identity:Identity|null,input:Record<string,unknown>){const scope=await teacherScope(identity);return service().saveMark(scope.identity,scope.organizationId,scope.schoolId,input);},
  async markStatus(identity:Identity|null,key:unknown){const scope=await teacherScope(identity);return service().markStatus(scope.identity,scope.organizationId,scope.schoolId,key);}
+ ,async moderationWorkspace(identity:Identity|null){const scope=await teacherScope(identity);return service().workspace(scope.identity,scope.organizationId,scope.schoolId);}
+ ,async submitModeration(identity:Identity|null,input:Record<string,unknown>){const scope=await teacherScope(identity);return service().submit(scope.identity,scope.organizationId,scope.schoolId,input);}
+ ,async respondModeration(identity:Identity|null,input:Record<string,unknown>){const scope=await teacherScope(identity);return service().respond(scope.identity,scope.organizationId,scope.schoolId,input);}
+ ,async moderationStatus(identity:Identity|null,command:unknown,key:unknown){const scope=await teacherScope(identity);return service().teacherStatus(scope.identity,scope.organizationId,scope.schoolId,command,key);}
 };
 export {services as assessmentsServices};

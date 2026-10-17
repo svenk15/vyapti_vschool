@@ -3,7 +3,7 @@ import type {DecisionAction,DecisionCommandStatus,DecisionDetail,DecisionDuePeri
 
 export type DecisionListInput=Readonly<{reference?:unknown;type?:unknown;state?:unknown;due?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}>;
 export type ValidDecisionListInput=Readonly<{reference:string|null;type:DecisionType|null;state:'READY'|null;due:DecisionDuePeriod|null;sort:DecisionSort;order:DecisionOrder;cursor:string|null;limit:number}>;
-export type DecisionCommand=Readonly<{action:DecisionAction;expectedVersion:number;reason:string|null;key:string}>;
+export type DecisionCommand=Readonly<{action:DecisionAction;expectedVersion:number;expectedEvidenceDigest:string|null;reason:string|null;key:string}>;
 export type DecisionInformationCommand=Readonly<{expectedVersion:number;question:string;responseDueAt:string|null;key:string}>;
 export type DecisionRecusalCommand=Readonly<{expectedVersion:number;category:DecisionRecusalCategory;note:string|null;routedToAccountId:string|null;key:string}>;
 

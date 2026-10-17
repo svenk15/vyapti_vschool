@@ -95,7 +95,10 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AssessmentsCohortMember | `vs_assessments_cohort_member` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsOutcome | `vs_assessments_outcome` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsOutcomeRevision | `vs_assessments_outcome_revision` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsModerationGrant | `vs_assessments_moderation_grant` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsModeration | `vs_assessments_moderation` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsModerationEvent | `vs_assessments_moderation_event` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsModerationInformation | `vs_assessments_moderation_information` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsReportRevision | `vs_assessments_report_revision` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |

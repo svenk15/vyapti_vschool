@@ -3197,6 +3197,23 @@ model AssessmentsPlanningGrant {
   @@map("vs_assessments_planning_grant")
 }
 
+model AssessmentsModerationGrant {
+  id                  String    @id(map: "vs_assessments_moderation_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_moderation_grant_scope_id_key")
+  @@unique([organizationId, schoolId, accountId], map: "vs_assessments_moderation_grant_account_key")
+  @@index([organizationId, schoolId, accountId, revokedAt], map: "vs_assessments_moderation_grant_active_idx")
+  @@map("vs_assessments_moderation_grant")
+}
+
 model AssessmentsCommandReceipt {
   id             String   @id(map: "vs_assessments_command_receipt_pkey") @db.Uuid
   organizationId String   @map("organization_id") @db.Uuid
@@ -3328,21 +3345,67 @@ model AssessmentsOutcomeRevision {
 }
 
 model AssessmentsModeration {
-  id              String   @id(map: "vs_assessments_moderation_pkey") @db.Uuid
-  organizationId  String   @map("organization_id") @db.Uuid
-  schoolId        String   @map("school_id") @db.Uuid
-  cycleId         String   @map("cycle_id") @db.Uuid
-  planItemId      String   @map("plan_item_id") @db.Uuid
-  evidenceVersion Int      @map("evidence_version")
-  evidenceDigest  String   @map("evidence_digest") @db.Char(64)
-  status          String   @db.VarChar(16)
-  version         Int
-  updatedAt       DateTime @map("updated_at") @db.Timestamptz(3)
+  id                        String    @id(map: "vs_assessments_moderation_pkey") @db.Uuid
+  organizationId            String    @map("organization_id") @db.Uuid
+  schoolId                  String    @map("school_id") @db.Uuid
+  cycleId                   String    @map("cycle_id") @db.Uuid
+  planItemId                String    @map("plan_item_id") @db.Uuid
+  evidenceVersion           Int       @map("evidence_version")
+  evidenceDigest            String    @map("evidence_digest") @db.Char(64)
+  status                    String    @db.VarChar(16)
+  version                   Int
+  updatedAt                 DateTime  @map("updated_at") @db.Timestamptz(3)
+  submittedByAccountId      String?   @map("submitted_by_account_id") @db.Uuid
+  assignedReviewerAccountId String?   @map("assigned_reviewer_account_id") @db.Uuid
+  submittedAt               DateTime? @map("submitted_at") @db.Timestamptz(3)
+  decidedByAccountId        String?   @map("decided_by_account_id") @db.Uuid
+  decidedAt                 DateTime? @map("decided_at") @db.Timestamptz(3)
+  decisionReason            String?   @map("decision_reason") @db.VarChar(1000)
 
   @@unique([organizationId, schoolId, id], map: "vs_assessments_moderation_scope_id_key")
   @@unique([organizationId, schoolId, cycleId, planItemId], map: "vs_assessments_moderation_plan_key")
   @@index([organizationId, schoolId, cycleId, status], map: "vs_assessments_moderation_cycle_status_idx")
+  @@index([organizationId, schoolId, assignedReviewerAccountId, status, submittedAt(sort: Desc)], map: "vs_assessments_moderation_reviewer_idx")
   @@map("vs_assessments_moderation")
+}
+
+model AssessmentsModerationEvent {
+  id                String   @id(map: "vs_assessments_moderation_event_pkey") @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  schoolId          String   @map("school_id") @db.Uuid
+  moderationId      String   @map("moderation_id") @db.Uuid
+  moderationVersion Int      @map("moderation_version")
+  type              String   @db.VarChar(32)
+  evidenceVersion   Int      @map("evidence_version")
+  evidenceDigest    String   @map("evidence_digest") @db.Char(64)
+  actorAccountId    String   @map("actor_account_id") @db.Uuid
+  occurredAt        DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_moderation_event_scope_id_key")
+  @@index([organizationId, schoolId, moderationId, occurredAt], map: "vs_assessments_moderation_event_history_idx")
+  @@map("vs_assessments_moderation_event")
+}
+
+model AssessmentsModerationInformation {
+  id                 String    @id(map: "vs_assessments_moderation_information_pkey") @db.Uuid
+  organizationId     String    @map("organization_id") @db.Uuid
+  schoolId           String    @map("school_id") @db.Uuid
+  moderationId       String    @map("moderation_id") @db.Uuid
+  requesterAccountId String    @map("requester_account_id") @db.Uuid
+  recipientAccountId String    @map("recipient_account_id") @db.Uuid
+  question           String    @db.VarChar(1000)
+  responseDueAt      DateTime? @map("response_due_at") @db.Timestamptz(3)
+  status             String    @db.VarChar(16)
+  responseText       String?   @map("response_text") @db.VarChar(1000)
+  requestedAt        DateTime  @map("requested_at") @db.Timestamptz(3)
+  answeredAt         DateTime? @map("answered_at") @db.Timestamptz(3)
+  cancelledAt        DateTime? @map("cancelled_at") @db.Timestamptz(3)
+  version            Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_moderation_information_scope_id_key")
+  @@index([organizationId, schoolId, moderationId, status, requestedAt(sort: Desc)], map: "vs_assessments_moderation_information_item_idx")
+  @@index([organizationId, schoolId, recipientAccountId, status, responseDueAt], map: "vs_assessments_moderation_information_recipient_idx")
+  @@map("vs_assessments_moderation_information")
 }
 
 model AssessmentsReportRevision {

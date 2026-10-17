@@ -30,3 +30,13 @@ export type AssessmentMarkWorkspace=Readonly<{
 }>;
 export type AssessmentMarkResult=Readonly<{command:'SaveAssessmentMarkRevision';cycleId:string;planItemId:string;cohortMemberId:string;outcomeId:string;state:AssessmentOutcomeState;revision:number;version:number;replayed:boolean}>;
 export type AssessmentMarkCommandStatus=Readonly<{state:'UNKNOWN'}>|Readonly<{state:'FOUND';result:AssessmentMarkResult}>;
+
+export type AssessmentModerationState='PENDING'|'APPROVED'|'RETURNED'|'REJECTED';
+export type AssessmentModerationWorkspace=Readonly<{
+ definitionVersion:'assessment-moderation.v1';asOf:string;timezone:string;
+ assignments:readonly Readonly<{cycleId:string;cycleName:string;planItemId:string;subjectName:string;sectionName:string;cycleState:AssessmentCycleState;moderationId:string|null;moderationVersion:number;evidenceVersion:number;status:AssessmentModerationState|null;missingOutcomes:number;canSubmit:boolean;informationRequest:Readonly<{id:string;question:string;status:'OPEN'|'ANSWERED'|'CANCELLED';responseText:string|null;version:number}>|null}>[];
+}>;
+export type AssessmentModerationSubmissionResult=Readonly<{command:'SubmitAssessmentMarksForModeration';moderationId:string;cycleId:string;planItemId:string;version:number;evidenceVersion:number;status:'PENDING';replayed:boolean}>;
+export type AssessmentModerationResponseResult=Readonly<{command:'RespondAssessmentModerationInformation';moderationId:string;informationRequestId:string;version:number;informationVersion:number;status:'ANSWERED';replayed:boolean}>;
+export type AssessmentModerationTeacherResult=AssessmentModerationSubmissionResult|AssessmentModerationResponseResult;
+export type AssessmentModerationCommandStatus=Readonly<{state:'UNKNOWN'}>|Readonly<{state:'FOUND';result:AssessmentModerationTeacherResult}>;

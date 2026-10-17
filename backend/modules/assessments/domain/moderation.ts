@@ -1,0 +1,9 @@
+import {AssessmentsError,uuid} from './readiness';
+
+const version=(value:unknown)=>{if(!Number.isSafeInteger(value)||Number(value)<0||Number(value)>2_147_483_647)throw new AssessmentsError('VALIDATION');return Number(value);};
+const text=(value:unknown,max:number)=>{if(typeof value!=='string')throw new AssessmentsError('VALIDATION');const result=value.normalize('NFC').trim();if(!result||result.length>max||/[\u0000-\u001f\u007f]/.test(result))throw new AssessmentsError('VALIDATION');return result;};
+export type SubmitModerationInput=Readonly<{cycleId:string;planItemId:string;expectedModerationVersion:number;key:string}>;
+export type RespondModerationInput=Readonly<{moderationId:string;informationRequestId:string;expectedModerationVersion:number;expectedInformationVersion:number;responseText:string;key:string}>;
+export function submitModerationInput(value:Record<string,unknown>):SubmitModerationInput{return {cycleId:uuid(value.cycleId),planItemId:uuid(value.planItemId),expectedModerationVersion:version(value.expectedModerationVersion),key:uuid(value.key)};}
+export function respondModerationInput(value:Record<string,unknown>):RespondModerationInput{return {moderationId:uuid(value.moderationId),informationRequestId:uuid(value.informationRequestId),expectedModerationVersion:version(value.expectedModerationVersion),expectedInformationVersion:version(value.expectedInformationVersion),responseText:text(value.responseText,1000),key:uuid(value.key)};}
+export function moderationDigest(rows:readonly Readonly<{cycleId:string;planItemId:string;scaleId:string;cohortMemberId:string;outcomeId:string;revision:number;state:string;scoreScaled:number|null}>[]){return rows.slice().sort((a,b)=>a.cohortMemberId.localeCompare(b.cohortMemberId)).map(row=>[row.cycleId,row.planItemId,row.scaleId,row.cohortMemberId,row.outcomeId,row.revision,row.state,row.scoreScaled]);}

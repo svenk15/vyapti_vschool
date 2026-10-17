@@ -1,5 +1,5 @@
 {
-  "revision": "4.19",
+  "revision": "4.20",
   "prefix": "vs_",
   "tables": [
     {
@@ -3301,11 +3301,74 @@
         "owner": "assessments",
         "closureGate": "TEN-03"
       },
+      "model": "AssessmentsModerationGrant",
+      "table": "vs_assessments_moderation_grant",
+      "fields": "id/org/school/membership/account/operator uuid; grant/revoke timestamps; version",
+      "responsibility": "Explicit independent reviewer designation; role or Principal status alone is insufficient.",
+      "constraints": "Scoped Membership FK and Account FK; unique scope account; active lookup index; positive version."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
       "model": "AssessmentsModeration",
       "table": "vs_assessments_moderation",
-      "fields": "id/org/school/cycle/plan uuid; evidence version/digest; status/version/time",
-      "responsibility": "Exact-revision moderation readiness state.",
-      "constraints": "Scoped Cycle/Plan FKs; unique cycle plan; digest/status/version checks; cycle/status index."
+      "fields": "id/org/school/cycle/plan/submitter/reviewer/decider uuid; evidence version/digest; status/version/submitted/decided/updated times; decision reason",
+      "responsibility": "Exact-revision moderation state and current assignment.",
+      "constraints": "Scoped Cycle/Plan FKs and Account FKs; unique cycle plan; digest/status/version and paired-decision checks; cycle/status and reviewer/status indexes."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsModerationEvent",
+      "table": "vs_assessments_moderation_event",
+      "fields": "id/org/school/moderation/actor uuid; moderation/evidence versions; type/digest/time",
+      "responsibility": "Append-only moderation, recusal and information audit evidence without pupil names or scores.",
+      "constraints": "Scoped Moderation FK and Account FK; type/version/digest checks; history index; immutable trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsModerationInformation",
+      "table": "vs_assessments_moderation_information",
+      "fields": "id/org/school/moderation/requester/recipient uuid; question/response; due/requested/answered/cancelled times; status/version",
+      "responsibility": "Current bounded information request addressed to the exact mark originator.",
+      "constraints": "Scoped Moderation FK and Account FKs; status/answer/version checks; moderation/status and recipient/status indexes."
     },
     {
       "owner": "assessments",

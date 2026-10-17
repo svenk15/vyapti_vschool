@@ -5,7 +5,7 @@ import type {AssessmentCycleResult,AssessmentCycleState,AssessmentFreezeResult,A
 import type {AssessmentAcademicPlanningPort} from '../../academics/contracts/assessment-planning';
 import type {AssessmentMarkAuthorityPort} from '../../academics/contracts/assessment-mark-authority';
 import type {AssessmentCohortPort} from '../../students/contracts/assessment-cohort';
-import type {ReleaseManifest} from '../../tenancy/domain/entitlements';
+import type {ReleaseManifest} from '../../tenancy/contracts/release-manifest';
 import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/verified-database-context';
 import type {AssessmentsRepository} from '../application/assessments';
 import type {CreateCycleInput,CreateScaleInput,FreezeCohortInput} from '../domain/planning';

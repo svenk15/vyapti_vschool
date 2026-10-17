@@ -1,15 +1,17 @@
 import type {CoordinationSourceSummary} from './coordination';
 
-export const decisionOwners=['COORDINATION_VERIFICATION'] as const;
+export const decisionOwners=['COORDINATION_VERIFICATION','ASSESSMENTS_MODERATION'] as const;
 export type DecisionOwner=typeof decisionOwners[number];
-export type DecisionAction='VERIFY'|'RETURN'|'REQUEST_INFORMATION'|'RECUSE';
+export type DecisionAction='VERIFY'|'APPROVE'|'RETURN'|'REJECT'|'REQUEST_INFORMATION'|'RECUSE';
 export const decisionRecusalCategories=['PERSONAL_CONFLICT','REQUESTER_OR_SUBJECT','OTHER_DUTY_CONFLICT'] as const;
 export type DecisionRecusalCategory=typeof decisionRecusalCategories[number];
 export type DecisionReviewer=Readonly<{accountId:string;displayName:string}>;
-export type DecisionType='ATTENDANCE_FOLLOW_UP'|'LEARNING_FOLLOW_UP';
+export type DecisionType='ATTENDANCE_FOLLOW_UP'|'LEARNING_FOLLOW_UP'|'ASSESSMENT_MODERATION';
 export type DecisionDuePeriod='OVERDUE'|'NEXT_7_DAYS'|'LATER'|'NO_DUE_DATE';
 export type DecisionSort='due'|'submitted';
 export type DecisionOrder='asc'|'desc';
+export type AssessmentModerationSourceSummary=Readonly<{type:'ASSESSMENT_PLAN';cycleName:string;sectionName:string;subjectName:string;scaleName:string;state:'PENDING';evidenceVersion:number;evidenceDigest:string;evidenceDigestPrefix:string;counts:Readonly<{numeric:number;notAssessed:number;absent:number;excused:number;total:number}>}>;
+export type DecisionSourceSummary=CoordinationSourceSummary|AssessmentModerationSourceSummary;
 export type DecisionQuery=Readonly<{reference:string|null;type:DecisionType|null;state:'READY'|null;due:DecisionDuePeriod|null;sort:DecisionSort;order:DecisionOrder}>;
 export type DecisionSummary=Readonly<{
  owner:DecisionOwner;
@@ -22,7 +24,7 @@ export type DecisionSummary=Readonly<{
  state:'READY';
  submittedAt:string;
  dueAt:string|null;
- source:CoordinationSourceSummary;
+ source:DecisionSourceSummary;
  allowedActions:readonly DecisionAction[];
 }>;
 export type DecisionDetail=DecisionSummary&Readonly<{
@@ -35,7 +37,7 @@ export type DecisionDetail=DecisionSummary&Readonly<{
 export type DecisionInformationResult=Readonly<{owner:DecisionOwner;itemId:string;informationRequestId:string;version:number;status:'OPEN';replayed:boolean}>;
 export type DecisionRecusalResult=Readonly<{owner:DecisionOwner;itemId:string;version:number;routedTo:DecisionReviewer|null;replayed:boolean}>;
 export type DecisionQueue=Readonly<{items:readonly DecisionSummary[];nextCursor:string|null;timezone:string;owners:readonly DecisionOwner[];query:DecisionQuery;filters:Readonly<{types:readonly Readonly<{value:DecisionType;label:string}>[];states:readonly Readonly<{value:'READY';label:string}>[];duePeriods:readonly Readonly<{value:DecisionDuePeriod;label:string}>[]}>}>;
-export type DecisionResult=Readonly<{owner:DecisionOwner;itemId:string;version:number;state:'RESOLVED'|'RETURNED';replayed:boolean}>;
+export type DecisionResult=Readonly<{owner:DecisionOwner;itemId:string;version:number;state:'RESOLVED'|'APPROVED'|'RETURNED'|'REJECTED';replayed:boolean}>;
 export type DecisionCommandStatus=
  | Readonly<{state:'UNKNOWN'}>
  | Readonly<{state:'CHANGED';currentVersion:number;currentState:string}>
