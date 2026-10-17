@@ -155,7 +155,7 @@ Publish weekdays and one holiday; inspect a teaching day and holiday; open the y
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
-## LEA-16 — Principal timetable exception read slice
+## LEA-16 — Principal timetable conflicts and uncovered classes
 
 - [x] Add a framework-independent bounded query over the current effective publication and persisted exception outcomes.
 - [x] Enforce live Principal capability, tenant/branch scope, and Timetable/Academics/Staff/Attendance availability in the repository.
@@ -163,9 +163,11 @@ Start and verify the server, give the user the URL and this script, record human
 - [x] Prove pagination, mixed outcome counts, retry clearing, cross-scope denial and existing reconciliation safety in real PostgreSQL.
 - [x] Wire the Principal route/navigation and compare populated desktop/mobile states with LEA-16.
 - [x] Expose the versioned, bounded Principal projection to Reporting for the separately authorized LEA-39 Timetable export without widening its fields or authority.
-- [ ] Implement general uncovered/absence and cover resolution only under a later approved owner contract.
+- [x] Compose authoritative dated `UNAVAILABLE` intervals with exact current/future published occurrences without projecting private source/reason data or treating `UNKNOWN` as absence.
+- [x] Show uncovered, pending-cover and active-cover state from the existing F07-B owner lifecycle while preserving its separate authorization and Attendance protections.
+- [x] Extend the repeat-safe fictional seed and verify the matched desktop/mobile production composition directly against LEA-16.
 
-Status: supported read slice VERIFIED; full workflow PARTIAL; human review PENDING.
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY.
 
 ## ACA-03 — Create offerings and assign teachers
 

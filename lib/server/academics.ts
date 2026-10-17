@@ -47,5 +47,5 @@ export const academicsGateway={
 };
 
 export const leadershipTimetableGateway={
- async overview(identity:Identity|null,input:{cursor?:unknown;limit?:unknown}={}){const home=await leadershipGateway.getHome(identity);return service().leadershipTimetableOverview(identity,home.scope.organizationId,home.scope.schoolId,input);},
+ async overview(identity:Identity|null,input:{cursor?:unknown;staffingCursor?:unknown;limit?:unknown}={}){const home=await leadershipGateway.getHome(identity);return service().leadershipTimetableOverview(identity,home.scope.organizationId,home.scope.schoolId,input);},
 };

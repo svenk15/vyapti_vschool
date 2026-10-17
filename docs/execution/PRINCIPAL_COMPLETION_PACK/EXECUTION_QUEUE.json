@@ -377,7 +377,7 @@
       "decisions": [
         "D09"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-16.md",
       "kind": "workflow",
       "workflow": "LEA-16"
