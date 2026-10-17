@@ -20,9 +20,9 @@
 ## F11-C — assigned-Teacher mark revisions
 
 - [x] Resolve exact current-assignment, owner-port, outcome/version, transaction, replay and UI contracts.
-- [ ] Implement subject-assignment authority, exact scaled outcomes, append-only revisions and stale recovery.
-- [ ] Keep missing, numeric zero, not assessed, absent and excused distinct.
-- [ ] Verify PostgreSQL assignment/revision/replay races and staged desktop/mobile Teacher journey.
+- [x] Implement subject-assignment authority, exact scaled outcomes, append-only revisions and stale recovery.
+- [x] Keep missing, numeric zero, not assessed, absent and excused distinct.
+- [x] Verify PostgreSQL assignment/revision/replay races and staged desktop/mobile Teacher journey.
 
 ## F11-D — independent moderation / LEA-21
 
