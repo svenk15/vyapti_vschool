@@ -39,6 +39,7 @@ const demos = [
   { name: "Teacher Learning publication and Parent/Student views", script: "scripts/demo-learning.ts", required: true },
   { name: "F11-A Assessments readiness", script: "scripts/demo-assessments.ts", required: true },
   { name: "F13 Principal, staff and family meetings", script: "scripts/demo-meetings.ts", required: true },
+  { name: "F14 restricted specialist support", script: "scripts/demo-support.ts", required: true },
 ] as const;
 
 function prepareImportSample(): void {
@@ -132,6 +133,7 @@ function main(): void {
   console.log("- artifacts/learning-01/private-demo.json");
   console.log("- artifacts/assessments-01/private-demo.json");
   console.log("- artifacts/meetings-01/private-demo.json");
+  console.log("- artifacts/support-01/private-demo.json");
   console.log("- artifacts/students-portal/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");

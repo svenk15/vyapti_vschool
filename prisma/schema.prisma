@@ -3332,6 +3332,107 @@ model AssessmentsCommandReceipt {
   @@map("vs_assessments_command_receipt")
 }
 
+model SupportCapabilityGrant {
+  id                  String    @id(map: "vs_support_capability_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  capability          String    @db.VarChar(32)
+  studentId           String?   @map("student_id") @db.Uuid
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_support_capability_grant_scope_id_key")
+  @@index([organizationId, schoolId, accountId, capability, studentId, revokedAt], map: "vs_support_capability_grant_active_idx")
+  @@map("vs_support_capability_grant")
+}
+
+model SupportProcedure {
+  id                   String    @id(map: "vs_support_procedure_pkey") @db.Uuid
+  organizationId       String    @map("organization_id") @db.Uuid
+  schoolId             String    @map("school_id") @db.Uuid
+  versionNo            Int       @map("version_no")
+  title                String    @db.VarChar(120)
+  instruction          String    @db.VarChar(1200)
+  contactLabel         String    @map("contact_label") @db.VarChar(160)
+  responsibleAccountId String    @map("responsible_account_id") @db.Uuid
+  status               String    @db.VarChar(12)
+  publishedByAccountId String    @map("published_by_account_id") @db.Uuid
+  publishedAt          DateTime  @map("published_at") @db.Timestamptz(3)
+  retiredAt            DateTime? @map("retired_at") @db.Timestamptz(3)
+  version              Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_support_procedure_scope_id_key")
+  @@unique([organizationId, schoolId, versionNo], map: "vs_support_procedure_version_key")
+  @@index([organizationId, schoolId, status, versionNo(sort: Desc)], map: "vs_support_procedure_current_idx")
+  @@map("vs_support_procedure")
+}
+
+model SupportReferral {
+  id                  String    @id(map: "vs_support_referral_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  studentId           String    @map("student_id") @db.Uuid
+  studentNameSnapshot String    @map("student_name_snapshot") @db.VarChar(210)
+  admissionSnapshot   String    @map("admission_snapshot") @db.VarChar(80)
+  referrerAccountId   String    @map("referrer_account_id") @db.Uuid
+  specialistAccountId String    @map("specialist_account_id") @db.Uuid
+  specialistName      String    @map("specialist_name") @db.VarChar(210)
+  factualConcern      String    @map("factual_concern") @db.VarChar(2000)
+  status              String    @db.VarChar(16)
+  version             Int
+  sentAt              DateTime  @map("sent_at") @db.Timestamptz(3)
+  acknowledgedAt      DateTime? @map("acknowledged_at") @db.Timestamptz(3)
+  returnedAt          DateTime? @map("returned_at") @db.Timestamptz(3)
+  closedAt            DateTime? @map("closed_at") @db.Timestamptz(3)
+  updatedAt           DateTime  @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_support_referral_scope_id_key")
+  @@index([organizationId, schoolId, referrerAccountId, updatedAt(sort: Desc), id], map: "vs_support_referral_referrer_idx")
+  @@index([organizationId, schoolId, specialistAccountId, status, updatedAt(sort: Desc), id], map: "vs_support_referral_specialist_idx")
+  @@map("vs_support_referral")
+}
+
+model SupportReferralEvent {
+  id             String   @id(map: "vs_support_referral_event_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  referralId     String   @map("referral_id") @db.Uuid
+  number         Int
+  type           String   @db.VarChar(24)
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  safeDetails    Json     @map("safe_details")
+  occurredAt     DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, referralId, number], map: "vs_support_referral_event_number_key")
+  @@index([organizationId, schoolId, referralId, occurredAt, id], map: "vs_support_referral_event_history_idx")
+  @@map("vs_support_referral_event")
+}
+
+model SupportHandoff {
+  id                   String    @id(map: "vs_support_handoff_pkey") @db.Uuid
+  organizationId       String    @map("organization_id") @db.Uuid
+  schoolId             String    @map("school_id") @db.Uuid
+  procedureId          String    @map("procedure_id") @db.Uuid
+  procedureVersion     Int       @map("procedure_version")
+  recorderAccountId    String    @map("recorder_account_id") @db.Uuid
+  responsibleAccountId String    @map("responsible_account_id") @db.Uuid
+  safeReference        String    @map("safe_reference") @db.VarChar(500)
+  status               String    @db.VarChar(16)
+  version              Int
+  recordedAt           DateTime  @map("recorded_at") @db.Timestamptz(3)
+  acknowledgedAt       DateTime? @map("acknowledged_at") @db.Timestamptz(3)
+  updatedAt            DateTime  @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_support_handoff_scope_id_key")
+  @@index([organizationId, schoolId, recorderAccountId, recordedAt(sort: Desc), id], map: "vs_support_handoff_recorder_idx")
+  @@index([organizationId, schoolId, responsibleAccountId, status, recordedAt(sort: Desc), id], map: "vs_support_handoff_responsible_idx")
+  @@map("vs_support_handoff")
+}
+
 model AssessmentsScale {
   id             String   @id(map: "vs_assessments_scale_pkey") @db.Uuid
   organizationId String   @map("organization_id") @db.Uuid

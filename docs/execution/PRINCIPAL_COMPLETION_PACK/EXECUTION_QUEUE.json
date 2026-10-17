@@ -202,11 +202,11 @@
       "decisions": [
         "D14"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Event-owner scheduling lifecycle, explicit purpose-granted participants, versioned responses and agreed actions.",
       "demo": "Family invite accepted, changed time resets response, completed meeting creates one reviewed action.",
       "kind": "foundation",
-      "completedSlice": "F13-A/B owner foundation: explicit manager grant, exact participant provenance, draft/proposal, accept/decline, all-accepted confirmation, explicit completion attendance, individually owned action sources, replay and revocation are PostgreSQL verified. Coordination adapter and production journeys remain."
+      "completedSlice": "Meeting owner, exact participant provenance, full scheduling/response/attendance/action lifecycle, typed Coordination action handoff, Principal/Teacher/Family routes, seed and direct desktop/mobile comparison are verified."
     },
     {
       "id": "F14",
@@ -217,10 +217,11 @@
       "decisions": [
         "D16"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Restricted referral, reviewed procedure/contact configuration and safe status; no invented emergency service.",
       "demo": "Synthetic referral to specialist; referrer status-only; missing urgent procedure honestly unavailable.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "Restricted Support owner, explicit resource/purpose grants, typed Student context, protected referral lifecycle, versioned school procedure, minimal handoff receipts, production routes, seed and direct desktop/mobile comparison are verified. D16 remains synthetic-only."
     },
     {
       "id": "F15",
@@ -693,11 +694,11 @@
       "decisions": [
         "D14"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-36.md",
       "kind": "workflow",
       "workflow": "LEA-36",
-      "completedSlice": "Events owner foundation is verified. Typed Coordination handoff, remaining lifecycle commands, real counterpart screens, seed and direct visual comparison remain."
+      "completedSlice": "Meeting owner lifecycle, explicit participants, responses, attendance, individually owned actions, typed Coordination handoff, production routes, seed and direct comparison are verified."
     },
     {
       "id": "WF-37",
@@ -708,10 +709,11 @@
       "decisions": [
         "D16"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-37.md",
       "kind": "workflow",
-      "workflow": "LEA-37"
+      "workflow": "LEA-37",
+      "completedSlice": "Exact authorized pupil selection, designated specialist route, protected narrative, status-only sender projection, exact recovery and revoked-access denial are verified."
     },
     {
       "id": "WF-38",
@@ -722,10 +724,11 @@
       "decisions": [
         "D16"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-38.md",
       "kind": "workflow",
-      "workflow": "LEA-38"
+      "workflow": "LEA-38",
+      "completedSlice": "Trusted procedure publication, honest missing configuration, minimal handoff, exact responsible-person acknowledgement and no-assistance claim are verified."
     },
     {
       "id": "WF-40",

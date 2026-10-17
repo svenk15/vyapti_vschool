@@ -100,6 +100,11 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AssessmentsModerationEvent | `vs_assessments_moderation_event` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsModerationInformation | `vs_assessments_moderation_information` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsReportRevision | `vs_assessments_report_revision` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| SupportCapabilityGrant | `vs_support_capability_grant` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
+| SupportHandoff | `vs_support_handoff` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
+| SupportProcedure | `vs_support_procedure` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
+| SupportReferral | `vs_support_referral` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
+| SupportReferralEvent | `vs_support_referral_event` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandRevision | `vs_branding_brand_revision` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |

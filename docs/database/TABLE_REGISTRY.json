@@ -3592,6 +3592,111 @@
       "fields": "id/org/school uuid; code/name; integer min/max; precision/rounding; status/version/time",
       "responsibility": "Versioned exact-decimal scoring scale.",
       "constraints": "Scoped School FK; unique code; bounded precision/range/rounding/status checks."
+    },
+    {
+      "owner": "support",
+      "status": "MIGRATED",
+      "design": "docs/modules/support/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Support purpose and exact resource authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "support",
+        "closureGate": "TEN-03"
+      },
+      "model": "SupportCapabilityGrant",
+      "table": "vs_support_capability_grant",
+      "fields": "id/org/school/membership/account/operator/student uuid; capability; grant/revoke/version",
+      "responsibility": "Explicit resource or branch Support purpose grant.",
+      "constraints": "Scoped membership/Student FKs; conditional capability/resource check; partial unique grants; active lookup index."
+    },
+{
+      "owner": "support",
+      "status": "MIGRATED",
+      "design": "docs/modules/support/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Support purpose and exact resource authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "support",
+        "closureGate": "TEN-03"
+      },
+      "model": "SupportHandoff",
+      "table": "vs_support_handoff",
+      "fields": "id/org/school/procedure/recorder/responsible uuid; procedure version/safe reference/status/version/time",
+      "responsibility": "Minimal recorded urgent-procedure handoff evidence.",
+      "constraints": "Scoped Procedure FK; status/version checks; recorder and responsible inbox indexes."
+    },
+{
+      "owner": "support",
+      "status": "MIGRATED",
+      "design": "docs/modules/support/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Support purpose and exact resource authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "support",
+        "closureGate": "TEN-03"
+      },
+      "model": "SupportProcedure",
+      "table": "vs_support_procedure",
+      "fields": "id/org/school/responsible/publisher uuid; version/title/instruction/contact/status/time",
+      "responsibility": "Versioned published school urgent-contact procedure.",
+      "constraints": "Scoped School FK; unique version and current published row; status/version checks; current index."
+    },
+{
+      "owner": "support",
+      "status": "MIGRATED",
+      "design": "docs/modules/support/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Support purpose and exact resource authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "support",
+        "closureGate": "TEN-03"
+      },
+      "model": "SupportReferral",
+      "table": "vs_support_referral",
+      "fields": "id/org/school/student/referrer/specialist uuid; snapshots; protected concern; status/version/time",
+      "responsibility": "Restricted specialist referral and safe handoff status.",
+      "constraints": "Scoped Student FK; closed state/version checks; referrer and specialist inbox indexes."
+    },
+{
+      "owner": "support",
+      "status": "MIGRATED",
+      "design": "docs/modules/support/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Support purpose and exact resource authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "support",
+        "closureGate": "TEN-03"
+      },
+      "model": "SupportReferralEvent",
+      "table": "vs_support_referral_event",
+      "fields": "id/org/school/referral/actor uuid; sequence/type/safe details/time",
+      "responsibility": "Append-only privacy-minimized referral lifecycle evidence.",
+      "constraints": "Scoped Referral FK; unique sequence; append-only trigger; history index."
     }
   ],
   "rlsPlan": {

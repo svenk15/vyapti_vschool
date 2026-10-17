@@ -1,0 +1,11 @@
+export type SupportCapability='REFERRAL_CREATE'|'SPECIALIST'|'POLICY_STEWARD'|'HANDOFF_RECORD';
+export type SupportReferralState='SENT'|'ACKNOWLEDGED'|'RETURNED'|'CLOSED';
+export type SupportPupilCandidate=Readonly<{studentId:string;displayName:string;admissionNumber:string;grantVersion:number}>;
+export type SupportSpecialistCandidate=Readonly<{accountId:string;displayName:string;grantVersion:number}>;
+export type SupportReferralSummary=Readonly<{id:string;studentId:string;studentName:string;admissionNumber:string;specialistName:string;status:SupportReferralState;version:number;sentAt:string;updatedAt:string;role:'REFERRER'|'SPECIALIST'}>;
+export type SupportReferralDetail=SupportReferralSummary&Readonly<{factualConcern?:string;history?:readonly {number:number;type:string;occurredAt:string}[];can:{acknowledge:boolean;return:boolean;close:boolean}}>;
+export type SupportProcedureView=Readonly<{id:string;versionNo:number;title:string;instruction:string;contactLabel:string;responsibleAccountId:string;responsibleName:string;publishedAt:string}>;
+export type SupportHandoffState='RECORDED'|'ACKNOWLEDGED';
+export type SupportHandoffSummary=Readonly<{id:string;procedureId:string;procedureVersion:number;contactLabel:string;safeReference:string;status:SupportHandoffState;version:number;recordedAt:string;acknowledgedAt:string|null;role:'RECORDER'|'RESPONSIBLE'}>;
+export type SupportCommandResult=Readonly<{resourceType:'REFERRAL'|'PROCEDURE'|'HANDOFF';resourceId:string;status:string;version:number;replayed:boolean}>;
+export type SupportCommandStatus=Readonly<{state:'UNKNOWN'}|{state:'FOUND';result:SupportCommandResult}>;
