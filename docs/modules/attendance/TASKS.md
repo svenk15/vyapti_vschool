@@ -200,4 +200,4 @@ Status: **ENGINEERING_VERIFIED** for the authorized fictional-data slice. Human 
 - [x] Add forward-only request/grant/event persistence and purpose allowlists; register every tenant table for the TEN-03 closure gate.
 - [x] Implement Parent, Student and assigned-Teacher contextual request/status/withdraw operations, Principal routing and explicit reviewer apply/decline operations through portable facades.
 - [x] Keep Attendance mutation inside its existing guarded owner command and require its exact committed receipt before APPLIED.
-- [ ] Complete incremental synthetic seed, current-source PostgreSQL/browser/repository/build verification, direct responsive comparison and evidence. Human acceptance remains PENDING.
+- [x] Complete incremental synthetic seed, current-source PostgreSQL/browser/repository/build verification, direct responsive comparison and evidence. Human acceptance remains PENDING.

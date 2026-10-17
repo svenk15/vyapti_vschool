@@ -365,10 +365,11 @@
         "D07",
         "D08"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-14.md",
       "kind": "workflow",
-      "workflow": "LEA-14"
+      "workflow": "LEA-14",
+      "completedSlice": "Exact Student/session/source-revision requests, explicit requester/reviewer purposes, Principal routing without correction authority, Attendance-owner application receipt, changed-evidence review, replay and revoked disclosure are verified."
     },
     {
       "id": "WF-16",
@@ -709,7 +710,7 @@
     },
     {
       "id": "WF-38",
-      "title": "Follow the school\u2019s urgent safety escalation procedure",
+      "title": "Follow the school’s urgent safety escalation procedure",
       "dependsOn": [
         "F14"
       ],
