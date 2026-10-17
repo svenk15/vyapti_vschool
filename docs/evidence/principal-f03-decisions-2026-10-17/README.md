@@ -2,6 +2,8 @@
 
 Status: **ENGINEERING_COMPLETE** for F03. Human review remains **PENDING**. LEA-27, LEA-29 and LEA-31 are supported partial workflows; LEA-28 and LEA-30 remain not started.
 
+Verified product source: `e862802e6e5bad6572192fe07634bb5d4aa67479`. Normal production build: `4bVuXP5diMkauT_59P1ow`.
+
 ## Authority and scope
 
 On 17 October 2026 the repository owner approved D02–D19 for synthetic-only implementation exactly as recorded in `docs/execution/PRINCIPAL_COMPLETION_PACK/02_PRODUCT_DECISIONS.md`, with no exceptions. F03 implements D03 with Coordination verification as the first typed owner adapter. D01 is unchanged. This checkpoint does not authorize production enablement, real messages, purchases, providers or real-client data.
