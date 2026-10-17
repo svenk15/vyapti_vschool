@@ -1,5 +1,5 @@
 {
-  "revision": "4.18",
+  "revision": "4.19",
   "prefix": "vs_",
   "tables": [
     {
@@ -3243,6 +3243,195 @@
         "owner": "requests",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsCohortMember",
+      "table": "vs_assessments_cohort_member",
+      "fields": "id/org/school/cycle/student/enrollment/placement/year uuid; state/position/frozen time",
+      "responsibility": "Frozen dated learner denominator member.",
+      "constraints": "Scoped Cycle/Student/Enrollment/Placement FKs; unique cycle student; state/position checks; cohort index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsCycle",
+      "table": "vs_assessments_cycle",
+      "fields": "id/org/school/year/section/scale uuid; code/name; scheme/state/cutoff/version/timestamps",
+      "responsibility": "Assessment scheme and readiness root pinned to exact academic scope.",
+      "constraints": "Scoped School/Year/Section/Scale FKs; unique code; state/version checks; state/update index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsModeration",
+      "table": "vs_assessments_moderation",
+      "fields": "id/org/school/cycle/plan uuid; evidence version/digest; status/version/time",
+      "responsibility": "Exact-revision moderation readiness state.",
+      "constraints": "Scoped Cycle/Plan FKs; unique cycle plan; digest/status/version checks; cycle/status index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsOutcome",
+      "table": "vs_assessments_outcome",
+      "fields": "id/org/school/cycle/plan/cohort/recorder uuid; state/score/revision/version/time",
+      "responsibility": "Current exact assessment outcome; zero is distinct from missing.",
+      "constraints": "Scoped Cycle/Plan/Cohort FKs; unique plan/cohort slot; state-score consistency; cycle/state index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsOutcomeRevision",
+      "table": "vs_assessments_outcome_revision",
+      "fields": "id/org/school/outcome/recorder uuid; number/state/score/time",
+      "responsibility": "Append-only mark/outcome evidence.",
+      "constraints": "Scoped Outcome FK; unique revision number; state-score consistency; immutable trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsOversightGrant",
+      "table": "vs_assessments_oversight_grant",
+      "fields": "id/org/school/membership/account/operator uuid; grant/revoke timestamps; version",
+      "responsibility": "Explicit Principal oversight designation; Principal role alone is insufficient.",
+      "constraints": "Scoped membership/account FKs; unique scope account; active lookup index; positive version."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsPlanItem",
+      "table": "vs_assessments_plan_item",
+      "fields": "id/org/school/cycle/subject uuid; max scaled; weight bp; required; position",
+      "responsibility": "Frozen required or optional subject requirement.",
+      "constraints": "Scoped Cycle/Subject FKs; unique cycle subject; score/weight/position checks; cycle index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportRevision",
+      "table": "vs_assessments_report_revision",
+      "fields": "id/org/school/cycle/cohort uuid; number/source version/digest/status/time",
+      "responsibility": "Immutable per-learner report readiness/publication revision.",
+      "constraints": "Scoped Cycle/Cohort FKs; unique report revision; digest/status/version checks; immutable trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsScale",
+      "table": "vs_assessments_scale",
+      "fields": "id/org/school uuid; code/name; integer min/max; precision/rounding; status/version/time",
+      "responsibility": "Versioned exact-decimal scoring scale.",
+      "constraints": "Scoped School FK; unique code; bounded precision/range/rounding/status checks."
     }
   ],
   "rlsPlan": {

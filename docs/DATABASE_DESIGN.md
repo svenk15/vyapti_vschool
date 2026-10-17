@@ -86,6 +86,15 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AttendanceCorrectionRequestEvent | `vs_attendance_correction_request_event` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendancePupilReviewGrant | `vs_attendance_pupil_review_grant` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendancePupilReviewSnapshot | `vs_attendance_pupil_review_snapshot` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
+| AssessmentsOversightGrant | `vs_assessments_oversight_grant` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsScale | `vs_assessments_scale` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsCycle | `vs_assessments_cycle` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsPlanItem | `vs_assessments_plan_item` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsCohortMember | `vs_assessments_cohort_member` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsOutcome | `vs_assessments_outcome` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsOutcomeRevision | `vs_assessments_outcome_revision` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsModeration | `vs_assessments_moderation` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportRevision | `vs_assessments_report_revision` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandRevision | `vs_branding_brand_revision` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |

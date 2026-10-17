@@ -3,10 +3,10 @@
 ## F11-A — readiness foundation and LEA-20 projection
 
 - [x] Record D11 scale, cycle, cohort, outcome, moderation, report and authorization contracts.
-- [ ] Add forward BRANCH schema and registry entries.
-- [ ] Implement pure reconciliation, portable facade and Prisma projection.
+- [x] Add forward BRANCH schema and registry entries.
+- [x] Implement pure reconciliation, portable facade and Prisma projection.
 - [ ] Add explicit synthetic oversight grant/provisioning and incremental demo seed.
-- [ ] Add Principal recipe-L route and gated navigation.
+- [x] Add Principal recipe-L route and gated navigation.
 - [ ] Verify unit, real PostgreSQL, desktop/mobile browser, build and direct comparison.
 
 ## F11-B — cycle planning and frozen cohort

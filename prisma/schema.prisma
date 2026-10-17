@@ -2008,6 +2008,7 @@ model SectionPlacement {
  enrollment Enrollment @relation(fields:[organizationId,schoolId,enrollmentId,yearId],references:[organizationId,schoolId,id,yearId],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_section_placement_enrollment_fkey")
  section Section @relation(fields:[organizationId,schoolId,sectionId,yearId],references:[organizationId,schoolId,id,yearId],onDelete:Restrict,onUpdate:Restrict,map:"vs_students_section_placement_section_fkey")
  @@index([organizationId,schoolId,sectionId,validFrom,validTo,enrollmentId],map:"vs_students_placement_roster_idx")
+ @@unique([organizationId,schoolId,id,yearId],map:"vs_students_placement_scope_year_id_key")
  @@index([organizationId,schoolId,enrollmentId,validFrom],map:"vs_students_placement_history_idx")
  @@map("vs_students_section_placement")
 }
@@ -3160,4 +3161,170 @@ model CoordinationInformationRequest {
  @@index([organizationId,schoolId,requestId,status,requestedAt(sort: Desc)],map:"vs_coordination_information_request_idx")
  @@index([organizationId,schoolId,recipientAccountId,status,responseDueAt],map:"vs_coordination_information_recipient_idx")
  @@map("vs_coordination_information_request")
+}
+
+model AssessmentsOversightGrant {
+  id                  String    @id(map: "vs_assessments_oversight_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_oversight_scope_id_key")
+  @@unique([organizationId, schoolId, accountId], map: "vs_assessments_oversight_account_key")
+  @@index([organizationId, schoolId, accountId, revokedAt], map: "vs_assessments_oversight_active_idx")
+  @@map("vs_assessments_oversight_grant")
+}
+
+model AssessmentsScale {
+  id             String   @id(map: "vs_assessments_scale_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  code           String   @db.VarChar(40)
+  name           String   @db.VarChar(120)
+  minimumScaled  Int      @map("minimum_scaled")
+  maximumScaled  Int      @map("maximum_scaled")
+  precision      Int
+  rounding       String   @db.VarChar(16)
+  status         String   @db.VarChar(16)
+  version        Int
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_scale_scope_id_key")
+  @@unique([organizationId, schoolId, code], map: "vs_assessments_scale_code_key")
+  @@map("vs_assessments_scale")
+}
+
+model AssessmentsCycle {
+  id             String   @id(map: "vs_assessments_cycle_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  academicYearId String   @map("academic_year_id") @db.Uuid
+  sectionId      String   @map("section_id") @db.Uuid
+  scaleId        String   @map("scale_id") @db.Uuid
+  code           String   @db.VarChar(40)
+  name           String   @db.VarChar(160)
+  schemeVersion  Int      @map("scheme_version")
+  state          String   @db.VarChar(20)
+  sourceCutoff   DateTime @map("source_cutoff") @db.Timestamptz(3)
+  version        Int
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_cycle_scope_id_key")
+  @@unique([organizationId, schoolId, code], map: "vs_assessments_cycle_code_key")
+  @@index([organizationId, schoolId, state, updatedAt(sort: Desc), id(sort: Desc)], map: "vs_assessments_cycle_state_idx")
+  @@map("vs_assessments_cycle")
+}
+
+model AssessmentsPlanItem {
+  id                String  @id(map: "vs_assessments_plan_item_pkey") @db.Uuid
+  organizationId    String  @map("organization_id") @db.Uuid
+  schoolId          String  @map("school_id") @db.Uuid
+  cycleId           String  @map("cycle_id") @db.Uuid
+  subjectId         String  @map("subject_id") @db.Uuid
+  maximumScaled     Int     @map("maximum_scaled")
+  weightBasisPoints Int     @map("weight_basis_points")
+  required          Boolean
+  position          Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_plan_scope_id_key")
+  @@unique([organizationId, schoolId, cycleId, subjectId], map: "vs_assessments_plan_subject_key")
+  @@index([organizationId, schoolId, cycleId, required, position], map: "vs_assessments_plan_cycle_idx")
+  @@map("vs_assessments_plan_item")
+}
+
+model AssessmentsCohortMember {
+  id             String   @id(map: "vs_assessments_cohort_member_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  cycleId        String   @map("cycle_id") @db.Uuid
+  studentId      String   @map("student_id") @db.Uuid
+  enrollmentId   String   @map("enrollment_id") @db.Uuid
+  placementId    String   @map("placement_id") @db.Uuid
+  yearId         String   @map("year_id") @db.Uuid
+  state          String   @db.VarChar(16)
+  position       Int
+  frozenAt       DateTime @map("frozen_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_cohort_scope_id_key")
+  @@unique([organizationId, schoolId, cycleId, studentId], map: "vs_assessments_cohort_student_key")
+  @@index([organizationId, schoolId, cycleId, state, position], map: "vs_assessments_cohort_cycle_idx")
+  @@map("vs_assessments_cohort_member")
+}
+
+model AssessmentsOutcome {
+  id                String   @id(map: "vs_assessments_outcome_pkey") @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  schoolId          String   @map("school_id") @db.Uuid
+  cycleId           String   @map("cycle_id") @db.Uuid
+  planItemId        String   @map("plan_item_id") @db.Uuid
+  cohortMemberId    String   @map("cohort_member_id") @db.Uuid
+  state             String   @db.VarChar(20)
+  scoreScaled       Int?     @map("score_scaled")
+  recorderAccountId String   @map("recorder_account_id") @db.Uuid
+  currentRevision   Int      @map("current_revision")
+  version           Int
+  updatedAt         DateTime @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_outcome_scope_id_key")
+  @@unique([organizationId, schoolId, planItemId, cohortMemberId], map: "vs_assessments_outcome_slot_key")
+  @@index([organizationId, schoolId, cycleId, state], map: "vs_assessments_outcome_cycle_state_idx")
+  @@map("vs_assessments_outcome")
+}
+
+model AssessmentsOutcomeRevision {
+  id                String   @id(map: "vs_assessments_outcome_revision_pkey") @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  schoolId          String   @map("school_id") @db.Uuid
+  outcomeId         String   @map("outcome_id") @db.Uuid
+  number            Int
+  state             String   @db.VarChar(20)
+  scoreScaled       Int?     @map("score_scaled")
+  recorderAccountId String   @map("recorder_account_id") @db.Uuid
+  recordedAt        DateTime @map("recorded_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_outcome_revision_scope_id_key")
+  @@unique([organizationId, schoolId, outcomeId, number], map: "vs_assessments_outcome_revision_number_key")
+  @@map("vs_assessments_outcome_revision")
+}
+
+model AssessmentsModeration {
+  id              String   @id(map: "vs_assessments_moderation_pkey") @db.Uuid
+  organizationId  String   @map("organization_id") @db.Uuid
+  schoolId        String   @map("school_id") @db.Uuid
+  cycleId         String   @map("cycle_id") @db.Uuid
+  planItemId      String   @map("plan_item_id") @db.Uuid
+  evidenceVersion Int      @map("evidence_version")
+  evidenceDigest  String   @map("evidence_digest") @db.Char(64)
+  status          String   @db.VarChar(16)
+  version         Int
+  updatedAt       DateTime @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_moderation_scope_id_key")
+  @@unique([organizationId, schoolId, cycleId, planItemId], map: "vs_assessments_moderation_plan_key")
+  @@index([organizationId, schoolId, cycleId, status], map: "vs_assessments_moderation_cycle_status_idx")
+  @@map("vs_assessments_moderation")
+}
+
+model AssessmentsReportRevision {
+  id                 String   @id(map: "vs_assessments_report_revision_pkey") @db.Uuid
+  organizationId     String   @map("organization_id") @db.Uuid
+  schoolId           String   @map("school_id") @db.Uuid
+  cycleId            String   @map("cycle_id") @db.Uuid
+  cohortMemberId     String   @map("cohort_member_id") @db.Uuid
+  number             Int
+  sourceCycleVersion Int      @map("source_cycle_version")
+  sourceDigest       String   @map("source_digest") @db.Char(64)
+  status             String   @db.VarChar(16)
+  createdAt          DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_scope_id_key")
+  @@unique([organizationId, schoolId, cycleId, cohortMemberId, number], map: "vs_assessments_report_number_key")
+  @@index([organizationId, schoolId, cycleId, status], map: "vs_assessments_report_cycle_status_idx")
+  @@map("vs_assessments_report_revision")
 }
