@@ -1,6 +1,6 @@
 # Assessments owner design
 
-Status: **D11 SYNTHETIC BASELINE APPROVED / F11-A DESIGN READY / IMPLEMENTATION PENDING**.
+Status: **D11 SYNTHETIC BASELINE APPROVED / F11-A VERIFIED / F11-B DESIGN READY**.
 
 The repository owner approved D11 for synthetic-only implementation on 17 October 2026. Assessments owns its scale, cycle, frozen cohort, plan items, mark outcomes and revisions, moderation decisions, report revisions and publication receipts. Academics supplies exact year, section and subject identities; Students supplies dated enrollment/placement facts; Access supplies live accounts and branch memberships. Assessments never writes those owners. Documents will own generated report bytes later; no PDF or download is claimed by F11-A.
 
@@ -87,4 +87,39 @@ sequenceDiagram
 
 ## Remaining F11 slices
 
-F11-B adds authorized cycle/plan/frozen-cohort commands and screens. F11-C adds assigned-Teacher mark revisions. F11-D adds independent moderation and LEA-21. F11-E adds report revisions, explicit publication delegation and LEA-22; Documents must provide a real-scanned generated artifact before report download is complete.
+### F11-B — authorized cycle planning and frozen cohort
+
+F11-B adds a School Administrator counterpart at `/admin/assessments`. Planning authority is a live `SCHOOL_ADMIN` membership plus an active, membership-bound `AssessmentsPlanningGrant`; neither the role nor the Principal oversight grant implies planning authority. The same Assessments release, entitlement and branch-activation checks used by the readiness projection apply on every read, command and receipt lookup.
+
+The planning workspace is a single repeatable-read projection of active scales, academic years, active sections, subjects and existing cycles. It exposes only exact owner identities. An academic year, section and subject remain owned by Academics; eligibility is checked in the command transaction and a section must belong to the selected year. The screen has three explicit operations:
+
+1. `CreateAssessmentScale` creates an immutable active numeric scale. `code` is normalized uppercase ASCII, name is trimmed, precision is 0–3, `minimumScaled < maximumScaled`, and rounding is `HALF_UP` or `HALF_EVEN`. A scale cannot be edited in place after creation.
+2. `CreateAssessmentCyclePlan` creates one `DRAFT` cycle and its ordered plan items atomically. Code and name are normalized, source cutoff is an ISO instant, all subjects must exist in the branch, each subject appears once, maximum scores are positive and within the scale, weights are 1–10,000 basis points, and required-item weights total exactly 10,000. The command pins `scheme_version = 1`; it does not freeze pupils or open marking.
+3. `FreezeAssessmentCohort` locks the exact draft cycle, rechecks its expected version and Academics scope, selects Students whose enrollment in the pinned academic year and placement in the pinned section contain the cycle cutoff (`valid_from <= cutoff-date < valid_to`), and writes their exact Student, Enrollment and SectionPlacement identities. The cohort must be non-empty. It then changes the cycle from `DRAFT` to `OPEN`, increments the cycle version and never recomputes that cohort later.
+
+All commands lock account → Organization → School → Cycle when a cycle exists. They run at `SERIALIZABLE`, require a UUID idempotency key, and write one Assessments-owned receipt keyed by organization, school, actor, command and key. The receipt stores a canonical input hash and a minimized result. Same-key/same-input replay reauthorizes the actor and returns the original semantic result; same-key/different-input fails with `IDEMPOTENCY_CONFLICT`. `getPlanningCommandStatus` also reauthorizes before returning `FOUND`; absence is `UNKNOWN`, never failure. Expected-version mismatch returns `STALE_VERSION` with no partial cohort rows. A transaction also appends a Platform audit entry with IDs, versions and counts only; pupil names and marks are excluded.
+
+`AssessmentsPlanningGrant` and `AssessmentsCommandReceipt` are BRANCH tables registered for the TEN-03 closure gate. The grant has scoped membership/account foreign keys and an active lookup index. The receipt has scoped actor and school foreign keys, a unique intent key and created-time index. No browser-supplied role, scope, source identity or trusted link is authority.
+
+The planning UI preserves safe entered values after validation, disables duplicate submission, reports unknown outcomes with a retry/status action using the original key, and links an opened cycle to the Principal readiness view. Reloaded drafts come from owner persistence; no browser durable draft is introduced. Empty, unavailable, forbidden, validation, stale and replay states are explicit. F11-B does not add mark entry, moderation, publication or report download.
+
+```mermaid
+sequenceDiagram
+  participant A as Explicitly granted School Administrator
+  participant H as Next hosting adapter
+  participant S as Assessments facade
+  participant DB as PostgreSQL
+  A->>H: Freeze cohort(cycle, expected version, original key)
+  H->>S: validated command + verified branch scope
+  S->>DB: establish verified transaction context
+  S->>DB: lock account, organization, school and cycle
+  S->>DB: recheck membership, planning grant, module and exact version
+  S->>DB: select dated enrollment + placement identities
+  S->>DB: insert frozen members, open cycle, audit and receipt atomically
+  DB-->>S: cycle version and frozen member count
+  S-->>H: confirmed result or exact replay
+```
+
+F11-B verification requires domain validation/reconciliation tests; real-PostgreSQL scope, grant, dated cohort, stale version, atomic rollback, replay/conflict, revocation and concurrent-freeze tests; and a one-worker browser journey for create scale → create plan → reload draft → freeze → Principal readiness link, including recovery, desktop/mobile composition and keyboard focus.
+
+F11-C adds assigned-Teacher mark revisions. F11-D adds independent moderation and LEA-21. F11-E adds report revisions, explicit publication delegation and LEA-22; Documents must provide a real-scanned generated artifact before report download is complete.
