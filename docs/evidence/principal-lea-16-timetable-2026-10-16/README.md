@@ -2,6 +2,8 @@
 
 Status: engineering complete for the approved synthetic-only scope; direct visual comparison complete with documented format/font deviations; human review pending.
 
+Verified product source: `68f9feca3fc02cec880452a56de6bf673afccd27`.
+
 The approved authority is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`, workflow **LEA-16 — Review timetable conflicts and uncovered classes**, together with its Timetable integration notes. The application route is `/leadership/timetable`.
 
 The application selects the current effective immutable publication and presents two distinct owner projections. Reconciliation exceptions show exact occurrence facts and trusted manual-conflict Attendance evidence. Staffing coverage shows only current/future published occurrences with an authoritative overlapping `UNAVAILABLE` interval or a current cover workflow; it distinguishes uncovered, pending cover and active cover. Unknown availability is excluded, private source/reason data is not selected, and Cover/Attendance routes independently reauthorize every operation.
@@ -28,4 +30,4 @@ Seed credentials remain only in ignored mode-0600 `artifacts/leadership-01/priva
 
 ## Current-source demo
 
-The current checkpoint builds completed with isolated ID `rllvncYayj5p8ZmrZneT4` and normal ID `_gBV-mUK4GAsJAyKisGQL`. After the focused commit, the exact source is recorded in the proportional provenance follow-up. The intended route is `http://127.0.0.1:3400/leadership/timetable` and credentials remain only in `artifacts/leadership-01/private-demo.json`.
+The tested source completed isolated build `rllvncYayj5p8ZmrZneT4` and normal build `_gBV-mUK4GAsJAyKisGQL`. The intended route is `http://127.0.0.1:3400/leadership/timetable` and credentials remain only in `artifacts/leadership-01/private-demo.json`.
