@@ -2,6 +2,8 @@
 
 Status: engineering verification complete for synthetic-only D02 scope; direct reference comparison complete with the routed-production deviation described below; human acceptance PENDING. Production enablement, school approver/action configuration, TEN-03, font portability and native VoiceOver/NVDA remain pending.
 
+Product checkpoint: `a3c7da1` (`Complete temporary Principal delegation`). Normal production build: `qCk9yMBZEprYlJB1zrOXP`.
+
 ## Delivered outcome
 
 - Access owns a branch-scoped delegation root, exact allowlisted action rows, trusted-operator issue/revoke receipts and immutable events.
@@ -40,7 +42,7 @@ All four are BRANCH-class Path-A tables registered for TEN-03 closure. The datab
 
 The first browser attempt exposed a test-fixture window beyond D02's 30-day maximum; the fixture was corrected rather than weakening validation. Two later failures were strict locator assumptions, while the application state was correct. The final desktop/mobile runs above supersede them. A build-reuse retry initially lacked sandbox permission for local PostgreSQL and failed with `EPERM`; the authorized retry used the same build and designated test database.
 
-The focused commands validate the current working-tree source that is committed by this checkpoint. The exact checkpoint commit and demo health are appended in the provenance update after commit.
+The focused commands validate the source committed as `a3c7da1`; the documentation-only provenance update does not change application behavior.
 
 ## Direct visual comparison
 
@@ -57,4 +59,4 @@ At 1440×1000 the application uses the established 240px Principal sidebar, comp
 
 ## Demo
 
-The normal demo entry is `http://127.0.0.1:3400`. Private credentials and seed-owned delegation identifiers remain in ignored `artifacts/leadership-01/private-demo.json`; values are never committed or printed. Run `pnpm demo:seed` for the connected suite or `node --import tsx scripts/demo-principal-delegation.ts` after its prerequisites. Sign in with the Teacher persona, choose **Acting leadership**, open **My acting access**, confirm the exact actions/window, then open **Notice coverage**. Trusted revocation is intentionally not exposed to the browser.
+The normal demo entry is `http://127.0.0.1:3400`; its `/api/health` returned `ready:true` after starting build `qCk9yMBZEprYlJB1zrOXP` from checkpoint `a3c7da1`. Private credentials and seed-owned delegation identifiers remain in ignored `artifacts/leadership-01/private-demo.json`; values are never committed or printed. Run `pnpm demo:seed` for the connected suite or `node --import tsx scripts/demo-principal-delegation.ts` after its prerequisites. Sign in with the Teacher persona, choose **Acting leadership**, open **My acting access**, confirm the exact actions/window, then open **Notice coverage**. Trusted revocation is intentionally not exposed to the browser.
