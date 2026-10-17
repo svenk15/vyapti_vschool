@@ -2,6 +2,8 @@
 
 Status: engineering complete for the approved synthetic-only registered-owner scope; direct visual comparison complete with documented routed-shell/font deviations; human review pending.
 
+Verified product source: `26fdc0f0216623d654042d4fcc368432156ca126`. Normal production build: `uvdcAQaNC1HS8F_B_SCVG`.
+
 The approved authority is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`, workflow **LEA-27 — Work from a purpose-scoped decision inbox**. The production route is `/leadership/decisions` and uses recipe L from the adopted Principal production UX contract.
 
 ## Implemented outcome
@@ -18,7 +20,7 @@ The approved authority is `docs/execution/VSchool_Execution_Pack/references/appr
 - Real PostgreSQL: `test/functional/coordination-requests.test.ts` — 15/15 passed against `vyapti_vschool_test`; exact lookup, type partition, no-due predicate, invalid cursor, scope/revocation and exact replay are covered.
 - Sequential one-worker Playwright: the changed typed-owner journey passed 1/1 Chromium and 1/1 mobile. It exercises exact search, type/state/due filters, submitted-time sort, owner detail, response-loss recovery and revoked-result denial. The first desktop attempt failed only because a test locator also matched the Clear button; the locator was narrowed to the named searchbox and both viewports then passed.
 - `pnpm check` passed lint, TypeScript, 30 documentation checks, 136 database contracts, backend boundaries/compilation and 210/210 unit tests.
-- Production build and exact product source are recorded in the proportional provenance follow-up after the focused commit.
+- Normal production build `uvdcAQaNC1HS8F_B_SCVG` passed for exact source `26fdc0f0216623d654042d4fcc368432156ca126`.
 
 ## Direct visual inspection
 
