@@ -1,8 +1,8 @@
 # LEA-35 — Handle an escalated family concern or complaint
 
 ## Identity and readiness
-- Current status: PARTIAL; protected submission, independent routing, assigned review, information response, public outcome and withdrawal are verified. Explicit acknowledgement, investigation owner/review date, and independent appeal/reopen remain. Human review PENDING.
-- Evidence: `docs/evidence/principal-f09-requests-2026-10-18/README.md`.
+- Current status: ENGINEERING_COMPLETE for the approved synthetic-only D12 lifecycle; human review PENDING.
+- Evidence: `docs/evidence/principal-lea-35-lifecycle-2026-10-18/README.md`.
 - Owner: Requests restricted cases. This names responsibility, not proof that an owner module exists.
 - Product decisions: D12,D16. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F09,F03. See execution queue.

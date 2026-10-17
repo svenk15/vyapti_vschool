@@ -16,10 +16,11 @@ const access=createAccessServices({databaseUrl:url});
 const requests=createRequestsServices({databaseUrl:url,releasedModules:['staff_core','family','student_core'],mode:'synthetic'});
 const operator={operatorId:randomUUID(),verified:true as const};
 const input={...schoolInput(),organizationName:`Requests ${randomUUID().slice(0,6)}`,schoolName:'Riverside School'};
-const evidence='docs/evidence/principal-f09-requests-2026-10-18';
+const evidence='docs/evidence/principal-lea-35-lifecycle-2026-10-18';
 let scope:Awaited<ReturnType<typeof access.provisionSchool>>;
 let staff:Awaited<ReturnType<typeof activeStaffFixture>>;
 let steward:Awaited<ReturnType<typeof activeStaffFixture>>;
+let appealReviewer:Awaited<ReturnType<typeof activeStaffFixture>>;
 let studentId:string;
 
 test.describe.configure({mode:'serial'});
@@ -31,11 +32,12 @@ test.beforeAll(async()=>{
  await access.institutionOperation({kind:'SetBranchMembership',organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:scope.accountId,status:'ACTIVE',roles:['SCHOOL_ADMIN','PRINCIPAL'],expectedVersion:1,key:randomUUID(),reason:'Synthetic Requests Principal authority'},operator);
  staff=await activeStaffFixture(db,scope,['TEACHER']);
  steward=await activeStaffFixture(db,scope,['PRINCIPAL']);
+ appealReviewer=await activeStaffFixture(db,scope,['PRINCIPAL']);
  for(const moduleId of ['staff_core','family','student_core']){
   await db.organizationEntitlement.create({data:{id:randomUUID(),organizationId:scope.organizationId,moduleId,state:'ACTIVE',startsAt:new Date('2026-01-01'),endsAt:null,limits:{},manifestVersion:1,version:1}});
   await db.branchActivation.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,moduleId,state:'ACTIVE',version:1,enabledAt:new Date()}});
  }
- await requests.configure(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,reviewerAccountId:scope.accountId,stewardAccountId:steward.accountId});
+ await requests.configure(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,reviewerAccountId:scope.accountId,stewardAccountId:steward.accountId,appealReviewerAccountId:appealReviewer.accountId});
  const person=await db.person.create({data:{id:randomUUID(),organizationId:scope.organizationId,firstName:'Mira',lastName:'Example',version:1,createdAt:new Date()}});
  const student=await db.student.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,personId:person.id,admissionNumber:`REQ-${randomUUID().slice(0,8)}`,admittedOn:new Date('2026-04-01'),status:'ACTIVE',version:1,createdAt:new Date()}});
  studentId=student.id;
@@ -114,14 +116,30 @@ test('routes a protected family concern away from an implicated Principal',async
  await signIn(stewardPage,steward.email,steward.password,'/leadership/concerns');
  await expect(stewardPage.getByText('Concern about the usual school response')).toBeVisible();
  await stewardPage.getByRole('link',{name:'Review'}).click();
+ await stewardPage.getByLabel('Review due date').fill('2026-10-25');
+ await stewardPage.getByRole('button',{name:'Acknowledge concern'}).click();
+ await expect(stewardPage.getByText('under review',{exact:true})).toBeVisible();
  await stewardPage.getByLabel('Public outcome').fill('Independent review recorded; no automatic downstream change.');
  await stewardPage.getByRole('button',{name:'Confirm approve'}).click();
  await expect(stewardPage.getByText('approved',{exact:true})).toBeVisible();
- await stewardPage.screenshot({path:`${evidence}/application-independent-review-${testInfo.project.name}.png`,fullPage:true});
  await family.reload();
- await expect(family.getByText('Independent review recorded; no automatic downstream change.')).toBeVisible();
+ await family.getByLabel('Appeal reason').fill('Please perform the configured independent appeal review.');
+ await family.getByRole('button',{name:'Submit appeal'}).click();
+ await expect(family.getByText('appealed',{exact:true})).toBeVisible();
+ const appealContext=await browser.newContext(),appealPage=await appealContext.newPage();
+ await signIn(appealPage,appealReviewer.email,appealReviewer.password,'/leadership/concerns');
+ await appealPage.getByRole('link',{name:'Review'}).click();
+ await appealPage.getByLabel('Review due date').fill('2026-10-27');
+ await appealPage.getByRole('button',{name:'Acknowledge concern'}).click();
+ await appealPage.getByLabel('Public outcome').fill('Independent appeal review completed.');
+ await appealPage.getByRole('button',{name:'Confirm approve'}).click();
+ await expect(appealPage.getByText('approved',{exact:true})).toBeVisible();
+ await appealPage.evaluate(()=>scrollTo(0,0));
+ await appealPage.screenshot({path:`${evidence}/application-independent-review-${testInfo.project.name}.png`,fullPage:true});
+ await family.reload();
+ await expect(family.getByText('Independent appeal review completed.')).toBeVisible();
  expect(await family.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
- await stewardContext.close();await ordinaryContext.close();await familyContext.close();
+ await appealContext.close();await stewardContext.close();await ordinaryContext.close();await familyContext.close();
 });
 
 test('captures the approved staff-request and protected-family-complaint workflow states',async({page},testInfo)=>{

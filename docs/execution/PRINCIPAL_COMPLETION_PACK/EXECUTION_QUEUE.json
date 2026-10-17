@@ -672,12 +672,11 @@
         "D12",
         "D16"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-35.md",
       "kind": "workflow",
       "workflow": "LEA-35",
-      "completedSlice": "Protected family submission, implicated-reviewer omission, independent assigned review, information response, public outcome and withdrawal are verified.",
-      "remaining": "Explicit acknowledgement, investigation owner/review date, and independent appeal/reopen lifecycle."
+      "completedSlice": "Protected submission, conflict routing, acknowledgement with dated ownership, information response, outcome, one configured independent appeal/reopen tier, final outcome and retained immutable history are verified."
     },
     {
       "id": "WF-36",
