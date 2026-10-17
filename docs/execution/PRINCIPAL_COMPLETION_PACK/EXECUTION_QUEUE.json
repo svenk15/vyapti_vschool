@@ -263,10 +263,11 @@
       "decisions": [
         "D19"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "scope": "Source-minimized retrieval, no mutation tools, provider configuration gate, citation validator and draft lifecycle.",
       "demo": "Configured approved provider produces cited draft; injected source ignored; revoked source blocks reopen. Test-double only remains partial.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "Source-minimized retained Reporting retrieval, explicit designation, deterministic no-tool generation, citation and numeric validation, creator-only review/discard, immutable events and protected exact-key recovery are verified. Provider, region, retention policy and real-provider evaluation remain unresolved production gates."
     },
     {
       "id": "F18",
@@ -818,10 +819,11 @@
       "decisions": [
         "D19"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "definition": "workflows/LEA-45.md",
       "kind": "workflow",
-      "workflow": "LEA-45"
+      "workflow": "LEA-45",
+      "completedSlice": "The synthetic D19 journey is verified through routed Principal screens, real PostgreSQL persistence and direct desktop/mobile explorer comparison. It remains partial because the deterministic adapter is not an approved provider integration."
     },
     {
       "id": "WF-46",

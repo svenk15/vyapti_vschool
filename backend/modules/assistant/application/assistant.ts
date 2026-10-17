@@ -1,0 +1,35 @@
+import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
+import type {AssistantAvailability,AssistantCommandResult,AssistantCommandStatus,AssistantDraftDetail,AssistantDraftSummary,AssistantEvaluation,AssistantSource} from '../../../../shared/contracts/assistant';
+import {AccessError,uuidPattern} from '../../access/contracts/index';
+import type {AssistantSourcePort} from '../contracts/source';
+import {minimizedAttendanceFacts,normalizeQuestion,normalizeReviewedText} from '../domain/assistant';
+
+export interface AssistantModelPort {generate(input:Readonly<{question:string;facts:Readonly<{due:number;received:number;awaiting:number}>;citation:AssistantSource}>):Promise<Readonly<{text:string;evaluation:AssistantEvaluation;providerCode:string}>>;}
+export interface AssistantRepository {
+ availability(actor:Identity,organizationId:string,schoolId:string):Promise<Omit<AssistantAvailability,'sources'|'reason'>&Readonly<{reason:'PROVIDER_CONFIGURATION_PENDING'|'NOT_DESIGNATED'|null}>>;
+ list(actor:Identity,organizationId:string,schoolId:string):Promise<readonly AssistantDraftSummary[]>;
+ get(actor:Identity,organizationId:string,schoolId:string,id:string):Promise<AssistantDraftDetail>;
+ create(actor:Identity,organizationId:string,schoolId:string,input:Readonly<{question:string;source:AssistantSource;text:string;evaluation:AssistantEvaluation;providerCode:string;key:string}>):Promise<AssistantCommandResult>;
+ transition(actor:Identity,organizationId:string,schoolId:string,input:Readonly<{id:string;action:'REVIEW'|'DISCARD';reviewedText?:string;expectedVersion:number;key:string}>):Promise<AssistantCommandResult>;
+ status(actor:Identity,organizationId:string,schoolId:string,key:string):Promise<AssistantCommandStatus>;
+ grant(operator:OperatorPrincipal,input:Readonly<{organizationId:string;schoolId:string;accountId:string}>):Promise<Readonly<{grantId:string;version:number}>>;
+ revoke(operator:OperatorPrincipal,input:Readonly<{organizationId:string;schoolId:string;accountId:string}>):Promise<Readonly<{grantId:string;version:number}>>;
+}
+const actor=(value:Identity|null)=>{if(!value||!uuidPattern.test(value.accountId)||!Number.isSafeInteger(value.tokenVersion))throw new AccessError('UNAUTHENTICATED');return value;};
+const id=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value;};
+const version=(value:unknown)=>{if(!Number.isSafeInteger(value)||Number(value)<1)throw new AccessError('VALIDATION');return Number(value);};
+
+export function createAssistantUseCases(source:AssistantSourcePort,model:AssistantModelPort,repository:AssistantRepository){
+ const ensureSource=async(current:Identity,organizationId:string,schoolId:string,sourceId:string,expectedVersion?:number)=>{const value=await source.get(current,organizationId,schoolId,sourceId);if(expectedVersion!==undefined&&value.sourceVersion!==expectedVersion)throw new AccessError('STALE_VERSION');minimizedAttendanceFacts(value.counts);return value;};
+ return {
+  async availability(actorValue:Identity|null,organizationValue:unknown,schoolValue:unknown){const current=actor(actorValue),organizationId=id(organizationValue),schoolId=id(schoolValue),availability=await repository.availability(current,organizationId,schoolId);if(!availability.canGenerate)return {...availability,sources:[]} as AssistantAvailability;const sources=await source.list(current,organizationId,schoolId);return {...availability,reason:sources.length?null:'NO_AUTHORIZED_SOURCES',sources} as AssistantAvailability;},
+  list(actorValue:Identity|null,organizationValue:unknown,schoolValue:unknown){return repository.list(actor(actorValue),id(organizationValue),id(schoolValue));},
+  async get(actorValue:Identity|null,organizationValue:unknown,schoolValue:unknown,draftId:unknown){const current=actor(actorValue),organizationId=id(organizationValue),schoolId=id(schoolValue),draft=await repository.get(current,organizationId,schoolId,id(draftId));await ensureSource(current,organizationId,schoolId,draft.source.sourceId,draft.source.sourceVersion);return draft;},
+  async generate(actorValue:Identity|null,organizationValue:unknown,schoolValue:unknown,input:{question:unknown;sourceId:unknown;expectedSourceVersion:unknown;key:unknown}){const current=actor(actorValue),organizationId=id(organizationValue),schoolId=id(schoolValue),sourceId=id(input.sourceId),expectedSourceVersion=version(input.expectedSourceVersion),question=normalizeQuestion(input.question),key=id(input.key),selected=await ensureSource(current,organizationId,schoolId,sourceId,expectedSourceVersion),generated=await model.generate({question,facts:selected.counts,citation:selected}),result=await repository.create(current,organizationId,schoolId,{question,source:selected,text:generated.text,evaluation:generated.evaluation,providerCode:generated.providerCode,key});await ensureSource(current,organizationId,schoolId,sourceId,expectedSourceVersion);return result;},
+  async transition(actorValue:Identity|null,organizationValue:unknown,schoolValue:unknown,draftId:unknown,input:{action:unknown;reviewedText?:unknown;expectedVersion:unknown;key:unknown}){const current=actor(actorValue),organizationId=id(organizationValue),schoolId=id(schoolValue),draft=await repository.get(current,organizationId,schoolId,id(draftId)),selected=await ensureSource(current,organizationId,schoolId,draft.source.sourceId,draft.source.sourceVersion);if(input.action!=='REVIEW'&&input.action!=='DISCARD')throw new AccessError('VALIDATION');const reviewedText=input.action==='REVIEW'?normalizeReviewedText(input.reviewedText,[selected.counts.due,selected.counts.received,selected.counts.awaiting,1]):undefined,result=await repository.transition(current,organizationId,schoolId,{id:draft.id,action:input.action,reviewedText,expectedVersion:version(input.expectedVersion),key:id(input.key)});await ensureSource(current,organizationId,schoolId,draft.source.sourceId,draft.source.sourceVersion);return result;},
+  async status(actorValue:Identity|null,organizationValue:unknown,schoolValue:unknown,keyValue:unknown){const current=actor(actorValue),organizationId=id(organizationValue),schoolId=id(schoolValue),result=await repository.status(current,organizationId,schoolId,id(keyValue));if(result.state==='FOUND'){const draft=await repository.get(current,organizationId,schoolId,result.result.draftId);await ensureSource(current,organizationId,schoolId,draft.source.sourceId,draft.source.sourceVersion);}return result;},
+  grant(operator:OperatorPrincipal,input:{organizationId:unknown;schoolId:unknown;accountId:unknown}){return repository.grant(operator,{organizationId:id(input.organizationId),schoolId:id(input.schoolId),accountId:id(input.accountId)});},
+  revoke(operator:OperatorPrincipal,input:{organizationId:unknown;schoolId:unknown;accountId:unknown}){return repository.revoke(operator,{organizationId:id(input.organizationId),schoolId:id(input.schoolId),accountId:id(input.accountId)});},
+ };
+}
+export type AssistantFacade=ReturnType<typeof createAssistantUseCases>;

@@ -1,0 +1,11 @@
+export type AssistantDraftState='GENERATED'|'HUMAN_REVIEWED'|'DISCARDED';
+export type AssistantAvailabilityReason='PROVIDER_CONFIGURATION_PENDING'|'NOT_DESIGNATED'|'NO_AUTHORIZED_SOURCES'|null;
+export type AssistantSource=Readonly<{id:string;label:string;reportType:'attendance-register-coverage.v1';definitionVersion:string;sourceVersion:number;sourceAsOf:string;schoolDate:string;counts:Readonly<{due:number;received:number;awaiting:number}>}>;
+export type AssistantAvailability=Readonly<{enabled:boolean;syntheticOnly:boolean;canGenerate:boolean;reason:AssistantAvailabilityReason;sources:readonly AssistantSource[]}>;
+export type AssistantCitation=Readonly<{sourceId:string;sourceVersion:number;label:string;sourceAsOf:string}>;
+export type AssistantEvaluation=Readonly<{citationsValid:boolean;numbersValid:boolean;sourceMinimized:boolean;providerSynthetic:boolean;warnings:readonly string[]}>;
+export type AssistantDraftSummary=Readonly<{id:string;question:string;state:AssistantDraftState;version:number;source:AssistantCitation;updatedAt:string}>;
+export type AssistantDraftEvent=Readonly<{number:number;type:'REQUESTED'|'GENERATED'|'HUMAN_REVIEWED'|'DISCARDED';draftVersion:number;occurredAt:string}>;
+export type AssistantDraftDetail=AssistantDraftSummary&Readonly<{generatedText:string;reviewedText:string|null;citations:readonly AssistantCitation[];evaluation:AssistantEvaluation;providerCode:string;history:readonly AssistantDraftEvent[];canReview:boolean;canDiscard:boolean}>;
+export type AssistantCommandResult=Readonly<{draftId:string;state:AssistantDraftState;version:number;replayed:boolean}>;
+export type AssistantCommandStatus=Readonly<{state:'FOUND';result:AssistantCommandResult}|{state:'UNKNOWN'}>;

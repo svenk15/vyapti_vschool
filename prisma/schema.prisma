@@ -3810,3 +3810,82 @@ model FinanceExceptionEvent {
   @@index([organizationId, schoolId, exceptionId, occurredAt, id], map: "vs_finance_exception_event_history_idx")
   @@map("vs_finance_exception_event")
 }
+
+model AssistantCapabilityGrant {
+  id                  String    @id(map: "vs_assistant_capability_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  capability          String    @db.VarChar(20)
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, accountId, capability], map: "vs_assistant_capability_grant_scope_key")
+  @@index([organizationId, schoolId, accountId, capability, revokedAt], map: "vs_assistant_capability_grant_active_idx")
+  @@map("vs_assistant_capability_grant")
+}
+
+model AssistantDraft {
+  id                    String    @id(map: "vs_assistant_draft_pkey") @db.Uuid
+  organizationId        String    @map("organization_id") @db.Uuid
+  schoolId              String    @map("school_id") @db.Uuid
+  createdByAccountId    String    @map("created_by_account_id") @db.Uuid
+  sourceSnapshotId      String    @map("source_snapshot_id") @db.Uuid
+  sourceVersion         Int       @map("source_version")
+  sourceDefinition      String    @map("source_definition") @db.VarChar(80)
+  sourceAsOf            DateTime  @map("source_as_of") @db.Timestamptz(3)
+  question              String    @db.VarChar(500)
+  generatedText         String    @map("generated_text") @db.VarChar(4000)
+  reviewedText          String?   @map("reviewed_text") @db.VarChar(4000)
+  citations             Json
+  evaluation            Json
+  providerCode          String    @map("provider_code") @db.VarChar(40)
+  state                 String    @db.VarChar(20)
+  version               Int
+  createdAt             DateTime  @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime  @map("updated_at") @db.Timestamptz(3)
+  reviewedAt            DateTime? @map("reviewed_at") @db.Timestamptz(3)
+  discardedAt           DateTime? @map("discarded_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assistant_draft_scope_id_key")
+  @@index([organizationId, schoolId, createdByAccountId, updatedAt(sort: Desc), id(sort: Desc)], map: "vs_assistant_draft_creator_idx")
+  @@index([organizationId, schoolId, sourceSnapshotId], map: "vs_assistant_draft_source_idx")
+  @@map("vs_assistant_draft")
+}
+
+model AssistantDraftEvent {
+  id             String   @id(map: "vs_assistant_draft_event_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  draftId        String   @map("draft_id") @db.Uuid
+  number         Int
+  type           String   @db.VarChar(20)
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  draftVersion   Int      @map("draft_version")
+  evidence       Json
+  occurredAt     DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, draftId, number], map: "vs_assistant_draft_event_number_key")
+  @@index([organizationId, schoolId, draftId, occurredAt, id], map: "vs_assistant_draft_event_history_idx")
+  @@map("vs_assistant_draft_event")
+}
+
+model AssistantCommandReceipt {
+  id             String   @id(map: "vs_assistant_command_receipt_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  command        String   @db.VarChar(32)
+  idempotencyKey String   @map("idempotency_key") @db.Uuid
+  inputHash      String   @map("input_hash") @db.Char(64)
+  draftId        String   @map("draft_id") @db.Uuid
+  result         Json
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, actorAccountId, idempotencyKey], map: "vs_assistant_command_receipt_intent_key")
+  @@index([organizationId, schoolId, draftId, createdAt], map: "vs_assistant_command_receipt_draft_idx")
+  @@map("vs_assistant_command_receipt")
+}

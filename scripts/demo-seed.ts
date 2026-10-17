@@ -42,6 +42,7 @@ const demos = [
   { name: "F14 restricted specialist support", script: "scripts/demo-support.ts", required: true },
   { name: "F16 Facilities service incident", script: "scripts/demo-facilities.ts", required: true },
   { name: "F15 synthetic Finance reconciliation and exception", script: "scripts/demo-finance.ts", required: true },
+  { name: "F17 source-linked reviewed Assistant", script: "scripts/demo-assistant.ts", required: true },
 ] as const;
 
 function prepareImportSample(): void {
@@ -137,6 +138,7 @@ function main(): void {
   console.log("- artifacts/meetings-01/private-demo.json");
   console.log("- artifacts/support-01/private-demo.json");
   console.log("- artifacts/facilities-01/private-demo.json");
+  console.log("- artifacts/assistant-01/private-demo.json");
   console.log("- artifacts/students-portal/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");

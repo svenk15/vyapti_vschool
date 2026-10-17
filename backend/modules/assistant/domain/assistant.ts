@@ -1,0 +1,9 @@
+import {AccessError} from '../../access/contracts/index';
+
+export const assistantStates=['GENERATED','HUMAN_REVIEWED','DISCARDED'] as const;
+const unsafe=/\b(password|passcode|token|secret|api[ -]?key|card number|cvv)\b/i;
+export function normalizeQuestion(value:unknown){if(typeof value!=='string')throw new AccessError('VALIDATION');const result=value.trim().replace(/\s+/g,' ');if(result.length<10||result.length>500||unsafe.test(result))throw new AccessError('VALIDATION');return result;}
+export function normalizeReviewedText(value:unknown,allowedNumbers:readonly number[]){if(typeof value!=='string')throw new AccessError('VALIDATION');const result=value.trim();if(result.length<20||result.length>4000||unsafe.test(result))throw new AccessError('VALIDATION');const allowed=new Set(allowedNumbers.map(String));for(const match of result.matchAll(/(?<![A-Za-z])\d+(?![A-Za-z])/g)){if(!allowed.has(match[0]))throw new AccessError('VALIDATION');}return result;}
+export function minimizedAttendanceFacts(input:{due:number;received:number;awaiting:number}){for(const value of Object.values(input))if(!Number.isSafeInteger(value)||value<0)throw new AccessError('VALIDATION');if(input.received+input.awaiting!==input.due)throw new AccessError('VALIDATION');return Object.freeze({...input});}
+export function deterministicDraft(facts:{due:number;received:number;awaiting:number}){return `The retained attendance snapshot records ${facts.received} received registers from ${facts.due} expected registers. ${facts.awaiting} register remains awaiting submission. [1] This is a factual aggregate only; it does not explain causes or authorize an operational action.`;}
+export function validateNumbers(text:string,facts:{due:number;received:number;awaiting:number}){const allowed=new Set([facts.due,facts.received,facts.awaiting,1].map(String));return [...text.matchAll(/(?<![A-Za-z])\d+(?![A-Za-z])/g)].every(match=>allowed.has(match[0]));}
