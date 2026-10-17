@@ -854,6 +854,106 @@ model ReportingComparisonGrant {
  @@map("vs_reporting_comparison_grant")
 }
 
+model ReportingBriefGrant {
+ id String @id(map:"vs_reporting_brief_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ capability String @db.VarChar(20)
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,accountId,capability],map:"vs_reporting_brief_grant_scope_capability_key")
+ @@index([organizationId,accountId,capability,revokedAt],map:"vs_reporting_brief_grant_active_idx")
+ @@map("vs_reporting_brief_grant")
+}
+
+model ReportingBrief {
+ id String @id(map:"vs_reporting_brief_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ anchorSchoolId String @map("anchor_school_id") @db.Uuid
+ createdByAccountId String @map("created_by_account_id") @db.Uuid
+ state String @db.VarChar(20)
+ currentRevisionNumber Int @map("current_revision_number")
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ finalizedAt DateTime? @map("finalized_at") @db.Timestamptz(3)
+ sharedAt DateTime? @map("shared_at") @db.Timestamptz(3)
+ withdrawnAt DateTime? @map("withdrawn_at") @db.Timestamptz(3)
+ withdrawnByAccountId String? @map("withdrawn_by_account_id") @db.Uuid
+ withdrawalReason String? @map("withdrawal_reason") @db.VarChar(500)
+ @@unique([organizationId,id],map:"vs_reporting_brief_scope_id_key")
+ @@index([organizationId,createdByAccountId,createdAt(sort:Desc),id(sort:Desc)],map:"vs_reporting_brief_author_idx")
+ @@index([organizationId,state,createdAt(sort:Desc),id(sort:Desc)],map:"vs_reporting_brief_list_idx")
+ @@map("vs_reporting_brief")
+}
+
+model ReportingBriefRevision {
+ id String @id(map:"vs_reporting_brief_revision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ briefId String @map("brief_id") @db.Uuid
+ number Int
+ state String @db.VarChar(20)
+ title String @db.VarChar(160)
+ purpose String @db.VarChar(200)
+ interpretation String @db.VarChar(4000)
+ nextActions String? @map("next_actions") @db.VarChar(2000)
+ createdByAccountId String @map("created_by_account_id") @db.Uuid
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ finalizedAt DateTime? @map("finalized_at") @db.Timestamptz(3)
+ inputHash String @map("input_hash") @db.Char(64)
+ @@unique([organizationId,briefId,number],map:"vs_reporting_brief_revision_number_key")
+ @@unique([organizationId,briefId,id],map:"vs_reporting_brief_revision_scope_id_key")
+ @@index([organizationId,briefId,number(sort:Desc)],map:"vs_reporting_brief_revision_lookup_idx")
+ @@map("vs_reporting_brief_revision")
+}
+
+model ReportingBriefSection {
+ id String @id(map:"vs_reporting_brief_section_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ briefId String @map("brief_id") @db.Uuid
+ revisionId String @map("revision_id") @db.Uuid
+ position Int
+ schoolId String @map("school_id") @db.Uuid
+ snapshotId String @map("snapshot_id") @db.Uuid
+ metric String @db.VarChar(80)
+ @@unique([revisionId,position],map:"vs_reporting_brief_section_position_key")
+ @@unique([revisionId,snapshotId],map:"vs_reporting_brief_section_snapshot_key")
+ @@index([organizationId,briefId,revisionId],map:"vs_reporting_brief_section_revision_idx")
+ @@map("vs_reporting_brief_section")
+}
+
+model ReportingBriefRecipient {
+ id String @id(map:"vs_reporting_brief_recipient_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ briefId String @map("brief_id") @db.Uuid
+ revisionId String @map("revision_id") @db.Uuid
+ position Int
+ accountId String @map("account_id") @db.Uuid
+ sharedAt DateTime? @map("shared_at") @db.Timestamptz(3)
+ firstReadAt DateTime? @map("first_read_at") @db.Timestamptz(3)
+ @@unique([revisionId,position],map:"vs_reporting_brief_recipient_position_key")
+ @@unique([revisionId,accountId],map:"vs_reporting_brief_recipient_account_key")
+ @@index([organizationId,accountId,sharedAt,briefId],map:"vs_reporting_brief_recipient_inbox_idx")
+ @@map("vs_reporting_brief_recipient")
+}
+
+model ReportingBriefReceipt {
+ id String @id(map:"vs_reporting_brief_receipt_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ command String @db.VarChar(32)
+ idempotencyKey String @map("idempotency_key") @db.VarChar(100)
+ inputHash String @map("input_hash") @db.Char(64)
+ briefId String @map("brief_id") @db.Uuid
+ revisionNumber Int @map("revision_number")
+ result Json
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ @@unique([organizationId,actorAccountId,command,idempotencyKey],map:"vs_reporting_brief_receipt_intent_key")
+ @@index([organizationId,briefId,createdAt,id],map:"vs_reporting_brief_receipt_brief_idx")
+ @@map("vs_reporting_brief_receipt")
+}
+
 model CoordinationCapabilityGrant {
  id String @id(map:"vs_coordination_capability_grant_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid

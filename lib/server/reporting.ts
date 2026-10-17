@@ -2,7 +2,7 @@ import 'server-only';
 import {createReportingServices} from '../../backend/composition/reporting';
 import type {AttendanceReportInput} from '../../backend/modules/reporting/application/attendance-report';
 import type {Identity} from '../../shared/contracts/access';
-import type {LeadershipAttendanceExportInput,LeadershipBranchComparisonInput,LeadershipLearningExportInput} from '../../shared/contracts/reporting';
+import type {LeadershipAttendanceExportInput,LeadershipBranchComparisonInput,LeadershipBriefDraftInput,LeadershipLearningExportInput} from '../../shared/contracts/reporting';
 import {accountGateway,leadershipGateway} from './access';
 import {reportingRuntimeConfiguration} from './reporting-runtime-configuration';
 const reporting=createReportingServices(reportingRuntimeConfiguration());
@@ -23,4 +23,11 @@ export const reportingGateway={
  removeLeadershipSnapshot:async(identity:Identity|null,input:{id:string;expectedVersion:number;key:string;confirmed:true})=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.removeSnapshot(identity,scope.organizationId,scope.schoolId,input);},
  leadershipComparisonAvailability:async(identity:Identity|null)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.leadershipComparisonAvailability(identity,scope.organizationId,scope.schoolId);},
  compareLeadershipBranches:async(identity:Identity|null,input:LeadershipBranchComparisonInput)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.compareLeadershipBranches(identity,scope.organizationId,scope.schoolId,input);},
+ leadershipBriefAvailability:async(identity:Identity|null)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.briefAvailability(identity,scope.organizationId,scope.schoolId);},
+ getLeadershipBrief:async(identity:Identity|null,id:string)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.getBrief(identity,scope.organizationId,scope.schoolId,id);},
+ createLeadershipBrief:async(identity:Identity|null,input:LeadershipBriefDraftInput)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.createBrief(identity,scope.organizationId,scope.schoolId,input);},
+ reviseLeadershipBrief:async(identity:Identity|null,id:string,expectedVersion:number,input:LeadershipBriefDraftInput)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.reviseBrief(identity,scope.organizationId,scope.schoolId,id,expectedVersion,input);},
+ finalizeLeadershipBrief:async(identity:Identity|null,id:string,input:{expectedVersion:number;key:string})=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.finalizeBrief(identity,scope.organizationId,scope.schoolId,id,input);},
+ shareLeadershipBrief:async(identity:Identity|null,id:string,input:{expectedVersion:number;key:string})=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.shareBrief(identity,scope.organizationId,scope.schoolId,id,input);},
+ withdrawLeadershipBrief:async(identity:Identity|null,id:string,input:{expectedVersion:number;reason:string;key:string})=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.withdrawBrief(identity,scope.organizationId,scope.schoolId,id,input);},
 };

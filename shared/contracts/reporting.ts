@@ -24,6 +24,16 @@ export type LeadershipBranchComparison=Readonly<{
  combined:Readonly<{includedBranchCount:number;numerator:number;denominator:number;value:number|null}>;
  limitations:readonly string[];
 }>;
+export type LeadershipBriefCapability='GENERATE'|'SHARE';
+export type LeadershipBriefState='DRAFT'|'FINALIZED'|'WITHDRAWN';
+export type LeadershipBriefSourceOption=Readonly<{snapshotId:string;schoolId:string;branchName:string;schoolDate:string;definitionVersion:string;sourceAsOf:string;counts:Readonly<{due:number;received:number;awaiting:number}>}>;
+export type LeadershipBriefRecipientOption=Readonly<{accountId:string;label:string}>;
+export type LeadershipBriefAvailability=Readonly<{enabled:boolean;canGenerate:boolean;canShare:boolean;reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null;sources:readonly LeadershipBriefSourceOption[];recipients:readonly LeadershipBriefRecipientOption[]}>;
+export type LeadershipBriefDraftInput=Readonly<{title:string;purpose:string;interpretation:string;nextActions?:string;snapshotIds:readonly string[];recipientAccountIds:readonly string[];key:string}>;
+export type LeadershipBriefCommandResult=Readonly<{briefId:string;revisionNumber:number;state:LeadershipBriefState;version:number;replayed:boolean}>;
+export type LeadershipBriefSection=LeadershipBriefSourceOption&Readonly<{position:number;limitations:readonly string[]}>;
+export type LeadershipBriefRecipient=LeadershipBriefRecipientOption&Readonly<{position:number;sharedAt:string|null;firstReadAt:string|null}>;
+export type LeadershipBriefDetail=Readonly<{briefId:string;organizationId:string;anchorSchoolId:string;state:LeadershipBriefState;version:number;revisionNumber:number;title:string;purpose:string;interpretation:string;nextActions:string|null;createdAt:string;finalizedAt:string|null;sharedAt:string|null;withdrawnAt:string|null;sections:readonly LeadershipBriefSection[];recipients:readonly LeadershipBriefRecipient[];canFinalize:boolean;canShare:boolean;canWithdraw:boolean;isRecipient:boolean}>;
 
 export type SchoolReadinessItemId='school'|'academics'|'staff'|'students'|'attendance';
 export type SetupResponsibleRole='SCHOOL_ADMIN'|'INSTITUTION_ADMIN'|'ASSIGNED_TEACHER';

@@ -1,7 +1,7 @@
 # LEA-41 — Prepare a leadership review brief
 
 ## Identity and readiness
-- Baseline: NOT_STARTED; human review PENDING.
+- Current status: ENGINEERING_COMPLETE for the D06 synthetic-only portal brief; human review PENDING. Real-data retention/disclosure and production gates remain open.
 - Owner: Reporting. This names responsibility, not proof that an owner module exists.
 - Product decisions: D06. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F05. See execution queue.

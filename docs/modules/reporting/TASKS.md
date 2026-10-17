@@ -87,10 +87,10 @@ Engineering status: the approved LEA-06 current, unavailable and retained-last-k
 ### LEA-41 leadership brief
 
 - [x] Record the approved immutable-snapshot, separate generation/share authority, revision and all-sections live-read rules without migrating speculative tables.
-- [ ] Finalize exact brief/revision/section/recipient/receipt DDL and command contract after the LEA-40 source/grant boundary is verified.
-- [ ] Implement, verify, seed and compare the complete portal brief journey.
+- [x] Finalize exact brief/revision/section/recipient/receipt DDL and command contract after the LEA-40 source/grant boundary is verified.
+- [x] Implement, verify, seed and compare the complete portal brief journey.
 
-Engineering status: F05 is IN_PROGRESS. LEA-40 is ENGINEERING_COMPLETE with direct reference/application comparison; LEA-41 remains NOT_STARTED. Human review PENDING.
+Engineering status: F05, LEA-40 and LEA-41 are ENGINEERING_COMPLETE for approved synthetic-only scope with direct reference/application comparison. Human review PENDING. Real-data retention/disclosure, TEN-03, font portability and native accessibility remain release gates.
 
 ## Experience overlay consumption
 

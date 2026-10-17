@@ -81,7 +81,7 @@
       "decisions": [
         "D06"
       ],
-      "status": "IN_PROGRESS",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Enumerated aggregate branches, compatible metrics, brief revisions/recipients and snapshot gating.",
       "demo": "Different branch grants/calendars show qualified comparison; withdrawn recipient cannot read brief.",
       "kind": "foundation"

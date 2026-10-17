@@ -2,6 +2,18 @@
 
 Last updated: 2026-10-17.
 
+## F05 / LEA-41 evidence-backed leadership brief — 17 October 2026
+
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY.
+
+Reporting now provides `/leadership/briefs/new` and retained brief detail/revision routes. Generation and portal sharing require separate operator designations. A draft saves an append-only complete revision containing bounded narrative, 1–20 immutable whole-branch Attendance snapshot pointers and 1–20 explicit account recipients. Finalize, share and withdraw use current version plus exact command key; finalized source/audience content is immutable. Sharing rechecks the author and every recipient as an active Principal with live comparison authority and enabled source modules. Every read rechecks all source rights and fails the whole brief closed after source removal, recipient revocation or withdrawal. Portal share and first read are separate recorded facts and are never described as acknowledgement.
+
+Forward migration `20261017233000_reporting_leadership_briefs` adds six registered Path A institution tables: capability grant, root, append-only revision, source section, explicit recipient and exact-command receipt. Development and test both retain 85 forward migrations. Neither database was reset and no applied migration changed. The guarded Principal seed now creates, finalizes and self-shares one deterministic fictional brief through owner commands; two consecutive focused runs replayed without duplicate revisions or receipts. Private IDs and credentials remain ignored in `artifacts/leadership-01/private-demo.json`.
+
+Focused evidence: application validation unit 2/2; real-PostgreSQL lifecycle 1/1; one-worker Playwright 2/2 desktop and 2/2 mobile. PostgreSQL covers no implicit capability, whole-branch filtering, append-only revision, exact replay/conflict, stale version, separate share authority, first-read evidence, comparison-grant revocation and withdrawn-link denial. The browser journey covers retained in-flow edits, committed-response recovery with the same payload/key, finalize, share and recipient read. Desktop/mobile reference and application captures were directly inspected. The approved LEA-41 source is a workflow-explorer dialog; production uses recipe W for composition and the shared Principal shell. The measured mobile lifecycle/recipient overflow found during verification was corrected. See [evidence](../../evidence/principal-f05-leadership-brief-2026-10-17/README.md).
+
+F05 is complete for the approved fictional local/test scope. Real-data retention/backup deletion and disclosure policy, TEN-03, exact font portability, native VoiceOver/NVDA, actual browser 200% zoom and human review remain pending.
+
 ## F05 / LEA-40 bounded branch comparison — 17 October 2026
 
 Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. Implementation checkpoint `0929ad8`; production build `6IdNEhQunU6fmFKvJvngh`.
@@ -12,7 +24,7 @@ Forward migration `20261017230000_reporting_branch_comparison` adds registered P
 
 Focused evidence: branch-comparison unit 3/3; real-PostgreSQL functional 1/1; sequential one-worker Playwright 2/2 desktop and 2/2 mobile. The coherent repository gate passed lint, TypeScript, documentation, 128-table database design, boundaries, portable backend and 205/205 unit tests. The final production build passed with build ID `6IdNEhQunU6fmFKvJvngh`; isolated Playwright build `QYMWNv7odp-WM3fgzxFAE` served the focused journeys. PostgreSQL covers no automatic grant, explicit enumeration, foreign-organization denial, subgroup exclusion, weighted totals, revocation without residue, target-module disablement and current Principal reauthorization. The browser evidence covers the routed production comparison and the immutable LEA-40 workflow reference at 1440×1000 and 390×844. Direct inspection confirmed the approved select → qualify → compare sequence, visible limitations/cutoffs, mobile labelled records and no operational drill-down. The reference remains a workflow-explorer dialog; production uses recipe L, so composition differences are explicit. See [evidence](../../evidence/principal-f05-branch-comparison-2026-10-17/README.md).
 
-LEA-41 leadership brief remains the unfinished half of F05. Human review, font portability, native VoiceOver/NVDA, actual browser 200% zoom, TEN-03, real-data retention/backup deletion and production disclosure policy remain pending.
+LEA-41 is recorded above as the completed synthetic-only second half of F05. Human review, font portability, native VoiceOver/NVDA, actual browser 200% zoom, TEN-03, real-data retention/backup deletion and production disclosure policy remain pending.
 
 ## LEA-06 retained aggregate snapshots — 16 October 2026
 

@@ -285,9 +285,51 @@ sequenceDiagram
 
 Verification requires pure range/branch validation and weighted-total arithmetic; real PostgreSQL no-auto-grant, target enumeration, cross-institution denial, revoked-branch removal without residual totals, module denial, malformed/subgroup snapshot exclusion and `1/2 + 9/10 = 10/12`; and one-worker desktop/mobile browser comparison against LEA-40 with keyboard selection and no operational branch link. Human review, native accessibility, exact font portability, TEN-03 and production disclosure/retention remain pending.
 
-## F05 / LEA-41 — leadership brief contract (implementation follows LEA-40)
+## F05 / LEA-41 — immutable snapshot-backed leadership brief
 
-D06 authorizes an immutable snapshot-backed portal brief with `DRAFT → FINALIZED → WITHDRAWN`, bounded narrative, explicit audience and live rights to every included section. Brief generation and portal sharing are separate designations. Revisions pin Reporting snapshot IDs and their source metadata; source changes never recalculate a finalized brief. Adding a source or audience creates a new draft revision. A finalized revision is immutable. Every recipient read rechecks current access to every included branch/metric and fails closed for the whole brief; this release does not synthesize a reduced artifact. Because v1 sources contain no staff identifiers, the staff-detail-grant rule is fail-closed for any future source that declares such identifiers. Exact columns, commands, receipt scope and indexes will be finalized immediately before the LEA-41 implementation slice rather than migrated speculatively with LEA-40.
+**Design-readiness note (17 October 2026):** D06 is approved for synthetic-only implementation and LEA-40 has verified the source/grant boundary. LEA-41 v1 is a portal brief over one or more nonremoved `attendance-register-coverage.v1` snapshots. The brief never embeds raw snapshot payload, pupil/Teacher names, awaiting-register rows, private cases or operational links. It derives only the pinned snapshot's whole-branch received/due counts, definition, school-local date, source cutoff and documented limitations. Export is a separate future capability and is not implied by portal sharing.
+
+The aggregate lifecycle is `DRAFT → FINALIZED → WITHDRAWN`. A draft save always appends a complete revision; it never updates narrative, sections or audience in place. A revision contains a 1–160 character title, 1–200 character purpose, a 1–4000 character explicitly labelled human interpretation and optional 0–2000 character next-actions text, 1–20 unique source snapshots and 1–20 explicit recipient accounts. This release supports explicit account recipients only; it does not dynamically expand a role audience after review. Saving changed sources, narrative or recipients creates the next revision number and leaves prior revisions retained. Only the current draft revision can finalize. Finalization pins that exact immutable revision. Source changes never recalculate it. Finalized content cannot be revised in place; a later brief is a new aggregate.
+
+Brief generation and portal sharing are separate operator designations in one institution-scoped grant table. `GENERATE` permits draft/revise/finalize; `SHARE` permits sharing the finalized current revision and withdrawing the portal brief. Principal role, comparison authority, snapshot management and export do not imply either designation. Source selection additionally requires a current active per-target-branch comparison grant for the creator. Every explicit recipient must be an active account with an active Principal membership somewhere in the same institution and a current comparison grant for every included source branch/metric. This validation runs when saving, again when sharing and on every recipient read. A revoked account, membership, module chain, source snapshot or comparison grant denies the whole brief without leaking which section failed. No reduced artifact is synthesized.
+
+`createBrief`, `reviseBrief`, `finalizeBrief`, `shareBrief` and `withdrawBrief` use UUID intent keys. Receipts are scoped by `(organization_id,actor_account_id,command,idempotency_key)`, bind the exact canonical input hash, and store only safe result identifiers/state/version. Replay reauthorizes the current command or recipient read before returning its result. Same-key/different-input conflicts. Commands establish verified database context, lock account → Organization SHARE → current School SHARE → Brief UPDATE where applicable, recheck the current Principal context and designation, and then append owner rows plus safe Platform audit atomically. Expected root version is required after creation; stale versions return `STALE_VERSION` and require fresh review. Concurrent finalize/share/withdraw therefore has one winner.
+
+Portal sharing is explicit and distinct from receipt: share writes `shared_at` to the reviewed recipient set; first authorized open writes `first_read_at` once. These are delivery facts, not acknowledgement or completion. Withdrawal records actor/time/reason on the root, denies every subsequent content read including stale links, and retains revisions, recipients, receipts and safe audit evidence. A share cannot proceed if any recipient has lost any source right. Reading a draft/final receipt as the author requires current `GENERATE`; reading a shared brief as a recipient requires all live section rights. The creator cannot infer recipient access from a successful finalization.
+
+Physical contracts:
+
+| Table | Fields and data stored | Meaning | Keys / constraints / query support |
+|---|---|---|---|
+| `vs_reporting_brief_grant` (ReportingBriefGrant) | id uuid PK; organization_id uuid; account_id uuid; capability varchar(20); granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int | Separate operator-designated institution authority for brief GENERATE or SHARE; Principal role never creates it. | Organization and Account FKs; capability CHECK GENERATE/SHARE; CHECK version>0; UNIQUE(organization_id,account_id,capability); active lookup index |
+| `vs_reporting_brief` (ReportingBrief) | id uuid PK; organization_id uuid; anchor_school_id uuid; created_by_account_id uuid; state varchar(20); current_revision_number int; version int; created_at timestamptz(3); finalized_at/shared_at/withdrawn_at timestamptz(3) nullable; withdrawn_by_account_id uuid nullable; withdrawal_reason varchar(500) nullable | Institution brief root and optimistic-concurrency/lifecycle boundary. | Scoped anchor School and actor FKs; state/timestamp consistency CHECKs; positive revision/version; UNIQUE(organization_id,id); author/list indexes |
+| `vs_reporting_brief_revision` (ReportingBriefRevision) | id uuid PK; organization_id uuid; brief_id uuid; number int; state varchar(20); title varchar(160); purpose varchar(200); interpretation varchar(4000); next_actions varchar(2000) nullable; created_by_account_id uuid; created_at timestamptz(3); finalized_at timestamptz(3) nullable; input_hash char(64) | Append-only reviewed narrative/source/audience version; facts remain source-derived. | Scoped Brief and actor FKs; positive number; bounded nonblank text and state/finalized consistency CHECKs; UNIQUE(organization_id,brief_id,number); immutable-content trigger; revision lookup index |
+| `vs_reporting_brief_section` (ReportingBriefSection) | id uuid PK; organization_id uuid; brief_id uuid; revision_id uuid; position int; school_id uuid; snapshot_id uuid; metric varchar(80) | Ordered pointer to an immutable allowlisted Reporting snapshot; no copied raw payload. | Scoped Revision/Brief, School and Snapshot FKs; fixed metric CHECK; position 1–20; UNIQUE(revision_id,position) and UNIQUE(revision_id,snapshot_id); immutable trigger |
+| `vs_reporting_brief_recipient` (ReportingBriefRecipient) | id uuid PK; organization_id uuid; brief_id uuid; revision_id uuid; position int; account_id uuid; shared_at timestamptz(3) nullable; first_read_at timestamptz(3) nullable | Explicit reviewed portal audience and delivery/read facts. | Scoped Revision/Brief and Account FKs; position 1–20; first_read requires shared; UNIQUE(revision_id,position) and UNIQUE(revision_id,account_id); recipient inbox index; content/audience immutable trigger |
+| `vs_reporting_brief_receipt` (ReportingBriefReceipt) | id uuid PK; organization_id uuid; actor_account_id uuid; command varchar(32); idempotency_key varchar(100); input_hash char(64); brief_id uuid; revision_number int; result jsonb; created_at timestamptz(3) | Exact-command recovery metadata; result contains safe IDs/state/version only. | Organization, actor and scoped Brief FKs; command CHECK; result object and positive revision CHECKs; UNIQUE(organization_id,actor_account_id,command,idempotency_key); brief lookup index; immutable trigger |
+
+All six tables are `INSTITUTION` Path A contracts: `organization_id` is the TEN-03 scope and `anchor_school_id`/section `school_id` are authorized resources, not caller-set tenant context. No backfill occurs. Application authorization remains mandatory. Production availability stays disabled until narrative/snapshot retention, backup deletion and aggregate disclosure policy are approved.
+
+```mermaid
+sequenceDiagram
+  actor A as Author Principal
+  participant W as Brief staged route
+  participant R as Reporting brief use case
+  participant D as Reporting persistence
+  actor P as Recipient Principal
+  A->>W: Select pinned snapshots, explicit recipients and narrative
+  W->>R: Save revision with stable key
+  R->>D: Reauthorize GENERATE plus every source/recipient right; append revision
+  A->>W: Review exact revision and confirm finalize
+  R->>D: Lock root; reauthorize; finalize expected version
+  A->>W: Confirm portal share
+  R->>D: Reauthorize SHARE and every recipient/section; stamp shared recipients
+  P->>R: Open shared link
+  R->>D: Reauthorize current Principal plus every section right
+  D-->>P: Whole brief and first-read receipt, or fail closed
+```
+
+Verification: pure validation/canonical-hash and state tests; real PostgreSQL no-auto-grant, separate generate/share authority, append-only revision, exact replay/conflict, stale version, concurrent finalize/share, source removal, cross-institution denial, recipient grant/membership revocation and whole-brief fail-closed stale-link denial; one-worker desktop/mobile staged author → finalize → share → recipient open journey and direct LEA-41 comparison. Seed uses fictional Principals and existing immutable synthetic snapshots only. Human review, native accessibility, font portability, TEN-03 and production retention/disclosure remain pending.
 
 ## Migration, retention and handoff
 

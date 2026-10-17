@@ -6,7 +6,7 @@ This is a completion programme across sessions, not an eight-hour promise. Impor
 
 - F00: ENGINEERING_COMPLETE. The current matrix, owner routes and L/D/W/R production specimens are recorded in [SCREEN_MAP](SCREEN_MAP.md).
 - F01 and WF-10: ENGINEERING_COMPLETE by current equivalent COORD-02/LEA-10 evidence at `f75ad4f3e3b036132d0c72bbe6c95eceea296b1c`.
-- D02–D19: RECOMMENDED_PENDING_APPROVAL. No dependent task is eligible until the applicable D-IDs are explicitly approved or an accepted live equivalent is identified.
+- D02–D19: APPROVED_SYNTHETIC_ONLY on 17 October 2026 with no exceptions. Production/provider authority remains outside that approval.
 
 ## Scheduler rules
 A task is eligible only when (a) dependencies engineering-verified or satisfied by current equivalent evidence; (b) its D-IDs approved/existing; (c) required owner/provider configuration present for the intended scope; (d) no explicit acceptance dependency blocks it. Human visual review pending does not ordinarily block independent engineering, but no existing explicit human gate may be erased. Choose the earliest eligible task that closes a partial workflow or unlocks several tasks. Never wait for a provider if another approved independent task exists.

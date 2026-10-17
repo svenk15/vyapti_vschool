@@ -2661,6 +2661,72 @@
         "owner": "reporting",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "ReportingBriefGrant",
+      "table": "vs_reporting_brief_grant",
+      "fields": "id uuid PK; organization_id uuid; account_id uuid; capability varchar(20); granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Separate operator-designated institution authority for brief GENERATE or SHARE; Principal role never creates it.",
+      "constraints": "Organization and Account FKs; capability CHECK GENERATE/SHARE; CHECK version>0; UNIQUE(organization_id,account_id,capability); active lookup index",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id"],"intendedPolicy":"Require verified institution context plus current brief capability; WITH CHECK binds organization_id.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
+    },
+    {
+      "model": "ReportingBrief",
+      "table": "vs_reporting_brief",
+      "fields": "id uuid PK; organization_id uuid; anchor_school_id uuid; created_by_account_id uuid; state varchar(20); current_revision_number int; version int; created_at timestamptz(3); finalized_at/shared_at/withdrawn_at timestamptz(3) nullable; withdrawn_by_account_id uuid nullable; withdrawal_reason varchar(500) nullable",
+      "responsibility": "Institution brief root and optimistic-concurrency/lifecycle boundary.",
+      "constraints": "Scoped anchor School and actor FKs; state/timestamp consistency CHECKs; positive revision/version; UNIQUE(organization_id,id); author/list indexes",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id"],"intendedPolicy":"Require verified institution context plus live generation/share/recipient authority; anchor school is an authorized resource.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
+    },
+    {
+      "model": "ReportingBriefRevision",
+      "table": "vs_reporting_brief_revision",
+      "fields": "id uuid PK; organization_id uuid; brief_id uuid; number int; state varchar(20); title varchar(160); purpose varchar(200); interpretation varchar(4000); next_actions varchar(2000) nullable; created_by_account_id uuid; created_at timestamptz(3); finalized_at timestamptz(3) nullable; input_hash char(64)",
+      "responsibility": "Append-only reviewed narrative/source/audience version; facts remain source-derived.",
+      "constraints": "Scoped Brief and actor FKs; positive number; bounded nonblank text and state/finalized consistency CHECKs; UNIQUE(organization_id,brief_id,number); immutable-content trigger; revision lookup index",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id"],"intendedPolicy":"Require verified institution context and the parent brief live authority; immutable content WITH CHECK binds organization_id.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
+    },
+    {
+      "model": "ReportingBriefSection",
+      "table": "vs_reporting_brief_section",
+      "fields": "id uuid PK; organization_id uuid; brief_id uuid; revision_id uuid; position int; school_id uuid; snapshot_id uuid; metric varchar(80)",
+      "responsibility": "Ordered pointer to an immutable allowlisted Reporting snapshot; no copied raw payload.",
+      "constraints": "Scoped Revision/Brief, School and Snapshot FKs; fixed metric CHECK; position 1–20; UNIQUE(revision_id,position) and UNIQUE(revision_id,snapshot_id); immutable trigger",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id"],"intendedPolicy":"Require verified institution context plus every source branch/metric right; school_id is an enumerated resource.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
+    },
+    {
+      "model": "ReportingBriefRecipient",
+      "table": "vs_reporting_brief_recipient",
+      "fields": "id uuid PK; organization_id uuid; brief_id uuid; revision_id uuid; position int; account_id uuid; shared_at timestamptz(3) nullable; first_read_at timestamptz(3) nullable",
+      "responsibility": "Explicit reviewed portal audience and delivery/read facts.",
+      "constraints": "Scoped Revision/Brief and Account FKs; position 1–20; first_read requires shared; UNIQUE(revision_id,position) and UNIQUE(revision_id,account_id); recipient inbox index; content/audience immutable trigger",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id"],"intendedPolicy":"Require verified institution context and exact recipient or share authority; recipient content remains immutable.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
+    },
+    {
+      "model": "ReportingBriefReceipt",
+      "table": "vs_reporting_brief_receipt",
+      "fields": "id uuid PK; organization_id uuid; actor_account_id uuid; command varchar(32); idempotency_key varchar(100); input_hash char(64); brief_id uuid; revision_number int; result jsonb; created_at timestamptz(3)",
+      "responsibility": "Exact-command recovery metadata; result contains safe IDs/state/version only.",
+      "constraints": "Organization, actor and scoped Brief FKs; command CHECK; result object and positive revision CHECKs; UNIQUE(organization_id,actor_account_id,command,idempotency_key); brief lookup index; immutable trigger",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id"],"intendedPolicy":"Require verified institution context plus current command authority before protected replay disclosure.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
     }
   ],
   "rlsPlan": {

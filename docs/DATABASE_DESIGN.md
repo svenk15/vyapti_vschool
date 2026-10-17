@@ -107,6 +107,12 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | ReportingSnapshotManagerGrant | `vs_reporting_snapshot_manager_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingSnapshot | `vs_reporting_snapshot` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingComparisonGrant | `vs_reporting_comparison_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingBriefGrant | `vs_reporting_brief_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingBrief | `vs_reporting_brief` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingBriefRevision | `vs_reporting_brief_revision` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingBriefSection | `vs_reporting_brief_section` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingBriefRecipient | `vs_reporting_brief_recipient` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingBriefReceipt | `vs_reporting_brief_receipt` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | CoordinationCapabilityGrant | `vs_coordination_capability_grant` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationRequest | `vs_coordination_request` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationRequestEvent | `vs_coordination_request_event` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
