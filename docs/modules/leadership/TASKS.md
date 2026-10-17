@@ -183,3 +183,10 @@ Engineering status: ENGINEERING_COMPLETE. This documentation/evidence checkpoint
 - [x] Implement server-side Coordination predicates and expose only current owner-authorized decision summaries.
 - [x] Add recipe-L exact search, filter/sort drawers, safe URL state, filtered empty state and preserved detail navigation.
 - [x] Record current-source PostgreSQL, sequential desktop/mobile browser, build and direct-comparison evidence; then update the matrix. Human review remains PENDING.
+
+## LEA-29 — source-defined assigned decision
+
+- [x] Reconcile the approved owner-defined action contract with the existing Coordination verification adapter; do not require fictional owner modules or generic approve/reject commands.
+- [x] Reuse the verified staged evidence → consequence → final confirmation composition and owner atomic transaction.
+- [x] Confirm expected-version conflict, independent proposer/reviewer identity, exact replay, changed-payload conflict, lost-response recovery and revoked-result denial from current-source evidence.
+- [x] Preserve the direct LEA-29 reference/application comparison and record human review PENDING.
