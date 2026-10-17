@@ -1,6 +1,6 @@
 # F10 / LEA-33 exact-revision Communication review evidence
 
-Date: 17 October 2026. Tested working tree based on `80545f0`; the executable checkpoint is the commit containing this evidence. Human review is **PENDING**.
+Date: 17 October 2026. Executable checkpoint: `3a84a3a22822f97115ae9cfb87325ba6bf1e1314`. Human review is **PENDING**.
 
 ## Outcome
 

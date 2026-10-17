@@ -1,6 +1,6 @@
 # Principal production screen map
 
-F00 checkpoint: 17 October 2026. Executable application source: `f75ad4f3e3b036132d0c72bbe6c95eceea296b1c`; build ID `dzbFDU1W0dZo_wYNuvjwH`.
+Latest checkpoint: 17 October 2026. Executable application source: `3a84a3a22822f97115ae9cfb87325ba6bf1e1314`; build ID `neoUrp8NYWHGZhYlRoVU6`. F00 established the recipes; later rows record verified consumers without changing those recipe decisions.
 
 The approved Principal HTML is a workflow explorer. It remains authoritative for outcomes, stages, labels and failure semantics, while these real routes are the production compositions. Routed presentation is not recorded as a visual defect merely because the explorer uses a catalogue dialog. Shared VSchool components remain authoritative for buttons, cards, badges, focus and navigation. Human visual acceptance remains PENDING.
 
