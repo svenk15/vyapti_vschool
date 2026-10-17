@@ -37,6 +37,7 @@ const demos = [
   { name: "LEA-14 Attendance correction request and routing", script: "scripts/demo-attendance-correction-requests.ts", required: true },
   { name: "Parent and Student one-off school calendar", script: "scripts/demo-events.ts", required: true },
   { name: "Teacher Learning publication and Parent/Student views", script: "scripts/demo-learning.ts", required: true },
+  { name: "F11-A Assessments readiness", script: "scripts/demo-assessments.ts", required: true },
 ] as const;
 
 function prepareImportSample(): void {
@@ -128,6 +129,7 @@ function main(): void {
   console.log("- artifacts/attendance-correction-requests/private-demo.json");
   console.log("- artifacts/events-01/private-demo.json");
   console.log("- artifacts/learning-01/private-demo.json");
+  console.log("- artifacts/assessments-01/private-demo.json");
   console.log("- artifacts/students-portal/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");
