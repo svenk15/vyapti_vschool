@@ -1,34 +1,36 @@
 # Documents / shared file-safety task breakdown
 
-These are design-ready candidate slices, not entries in the current execution index. They remain blocked where the named product/provider decision is unresolved.
+F12 is now an active execution-queue foundation. D15 settles its synthetic baseline; production provider and retention choices remain separate release gates.
 
 ## DOC-00 — approve the safe-file baseline
 
 - [x] Reconcile canonical Documents ownership with the requested shared Files contract.
 - [x] Map exact consuming workflows and existing owner capabilities.
 - [x] Define the portable ports, proposed schema, quarantine/scan state machine, authorization boundary and verification plan.
-- [ ] Approve initial media allowlist, size/count/quota limits, production storage/provider/residency, real scanner behavior, quarantine/orphan retention and download delivery.
+- [x] Approve the synthetic media allowlist, size/count/quota limits, fail-closed real scanner behavior and same-origin download delivery through D15.
+- [ ] Select production storage/provider/residency, scanner service and quarantine/orphan retention before production enablement.
 - [ ] Approve purpose-specific retention, legal hold, deletion and backup policy before cleanup exists.
 
-Status: DESIGN_COMPLETE / PRODUCT_AND_PROVIDER_DECISIONS_PENDING.
+Status: SYNTHETIC_BASELINE_APPROVED / PRODUCTION_PROVIDER_AND_RETENTION_PENDING.
 
 ## DOC-01 — provider-independent safety foundation
 
-- [ ] Add the forward BRANCH migration and table-registry contracts after DOC-00 decisions.
-- [ ] Implement framework-free state/invariant logic, Documents facade, typed ports and Prisma adapter.
-- [ ] Prove scope, replay, concurrency, append-only scan evidence and clean-only promotion with real PostgreSQL.
-- [ ] Keep all user routes unavailable; test scanner/storage adapters are not a secure upload capability.
+- [x] Add the forward BRANCH migration and table-registry contracts.
+- [x] Implement framework-free state/invariant logic, Documents facade, typed ports and Prisma adapter.
+- [x] Prove scope, replay, append-only scan evidence, controlled rescan and clean-only promotion with real PostgreSQL.
+- [x] Keep all user routes unavailable; deterministic scanner evidence is explicitly test-only.
 
-Status: NOT_STARTED; depends on DOC-00 decisions.
+Status: ENGINEERING_COMPLETE_FOUNDATION; migration `20261018090000_documents_safe_foundation`.
 
 ## DOC-02 — guarded storage, scanner and download delivery
 
-- [ ] Implement local private storage restricted to the guarded development database.
-- [ ] Integrate one real non-production scanner adapter; scanner unavailable remains unavailable.
+- [x] Implement local private storage restricted to explicitly guarded development/test composition.
+- [x] Implement a ClamAV command adapter; absent or failed ClamAV remains `SCAN_UNAVAILABLE` and controlled rescan rechecks owner authority.
+- [ ] Configure and exercise a real non-production ClamAV engine/signature set; no current local executable is installed.
 - [ ] Implement upload/finalize recovery and current-authority same-origin download.
 - [ ] Verify malicious/mismatch/oversize/expired/revoked cases and provider metadata privacy.
 
-Status: NOT_STARTED; depends on DOC-01 and provider/scanner decisions.
+Status: PARTIAL; no user route or SAFE-file claim until the real scanner is exercised. Authenticated download remains with the first consuming-owner link.
 
 ## DOC-03 — Learning resource publication and Student read
 

@@ -2732,3 +2732,126 @@ model LearningFeedbackVersion {
   @@index([organizationId, schoolId, submissionId, publishedAt(sort: Desc), id], map: "vs_learning_feedback_version_submission_idx")
   @@map("vs_learning_feedback_version")
 }
+model DocumentsUploadSession {
+  id                String   @id(map: "vs_documents_upload_session_pkey") @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  schoolId          String   @map("school_id") @db.Uuid
+  actorAccountId    String   @map("actor_account_id") @db.Uuid
+  ownerModule       String   @map("owner_module") @db.VarChar(40)
+  ownerResourceType String   @map("owner_resource_type") @db.VarChar(80)
+  ownerResourceId   String   @map("owner_resource_id") @db.Uuid
+  purpose           String   @db.VarChar(80)
+  displayFilename   String   @map("display_filename") @db.VarChar(180)
+  declaredMediaType String   @map("declared_media_type") @db.VarChar(40)
+  expectedSize      Int      @map("expected_size")
+  expectedSha256    String   @map("expected_sha256") @db.Char(64)
+  storageKey        String   @unique(map: "vs_documents_upload_storage_key") @map("storage_key") @db.VarChar(160)
+  state             String   @db.VarChar(24)
+  version           Int
+  idempotencyKey    String   @map("idempotency_key") @db.VarChar(100)
+  inputHash         String   @map("input_hash") @db.Char(64)
+  assetId           String?  @map("asset_id") @db.Uuid
+  expiresAt         DateTime @map("expires_at") @db.Timestamptz(3)
+  createdAt         DateTime @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_documents_upload_scope_id_key")
+  @@unique([organizationId, schoolId, actorAccountId, idempotencyKey], map: "vs_documents_upload_actor_key")
+  @@index([organizationId, schoolId, ownerModule, ownerResourceType, ownerResourceId, state], map: "vs_documents_upload_owner_idx")
+  @@index([organizationId, schoolId, state, expiresAt], map: "vs_documents_upload_expiry_idx")
+  @@map("vs_documents_upload_session")
+}
+
+model DocumentsFileAsset {
+  id                  String   @id(map: "vs_documents_file_asset_pkey") @db.Uuid
+  organizationId      String   @map("organization_id") @db.Uuid
+  schoolId            String   @map("school_id") @db.Uuid
+  storageKey          String   @unique(map: "vs_documents_asset_storage_key") @map("storage_key") @db.VarChar(160)
+  byteSize            Int      @map("byte_size")
+  sha256              String   @db.Char(64)
+  detectedMediaType   String   @map("detected_media_type") @db.VarChar(40)
+  safetyState         String   @map("safety_state") @db.VarChar(24)
+  safetyVersion       Int      @map("safety_version")
+  currentScanResultId String?  @map("current_scan_result_id") @db.Uuid
+  createdAt           DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_documents_asset_scope_id_key")
+  @@index([organizationId, schoolId, sha256], map: "vs_documents_asset_hash_idx")
+  @@index([organizationId, schoolId, safetyState, createdAt], map: "vs_documents_asset_safety_idx")
+  @@map("vs_documents_file_asset")
+}
+
+model DocumentsScanResult {
+  id                 String   @id(map: "vs_documents_scan_result_pkey") @db.Uuid
+  organizationId     String   @map("organization_id") @db.Uuid
+  schoolId           String   @map("school_id") @db.Uuid
+  assetId            String   @map("asset_id") @db.Uuid
+  attemptNo          Int      @map("attempt_no")
+  assetSha256        String   @map("asset_sha256") @db.Char(64)
+  verdict            String   @db.VarChar(16)
+  engine             String   @db.VarChar(80)
+  engineVersion      String   @map("engine_version") @db.VarChar(80)
+  definitionsVersion String?  @map("definitions_version") @db.VarChar(80)
+  errorCode          String?  @map("error_code") @db.VarChar(80)
+  scannedAt          DateTime @map("scanned_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_documents_scan_scope_id_key")
+  @@unique([organizationId, schoolId, assetId, attemptNo], map: "vs_documents_scan_attempt_key")
+  @@index([organizationId, schoolId, assetId, scannedAt(sort: Desc)], map: "vs_documents_scan_asset_idx")
+  @@map("vs_documents_scan_result")
+}
+
+model DocumentsDocument {
+  id                String   @id(map: "vs_documents_document_pkey") @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  schoolId          String   @map("school_id") @db.Uuid
+  ownerModule       String   @map("owner_module") @db.VarChar(40)
+  ownerResourceType String   @map("owner_resource_type") @db.VarChar(80)
+  ownerResourceId   String   @map("owner_resource_id") @db.Uuid
+  status            String   @db.VarChar(16)
+  revision          Int
+  currentVersionId  String?  @map("current_version_id") @db.Uuid
+  createdAt         DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_documents_document_scope_id_key")
+  @@unique([organizationId, schoolId, ownerModule, ownerResourceType, ownerResourceId], map: "vs_documents_document_owner_key")
+  @@index([organizationId, schoolId, status, createdAt(sort: Desc)], map: "vs_documents_document_list_idx")
+  @@map("vs_documents_document")
+}
+
+model DocumentsDocumentVersion {
+  id              String   @id(map: "vs_documents_document_version_pkey") @db.Uuid
+  organizationId  String   @map("organization_id") @db.Uuid
+  schoolId        String   @map("school_id") @db.Uuid
+  documentId      String   @map("document_id") @db.Uuid
+  assetId         String   @map("asset_id") @db.Uuid
+  versionNo       Int      @map("version_no")
+  displayFilename String   @map("display_filename") @db.VarChar(180)
+  classification  String   @db.VarChar(40)
+  createdAt       DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_documents_version_scope_id_key")
+  @@unique([organizationId, schoolId, documentId, versionNo], map: "vs_documents_version_number_key")
+  @@index([organizationId, schoolId, classification, createdAt(sort: Desc)], map: "vs_documents_version_class_idx")
+  @@map("vs_documents_document_version")
+}
+
+model DocumentsDocumentGrant {
+  id                String    @id(map: "vs_documents_document_grant_pkey") @db.Uuid
+  organizationId    String    @map("organization_id") @db.Uuid
+  schoolId          String    @map("school_id") @db.Uuid
+  documentVersionId String    @map("document_version_id") @db.Uuid
+  ownerModule       String    @map("owner_module") @db.VarChar(40)
+  ownerResourceType String    @map("owner_resource_type") @db.VarChar(80)
+  ownerResourceId   String    @map("owner_resource_id") @db.Uuid
+  purpose           String    @db.VarChar(80)
+  status            String    @db.VarChar(16)
+  version           Int
+  createdAt         DateTime  @map("created_at") @db.Timestamptz(3)
+  revokedAt         DateTime? @map("revoked_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_documents_grant_scope_id_key")
+  @@unique([organizationId, schoolId, documentVersionId, ownerModule, ownerResourceType, ownerResourceId, purpose], map: "vs_documents_grant_owner_key")
+  @@index([organizationId, schoolId, ownerModule, ownerResourceType, ownerResourceId, status], map: "vs_documents_grant_active_idx")
+  @@map("vs_documents_document_grant")
+}

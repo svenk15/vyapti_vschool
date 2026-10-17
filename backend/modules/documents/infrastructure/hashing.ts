@@ -1,0 +1,3 @@
+import {createHash} from 'node:crypto';
+export const sha256=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
+export const canonicalHash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');

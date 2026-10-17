@@ -167,8 +167,14 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AccessLeadershipDelegationAction | `vs_access_leadership_delegation_action` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccessLeadershipDelegationReceipt | `vs_access_leadership_delegation_receipt` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
 | AccessLeadershipDelegationEvent | `vs_access_leadership_delegation_event` | access | MIGRATED | [access LLD](modules/access/DESIGN.md) |
+| DocumentsUploadSession | `vs_documents_upload_session` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
+| DocumentsFileAsset | `vs_documents_file_asset` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
+| DocumentsScanResult | `vs_documents_scan_result` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
+| DocumentsDocument | `vs_documents_document` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
+| DocumentsDocumentVersion | `vs_documents_document_version` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
+| DocumentsDocumentGrant | `vs_documents_document_grant` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
 
-No business table is migrated simply because it is listed here. Fees, exams, transport, HR/payroll, library, inventory, health, documents, analytics and AI retain Bible blueprints. Each gets a physical schema and its own DESIGN/TASKS/CURRENT_STATE pack before implementation. Reserve matching owner names such as `fees`; do not install speculative empty tables now. Fees can consume Student core through its owner contract without enabling Attendance.
+No business table is migrated simply because it is listed here. Fees, exams, transport, HR/payroll, library, inventory, health, analytics and AI retain Bible blueprints. Documents now has only its D15 synthetic safety foundation; consuming-owner links and a real configured scanner remain separate gates. Each gets a physical schema and its own DESIGN/TASKS/CURRENT_STATE pack before implementation. Reserve matching owner names such as `fees`; do not install speculative empty tables now. Fees can consume Student core through its owner contract without enabling Attendance.
 
 SA-38 installs the first bounded Admissions owner slice after its live design-readiness gate: `vs_admissions_cycle`, `vs_admissions_applicant` and `vs_admissions_application`. Their exact schema, scoped joins and Path A TEN-03 metadata are owned by `docs/modules/admissions/DESIGN.md`; no Student, Person, guardian, fee or communication table is part of that migration.
 

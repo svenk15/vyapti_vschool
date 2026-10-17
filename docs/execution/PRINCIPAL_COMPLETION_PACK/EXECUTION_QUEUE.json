@@ -185,10 +185,11 @@
       "decisions": [
         "D15"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "scope": "Follow DOC-00/01/02 etc canonical tasks: metadata/quarantine, private adapter, real scanning, conditional owner links, authenticated serving and deletion policy.",
       "demo": "Safe file serves; EICAR-style safe test fixture per scanner docs quarantined; scanner failure blocks download; no real personal files.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "DOC-01 schema/domain/ports/Prisma persistence and guarded local storage are verified; ClamAV adapter fails closed and supports controlled rescan. Real scanner execution, owner linking and authenticated serving remain."
     },
     {
       "id": "F13",
@@ -704,7 +705,7 @@
     },
     {
       "id": "WF-38",
-      "title": "Follow the school\u2019s urgent safety escalation procedure",
+      "title": "Follow the school’s urgent safety escalation procedure",
       "dependsOn": [
         "F14"
       ],

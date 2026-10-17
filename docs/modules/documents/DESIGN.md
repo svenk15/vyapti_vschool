@@ -1,6 +1,8 @@
 # Documents / shared file-safety owner design
 
-Status: **DESIGN_READY_PENDING_PRODUCT_AND_PROVIDER_DECISIONS**. No upload, scan, storage, download or deletion capability is implemented by this document.
+Status: **D15 SYNTHETIC BASELINE APPROVED / DOC-01 IMPLEMENTED / REAL SCANNER CONFIGURATION PENDING**.
+
+The user's 17 October 2026 session approval adopts D15 for synthetic-only implementation. The initial PDF/JPEG/PNG allowlist, 10 MiB per file, five attachments per owner action, configurable 100 MiB synthetic branch quota, private local development storage, fail-closed real scanning, and same-origin authenticated streaming are therefore settled for this programme. Production provider, region, encryption/KMS, scanner service, retention, deletion and production quota remain deliberately unselected. No real-client file or production enablement is authorized.
 
 The current programme calls this the “Files owner”. The approved SA-44 contract names the authoritative owner **Documents** and states that Documents owns `FileAsset`, `ScanResult`, `DocumentVersion` and its grant while a consuming owner references the immutable approved version. This package therefore uses the canonical module name `documents`; creating a competing generic `files` owner would contradict the approved source.
 
@@ -31,9 +33,9 @@ The following rules come directly from the approved SA-44 and Student/Parent ref
 - Student resources default to no new download after current enrollment ends unless a separately approved historical-access rule applies.
 - Audit excludes file contents. Cross-child, cross-branch and revoked access must fail without revealing object existence.
 
-## Decisions still required
+## Approved synthetic baseline and production decisions still required
 
-These are proposals, not accepted policy:
+The recommended first-slice values in the first, second, fourth and sixth rows are accepted for synthetic-only implementation by D15. Provider and production-policy choices remain pending:
 
 | Decision | Recommended first slice | Alternatives / consequence |
 |---|---|---|
@@ -46,7 +48,18 @@ These are proposals, not accepted policy:
 | Quarantine/orphan expiry | Upload sessions expire after 24 hours; unlinked quarantined assets become cleanup candidates after seven days | These periods are retention decisions and must be approved before a deletion worker exists |
 | Retention and deletion | Policy by document purpose/classification, with legal hold and immutable evidence separated from deletable bytes | A single global duration is unsafe; backup expiry and provider deletion guarantees must be approved |
 
-Until these decisions are accepted, the module may be unit-designed but no user-facing upload can be called secure or complete.
+Until a real scanner is configured and exercised, no user-facing upload can be called secure or complete.
+
+## Installed physical schema (DOC-01)
+
+| Physical table (logical model) | Exact physical columns | Purpose | Constraints / indexes |
+|---|---|---|---|
+| `vs_documents_upload_session` (DocumentsUploadSession) | id uuid PK; organization_id/school_id/actor_account_id/owner_resource_id/asset_id uuid; owner_module/resource_type/purpose/filename/media/state/key/hash text; expected_size/version int; expires/created/updated timestamptz | Actor and owner-bound quarantine intent with exact replay metadata. | Scoped School/actor/asset FKs; media/size/hash/state/version CHECKs; scoped id, actor/key and storage uniqueness; owner and expiry indexes |
+| `vs_documents_file_asset` (DocumentsFileAsset) | id uuid PK; organization_id/school_id/current_scan_result_id uuid; storage_key/media/state/hash text; byte_size/safety_version int; created_at timestamptz | Immutable private-object metadata and current fail-closed safety pointer. | Scoped School/current-scan FKs; media/size/hash/state/version CHECKs; scoped id and storage uniqueness; hash and safety indexes |
+| `vs_documents_scan_result` (DocumentsScanResult) | id uuid PK; organization_id/school_id/asset_id uuid; attempt_no int; hash/verdict/engine/version/definitions/error text; scanned_at timestamptz | Append-only evidence for an exact asset hash and scanner definition. | Scoped Asset FK; verdict/attempt CHECKs; scoped id and asset/attempt uniqueness; asset/time index; append-only trigger |
+| `vs_documents_document` (DocumentsDocument) | id uuid PK; organization_id/school_id/owner_resource_id/current_version_id uuid; owner_module/resource_type/status text; revision int; created_at timestamptz | Logical consuming-owner resource and immutable-version pointer. | Scoped School/current-version FKs; status/revision CHECKs; scoped id and owner-resource uniqueness; status/time index |
+| `vs_documents_document_version` (DocumentsDocumentVersion) | id uuid PK; organization_id/school_id/document_id/asset_id uuid; version_no int; filename/classification text; created_at timestamptz | Immutable clean asset plus display/classification metadata. | Scoped Document/Asset FKs; positive version CHECK; scoped id and document/version uniqueness; classification index; append-only trigger |
+| `vs_documents_document_grant` (DocumentsDocumentGrant) | id uuid PK; organization_id/school_id/document_version_id/owner_resource_id uuid; owner_module/resource_type/purpose/status text; version int; created_at/revoked_at timestamptz | Revocable purpose link; current consuming-owner authorization is still required. | Scoped Version FK; status/version/revocation CHECKs; scoped id and version-owner-purpose uniqueness; active owner index |
 
 ## Domain model and invariants
 
