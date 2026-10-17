@@ -187,11 +187,11 @@
       "decisions": [
         "D15"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Follow DOC-00/01/02 etc canonical tasks: metadata/quarantine, private adapter, real scanning, conditional owner links, authenticated serving and deletion policy.",
       "demo": "Safe file serves; EICAR-style safe test fixture per scanner docs quarantined; scanner failure blocks download; no real personal files.",
       "kind": "foundation",
-      "completedSlice": "DOC-01 schema/domain/ports/Prisma persistence and guarded local storage are verified; the ClamAV adapter fails closed and supports controlled rescan. Provider-independent promotion/grant/serving, Communication owner linking, real scanner execution and completed browser verification remain distinct gaps."
+      "completedSlice": "DOC-02A and COM-05 are verified for synthetic use: guarded local private storage, real ClamAV clean/EICAR evidence, immutable promotion, exact replay receipts, revocable owner grants, Communication attachment digests, current-authority/current-safety same-origin delivery and desktop/mobile owner journeys. Production provider, retention/deletion, backup and scanner-service review remain release gates."
     },
     {
       "id": "F13",
@@ -263,7 +263,7 @@
       "decisions": [
         "D19"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Source-minimized retrieval, no mutation tools, provider configuration gate, citation validator and draft lifecycle.",
       "demo": "Configured approved provider produces cited draft; injected source ignored; revoked source blocks reopen. Test-double only remains partial.",
       "kind": "foundation",
@@ -633,11 +633,11 @@
         "D13",
         "D15"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-32.md",
       "kind": "workflow",
       "workflow": "LEA-32",
-      "completedSlice": "Text-only audience, immutable draft revision, review submission and final portal publication are verified; required Documents/attachment capability remains F12."
+      "completedSlice": "Exact audience, immutable draft and ordered scanned attachment versions, independent digest review, separate publication, frozen recipient references and reauthorized Parent/Student downloads are verified with real local ClamAV and desktop/mobile comparison."
     },
     {
       "id": "WF-33",

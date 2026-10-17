@@ -166,8 +166,10 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | CommunicationNoticeProposal | `vs_communication_notice_proposal` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNoticeProposalRevision | `vs_communication_notice_proposal_revision` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNoticeProposalDecision | `vs_communication_notice_proposal_decision` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
+| CommunicationNoticeProposalAttachment | `vs_communication_notice_proposal_attachment` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNotice | `vs_communication_notice` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNoticeVersion | `vs_communication_notice_version` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
+| CommunicationNoticeAttachment | `vs_communication_notice_attachment` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationReminderManagerGrant | `vs_communication_reminder_manager_grant` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationReminder | `vs_communication_reminder` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationReminderDelivery | `vs_communication_reminder_delivery` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
@@ -207,6 +209,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | DocumentsDocument | `vs_documents_document` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
 | DocumentsDocumentVersion | `vs_documents_document_version` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
 | DocumentsDocumentGrant | `vs_documents_document_grant` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
+| DocumentsCommandReceipt | `vs_documents_command_receipt` | documents | MIGRATED | [documents LLD](modules/documents/DESIGN.md) |
 | FinanceCapabilityGrant | `vs_finance_capability_grant` | finance | MIGRATED | [finance LLD](modules/finance/DESIGN.md) |
 | FinanceLedgerEntry | `vs_finance_ledger_entry` | finance | MIGRATED | [finance LLD](modules/finance/DESIGN.md) |
 | FinanceAllocation | `vs_finance_allocation` | finance | MIGRATED | [finance LLD](modules/finance/DESIGN.md) |

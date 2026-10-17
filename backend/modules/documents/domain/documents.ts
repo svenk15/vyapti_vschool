@@ -14,6 +14,9 @@ export function documentId(value:unknown){if(typeof value!=='string'||!uuidPatte
 export function documentKey(value:unknown){if(typeof value!=='string'||!keyPattern.test(value))throw new AccessError('VALIDATION');return value;}
 export function documentHash(value:unknown){if(typeof value!=='string'||!hashPattern.test(value))throw new AccessError('VALIDATION');return value;}
 export function documentSize(value:unknown){if(typeof value!=='number'||!Number.isSafeInteger(value)||value<1||value>DOCUMENT_MAX_BYTES)throw new AccessError('VALIDATION');return value;}
+export function documentVersion(value:unknown){if(typeof value!=='number'||!Number.isSafeInteger(value)||value<1)throw new AccessError('VALIDATION');return value;}
+export function documentClassification(value:unknown){if(typeof value!=='string'||!/^[A-Z][A-Z0-9_]{1,39}$/.test(value))throw new AccessError('VALIDATION');return value;}
+export function documentReason(value:unknown){if(typeof value!=='string')throw new AccessError('VALIDATION');const result=value.normalize('NFC').trim();if(result.length<10||result.length>500||/[\u0000-\u001f\u007f]/.test(result))throw new AccessError('VALIDATION');return result;}
 export function documentMediaType(value:unknown):DocumentMediaType{if(!DOCUMENT_MEDIA_TYPES.includes(value as DocumentMediaType))throw new AccessError('VALIDATION');return value as DocumentMediaType;}
 export function displayFilename(value:unknown){
  if(typeof value!=='string')throw new AccessError('VALIDATION');

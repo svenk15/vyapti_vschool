@@ -2,7 +2,17 @@
 
 Last updated: 18 October 2026.
 
-Status: **DOC-01 ENGINEERING_COMPLETE / DOC-02 PARTIAL / F12 PARTIAL / HUMAN_REVIEW_PENDING**.
+Status: **DOC-01 ENGINEERING_COMPLETE / DOC-02A ENGINEERING_COMPLETE_SYNTHETIC / F12 ENGINEERING_COMPLETE_SYNTHETIC / HUMAN_REVIEW_PENDING**.
+
+## 18 October 2026 — DOC-02A and first Communication owner link
+
+The provider-independent file lifecycle is implemented. A CLEAN exact asset can be promoted once into an immutable `DocumentVersion` and active owner-purpose grant; exact command replay returns the original version/grant without duplicate writes, while changed payload conflicts. Same-origin downloads derive scope only from that trusted active grant, establish the live account, invoke the consuming-owner authorization port, require the current exact CLEAN scan and recheck the private bytes before returning `private, no-store`, `nosniff` and attachment headers. Parent and Student downloads therefore do not require a staff membership, and a copied URL is denied after recipient-purpose revocation or notice withdrawal.
+
+Forward migration `20261019070000_documents_promotion_receipts` adds the Documents-owned command receipt. Development and test contain 116 forward migrations through the Communication attachment link; neither database was reset or rewritten. The local runtime uses ignored private storage and ClamAV 1.5.4 with official signature set 28156. A synthetic PDF returned CLEAN; the exact standard EICAR fixture returned `Eicar-Test-Signature FOUND` with scanner exit 1. Missing/stale signatures and scanner failures remain fail closed.
+
+Focused current-source evidence: Documents unit tests passed; Documents PostgreSQL 5/5; Communication PostgreSQL 6/6; typecheck, backend boundary and database-design checks passed; production and isolated E2E builds used the documented 4 GiB heap. The LEA-32 author → independent reviewer → publisher → Parent download journey passed one-worker desktop and mobile Playwright with real ClamAV. Captures were directly inspected at 1440×1000 and 390×844. See `docs/evidence/principal-lea-32-attachments-2026-10-18/`.
+
+Remaining gates are production storage/region/KMS, scanner service/update SLA, retention/deletion/legal hold/backup, TEN-03, native accessibility, font portability and human acceptance. The local synthetic file path does not authorize real pupil files or production enablement.
 
 The user's recorded D02–D19 approval includes D15 for synthetic-only implementation. The approved baseline is PDF/JPEG/PNG, 10 MiB per file, five attachments per action, a configurable 100 MiB synthetic branch quota, private local development storage, real fail-closed scanning and same-origin authenticated streaming. Production provider, region, KMS, scanner service, retention/deletion and production quota remain outside this approval.
 

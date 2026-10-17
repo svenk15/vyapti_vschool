@@ -6,6 +6,12 @@ const root = process.cwd();
 loadEnvironment({path: resolve(root, '.env.local'), quiet: true});
 loadEnvironment({path: resolve(root, '.env'), quiet: true});
 const distDir=process.env.VSCHOOL_E2E==='1'?'.next-e2e':'.next';
+if(process.env.VSCHOOL_DOCUMENTS_MODE==='synthetic'){
+  process.env.VSCHOOL_DOCUMENTS_STORAGE_ROOT ??= resolve(root,'artifacts/documents-private');
+  const localClam='/opt/homebrew/bin/clamscan',localDefinitions=resolve(root,'artifacts/documents-clamav/signatures');
+  if(existsSync(localClam))process.env.VSCHOOL_CLAMAV_EXECUTABLE ??= localClam;
+  if(existsSync(resolve(localDefinitions,'daily.cvd')))process.env.VSCHOOL_CLAMAV_DATABASE_DIRECTORY ??= localDefinitions;
+}
 const standalone = resolve(root, `${distDir}/standalone`);
 const serverRoot=existsSync(resolve(standalone,'server.js'))?standalone:resolve(root,distDir);
 if (!existsSync(resolve(serverRoot, 'server.js'))) throw new Error(`No ${distDir} server build found. Run pnpm build before pnpm demo:start.`);

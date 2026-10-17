@@ -5,7 +5,7 @@ import {acknowledgementReminderInput,communicationId,noticeProposalDecisionInput
 export interface CommunicationRepository{
  grantPublisher(operator:OperatorPrincipal,input:{organizationId:string;schoolId:string;accountId:string}):Promise<{grantId:string;version:number}>;
  grantNoticeWorkflow(operator:OperatorPrincipal,input:{organizationId:string;schoolId:string;accountId:string;action:NoticeWorkflowAction}):Promise<{grantId:string;version:number}>;
- saveProposal(actor:Identity,input:{organizationId:string;schoolId:string;proposalId:string|null;expectedVersion:number;sectionId:string;title:string;body:string;requiresAcknowledgement:boolean;key:string;requestId:string}):Promise<NoticeProposalCommandResult>;
+ saveProposal(actor:Identity,input:{organizationId:string;schoolId:string;proposalId:string|null;expectedVersion:number;sectionId:string;title:string;body:string;requiresAcknowledgement:boolean;attachments:readonly {versionId:string;grantId:string}[];key:string;requestId:string}):Promise<NoticeProposalCommandResult>;
  listAuthorProposals(actor:Identity,input:{organizationId:string;schoolId:string}):Promise<readonly NoticeProposalSummary[]>;
  authorProposalDetail(actor:Identity,input:{organizationId:string;schoolId:string;proposalId:string}):Promise<NoticeProposalDetail>;
  submitProposal(actor:Identity,input:{organizationId:string;schoolId:string;proposalId:string;expectedVersion:number;revisionId:string;key:string;requestId:string}):Promise<NoticeProposalCommandResult>;

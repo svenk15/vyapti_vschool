@@ -1,5 +1,5 @@
 {
-  "revision": "4.21",
+  "revision": "4.23",
   "prefix": "vs_",
   "tables": [
     {
@@ -1698,6 +1698,24 @@
       }
     },
     {
+      "model": "CommunicationNoticeProposalAttachment",
+      "owner": "communication",
+      "table": "vs_communication_notice_proposal_attachment",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/organization_id/school_id/proposal_id/revision_id/document_version_id/document_grant_id uuid; position int; display_filename varchar(180); created_at timestamptz",
+      "responsibility": "Immutable ordered clean DocumentVersion set reviewed with one proposal revision.",
+      "constraints": "Scoped Proposal/Revision and exact Document grant-version FKs; position 1-5; scoped id, revision-position and revision-version uniqueness; proposal/revision index; immutable trigger",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": ["organization_id", "school_id"],
+        "intendedPolicy": "Require verified branch context and current proposal author/reviewer/publisher authority; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
       "model": "CommunicationNotice",
       "owner": "communication",
       "table": "vs_communication_notice",
@@ -1734,6 +1752,24 @@
           "school_id"
         ],
         "intendedPolicy": "Publisher administration or current authorized recipient of this exact version.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationNoticeAttachment",
+      "owner": "communication",
+      "table": "vs_communication_notice_attachment",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/organization_id/school_id/notice_version_id/document_version_id/document_grant_id uuid; position int; display_filename varchar(180); created_at timestamptz",
+      "responsibility": "Frozen ordered attachment set for one immutable published NoticeVersion.",
+      "constraints": "Scoped NoticeVersion and exact Document grant-version FKs; position 1-5; scoped id, version-position and version-document uniqueness; version index; immutable trigger",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": ["organization_id", "school_id"],
+        "intendedPolicy": "Require verified branch context and current exact NoticeVersion recipient purpose on reads; publisher writes bind both scope columns.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "communication",
         "closureGate": "TEN-03"
@@ -3207,7 +3243,7 @@
       "table": "vs_documents_document_grant",
       "fields": "id uuid PK; organization_id/school_id/document_version_id/owner_resource_id uuid; owner_module/resource_type/purpose/status text; version int; created_at/revoked_at timestamptz",
       "responsibility": "Revocable purpose link to an immutable version; never authority by itself.",
-      "constraints": "Scoped Version FK; status/version/revocation CHECKs; scoped id and version-owner-purpose uniqueness; active owner index",
+      "constraints": "Scoped Version FK; status/version/revocation CHECKs; scoped id, scoped id-version and version-owner-purpose uniqueness; active owner index",
       "owner": "documents",
       "status": "MIGRATED",
       "design": "docs/modules/documents/DESIGN.md",
@@ -3218,6 +3254,27 @@
           "school_id"
         ],
         "intendedPolicy": "Require verified branch context and current consuming-owner authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "documents",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "DocumentsCommandReceipt",
+      "table": "vs_documents_command_receipt",
+      "fields": "id uuid PK; organization_id/school_id/actor_account_id uuid; command/idempotency_key/input_hash text; result jsonb; created_at timestamptz",
+      "responsibility": "Exact promotion/revocation replay evidence with safe identifiers and state only.",
+      "constraints": "Scoped School/actor FKs; command/hash/result CHECKs; scoped actor-command-key uniqueness; scope/time index; immutable trigger",
+      "owner": "documents",
+      "status": "MIGRATED",
+      "design": "docs/modules/documents/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context and current consuming-owner authorization before replay disclosure; WITH CHECK binds both scope columns.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "documents",
         "closureGate": "TEN-03"

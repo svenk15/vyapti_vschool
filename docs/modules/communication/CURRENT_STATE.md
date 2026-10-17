@@ -1,6 +1,16 @@
 # Communication — current state
 
-Last updated: 17 October 2026.
+Last updated: 18 October 2026.
+
+## 18 October 2026 — COM-05 / LEA-32 scanned notice attachments
+
+LEA-32 is **ENGINEERING_COMPLETE** for the approved synthetic portal contract; human review is **PENDING**. An AUTHOR saves the proposal before upload, Documents scans exact PDF/JPEG/PNG bytes, and only a real CLEAN verdict can produce an immutable version/grant. Every attachment edit creates a new notice proposal revision and review digest. The assigned independent reviewer sees exact filenames and approves that digest; the separate PUBLISH actor freezes ordered references into the immutable NoticeVersion and current recipient manifest.
+
+Parent/Student download routes expose no public object URL. Each request establishes the live account, derives tenant/branch scope from the trusted Documents grant, rechecks the exact current Communication recipient purpose and published version, and then rechecks the active grant, current CLEAN scan and stored bytes. Withdrawal, purpose revocation, wrong account/scope or unsafe bytes deny the old link without disclosing protected metadata.
+
+Migration `20261019071000_communication_notice_attachments` adds scoped immutable proposal-revision and published-version joins. Development and test both have 116 forward migrations. The repeat-safe synthetic seed creates one real-scanned attachment fixture without overwriting existing records or printing credentials.
+
+Focused evidence: Communication PostgreSQL 6/6 and Documents PostgreSQL 5/5 passed; desktop and mobile attachment publication journeys passed one worker using ClamAV 1.5.4/signature 28156; the captures were inspected directly against the LEA-32 explorer contract. See `docs/evidence/principal-lea-32-attachments-2026-10-18/`. Production storage/scanner/retention, native accessibility, font portability, TEN-03 and human acceptance remain pending.
 
 ## 17 October 2026 — COM-04 / F10 exact-revision review and publication
 

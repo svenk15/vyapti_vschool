@@ -1,6 +1,7 @@
 export type NoticeStatus='PUBLISHED'|'WITHDRAWN';
 export type NoticeSummary=Readonly<{noticeId:string;versionId:string;version:number;status:NoticeStatus;title:string;publishedAt:string;requiresAcknowledgement:boolean;readAt:string|null;acknowledgedAt:string|null;reminderCount:number;latestReminderAt:string|null;childNames:readonly string[]}>;
-export type NoticeDetail=NoticeSummary&Readonly<{body:string|null;schoolName:string}>;
+export type NoticeAttachment=Readonly<{versionId:string;grantId:string;filename:string}>;
+export type NoticeDetail=NoticeSummary&Readonly<{body:string|null;schoolName:string;attachments:readonly NoticeAttachment[]}>;
 export type AdminNoticeSummary=Readonly<{noticeId:string;versionId:string;version:number;revision:number;status:NoticeStatus;title:string;audienceLabel:string;publishedAt:string;recipientCount:number;readCount:number;acknowledgedCount:number;requiresAcknowledgement:boolean}>;
 export type LeadershipNoticeCoverageItem=Readonly<{noticeId:string;versionId:string;version:number;revision:number;status:NoticeStatus;title:string;audienceLabel:string;publishedAt:string;eligibleAccounts:number;readAccounts:number;acknowledgedAccounts:number;reminderItems:number;latestReminderAt:string|null;requiresAcknowledgement:boolean}>;
 export type LeadershipNoticeCoverage=Readonly<{definitionVersion:'notice-coverage.v1';asOf:string;timezone:string;total:number;canRemind:boolean;items:readonly LeadershipNoticeCoverageItem[]}>;
@@ -11,7 +12,7 @@ export type NoticeAcknowledgementResult=Readonly<{noticeId:string;versionId:stri
 export type NoticeWithdrawalResult=Readonly<{noticeId:string;revision:number;status:'WITHDRAWN';replayed:boolean}>;
 export type NoticeProposalStatus='DRAFT'|'IN_REVIEW'|'APPROVED'|'RETURNED'|'REJECTED'|'PUBLISHED';
 export type NoticeProposalAction='APPROVE'|'RETURN'|'REJECT';
-export type NoticeProposalRevision=Readonly<{revisionId:string;number:number;sectionId:string;audienceLabel:string;title:string;body:string;requiresAcknowledgement:boolean;channel:'PORTAL';scheduleKind:'IMMEDIATE';approvalDigest:string;createdAt:string}>;
+export type NoticeProposalRevision=Readonly<{revisionId:string;number:number;sectionId:string;audienceLabel:string;title:string;body:string;requiresAcknowledgement:boolean;attachments:readonly NoticeAttachment[];channel:'PORTAL';scheduleKind:'IMMEDIATE';approvalDigest:string;createdAt:string}>;
 export type NoticeProposalDecision=Readonly<{action:NoticeProposalAction;reason:string;createdAt:string}>;
 export type NoticeProposalSummary=Readonly<{proposalId:string;status:NoticeProposalStatus;version:number;revisionId:string;revisionNumber:number;title:string;audienceLabel:string;updatedAt:string;publishedNoticeId:string|null}>;
 export type NoticeProposalDetail=NoticeProposalSummary&Readonly<{revision:NoticeProposalRevision;decision:NoticeProposalDecision|null;availableActions:readonly ('EDIT'|'SUBMIT'|'APPROVE'|'RETURN'|'REJECT'|'PUBLISH')[]}>;

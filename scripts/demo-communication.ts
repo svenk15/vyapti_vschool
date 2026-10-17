@@ -5,10 +5,12 @@ import {join} from 'node:path';
 import {PrismaClient} from '../generated/prisma/client';
 import {PrismaPg} from '@prisma/adapter-pg';
 import {createCommunicationServices} from '../backend/composition/communication';
+import {createDocumentsServices} from '../backend/composition/documents';
 import {createGuardiansServices} from '../backend/composition/guardians';
 import {createTenancyServices} from '../backend/composition/tenancy';
 import {BcryptPasswords} from '../backend/modules/access/infrastructure/passwords';
 import {localAccessConfig} from './access-local-config';
+import {sha256} from '../backend/modules/documents/infrastructure/hashing';
 
 config({path: '.env.local', quiet: true});
 config({quiet: true});
@@ -39,6 +41,12 @@ type Demo = {
   reviewRevisionId?: string;
   reviewSaveKey?: string;
   reviewSubmitKey?: string;
+  attachmentProposalId?: string;
+  attachmentRevisionId?: string;
+  attachmentUploadKey?: string;
+  attachmentPromotionKey?: string;
+  attachmentSaveKey?: string;
+  attachmentSubmitKey?: string;
 };
 
 function save(value: Demo) {
@@ -80,6 +88,9 @@ async function main() {
     emailSender: {sendFamilyInvite: async input => { invitationToken = input.token; return {ok: true}; }},
   });
   const communication = createCommunicationServices({databaseUrl: local.databaseUrl, releasedModules: modules});
+  const clamAvExecutable = process.env.VSCHOOL_CLAMAV_EXECUTABLE ?? ['/opt/homebrew/bin/clamscan', '/usr/local/bin/clamscan'].find(existsSync) ?? null;
+  const clamAvDatabaseDirectory = process.env.VSCHOOL_CLAMAV_DATABASE_DIRECTORY ?? join(process.cwd(), 'artifacts/documents-clamav/signatures');
+  const documents = createDocumentsServices({databaseUrl: local.databaseUrl, releasedModules: modules, localStorageRoot: join(process.cwd(), 'artifacts/documents-private'), clamAvExecutable, clamAvDatabaseDirectory, maxDefinitionsAgeMs: 24 * 60 * 60 * 1000});
   let stage = 'authenticate';
   try {
     const account = await db.userAccount.findUnique({where: {normalizedEmail: people.adminEmail.toLowerCase()}});
@@ -174,6 +185,24 @@ async function main() {
     const reviewerInbox = await communication.listReviewProposals(reviewer, people.organizationId, people.schoolId);
     if (existingProposal?.status === 'IN_REVIEW' && !reviewerInbox.some(item => item.proposalId === existingProposal.id)) throw new Error('SYNTHETIC_REVIEW_ASSIGNMENT_CONFLICT');
 
+    stage = 'scanned-attachment-proposal';
+    demo.attachmentUploadKey ??= randomUUID();
+    demo.attachmentPromotionKey ??= randomUUID();
+    demo.attachmentSaveKey ??= randomUUID();
+    demo.attachmentSubmitKey ??= randomUUID();
+    const existingAttachmentProposal = demo.attachmentProposalId ? await db.communicationNoticeProposal.findFirst({where: {id: demo.attachmentProposalId, organizationId: people.organizationId, schoolId: people.schoolId}, include: {revisions: {include: {attachments: true}}}}) : null;
+    if (!existingAttachmentProposal) {
+      const base = await communication.saveProposal(admin, people.organizationId, people.schoolId, null, {expectedVersion: 0, sectionId: placement.sectionId, title: 'Scanned family trip information', body: 'Review the attached fictional trip information. No real pupil document or external message is used.', requiresAcknowledgement: true, attachments: [], key: randomUUID()}, randomUUID());
+      const bytes = new TextEncoder().encode('%PDF-1.7\nSynthetic VSchool trip information only.');
+      const uploaded = await documents.ingest(admin, {organizationId: people.organizationId, schoolId: people.schoolId, owner: {module: 'communication', resourceType: 'NoticeProposal', resourceId: base.proposalId, purpose: 'NOTICE_ATTACHMENT'}, filename: 'fictional-trip-information.pdf', declaredMediaType: 'application/pdf', expectedSize: bytes.byteLength, expectedSha256: sha256(bytes), key: demo.attachmentUploadKey}, bytes);
+      if (uploaded.state !== 'READY') throw new Error(`SYNTHETIC_ATTACHMENT_${uploaded.state}`);
+      const promoted = await documents.promote(admin, {organizationId: people.organizationId, schoolId: people.schoolId, uploadId: uploaded.uploadId, classification: 'NOTICE_ATTACHMENT', key: demo.attachmentPromotionKey}, randomUUID());
+      const linked = await communication.saveProposal(admin, people.organizationId, people.schoolId, base.proposalId, {expectedVersion: base.version, sectionId: placement.sectionId, title: 'Scanned family trip information', body: 'Review the attached fictional trip information. No real pupil document or external message is used.', requiresAcknowledgement: true, attachments: [{versionId: promoted.versionId, grantId: promoted.grantId}], key: demo.attachmentSaveKey}, randomUUID());
+      const submitted = await communication.submitProposal(admin, people.organizationId, people.schoolId, base.proposalId, {expectedVersion: linked.version, revisionId: linked.revisionId, key: demo.attachmentSubmitKey}, randomUUID());
+      demo.attachmentProposalId = submitted.proposalId;
+      demo.attachmentRevisionId = submitted.revisionId;
+    } else if (!existingAttachmentProposal.revisions.some(revision => revision.attachments.length > 0)) throw new Error('SYNTHETIC_ATTACHMENT_PROPOSAL_CONFLICT');
+
     stage = 'leadership-coverage';
     const coverage = await communication.listLeadership(admin, people.organizationId, people.schoolId);
     if (!coverage.items.some(item => item.noticeId === demo.noticeId)
@@ -191,6 +220,7 @@ async function main() {
     throw new Error(`${stage.toUpperCase()}_${code}`);
   } finally {
     await communication.disconnect();
+    await documents.disconnect();
     await guardians.disconnect();
     await tenancy.disconnect();
     await db.$disconnect();

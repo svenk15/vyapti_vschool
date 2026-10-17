@@ -4,9 +4,9 @@ Recorded 18 October 2026 IST from repository HEAD `86f2fae`. This document recon
 
 ## Exact 46-workflow accounting
 
-Engineering complete (43): `LEA-01`, `LEA-02`, `LEA-03`, `LEA-04`, `LEA-05`, `LEA-06`, `LEA-07`, `LEA-08`, `LEA-09`, `LEA-10`, `LEA-11`, `LEA-12`, `LEA-13`, `LEA-14`, `LEA-15`, `LEA-16`, `LEA-17`, `LEA-18`, `LEA-19`, `LEA-20`, `LEA-21`, `LEA-23`, `LEA-24`, `LEA-25`, `LEA-26`, `LEA-27`, `LEA-28`, `LEA-29`, `LEA-30`, `LEA-31`, `LEA-33`, `LEA-34`, `LEA-35`, `LEA-36`, `LEA-37`, `LEA-38`, `LEA-39`, `LEA-40`, `LEA-41`, `LEA-42`, `LEA-43`, `LEA-44`, `LEA-46`.
+Engineering complete (44): `LEA-01`, `LEA-02`, `LEA-03`, `LEA-04`, `LEA-05`, `LEA-06`, `LEA-07`, `LEA-08`, `LEA-09`, `LEA-10`, `LEA-11`, `LEA-12`, `LEA-13`, `LEA-14`, `LEA-15`, `LEA-16`, `LEA-17`, `LEA-18`, `LEA-19`, `LEA-20`, `LEA-21`, `LEA-23`, `LEA-24`, `LEA-25`, `LEA-26`, `LEA-27`, `LEA-28`, `LEA-29`, `LEA-30`, `LEA-31`, `LEA-32`, `LEA-33`, `LEA-34`, `LEA-35`, `LEA-36`, `LEA-37`, `LEA-38`, `LEA-39`, `LEA-40`, `LEA-41`, `LEA-42`, `LEA-43`, `LEA-44`, `LEA-46`.
 
-Partial (2): `LEA-32` has the complete text-only Communication lifecycle but lacks safe attachments; `LEA-45` has the complete deterministic source-linked Assistant boundary but lacks an approved real provider/data policy and real-provider evaluation.
+Partial (1): `LEA-45` has the complete deterministic source-linked Assistant boundary but lacks an approved real provider/data policy and real-provider evaluation.
 
 Not started (1): `LEA-22` lacks the Assessments report publication/audience owner contract and completed Documents path.
 
@@ -32,7 +32,7 @@ All rows retain human review `PENDING`. Direct comparison status and row-specifi
 | LEA-39–42 | Bounded aggregate exports, branch comparison, leadership brief and immutable Coordination history | `principal-lea-39-export-2026-10-16/` plus owner-specific LEA-39 directories, `principal-f05-branch-comparison-2026-10-17/`, `principal-f05-leadership-brief-2026-10-17/`, `principal-f04-history-2026-10-17/` | Approved aggregates only; no sensitive subgroup inference or universal export authority. |
 | LEA-43 | Exact-money synthetic Finance summary and assigned exception decision | `principal-lea-43-finance-2026-10-19/` | No provider payment, settlement or production financial authority. |
 | LEA-44 | Facilities incident, assigned coordination and independent restoration verification | `principal-lea-44-facilities-2026-10-19/` | Facilities only; no broad service/emergency claim. |
-| LEA-32 | Text-only Notice proposal/review/publication is complete | `principal-f10-notice-review-2026-10-17/`, `documents-f12-foundation-2026-10-17/` | PARTIAL: attachment bytes cannot be called safe or downloaded yet. |
+| LEA-32 | Real-scanned immutable Notice attachments, exact-digest review, separate publication and current-authority downloads | `principal-f10-notice-review-2026-10-17/`, `documents-f12-foundation-2026-10-17/`, `principal-lea-32-attachments-2026-10-18/` | Synthetic portal scope only; production storage/scanner/retention remains unavailable. |
 | LEA-45 | Minimized deterministic Assistant draft, citations, review/discard and source revocation | `principal-lea-45-assistant-2026-10-19/` | PARTIAL: synthetic adapter only; no approved model/provider or transmitted data. |
 | LEA-22 | No implemented publication journey | Assessments readiness/moderation evidence only | NOT_STARTED: readiness and moderation do not imply publication. |
 
@@ -92,4 +92,4 @@ No provider is selected, no credential is requested and no data may be transmitt
 
 At reconciliation time both the machine timezone and explicit `Asia/Kolkata` time are 18 October 2026 IST. Git commits `0ffaf54`, `bdf6e3b` and `86f2fae` and filesystem timestamps are also 18 October. The `principal-lea-20-completion-2026-10-19` path inherited a future queue label; its evidence remains valid and is not renamed because published historical paths are stable.
 
-Exact next task: **DOC-02A provider-independent immutable promotion and authenticated serving**. It can proceed without a production provider or retention decision. A SAFE runtime demo still requires explicit authorization to install/configure ClamAV and download signatures. Human acceptance remains pending.
+DOC-02A and COM-05 are complete for synthetic use with real local ClamAV. Exact next task: **F11-E / WF-22 / LEA-22 assessment report publication** under the approved separation, template, audience, immediate-release, Assessments-owned handoff and withdrawal rules. Human acceptance remains pending.

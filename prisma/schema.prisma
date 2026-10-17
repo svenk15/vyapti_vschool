@@ -2483,6 +2483,7 @@ model CommunicationNoticeProposal {
  updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
  revisions CommunicationNoticeProposalRevision[]
  decisions CommunicationNoticeProposalDecision[]
+ attachments CommunicationNoticeProposalAttachment[]
  @@unique([organizationId,schoolId,id],map:"vs_communication_notice_proposal_scope_id_key")
  @@index([organizationId,schoolId,authorAccountId,updatedAt(sort:Desc),id],map:"vs_communication_notice_proposal_author_idx")
  @@index([organizationId,schoolId,assignedReviewerAccountId,status,updatedAt(sort:Desc),id],map:"vs_communication_notice_proposal_reviewer_idx")
@@ -2508,6 +2509,7 @@ model CommunicationNoticeProposalRevision {
  createdAt DateTime @map("created_at") @db.Timestamptz(3)
  proposal CommunicationNoticeProposal @relation(fields:[organizationId,schoolId,proposalId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_notice_proposal_revision_proposal_fkey")
  decisions CommunicationNoticeProposalDecision[]
+ attachments CommunicationNoticeProposalAttachment[]
  @@unique([organizationId,schoolId,id],map:"vs_communication_notice_proposal_revision_scope_id_key")
  @@unique([organizationId,schoolId,proposalId,number],map:"vs_communication_notice_proposal_revision_number_key")
  @@index([organizationId,schoolId,proposalId,number(sort:Desc),id],map:"vs_communication_notice_proposal_revision_sequence_idx")
@@ -2578,6 +2580,7 @@ model CommunicationNoticeVersion {
  publishedAt DateTime @map("published_at") @db.Timestamptz(3)
  notice CommunicationNotice @relation(fields:[organizationId,schoolId,noticeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_notice_version_notice_fkey")
  recipients CommunicationRecipient[]
+ attachments CommunicationNoticeAttachment[]
  @@unique([organizationId,schoolId,id],map:"vs_communication_notice_version_scope_id_key")
  @@unique([organizationId,schoolId,noticeId,versionNo],map:"vs_communication_notice_version_number_key")
  @@index([organizationId,schoolId,publishedAt(sort:Desc),id],map:"vs_communication_notice_version_published_idx")
@@ -3238,9 +3241,66 @@ model DocumentsDocumentGrant {
   revokedAt         DateTime? @map("revoked_at") @db.Timestamptz(3)
 
   @@unique([organizationId, schoolId, id], map: "vs_documents_grant_scope_id_key")
+  @@unique([organizationId, schoolId, id, documentVersionId], map: "vs_documents_grant_scope_version_id_key")
   @@unique([organizationId, schoolId, documentVersionId, ownerModule, ownerResourceType, ownerResourceId, purpose], map: "vs_documents_grant_owner_key")
   @@index([organizationId, schoolId, ownerModule, ownerResourceType, ownerResourceId, status], map: "vs_documents_grant_active_idx")
   @@map("vs_documents_document_grant")
+}
+
+model CommunicationNoticeProposalAttachment {
+  id                String   @id(map: "vs_communication_notice_proposal_attachment_pkey") @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  schoolId          String   @map("school_id") @db.Uuid
+  proposalId        String   @map("proposal_id") @db.Uuid
+  revisionId        String   @map("revision_id") @db.Uuid
+  position          Int
+  documentVersionId String   @map("document_version_id") @db.Uuid
+  documentGrantId   String   @map("document_grant_id") @db.Uuid
+  displayFilename   String   @map("display_filename") @db.VarChar(180)
+  createdAt         DateTime @map("created_at") @db.Timestamptz(3)
+  proposal          CommunicationNoticeProposal @relation(fields: [organizationId, schoolId, proposalId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_communication_proposal_attachment_proposal_fkey")
+  revision          CommunicationNoticeProposalRevision @relation(fields: [organizationId, schoolId, revisionId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_communication_proposal_attachment_revision_fkey")
+
+  @@unique([organizationId, schoolId, id], map: "vs_communication_proposal_attachment_scope_id_key")
+  @@unique([organizationId, schoolId, revisionId, position], map: "vs_communication_proposal_attachment_position_key")
+  @@unique([organizationId, schoolId, revisionId, documentVersionId], map: "vs_communication_proposal_attachment_version_key")
+  @@index([organizationId, schoolId, proposalId, revisionId, position], map: "vs_communication_proposal_attachment_proposal_idx")
+  @@map("vs_communication_notice_proposal_attachment")
+}
+
+model CommunicationNoticeAttachment {
+  id                String   @id(map: "vs_communication_notice_attachment_pkey") @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  schoolId          String   @map("school_id") @db.Uuid
+  noticeVersionId   String   @map("notice_version_id") @db.Uuid
+  position          Int
+  documentVersionId String   @map("document_version_id") @db.Uuid
+  documentGrantId   String   @map("document_grant_id") @db.Uuid
+  displayFilename   String   @map("display_filename") @db.VarChar(180)
+  createdAt         DateTime @map("created_at") @db.Timestamptz(3)
+  noticeVersion     CommunicationNoticeVersion @relation(fields: [organizationId, schoolId, noticeVersionId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_communication_notice_attachment_version_fkey")
+
+  @@unique([organizationId, schoolId, id], map: "vs_communication_notice_attachment_scope_id_key")
+  @@unique([organizationId, schoolId, noticeVersionId, position], map: "vs_communication_notice_attachment_position_key")
+  @@unique([organizationId, schoolId, noticeVersionId, documentVersionId], map: "vs_communication_notice_attachment_version_key")
+  @@index([organizationId, schoolId, noticeVersionId, position], map: "vs_communication_notice_attachment_version_idx")
+  @@map("vs_communication_notice_attachment")
+}
+
+model DocumentsCommandReceipt {
+  id             String   @id(map: "vs_documents_command_receipt_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  command        String   @db.VarChar(48)
+  idempotencyKey String   @map("idempotency_key") @db.VarChar(100)
+  inputHash      String   @map("input_hash") @db.Char(64)
+  result         Json
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, actorAccountId, command, idempotencyKey], map: "vs_documents_receipt_actor_key")
+  @@index([organizationId, schoolId, createdAt(sort: Desc), id], map: "vs_documents_receipt_scope_idx")
+  @@map("vs_documents_command_receipt")
 }
 
 model CoordinationInformationRequest {

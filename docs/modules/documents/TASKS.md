@@ -26,13 +26,14 @@ Status: ENGINEERING_COMPLETE_FOUNDATION; migration `20261018090000_documents_saf
 
 - [x] Implement local private storage restricted to explicitly guarded development/test composition.
 - [x] Implement a ClamAV command adapter; absent or failed ClamAV remains `SCAN_UNAVAILABLE` and controlled rescan rechecks owner authority.
-- [ ] Add idempotent READY-asset promotion into an immutable DocumentVersion and revocable owner-purpose grant.
-- [ ] Add current-authority, current-safety same-origin download streaming with safe headers and no public object reference.
-- [ ] Add thin hosting composition and bounded upload/status/rescan/link/download routes; keep business policy in Documents and consuming-owner adapters.
-- [ ] Configure and exercise a real non-production ClamAV engine/signature set; no current local executable is installed.
-- [ ] Verify malicious/mismatch/oversize/expired/revoked cases and provider metadata privacy.
+- [x] Add idempotent READY-asset promotion into an immutable DocumentVersion and revocable owner-purpose grant.
+- [x] Add current-authority, current-safety same-origin download streaming with safe headers and no public object reference.
+- [x] Add thin hosting composition and bounded upload/status/rescan/link/download routes; keep business policy in Documents and consuming-owner adapters.
+- [x] Configure and exercise a real non-production ClamAV engine/signature set against a clean synthetic PDF and the standard EICAR fixture.
+- [x] Verify malicious/mismatch/oversize/revoked cases and provider metadata privacy.
+- [ ] Add cleanup/expiry execution only after the production retention, deletion and legal-hold policy is approved.
 
-Status: PARTIAL; no user route or SAFE-file claim until the real scanner is exercised. Authenticated download remains with the first consuming-owner link.
+Status: **ENGINEERING_COMPLETE_SYNTHETIC** for DOC-02A. Production provider, retention/deletion, backup and scanner-service review remain release gates.
 
 ## DOC-03 — Learning resource publication and Student read
 
@@ -53,12 +54,12 @@ Status: NOT_STARTED; depends on DOC-03 and accepted file limits.
 
 ## DOC-05 — Communication attachments
 
-- [ ] Freeze exact clean versions into one immutable NoticeVersion.
-- [ ] Include ordered attachment-version identities in the proposal revision approval digest so any attachment change invalidates approval.
-- [ ] Reauthorize the current exact Parent/Student notice purpose for every download.
-- [ ] Preserve withdrawal as a content-free state and deny prior attachment access.
+- [x] Freeze exact clean versions into one immutable NoticeVersion.
+- [x] Include ordered attachment-version identities in the proposal revision approval digest so any attachment change invalidates approval.
+- [x] Reauthorize the current exact Parent/Student notice purpose for every download.
+- [x] Preserve withdrawal as a content-free state and deny prior attachment access.
 
-Status: NOT_STARTED; depends on DOC-02 and Communication attachment-authoring rules.
+Status: **ENGINEERING_COMPLETE_SYNTHETIC** for LEA-32; human review and production gates remain pending.
 
 ## DOC-06 — document requests, review and issued artifacts
 
