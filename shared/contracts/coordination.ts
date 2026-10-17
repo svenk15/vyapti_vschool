@@ -16,6 +16,10 @@ export type CoordinationRequestSummary=Omit<CoordinationRequest,'history'>;
 export type CoordinationQueue=Readonly<{items:readonly CoordinationRequestSummary[];nextCursor:string|null;timezone:string;capabilities:readonly CoordinationCapability[]}>;
 export type CoordinationAvailability=Readonly<{enabled:boolean;capabilities:readonly CoordinationCapability[];reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null}>;
 export type CoordinationMutationResult=Readonly<{requestId:string;version:number;status:CoordinationStatus;replayed:boolean}>;
+export type CoordinationCommandStatus=
+ | Readonly<{state:'UNKNOWN'}>
+ | Readonly<{state:'CHANGED';currentVersion:number;currentState:CoordinationStatus}>
+ | Readonly<{state:'FOUND';result:CoordinationMutationResult}>;
 export type CoordinationAssignee=Readonly<{accountId:string;displayName:string}>;
 export type CoordinationSourceSetup=Readonly<{source:CoordinationSourceSummary;assignees:readonly CoordinationAssignee[];timezone:string}>;
 export type CoordinationBatchItemStatus='PENDING'|'CREATED'|'ALREADY_EXISTS'|'FAILED';

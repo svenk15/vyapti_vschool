@@ -29,3 +29,7 @@ export type DecisionDetail=DecisionSummary&Readonly<{
 }>;
 export type DecisionQueue=Readonly<{items:readonly DecisionSummary[];nextCursor:string|null;timezone:string;owners:readonly DecisionOwner[];query:DecisionQuery;filters:Readonly<{types:readonly Readonly<{value:DecisionType;label:string}>[];states:readonly Readonly<{value:'READY';label:string}>[];duePeriods:readonly Readonly<{value:DecisionDuePeriod;label:string}>[]}>}>;
 export type DecisionResult=Readonly<{owner:DecisionOwner;itemId:string;version:number;state:'RESOLVED'|'RETURNED';replayed:boolean}>;
+export type DecisionCommandStatus=
+ | Readonly<{state:'UNKNOWN'}>
+ | Readonly<{state:'CHANGED';currentVersion:number;currentState:string}>
+ | Readonly<{state:'FOUND';result:DecisionResult}>;

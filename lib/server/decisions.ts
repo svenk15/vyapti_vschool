@@ -10,4 +10,5 @@ export const decisionGateway={
  list:async(identity:Identity|null,input:Parameters<typeof decisions.list>[3]={})=>{const s=await scoped(identity);return decisions.list(s.identity,s.organizationId,s.schoolId,input);},
  get:async(identity:Identity|null,owner:string,id:string)=>{const s=await scoped(identity);return decisions.get(s.identity,s.organizationId,s.schoolId,owner,id);},
  decide:async(identity:Identity|null,owner:string,id:string,input:unknown)=>{const s=await scoped(identity);return decisions.decide(s.identity,s.organizationId,s.schoolId,owner,id,input);},
+ status:async(identity:Identity|null,owner:string,id:string,input:unknown)=>{const s=await scoped(identity);return decisions.status(s.identity,s.organizationId,s.schoolId,owner,id,input);},
 };

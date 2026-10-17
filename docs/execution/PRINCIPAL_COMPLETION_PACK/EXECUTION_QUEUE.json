@@ -603,10 +603,11 @@
       "decisions": [
         "D03"
       ],
-      "status": "PLANNED",
+      "status": "COMPLETE",
       "definition": "workflows/LEA-31.md",
       "kind": "workflow",
-      "workflow": "LEA-31"
+      "workflow": "LEA-31",
+      "completedSlice": "Every registered owner provides owner-specific protected status. Coordination verifies UNKNOWN, CHANGED and FOUND, exact original retry, one side effect and revoked receipt denial without a generic receipt store."
     },
     {
       "id": "WF-32",

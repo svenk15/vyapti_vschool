@@ -245,11 +245,22 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   expect((await decisions.list(worker,scope.organizationId,scope.schoolId,{})).items.some(item=>item.itemId===created.requestId)).toBe(false);
   await expect(decisions.get(worker,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId)).rejects.toMatchObject({code:'NOT_FOUND'});
   await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:worker.accountId,capability:'coordination.verify'});
-  const key=commandKey(),input={action:'VERIFY',expectedVersion:submitted.version,reason:null,key} as const,committed=await decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input);expect(committed).toMatchObject({state:'RESOLVED',replayed:false});
+  const key=commandKey(),input={action:'VERIFY',expectedVersion:submitted.version,reason:null,key} as const;
+  expect(await decisions.status(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input)).toEqual({state:'UNKNOWN'});
+  const committed=await decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input);expect(committed).toMatchObject({state:'RESOLVED',replayed:false});
   await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.verify'});
   await expect(decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await expect(decisions.status(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input)).rejects.toMatchObject({code:'FORBIDDEN'});
   await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.verify'});
+  expect(await decisions.status(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input)).toMatchObject({state:'FOUND',result:{...committed,replayed:true}});
   expect(await decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input)).toMatchObject({...committed,replayed:true});
   await expect(decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,{...input,reason:'Changed verification payload'})).rejects.toMatchObject({code:'IDEMPOTENCY_CONFLICT'});
+  await expect(decisions.status(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,{...input,reason:'Changed verification payload'})).rejects.toMatchObject({code:'IDEMPOTENCY_CONFLICT'});
+  expect(await db.coordinationCommandReceipt.count({where:{organizationId:scope.organizationId,schoolId:scope.schoolId,actorAccountId:creator.accountId,command:'CoordinationResolutionVerified',idempotencyKey:key}})).toBe(1);
+
+  const changedSource=await source(),changedCreated=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:changedSource.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Prepare changed-evidence status',key:commandKey()}),changedStarted=await coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:changedCreated.requestId,expectedVersion:changedCreated.version,reason:null,key:commandKey()}),changedSubmitted=await coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:changedCreated.requestId,expectedVersion:changedStarted.version,kind:'NO_CHANGE_NEEDED',revision:null,reason:'Initial evidence for changed-status proof.',key:commandKey()}),uncommitted={action:'VERIFY',expectedVersion:changedSubmitted.version,reason:null,key:commandKey()} as const;
+  expect(await decisions.status(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',changedCreated.requestId,uncommitted)).toEqual({state:'UNKNOWN'});
+  const returned=await coordination.returnResolution(creator,scope.organizationId,scope.schoolId,{requestId:changedCreated.requestId,expectedVersion:changedSubmitted.version,reason:'Refresh this evidence.',key:commandKey()});
+  expect(await decisions.status(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',changedCreated.requestId,uncommitted)).toEqual({state:'CHANGED',currentVersion:returned.version,currentState:'IN_PROGRESS'});
  });
 });

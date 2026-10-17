@@ -81,4 +81,14 @@ Dependencies: F00 engineering-complete; D03 approved for synthetic-only implemen
 - [x] Verify PostgreSQL authority, replay/revocation/concurrency and focused desktop/mobile journeys.
 - [x] Extend synthetic seed/evidence and update F03 status without claiming all LEA-27–31 workflows complete.
 
+## COORD-05 / LEA-31 protected decision recovery
+
+- [x] Add owner-specific status lookup using the existing Coordination receipt and exact command hash.
+- [x] Recheck live branch capability, proposer separation and source access before returning status or receipt.
+- [x] Distinguish `UNKNOWN`, owner `CHANGED` and `FOUND` without writing or interpreting absence as failure.
+- [x] Prove exact retry has one receipt and one verified event; changed payload conflicts.
+- [x] Prove revocation denies receipt disclosure and restoration recovers the original result.
+
+Engineering status: LEA-31 ENGINEERING_COMPLETE for the registered Coordination owner; human review PENDING.
+
 Human review, production retention, TEN-03, font portability and native accessibility remain PENDING.

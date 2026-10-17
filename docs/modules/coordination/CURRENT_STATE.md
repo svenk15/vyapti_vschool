@@ -46,6 +46,12 @@ Verified product source `e862802e6e5bad6572192fe07634bb5d4aa67479` (normal produ
 
 The targeted demo seed now creates a fresh fictional awaiting-verification request when its prior synthetic example has left that state, preserving the historical request. Evidence: [principal-f03-decisions-2026-10-17](../../evidence/principal-f03-decisions-2026-10-17/README.md). F03 is ENGINEERING_COMPLETE; LEA-27, LEA-29 and LEA-31 remain PARTIAL because other decision owners and their broader filters/actions/status paths are not yet implemented. Human review and production gates remain PENDING.
 
+## 17 October 2026 — COORD-05 / LEA-31 owner status verified
+
+Coordination now exposes a narrow `decisionStatus` operation solely through its registered Leadership adapter. It rechecks the live `coordination.verify` grant, proposer separation and current registered-source access before its primary-database receipt read. The exact action/payload/key reconstructs the existing owner command hash. Matching receipt returns the original safe result; absence at the unchanged awaiting version is `UNKNOWN`; absence after owner version/state change is `CHANGED`; revoked authority denies all protected receipt data. Exact replay still uses the existing atomic transition and creates no duplicate event or receipt.
+
+No persistence contract or migration changed; development and test retain 87 forward migrations. Real-PostgreSQL verification passed 15/15, including unknown, one exact result, changed-payload conflict, changed evidence and revoked/restored status access. Sequential browser evidence covers the real routed recovery journey. Human review and all production gates remain PENDING. Evidence: [principal-lea-31-recovery-2026-10-17](../../evidence/principal-lea-31-recovery-2026-10-17/README.md).
+
 ## 17 October 2026 — F04-A typed source registry checkpoint
 
 F04 is IN_PROGRESS. Coordination now resolves source inspection, evidence verification and assignee eligibility through an explicit typed owner registry. Attendance remains the sole registered source with the same `ATTENDANCE_SESSION` and request-kind allowlist. Its adapter now owns Attendance capability/session policy, while Coordination independently retains active membership and `coordination.work` designation checks. Duplicate registrations, foreign source types and unsupported source/kind pairs fail closed before owner access.

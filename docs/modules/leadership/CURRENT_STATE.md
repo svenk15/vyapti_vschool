@@ -240,6 +240,14 @@ Approved synthetic-only D03 is now implemented as a framework-free Leadership re
 
 The first adapter deliberately leaves the broader workflows partial. LEA-27 still lacks the approved multi-owner type/state/due filters, reference search and stable sort. LEA-29 currently supports Coordination verify/return only. LEA-31 proves exact same-intent recovery and revoked receipt protection for that owner but does not yet provide the cross-owner status route. LEA-28 information requests and LEA-30 recusal remain unimplemented.
 
+## 17 October 2026 — LEA-31 uncertain-decision recovery completed
+
+The pre-slice 46-row matrix was reconciled directly as 28 ENGINEERING_COMPLETE, two PARTIAL and 16 NOT_STARTED. The partial rows were LEA-31 (missing owner status and changed-evidence restart) and LEA-32 (Documents attachment plus direct comparison). LEA-27 and LEA-29 explicitly cover every currently registered owner; future owner registrations remain separate owner tasks.
+
+LEA-31 now dispatches `status` through the typed owner registry. Coordination alone rechecks current branch authority and source access, reconstructs the exact original command hash and reads its receipt. The routed review freezes a pending intent, labels missing receipt `UNKNOWN`, permits only exact retry, clears protected evidence on authority loss, returns the one original result after restoration and requires a fresh owner review/key after evidence changes. No generic receipt store, schema or migration was added; both databases retain 87 forward migrations.
+
+Focused evidence: 12/12 unit, 15/15 real-PostgreSQL Coordination, sequential one-worker 2/2 Chromium and 2/2 mobile LEA-31 browser checks, TypeScript and normal/isolated production builds. Direct inspection compared the approved LEA-31 explorer at 1440×1000 and 390×844 with production pending, unknown, revoked, recovered and changed states. The workflow explorer maps to the established routed recipe; font portability and native accessibility remain pending. Human review remains PENDING. See [LEA-31 evidence](../../evidence/principal-lea-31-recovery-2026-10-17/README.md).
+
 Verified product source `e862802e6e5bad6572192fe07634bb5d4aa67479` (normal production build `4bVuXP5diMkauT_59P1ow`) passed 5/5 unit, 11/11 real-PostgreSQL and sequential one-worker 2/2 desktop plus 2/2 mobile browser checks, followed by type, lint, backend, boundary, documentation and production-build gates. No schema changed; both databases retain 70 migrations. Direct inspection compared the approved LEA-27 and LEA-29 explorer states with the production inbox and staged review at 1440×1000 and 390×844. The persistent application shell and routed composition are the recorded production mapping; portable-font and native-accessibility evidence remain pending. See [evidence](../../evidence/principal-f03-decisions-2026-10-17/README.md).
 
 ## 17 October 2026 — LEA-27 purpose-scoped inbox completed

@@ -111,6 +111,18 @@ Engineering status: LEA-46 ENGINEERING_COMPLETE; visual comparison complete with
 
 Engineering status: LEA-17 ENGINEERING_COMPLETE after the supported read slice at `2e03897`, F08-A recipient policy and F08-B typed Learning Coordination evidence. Human review PENDING. LEA-18 remains a separate partial aggregate feedback-turnaround workflow.
 
+## LEA-31 — Recover an uncertain or outdated decision
+
+- [x] Retain one exact normalized owner intent and disable a different decision while its outcome is unresolved.
+- [x] Dispatch protected status through the typed owner adapter without adding a Leadership receipt store.
+- [x] Keep absent owner receipt `UNKNOWN`; allow status check and exact original retry only.
+- [x] Recheck current owner authority and source access before protected receipt disclosure; clear protected view data after revocation.
+- [x] Show changed owner version/state and require a fresh evidence read and confirmation with a new intent.
+- [x] Verify exact replay has one owner side effect and changed payload conflicts in real PostgreSQL.
+- [x] Compare approved LEA-31 with desktop/mobile unknown, revoked, recovered and changed states.
+
+Engineering status: LEA-31 ENGINEERING_COMPLETE for every registered decision owner; direct comparison complete with the routed production-composition/font deviations; human review PENDING.
+
 ## LEA-34 — Notice delivery and acknowledgement coverage
 
 - [x] Grant only the exact Principal read capability; retain separate publisher authority.
