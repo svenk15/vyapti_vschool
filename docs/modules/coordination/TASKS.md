@@ -54,8 +54,9 @@ Dependencies: F03 engineering-complete; D04 approved for synthetic-only implemen
 - [x] Add the current-purpose 90-day safe event projection without exposing notes, tokens or restricted source contents.
 - [x] Verify PostgreSQL replay/concurrency/revocation and focused Principal desktop/mobile journeys.
 - [x] Extend synthetic seed/evidence and update F04 plus affected workflow accounting.
+- [x] Add the separately designated immutable WF-42 finding/escalation record with exact replay, no request mutation and protected text visibility.
 
-Engineering status: ENGINEERING_COMPLETE for the F04 foundation. LEA-42 remains PARTIAL because its safe read/search/source-open path is complete while the optional separate review-finding record is not implemented by this slice. Human review remains PENDING.
+Engineering status: ENGINEERING_COMPLETE for F04 and LEA-42 in the approved synthetic-only scope. Safe search/source opening and the separate immutable review-finding record are implemented. Human review remains PENDING.
 
 ## COORD-02 — LEA-10 bounded bulk Attendance follow-ups
 

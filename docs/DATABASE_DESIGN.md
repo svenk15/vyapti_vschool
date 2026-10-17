@@ -117,6 +117,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | CoordinationCapabilityGrant | `vs_coordination_capability_grant` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationRequest | `vs_coordination_request` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationRequestEvent | `vs_coordination_request_event` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
+| CoordinationHistoryFinding | `vs_coordination_history_finding` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationCommandReceipt | `vs_coordination_command_receipt` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationBatch | `vs_coordination_batch` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationBatchItem | `vs_coordination_batch_item` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |

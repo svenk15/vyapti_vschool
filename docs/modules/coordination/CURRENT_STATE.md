@@ -1,5 +1,13 @@
 # Coordination current state
 
+## 17 October 2026 — WF-42 / LEA-42 separate review finding
+
+LEA-42 is ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. The existing safe bounded history now offers a separate staged finding/escalation only when the actor holds both `coordination.history` and the trusted `coordination.history.finding` designation. The command binds one exact request event, normalized bounded text and a stable key. It writes an immutable Coordination-owned record and safe receipt/audit metadata without changing the request version, owner lifecycle, source evidence or prior events. General history actors never receive finding text.
+
+Forward migration `20261018010000_coordination_history_findings` is applied to development and test; both retain 87 forward migrations. It extends the capability allowlist and adds registered Path-A table `vs_coordination_history_finding` with scoped request/event FKs and an update/delete denial trigger. Focused unit passed 10/10; real-PostgreSQL Coordination passed 15/15 including replay/conflict, immutability and revocation; current isolated Chromium and mobile finding journeys passed 1/1 each after rebuilding a stale isolated output and correcting one ambiguous test locator. `pnpm check` passed all repository gates and 209/209 unit tests. Normal production build `BftvXrMHfVnML5bwvM2QZ` and isolated build `qnG7oQXhVh9N-nY_3Rkaw` passed. The incremental seed passed twice. The new desktop/mobile captures were directly inspected against LEA-42. Evidence: [principal-f04-history-2026-10-17](../../evidence/principal-f04-history-2026-10-17/README.md).
+
+Real operational-note retention/backup deletion and designation policy, TEN-03, font portability, native accessibility, actual browser zoom and human review remain pending.
+
 ## 16 October 2026 — COORD-01 verified Attendance foundation
 
 Coordination now owns persisted Attendance follow-up requests for LEA-09, LEA-11 and LEA-15. The implemented slice provides branch-scoped designation grants, create and atomic initial assignment, queues and details, reassign/due changes, start, exact Attendance-owned evidence submission, independent verify/return, withdraw and reopen. Current membership, module availability, source authority and assignment eligibility are rechecked on protected operations. Notes stay out of platform audit payloads.

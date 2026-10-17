@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {randomUUID} from 'node:crypto';
-import {assignInput,batchInput,createInput,handoverInput,historyInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
+import {assignInput,batchInput,createInput,handoverInput,historyFindingInput,historyInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
 import {createDecisionInboxUseCases,type DecisionOwnerAdapter} from '../../backend/modules/leadership/application/decisions';
 import type {CoordinationSourceAdapter} from '../../backend/modules/coordination/contracts/source-adapter';
 import {CoordinationSourceRegistry} from '../../backend/modules/coordination/infrastructure/source-registry';
@@ -51,6 +51,13 @@ describe('coordination request contract',()=>{
   expect(()=>historyInput({attribute:'date',value:null,fromDate:'2026-07-18',toDate:'2026-10-16'})).toThrow('VALIDATION');
   expect(()=>historyInput({attribute:'actor',value:'not-an-id',fromDate:'2026-10-01',toDate:'2026-10-16'})).toThrow('VALIDATION');
   expect(()=>historyInput({attribute:'date',value:null,fromDate:'2026-10-17',toDate:'2026-10-16'})).toThrow('VALIDATION');
+ });
+
+ it('binds an immutable history finding to one exact event',()=>{
+  const requestId=randomUUID(),input=historyFindingInput({requestId,eventNumber:3,kind:'ESCALATION',text:'  Review the unresolved operational ownership.  ',key:key()});
+  expect(input).toMatchObject({requestId,eventNumber:3,kind:'ESCALATION',text:'Review the unresolved operational ownership.'});
+  expect(()=>historyFindingInput({...input,eventNumber:0})).toThrow('VALIDATION');
+  expect(()=>historyFindingInput({...input,kind:'NOTE'})).toThrow('VALIDATION');
  });
 
  it('converts an unambiguous branch-local due time and rejects DST gaps and overlaps',()=>{

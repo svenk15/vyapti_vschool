@@ -1,4 +1,4 @@
-export const coordinationCapabilities=['coordination.create','coordination.assign','coordination.work','coordination.verify','coordination.manage','coordination.history'] as const;
+export const coordinationCapabilities=['coordination.create','coordination.assign','coordination.work','coordination.verify','coordination.manage','coordination.history','coordination.history.finding'] as const;
 export type CoordinationCapability=typeof coordinationCapabilities[number];
 export const coordinationStatuses=['OPEN','IN_PROGRESS','AWAITING_VERIFICATION','RESOLVED','WITHDRAWN'] as const;
 export type CoordinationStatus=typeof coordinationStatuses[number];
@@ -29,4 +29,6 @@ export type CoordinationHandoverItemResult=Readonly<{ordinal:number;requestId:st
 export type CoordinationHandoverReceipt=Readonly<{id:string;state:'PROCESSING'|'COMPLETED'|'PARTIAL';input:CoordinationHandoverInput;from:CoordinationActorSummary;to:CoordinationActorSummary;counts:{total:number;transferred:number;failed:number;pending:number};items:readonly CoordinationHandoverItemResult[];createdAt:string;updatedAt:string;completedAt:string|null;replayed:boolean}>;
 export type CoordinationHistoryAttribute='reference'|'actor'|'date';
 export type CoordinationHistoryItem=Readonly<{eventId:string;requestId:string;number:number;type:string;fromStatus:CoordinationStatus|null;toStatus:CoordinationStatus|null;actor:CoordinationActorSummary;previousAssignee:CoordinationActorSummary|null;assignee:CoordinationActorSummary|null;occurredAt:string}>;
-export type CoordinationHistory=Readonly<{items:readonly CoordinationHistoryItem[];nextCursor:string|null;timezone:string;query:{attribute:CoordinationHistoryAttribute;value:string|null;fromDate:string;toDate:string}}>;
+export type CoordinationHistoryFinding=Readonly<{id:string;requestId:string;eventNumber:number;kind:'FINDING'|'ESCALATION';text:string;actor:CoordinationActorSummary;occurredAt:string}>;
+export type CoordinationHistoryFindingResult=Readonly<{findingId:string;requestId:string;eventNumber:number;kind:'FINDING'|'ESCALATION';occurredAt:string;replayed:boolean}>;
+export type CoordinationHistory=Readonly<{items:readonly CoordinationHistoryItem[];findings:readonly CoordinationHistoryFinding[];canRecordFinding:boolean;nextCursor:string|null;timezone:string;query:{attribute:CoordinationHistoryAttribute;value:string|null;fromDate:string;toDate:string}}>;

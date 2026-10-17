@@ -57,7 +57,7 @@ beforeAll(async()=>{
  const principal=await activeStaffFixture(db,scope,['PRINCIPAL']);creator=principal.identity;
  const second=await activeStaffFixture(db,scope,['SCHOOL_ADMIN']);secondWorker=second.identity;
  const withoutCoordination=await activeStaffFixture(db,scope,['SCHOOL_ADMIN']);undesignated=withoutCoordination.identity;
- for(const capability of ['coordination.create','coordination.assign','coordination.verify','coordination.manage','coordination.history'] as const)await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability});
+ for(const capability of ['coordination.create','coordination.assign','coordination.verify','coordination.manage','coordination.history','coordination.history.finding'] as const)await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability});
  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:worker.accountId,capability:'coordination.work'});
  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:secondWorker.accountId,capability:'coordination.work'});
 });
@@ -221,6 +221,16 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   expect((await coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'actor',value:worker.accountId,fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25})).items.some(item=>item.requestId===created.requestId)).toBe(true);
   expect((await coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'actor',value:randomUUID(),fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25})).items).toEqual([]);
   await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.history'});await expect(coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'date',value:null,fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25})).rejects.toMatchObject({code:'FORBIDDEN'});await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.history'});
+ });
+
+ it('records a separate immutable history finding with exact replay and live designation',async()=>{
+  const attendance=await source(),created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,key:commandKey()}),key=commandKey(),input={requestId:created.requestId,eventNumber:1,kind:'FINDING',text:'Synthetic review confirms that ownership remains visible.',key} as const;
+  const finding=await coordination.recordHistoryFinding(creator,scope.organizationId,scope.schoolId,input);expect(finding).toMatchObject({requestId:created.requestId,eventNumber:1,kind:'FINDING',replayed:false});
+  expect(await coordination.recordHistoryFinding(creator,scope.organizationId,scope.schoolId,input)).toMatchObject({...finding,replayed:true});
+  await expect(coordination.recordHistoryFinding(creator,scope.organizationId,scope.schoolId,{...input,text:'Changed finding'})).rejects.toMatchObject({code:'IDEMPOTENCY_CONFLICT'});
+  const history=await coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'reference',value:created.requestId,fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25});expect(history.findings).toHaveLength(1);expect(history.findings[0]).toMatchObject({id:finding.findingId,text:input.text});
+  await expect(db.coordinationHistoryFinding.update({where:{id:finding.findingId},data:{text:'Erased'}})).rejects.toBeTruthy();
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.history.finding'});await expect(coordination.recordHistoryFinding(creator,scope.organizationId,scope.schoolId,input)).rejects.toMatchObject({code:'FORBIDDEN'});expect((await coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'reference',value:created.requestId,fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25})).findings).toEqual([]);await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.history.finding'});
  });
 
  it('dispatches only the typed Coordination decision and protects an exact recovered result',async()=>{

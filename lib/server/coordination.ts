@@ -19,6 +19,7 @@ export const coordinationGateway={
  handover:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.handover(s.identity,s.organizationId,s.schoolId,input);},
  getHandover:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.getHandover(s.identity,s.organizationId,s.schoolId,id);},
  history:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.history(s.identity,s.organizationId,s.schoolId,input);},
+ recordHistoryFinding:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.recordHistoryFinding(s.identity,s.organizationId,s.schoolId,input);},
  create:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.create(s.identity,s.organizationId,s.schoolId,input);},
  assign:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.assign(s.identity,s.organizationId,s.schoolId,input);},
  start:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.start(s.identity,s.organizationId,s.schoolId,input);},

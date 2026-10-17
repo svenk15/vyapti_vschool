@@ -1040,6 +1040,20 @@ model CoordinationRequestEvent {
  @@map("vs_coordination_request_event")
 }
 
+model CoordinationHistoryFinding {
+ id String @id(map:"vs_coordination_history_finding_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ requestId String @map("request_id") @db.Uuid
+ eventNumber Int @map("event_number")
+ kind String @db.VarChar(20)
+ text String @db.VarChar(1000)
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ @@index([organizationId,schoolId,requestId,occurredAt(sort: Desc),id(sort: Desc)],map:"vs_coordination_history_finding_list_idx")
+ @@map("vs_coordination_history_finding")
+}
+
 model CoordinationCommandReceipt {
  id String @id(map:"vs_coordination_command_receipt_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid

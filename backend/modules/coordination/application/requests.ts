@@ -1,7 +1,7 @@
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
-import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPreview,CoordinationBatchReceipt,CoordinationCapability,CoordinationHandoverReceipt,CoordinationHistory,CoordinationMutationResult,CoordinationQueue,CoordinationRequest,CoordinationSourceSetup} from '../../../../shared/contracts/coordination';
+import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPreview,CoordinationBatchReceipt,CoordinationCapability,CoordinationHandoverReceipt,CoordinationHistory,CoordinationHistoryFindingResult,CoordinationMutationResult,CoordinationQueue,CoordinationRequest,CoordinationSourceSetup} from '../../../../shared/contracts/coordination';
 import {AccessError} from '../../access/contracts/index';
-import {assignInput,batchInput,batchPreviewInput,createInput,handoverInput,historyInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
+import {assignInput,batchInput,batchPreviewInput,createInput,handoverInput,historyFindingInput,historyInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
 
 export type CoordinationListInput=Readonly<{status?:unknown;kind?:unknown;assignment?:unknown;cursor?:unknown;limit?:unknown}>;
 export interface CoordinationRepository {
@@ -17,6 +17,7 @@ export interface CoordinationRepository {
  handover(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof handoverInput>):Promise<CoordinationHandoverReceipt>;
  getHandover(actor:Identity,organizationId:string,schoolId:string,handoverId:string):Promise<CoordinationHandoverReceipt>;
  history(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof historyInput>):Promise<CoordinationHistory>;
+ recordHistoryFinding(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof historyFindingInput>):Promise<CoordinationHistoryFindingResult>;
  create(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof createInput>):Promise<CoordinationMutationResult>;
  assign(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof assignInput>):Promise<CoordinationMutationResult>;
  start(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof transitionInput>):Promise<CoordinationMutationResult>;
@@ -43,6 +44,7 @@ export function createCoordinationUseCases(repository:CoordinationRepository){re
  handover(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.handover(s.actor,s.organizationId,s.schoolId,handoverInput(record(input)));},
  getHandover(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,handoverId:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.getHandover(s.actor,s.organizationId,s.schoolId,id(handoverId));},
  history(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.history(s.actor,s.organizationId,s.schoolId,historyInput(record(input)));},
+ recordHistoryFinding(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.recordHistoryFinding(s.actor,s.organizationId,s.schoolId,historyFindingInput(record(input)));},
  create(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.create(s.actor,s.organizationId,s.schoolId,createInput(record(input)));},
  assign(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.assign(s.actor,s.organizationId,s.schoolId,assignInput(record(input)));},
  start(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.start(s.actor,s.organizationId,s.schoolId,transitionInput(record(input)));},
