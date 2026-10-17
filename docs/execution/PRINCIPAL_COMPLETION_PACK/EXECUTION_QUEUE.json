@@ -176,7 +176,7 @@
       "scope": "Subtasks: plan+scale+cohort; teacher mark revisions; independent moderation; report revision/audience. Each checkpoint demo-able; register a distinct owner.",
       "demo": "Teacher records marks, reviewer returns then approves revised set, publisher prepares report; no missing-as-zero.",
       "kind": "foundation",
-      "completedSlice": "F11-A readiness, F11-B planning and F11-C exact-assignment Teacher mark revisions are verified: owner recovery, dated frozen cohort, distinct outcome states, append-only revisions, concurrency, protected replay, focused seed and direct desktop/mobile inspection. Principal cycle selection, typed Coordination handoff, moderation and publication remain."
+      "completedSlice": "F11-A readiness, F11-B planning, F11-C exact-assignment Teacher mark revisions and F11-D independent moderation are verified: owner recovery, dated frozen cohort, distinct outcome states, append-only revisions, explicit moderator authority, information/recusal, fresh-evidence decisions, protected replay, focused seed and direct desktop/mobile inspection. Principal cycle selection, typed Coordination handoff and report publication remain."
     },
     {
       "id": "F12",
@@ -456,10 +456,11 @@
       "decisions": [
         "D11"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-21.md",
       "kind": "workflow",
-      "workflow": "LEA-21"
+      "workflow": "LEA-21",
+      "completedSlice": "Assessments registers a typed decision owner with explicit independent moderator grants, aggregate-only exact evidence, Teacher information response, recusal/routing, return/resubmit, approve/reject, exact replay, protected recovery and changed-evidence invalidation. Moderation never publishes a report."
     },
     {
       "id": "WF-22",

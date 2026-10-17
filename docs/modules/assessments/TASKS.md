@@ -27,10 +27,10 @@
 ## F11-D — independent moderation / LEA-21
 
 - [x] Resolve the exact moderator designation, submitted evidence, information/recusal, replay and owner-adapter contract.
-- [ ] Add forward moderation assignment/event/information persistence and TEN-03 registrations.
-- [ ] Implement Teacher submission/response, typed decision adapter and Principal moderation route.
-- [ ] Verify submission, separation of duties, evidence invalidation, return/resubmit, recovery and desktop/mobile evidence.
-- [ ] Prove recorder cannot moderate own revision and moderation never publishes.
+- [x] Add forward moderation assignment/event/information persistence and TEN-03 registrations.
+- [x] Implement Teacher submission/response, typed decision adapter and Principal moderation route.
+- [x] Verify submission, separation of duties, evidence invalidation, return/resubmit, recovery and desktop/mobile evidence.
+- [x] Prove recorder cannot moderate own revision and moderation never publishes.
 
 ## F11-E — report publication / LEA-22
 
