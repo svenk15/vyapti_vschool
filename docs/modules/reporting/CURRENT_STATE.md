@@ -4,7 +4,7 @@ Last updated: 2026-10-17.
 
 ## F05 / LEA-41 evidence-backed leadership brief — 17 October 2026
 
-Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY.
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. Implementation checkpoint `4e61deb`; production build `YojMoKMwoNyiWSJpXYkBw`.
 
 Reporting now provides `/leadership/briefs/new` and retained brief detail/revision routes. Generation and portal sharing require separate operator designations. A draft saves an append-only complete revision containing bounded narrative, 1–20 immutable whole-branch Attendance snapshot pointers and 1–20 explicit account recipients. Finalize, share and withdraw use current version plus exact command key; finalized source/audience content is immutable. Sharing rechecks the author and every recipient as an active Principal with live comparison authority and enabled source modules. Every read rechecks all source rights and fails the whole brief closed after source removal, recipient revocation or withdrawal. Portal share and first read are separate recorded facts and are never described as acknowledgement.
 

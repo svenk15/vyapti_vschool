@@ -2,6 +2,8 @@
 
 Human review: **PENDING**. Deployment: **SYNTHETIC_ONLY**.
 
+Verified implementation source: `4e61deb`. Production build: `YojMoKMwoNyiWSJpXYkBw`.
+
 ## Scope
 
 The production route is `/leadership/briefs/new`, with revision/detail routes under `/leadership/briefs/{id}`. The approved source is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`, workflow state `LEA-41 — Prepare a leadership review brief`.
