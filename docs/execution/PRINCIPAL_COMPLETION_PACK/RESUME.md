@@ -1,12 +1,12 @@
 # Programme resume
 
-Task/subtask: F07-A and WF-23/LEA-23 are **ENGINEERING_COMPLETE** at product checkpoint `F07_PRODUCT_COMMIT`. F07 remains **PARTIAL**. The exact next action is F07-B / LEA-24: reconcile the existing Timetable cover proposal with approved D09 and D02, write the narrow exact-occurrence cover LLD, and implement approval plus substitute acceptance without changing OPEN/submitted Attendance.
+Task/subtask: F07-A and WF-23/LEA-23 are **ENGINEERING_COMPLETE** at product checkpoint `e62445d`. F07 remains **PARTIAL**. The exact next action is F07-B / LEA-24: reconcile the existing Timetable cover proposal with approved D09 and D02, write the narrow exact-occurrence cover LLD, and implement approval plus substitute acceptance without changing OPEN/submitted Attendance.
 
 Approved decisions: D01 preserves the existing COORD-02/LEA-10 contract. On 17 October 2026 the repository owner explicitly approved D02–D19 for synthetic-only implementation exactly as recorded in `02_PRODUCT_DECISIONS.md`, with no exceptions. This does not authorize production enablement, purchases, provider selection, real external messages or payments, or invented emergency procedures. Human acceptance remains separate and PENDING.
 
 Current matrix: 19 ENGINEERING_COMPLETE, five PARTIAL and 22 NOT_STARTED. Human review remains PENDING for all 46 Principal workflows.
 
-Current verified product source: `F07_PRODUCT_COMMIT`. The normal build and focused E2E build both completed from the F07-A source. Current normal build ID: `z4pQqAZLYuGN_Fp_yPxa9`.
+Current verified product source: `e62445d`. The normal build and focused E2E build both completed from the F07-A source. Current normal build ID: `z4pQqAZLYuGN_Fp_yPxa9`.
 
 Current demo: the exact current-source demo is restored at `http://127.0.0.1:3400` after the checkpoint commit. Verify `/api/health` and the build identity again on resumption rather than assuming a long-running process survived.
 

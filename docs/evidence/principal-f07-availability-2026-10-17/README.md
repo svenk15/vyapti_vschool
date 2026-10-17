@@ -1,6 +1,6 @@
 # F07-A / LEA-23 — safe operational staffing availability
 
-Status: engineering complete for the D09 availability slice at `F07_PRODUCT_COMMIT`; human review PENDING. F07 remains PARTIAL because exact-occurrence cover approval, substitute acceptance and Attendance-safe activation are a separate slice.
+Status: engineering complete for the D09 availability slice at `e62445d`; human review PENDING. F07 remains PARTIAL because exact-occurrence cover approval, substitute acceptance and Attendance-safe activation are a separate slice.
 
 ## Implemented outcome
 

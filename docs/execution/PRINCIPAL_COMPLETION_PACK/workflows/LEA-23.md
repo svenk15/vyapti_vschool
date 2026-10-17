@@ -1,7 +1,7 @@
 # LEA-23 — Review staffing availability without private reasons
 
 ## Identity and readiness
-- Current status: ENGINEERING_COMPLETE at `F07_PRODUCT_COMMIT`; human review PENDING. The broader F07 cover foundation remains PARTIAL.
+- Current status: ENGINEERING_COMPLETE at `e62445d`; human review PENDING. The broader F07 cover foundation remains PARTIAL.
 - Owner: People + Timetable. This names responsibility, not proof that an owner module exists.
 - Product decisions: D09. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F07. See execution queue.
