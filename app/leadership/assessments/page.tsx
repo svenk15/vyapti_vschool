@@ -1,5 +1,6 @@
 import {redirect} from 'next/navigation';
 import {Alert,Badge,Card,EmptyState,PageHeader,PageStack,StatCard} from '@/components/ui/primitives';
+import {SelectField} from '@/components/ui/forms';
 import {getIdentity} from '@/lib/server/auth';
 import {assessmentsGateway} from '@/lib/server/assessments';
 
@@ -11,8 +12,9 @@ export default async function LeadershipAssessments({searchParams}:{searchParams
  const params=await searchParams;let view,error=false;
  try{view=await assessmentsGateway.leadershipReadiness(identity,params.cycle);}catch{error=true;}
  return <main id="main-content" className="container page-space"><PageStack>
-  <PageHeader eyebrow="Assessment oversight" title="Assessment and report readiness" description="Frozen cohort outcomes, moderation and report states from one exact scheme version."/>
+  <PageHeader eyebrow="Assessment oversight" title="Assessment and report readiness" description="Frozen cohort outcomes, moderation and report states from one exact scheme version." actions={view&&!view.readyForApproval?<a className="btn btn-primary" href={`/leadership/coordination/new?assessmentCycle=${encodeURIComponent(view.cycle.id)}&kind=ASSESSMENT_READINESS_FOLLOW_UP&return=${encodeURIComponent(`/leadership/assessments?cycle=${view.cycle.id}`)}`}>Create readiness follow-up</a>:undefined}/>
   {error||!view?<Alert tone="danger" title="Assessment readiness unavailable">No readiness count is shown. Check the current branch, Assessments module and explicit oversight grant.</Alert>:<>
+   <Card className="padded"><form method="get" className="compact-toolbar"><SelectField label="Assessment cycle" name="cycle" defaultValue={view.cycle.id}>{view.cycles.map(cycle=><option key={cycle.id} value={cycle.id}>{cycle.name} · {cycle.academicYearName} · {cycle.sectionName} · scheme {cycle.schemeVersion}</option>)}</SelectField><button className="btn btn-secondary" type="submit">View cycle</button></form></Card>
    <Card className="padded"><div className="split-heading"><div><Badge tone={view.readyForApproval?'success':'warning'}>{view.readyForApproval?'Ready for approval':'Action required'}</Badge><h2>{view.cycle.name}</h2><p>{view.cycle.academicYearName} · {view.cycle.sectionName} · Scheme {view.cycle.schemeVersion}</p></div><div className="small muted">Source cutoff {new Intl.DateTimeFormat('en-IN',{timeZone:view.timezone,dateStyle:'medium',timeStyle:'short'}).format(new Date(view.cycle.sourceCutoff))}</div></div></Card>
    <section className="leadership-coverage-metrics assessment-readiness-metrics" aria-label="Assessment readiness summary"><StatCard label="Required outcomes" value={String(view.counts.requiredSlots)} detail="Frozen required subject and cohort slots."/><StatCard label="Numeric" value={String(view.counts.numeric)} detail="Includes a recorded numeric zero."/><StatCard label="Missing" value={String(view.counts.missing)} detail="Never converted to zero."/><StatCard label="Moderation pending" value={String(view.counts.moderationPending)} detail="Approval and publication remain separate."/></section>
    {view.blockers.length?<Alert tone="warning" title="Readiness blockers">{view.blockers.map(label).join(' · ')}</Alert>:<Alert tone="success" title="Readiness prerequisites satisfied">This does not publish a report.</Alert>}

@@ -17,6 +17,8 @@ describe('coordination request contract',()=>{
   expect(resolutionInput({requestId:randomUUID(),expectedVersion:3,kind:'LEARNING_POLICY_EVENT',revision:1,reason:'The reviewed extension is now effective.',key:key()})).toMatchObject({kind:'LEARNING_POLICY_EVENT',revision:1});
   const submissionId=randomUUID();expect(createInput({sourceType:'LEARNING_FEEDBACK_SUBMISSION',sourceId:submissionId,kind:'LEARNING_FEEDBACK_FOLLOW_UP',concern:'FEEDBACK_AWAITING',note:'Accepted work is awaiting its first feedback publication.',dueLocal:'2026-10-20T15:30',assigneeAccountId:randomUUID(),assignmentReason:'Coordinate the exact accepted submission.',key:key()})).toMatchObject({sourceType:'LEARNING_FEEDBACK_SUBMISSION',sourceId:submissionId,kind:'LEARNING_FEEDBACK_FOLLOW_UP',concern:'FEEDBACK_AWAITING'});
   expect(resolutionInput({requestId:randomUUID(),expectedVersion:3,kind:'LEARNING_FEEDBACK_PUBLICATION',revision:1,reason:'The first immutable feedback version is published.',key:key()})).toMatchObject({kind:'LEARNING_FEEDBACK_PUBLICATION',revision:1});
+  const cycleId=randomUUID();expect(createInput({sourceType:'ASSESSMENT_READINESS',sourceId:cycleId,kind:'ASSESSMENT_READINESS_FOLLOW_UP',concern:'ASSESSMENT_READINESS',note:'Resolve the exact owner blockers.',dueLocal:'2026-10-20T15:30',assigneeAccountId:randomUUID(),assignmentReason:'Explicit Assessments planner.',key:key()})).toMatchObject({sourceType:'ASSESSMENT_READINESS',sourceId:cycleId,kind:'ASSESSMENT_READINESS_FOLLOW_UP',concern:'ASSESSMENT_READINESS'});
+  expect(resolutionInput({requestId:randomUUID(),expectedVersion:3,kind:'ASSESSMENT_READINESS_RECHECK',revision:8,reason:'The owner projection was rechecked.',key:key()})).toMatchObject({kind:'ASSESSMENT_READINESS_RECHECK',revision:8});
  });
 
  it('rejects mismatched kinds, unknown fields, invalid evidence and unsafe text',()=>{
@@ -26,6 +28,7 @@ describe('coordination request contract',()=>{
   expect(()=>createInput({sourceType:'LEARNING_RECIPIENT',sourceId:randomUUID(),kind:'LEARNING_SUPPORT_REVIEW',concern:'LEARNING_PROGRESS',note:null,dueLocal:'2026-10-20T15:30',assigneeAccountId:randomUUID(),assignmentReason:'Missing factual note',key:key()})).toThrow('VALIDATION');
   expect(()=>createInput({sourceType:'LEARNING_RECIPIENT',sourceId:randomUUID(),kind:'SESSION_SETUP_REVIEW',concern:'OTHER',note:'Wrong source pairing',dueLocal:null,key:key()})).toThrow('VALIDATION');
   expect(()=>createInput({sourceType:'LEARNING_FEEDBACK_SUBMISSION',sourceId:randomUUID(),kind:'LEARNING_SUPPORT_REVIEW',concern:'LEARNING_PROGRESS',note:'Wrong source pairing',dueLocal:'2026-10-20T15:30',assigneeAccountId:randomUUID(),assignmentReason:'Wrong source pairing',key:key()})).toThrow('VALIDATION');
+  expect(()=>createInput({sourceType:'ASSESSMENT_READINESS',sourceId:randomUUID(),kind:'ASSESSMENT_READINESS_FOLLOW_UP',concern:'OTHER',note:'Wrong concern',dueLocal:'2026-10-20T15:30',assigneeAccountId:randomUUID(),assignmentReason:'Wrong concern',key:key()})).toThrow('VALIDATION');
   expect(()=>resolutionInput({requestId:randomUUID(),expectedVersion:1,kind:'NO_CHANGE_NEEDED',revision:1,reason:'No change',key:key()})).toThrow('VALIDATION');
  expect(()=>assignInput({requestId:randomUUID(),assigneeAccountId:randomUUID(),dueLocal:null,expectedVersion:1,reason:'line\nbreak',key:key()})).toThrow('VALIDATION');
   expect(()=>batchInput({sourceIds:[],kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:null,assignmentReason:null,key:key()})).toThrow('VALIDATION');
@@ -99,7 +102,7 @@ describe('typed decision facade',()=>{
  it('validates and dispatches one owner status intent without changing it',async()=>{
   let seen:unknown;const adapter={owner:'COORDINATION_VERIFICATION',list:async()=>({items:[],nextCursor:null,timezone:'UTC'}),get:async()=>{throw new Error('unexpected');},decide:async()=>{throw new Error('unexpected');},status:async(_actor,_organizationId,_schoolId,_itemId,input)=>{seen=input;return {state:'UNKNOWN' as const};},requestInformation:async()=>{throw new Error('unexpected');},reviewers:async()=>[],recuse:async()=>{throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1},input={action:'RETURN',expectedVersion:4,reason:'Needs current owner evidence',key:key()};
   await expect(facade.status(identity,randomUUID(),randomUUID(),'COORDINATION_VERIFICATION',randomUUID(),input)).resolves.toEqual({state:'UNKNOWN'});
-  expect(seen).toEqual(input);
+  expect(seen).toEqual({...input,expectedEvidenceDigest:null});
  });
 });
 
