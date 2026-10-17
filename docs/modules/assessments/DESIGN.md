@@ -124,4 +124,34 @@ sequenceDiagram
 
 F11-B verification requires domain validation/reconciliation tests; real-PostgreSQL scope, grant, dated cohort, stale version, atomic rollback, replay/conflict, revocation and concurrent-freeze tests; and a one-worker browser journey for create scale → create plan → reload draft → freeze → Principal readiness link, including recovery, desktop/mobile composition and keyboard focus.
 
-F11-C adds assigned-Teacher mark revisions. F11-D adds independent moderation and LEA-21. F11-E adds report revisions, explicit publication delegation and LEA-22; Documents must provide a real-scanned generated artifact before report download is complete.
+### F11-C — assigned-Teacher mark revisions
+
+F11-C implements the D11 and approved TEA-33 subset needed by LEA-20. `/teacher/assessments` lists only `OPEN` or `MARKING` cycle-plan items for which the signed-in Teacher has a current, dated `TeacherAssignment` to the exact active `CourseOffering(academicYearId, sectionId, subjectId)`. The Teacher account must still bind through Account → Person → active Employee → active Teacher and an active `TEACHER` membership. The relevant `assessments`, `academic_core`, `staff_core` and `student_core` release, entitlement and branch activation checks apply on every read, write and protected receipt lookup. Role alone is insufficient.
+
+Academics owns assignment resolution through `AssessmentMarkAuthorityPort`; Assessments never reads Academics tables directly. Students owns the bounded frozen-member display projection through `AssessmentCohortPort`; the port returns only exact Student ID, display name and admission number for the already-authorized frozen identities. Assignment validity uses the current branch-local date. Later transfers do not rewrite the frozen cohort, and an actor who no longer holds the exact current subject assignment cannot read or write the gradebook.
+
+`SaveAssessmentMarkRevision` accepts one exact `cycleId`, `planItemId`, `cohortMemberId`, outcome state, nullable scaled integer score, `expectedOutcomeVersion`, required reviewed acknowledgement and UUID key. `NUMERIC` requires an integer within the pinned scale minimum and plan-item maximum, including zero. `ABSENT`, `EXCUSED` and `NOT_ASSESSED` require a null score. The browser label follows the live D11 owner vocabulary (`Excused`); it does not silently reinterpret that state as a different national-board exemption rule. Expected version `0` means the slot is not yet recorded; an existing slot then returns `STALE_VERSION`. Existing outcomes require the exact positive version. The current row and a new immutable `AssessmentsOutcomeRevision` are written atomically. First successful entry changes the cycle from `OPEN` to `MARKING`; no command publishes family-visible results or creates moderation approval.
+
+The write runs at `SERIALIZABLE` and locks account → Organization → School → Cycle → current outcome slot. It rechecks current assignment after the locks and uses the existing Assessments receipt table with command `SaveAssessmentMarkRevision`. The receipt response contains only cycle/plan/cohort/outcome identities, revision/version and state. Same-key/same-payload reauthorizes the exact assignment and returns the original result; changed payload conflicts. `getMarkCommandStatus` returns `UNKNOWN` when absent and reauthorizes the exact current assignment before a `FOUND` result. Revoked membership, module access or assignment denies protected replay disclosure. Platform audit records IDs/state/version only; names and scores remain in Assessments-owned rows and are excluded from audit/receipt response.
+
+The Teacher screen uses the approved TEA-33 two-stage composition: choose one frozen pupil and explicit outcome, then review the pinned subject/scale and acknowledge before the final save. Back/Continue retains in-flow edits. Validation occurs before confirmation; only the final action mutates. A committed response loss retains the exact payload/key for status/retry. Stale state reloads the current permitted value and requires fresh confirmation. Reload reads the persisted revision. No durable browser draft, result publication, moderation or assessment-schedule creation is introduced.
+
+```mermaid
+sequenceDiagram
+  participant T as Assigned Teacher
+  participant H as Next hosting adapter
+  participant A as Assessments facade
+  participant AC as Academics authority port
+  participant DB as PostgreSQL
+  T->>H: Save reviewed outcome(expected version, key)
+  H->>A: validated command + verified branch scope
+  A->>DB: establish context; lock account, org, school, cycle and slot
+  A->>AC: recheck current exact subject assignment
+  A->>DB: append revision; create/update current outcome; audit + receipt
+  DB-->>A: one owner-confirmed revision
+  A-->>H: confirmed result or exact replay
+```
+
+Verification requires domain state/score/version validation; real-PostgreSQL exact-assignment, cross-branch, revoked assignment, zero/non-score distinction, new/update revision, stale version, exact replay/conflict, protected status and concurrent-editor tests; and sequential one-worker desktop/mobile journeys for staged entry, retained Back/Continue edits, committed-response recovery, persisted reload, stale recovery, keyboard focus and no overflow. The approved Teacher reference supplies TEA-33 stage semantics; production uses the established Teacher shell and measured shared recipes. Human review and native accessibility remain separate.
+
+F11-D adds independent moderation and LEA-21. F11-E adds report revisions, explicit publication delegation and LEA-22; Documents must provide a real-scanned generated artifact before report download is complete.
