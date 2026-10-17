@@ -19,7 +19,7 @@ F08 remains PARTIAL: the typed Coordination academic-evidence adapter, eligible 
 
 Forward migration `20261017160000_learning_recipient_policy` adds `vs_learning_manager_grant` and append-only `vs_learning_recipient_policy_event`. Development and `vyapti_vschool_test` each have 73 applied migrations. Both tables carry TEN-ADR-006 Path A metadata; TEN-03 remains required before production or real-client data.
 
-Passed on current working source before checkpoint commit:
+Passed on committed product source `6df25c98b2b8919b30384a41cf21257da734b931`:
 
 - `pnpm exec vitest run test/unit/learning-recipient-policy.test.ts test/unit/reporting-export.test.ts --reporter=default` — 16/16.
 - `pnpm test:functional test/functional/learning-publication.test.ts -t "gives a Principal|applies exact recipient extensions"` — 2/2 with 15 intentionally skipped by filter, real PostgreSQL.

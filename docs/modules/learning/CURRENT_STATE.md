@@ -84,6 +84,8 @@ Full LEA-18 remains PARTIAL. Subject-lead assignee authority, operational-note o
 
 Status: ENGINEERING_VERIFIED_SUPPORTED_SLICE / F08_PARTIAL / HUMAN_REVIEW_PENDING
 
+Implementation commit: `6df25c98b2b8919b30384a41cf21257da734b931`.
+
 Approved synthetic-only D10 is implemented for Learning-owned per-recipient deadline extensions, excusal and reversal. Exact class/subject manager and status-reader designations are independent. Reads and writes recheck live identity, membership, branch, release, entitlement, activation and the exact designation. Policy commands lock the account, organization, school, assignment and recipient in the documented order, use expected event version and exact-key replay, and append immutable owner history, safe audit, outbox and receipt evidence. Reasons remain restricted to Learning history and never enter named status DTOs, Parent/Student assignment DTOs or Principal aggregates.
 
 Forward migration `20261017160000_learning_recipient_policy` is applied to development and `vyapti_vschool_test`; both have 73 applied migrations. It adds `vs_learning_manager_grant` and `vs_learning_recipient_policy_event`. The database registry now contains 111 passing contracts. TEN-03 Path A remains a production and real-client-data gate.
