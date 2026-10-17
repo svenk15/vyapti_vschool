@@ -1,5 +1,5 @@
 {
-  "revision": "4.9",
+  "revision": "4.10",
   "prefix": "vs_",
   "tables": [
     {
@@ -2366,6 +2366,90 @@
         "intendedPolicy": "Require verified tenant keys and current live Communication authority; recipient portal reads start from the authenticated account and typed current purpose binding.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AccessLeadershipDelegation",
+      "owner": "access",
+      "table": "vs_access_leadership_delegation",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; employee_id uuid; starts_at/ends_at timestamptz(3); reason varchar(500); operator attribution; revocation; version int",
+      "responsibility": "D02 temporary exact-action leadership authority root; retains attribution after expiry/revocation.",
+      "constraints": "FK(scope,membership_id,account_id); FK(scope,employee_id); CHECK half-open window <=30 days, positive version, coherent revocation; UNIQUE(scope,id); runtime and Employee indexes",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live Access authority; WITH CHECK binds both branch keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AccessLeadershipDelegationAction",
+      "owner": "access",
+      "table": "vs_access_leadership_delegation_action",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; delegation_id uuid; action varchar(80)",
+      "responsibility": "Allowlisted exact action rows; no wildcard or onward authority.",
+      "constraints": "FK(scope,delegation_id); CHECK fixed action allowlist; UNIQUE(scope,delegation_id,action); action lookup index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live Access authority; WITH CHECK binds both branch keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AccessLeadershipDelegationEvent",
+      "owner": "access",
+      "table": "vs_access_leadership_delegation_event",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; delegation_id uuid; operator_id uuid; kind varchar(30); version int; reason varchar(500); safe_details jsonb; occurred_at timestamptz(3)",
+      "responsibility": "Immutable safe issue/revoke attribution and history.",
+      "constraints": "FK(scope,delegation_id); CHECK kind and positive version; UNIQUE(scope,delegation_id,version); sequence index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live Access authority; WITH CHECK binds both branch keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AccessLeadershipDelegationReceipt",
+      "owner": "access",
+      "table": "vs_access_leadership_delegation_receipt",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; operator_id uuid; command varchar(80); key uuid; input_hash char(64); response jsonb; created_at timestamptz(3)",
+      "responsibility": "Trusted-operator exact-payload issue/revoke replay without account-FK impersonation.",
+      "constraints": "FK(scope school); UNIQUE(scope,operator_id,command,key); scope/time index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live Access authority; WITH CHECK binds both branch keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
         "closureGate": "TEN-03"
       }
     }

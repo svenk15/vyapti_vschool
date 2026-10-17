@@ -543,6 +543,76 @@ model RoleGrant {
   @@map("vs_access_role_grant")
 }
 
+model AccessLeadershipDelegation {
+  id                    String   @id(map: "vs_access_leadership_delegation_pkey") @db.Uuid
+  organizationId        String   @map("organization_id") @db.Uuid
+  schoolId              String   @map("school_id") @db.Uuid
+  membershipId          String   @map("membership_id") @db.Uuid
+  accountId             String   @map("account_id") @db.Uuid
+  employeeId            String   @map("employee_id") @db.Uuid
+  startsAt              DateTime @map("starts_at") @db.Timestamptz(3)
+  endsAt                DateTime @map("ends_at") @db.Timestamptz(3)
+  reason                String   @db.VarChar(500)
+  issuedByOperatorId    String   @map("issued_by_operator_id") @db.Uuid
+  issuedAt              DateTime @map("issued_at") @db.Timestamptz(3)
+  revokedAt             DateTime? @map("revoked_at") @db.Timestamptz(3)
+  revokedByOperatorId   String?  @map("revoked_by_operator_id") @db.Uuid
+  revokeReason          String?  @map("revoke_reason") @db.VarChar(500)
+  version               Int
+  actions               AccessLeadershipDelegationAction[]
+
+  @@unique([organizationId, schoolId, id], map: "vs_access_leadership_delegation_scope_id_key")
+  @@index([organizationId, schoolId, accountId, startsAt, endsAt], map: "vs_access_leadership_delegation_runtime_idx")
+  @@index([organizationId, schoolId, employeeId, startsAt, endsAt], map: "vs_access_leadership_delegation_employee_idx")
+  @@map("vs_access_leadership_delegation")
+}
+
+model AccessLeadershipDelegationAction {
+  id             String @id(map: "vs_access_leadership_delegation_action_pkey") @db.Uuid
+  organizationId String @map("organization_id") @db.Uuid
+  schoolId       String @map("school_id") @db.Uuid
+  delegationId   String @map("delegation_id") @db.Uuid
+  action         String @db.VarChar(80)
+  delegation     AccessLeadershipDelegation @relation(fields: [organizationId, schoolId, delegationId], references: [organizationId, schoolId, id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_leadership_delegation_action_delegation_fkey")
+
+  @@unique([organizationId, schoolId, delegationId, action], map: "vs_access_leadership_delegation_action_key")
+  @@index([organizationId, schoolId, action, delegationId], map: "vs_access_leadership_delegation_action_lookup_idx")
+  @@map("vs_access_leadership_delegation_action")
+}
+
+model AccessLeadershipDelegationReceipt {
+  id             String   @id(map: "vs_access_leadership_delegation_receipt_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  operatorId     String   @map("operator_id") @db.Uuid
+  command        String   @db.VarChar(80)
+  key            String   @db.Uuid
+  inputHash      String   @map("input_hash") @db.Char(64)
+  response       Json
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, operatorId, command, key], map: "vs_access_leadership_delegation_receipt_key")
+  @@index([organizationId, schoolId, createdAt(sort: Desc), id], map: "vs_access_leadership_delegation_receipt_scope_idx")
+  @@map("vs_access_leadership_delegation_receipt")
+}
+
+model AccessLeadershipDelegationEvent {
+  id             String   @id(map: "vs_access_leadership_delegation_event_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  delegationId   String   @map("delegation_id") @db.Uuid
+  operatorId     String   @map("operator_id") @db.Uuid
+  kind           String   @db.VarChar(30)
+  version        Int
+  reason         String   @db.VarChar(500)
+  safeDetails    Json     @map("safe_details")
+  occurredAt     DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, delegationId, version], map: "vs_access_leadership_delegation_event_version_key")
+  @@index([organizationId, schoolId, delegationId, occurredAt, id], map: "vs_access_leadership_delegation_event_sequence_idx")
+  @@map("vs_access_leadership_delegation_event")
+}
+
 model AuthSecurityEvent {
   id             String       @id(map: "vs_access_auth_security_event_pkey") @db.Uuid
   accountId      String?      @map("account_id") @db.Uuid

@@ -203,3 +203,14 @@ Human visual acceptance, native VoiceOver/NVDA, font portability and TEN-03 rema
 - [x] Extend repeat-safe synthetic seed and verify PostgreSQL, browser, visual and repository gates.
 
 Human acceptance and production enablement remain PENDING.
+
+# ACC-03 / F02 / LEA-03 — temporary leadership delegation
+
+- [x] Record explicit D02 synthetic-only approval and preserve permanent role contracts.
+- [x] Add scoped dated delegation, exact action, protected replay receipt and immutable event tables through a forward Path-A migration.
+- [x] Implement trusted operator issue/revoke, active Employee/account binding checks, overlap prevention, expected-version revocation and exact replay.
+- [x] Add a transport-neutral runtime authority port and retain every source owner's module/resource authorization.
+- [x] Integrate the acting workspace and the first real Communication owner read without granting writes or exports.
+- [x] Add repeat-safe synthetic seed, real PostgreSQL lifecycle/security tests and desktop/mobile LEA-03 comparison evidence.
+
+Human acceptance, school production approver/action configuration, TEN-03, native accessibility and font portability remain PENDING.

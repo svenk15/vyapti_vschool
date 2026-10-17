@@ -23,7 +23,7 @@ export default async function ChooseWorkspacePage(){
   return <AuthLayout eyebrow="School workspace" title="Choose your workspace" description="Only branches you are authorized to use appear here." backHref="/sign-in" backLabel="Back to sign in"><div className="control-stack"><Alert tone="danger" title="Workspaces unavailable">Authorized branches could not be loaded. Try again later.</Alert><AccessSignOut/></div></AuthLayout>;
  }
  const branches=directory.institutions.flatMap(institution=>institution.branches.filter(branch=>branch.selectable).flatMap(branch=>[
-  ...(branch.roles.includes('PRINCIPAL')?[{institutionId:institution.id,institutionName:institution.name,branchId:branch.id,branchName:branch.name,branchCode:branch.code,workspace:'leadership' as const,workspaceLabel:'Principal leadership'}]:[]),
+  ...(branch.roles.includes('PRINCIPAL')||branch.delegatedLeadership?[{institutionId:institution.id,institutionName:institution.name,branchId:branch.id,branchName:branch.name,branchCode:branch.code,workspace:'leadership' as const,workspaceLabel:branch.roles.includes('PRINCIPAL')?'Principal leadership':'Acting leadership'}]:[]),
   ...(branch.roles.includes('SCHOOL_ADMIN')?[{institutionId:institution.id,institutionName:institution.name,branchId:branch.id,branchName:branch.name,branchCode:branch.code,workspace:'administration' as const,workspaceLabel:'School administration'}]:[]),
   ...(branch.roles.includes('TEACHER')?[{institutionId:institution.id,institutionName:institution.name,branchId:branch.id,branchName:branch.name,branchCode:branch.code,workspace:'teaching' as const,workspaceLabel:'Teaching'}]:[]),
  ]));

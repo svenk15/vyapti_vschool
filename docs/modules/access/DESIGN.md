@@ -395,6 +395,46 @@ sequenceDiagram
 
 Validation failures cover missing confirmation, invalid email/UUID/key, duplicate/unknown roles, and a verification reference outside 3–80 safe characters. `NOT_FOUND` covers an absent, foreign, ended or not-yet-effective Employee without exposing foreign identity data. `CONFLICT` covers disabled/mismatched/bound accounts and duplicate grants. Permission or trust-mode loss denies the command; a receipt input mismatch returns `IDEMPOTENCY_CONFLICT`; provider failure returns a sanitized, visible failure while preserving the committed access grant. Verification requires application validation tests; real PostgreSQL proof of atomic rows/evidence, cross-scope denial, duplicate binding/grant rollback, redaction, replay and delivery failure; and desktop/mobile Playwright proof of selection, confirmation, persisted reload, keyboard flow and denied/empty/error states.
 
+## F02 / D02 — temporary leadership delegation
+
+Status: design-ready and implemented for synthetic-only evaluation on 17 October 2026. The approved D02 rule is the authority: a trusted platform operator may issue an exact-action branch delegation to an active Employee-bound account for at most 30 days. There is no browser issue/revoke endpoint, wildcard, self-issue, onward delegation or permanent-role mutation. Production enablement still requires school-authorized approver/action configuration and TEN-03.
+
+**Ownership and invariants.** Access owns the delegation root, action set, replay receipt, immutable event history and runtime authority port. People owns active Employee identity and supplies only `findActiveEmployee`/`findActiveEmployeeByPerson` through its enlisted port. The target must retain a live account, active scoped SchoolMembership, exact AccountPersonBinding and active dated Employee at issuance and on every protected request. The window is half-open `[startsAt, endsAt)`, strictly increasing and at most 30×24 hours. `leadership.read` is mandatory; every additional action is from the fixed D02 allowlist. Status is derived as SCHEDULED, ACTIVE or EXPIRED unless an immutable revocation makes it REVOKED. Renewal creates another root. Existing receipts and attribution survive expiry/revocation.
+
+**Physical schema and reads.** Migration `20261017190000_access_leadership_delegations` adds four BRANCH-class Path-A tables. `vs_access_leadership_delegation` stores scope, exact membership/account/Employee, window, reason, operator attribution, revocation and positive version; scoped composite FKs prevent cross-branch membership or Employee references. Runtime lookup uses `(organization_id,school_id,account_id,starts_at,ends_at)` and joins the unique action row through `vs_access_leadership_delegation_action`. The Employee index supports eligibility/overlap checks. The action table has a database allowlist CHECK plus unique `(scope,delegation_id,action)`. `vs_access_leadership_delegation_receipt` uniquely binds `(scope,operator_id,command,key)` to a SHA-256 input hash and safe result. `vs_access_leadership_delegation_event` uniquely binds `(scope,delegation_id,version)` and retains safe issue/revoke facts. Runtime reads join live account → membership → binding → Employee → currently effective delegation/action; no display label establishes identity.
+
+| Physical table (classification; scope; owner; closure) | Columns | Responsibility | Constraints and indexes |
+|---|---|---|---|
+| `vs_access_leadership_delegation` (BRANCH; organization_id, school_id; access; TEN-03) | id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; employee_id uuid; starts_at/ends_at timestamptz(3); reason varchar(500); operator attribution; revocation; version int | D02 temporary exact-action leadership authority root; retains attribution after expiry/revocation. | FK(scope,membership_id,account_id); FK(scope,employee_id); CHECK half-open window <=30 days, positive version, coherent revocation; UNIQUE(scope,id); runtime and Employee indexes |
+| `vs_access_leadership_delegation_action` (BRANCH; organization_id, school_id; access; TEN-03) | id uuid PK; organization_id uuid; school_id uuid; delegation_id uuid; action varchar(80) | Allowlisted exact action rows; no wildcard or onward authority. | FK(scope,delegation_id); CHECK fixed action allowlist; UNIQUE(scope,delegation_id,action); action lookup index |
+| `vs_access_leadership_delegation_receipt` (BRANCH; organization_id, school_id; access; TEN-03) | id uuid PK; organization_id uuid; school_id uuid; operator_id uuid; command varchar(80); key uuid; input_hash char(64); response jsonb; created_at timestamptz(3) | Trusted-operator exact-payload issue/revoke replay without account-FK impersonation. | FK(scope school); UNIQUE(scope,operator_id,command,key); scope/time index |
+| `vs_access_leadership_delegation_event` (BRANCH; organization_id, school_id; access; TEN-03) | id uuid PK; organization_id uuid; school_id uuid; delegation_id uuid; operator_id uuid; kind varchar(30); version int; reason varchar(500); safe_details jsonb; occurred_at timestamptz(3) | Immutable safe issue/revoke attribution and history. | FK(scope,delegation_id); CHECK kind and positive version; UNIQUE(scope,delegation_id,version); sequence index |
+
+**Authorization, transaction and replay.** Issue/revoke accepts only a server-verified `OperatorPrincipal`; no browser field can assert this trust result. Issue takes a scoped Employee advisory lock, verifies active institution/branch, current target Employee, binding and membership, rejects self-issue and an overlapping same-action grant, then commits root, actions, ISSUED event, receipt and Access outbox atomically under SERIALIZABLE isolation. Revoke locks the root, checks expected version and commits revocation, version 2 event, receipt and outbox atomically. Same-key/same-input returns the original semantic result; changed input conflicts. Runtime resolution establishes transaction-local verified account/scope context and rechecks the live account token, membership, binding, Employee, window, revocation and exact action. Source owners continue to enforce their module release, entitlement, branch activation and resource rules; the first real consumer is Communication `listLeadership`. Reads take no write locks.
+
+```mermaid
+sequenceDiagram
+  actor O as Trusted operator
+  participant A as Access delegation facade
+  participant P as People employee port
+  participant D as PostgreSQL
+  actor L as Acting leader
+  participant C as Communication owner
+  O->>A: Issue exact branch/actions/window + stable key
+  A->>D: Lock scoped delegation intent and verify target account/membership
+  A->>P: Verify exact active Employee in enlisted transaction
+  A->>D: Root + actions + event + receipt + outbox atomically
+  L->>C: Open protected leadership projection
+  C->>D: Recheck source module and direct capability
+  C->>A: Resolve exact delegated action at current instant
+  A->>D: Recheck live account, membership, binding, Employee and grant
+  D-->>C: Exact active action or deny
+```
+
+**Application and failure contract.** `LeadershipDelegationFacade` is transport-neutral. Issuance/revocation remain trusted local operator operations; the browser can list only its own bounded history. `/choose-workspace` offers “Acting leadership” without changing fixed roles. `/leadership/delegations` shows exact branch-local window, reason, actions and acting label. Unknown/foreign/ineligible target is `NOT_FOUND`; invalid window/action/reason is `VALIDATION`; overlap/self-issue is denied; stale revoke is `STALE_VERSION`; changed replay is `IDEMPOTENCY_CONFLICT`; infrastructure faults are `UNAVAILABLE`. After revocation or expiry, new protected reads fail immediately and role restoration does not revive the old delegation.
+
+**Verification criteria.** Unit tests cover allowlist, mandatory workspace action, window limit and revoke validation. Real PostgreSQL proves scheduled/active/expired/revoked states, exact replay, changed replay, scope, delegated Communication access, self-issue denial and immediate revocation. Browser verification proves role-aware workspace selection, exact displayed actions, Communication read, deep-link denial after revoke, keyboard/mobile composition and direct LEA-03 reference comparison. The repeat-safe demo seed uses the fictional Teacher identity and never overwrites credentials or historical delegation rows.
+
 ## TEA-03 — Teacher workspace exit composition
 
 TEA-03 reuses the existing Access context directory and guarded `switchContext`; it introduces no table, write model or business capability. The account page reads current scope through `getHome` and active selectable branch memberships through `getContexts`. The browser destination is only a candidate. Final confirmation rechecks the live account/token, target organization and branch, active membership and role before changing the hosting context cookie. Back retains the in-flow selection and acknowledgement. Sign-out uses the same staged page and ends the current session.

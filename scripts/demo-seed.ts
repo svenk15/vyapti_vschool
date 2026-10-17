@@ -27,6 +27,7 @@ const demos = [
   { name: "Parent/Guardian child access", script: "scripts/demo-guardians.ts", required: true },
   { name: "Student self-service workspace", script: "scripts/demo-student-portal.ts", required: true },
   { name: "Parent/Guardian and Student school notices", script: "scripts/demo-communication.ts", required: true },
+  { name: "F02 temporary acting Principal access", script: "scripts/demo-principal-delegation.ts", required: true },
   { name: "Parent Attendance explanation and branch review", script: "scripts/demo-attendance-explanations.ts", required: true },
   { name: "Parent and Student one-off school calendar", script: "scripts/demo-events.ts", required: true },
   { name: "Teacher Learning publication and Parent/Student views", script: "scripts/demo-learning.ts", required: true },

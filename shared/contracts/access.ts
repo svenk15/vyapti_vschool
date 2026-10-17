@@ -1,9 +1,33 @@
 export type Identity = Readonly<{ accountId: string; tokenVersion: number }>;
 export type RoleCode = "SCHOOL_ADMIN" | "TEACHER" | "PRINCIPAL";
+export type LeadershipDelegationAction =
+  | "leadership.read"
+  | "attendance.read_leadership"
+  | "timetable.read_leadership"
+  | "learning.read_leadership"
+  | "communication.read_leadership";
+export type LeadershipDelegationStatus = "SCHEDULED" | "ACTIVE" | "EXPIRED" | "REVOKED";
+export type LeadershipDelegationSummary = Readonly<{
+  delegationId: string;
+  organizationId: string;
+  schoolId: string;
+  accountId: string;
+  employeeId: string;
+  displayName: string;
+  actions: readonly LeadershipDelegationAction[];
+  startsAt: string;
+  endsAt: string;
+  status: LeadershipDelegationStatus;
+  version: number;
+  reason: string;
+  revokedAt: string | null;
+}>;
+export type LeadershipDelegationResult = LeadershipDelegationSummary & Readonly<{replayed:boolean}>;
 export type AdminHome = Readonly<{
   accountId: string; membershipId: string; scope: { organizationId: string; schoolId: string };
   institutionName: string; schoolName: string; schoolCode: string; timezone: string;
   capabilities: readonly string[];
+  actingDelegation?: Readonly<{delegationId:string; startsAt:string; endsAt:string; actions:readonly LeadershipDelegationAction[]}>;
 }>;
 export type SelfAccount = Readonly<{
   accountId: string;

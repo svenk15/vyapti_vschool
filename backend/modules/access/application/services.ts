@@ -1,4 +1,4 @@
-import type { AdminHome, Identity, OperatorPrincipal, ProvisionInput, ProvisionResult, RoleCode, SelfAccount } from "../../../../shared/contracts/access";
+import type { AdminHome, Identity, LeadershipDelegationAction, OperatorPrincipal, ProvisionInput, ProvisionResult, RoleCode, SelfAccount } from "../../../../shared/contracts/access";
 import { AccessError, capabilitiesFor, currentIdentity, normalizeEmail, normalizeProvision, uuidPattern, validPassword } from "../domain/policy";
 export type LoginRecord = { id:string; passwordHash:string|null; tokenVersion:number };
 export interface AccessRepository {
@@ -7,7 +7,7 @@ export interface AccessRepository {
  finishLogin(record:LoginRecord|null,verified:boolean,requestId:string):Promise<Identity|null>;
  account(identity:Identity):Promise<{status:string;tokenVersion:number;normalizedEmail:string;createdAt:Date}|null>;
  adminContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:RoleCode[]})|null>;
- leadershipContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:RoleCode[]})|null>;
+ leadershipContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:RoleCode[];delegatedCapabilities?:readonly LeadershipDelegationAction[]})|null>;
  memberContext(identity:Identity,schoolId?:string):Promise<(Omit<AdminHome,"capabilities">&{roles:RoleCode[]})|null>;
 }
 export interface Passwords { hash(value:string):Promise<string>; verify(value:string,hash:string|null):Promise<boolean> }
@@ -66,9 +66,9 @@ export function createAccessUseCases(repository:AccessRepository,passwords:Passw
    if(schoolId&&!uuidPattern.test(schoolId))throw new AccessError("NOT_FOUND");
    const context=await repository.leadershipContext(identity,schoolId);
    if(!context)throw new AccessError("NOT_FOUND");
-   const capabilities=capabilitiesFor(context.roles);
+   const capabilities=[...new Set([...capabilitiesFor(context.roles),...(context.delegatedCapabilities??[])])];
    if(!capabilities.includes("leadership.read"))throw new AccessError("NOT_FOUND");
-   const {roles:discard,...safe}=context;void discard;
+   const {roles:discard,delegatedCapabilities:discardDelegated,...safe}=context;void discard;void discardDelegated;
    return {...safe,capabilities};
   },
  };

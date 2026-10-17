@@ -6,8 +6,9 @@ import type { Identity, OperatorPrincipal, ProvisionInput } from "../../../../sh
 import { AccessError, nextFailure } from "../domain/policy";
 import type { ProvisionEvidenceWriter } from "../../platform/contracts/provision-evidence";
 import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/verified-database-context';
+import type {DelegatedAuthorityPort} from '../contracts/delegated-authority';
 export class PrismaAccessRepository implements AccessRepository {
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>ProvisionEvidenceWriter,private readonly databaseContext:VerifiedDatabaseContextPort,private readonly now:()=>Date=()=>new Date()) {}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>ProvisionEvidenceWriter,private readonly databaseContext:VerifiedDatabaseContextPort,private readonly now:()=>Date=()=>new Date(),private readonly delegatedAuthority:DelegatedAuthorityPort={resolve:async()=>null}) {}
  async provision(input:Omit<ProvisionInput,"password">,passwordHash:string,operator:OperatorPrincipal,requestId:string) {
   try {return await this.db.$transaction(async tx=>{
    await tx.$executeRaw`SELECT pg_advisory_xact_lock(1448302674,1)`;
@@ -40,9 +41,9 @@ export class PrismaAccessRepository implements AccessRepository {
  }
  account(identity:Identity) {return this.db.$transaction(async tx=>{if(!await this.databaseContext.establishAccount(tx,identity.accountId,identity.tokenVersion))return null;return tx.userAccount.findUnique({where:{id:identity.accountId},select:{status:true,tokenVersion:true,normalizedEmail:true,createdAt:true}});},{isolationLevel:'RepeatableRead'});}
  adminContext(identity:Identity,schoolId?:string){return this.context(identity,schoolId,'SCHOOL_ADMIN');}
- leadershipContext(identity:Identity,schoolId?:string){return this.context(identity,schoolId,'PRINCIPAL');}
+ leadershipContext(identity:Identity,schoolId?:string){return this.context(identity,schoolId,'PRINCIPAL',true);}
  memberContext(identity:Identity,schoolId?:string){return this.context(identity,schoolId);}
- private async context(identity:Identity,schoolId:string|undefined,requiredRole?:'SCHOOL_ADMIN'|'PRINCIPAL') {
+ private async context(identity:Identity,schoolId:string|undefined,requiredRole?:'SCHOOL_ADMIN'|'PRINCIPAL',allowDelegation=false) {
   const context=await this.db.$transaction(async tx=>{if(!await this.databaseContext.establishAccount(tx,identity.accountId,identity.tokenVersion))return null;
   // One SQL statement gives a current authorized snapshot; scope appears in every join.
   const rows=await tx.$queryRaw<{account_id:string;membership_id:string;organization_id:string;school_id:string;institution_name:string;school_name:string;school_code:string;timezone:string;roles:string[]}[]>`
@@ -53,8 +54,11 @@ export class PrismaAccessRepository implements AccessRepository {
    JOIN vs_access_role_grant g ON g.organization_id=m.organization_id AND g.school_id=m.school_id AND g.membership_id=m.id
    WHERE a.id=${identity.accountId}::uuid AND a.token_version=${identity.tokenVersion} AND a.status='ACTIVE' AND m.status='ACTIVE' AND s.status='ACTIVE' AND o.status='ACTIVE'
    AND (${schoolId??null}::uuid IS NULL OR s.id=${schoolId??null}::uuid)
-   GROUP BY a.id,m.id,o.id,s.id HAVING (${requiredRole??null}::text IS NULL OR bool_or(g.code=${requiredRole??null})) ORDER BY s.id LIMIT 1`;
-  const r=rows[0];return r?{accountId:r.account_id,membershipId:r.membership_id,scope:{organizationId:r.organization_id,schoolId:r.school_id},institutionName:r.institution_name,schoolName:r.school_name,schoolCode:r.school_code,timezone:r.timezone,roles:r.roles.filter((v):v is "SCHOOL_ADMIN"|"TEACHER"|"PRINCIPAL"=>v==="SCHOOL_ADMIN"||v==="TEACHER"||v==="PRINCIPAL")}:null;
+   GROUP BY a.id,m.id,o.id,s.id HAVING (${allowDelegation?null:requiredRole??null}::text IS NULL OR bool_or(g.code=${allowDelegation?null:requiredRole??null})) ORDER BY s.id LIMIT 1`;
+  const r=rows[0];if(!r)return null;const roles=r.roles.filter((v):v is "SCHOOL_ADMIN"|"TEACHER"|"PRINCIPAL"=>v==="SCHOOL_ADMIN"||v==="TEACHER"||v==="PRINCIPAL"),base={accountId:r.account_id,membershipId:r.membership_id,scope:{organizationId:r.organization_id,schoolId:r.school_id},institutionName:r.institution_name,schoolName:r.school_name,schoolCode:r.school_code,timezone:r.timezone,roles};
+  if(!allowDelegation||roles.includes('PRINCIPAL'))return base;
+  const delegated=await this.delegatedAuthority.resolve(tx,identity,{organizationId:r.organization_id,schoolId:r.school_id,requiredAction:'leadership.read',at:this.now()});
+  return delegated?{...base,delegatedCapabilities:delegated.actions,actingDelegation:{delegationId:delegated.delegationId,startsAt:delegated.startsAt.toISOString(),endsAt:delegated.endsAt.toISOString(),actions:delegated.actions}}:null;
   },{isolationLevel:'RepeatableRead'});return context;
  }
 }

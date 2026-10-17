@@ -18,4 +18,13 @@ export interface EmployeeAccessVerificationPort {
       schoolDate: string;
     }>,
   ): Promise<VerifiedEmployeeAccessFact | null>;
+  findActiveEmployeeByPerson(
+    transaction: EmployeeAccessTransaction,
+    input: Readonly<{
+      organizationId: string;
+      schoolId: string;
+      personId: string;
+      schoolDate: string;
+    }>,
+  ): Promise<VerifiedEmployeeAccessFact | null>;
 }

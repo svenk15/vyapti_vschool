@@ -38,10 +38,11 @@
       "decisions": [
         "D02"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Dated action grants, runtime evaluation, trusted provision/revoke and eligible target query.",
       "demo": "Future/active/expired/revoked persona; same account across roles cannot self-issue.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "D02 exact-action temporary delegation, trusted issue/revoke, live runtime reauthorization, first Communication owner consumer and LEA-03 production composition are engineering-verified."
     },
     {
       "id": "F03",
@@ -282,7 +283,7 @@
       "decisions": [
         "D02"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-03.md",
       "kind": "workflow",
       "workflow": "LEA-03"
@@ -528,7 +529,7 @@
         "D02",
         "D03"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE_CURRENT_EQUIVALENT",
       "definition": "workflows/LEA-26.md",
       "kind": "workflow",
       "workflow": "LEA-26"
@@ -697,7 +698,7 @@
     },
     {
       "id": "WF-38",
-      "title": "Follow the school\u2019s urgent safety escalation procedure",
+      "title": "Follow the school’s urgent safety escalation procedure",
       "dependsOn": [
         "F14"
       ],
