@@ -2,6 +2,10 @@
 
 Last updated: 2026-10-17. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
+## F07-B exact delegation action — 17 October 2026
+
+D02's fixed synthetic-only allowlist now includes only `timetable.cover.approve` for exact-occurrence cover decisions. The action requires the same active Employee-bound account, live scoped membership, mandatory `leadership.read`, bounded delegation window and fresh source-owner authorization as every D02 use. It grants no Timetable edit, substitute-response or Attendance mutation authority. The forward migration extends only the database CHECK; existing delegations and immutable attribution remain intact. Focused unit, real-PostgreSQL separation/revocation and Principal browser evidence passed in [F07-B](../../evidence/principal-f07-cover-2026-10-17/README.md). Human review and production gates remain PENDING.
+
 ## ACC-02 / F18 own preferences and trusted school support — 17 October 2026
 
 LEA-46 is ENGINEERING_COMPLETE; direct comparison is complete with documented explorer/font deviations; human review is PENDING; deployment remains SYNTHETIC_ONLY. Access now owns two allowlisted global own-account preferences with expected versions, current-account authorization, exact-input replay receipts and safe security evidence. School support is a complete administrator-published snapshot on the existing School aggregate, guarded by the existing School management lock/version/evidence transaction. Leadership composes these projections with the unchanged own-session controls.

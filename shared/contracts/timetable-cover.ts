@@ -1,0 +1,9 @@
+export type CoverApprovalState='PENDING'|'APPROVED'|'RETURNED'|'REJECTED';
+export type CoverResponseState='PENDING'|'ACCEPTED'|'DECLINED';
+export type CoverLifecycle='OPEN'|'ACTIVE'|'WITHDRAWN'|'CANCELLED'|'REPLACED';
+export type CoverAction='APPROVE'|'RETURN'|'REJECT'|'ACCEPT'|'DECLINE'|'WITHDRAW'|'CANCEL';
+export type CoverCandidate=Readonly<{teacherId:string;displayName:string;staffNumber:string;availability:'FREE'}>;
+export type CoverOccurrence=Readonly<{occurrenceId:string;schoolDate:string;startsAt:string;endsAt:string;sectionName:string;subjectName:string;originalTeacherName:string}>;
+export type TimetableCoverDetail=Readonly<{coverId:string;version:number;approvalState:CoverApprovalState;responseState:CoverResponseState;lifecycle:CoverLifecycle;reason:string;occurrence:CoverOccurrence;substitute:Readonly<{teacherId:string;displayName:string;staffNumber:string}>;availableActions:readonly CoverAction[];createdAt:string;updatedAt:string;replayed?:boolean}>;
+export type TimetableCoverContext=Readonly<{occurrence:CoverOccurrence;candidates:readonly CoverCandidate[]}>;
+export type TimetableCoverInbox=Readonly<{items:readonly TimetableCoverDetail[]}>;

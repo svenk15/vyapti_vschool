@@ -1,5 +1,5 @@
 {
-  "revision": "4.11",
+  "revision": "4.12",
   "prefix": "vs_",
   "tables": [
     {
@@ -2513,6 +2513,48 @@
         "intendedPolicy": "Require verified tenant keys plus current live People availability authority; WITH CHECK binds both branch keys on inserts/updates.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "people",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "TimetableCover",
+      "table": "vs_academics_timetable_cover",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; occurrence_id uuid; original_teacher_assignment_id uuid; substitute_teacher_id uuid; proposer/approval/response/closure evidence; approval_state; response_state; lifecycle; version; timestamps",
+      "responsibility": "Exact published-occurrence cover overlay; immutable publication and original assignment remain unchanged.",
+      "constraints": "Scoped occurrence/assignment/Teacher FKs; actor FKs; closed states/evidence checks; UNIQUE live occurrence; occurrence and substitute indexes",
+      "owner": "academics",
+      "status": "MIGRATED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current exact cover authority; WITH CHECK binds both branch keys on writes.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "TimetableCoverEvent",
+      "table": "vs_academics_timetable_cover_event",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; cover_id uuid; number; kind; actor_account_id; reason; safe_details jsonb; occurred_at",
+      "responsibility": "Append-only cover lifecycle and activation evidence.",
+      "constraints": "Scoped cover FK; actor FK; closed event vocabulary; UNIQUE(scope,cover_id,number); immutable trigger; sequence index",
+      "owner": "academics",
+      "status": "MIGRATED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current exact cover authority; append-only WITH CHECK binds both branch keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
         "closureGate": "TEN-03"
       }
     }

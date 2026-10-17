@@ -5,6 +5,7 @@ export const leadershipDelegationActions = [
   'leadership.read',
   'attendance.read_leadership',
   'timetable.read_leadership',
+  'timetable.cover.approve',
   'learning.read_leadership',
   'communication.read_leadership',
 ] as const satisfies readonly LeadershipDelegationAction[];

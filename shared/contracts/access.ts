@@ -4,6 +4,7 @@ export type LeadershipDelegationAction =
   | "leadership.read"
   | "attendance.read_leadership"
   | "timetable.read_leadership"
+  | "timetable.cover.approve"
   | "learning.read_leadership"
   | "communication.read_leadership";
 export type LeadershipDelegationStatus = "SCHEDULED" | "ACTIVE" | "EXPIRED" | "REVOKED";

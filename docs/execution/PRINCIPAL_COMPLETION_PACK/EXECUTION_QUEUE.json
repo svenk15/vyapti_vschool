@@ -111,11 +111,11 @@
       "decisions": [
         "D09"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Availability records and privacy projection; exact occurrence cover with approval+acceptance; scheduled Attendance atomic change.",
       "demo": "Substitute accepts before class; marking changes only after activation; open register conflicts.",
       "kind": "foundation",
-      "completedSlice": "F07-A / LEA-23 safe People availability is engineering-verified: separate recorder designation, bounded versioned intervals, safe Principal projection, exact replay and minimal cross-branch collision. F07-B exact-occurrence cover approval/acceptance and Attendance-safe activation remain."
+      "completedSlice": "F07-A safe People availability and F07-B exact-occurrence cover are engineering-complete: exact D02 approval, named substitute acceptance, fresh availability/collision/Attendance checks, immutable events, replay recovery and effective source-linked Teacher authority are verified."
     },
     {
       "id": "F08",
@@ -500,10 +500,11 @@
         "D02",
         "D09"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-24.md",
       "kind": "workflow",
-      "workflow": "LEA-24"
+      "workflow": "LEA-24",
+      "completedSlice": "Routed Principal approval and named-Teacher response are verified in PostgreSQL and directly inspected at desktop/mobile against the LEA-24 workflow explorer; human review remains pending."
     },
     {
       "id": "WF-25",

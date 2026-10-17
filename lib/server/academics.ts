@@ -37,6 +37,13 @@ export const academicsGateway={
  async teacherTimetableWeek(identity:Identity|null,weekStart:string){const s=await scope(identity);return service().teacherTimetableWeek(identity,s.organizationId,s.schoolId,weekStart);},
  async teacherClasses(identity:Identity|null,date:string,offeringId?:string){const s=await scope(identity);return service().teacherClasses(identity,s.organizationId,s.schoolId,date,offeringId);},
  async teacherReadiness(identity:Identity|null,date:string){const s=await scope(identity);return service().teacherReadiness(identity,s.organizationId,s.schoolId,date);},
+ async timetableCoverContext(identity:Identity|null,occurrenceId:string){const s=await scope(identity);return service().coverContext(identity,s.organizationId,s.schoolId,occurrenceId);},
+ async timetableCoverInbox(identity:Identity|null){const s=await scope(identity);return service().coverInbox(identity,s.organizationId,s.schoolId);},
+ async timetableCoverDetail(identity:Identity|null,coverId:string){const s=await scope(identity);return service().coverDetail(identity,s.organizationId,s.schoolId,coverId);},
+ async proposeTimetableCover(identity:Identity|null,input:Record<string,unknown>){const s=await scope(identity);return service().proposeCover(identity,s.organizationId,s.schoolId,input);},
+ async decideTimetableCover(identity:Identity|null,coverId:string,input:Record<string,unknown>){const s=await scope(identity);return service().decideCover(identity,s.organizationId,s.schoolId,coverId,input);},
+ async respondTimetableCover(identity:Identity|null,coverId:string,input:Record<string,unknown>){const s=await scope(identity);return service().respondCover(identity,s.organizationId,s.schoolId,coverId,input);},
+ async closeTimetableCover(identity:Identity|null,coverId:string,input:Record<string,unknown>){const s=await scope(identity);return service().closeCover(identity,s.organizationId,s.schoolId,coverId,input);},
 };
 
 export const leadershipTimetableGateway={

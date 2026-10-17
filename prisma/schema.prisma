@@ -533,6 +533,7 @@ model Teacher {
  version Int
  employee Employee @relation(fields:[organizationId,schoolId,employeeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_employee_fkey")
  assignments TeacherAssignment[]
+ proposedCovers TimetableCover[] @relation("TimetableCoverSubstitute")
  @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_scope_id_key")
  @@unique([organizationId,schoolId,employeeId],map:"vs_academics_teacher_employee_key")
  @@index([organizationId,schoolId,active,employeeId],map:"vs_academics_teacher_eligibility_idx")
@@ -1412,6 +1413,7 @@ model Section {
  placements SectionPlacement[]
  offerings CourseOffering[]
  timetableSlots TimetableSlot[]
+ lessonOccurrences LessonOccurrence[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_section_scope_id_key")
  @@unique([organizationId,schoolId,id,yearId],map:"vs_academics_section_scope_year_id_key")
  @@index([organizationId,schoolId,yearId,gradeId],map:"vs_academics_section_year_grade_idx")
@@ -1434,6 +1436,7 @@ model CourseOffering {
  assignments TeacherAssignment[]
  sessions AttendanceSession[]
  timetableSlots TimetableSlot[]
+ lessonOccurrences LessonOccurrence[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_course_offering_scope_id_key")
  @@unique([organizationId,schoolId,yearId,code],map:"vs_academics_course_offering_code_key")
  @@unique([organizationId,schoolId,yearId,sectionId,subjectId],map:"vs_academics_course_offering_section_subject_key")
@@ -1452,6 +1455,8 @@ model TeacherAssignment {
  offering CourseOffering @relation(fields:[organizationId,schoolId,offeringId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_assignment_offering_fkey")
  teacher Teacher @relation(fields:[organizationId,schoolId,teacherId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_assignment_teacher_fkey")
  timetableSlots TimetableSlot[]
+ lessonOccurrences LessonOccurrence[]
+ originalCovers TimetableCover[] @relation("TimetableCoverOriginalAssignment")
  @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_assignment_scope_id_key")
  @@unique([organizationId,schoolId,id,offeringId],map:"vs_academics_teacher_assignment_scope_offering_key")
  @@index([organizationId,schoolId,offeringId,validFrom,validTo],map:"vs_academics_teacher_assignment_offering_date_idx")
@@ -1582,11 +1587,65 @@ model LessonOccurrence {
  version Int
  createdAt DateTime @map("created_at") @db.Timestamptz(3)
  updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ section Section @relation(fields:[organizationId,schoolId,classSectionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_lesson_occurrence_section_fkey")
+ offering CourseOffering @relation(fields:[organizationId,schoolId,subjectOfferingId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_lesson_occurrence_offering_fkey")
+ effectiveTeacherAssignment TeacherAssignment @relation(fields:[organizationId,schoolId,effectiveTeacherAssignmentId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_lesson_occurrence_assignment_fkey")
+ covers TimetableCover[]
  @@unique([organizationId,schoolId,id],map:"vs_academics_lesson_occurrence_scope_id_key")
  @@unique([organizationId,schoolId,academicYearId,classSectionId,localDate,periodKey],map:"vs_academics_lesson_occurrence_stable_key")
  @@index([organizationId,schoolId,sourceRevisionId,localDate],map:"vs_academics_lesson_occurrence_source_date_idx")
  @@index([organizationId,schoolId,classSectionId,localDate,startsAt],map:"vs_academics_lesson_occurrence_class_date_idx")
  @@map("vs_academics_lesson_occurrence")
+}
+
+model TimetableCover {
+ id String @id(map:"vs_academics_timetable_cover_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ occurrenceId String @map("occurrence_id") @db.Uuid
+ originalTeacherAssignmentId String @map("original_teacher_assignment_id") @db.Uuid
+ substituteTeacherId String @map("substitute_teacher_id") @db.Uuid
+ proposedByAccountId String @map("proposed_by_account_id") @db.Uuid
+ reason String @db.VarChar(500)
+ approvalState String @map("approval_state") @db.VarChar(16)
+ responseState String @map("response_state") @db.VarChar(16)
+ lifecycle String @db.VarChar(16)
+ approvedByAccountId String? @map("approved_by_account_id") @db.Uuid
+ approvedAt DateTime? @map("approved_at") @db.Timestamptz(3)
+ respondedByAccountId String? @map("responded_by_account_id") @db.Uuid
+ respondedAt DateTime? @map("responded_at") @db.Timestamptz(3)
+ activatedAt DateTime? @map("activated_at") @db.Timestamptz(3)
+ closedByAccountId String? @map("closed_by_account_id") @db.Uuid
+ closedAt DateTime? @map("closed_at") @db.Timestamptz(3)
+ closeReason String? @map("close_reason") @db.VarChar(500)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ occurrence LessonOccurrence @relation(fields:[organizationId,schoolId,occurrenceId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_cover_occurrence_fkey")
+ originalAssignment TeacherAssignment @relation("TimetableCoverOriginalAssignment",fields:[organizationId,schoolId,originalTeacherAssignmentId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_cover_original_assignment_fkey")
+ substituteTeacher Teacher @relation("TimetableCoverSubstitute",fields:[organizationId,schoolId,substituteTeacherId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_cover_substitute_fkey")
+ events TimetableCoverEvent[]
+ @@unique([organizationId,schoolId,id],map:"vs_academics_timetable_cover_scope_id_key")
+ @@index([organizationId,schoolId,occurrenceId,lifecycle],map:"vs_academics_timetable_cover_occurrence_idx")
+ @@index([organizationId,schoolId,substituteTeacherId,lifecycle],map:"vs_academics_timetable_cover_substitute_idx")
+ @@map("vs_academics_timetable_cover")
+}
+
+model TimetableCoverEvent {
+ id String @id(map:"vs_academics_timetable_cover_event_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ coverId String @map("cover_id") @db.Uuid
+ number Int
+ kind String @db.VarChar(20)
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ reason String @db.VarChar(500)
+ safeDetails Json @map("safe_details")
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ cover TimetableCover @relation(fields:[organizationId,schoolId,coverId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_timetable_cover_event_cover_fkey")
+ @@unique([organizationId,schoolId,coverId,number],map:"vs_academics_timetable_cover_event_number_key")
+ @@index([organizationId,schoolId,coverId,occurredAt,id],map:"vs_academics_timetable_cover_event_sequence_idx")
+ @@map("vs_academics_timetable_cover_event")
 }
 
 model TimetableGenerationCheckpoint {

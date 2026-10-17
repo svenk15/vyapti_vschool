@@ -1,0 +1,8 @@
+import {AccessError,uuidPattern} from '../../access/contracts/index';
+const id=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AccessError('VALIDATION');return value.toLowerCase();};
+const text=(value:unknown,min=5,max=500)=>{if(typeof value!=='string')throw new AccessError('VALIDATION');const result=value.normalize('NFC').trim();if(result.length<min||result.length>max||/[\u0000-\u001f\u007f]/.test(result))throw new AccessError('VALIDATION');return result;};
+const version=(value:unknown)=>{if(!Number.isInteger(value)||Number(value)<1)throw new AccessError('VALIDATION');return Number(value);};
+export const proposeCoverInput=(value:Record<string,unknown>)=>({occurrenceId:id(value.occurrenceId),substituteTeacherId:id(value.substituteTeacherId),reason:text(value.reason),key:id(value.key)});
+export const decideCoverInput=(value:Record<string,unknown>)=>{const action=value.action;if(action!=='APPROVE'&&action!=='RETURN'&&action!=='REJECT')throw new AccessError('VALIDATION');return {action,expectedVersion:version(value.expectedVersion),reason:text(value.reason),key:id(value.key)} as const;};
+export const respondCoverInput=(value:Record<string,unknown>)=>{const action=value.action;if(action!=='ACCEPT'&&action!=='DECLINE')throw new AccessError('VALIDATION');return {action,expectedVersion:version(value.expectedVersion),reason:text(value.reason),key:id(value.key)} as const;};
+export const closeCoverInput=(value:Record<string,unknown>)=>{const action=value.action;if(action!=='WITHDRAW'&&action!=='CANCEL')throw new AccessError('VALIDATION');return {action,expectedVersion:version(value.expectedVersion),reason:text(value.reason),key:id(value.key)} as const;};

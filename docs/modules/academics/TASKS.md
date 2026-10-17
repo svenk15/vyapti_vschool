@@ -97,7 +97,7 @@ Acceptance: derive the school-local day on the server; display the deterministic
 
 ## TT-07 / TEA-23 — Assign and respond to dated cover
 
-Status: **DESIGN PREPARED / BLOCKED ON PRODUCT DECISIONS**. The narrow LLD is in DESIGN. Its technical dependency is TT-05 plus the verified TT-06 Teacher projection; Student and Parent timetable projections are not command dependencies. Do not add tables, capabilities, grants or browser actions until the authority timing, response lifecycle, original-Teacher access, dated eligibility and Attendance-state decisions in the LLD are accepted. When unblocked, implement the exact occurrence-scoped command through Academics and Attendance owner ports with current authorization, guarded locking, optimistic versioning, exact replay and immutable audit/history evidence.
+Status: **VERIFIED** under approved D09/D02 synthetic-only rules; human review remains **PENDING**. The exact-occurrence aggregate, immutable event history, coordinator proposal, independent delegated decision, named-substitute response, effective Teacher projection and Attendance-safe activation are implemented. Focused real-PostgreSQL verification covers replay, stale versions, separation, revocation, collision and OPEN/SUBMITTED protection. Principal and Teacher production states were directly inspected at desktop/mobile against the approved LEA-24 workflow explorer; the routed production composition is recorded as an intentional reference-format deviation.
 
 ## TEA-07/TEA-08 — Review assigned classes and a minimal dated roster
 

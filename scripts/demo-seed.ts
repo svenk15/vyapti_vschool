@@ -29,6 +29,7 @@ const demos = [
   { name: "Parent/Guardian and Student school notices", script: "scripts/demo-communication.ts", required: true },
   { name: "F02 temporary acting Principal access", script: "scripts/demo-principal-delegation.ts", required: true },
   { name: "F07-A Principal staffing availability", script: "scripts/demo-principal-availability.ts", required: true },
+  { name: "F07-B exact occurrence cover", script: "scripts/demo-timetable-cover.ts", required: true },
   { name: "Parent Attendance explanation and branch review", script: "scripts/demo-attendance-explanations.ts", required: true },
   { name: "Parent and Student one-off school calendar", script: "scripts/demo-events.ts", required: true },
   { name: "Teacher Learning publication and Parent/Student views", script: "scripts/demo-learning.ts", required: true },
@@ -107,6 +108,7 @@ function main(): void {
   console.log("- artifacts/iam-03/private-activation.json");
   console.log("- artifacts/people-02/private-demo.json");
   console.log("- artifacts/leadership-01/private-demo.json");
+  console.log("- artifacts/timetable-cover/private-demo.json");
   console.log("- artifacts/academics-03/private-demo.json");
   console.log("- artifacts/attendance-01/private-demo.json");
   console.log("- artifacts/coordination-01/private-demo.json");

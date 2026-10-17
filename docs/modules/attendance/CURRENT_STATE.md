@@ -2,6 +2,10 @@
 
 Last updated: 2026-10-15. No imported task completion or active execution timer. IAM-03 human acceptance is recorded separately in Access CURRENT_STATE for the exact reviewed source.
 
+## TT-07 effective-Teacher integration — 17 October 2026
+
+Attendance remains the sole owner of register state and writes. Its enlisted cover port returns only trusted source-linked session state after current scope/module/permission checks. Academics may activate an exact cover only while the session is absent or `SCHEDULED`; `OPEN`, `SUBMITTED` and `CANCELLED` remain protected. Current source-linked detail/marking resolves the ACTIVE substitute, removes current marking authority from the original Teacher and preserves separately authorized history. Focused real-PostgreSQL evidence covers effective access, original-Teacher denial and OPEN-register cancellation protection. No Attendance table or migration changed; evidence is in [F07-B](../../evidence/principal-f07-cover-2026-10-17/README.md). Human review, TEN-03 and production gates remain PENDING.
+
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | ATT-01 | VERIFIED | PENDING | Source `5a9e528a65a6e96b63b8546d9eda590567483ea5`; local PostgreSQL, Playwright, checks, build and live demo evidence below |

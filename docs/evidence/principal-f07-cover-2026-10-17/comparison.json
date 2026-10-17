@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-17T07:13:12.206Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "credentialPath": "artifacts/people-02/private-demo.json",
+  "scenarioPath": "artifacts/timetable-cover/private-demo.json",
+  "applicationRoute": "/leadership/cover/b878f4a6-4437-4503-9466-25d3dc08278f",
+  "referenceWorkflow": "LEA-24",
+  "states": {
+    "desktopActive": {
+      "persistedAfterReload": true,
+      "overflow": false
+    },
+    "mobileActive": {
+      "keyboardFocusReturn": true,
+      "overflow": false
+    },
+    "teacherActive": {
+      "persistedAfterReload": true,
+      "overflow": false
+    },
+    "teacherMobileActive": {
+      "keyboardFocusReturn": true,
+      "overflow": false
+    }
+  }
+}

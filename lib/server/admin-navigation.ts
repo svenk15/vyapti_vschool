@@ -23,6 +23,7 @@ const routes:readonly Route[]=[
  {label:'Imports',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
  {label:'Academics',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
  {label:'Timetable',href:'/admin/timetable',icon:'calendar',permission:'timetable.manage',modules:['timetable','academic_core','staff_core']},
+ {label:'Cover coordination',href:'/admin/timetable/cover',icon:'people',permission:'timetable.manage',modules:['timetable','academic_core','staff_core','attendance']},
  {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
  {label:'Attendance',href:'/admin/attendance/sessions',icon:'attendance',permission:'attendance.read_school',modules:['attendance']},
  {label:'Communication',href:'/admin/communication',icon:'mail',permission:'communication.publish',modules:['communication']},
@@ -30,7 +31,7 @@ const routes:readonly Route[]=[
  {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
 const sections:readonly Readonly<{label:string;hrefs:readonly string[]}>[]=[
- {label:'Operations',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/users','/admin/academics','/admin/timetable','/admin/reports/attendance','/admin/communication','/admin/events']},
+ {label:'Operations',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/users','/admin/academics','/admin/timetable','/admin/timetable/cover','/admin/reports/attendance','/admin/communication','/admin/events']},
  {label:'Management',hrefs:['/admin/teachers','/admin/imports','/admin/admissions','/admin/classes','/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
 ];
 

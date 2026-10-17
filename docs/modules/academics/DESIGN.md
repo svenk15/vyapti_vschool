@@ -397,22 +397,58 @@ sequenceDiagram
 
 Verification requires a pure deterministic-selection unit test, a populated real-PostgreSQL browser journey through the existing guarded read, desktop/mobile comparison with the approved Student day reference, and empty/failure rendering. The recorded font-portability and native accessibility gates remain unchanged.
 
-## TT-07 / TEA-23 — Cover and substitution design readiness — 13 October 2026
+## TT-07 / F07-B / LEA-24 — exact-occurrence cover — 17 October 2026
 
-This is a narrow readiness proposal, not implemented authority. The actual owner contracts show that a Teacher-only timetable projection can depend on the verified TT-06 Teacher slice rather than waiting for Student and Parent TT-06 projections: the candidate occurrence, original assignment, substitute Teacher identity and any trusted Attendance session are all resolved from Academics, People and Attendance owner data. The proposed dependency is therefore `TT-05 + TT-06 Teacher slice`; Student/Parent projection work is not on the command path. This dependency change does not authorize a cover command.
+D09 and D02 are approved for synthetic-only implementation. The command dependency is TT-05 plus the verified TT-06 Teacher projection; Student and Parent timetable projections are not on the mutation path. Academics owns the cover proposal and effective occurrence authority, People supplies the minimal availability collision fact, Access supplies exact delegated approval authority, and Attendance alone checks the linked register state. Publication and the occurrence's original assignment remain immutable.
 
-The proposed aggregate is one exact dated published occurrence. The browser may submit only a candidate occurrence and expected cover version; the server derives the immutable publication/slot identity, current original Teacher, eligible substitute Teacher and trusted Attendance link. Proposed mutations use the existing account → Organization → School guard, then lock the occurrence/cover row; current authorization, dated eligibility and overlap are rechecked before replay and commit. Same scope/actor/command/key plus the same canonical payload returns the original result; changed payload conflicts. Every transition appends audit/outbox/receipt evidence and an immutable cover-history entry.
+The aggregate is one exact `LessonOccurrence`. A coordinator with current `timetable.manage` proposes one currently active substitute Teacher and a bounded non-sensitive reason. The server derives publication, slot, original Teacher assignment, exact instants and the trusted Attendance link. The proposer cannot approve. Approval requires current D02 action `timetable.cover.approve`; only the named substitute's currently bound active Teacher identity may accept or decline. Approval and acceptance may arrive in either order. The second positive transition activates only after fresh eligibility, People `FREE` availability, same-school occurrence overlap, cross-branch collision and Attendance `SCHEDULED`/absent checks all pass in one transaction. `UNKNOWN` or `BUSY` never auto-selects a substitute.
 
-The smallest unresolved product decisions are:
+Lifecycle is represented without ambiguous combined labels: `approval_state=PENDING|APPROVED|RETURNED|REJECTED`, `response_state=PENDING|ACCEPTED|DECLINED`, and `lifecycle=OPEN|ACTIVE|WITHDRAWN|CANCELLED|REPLACED`. Return/reject are approver actions with reason; decline is substitute-owned; withdraw is proposer/coordinator-owned before activation; cancelling an active cover is allowed only before the linked register becomes OPEN. Replacement creates a new proposal and closes the prior aggregate; it never edits an immutable publication. This slice implements propose, approve/return/reject, accept/decline and safe activation/cancellation; replacement is composition over withdraw/cancel plus a new proposal and uses separate keys.
 
-1. **Assignment authority:** proposed `timetable.cover.manage` for an explicitly granted school administrator in the current branch. Role name alone grants nothing. No grant is added until approved.
-2. **Teacher response:** proposed `timetable.cover.respond` lets only the named substitute acknowledge or decline that exact active occurrence. Decide whether manager assignment immediately changes teaching/Attendance authority, with response as acknowledgement, or whether acceptance is required before authority changes. The recommended option is acceptance-before-authority because it prevents an unaware Teacher gaining a live register.
-3. **Lifecycle:** proposed states `PROPOSED → ACCEPTED | DECLINED | WITHDRAWN | CANCELLED | REPLACED`. Only the manager withdraws/cancels/replaces; the named substitute accepts/declines. Replacement is one atomic command that closes the previous proposal and creates its successor. Decide whether a decline may include an administrator-visible reason and its retention.
-4. **Eligibility and overlap:** require active account/membership, active dated Employee/Teacher identity for the whole occurrence, and no Teacher-Person interval overlap. Decide whether additional dated eligibility beyond existing employment/Teacher status is required; none is inferred.
-5. **Access effect:** proposed original Teacher keeps historical visibility allowed by existing policy but loses open/mark authority for the exact occurrence only after an accepted cover; the substitute gains only that occurrence. Decide whether the original Teacher retains live read access after acceptance.
-6. **Attendance state:** proposed cover changes are allowed only before a trusted Attendance session becomes `OPEN`; `OPEN` or `SUBMITTED` blocks assignment/replacement and never rewrites the frozen roster or revision history. Decide whether a `SCHEDULED` trusted session is updated atomically through an Attendance owner port or cancelled/recreated before acceptance.
+### Physical contract and queries
 
-Until these decisions are accepted, there is no cover table, capability, grant, button or authority transition. TEA-23 remains blocked by product policy; TEA-22 may only display supported published schedule facts.
+| Physical table | Columns | Responsibility | Constraints and indexes |
+|---|---|---|---|
+| `vs_academics_timetable_cover` (TimetableCover) | id uuid PK; organization_id uuid; school_id uuid; occurrence_id uuid; original_teacher_assignment_id uuid; substitute_teacher_id uuid; proposer/approval/response/closure evidence; approval_state; response_state; lifecycle; version; timestamps | Exact published-occurrence cover overlay; immutable publication and original assignment remain unchanged. | Scoped occurrence/assignment/Teacher FKs; actor FKs; closed states/evidence checks; UNIQUE live occurrence; occurrence and substitute indexes |
+| `vs_academics_timetable_cover_event` (TimetableCoverEvent) | id uuid PK; organization_id uuid; school_id uuid; cover_id uuid; number; kind; actor_account_id; reason; safe_details jsonb; occurred_at | Append-only cover lifecycle and activation evidence. | Scoped cover FK; actor FK; closed event vocabulary; UNIQUE(scope,cover_id,number); immutable trigger; sequence index |
+
+| Table | Fields | Constraints and indexes |
+|---|---|---|
+| `vs_academics_timetable_cover` | `id`, scope, `occurrence_id`, `original_teacher_assignment_id`, `substitute_teacher_id`, `proposed_by_account_id`, `reason`, three state columns, approval/response/activation/cancellation actor+time, `version`, timestamps | Scoped FKs to occurrence, original assignment and substitute Teacher; actor FKs; state/timestamp consistency checks; positive version; one OPEN/ACTIVE cover per occurrence partial unique index; scope/occurrence and scope/substitute/state indexes |
+| `vs_academics_timetable_cover_event` | `id`, scope, `cover_id`, `number`, `kind`, `actor_account_id`, `reason`, safe JSON details, `occurred_at` | Scoped cover FK; closed event vocabulary; `UNIQUE(scope,cover_id,number)`; append-only sequence index |
+
+The detail read joins cover → exact occurrence → immutable publication/slot → Section/Offering/Subject → original/substitute Teacher/Employee/Person and the trusted Attendance status port. Candidate substitutes are branch-scoped active Teachers whose Employee interval contains the occurrence date, whose bound account has active Teacher membership, and whose People collision fact is `FREE`; results are bounded and deterministic by display name, staff number and Teacher ID. Browser IDs remain candidates and are re-resolved under the locked occurrence.
+
+Every mutation takes account → Organization → School locks, locks the occurrence and cover, then calls the enlisted People and Attendance owner ports. Activation checks no overlapping PLANNED occurrence already resolves to the substitute and no other active cover overlaps by Teacher Person. Attendance locks the source-linked session and permits absent or SCHEDULED only; OPEN/SUBMITTED blocks atomically. Attendance open/submit calls the Academics effective-occurrence Teacher port in its existing transaction, so an ACTIVE cover gives the substitute exact occurrence authority and removes the original Teacher's marking authority without copying a Teacher ID into Attendance. Historical submitted visibility remains under the existing history policy; no roster or Attendance revision is rewritten.
+
+Same actor/scope/command/key and canonical payload reauthorizes then returns the original receipt; changed payload conflicts. A replay never discloses the proposal after authority, membership or named-substitute identity is lost. Expected version is required after create. Each successful transition atomically updates the cover CAS, appends its event, and writes the existing tenant receipt/audit/outbox evidence. The browser retains the exact key after an unknown outcome and checks the protected receipt before retrying the same payload.
+
+```mermaid
+sequenceDiagram
+  actor C as Timetable coordinator
+  actor P as Delegated Principal
+  actor T as Named substitute
+  participant A as Academics cover use case
+  participant Pe as People collision port
+  participant At as Attendance cover port
+  participant D as PostgreSQL transaction
+  C->>A: Propose exact occurrence + substitute + key
+  A->>D: Lock scope/occurrence; recheck timetable.manage
+  A->>Pe: Require FREE for exact interval
+  A->>At: Require no OPEN/SUBMITTED linked register
+  A->>D: Persist proposal, event and receipt
+  par independent decisions
+    P->>A: Approve with D02 timetable.cover.approve
+    T->>A: Accept own exact proposal
+  end
+  A->>D: Lock scope/occurrence/cover; reauthorize both facts
+  A->>Pe: Recheck availability and overlap
+  A->>At: Lock and recheck linked register
+  A->>D: Activate cover and evidence atomically
+  D-->>T: Exact occurrence authority; original marking denied
+```
+
+Verification requires domain transition tests; real PostgreSQL propose/replay/stale/separation, approval-before/after-acceptance, expired delegation, substitute revocation, `UNKNOWN`/`BUSY`, overlap, OPEN/SUBMITTED race, concurrent activation, cross-scope denial, event immutability and lost-response recovery; and one-worker desktop/mobile coordinator → Principal → Teacher → Attendance journeys. Direct comparison uses LEA-24 and the Teacher cover reference. Font portability, native accessibility, TEN-03 and human acceptance remain separate gates.
 
 ## TEA-07/TEA-08 — Assigned classes and minimal roster — 13 October 2026
 
