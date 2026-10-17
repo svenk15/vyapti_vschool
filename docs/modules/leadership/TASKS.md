@@ -96,10 +96,10 @@ Engineering status: supported read slice VERIFIED; full LEA-16 PARTIAL. Human re
 - [x] Verify another own session is removed after reload while the current session remains authorized.
 - [x] Verify current-browser sign-out invalidates that session and a protected Principal account route returns through sign-in.
 - [x] Compare the approved reference with production desktop/mobile session and confirmation states, including focus and viewport containment.
-- [ ] Add preferences only after the approved key/value, validation, portability and persistence contract exists.
-- [ ] Add school support only after an authorized source/configuration owner and safe presentation contract exists.
+- [x] Add only `TABLE_DENSITY` and `REDUCED_MOTION` through the Access-owned versioned self-account contract.
+- [x] Read only the trusted School administrator-published branch support snapshot; show unconfigured state honestly.
 
-Engineering status: supported session-security slice VERIFIED; full LEA-46 PARTIAL. Human review PENDING.
+Engineering status: LEA-46 ENGINEERING_COMPLETE; visual comparison complete with documented workflow-explorer/font deviations; human review PENDING.
 
 ## LEA-17 — Assignment completion with the right denominator
 

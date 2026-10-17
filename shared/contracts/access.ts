@@ -32,6 +32,23 @@ export type AccountSessionRevocation = Readonly<{
   replayed: boolean;
   current: boolean;
 }>;
+export type TableDensity = 'COMFORTABLE' | 'COMPACT';
+export type ReducedMotionPreference = 'SYSTEM' | 'REDUCE';
+export type AccountPreferenceBundle = Readonly<{
+  density: TableDensity;
+  reducedMotion: ReducedMotionPreference;
+  versions: Readonly<{density: number; reducedMotion: number}>;
+  updatedAt: string | null;
+}>;
+export type AccountPreferenceUpdateResult = AccountPreferenceBundle & Readonly<{replayed: boolean}>;
+export type SchoolSupportConfiguration = Readonly<{
+  label: string;
+  email: string | null;
+  phone: string | null;
+  hours: string;
+  timezone: string;
+  publishedAt: string;
+}>;
 export type ProvisionInput = { organizationName: string; schoolCode: string; schoolName: string; timezone: string; adminEmail: string; password: string };
 export type OperatorPrincipal = Readonly<{ operatorId: string; verified: true }>;
 export type ProvisionResult = Readonly<{ organizationId: string; schoolId: string; accountId: string; membershipId: string }>;

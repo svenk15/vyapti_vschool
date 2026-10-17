@@ -18,6 +18,7 @@ export const contextGateway={getContexts:access.getContexts,switchContext:access
 export const accountGateway={getHome:async(identity:Identity|null,schoolId?:string)=>access.getAccountHome(identity,schoolId??await selectedSchoolId(identity)),getSelf:access.getSelfAccount};
 export const leadershipGateway={getHome:async(identity:Identity|null,schoolId?:string)=>access.getLeadershipHome(identity,schoolId??await selectedSchoolId(identity))};
 export const sessionGateway={list:access.listSessions,revoke:access.revokeSession};
+export const preferenceGateway={get:access.getOwnPreferences,update:access.updateOwnPreferences,getSupport:access.getSchoolSupport};
 export const adminGateway = {
  getSettings:async(identity:Identity|null,schoolId?:string)=>access.getSettings(identity,schoolId??await selectedSchoolId(identity)),
  listMembers:async(identity:Identity|null,schoolId?:string,cursor?:string)=>access.listMembers(identity,schoolId??await selectedSchoolId(identity),cursor),

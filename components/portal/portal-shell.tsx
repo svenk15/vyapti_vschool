@@ -20,11 +20,12 @@ type PortalShellProps={
  stagedSignOutHref?:string;
  children:ReactNode;
  contentClassName?:string;
+ preferences?:{density:'COMFORTABLE'|'COMPACT';reducedMotion:'SYSTEM'|'REDUCE'};
 };
 
 const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),input:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,contextHref='/admin/context',stagedSignOutHref='/admin/context?destination=sign-out',children,contentClassName}:PortalShellProps){
+export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,contextHref='/admin/context',stagedSignOutHref='/admin/context?destination=sign-out',children,contentClassName,preferences}:PortalShellProps){
  const pathname=usePathname(),[openOnPath,setOpenOnPath]=useState<string|null>(null),toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
  const currentItem=groups.flatMap(group=>group.items).filter(item=>item.href===homeHref?pathname===homeHref:pathname===item.href||pathname.startsWith(`${item.href}/`)).sort((left,right)=>right.href.length-left.href.length)[0];
  const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>toggle.current?.focus());},[]);
@@ -46,7 +47,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
   return()=>{document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',onKeyDown);};
  },[close,open]);
  const identityLabel=accountDisplayName?.trim()||roleLabel,initials=identityLabel.split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();
- return <div className="portal-shell">
+ return <div className="portal-shell" data-density={preferences?.density} data-reduced-motion={preferences?.reducedMotion}>
   <header className="portal-topbar">
    <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls="portal-navigation" aria-expanded={open} onClick={()=>open?close(true):setOpenOnPath(pathname)}><span aria-hidden="true">{open?'×':'☰'}</span><span className="sr-only">{open?'Close navigation':'Open navigation'}</span></button>
    <Link className="portal-mobile-brand" href={homeHref}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>

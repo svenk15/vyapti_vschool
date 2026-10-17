@@ -49,16 +49,16 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-43 | Review financial exceptions under a separate grant | services | 5 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-44 | Coordinate a school service interruption | services | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-45 | Review a source-linked leadership draft | assistant | 7 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-46 | Manage sessions, preferences and school support | account | 1 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Own non-current session revocation, persistence after reload, current-session sign-out and protected-route denial are verified in the Principal shell; preferences and school-approved support configuration remain absent because their owner contracts do not exist |
+| LEA-46 | Manage sessions, preferences and school support | account | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Own-session controls, allowlisted versioned display preferences and administrator-published trusted branch support are verified through Access-owned contracts; the approved source is a workflow explorer while production uses the Principal account and School settings compositions, and font/native-accessibility gates remain pending |
 
 ## Current counts
 
-Engineering: 11 ENGINEERING_COMPLETE, 5 PARTIAL, 30 NOT_STARTED. Human acceptance remains pending for all 46.
+Engineering: 12 ENGINEERING_COMPLETE, 4 PARTIAL, 30 NOT_STARTED. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. Principal completion F00 and the current-equivalent F01/WF-10 are engineering-complete. The production L/D/W/R mapping is recorded in `docs/execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md`.
 2. LEA-10 remains production-gated by Coordination retention/backup-deletion policy and TEN-03; these gates do not reduce its engineering status.
-3. Every remaining programme task depends on at least one of D02–D19. Those rules remain recommended pending explicit user approval; no dependent authority is inferred.
+3. D02–D19 are approved for synthetic-only implementation with no exceptions. The next graph-eligible priority is F03, followed by F04 and F08 where their dependencies are satisfied; production authority and provider gates remain separate.
 
 LEA-09/10/11/15 use the implemented Coordination owner. LEA-15 remains an independently authorized Attendance operation rather than a direct Principal mutation. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

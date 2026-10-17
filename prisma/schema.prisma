@@ -62,6 +62,11 @@ model School {
   officeEmail          String?            @map("office_email") @db.VarChar(254)
   officePhone          String?            @map("office_phone") @db.VarChar(40)
   officeAddress        String?            @map("office_address") @db.VarChar(500)
+  supportLabel         String?            @map("support_label") @db.VarChar(160)
+  supportEmail         String?            @map("support_email") @db.VarChar(254)
+  supportPhone         String?            @map("support_phone") @db.VarChar(40)
+  supportHours         String?            @map("support_hours") @db.VarChar(500)
+  supportPublishedAt   DateTime?          @map("support_published_at") @db.Timestamptz(3)
   status               String             @db.VarChar(20)
   version              Int
   createdAt            DateTime           @map("created_at") @db.Timestamptz(3)
@@ -154,6 +159,8 @@ model UserAccount {
   intendedStudentInvitations StudentPortalInvitation[] @relation("StudentPortalInvitationAccount")
   createdStudentInvitations StudentPortalInvitation[] @relation("StudentPortalInvitationCreator")
   accountSessions AccountSession[]
+  accountPreferences AccountPreference[]
+  accountPreferenceReceipts AccountPreferenceReceipt[]
 
   @@unique([normalizedEmail], map: "vs_access_user_account_u0_key")
   @@index([status, id], map: "vs_access_user_account_q0_idx")
@@ -173,6 +180,33 @@ model AccountSession {
  @@unique([accountId,id],map:"vs_access_account_session_account_id_key")
  @@index([accountId,revokedAt,expiresAt,id],map:"vs_access_account_session_account_active_idx")
  @@map("vs_access_account_session")
+}
+
+model AccountPreference {
+ id String @id(map:"vs_access_account_preference_pkey") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ key String @db.VarChar(40)
+ value String @db.VarChar(40)
+ version Int
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ account UserAccount @relation(fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_preference_account_fkey")
+ @@unique([accountId,key],map:"vs_access_account_preference_account_key_key")
+ @@index([accountId,updatedAt(sort: Desc),id],map:"vs_access_account_preference_account_updated_idx")
+ @@map("vs_access_account_preference")
+}
+
+model AccountPreferenceReceipt {
+ id String @id(map:"vs_access_account_preference_receipt_pkey") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ command String @db.VarChar(60)
+ key String @db.VarChar(100)
+ inputHash String @map("input_hash") @db.Char(64)
+ response Json
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ account UserAccount @relation(fields:[accountId],references:[id],onDelete:Restrict,onUpdate:Restrict,map:"vs_access_account_preference_receipt_account_fkey")
+ @@unique([accountId,command,key],map:"vs_access_account_preference_receipt_account_command_key_key")
+ @@index([accountId,occurredAt(sort: Desc),id],map:"vs_access_account_preference_receipt_account_occurred_idx")
+ @@map("vs_access_account_preference_receipt")
 }
 
 model AccountPersonBinding {

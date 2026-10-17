@@ -138,6 +138,12 @@ No schema or migration changed; both databases retain all 64 migrations. Existin
 
 Remaining gates: full LEA-46 remains partial, and font portability, native VoiceOver/NVDA, TEN-03, production controls and human acceptance remain pending.
 
+## 17 October 2026 — F18 completes LEA-46 preferences and support
+
+LEA-46 is now ENGINEERING_COMPLETE; direct reference comparison remains complete with the documented workflow-explorer and font deviations; human review is PENDING. `/leadership/account` composes the unchanged Access session workflow, Access-owned versioned table-density/reduced-motion preferences and the trusted School administrator-published support snapshot. `/admin/school` is the authorized counterpart publication route. Leadership adds no database write or authority of its own.
+
+The current-source browser journey passed 2/2 Chromium and 2/2 mobile with one worker after rebuilding the isolated `.next-e2e` bundle. It proves publication, preference confirmation/reload, trusted support display, other-session revoke and current-session sign-out. Access unit/PostgreSQL and repository-gate evidence is recorded in [LEA-46 evidence](../../evidence/principal-lea-46-account-2026-10-16/README.md). The Principal matrix is 12 ENGINEERING_COMPLETE, four PARTIAL and 30 NOT_STARTED. Font portability, native accessibility, TEN-03, production enablement and human acceptance remain pending.
+
 Next action: select the next bounded Principal owner projection whose denominator and disclosure rules are fully represented by current source data; do not invent extension/excused, sensitive staff or approval semantics.
 
 ## 16 October 2026 — LEA-39 current-release export completion
@@ -222,7 +228,7 @@ Next action: implement the approved synthetic-only LEA-06 retained aggregate sna
 
 ## 17 October 2026 — Principal completion F00 checkpoint
 
-F00 is ENGINEERING_COMPLETE; human review remains PENDING. The imported completion package was reconciled against executable source `f75ad4f3e3b036132d0c72bbe6c95eceea296b1c` and the live 46-row matrix. The current mutually exclusive counts are 11 ENGINEERING_COMPLETE, five PARTIAL and 30 NOT_STARTED. LEA-10 is complete through the existing verified COORD-02 implementation, so F01 and WF-10 are recorded as current equivalents rather than duplicated work.
+F00 is ENGINEERING_COMPLETE; human review remains PENDING. At that checkpoint the imported completion package was reconciled against executable source `f75ad4f3e3b036132d0c72bbe6c95eceea296b1c` and the live 46-row matrix contained 11 ENGINEERING_COMPLETE, five PARTIAL and 30 NOT_STARTED. The later F18 checkpoint above supersedes those counts. LEA-10 is complete through the existing verified COORD-02 implementation, so F01 and WF-10 are recorded as current equivalents rather than duplicated work.
 
 The [production screen map](../../execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md) maps real Principal routes to the L/D/W/R recipes. Current-source captures at 1440×1000 and 390×844 were directly inspected and measured; all specimens retained the shared shell and reported no horizontal overflow. Evidence is in [principal-f00-production-recipes-2026-10-17](../../evidence/principal-f00-production-recipes-2026-10-17/README.md). This checkpoint changes no application code, business contract, schema, migration or database data, so the existing LEA-10 functional/security evidence remains applicable.
 

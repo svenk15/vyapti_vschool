@@ -2,7 +2,7 @@
 
 ## Principal completion programme — 17 October 2026
 
-The active Principal continuation graph is [PRINCIPAL_COMPLETION_PACK](execution/PRINCIPAL_COMPLETION_PACK/00_START_HERE.md). F00 reconciles the imported snapshot against the live repository, and its [SCREEN_MAP](execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md) defines production L/D/W/R compositions without treating the workflow explorer as a complete page design. The canonical [Principal workflow matrix](execution/PRINCIPAL_WORKFLOW_MATRIX.md) currently records 11 ENGINEERING_COMPLETE, five PARTIAL and 30 NOT_STARTED workflows. F01/WF-10 are satisfied by the verified COORD-02/LEA-10 implementation. D02–D19 remain recommendations pending an explicit user decision; production retention, TEN-03, font portability, native accessibility and human acceptance remain separate gates.
+The active Principal continuation graph is [PRINCIPAL_COMPLETION_PACK](execution/PRINCIPAL_COMPLETION_PACK/00_START_HERE.md). F00 reconciles the imported snapshot against the live repository, and its [SCREEN_MAP](execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md) defines production L/D/W/R compositions without treating the workflow explorer as a complete page design. The canonical [Principal workflow matrix](execution/PRINCIPAL_WORKFLOW_MATRIX.md) currently records 12 ENGINEERING_COMPLETE, four PARTIAL and 30 NOT_STARTED workflows. F01/WF-10 are satisfied by the verified COORD-02/LEA-10 implementation, and F18/LEA-46 is engineering-complete. D02–D19 are approved for synthetic-only implementation with no exceptions; production enablement, providers, retention, TEN-03, font portability, native accessibility and human acceptance remain separate gates.
 
 ## Complete School Administrator directive (10 October 2026)
 

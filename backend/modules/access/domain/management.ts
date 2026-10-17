@@ -7,8 +7,9 @@ function optionalText(value:unknown,max:number){if(value==null||value==="")retur
 export function normalizeCommand(kind:ManagementCommand["kind"],body:unknown,targetId?:string):ManagementCommand {
  if(!body||typeof body!=="object"||!("payload" in body)||!body.payload||typeof body.payload!=="object")throw new AccessError("VALIDATION");
  const p=body.payload as Record<string,unknown>,version="expectedVersion" in body?body.expectedVersion:undefined;
- if((kind==="UpdateSchool"||kind==="UpdateMembership")&&(!Number.isInteger(version)||Number(version)<1))throw new AccessError("VALIDATION");
+ if((kind==="UpdateSchool"||kind==="PublishSchoolSupport"||kind==="UpdateMembership")&&(!Number.isInteger(version)||Number(version)<1))throw new AccessError("VALIDATION");
  if(kind==="UpdateSchool"){const timezone=text(p.timezone,64),officeEmail=text(p.officeEmail,254).toLowerCase(),officePhone=optionalText(p.officePhone,40),officeAddress=text(p.officeAddress,500),reason=text(p.reason,500);try{new Intl.DateTimeFormat("en",{timeZone:timezone});}catch{throw new AccessError("VALIDATION");}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(officeEmail)||officePhone&&!/^[0-9+().\-\s]{5,40}$/.test(officePhone))throw new AccessError("VALIDATION");return {kind,payload:{name:text(p.name,160),timezone,officeEmail,officePhone,officeAddress,reason},expectedVersion:Number(version)};}
+ if(kind==="PublishSchoolSupport"){const email=optionalText(p.email,254).toLowerCase(),phone=optionalText(p.phone,40);if(!email&&!phone||email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||phone&&!/^[0-9+().\-\s]{5,40}$/.test(phone))throw new AccessError("VALIDATION");return {kind,payload:{label:text(p.label,160),email,phone,hours:text(p.hours,500),reason:text(p.reason,500)},expectedVersion:Number(version)};}
  if(kind==="CreateCampus")return {kind,payload:{code:text(p.code,40),name:text(p.name,160)}};
  if(kind==="CreateMembership"){
   if(Boolean(p.email)===Boolean(p.targetAccountId))throw new AccessError("VALIDATION");

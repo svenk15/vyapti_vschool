@@ -437,9 +437,9 @@
       "table": "vs_access_school",
       "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); office_email varchar(254) nullable; office_phone varchar(40) nullable; office_address varchar(500) nullable; status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
-      "responsibility": "Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1.",
-      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); contact normalization/bounds checks; CHECK configuration_version>0",
+      "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); office_email varchar(254) nullable; office_phone varchar(40) nullable; office_address varchar(500) nullable; support_label varchar(160) nullable; support_email varchar(254) nullable; support_phone varchar(40) nullable; support_hours varchar(500) nullable; support_published_at timestamptz(3) nullable; status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
+      "responsibility": "Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1. Owns the administrator-published trusted branch support snapshot used by personal account workspaces.",
+      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); office contact normalization/bounds; support columns are all absent or complete with label, hours, publication time and at least one normalized contact; CHECK configuration_version>0",
       "rls": {
         "classification": "BRANCH_DIRECTORY",
         "scopeColumns": [
@@ -508,6 +508,46 @@
           "account_id"
         ],
         "intendedPolicy": "Runtime access is limited to the authenticated app.account_id; session validation and revocation use the guarded Access workflow.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AccountPreference",
+      "owner": "access",
+      "table": "vs_access_account_preference",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; account_id uuid; key varchar(40); value varchar(40); version int; updated_at timestamptz(3)",
+      "responsibility": "Own allowlisted table-density and reduced-motion values only; missing rows resolve to documented defaults.",
+      "constraints": "FK account; UNIQUE(account_id,key); key/value CHECK for TABLE_DENSITY and REDUCED_MOTION; version>0; index(account_id,updated_at DESC,id)",
+      "rls": {
+        "classification": "GLOBAL_IDENTITY",
+        "scopeColumns": [
+          "account_id"
+        ],
+        "intendedPolicy": "Runtime reads and writes are limited to the authenticated app.account_id; no target account is accepted by the use case.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AccountPreferenceReceipt",
+      "owner": "access",
+      "table": "vs_access_account_preference_receipt",
+      "status": "MIGRATED",
+      "design": "docs/modules/access/DESIGN.md",
+      "fields": "id uuid PK; account_id uuid; command varchar(60); key varchar(100); input_hash char(64); response jsonb; occurred_at timestamptz(3)",
+      "responsibility": "Protected exact-input recovery for own preference updates; response contains only allowlisted preference values and versions.",
+      "constraints": "FK account; UNIQUE(account_id,command,key); command fixed to UpdateOwnPreferences; key length 16..100; lowercase SHA-256 input hash; index(account_id,occurred_at DESC,id)",
+      "rls": {
+        "classification": "GLOBAL_IDENTITY",
+        "scopeColumns": [
+          "account_id"
+        ],
+        "intendedPolicy": "Runtime replay lookup is limited to authenticated app.account_id and reauthorized before receipt disclosure.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "access",
         "closureGate": "TEN-03"

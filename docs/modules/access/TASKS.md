@@ -193,3 +193,13 @@ Human visual acceptance, native VoiceOver/NVDA, font portability and TEN-03 rema
 - [x] Compare matched approved/application states and record the necessary live-data extension separately.
 
 Human visual acceptance, native VoiceOver/NVDA, font portability and TEN-03 remain separate pending gates.
+# ACC-02 / F18 — preferences and school support
+
+- [x] Record D05 synthetic-only approval and reconcile existing LEA-46 session evidence.
+- [x] Add constrained global own-account preference rows and protected replay receipts.
+- [x] Add the trusted branch support snapshot to School through a forward migration.
+- [x] Implement Access facades, current authorization, version/replay/rollback evidence and thin HTTP gateways.
+- [x] Add the School administrator publication counterpart and Principal account composition.
+- [x] Extend repeat-safe synthetic seed and verify PostgreSQL, browser, visual and repository gates.
+
+Human acceptance and production enablement remain PENDING.

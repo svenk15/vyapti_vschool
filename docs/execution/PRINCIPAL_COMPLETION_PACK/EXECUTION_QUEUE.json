@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "approval": "PENDING_FOR_NEW_DECISIONS",
-  "baselineComplete": 11,
-  "baselinePartial": 5,
+  "approval": "D01_EXISTING_D02_D19_SYNTHETIC_APPROVED_2026_10_17",
+  "baselineComplete": 12,
+  "baselinePartial": 4,
   "baselineNotStarted": 30,
   "tasks": [
     {
@@ -266,7 +266,7 @@
       "decisions": [
         "D05"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Own allowlisted preference persistence and trusted published branch support contact.",
       "demo": "Reload density preference and separate sign-out; wrong-account write denied; unconfigured support honest.",
       "kind": "foundation"

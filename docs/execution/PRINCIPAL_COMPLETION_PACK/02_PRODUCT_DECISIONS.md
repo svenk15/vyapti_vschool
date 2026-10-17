@@ -1,6 +1,8 @@
 # Consolidated product decision register
 
-Status: D01 is EXISTING_DOCUMENTED. D02–D19 are RECOMMENDED_PENDING_APPROVAL unless live repository evidence shows an accepted equivalent. Each recommendation below is a product proposal, not legal, medical, school-safety or financial advice. The approval record must identify the actual approving user, date, D-IDs and exceptions. Do not fabricate acceptance timestamps.
+Status: D01 is EXISTING_DOCUMENTED. D02–D19 are APPROVED_FOR_SYNTHETIC_IMPLEMENTATION. They remain gated from production as described below.
+
+Approval evidence: on 17 October 2026, the repository owner explicitly stated in this Codex session: “I approve D02–D19 for synthetic-only implementation exactly as recorded in docs/execution/PRINCIPAL_COMPLETION_PACK/02_PRODUCT_DECISIONS.md. Exceptions: none. Preserve the existing D01 contract.” This approval does not authorize production enablement, purchases, real external messages, real payments, provider selection or invented school emergency procedures. Human acceptance remains separate and PENDING.
 
 ## Common policy proposed for all new capabilities
 Provision new sensitive grants through the existing trusted operator-designation path; do not expand a broad Principal role automatically. Bind scope to institution, branch and purpose. An institution-wide summary grant enumerates branches, never substitutes for branch operational grants. Self-approval is checked by global account/Person identity where established, across workspaces. Default new functionality disabled until release, entitlement, activation and explicit actor grant are satisfied.
@@ -67,7 +69,7 @@ Money uses currency code plus integer minor units or owner-approved fixed decima
 ### D18–D19: service and AI completion
 Facilities slice does not complete every possible service integration; document exact supported service. AI can use deterministic test adapter for boundary tests but that is not a working AI-provider demonstration. Provider approval must cover payload minimization, retention and region. Generated content remains untrusted data, cannot call owner commands, and cannot influence retrieval scope. Store authorized source version references and only policy-permitted draft text. Evaluate invented numbers, missing citations, prompt injection and revoked sources before calling the AI workflow engineering-complete.
 
-## One approval form
+## Approval form retained for provenance
 Record: “Approve product definitions D02–D19 for implementation using synthetic data, with exceptions: ____. Preserve existing D01. This does not authorize production enablement, real external sends, purchases, real payments, school emergency policy or provider selection. External dependencies remain separately configured and verified.”
 
-The user can approve subsets instead. Live Codex must not treat this prewritten form as a submitted approval. If approval is absent it may reconcile documentation and continue already-authorized D01 work, not activate proposed authority.
+The form above is retained as the original recommendation text. The explicit session approval recorded at the top of this file is the authority for D02–D19 synthetic implementation.

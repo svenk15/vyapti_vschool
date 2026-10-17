@@ -34,13 +34,37 @@ async function signIn(page:Page){
 test('Principal reviews and revokes only own sessions, then signs out the current browser',async({page},testInfo)=>{
  if(testInfo.project.name==='chromium')await page.setViewportSize({width:1440,height:1000});
  await signIn(page);
+ await page.goto('/admin/school');
+ await page.getByLabel('Support label').fill('Riverbank school office');
+ await page.getByLabel('Support email (optional)').fill('support@riverbank.example');
+ await page.getByLabel('Support hours').fill('Weekdays 08:00–16:00');
+ await page.getByLabel('Reason').last().fill(`Synthetic ${testInfo.project.name} support publication`);
+ await page.getByRole('button',{name:'Review publication'}).click();
+ await expect(page.getByRole('heading',{name:'Review school support'})).toBeFocused();
+ await page.getByRole('button',{name:'Publish support information'}).click();
+ await expect(page.getByText('Personal account workspaces now show this approved contact route.')).toBeVisible();
+ await page.screenshot({path:`${evidence}/application-support-publisher-${testInfo.project.name}.png`});
  await page.goto('/leadership/account');
  await expect(page.getByRole('heading',{name:'My account'})).toBeVisible();
+ await expect(page.getByText('Riverbank school office',{exact:true})).toBeVisible();
+ await expect(page.getByText('support@riverbank.example',{exact:true})).toBeVisible();
+ await page.getByLabel('Compact').check();
+ await page.getByLabel('Reduce motion').check();
+ await page.getByRole('button',{name:'Review changes'}).click();
+ await expect(page.getByRole('heading',{name:'Confirm display preferences'})).toBeFocused();
+ await page.getByRole('button',{name:'Save preferences'}).click();
+ await expect(page.getByRole('status').filter({hasText:'Preferences saved'})).toBeVisible();
+ await page.reload();
+ await expect(page.locator('.portal-shell')).toHaveAttribute('data-density','COMPACT');
+ await expect(page.locator('.portal-shell')).toHaveAttribute('data-reduced-motion','REDUCE');
  await expect(page.getByText('Mobile web browser',{exact:true})).toBeVisible();
  await expect(page.getByText('Desktop web browser',{exact:true})).toBeVisible();
  expect(await page.locator('body').innerText()).not.toMatch(/user-agent|ip address/i);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
- await page.screenshot({path:`${evidence}/application-sessions-${testInfo.project.name}.png`,fullPage:true});
+ await page.screenshot({path:`${evidence}/application-preferences-support-${testInfo.project.name}.png`});
+ await page.getByRole('heading',{name:'School support'}).scrollIntoViewIfNeeded();
+ await page.screenshot({path:`${evidence}/application-support-${testInfo.project.name}.png`});
+ await page.getByRole('heading',{name:'Review sessions'}).scrollIntoViewIfNeeded();
 
  await page.getByText('Mobile web browser',{exact:true}).click();
  await page.getByRole('button',{name:/Continue/}).click();

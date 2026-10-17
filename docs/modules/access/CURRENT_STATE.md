@@ -1,6 +1,14 @@
 # School scope, authentication and permissions — current state
 
-Last updated: 2026-10-16. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
+Last updated: 2026-10-17. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
+
+## ACC-02 / F18 own preferences and trusted school support — 17 October 2026
+
+LEA-46 is ENGINEERING_COMPLETE; direct comparison is complete with documented explorer/font deviations; human review is PENDING; deployment remains SYNTHETIC_ONLY. Access now owns two allowlisted global own-account preferences with expected versions, current-account authorization, exact-input replay receipts and safe security evidence. School support is a complete administrator-published snapshot on the existing School aggregate, guarded by the existing School management lock/version/evidence transaction. Leadership composes these projections with the unchanged own-session controls.
+
+Forward migration `20261017130000_access_preferences_support` is applied to development and test databases, bringing each to 70 migrations without reset or history rewrite. Unit validation passed 7/7 across the focused preference/management files. Both focused real-PostgreSQL F18 tests passed, including wrong-account isolation, concurrent stale handling, exact replay, database constraints, redacted evidence, cross-branch denial and revoked-access denial. Typecheck, database design, backend extraction, boundary and production build checks passed. Focused current-source Playwright passed 2/2 desktop and 2/2 mobile sequentially with one worker. Evidence: [LEA-46](../../evidence/principal-lea-46-account-2026-10-16/README.md).
+
+The broader functional run completed 192/194; two unrelated tests have stale expectations for already-existing `roles` and `feedback-turnaround.v1` fields and remain an honest consolidated-gate failure. The documented font deviation, native VoiceOver/NVDA, TEN-03, production enablement and human acceptance remain pending.
 
 ## ACC-01 / STW-44 own-session management — 16 October 2026
 
@@ -12,7 +20,7 @@ Focused unit passed 3/3 and real-PostgreSQL functional passed 2/2, including for
 
 PAR-50 now consumes this same global self-service boundary for the reference's optional “Other sessions if supported” path. A focused real-browser journey signs one Parent account into two sessions, revokes the selected non-current session only on final confirmation, verifies denial in that browser, and preserves the independent current-session and recovery choices. Desktop and mobile each pass 1/1 with one worker. No schema, migration, seed or grant changed. Evidence: [PAR-50 cross-session extension](../../evidence/parent-sessions-par-50-2026-10-16/README.md).
 
-LEA-46 now consumes the same boundary in the explicit Principal shell. A focused real-browser journey lists the Principal account's two safe sessions, revokes the selected non-current session only at final confirmation, verifies removal after reload, then signs out the current browser and confirms the protected route requires sign-in. Chromium and mobile each passed 2/2 with one worker, including untouched approved-reference capture. No Access code, schema, migration, grant or seed changed. Preferences and school-support configuration remain outside the current owner contract. Evidence: [LEA-46 Principal account](../../evidence/principal-lea-46-account-2026-10-16/README.md).
+LEA-46 first consumed this boundary as a session-only partial. ACC-02/F18 above supersedes that partial status by adding the approved Access-owned preferences and trusted School support contracts without widening session authority.
 
 ## Parent/Guardian authority decision — 13 October 2026
 
