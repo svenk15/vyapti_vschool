@@ -172,11 +172,11 @@
       "decisions": [
         "D11"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Subtasks: plan+scale+cohort; teacher mark revisions; independent moderation; report revision/audience. Each checkpoint demo-able; register a distinct owner.",
       "demo": "Teacher records marks, reviewer returns then approves revised set, publisher prepares report; no missing-as-zero.",
       "kind": "foundation",
-      "completedSlice": "F11-A readiness, F11-B planning, F11-C exact-assignment Teacher mark revisions, F11-D independent moderation and LEA-20 exact-cycle Coordination handoff are verified. Report revision, audience and publication remain."
+      "completedSlice": "F11-A readiness, F11-B planning, F11-C exact-assignment Teacher mark revisions, F11-D independent moderation and F11-E explicit-audience report publication are verified. LEA-20, LEA-21 and LEA-22 are engineering-complete for the approved synthetic scope."
     },
     {
       "id": "F12",
@@ -479,10 +479,11 @@
         "D11",
         "D15"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-22.md",
       "kind": "workflow",
-      "workflow": "LEA-22"
+      "workflow": "LEA-22",
+      "completedSlice": "Assessments-owned publisher handoff, recorder separation, explicit non-empty audience, exact approved source digest, real-scanned immutable synthetic report, exact-key recovery, current-purpose Family/Student download and separate guarded withdrawal are verified."
     },
     {
       "id": "WF-23",

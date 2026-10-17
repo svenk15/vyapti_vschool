@@ -3688,6 +3688,146 @@ model AssessmentsReportRevision {
   @@map("vs_assessments_report_revision")
 }
 
+model AssessmentsReportCapabilityGrant {
+  id                  String    @id(map: "vs_assessments_report_capability_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  capability          String    @db.VarChar(32)
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, accountId, capability], map: "vs_assessments_report_capability_account_key")
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_capability_scope_id_key")
+  @@index([organizationId, schoolId, capability, revokedAt, accountId], map: "vs_assessments_report_capability_active_idx")
+  @@map("vs_assessments_report_capability_grant")
+}
+
+model AssessmentsReportTemplate {
+  id             String   @id(map: "vs_assessments_report_template_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  code           String   @db.VarChar(40)
+  versionNo      Int      @map("version_no")
+  name           String   @db.VarChar(120)
+  signatoryName  String   @map("signatory_name") @db.VarChar(160)
+  signatoryTitle String   @map("signatory_title") @db.VarChar(120)
+  synthetic      Boolean
+  status         String   @db.VarChar(16)
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_template_scope_id_key")
+  @@unique([organizationId, schoolId, code, versionNo], map: "vs_assessments_report_template_version_key")
+  @@index([organizationId, schoolId, status, code, versionNo(sort: Desc)], map: "vs_assessments_report_template_active_idx")
+  @@map("vs_assessments_report_template")
+}
+
+model AssessmentsReportHandoff {
+  id                         String   @id(map: "vs_assessments_report_handoff_pkey") @db.Uuid
+  organizationId             String   @map("organization_id") @db.Uuid
+  schoolId                   String   @map("school_id") @db.Uuid
+  reportRevisionId           String   @map("report_revision_id") @db.Uuid
+  templateId                 String   @map("template_id") @db.Uuid
+  audience                   String   @db.VarChar(16)
+  assignedPublisherAccountId String   @map("assigned_publisher_account_id") @db.Uuid
+  assignedByAccountId        String   @map("assigned_by_account_id") @db.Uuid
+  sourceDigest               String   @map("source_digest") @db.Char(64)
+  status                     String   @db.VarChar(16)
+  version                    Int
+  assignedAt                 DateTime @map("assigned_at") @db.Timestamptz(3)
+  updatedAt                  DateTime @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_handoff_scope_id_key")
+  @@unique([organizationId, schoolId, reportRevisionId], map: "vs_assessments_report_handoff_revision_key")
+  @@index([organizationId, schoolId, assignedPublisherAccountId, status, assignedAt(sort: Desc)], map: "vs_assessments_report_handoff_publisher_idx")
+  @@map("vs_assessments_report_handoff")
+}
+
+model AssessmentsReportPublication {
+  id                 String   @id(map: "vs_assessments_report_publication_pkey") @db.Uuid
+  organizationId     String   @map("organization_id") @db.Uuid
+  schoolId           String   @map("school_id") @db.Uuid
+  handoffId          String   @map("handoff_id") @db.Uuid
+  reportRevisionId   String   @map("report_revision_id") @db.Uuid
+  templateId         String   @map("template_id") @db.Uuid
+  audience           String   @db.VarChar(16)
+  documentVersionId  String   @map("document_version_id") @db.Uuid
+  documentGrantId    String   @map("document_grant_id") @db.Uuid
+  publishedByAccountId String @map("published_by_account_id") @db.Uuid
+  publishedAt        DateTime @map("published_at") @db.Timestamptz(3)
+  version            Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_publication_scope_id_key")
+  @@unique([organizationId, schoolId, handoffId], map: "vs_assessments_report_publication_handoff_key")
+  @@index([organizationId, schoolId, reportRevisionId, publishedAt(sort: Desc)], map: "vs_assessments_report_publication_report_idx")
+  @@map("vs_assessments_report_publication")
+}
+
+model AssessmentsReportGuardianRecipient {
+  id             String   @id(map: "vs_assessments_report_guardian_recipient_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  publicationId  String   @map("publication_id") @db.Uuid
+  accessId       String   @map("access_id") @db.Uuid
+  studentId      String   @map("student_id") @db.Uuid
+  accountId      String   @map("account_id") @db.Uuid
+  frozenAt       DateTime @map("frozen_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_guardian_recipient_scope_id_key")
+  @@unique([organizationId, schoolId, publicationId, accessId], map: "vs_assessments_report_guardian_recipient_access_key")
+  @@index([organizationId, schoolId, accountId, publicationId], map: "vs_assessments_report_guardian_recipient_account_idx")
+  @@map("vs_assessments_report_guardian_recipient")
+}
+
+model AssessmentsReportStudentRecipient {
+  id             String   @id(map: "vs_assessments_report_student_recipient_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  publicationId  String   @map("publication_id") @db.Uuid
+  accessId       String   @map("access_id") @db.Uuid
+  studentId      String   @map("student_id") @db.Uuid
+  accountId      String   @map("account_id") @db.Uuid
+  frozenAt       DateTime @map("frozen_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_student_recipient_scope_id_key")
+  @@unique([organizationId, schoolId, publicationId, accessId], map: "vs_assessments_report_student_recipient_access_key")
+  @@index([organizationId, schoolId, accountId, publicationId], map: "vs_assessments_report_student_recipient_account_idx")
+  @@map("vs_assessments_report_student_recipient")
+}
+
+model AssessmentsReportWithdrawal {
+  id                   String   @id(map: "vs_assessments_report_withdrawal_pkey") @db.Uuid
+  organizationId       String   @map("organization_id") @db.Uuid
+  schoolId             String   @map("school_id") @db.Uuid
+  publicationId        String   @map("publication_id") @db.Uuid
+  withdrawnByAccountId String   @map("withdrawn_by_account_id") @db.Uuid
+  reason               String   @db.VarChar(500)
+  withdrawnAt          DateTime @map("withdrawn_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_withdrawal_scope_id_key")
+  @@unique([organizationId, schoolId, publicationId], map: "vs_assessments_report_withdrawal_publication_key")
+  @@map("vs_assessments_report_withdrawal")
+}
+
+model AssessmentsReportEvent {
+  id             String   @id(map: "vs_assessments_report_event_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  handoffId      String   @map("handoff_id") @db.Uuid
+  publicationId  String?  @map("publication_id") @db.Uuid
+  type           String   @db.VarChar(32)
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  details        Json
+  occurredAt     DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_report_event_scope_id_key")
+  @@index([organizationId, schoolId, handoffId, occurredAt, id], map: "vs_assessments_report_event_history_idx")
+  @@map("vs_assessments_report_event")
+}
+
 model FacilitiesCapabilityGrant {
   id                  String    @id(map: "vs_facilities_capability_grant_pkey") @db.Uuid
   organizationId      String    @map("organization_id") @db.Uuid

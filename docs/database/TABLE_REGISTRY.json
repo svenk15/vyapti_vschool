@@ -1,5 +1,5 @@
 {
-  "revision": "4.23",
+  "revision": "4.24",
   "prefix": "vs_",
   "tables": [
     {
@@ -4077,6 +4077,174 @@
       "fields": "id/org/school/actor/draft/key uuid; command/hash/result/time",
       "responsibility": "Exact Assistant command replay and recovery receipt.",
       "constraints": "Scoped draft/account FKs; unique actor/key; draft index; append-only trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportCapabilityGrant",
+      "table": "vs_assessments_report_capability_grant",
+      "fields": "membership/account/capability designation",
+      "responsibility": "Distinct report publish or withdraw designation.",
+      "constraints": "Scoped membership/account FKs; unique account capability; constrained action; active lookup index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportEvent",
+      "table": "vs_assessments_report_event",
+      "fields": "handoff/publication/type/actor/safe details/time",
+      "responsibility": "Immutable report handoff, publication and withdrawal event evidence.",
+      "constraints": "Scoped Handoff FK; constrained types; history index; immutable trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportGuardianRecipient",
+      "table": "vs_assessments_report_guardian_recipient",
+      "fields": "frozen publication/Guardian access/Student/account binding",
+      "responsibility": "Frozen Guardian audience binding; live purpose is rechecked on every read.",
+      "constraints": "Scoped Publication/Guardian access FKs; unique publication/access; account read index; immutable trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportHandoff",
+      "table": "vs_assessments_report_handoff",
+      "fields": "exact report/template/audience/publisher assignment",
+      "responsibility": "Assessments-owned explicit report publication handoff.",
+      "constraints": "Scoped Report/Template FKs; unique report handoff; audience/digest/state/version checks; publisher queue index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportPublication",
+      "table": "vs_assessments_report_publication",
+      "fields": "exact handoff/report/template/Documents references and receipt time",
+      "responsibility": "Immutable immediate report publication receipt.",
+      "constraints": "Scoped Handoff/Report/Template and Documents FKs; unique handoff publication; immutable trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportStudentRecipient",
+      "table": "vs_assessments_report_student_recipient",
+      "fields": "frozen publication/Student access/Student/account binding",
+      "responsibility": "Frozen Student audience binding; live purpose is rechecked on every read.",
+      "constraints": "Scoped Publication/Student access FKs; unique publication/access; account read index; immutable trigger."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportTemplate",
+      "table": "vs_assessments_report_template",
+      "fields": "versioned template and configured synthetic signatory",
+      "responsibility": "Versioned school-approved report presentation contract.",
+      "constraints": "Scoped School FK; unique code/version; state/version checks; active lookup index."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsReportWithdrawal",
+      "table": "vs_assessments_report_withdrawal",
+      "fields": "publication/actor/reason/time",
+      "responsibility": "Immutable withdrawal that stops serving without deleting publication history.",
+      "constraints": "Scoped Publication FK; one withdrawal per publication; bounded reason; immutable trigger."
     }
   ],
   "rlsPlan": {

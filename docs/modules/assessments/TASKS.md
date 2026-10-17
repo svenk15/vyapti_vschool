@@ -36,7 +36,11 @@
 
 ## F11-E — report publication / LEA-22
 
-- [ ] Implement report revision/audience lifecycle, explicit publisher handoff and exact receipt.
-- [ ] Integrate real-scanned Documents artifact and live Student/Guardian purposes before claiming download completion.
+- [x] Implement report revision/audience lifecycle, explicit publisher handoff and exact receipt under the approved 18 October 2026 LEA-22 rules.
+- [x] Require a separate publisher designation, distinct mark recorder, exact approved source digest and explicit non-empty `STUDENT` / `GUARDIANS` / `BOTH` audience preview.
+- [x] Generate the versioned synthetic PDF through Documents quarantine, real scan and immutable promotion; serve only through current result-purpose checks.
+- [x] Implement immediate publication, replay/status recovery, separate guarded withdrawal and corrected-report-as-new-revision behavior.
+- [x] Provide Principal, Guardian and Student counterparts plus focused PostgreSQL and sequential desktop/mobile evidence.
+- [x] Integrate real-scanned Documents artifact and live Student/Guardian purposes before claiming download completion.
 
 Human acceptance and production gates remain pending for every slice.

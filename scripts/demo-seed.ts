@@ -38,6 +38,7 @@ const demos = [
   { name: "Parent and Student one-off school calendar", script: "scripts/demo-events.ts", required: true },
   { name: "Teacher Learning publication and Parent/Student views", script: "scripts/demo-learning.ts", required: true },
   { name: "F11-A Assessments readiness", script: "scripts/demo-assessments.ts", required: true },
+  { name: "F11-E Assessment report publication", script: "scripts/demo-assessment-publications.ts", required: true },
   { name: "F13 Principal, staff and family meetings", script: "scripts/demo-meetings.ts", required: true },
   { name: "F14 restricted specialist support", script: "scripts/demo-support.ts", required: true },
   { name: "F16 Facilities service incident", script: "scripts/demo-facilities.ts", required: true },
@@ -135,6 +136,7 @@ function main(): void {
   console.log("- artifacts/events-01/private-demo.json");
   console.log("- artifacts/learning-01/private-demo.json");
   console.log("- artifacts/assessments-01/private-demo.json");
+  console.log("- artifacts/assessment-publications-01/private-demo.json");
   console.log("- artifacts/meetings-01/private-demo.json");
   console.log("- artifacts/support-01/private-demo.json");
   console.log("- artifacts/facilities-01/private-demo.json");

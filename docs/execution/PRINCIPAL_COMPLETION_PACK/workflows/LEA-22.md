@@ -1,12 +1,12 @@
 # LEA-22 — Authorize or hand off report publication
 
 ## Identity and readiness
-- Baseline: NOT_STARTED; human review PENDING.
-- Owner: Assessments + Documents. This names responsibility, not proof that an owner module exists.
+- Baseline: ENGINEERING_COMPLETE for the approved synthetic scope; human review PENDING.
+- Owner: Assessments + Documents. Assessments owns the report revision, handoff, publication, recipients, withdrawal and receipts; Documents owns quarantine, scan, immutable bytes, grants and authenticated serving.
 - Product decisions: D11,D15. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F11,F12,F03. See execution queue.
 - Reference: approved Principal catalogue LEA-22; locate its actual explorer trigger in HTML, do not invent a hash route.
-- Proposed production route: `/leadership/assessments/publications/:id`. Reuse an existing equivalent route and preserve old links; this is not a claim it exists.
+- Production route: `/leadership/assessments/publications`, with `/family/results` and `/student/results` recipient counterparts.
 - Production composition: recipe W from 04_PRODUCTION_UX.md.
 
 ## Target product definition
@@ -38,6 +38,8 @@ Unapproved report cannot publish; revoked guardian cannot download an old copied
 
 ## Demonstration and evidence
 Use fictional personas with distinct proposer/reviewer when required, a second branch, a denied actor and a retained unknown-outcome fixture. Demonstrate source → role action → counterpart action → persisted receipt → reload. For read-only flows demonstrate populated/empty/unavailable and forbidden deep link. Add screenshots at 1440×1000 and 390×844, exact executable commit, commands/results and recorded deviations. No credentials in evidence or Git.
+
+Implementation and direct-comparison evidence: `docs/evidence/principal-lea-22-report-publication-2026-10-18/`. Production template/signatory, storage/region/retention/scanner-service configuration, human review, native accessibility, actual browser 200% zoom and TEN-03 remain pending release gates.
 
 ## Original supplied workflow contract
 The following is copied from the user's approved-pack catalogue to preserve scope. It is not evidence of implementation. Where new recommendations refine an earlier proposal, record the D-ID override when approved; do not silently narrow this contract.

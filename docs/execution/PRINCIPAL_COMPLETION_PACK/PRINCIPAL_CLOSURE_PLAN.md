@@ -1,14 +1,14 @@
 # Principal engineering closure plan
 
-Recorded 18 October 2026 IST from repository HEAD `86f2fae`. This document reconciles engineering scope; it does not grant human acceptance or production readiness.
+Updated 18 October 2026 IST from the LEA-22 working checkpoint after repository HEAD `8d1cdbe`. This document reconciles engineering scope; it does not grant human acceptance or production readiness.
 
 ## Exact 46-workflow accounting
 
-Engineering complete (44): `LEA-01`, `LEA-02`, `LEA-03`, `LEA-04`, `LEA-05`, `LEA-06`, `LEA-07`, `LEA-08`, `LEA-09`, `LEA-10`, `LEA-11`, `LEA-12`, `LEA-13`, `LEA-14`, `LEA-15`, `LEA-16`, `LEA-17`, `LEA-18`, `LEA-19`, `LEA-20`, `LEA-21`, `LEA-23`, `LEA-24`, `LEA-25`, `LEA-26`, `LEA-27`, `LEA-28`, `LEA-29`, `LEA-30`, `LEA-31`, `LEA-32`, `LEA-33`, `LEA-34`, `LEA-35`, `LEA-36`, `LEA-37`, `LEA-38`, `LEA-39`, `LEA-40`, `LEA-41`, `LEA-42`, `LEA-43`, `LEA-44`, `LEA-46`.
+Engineering complete (45): `LEA-01`, `LEA-02`, `LEA-03`, `LEA-04`, `LEA-05`, `LEA-06`, `LEA-07`, `LEA-08`, `LEA-09`, `LEA-10`, `LEA-11`, `LEA-12`, `LEA-13`, `LEA-14`, `LEA-15`, `LEA-16`, `LEA-17`, `LEA-18`, `LEA-19`, `LEA-20`, `LEA-21`, `LEA-22`, `LEA-23`, `LEA-24`, `LEA-25`, `LEA-26`, `LEA-27`, `LEA-28`, `LEA-29`, `LEA-30`, `LEA-31`, `LEA-32`, `LEA-33`, `LEA-34`, `LEA-35`, `LEA-36`, `LEA-37`, `LEA-38`, `LEA-39`, `LEA-40`, `LEA-41`, `LEA-42`, `LEA-43`, `LEA-44`, `LEA-46`.
 
 Partial (1): `LEA-45` has the complete deterministic source-linked Assistant boundary but lacks an approved real provider/data policy and real-provider evaluation.
 
-Not started (1): `LEA-22` lacks the Assessments report publication/audience owner contract and completed Documents path.
+Not started (0).
 
 All rows retain human review `PENDING`. Direct comparison status and row-specific deviations remain authoritative in `../PRINCIPAL_WORKFLOW_MATRIX.md`.
 
@@ -21,7 +21,7 @@ All rows retain human review `PENDING`. Direct comparison status and row-specifi
 | LEA-08–15 | Attendance coverage, single/bulk Coordination, named-pupil patterns, explanation review, correction requests and guarded cancellation | `principal-lea-08-controls-2026-10-16/`, `principal-coordination-lea-09-11-15-2026-10-16/`, `principal-coordination-lea-10-2026-10-17/`, `principal-lea-12-pupil-attendance-2026-10-18/`, `principal-lea-13-explanation-2026-10-18/`, `principal-lea-14-correction-request-2026-10-18/` | Protected text/real-data retention is not approved; Coordination never gains Attendance write authority. |
 | LEA-16 | Published timetable staffing/availability exceptions | `principal-lea-16-timetable-2026-10-16/` | Exact configured occurrence scope only; no inferred HR availability. |
 | LEA-17–19 | Learning completion, feedback-awaiting and exact recipient/submission Coordination sources | `principal-lea-17-learning-2026-10-16/`, `principal-f08-learning-followup-2026-10-17/`, `principal-f08-feedback-followup-2026-10-17/` | Aggregate or explicitly named authorized evidence only; private learner work remains excluded. |
-| LEA-20–21 | Exact-cycle readiness, typed Coordination handoff, Teacher mark revisions and independent moderation | `principal-lea-20-completion-2026-10-19/`, `principal-f11-d-assessment-moderation-2026-10-19/` | Report publication is separate; no result recipient/download claim. |
+| LEA-20–22 | Exact-cycle readiness, typed Coordination handoff, Teacher mark revisions, independent moderation and explicit-audience report publication | `principal-lea-20-completion-2026-10-19/`, `principal-f11-d-assessment-moderation-2026-10-19/`, `principal-lea-22-report-publication-2026-10-18/` | Synthetic report template and local real-scanned portal delivery only; production template/signatory/storage/retention/scanner-service policy remains unavailable. |
 | LEA-23–24 | Safe staff availability and exact-occurrence cover | `principal-f07-availability-2026-10-17/`, `principal-f07-cover-2026-10-17/` | Operational facts only; no private reason or general substitution authority. |
 | LEA-25, LEA-35 | Synthetic staff-request and protected family-concern lifecycles | `principal-f09-requests-2026-10-18/`, `principal-lea-35-lifecycle-2026-10-18/` | Synthetic protected content only; retention and independent school route remain release configuration. |
 | LEA-26 | Bounded Coordination handover | `principal-f04-handover-2026-10-17/` | Only eligible current assignees; source-owner authority is unchanged. |
@@ -34,7 +34,6 @@ All rows retain human review `PENDING`. Direct comparison status and row-specifi
 | LEA-44 | Facilities incident, assigned coordination and independent restoration verification | `principal-lea-44-facilities-2026-10-19/` | Facilities only; no broad service/emergency claim. |
 | LEA-32 | Real-scanned immutable Notice attachments, exact-digest review, separate publication and current-authority downloads | `principal-f10-notice-review-2026-10-17/`, `documents-f12-foundation-2026-10-17/`, `principal-lea-32-attachments-2026-10-18/` | Synthetic portal scope only; production storage/scanner/retention remains unavailable. |
 | LEA-45 | Minimized deterministic Assistant draft, citations, review/discard and source revocation | `principal-lea-45-assistant-2026-10-19/` | PARTIAL: synthetic adapter only; no approved model/provider or transmitted data. |
-| LEA-22 | No implemented publication journey | Assessments readiness/moderation evidence only | NOT_STARTED: readiness and moderation do not imply publication. |
 
 The D02–D19 approval is explicitly synthetic-only. TEN-03, real-data retention/deletion, restore/load, provider/scanner security, native accessibility, font portability and human acceptance remain independent gates.
 
@@ -51,30 +50,20 @@ Authenticated serving and the application lifecycle are category A engineering w
 
 ### LEA-22 — assessment report publication
 
-- **A — authorized code after the rules below are closed:** Documents artifact/link/download mechanics, exact immutable Assessments report revision, explicit self/child purpose grants, fresh prerequisite checks, replay-safe owner receipt, withdrawal/new-revision behavior and portal-only synthetic delivery.
-- **B — local runtime prerequisite:** the same real local scanner; a versioned school-approved PDF template/generator must also exist before a genuine artifact can be demonstrated.
-- **C — product/provider decisions:** exact publisher separation, template/signatory policy, permitted audience selection, immediate versus scheduled release, handoff owner, withdrawal authority and purpose-specific retention. Production storage/scanner policies remain separate.
-- **D — missing verification:** stale/unapproved denial, exact replay, concurrent approval change, recipient freeze, wrong guardian/student and revoked-purpose denial, old-link denial after withdrawal/rescan, correction as a new immutable revision, and matched browser evidence.
+- **A — authorized code:** complete. Assessments owns exact immutable revisions, explicit publisher handoff, non-empty Student/Guardian audience, exact receipts, withdrawal and new-revision correction. Documents owns real-scanned immutable bytes, grants and current-authority serving.
+- **B — local runtime prerequisite:** complete for the synthetic development checkpoint with the same real local ClamAV and ignored private storage used by DOC-02A.
+- **C — external/provider or school policy:** production PDF template/signatory, object storage/region/KMS, scanner service/update SLA and purpose-specific retention/deletion/legal hold/backup expiry remain release gates.
+- **D — verification:** focused domain and PostgreSQL lifecycle/security, exact replay, recipient revocation, withdrawal and sequential desktop/mobile role journeys passed. Human review, native accessibility and actual browser 200% zoom remain pending.
 
-## LEA-22 rules: settled versus unresolved
+## LEA-22 rules applied
 
 D11 already settles exact decimal outcomes, frozen plan/cohort, distinct missing states, independent moderation, no stale/unapproved publication, explicit `results.read_self`/`results.read_child` purposes with no backfill, school-approved PDF via Documents, and new immutable revision or withdrawal for changes. D15 already settles private bytes, real fail-closed scan, clean-only linking, current-authority/current-safety download and safe streaming headers.
 
-The remaining product decisions are:
-
-1. **Publisher separation:** decide whether the publisher must be distinct from the recorder, final moderator, or both. Recommendation: distinct from both for the same report revision.
-2. **Template and signatory:** identify the versioned school-approved template, required fields, authorized signatory and whether a visible signature is required. Recommendation: one synthetic unsigned template first, explicitly labelled non-official; official issuance remains unavailable.
-3. **Audience choice:** decide whether one command may select Student, eligible guardians, or both. Recommendation: explicit checkboxes with no default; freeze only currently purpose-authorized recipients.
-4. **Release timing:** immediate-only or scheduled. Recommendation: immediate portal publication first; scheduling waits for a durable scheduler/timezone policy.
-5. **Handoff:** identify the explicit publisher designation and queue. Recommendation: an Assessments-owned publication assignment; Coordination may carry a safe reference but cannot publish.
-6. **Withdrawal:** identify who may withdraw and required reason. Recommendation: the same explicit publication designation, fresh owner checks and a bounded mandatory reason; withdrawal blocks new downloads but retains evidence.
+The 18 October approval is implemented exactly: publisher differs from the mark recorder; the synthetic versioned template contains the required fields and a visibly synthetic signatory without a fake signature; audience is explicit Student/Guardians/Both with no default or backfill; release is immediate; Assessments owns the handoff; withdrawal uses separate live authority and a required reason. A final moderator can publish only when separately designated and still subject to recorder separation. Production policy remains separate.
 
 ## Recommended development path
 
-1. **DOC-02A, next implementation:** provider-independent promotion, command receipt, revocable grant, current-authority download and same-origin stream using the existing Documents tables/ports plus one narrowly justified receipt migration. Keep runtime files under ignored private local storage and keep scanner-unavailable fail closed.
-2. **Local scanner checkpoint:** after explicit package-install authorization, install ClamAV, configure `freshclam`, obtain current official signatures and verify clean/EICAR/unavailable states. Official ClamAV documentation requires signature databases before scanning and documents Homebrew installation/configuration: <https://docs.clamav.net/manual/Installing/Packages.html> and <https://docs.clamav.net/manual/Usage/SignatureManagement.html>.
-3. **DOC-05 / LEA-32:** add the Communication revision attachment join/digest, upload UI, independent review invalidation, frozen publication link and recipient downloads. No external send.
-4. **LEA-22:** after the six publication decisions, implement Assessments report revision/audience/publication and reuse the completed Documents path.
+DOC-02A, the real local scanner checkpoint, DOC-05/LEA-32 and F11-E/LEA-22 are complete for synthetic development. No further Principal workflow is independently implementable: LEA-45 is the sole partial and requires the external configuration decisions below before real-provider integration or evaluation.
 
 ## LEA-45 configuration checklist
 
@@ -92,4 +81,4 @@ No provider is selected, no credential is requested and no data may be transmitt
 
 At reconciliation time both the machine timezone and explicit `Asia/Kolkata` time are 18 October 2026 IST. Git commits `0ffaf54`, `bdf6e3b` and `86f2fae` and filesystem timestamps are also 18 October. The `principal-lea-20-completion-2026-10-19` path inherited a future queue label; its evidence remains valid and is not renamed because published historical paths are stable.
 
-DOC-02A and COM-05 are complete for synthetic use with real local ClamAV. Exact next task: **F11-E / WF-22 / LEA-22 assessment report publication** under the approved separation, template, audience, immediate-release, Assessments-owned handoff and withdrawal rules. Human acceptance remains pending.
+DOC-02A, COM-05 and F11-E are complete for synthetic use with real local ClamAV. Exact next task after user decisions is **F17 / WF-45 / LEA-45 real-provider configuration and evaluation**. Until then there is no independently eligible Principal implementation task. Human acceptance remains pending.

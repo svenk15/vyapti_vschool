@@ -45,7 +45,7 @@ export class PrismaFamilyAccessRepository implements FamilyAccessRepository{
        school:{select:{
         organizationId:true,name:true,code:true,timezone:true,
         organization:{select:{name:true}},
-        moduleActivations:{where:{moduleId:{in:['family','student_core']},state:'ACTIVE'},select:{moduleId:true}}
+        moduleActivations:{where:{moduleId:{in:['family','student_core','assessments']},state:'ACTIVE'},select:{moduleId:true}}
        }},
        enrollments:{where:{validFrom:{lte:now},validTo:{gt:now}},orderBy:{validFrom:'desc'},take:1,include:{
         year:{select:{name:true}},
@@ -56,15 +56,15 @@ export class PrismaFamilyAccessRepository implements FamilyAccessRepository{
     });
     if(rows.length>100)throw new GuardianError('VALIDATION');
     const organizationIds=[...new Set(rows.map(row=>row.organizationId))];
-    const entitlements=await tx.organizationEntitlement.findMany({where:{organizationId:{in:organizationIds},moduleId:{in:['family','student_core']},state:'ACTIVE',startsAt:{lte:now},OR:[{endsAt:null},{endsAt:{gt:now}}]},select:{organizationId:true,moduleId:true}});
+    const entitlements=await tx.organizationEntitlement.findMany({where:{organizationId:{in:organizationIds},moduleId:{in:['family','student_core','assessments']},state:'ACTIVE',startsAt:{lte:now},OR:[{endsAt:null},{endsAt:{gt:now}}]},select:{organizationId:true,moduleId:true}});
     const licensed=new Set(entitlements.map(row=>`${row.organizationId}:${row.moduleId}`));
     const children=rows
-     .filter(row=>this.manifest.family&&this.manifest.student_core&&row.student.school.moduleActivations.length===2&&licensed.has(`${row.organizationId}:family`)&&licensed.has(`${row.organizationId}:student_core`))
+     .filter(row=>{const active=new Set(row.student.school.moduleActivations.map(item=>item.moduleId));return this.manifest.family&&this.manifest.student_core&&active.has('family')&&active.has('student_core')&&licensed.has(`${row.organizationId}:family`)&&licensed.has(`${row.organizationId}:student_core`);})
      .map(row=>{
       const enrollment=row.student.enrollments[0],placement=enrollment?.placements[0];
       const classLabel=placement?`${placement.section.grade.name} · ${placement.section.name}`:enrollment?.year.name??null;
-      const available=new Set(row.purposes.map(item=>item.purpose));
-      return {accessId:row.id,organizationId:row.organizationId,schoolId:row.schoolId,studentId:row.studentId,displayName:[row.student.person.firstName,row.student.person.lastName].filter(Boolean).join(' '),admissionNumber:row.student.admissionNumber,institutionName:row.student.school.organization.name,schoolName:row.student.school.name,schoolCode:row.student.school.code,timezone:row.student.school.timezone,classLabel,accessFrom:row.accessFrom.toISOString().slice(0,10),purposes:guardianPurposes.filter((purpose):purpose is GuardianPurpose=>available.has(purpose))};
+      const available=new Set(row.purposes.map(item=>item.purpose)),active=new Set(row.student.school.moduleActivations.map(item=>item.moduleId)),resultsEnabled=this.manifest.assessments&&licensed.has(`${row.organizationId}:assessments`)&&active.has('assessments');
+      return {accessId:row.id,organizationId:row.organizationId,schoolId:row.schoolId,studentId:row.studentId,displayName:[row.student.person.firstName,row.student.person.lastName].filter(Boolean).join(' '),admissionNumber:row.student.admissionNumber,institutionName:row.student.school.organization.name,schoolName:row.student.school.name,schoolCode:row.student.school.code,timezone:row.student.school.timezone,classLabel,accessFrom:row.accessFrom.toISOString().slice(0,10),purposes:guardianPurposes.filter((purpose):purpose is GuardianPurpose=>available.has(purpose)&&(purpose!=='results.read_child'||resultsEnabled))};
      });
     return {accountId:identity.accountId,accountDisplayName:rows[0]?.displayName??null,children};
    },{isolationLevel:'RepeatableRead'});

@@ -100,6 +100,14 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AssessmentsModerationEvent | `vs_assessments_moderation_event` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsModerationInformation | `vs_assessments_moderation_information` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsReportRevision | `vs_assessments_report_revision` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportCapabilityGrant | `vs_assessments_report_capability_grant` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportTemplate | `vs_assessments_report_template` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportHandoff | `vs_assessments_report_handoff` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportPublication | `vs_assessments_report_publication` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportGuardianRecipient | `vs_assessments_report_guardian_recipient` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportStudentRecipient | `vs_assessments_report_student_recipient` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportWithdrawal | `vs_assessments_report_withdrawal` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsReportEvent | `vs_assessments_report_event` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | SupportCapabilityGrant | `vs_support_capability_grant` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
 | SupportHandoff | `vs_support_handoff` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
 | SupportProcedure | `vs_support_procedure` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
