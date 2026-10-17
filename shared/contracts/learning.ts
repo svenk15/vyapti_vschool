@@ -1,6 +1,6 @@
 export type LearningAssignmentStatus='DRAFT'|'PUBLISHED';
 export type LearningOffering={id:string;code:string;subject:string;classLabel:string;yearName:string};
-export type LearningWorkStatus='TO_DO'|'DRAFT'|'SUBMITTED'|'FEEDBACK_AVAILABLE'|'PUBLISHED';
+export type LearningWorkStatus='TO_DO'|'DRAFT'|'SUBMITTED'|'FEEDBACK_AVAILABLE'|'PUBLISHED'|'EXCUSED';
 export type LearningAssignmentSummary={id:string;status:LearningAssignmentStatus;revision:number;version:number|null;title:string;instructions:string;dueAt:string;offering:LearningOffering;recipientCount:number;publishedAt:string|null;workStatus?:LearningWorkStatus};
 export type LearningAssignmentSearchBy='title'|'subject';
 export type LearningAssignmentSort='due'|'title'|'subject';
@@ -19,19 +19,29 @@ export type LearningTeacherSubmissionSummary={submissionId:string;studentId:stri
 export type LearningTeacherSubmissionDetail=LearningTeacherSubmissionSummary&{assignmentId:string;assignmentTitle:string;text:string;effectiveDueAt:string;timezone:string};
 export type LearningTeacherFeedback=LearningTeacherSubmissionDetail&{feedbackRevision:number;draft:LearningFeedbackDraft|null;published:LearningPublishedFeedback|null};
 
+export const learningManagerCapabilities=['RECIPIENT_POLICY_MANAGE','RECIPIENT_STATUS_READ'] as const;
+export type LearningManagerCapability=typeof learningManagerCapabilities[number];
+export type LearningRecipientPolicyAction='EXTEND'|'EXCUSE'|'REVERSE_EXCUSAL';
+export type LearningRecipientStatus='UPCOMING'|'AWAITING'|'SUBMITTED'|'EXCUSED';
+export type LearningManagerAssignment={assignmentId:string;assignmentVersionId:string;title:string;classId:string;classLabel:string;subjectId:string;subjectName:string;defaultDueAt:string;recipientCount:number};
+export type LearningManagerWorkspace={timezone:string;capabilities:readonly LearningManagerCapability[];assignments:readonly LearningManagerAssignment[]};
+export type LearningRecipientEvidence={recipientId:string;studentId:string;studentName:string;assignmentId:string;assignmentVersionId:string;assignmentTitle:string;classLabel:string;subjectName:string;defaultDueAt:string;effectiveDueAt:string;excused:boolean;submitted:boolean;status:LearningRecipientStatus;policyVersion:number};
+export type LearningRecipientEvidencePage={timezone:string;assignment:LearningManagerAssignment;items:readonly LearningRecipientEvidence[]};
+export type LearningRecipientPolicyResult={recipientId:string;assignmentId:string;eventId:string;version:number;action:LearningRecipientPolicyAction;effectiveDueAt:string;excused:boolean;occurredAt:string;replayed:boolean};
+
 export type LeadershipLearningQuery={fromDate:string;toDate:string;classId:string|null;subjectId:string|null;cursor:string|null;limit:number};
 export type LeadershipLearningFilter={id:string;label:string};
 export type LeadershipLearningAssignment={assignmentId:string;assignmentVersionId:string;title:string;dueAt:string;classId:string;classLabel:string;subjectId:string;subjectName:string;expectedPairs:number;submittedPairs:number;awaitingPairs:number;due:boolean};
 export type LeadershipLearningOverview={
  asOf:string;
  timezone:string;
- definitionVersion:'assignment-completion.v1';
- denominatorPolicy:'FROZEN_PUBLISHED_RECIPIENTS_DUE_BY_SERVER_CUTOFF';
+ definitionVersion:'assignment-completion.v2';
+ denominatorPolicy:'NON_EXCUSED_EFFECTIVE_DEADLINE_DUE_BY_SERVER_CUTOFF';
  query:LeadershipLearningQuery;
  filters:{classes:readonly LeadershipLearningFilter[];subjects:readonly LeadershipLearningFilter[]};
- counts:{assignments:number;expectedPairs:number;submittedPairs:number;awaitingPairs:number;upcomingPairs:number};
+ counts:{assignments:number;expectedPairs:number;submittedPairs:number;awaitingPairs:number;upcomingPairs:number;excusedPairs?:number};
  assignments:{items:readonly LeadershipLearningAssignment[];total:number;nextCursor:string|null};
- limitations:{extensionsSupported:false;excusedSupported:false;pupilDetailSupported:false;followUpSupported:false};
+ limitations:{extensionsSupported:boolean;excusedSupported:boolean;pupilDetailSupported:boolean;followUpSupported:boolean};
 };
 
 export type LeadershipFeedbackTurnaroundQuery={fromDate:string;toDate:string;classId:string|null;subjectId:string|null};

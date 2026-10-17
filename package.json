@@ -6,7 +6,7 @@
     "dev": "next dev --webpack --hostname 127.0.0.1 --port 3400",
     "build": "prisma generate && next build --webpack",
     "start": "next start --hostname 127.0.0.1 --port 3400",
-    "demo:start": "VSCHOOL_COORDINATION_MODE=synthetic VSCHOOL_PROTECTED_EXPLANATIONS_MODE=synthetic VSCHOOL_REPORTING_SNAPSHOT_MODE=synthetic VSCHOOL_RELEASED_MODULES=academic_core,admissions,attendance,communication,family,homework,staff_core,student_core,timetable node scripts/start-demo.mjs",
+    "demo:start": "VSCHOOL_COORDINATION_MODE=synthetic VSCHOOL_LEARNING_RECIPIENT_POLICY_MODE=synthetic VSCHOOL_PROTECTED_EXPLANATIONS_MODE=synthetic VSCHOOL_REPORTING_SNAPSHOT_MODE=synthetic VSCHOOL_RELEASED_MODULES=academic_core,admissions,attendance,communication,family,homework,staff_core,student_core,timetable node scripts/start-demo.mjs",
     "lint": "eslint app components lib backend shared test scripts *.ts *.mjs --no-warn-ignored",
     "typecheck": "prisma generate && next typegen && tsc --noEmit",
     "check": "pnpm lint && pnpm typecheck && pnpm check:docs && pnpm check:db-design && pnpm check:boundaries && pnpm check:backend && pnpm test:unit",

@@ -63,6 +63,19 @@ Human acceptance remains PENDING. Marks, rubrics, return/reopen, Student reply, 
 
 Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PARTIAL. Human review PENDING.
 
+## F08-A — Learning recipient policy and named status evidence
+
+- [x] Reconcile approved D10 into exact Learning-owned schema, grant, transaction, replay, denominator and disclosure contracts.
+- [x] Add forward-only manager-grant and immutable recipient-policy history tables with TEN-03 Path A registry entries.
+- [x] Implement operator designation, exact class/subject policy commands and separate named-status projection.
+- [x] Enforce effective deadline/excusal in Student work and preserve accepted submissions/authorized replay.
+- [x] Upgrade current Principal completion to the pinned v2 denominator without exposing learner identity or reasons.
+- [x] Add staged manager UI plus permitted Student/Parent status and incremental fictional seed.
+- [x] Pass focused unit, real PostgreSQL, sequential desktop/mobile browser, migration, boundary, build and visual checks.
+- [ ] Implement the typed Coordination academic-evidence adapter and eligible assignee flow in F08-B.
+
+Engineering status: F08-A ENGINEERING_VERIFIED; F08 remains PARTIAL until F08-B supplies the typed Coordination academic-evidence adapter and eligible assignee flow. Human review PENDING.
+
 ## LEA-18 — Principal feedback-turnaround oversight
 
 - [x] Adopt the explicitly approved accepted-submission cohort, first-publication and elapsed-clock definitions.

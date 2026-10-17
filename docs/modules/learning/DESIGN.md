@@ -81,6 +81,45 @@ Validation preserves entered safe fields. Failure states distinguish unavailable
 
 Human acceptance, native VoiceOver/NVDA, font portability, TEN-03 enforcement and production readiness remain separate gates.
 
+## F08-A — per-recipient deadline and excusal policy
+
+### Approved scope and ownership
+
+This slice implements approved decision D10. Learning owns the effective deadline, excusal state, immutable policy history and the separately authorized named status projection. It does not expose a Student response or Teacher feedback, change an accepted submission, create a durable browser draft, or grant Learning authority from a Principal/Teacher role alone. A synthetic operator designates a current branch member for an exact `(section, subject)` and one of two capabilities: `RECIPIENT_POLICY_MANAGE` or `RECIPIENT_STATUS_READ`. Every read and write still rechecks the live account/token, active membership, active School, module release/entitlement/activation, exact grant and exact current immutable AssignmentVersion scope.
+
+### Physical schema and read joins
+
+| Physical table (model) | Fields | Invariants and indexes |
+|---|---|---|
+| `vs_learning_manager_grant` (`LearningManagerGrant`) | id/org/school/membership/account/section/subject uuid; capability; operator/grant/revoke timestamps; version | Scoped membership/Section/Subject FKs; capability/version checks; unique account/scope/capability; active lookup index |
+| `vs_learning_recipient_policy_event` (`LearningRecipientPolicyEvent`) | id/org/school/version/recipient/student/actor uuid; event/action; previous/effective deadline and excusal; reason/timestamp | Scoped version/recipient/Student and account FKs; unique recipient/event; transition-shape and reason checks; assignment and Student history indexes; append-only trigger |
+
+Effective policy is the latest event for the exact recipient, falling back to the immutable AssignmentVersion `due_at` and `excused=false`. Named evidence joins manager grant → current AssignmentVersion/CourseOffering → Recipient → Student/Person plus at most one SubmissionAttempt and latest policy event. Aggregate oversight uses the same latest-event relation but omits Student, Person, actor and reason fields. Parent/Student assignment reads use only effective deadline and status; Parent never joins submission response or Feedback tables.
+
+All new tenant tables remain Path A registrations for TEN-03. Their intended policies require verified organization/school context plus the same live grant/resource predicates; TEN-03 remains the consolidated enforcement gate and production blocker.
+
+### Commands, concurrency and replay
+
+`extendRecipientDeadline`, `excuseRecipient` and `reverseRecipientExcusal` are Learning application commands. Each locks account UPDATE → organization SHARE → school UPDATE → assignment SHARE → recipient UPDATE, then repeats authorization. The browser supplies candidate IDs, expected recipient-policy version, normalized bounded reason, final confirmation and an idempotency key; it never supplies authority or trusted scope.
+
+- **Extend** requires an unsubmitted, non-excused recipient and a strictly later effective deadline. A past original deadline may be reopened only by this reviewed final command, and the new deadline must be in the future.
+- **Excuse** records `excused=true` and retains any already accepted immutable submission. The pair leaves the required-work denominator at the event timestamp without deleting work.
+- **Reverse excusal** requires the current excused state. An unsubmitted recipient needs a new future deadline; a submitted recipient retains its prior effective deadline. Reversal never withdraws or changes an accepted attempt.
+
+The event number is the optimistic version. A same actor/command/key and exact semantic input replays the original authorized result; a changed payload conflicts. Reauthorization occurs before protected replay disclosure. Event, safe audit/outbox evidence and command receipt commit atomically. Policy reasons never enter general aggregate reports, Parent/Student DTOs, outbox payloads or command receipts.
+
+Student submission authority derives `effectiveDueAt` from the latest event under the recipient lock. Excused recipients cannot save a new draft or submit. Existing accepted receipts remain independently readable through prior live Student permissions. A new submission succeeds only at or before the effective deadline and stores that exact deadline in the immutable attempt.
+
+### Aggregate and UI contract
+
+`assignment-completion.v2` pins the server as-of instant. Non-excused pairs whose effective deadline is at or before the cutoff form the expected denominator; one accepted attempt counts once; awaiting is expected minus submitted. Non-excused future pairs and excused pairs are separate counts. The assignment rows expose the same categories and no learner identity. Historical retained report snapshots are not rewritten when a later event changes current results.
+
+`/leadership/learning/evidence` is the separately guarded manager composition. It lists only assignments inside the manager's exact class/subject grants, then shows named recipient status without draft/answer/feedback content. Extend, excuse and reversal use review/final-confirmation UI, retain in-flow safe values, bind the expected policy version and recover a known receipt with the same key. `/leadership/learning` links to the evidence composition only when the current actor also holds an applicable status or policy grant.
+
+### Verification
+
+Unit checks cover exact input shape, reason bounds, future/later deadline and reversal rules. Real PostgreSQL checks cover exact grant scope, cross-tenant/branch denial, revocation, event append-only enforcement, version races, exact replay, extension after the original deadline, excusal/reversal, submitted-work immutability, effective-deadline submission, Parent content isolation and `assignment-completion.v2` reconciliation. Browser checks cover the staged manager actions, reload/recovery, Principal aggregate, Student/Parent permitted status, desktop/mobile layout and keyboard focus. Human acceptance, native accessibility, font portability, retained-note production policy and TEN-03 remain pending.
+
 ## LEA-17 — bounded Principal assignment-completion oversight
 
 ### Supported owner contract

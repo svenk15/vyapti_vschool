@@ -2107,6 +2107,49 @@ model LearningAssignmentRecipient {
   @@map("vs_learning_assignment_recipient")
 }
 
+model LearningManagerGrant {
+  id                  String    @id(map: "vs_learning_manager_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  sectionId           String    @map("section_id") @db.Uuid
+  subjectId           String    @map("subject_id") @db.Uuid
+  capability          String    @db.VarChar(40)
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, accountId, sectionId, subjectId, capability], map: "vs_learning_manager_grant_scope_key")
+  @@index([organizationId, schoolId, accountId, capability, revokedAt], map: "vs_learning_manager_grant_active_idx")
+  @@map("vs_learning_manager_grant")
+}
+
+model LearningRecipientPolicyEvent {
+  id                   String   @id(map: "vs_learning_recipient_policy_event_pkey") @db.Uuid
+  organizationId       String   @map("organization_id") @db.Uuid
+  schoolId             String   @map("school_id") @db.Uuid
+  assignmentVersionId  String   @map("assignment_version_id") @db.Uuid
+  recipientId          String   @map("recipient_id") @db.Uuid
+  studentId            String   @map("student_id") @db.Uuid
+  eventNo              Int      @map("event_no")
+  action               String   @db.VarChar(24)
+  previousDueAt        DateTime @map("previous_due_at") @db.Timestamptz(3)
+  effectiveDueAt       DateTime @map("effective_due_at") @db.Timestamptz(3)
+  previousExcused      Boolean  @map("previous_excused")
+  effectiveExcused     Boolean  @map("effective_excused")
+  reason               String   @db.VarChar(500)
+  actorAccountId       String   @map("actor_account_id") @db.Uuid
+  occurredAt           DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_learning_recipient_policy_event_scope_id_key")
+  @@unique([organizationId, schoolId, recipientId, eventNo], map: "vs_learning_recipient_policy_event_number_key")
+  @@index([organizationId, schoolId, assignmentVersionId, recipientId, eventNo(sort: Desc)], map: "vs_learning_recipient_policy_event_assignment_idx")
+  @@index([organizationId, schoolId, studentId, occurredAt(sort: Desc), id], map: "vs_learning_recipient_policy_event_student_idx")
+  @@map("vs_learning_recipient_policy_event")
+}
+
 model LearningAssignmentGuardianBinding {
   id             String                      @id(map: "vs_learning_guardian_binding_pkey") @db.Uuid
   organizationId String                      @map("organization_id") @db.Uuid

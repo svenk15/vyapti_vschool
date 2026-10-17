@@ -1992,6 +1992,48 @@
       }
     },
     {
+      "model": "LearningManagerGrant",
+      "owner": "learning",
+      "table": "vs_learning_manager_grant",
+      "fields": "id/org/school/membership/account/section/subject uuid; capability; operator/grant/revoke timestamps; version",
+      "responsibility": "Explicit exact class/subject designation for recipient-policy mutation or separate named-status evidence.",
+      "constraints": "Scoped membership/Section/Subject FKs; capability/version checks; unique account/scope/capability; active lookup index",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, live membership and the exact current class/subject Learning designation; WITH CHECK binds all scope and resource keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "LearningRecipientPolicyEvent",
+      "owner": "learning",
+      "table": "vs_learning_recipient_policy_event",
+      "fields": "id/org/school/version/recipient/student/actor uuid; event/action; previous/effective deadline and excusal; reason/timestamp",
+      "responsibility": "Immutable recipient deadline-extension, excusal and reversal history under approved D10.",
+      "constraints": "Scoped version/recipient/Student and account FKs; unique recipient/event; transition-shape and reason checks; assignment and Student history indexes; append-only trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/learning/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Aggregate reads omit identity/reason; named reads and writes require the exact current class/subject grant and verified branch context.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "learning",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
       "model": "LearningAssignmentStudentBinding",
       "owner": "learning",
       "table": "vs_learning_student_binding",

@@ -27,9 +27,9 @@ export function encodeLeadershipAttendanceCoverageCsv(report:LeadershipRegisterC
 }
 
 export function encodeLeadershipAssignmentCompletionCsv(report:LeadershipLearningOverview):string{
- const header=['rowKind','definitionVersion','asOf','timezone','fromDate','toDateExclusive','denominatorPolicy','assignments','expectedDue','submitted','awaiting','upcoming','assignmentId','assignmentVersionId','title','class','subject','dueAt','due','assignmentExpected','assignmentSubmitted','assignmentAwaiting'];
- const summary:(string|number|null)[]=['SUMMARY',report.definitionVersion,report.asOf,report.timezone,report.query.fromDate,report.query.toDate,report.denominatorPolicy,report.counts.assignments,report.counts.expectedPairs,report.counts.submittedPairs,report.counts.awaitingPairs,report.counts.upcomingPairs,null,null,null,null,null,null,null,null,null,null];
- const evidence:(string|number|null)[][]=report.assignments.items.map(item=>['ASSIGNMENT',report.definitionVersion,report.asOf,report.timezone,report.query.fromDate,report.query.toDate,report.denominatorPolicy,null,null,null,null,null,item.assignmentId,item.assignmentVersionId,item.title,item.classLabel,item.subjectName,item.dueAt,item.due?'true':'false',item.expectedPairs,item.submittedPairs,item.awaitingPairs]);
+ const header=['rowKind','definitionVersion','asOf','timezone','fromDate','toDateExclusive','denominatorPolicy','assignments','expectedDue','submitted','awaiting','upcoming','excused','assignmentId','assignmentVersionId','title','class','subject','dueAt','due','assignmentExpected','assignmentSubmitted','assignmentAwaiting'];
+ const summary:(string|number|null)[]=['SUMMARY',report.definitionVersion,report.asOf,report.timezone,report.query.fromDate,report.query.toDate,report.denominatorPolicy,report.counts.assignments,report.counts.expectedPairs,report.counts.submittedPairs,report.counts.awaitingPairs,report.counts.upcomingPairs,report.counts.excusedPairs??0,null,null,null,null,null,null,null,null,null,null];
+ const evidence:(string|number|null)[][]=report.assignments.items.map(item=>['ASSIGNMENT',report.definitionVersion,report.asOf,report.timezone,report.query.fromDate,report.query.toDate,report.denominatorPolicy,null,null,null,null,null,null,item.assignmentId,item.assignmentVersionId,item.title,item.classLabel,item.subjectName,item.dueAt,item.due?'true':'false',item.expectedPairs,item.submittedPairs,item.awaitingPairs]);
  return [header,summary,...evidence].map(row=>row.map(value=>csvCell(value)).join(',')).join('\r\n')+'\r\n';
 }
 

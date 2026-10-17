@@ -4,7 +4,7 @@ import {createLearningServices} from '../../backend/composition/learning';
 import {releasedModuleIds} from '../../backend/modules/tenancy/domain/entitlements';
 import type {Identity} from '../../shared/contracts/access';
 import {accountGateway,leadershipGateway} from './access';
-type Services=ReturnType<typeof createLearningServices>;let services:Services|undefined;try{services=createLearningServices({databaseUrl:process.env.DATABASE_URL??'',releasedModules:releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES),now:()=>new Date()});}catch{}
+type Services=ReturnType<typeof createLearningServices>;let services:Services|undefined;try{services=createLearningServices({databaseUrl:process.env.DATABASE_URL??'',releasedModules:releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES),recipientPolicyMode:process.env.VSCHOOL_LEARNING_RECIPIENT_POLICY_MODE==='synthetic'?'synthetic':'disabled',now:()=>new Date()});}catch{}
 const service=()=>{if(!services)throw new AccessError('UNAVAILABLE');return services;},required=(identity:Identity|null)=>{if(!identity)throw new AccessError('UNAUTHENTICATED');return identity;};
 async function scope(identity:Identity|null){const actor=required(identity),home=await accountGateway.getHome(actor);return {actor,...home.scope};}
 export const learningGateway={
@@ -27,4 +27,7 @@ export const learningGateway={
  async publishFeedback(identity:Identity|null,id:unknown,submissionId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().publishFeedback(actor,organizationId,schoolId,id,submissionId,input,requestId);},
  async leadershipOverview(identity:Identity|null,query:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().leadershipLearningOverview(actor,home.scope.organizationId,home.scope.schoolId,query);},
  async leadershipFeedbackTurnaround(identity:Identity|null,query:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().leadershipFeedbackTurnaround(actor,home.scope.organizationId,home.scope.schoolId,query);},
+ async managerWorkspace(identity:Identity|null){const {actor,organizationId,schoolId}=await scope(identity);return service().managerWorkspace(actor,organizationId,schoolId);},
+ async recipientEvidence(identity:Identity|null,assignmentId:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().recipientEvidence(actor,organizationId,schoolId,assignmentId);},
+ async applyRecipientPolicy(identity:Identity|null,assignmentId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().applyRecipientPolicy(actor,organizationId,schoolId,assignmentId,input,requestId);},
 };

@@ -946,3 +946,7 @@ body{font-family:var(--font-ui)}
 @media(max-width:900px){.history-search-form{grid-template-columns:1fr 1fr}.history-search-form>.btn{width:max-content}}
 @media(max-width:640px){.history-search-form{grid-template-columns:1fr}.history-search-form>.btn{width:100%}}
 @media(max-width:760px){.bulk-selection-bar{align-items:stretch;flex-direction:column}.bulk-selection-bar .btn{width:100%}.leadership-register-list table{min-width:0}.leadership-register-list tbody .bulk-check{grid-column:1/-1;display:flex;align-items:center;justify-content:flex-start}.batch-preview-list>div,.batch-results>div{align-items:flex-start;flex-direction:column}.batch-results>div>div:last-child{justify-content:flex-start}}
+
+/* Principal Learning recipient policy — compact reviewed confirmation */
+.learning-recipient-policy-dialog .record-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:460px){.learning-recipient-policy-dialog{padding:18px}.learning-recipient-policy-dialog h2{font-size:21px}.learning-recipient-policy-dialog>p{margin-bottom:10px}.learning-recipient-policy-dialog .record-facts{gap:10px 16px}.learning-recipient-policy-dialog .record-facts>div{padding-block:8px}.learning-recipient-policy-dialog .alert{margin-block:12px}.learning-recipient-policy-dialog .dialog-actions{gap:8px;margin-top:16px}}

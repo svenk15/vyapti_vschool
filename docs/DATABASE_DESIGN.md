@@ -136,6 +136,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | LearningSubmissionAttempt | `vs_learning_submission_attempt` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | LearningFeedback | `vs_learning_feedback` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | LearningFeedbackVersion | `vs_learning_feedback_version` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
+| LearningManagerGrant | `vs_learning_manager_grant` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
+| LearningRecipientPolicyEvent | `vs_learning_recipient_policy_event` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | CommunicationRecipient | `vs_communication_recipient` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationRecipientBinding | `vs_communication_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationStudentRecipientBinding | `vs_communication_student_recipient_binding` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
