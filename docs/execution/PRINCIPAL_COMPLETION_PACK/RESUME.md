@@ -18,6 +18,6 @@ Remaining workflow gaps:
 
 No remaining incomplete workflow is independently eligible for ENGINEERING_COMPLETE under the current provider and Documents restrictions. Continue only when the scanner/serving contract or Assistant provider/region/retention configuration is available, or when an independently approved workflow is added. Do not downgrade these concrete external dependencies to a generic technical-design blocker.
 
-Demo credentials remain in ignored `artifacts/people-02/private-demo.json` and related private artifact files; never copy their values into Git or documentation. After the final commit, make one normal 4 GiB build and run one demo server at `http://127.0.0.1:3402`, recording the exact source and build ID.
+Demo credentials remain in ignored `artifacts/people-02/private-demo.json` and related private artifact files; never copy their values into Git or documentation. One healthy production demo is running at `http://127.0.0.1:3402`. It serves application implementation commit `0ffaf54` from normal build `LTj3s3qCdKwbxIexlHvZh`; the later evidence-only commit does not change executable application files.
 
 Pending release gates: human review, font portability, native VoiceOver/NVDA, actual browser 200% zoom, TEN-03, real-data retention/backup deletion and disclosure policy, real provider/scanner/restore/load review and production enablement.
