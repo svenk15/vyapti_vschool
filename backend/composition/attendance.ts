@@ -13,8 +13,11 @@ import {PrismaVerifiedDatabaseContext} from '../modules/tenancy/infrastructure/v
 import {createLeadershipCoverageUseCases} from '../modules/attendance/application/leadership-coverage';
 import {PrismaLeadershipCoverageRepository} from '../modules/attendance/infrastructure/leadership-coverage';
 import {PrismaEffectiveOccurrenceTeacher} from '../modules/academics/infrastructure/timetable-cover';
-export function createAttendanceServices(config:{databaseUrl:string;releasedModules?:readonly ModuleId[];now?:()=>Date}){
+import {createAttendancePupilReviewUseCases} from '../modules/attendance/application/pupil-review';
+import {PrismaAttendancePupilReviewPolicy,PrismaAttendancePupilReviewRepository} from '../modules/attendance/infrastructure/pupil-review';
+export function createAttendanceServices(config:{databaseUrl:string;releasedModules?:readonly ModuleId[];pupilReviewMode?:'disabled'|'synthetic';now?:()=>Date}){
  const db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]}),manifest=capabilityReleaseManifest(config.releasedModules??releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES));
  const context=new PrismaVerifiedDatabaseContext(),students=new PrismaStudentRepository(db,tx=>new PrismaCommandEvidence(tx),createPersonIdentityUseCases(new PrismaPersonIdentity()),config.now,undefined,manifest,undefined,context);
- return {...createAttendanceUseCases(new PrismaSessionRepository(db,tx=>new PrismaInstitutionEvidence(tx),manifest,config.now,students,context,new PrismaEffectiveOccurrenceTeacher())),...createLeadershipCoverageUseCases(new PrismaLeadershipCoverageRepository(db,manifest,config.now,context)),disconnect:()=>db.$disconnect()};
+ const pupilPolicy=new PrismaAttendancePupilReviewPolicy(manifest,context,config.pupilReviewMode??'disabled',config.now),pupilReview=new PrismaAttendancePupilReviewRepository(db,pupilPolicy,config.now);
+ return {...createAttendanceUseCases(new PrismaSessionRepository(db,tx=>new PrismaInstitutionEvidence(tx),manifest,config.now,students,context,new PrismaEffectiveOccurrenceTeacher())),...createLeadershipCoverageUseCases(new PrismaLeadershipCoverageRepository(db,manifest,config.now,context)),...createAttendancePupilReviewUseCases(pupilReview),disconnect:()=>db.$disconnect()};
 }

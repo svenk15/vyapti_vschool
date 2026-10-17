@@ -4,7 +4,7 @@ import type {AttendanceFacade} from '../../backend/modules/attendance/applicatio
 import type {Identity} from '../../shared/contracts/access';
 import {accountGateway} from './access';
 import {leadershipGateway} from './access';
-const attendance=createAttendanceServices({databaseUrl:process.env.DATABASE_URL??''});
+const attendance=createAttendanceServices({databaseUrl:process.env.DATABASE_URL??'',pupilReviewMode:process.env.VSCHOOL_PUPIL_REVIEW_MODE==='synthetic'?'synthetic':'disabled'});
 async function scope(identity:Identity|null){return (await accountGateway.getHome(identity)).scope;}
 export const attendanceGateway={
  authorizeAdmin(identity:Identity|null){return scope(identity).then(s=>attendance.authorizeAdmin(identity,s.organizationId,s.schoolId));},
@@ -22,5 +22,7 @@ export const attendanceGateway={
 };
 export const leadershipAttendanceGateway={
  get(identity:Identity|null,input:Readonly<{date?:unknown;classId?:unknown;status?:unknown;teacherId?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}>={}){return leadershipGateway.getHome(identity).then(home=>attendance.get(identity,home.scope.organizationId,home.scope.schoolId,input));},
- detail(identity:Identity|null,sessionId:string){return leadershipGateway.getHome(identity).then(home=>attendance.evidence(identity,home.scope.organizationId,home.scope.schoolId,sessionId));}
+ detail(identity:Identity|null,sessionId:string){return leadershipGateway.getHome(identity).then(home=>attendance.evidence(identity,home.scope.organizationId,home.scope.schoolId,sessionId));},
+ pupilReview(identity:Identity|null,input:Record<string,unknown>){return leadershipGateway.getHome(identity).then(home=>attendance.review(identity,home.scope.organizationId,home.scope.schoolId,input));},
+ pupilSnapshot(identity:Identity|null,input:Record<string,unknown>){return leadershipGateway.getHome(identity).then(home=>attendance.snapshot(identity,home.scope.organizationId,home.scope.schoolId,input));}
 };

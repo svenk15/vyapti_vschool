@@ -1,5 +1,18 @@
 # Coordination tasks
 
+## COORD-08 / LEA-12 — named-pupil Attendance support source
+
+Dependencies: F04/F06 engineering-complete; D07 approved for synthetic-only implementation on 17 October 2026.
+
+- [x] Register only `ATTENDANCE_PUPIL_PATTERN` / `PUPIL_ATTENDANCE_SUPPORT` with immutable Attendance snapshot identity.
+- [x] Reauthorize the creator and protected replay against the current named-pupil grant.
+- [x] Require the assignee's independent current named-pupil grant plus `coordination.work`.
+- [x] Extend exact pair/source constraints by forward migration without relabelling `ATTENDANCE_SESSION`.
+- [x] Permit only a factual no-change support resolution; grant no Attendance correction or family-contact authority.
+- [x] Verify exact replay, revoked source disclosure denial, typed source routing and the staged desktop/mobile handoff.
+
+Engineering status: ENGINEERING_COMPLETE in the approved synthetic-only scope. Human review PENDING.
+
 ## COORD-07 / WF-28 — owner information request
 
 Dependencies: F03 engineering-complete; D03 and D08 approved for synthetic-only implementation on 17 October 2026.

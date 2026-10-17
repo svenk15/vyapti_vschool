@@ -1,0 +1,9 @@
+import {describe,expect,it,vi} from 'vitest';
+import {createAttendancePupilReviewUseCases,type AttendancePupilReviewRepository} from '../../backend/modules/attendance/application/pupil-review';
+const accountId='c6ec3257-35c7-4a4c-942a-c082c4311201',organizationId='3233a2aa-d2f2-4942-9a0e-54d47e62e19f',schoolId='7b74ad58-c10d-40dc-98ef-1a0c18a03648',studentId='668161e6-a47b-4464-98bf-cce74f996997',key='D7AttendanceReviewKey2026';
+const repository={review:vi.fn(),snapshot:vi.fn(),grant:vi.fn(),revoke:vi.fn()} as unknown as AttendancePupilReviewRepository,facade=createAttendancePupilReviewUseCases(repository),actor={accountId,tokenVersion:1};
+describe('LEA-12 named-pupil review input',()=>{
+ it('accepts a bounded inclusive 1–90 day review and explicit threshold',async()=>{await facade.review(actor,organizationId,schoolId,{fromDate:'2026-08-01',toDate:'2026-10-17',threshold:2});expect(repository.review).toHaveBeenCalledWith(actor,organizationId,schoolId,{fromDate:'2026-08-01',toDate:'2026-10-17',threshold:2});});
+ it('rejects reversed, over-90-day and invalid-threshold queries',()=>{expect(()=>facade.review(actor,organizationId,schoolId,{fromDate:'2026-10-18',toDate:'2026-10-17',threshold:2})).toThrow();expect(()=>facade.review(actor,organizationId,schoolId,{fromDate:'2026-01-01',toDate:'2026-10-17',threshold:2})).toThrow();expect(()=>facade.review(actor,organizationId,schoolId,{fromDate:'2026-10-01',toDate:'2026-10-17',threshold:0})).toThrow();});
+ it('binds a snapshot to an exact pupil, window, threshold and command key',async()=>{await facade.snapshot(actor,organizationId,schoolId,{studentId,fromDate:'2026-10-01',toDate:'2026-10-17',threshold:2,key,requestId:organizationId});expect(repository.snapshot).toHaveBeenCalledWith(actor,organizationId,schoolId,{studentId,fromDate:'2026-10-01',toDate:'2026-10-17',threshold:2,key,requestId:organizationId});});
+});

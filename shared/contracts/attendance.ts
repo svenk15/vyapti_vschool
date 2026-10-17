@@ -30,3 +30,16 @@ export type LeadershipSessionEvidence=Readonly<{
  evidenceState:'AWAITING'|'RECEIVED'|'CANCELLED'|'NOT_DUE';
  stateUpdatedAt:string|null;observedAt:string;
 }>;
+export type LeadershipPupilPatternOutcome=Readonly<{sessionId:string;schoolDate:string;startsAt:string;subjectName:string;sectionName:string;status:AttendanceStatus;lateMinutes:number|null}>;
+export type LeadershipPupilMissingCoverage=Readonly<{sessionId:string;schoolDate:string;startsAt:string;subjectName:string;sectionName:string;state:'SCHEDULED'|'OPEN'}>;
+export type LeadershipPupilPatternItem=Readonly<{
+ studentId:string;displayName:string;admissionNumber:string;grantVersion:number;
+ submittedSessions:number;absentSessions:number;absentDates:number;missingSessions:number;meetsThreshold:boolean;
+ outcomes:readonly LeadershipPupilPatternOutcome[];missingCoverage:readonly LeadershipPupilMissingCoverage[];
+}>;
+export type LeadershipPupilPatternReview=Readonly<{
+ definitionVersion:'pupil-pattern.v1';asOf:string;timezone:string;fromDate:string;toDate:string;threshold:number;
+ counts:Readonly<{authorizedPupils:number;matchingPupils:number;uniquePupils:number;submittedSessions:number;absentSessions:number;absentDates:number;missingSessions:number}>;
+ items:readonly LeadershipPupilPatternItem[];
+}>;
+export type AttendancePupilReviewSnapshotResult=Readonly<{snapshotId:string;version:number;studentId:string;fromDate:string;toDate:string;threshold:number;evidenceHash:string;replayed:boolean}>;

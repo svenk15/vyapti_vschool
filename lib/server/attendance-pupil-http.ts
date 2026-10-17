@@ -1,0 +1,6 @@
+import {randomUUID} from 'node:crypto';
+import {AccessError} from '../../backend/modules/access/contracts/index';
+import {getIdentity} from './auth';
+import {leadershipAttendanceGateway} from './attendance';
+const headers={'Cache-Control':'private, no-store'};
+export async function createPupilReviewSnapshot(request:Request){try{const body=await request.json() as Record<string,unknown>,result=await leadershipAttendanceGateway.pupilSnapshot(await getIdentity(),{...body,requestId:randomUUID()});return Response.json(result,{status:result.replayed?200:201,headers});}catch(error){const code=error instanceof AccessError?error.code:'UNAVAILABLE',status=code==='UNAUTHENTICATED'?401:code==='FORBIDDEN'?403:code==='NOT_FOUND'?404:code==='VALIDATION'?422:code==='CONFLICT'||code==='IDEMPOTENCY_CONFLICT'?409:503;return Response.json({code,message:code==='FORBIDDEN'?'Your current account does not hold this named-pupil review grant.':code==='VALIDATION'?'Choose a valid pupil, 1–90 day period and threshold.':code==='CONFLICT'?'This pupil does not currently meet the selected factual threshold.':code==='IDEMPOTENCY_CONFLICT'?'This retry key belongs to different review details.':'The review snapshot is temporarily unavailable.',requestId:randomUUID()},{status,headers});}}

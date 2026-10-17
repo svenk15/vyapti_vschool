@@ -2223,6 +2223,43 @@ model AttendanceExplanationReviewerGrant {
   @@map("vs_attendance_explanation_reviewer_grant")
 }
 
+model AttendancePupilReviewGrant {
+  id                  String    @id(map: "vs_attendance_pupil_review_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  studentId           String    @map("student_id") @db.Uuid
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, accountId, studentId], map: "vs_attendance_pupil_review_grant_scope_account_student_key")
+  @@index([organizationId, schoolId, accountId, revokedAt, studentId], map: "vs_attendance_pupil_review_grant_active_idx")
+  @@map("vs_attendance_pupil_review_grant")
+}
+
+model AttendancePupilReviewSnapshot {
+  id             String   @id(map: "vs_attendance_pupil_review_snapshot_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  grantId        String   @map("grant_id") @db.Uuid
+  studentId      String   @map("student_id") @db.Uuid
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  fromDate       DateTime @map("from_date") @db.Date
+  toDate         DateTime @map("to_date") @db.Date
+  threshold      Int
+  evidenceHash   String   @map("evidence_hash") @db.Char(64)
+  facts          Json
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+  version        Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_attendance_pupil_review_snapshot_scope_id_key")
+  @@index([organizationId, schoolId, actorAccountId, createdAt(sort: Desc)], map: "vs_attendance_pupil_review_snapshot_actor_idx")
+  @@map("vs_attendance_pupil_review_snapshot")
+}
+
 model AttendanceExplanation {
   id                  String    @id(map: "vs_attendance_explanation_pkey") @db.Uuid
   organizationId      String    @map("organization_id") @db.Uuid

@@ -2,6 +2,15 @@
 
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
+## LEA-12 — factual named-pupil Attendance review
+
+- [x] Add the forward-only named-pupil review grant and TEN-03 registry contract.
+- [x] Implement the 1–90 day framework-free query and scoped PostgreSQL projection over submitted/frozen/historical placement evidence.
+- [x] Register the distinct `ATTENDANCE_PUPIL_PATTERN` Coordination source and `PUPIL_ATTENDANCE_SUPPORT` kind without changing session-source semantics.
+- [x] Deliver the Principal production route, explicit threshold, populated/empty/error states and scoped support handoff.
+- [x] Extend repeat-safe fictional seed data and verify date bounds, count semantics, isolation, revocation and typed handoff with real PostgreSQL.
+- [x] Compare the approved LEA-12 state and production route at 1440×1000 and 390×844; human review remains pending.
+
 ## ATT-01 — Schedule sessions and show each teacher their day
 
 Depends on: ACA-03, STU-02

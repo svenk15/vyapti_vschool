@@ -2,11 +2,12 @@ export const coordinationCapabilities=['coordination.create','coordination.assig
 export type CoordinationCapability=typeof coordinationCapabilities[number];
 export const coordinationStatuses=['OPEN','IN_PROGRESS','AWAITING_VERIFICATION','RESOLVED','WITHDRAWN'] as const;
 export type CoordinationStatus=typeof coordinationStatuses[number];
-export type CoordinationRequestKind='MISSING_REGISTER'|'SESSION_SETUP_REVIEW'|'LEARNING_SUPPORT_REVIEW'|'LEARNING_FEEDBACK_FOLLOW_UP';
-export type CoordinationConcern='MISSING_REGISTER'|'WRONG_TIME'|'WRONG_OFFERING'|'DUPLICATE'|'LEARNING_PROGRESS'|'FEEDBACK_AWAITING'|'OTHER';
+export type CoordinationRequestKind='MISSING_REGISTER'|'SESSION_SETUP_REVIEW'|'PUPIL_ATTENDANCE_SUPPORT'|'LEARNING_SUPPORT_REVIEW'|'LEARNING_FEEDBACK_FOLLOW_UP';
+export type CoordinationConcern='MISSING_REGISTER'|'WRONG_TIME'|'WRONG_OFFERING'|'DUPLICATE'|'ATTENDANCE_SUPPORT'|'LEARNING_PROGRESS'|'FEEDBACK_AWAITING'|'OTHER';
 export type CoordinationEvidenceKind='ATTENDANCE_CORRECTION'|'ATTENDANCE_CANCELLATION'|'LEARNING_POLICY_EVENT'|'LEARNING_FEEDBACK_PUBLICATION'|'NO_CHANGE_NEEDED';
 export type CoordinationSourceSummary=
  |Readonly<{type:'ATTENDANCE_SESSION';id:string;version:number;schoolDate:string;startsAt:string;endsAt:string;sectionName:string;subjectName:string;teacherName:string|null;state:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';eligible:boolean}>
+ |Readonly<{type:'ATTENDANCE_PUPIL_PATTERN';id:string;version:number;studentId:string;studentName:string;admissionNumber:string;title:string;sectionName:string;subjectName:string;schoolDate:string;fromDate:string;toDate:string;threshold:number;absentSessions:number;absentDates:number;missingSessions:number;state:'REVIEWED';eligible:boolean}>
  |Readonly<{type:'LEARNING_RECIPIENT';id:string;version:number;assignmentId:string;title:string;sectionName:string;subjectName:string;studentName:string;effectiveDueAt:string;policyVersion:number;state:'UPCOMING'|'AWAITING'|'SUBMITTED'|'EXCUSED';eligible:boolean}>
  |Readonly<{type:'LEARNING_FEEDBACK_SUBMISSION';id:string;version:number;assignmentId:string;title:string;sectionName:string;subjectName:string;acceptedAt:string;firstPublishedAt:string|null;state:'AWAITING'|'PUBLISHED';eligible:boolean}>;
 export type CoordinationActorSummary=Readonly<{accountId:string;displayName:string}>;
