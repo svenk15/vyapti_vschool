@@ -1,0 +1,2 @@
+import {redirect} from 'next/navigation';import {MeetingDetailView} from '@/components/meeting-workspace';import {getIdentity} from '@/lib/server/auth';import {eventsGateway} from '@/lib/server/events';
+export const dynamic='force-dynamic';export default async function Page({params}:{params:Promise<{id:string}>}){const identity=await getIdentity();if(!identity)redirect('/sign-in');return <main id="main-content" className="container page-space"><MeetingDetailView initial={await eventsGateway.meetings.get(identity,(await params).id)} backHref="/teacher/meetings"/></main>}

@@ -2429,7 +2429,7 @@
       "owner": "coordination",
       "table": "vs_coordination_request",
       "fields": "id/org/school/source/actor/assignee/verification_reviewer uuid; kind/concern/status; due/note/resolution; timestamps/version",
-      "responsibility": "Typed Attendance or Learning operational follow-up aggregate with current assignment and verified owner outcome.",
+      "responsibility": "Typed Attendance, Learning or Events operational follow-up aggregate with current assignment and verified owner outcome.",
       "constraints": "Scoped School and optional verification-reviewer FKs plus deferred typed source-integrity trigger; exact source/kind/concern/evidence pairing; state/text/version checks; partial unique active source/kind; queue/assignee/reviewer indexes",
       "status": "MIGRATED",
       "design": "docs/modules/coordination/DESIGN.md",

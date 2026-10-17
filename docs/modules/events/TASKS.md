@@ -49,9 +49,9 @@ Human acceptance remains PENDING. PAR-18 remains partial for advanced event inte
 
 - [x] Record the D14 owner, authority, lifecycle, participant, response, completion, action-source, persistence and recovery contract.
 - [x] Add forward meeting grant/root/participant/action/event persistence and TEN-03 registrations.
-- [ ] Implement guarded manager and participant operations through the Events facade.
-- [ ] Register the minimal `EVENT_MEETING_ACTION` Coordination source adapter without direct foreign-owner writes.
-- [ ] Implement Principal and real participant routes, incremental seed and all interaction states.
-- [ ] Verify PostgreSQL lifecycle/isolation/replay/concurrency, browser journeys, direct desktop/mobile comparison and required repository gates.
+- [x] Implement guarded manager and participant operations through the Events facade.
+- [x] Register the minimal `EVENT_MEETING_ACTION` Coordination source adapter without direct foreign-owner writes.
+- [x] Implement Principal and real participant routes, incremental seed and all interaction states.
+- [x] Verify PostgreSQL lifecycle/isolation/replay/concurrency, browser journeys, direct desktop/mobile comparison and required repository gates.
 
 Human acceptance and production gates remain PENDING.
