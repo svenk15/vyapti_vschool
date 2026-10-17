@@ -26,7 +26,7 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-20 | Check assessment and report readiness | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-21 | Perform an explicitly delegated moderation decision | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-22 | Authorize or hand off report publication | academics | 4 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-23 | Review staffing availability without private reasons | staff | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-23 | Review staffing availability without private reasons | staff | 3 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | F07-A provides a separately designated People recorder, versioned safe intervals, minimal cross-branch collision and a Principal projection that excludes private narrative. The explorer dialog maps to the production recipe-L route; exact-occurrence cover remains the separate LEA-24/F07-B slice. |
 | LEA-24 | Approve temporary cover when delegated | staff | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-25 | Decide an assigned staff request | staff | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-26 | Hand over open work when leadership changes | staff | 2 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | F04 provides bounded per-item Coordination transfer, exact recovery, retained assignment history and current successor eligibility; F02 independently provides temporary Access delegation and immediate revocation. Transfer does not defer or roll back revocation, partial outcomes remain explicit, and the approved explorer maps to the existing recipe W/R routes. |
@@ -53,12 +53,12 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 18 ENGINEERING_COMPLETE, 5 PARTIAL, 23 NOT_STARTED. Human acceptance remains pending for all 46.
+Engineering: 19 ENGINEERING_COMPLETE, 5 PARTIAL, 22 NOT_STARTED. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. Principal completion F00 and the current-equivalent F01/WF-10 are engineering-complete. The production L/D/W/R mapping is recorded in `docs/execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md`.
 2. LEA-10 remains production-gated by Coordination retention/backup-deletion policy and TEN-03; these gates do not reduce its engineering status.
-3. D02–D19 are approved for synthetic-only implementation with no exceptions. F02, F03, F04 and F08 are engineering-complete; LEA-03, LEA-17, LEA-18, LEA-19, LEA-26 and LEA-34 are engineering-complete. F10 remains in progress for independent communication review/publish. Production authority, retention, accessibility and provider gates remain separate.
+3. D02–D19 are approved for synthetic-only implementation with no exceptions. F02, F03, F04 and F08 are engineering-complete; LEA-03, LEA-17, LEA-18, LEA-19, LEA-26 and LEA-34 are engineering-complete. F07 is PARTIAL after completing F07-A / LEA-23 safe availability; F07-B / LEA-24 exact-occurrence cover is next. F10 remains in progress for independent communication review/publish. Production authority, retention, accessibility and provider gates remain separate.
 
 LEA-09/10/11/15 use the implemented Coordination owner. LEA-15 remains an independently authorized Attendance operation rather than a direct Principal mutation. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

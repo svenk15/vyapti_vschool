@@ -458,10 +458,69 @@ model Employee {
  school School @relation(fields:[organizationId,schoolId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_employee_school_fkey")
  person Person @relation(fields:[organizationId,personId],references:[organizationId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_employee_person_fkey")
  teacher Teacher?
+ availabilityIntervals PeopleAvailabilityInterval[]
  @@unique([organizationId,schoolId,id],map:"vs_people_employee_scope_id_key")
  @@unique([organizationId,schoolId,staffNumber],map:"vs_people_employee_staff_number_key")
  @@unique([organizationId,schoolId,personId],map:"vs_people_employee_person_key")
  @@map("vs_people_employee")
+}
+
+model PeopleAvailabilityRecorderGrant {
+ id String @id(map:"vs_people_availability_recorder_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ designatedByOperatorId String @map("designated_by_operator_id") @db.Uuid
+ designatedAt DateTime @map("designated_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,id],map:"vs_people_availability_recorder_grant_scope_id_key")
+ @@unique([organizationId,schoolId,accountId],map:"vs_people_availability_recorder_grant_scope_account_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_people_availability_recorder_grant_runtime_idx")
+ @@map("vs_people_availability_recorder_grant")
+}
+
+model PeopleAvailabilityInterval {
+ id String @id(map:"vs_people_availability_interval_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ employeeId String @map("employee_id") @db.Uuid
+ state String @db.VarChar(20)
+ startsAt DateTime @map("starts_at") @db.Timestamptz(3)
+ endsAt DateTime @map("ends_at") @db.Timestamptz(3)
+ timezone String @db.VarChar(64)
+ sourceKind String @map("source_kind") @db.VarChar(30)
+ sourceReference String @map("source_reference") @db.VarChar(120)
+ recordedByAccountId String @map("recorded_by_account_id") @db.Uuid
+ recordedAt DateTime @map("recorded_at") @db.Timestamptz(3)
+ version Int
+ employee Employee @relation(fields:[organizationId,schoolId,employeeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_availability_interval_employee_fkey")
+ revisions PeopleAvailabilityRevision[]
+ @@unique([organizationId,schoolId,id],map:"vs_people_availability_interval_scope_id_key")
+ @@index([organizationId,schoolId,employeeId,startsAt,endsAt],map:"vs_people_availability_interval_employee_window_idx")
+ @@index([organizationId,schoolId,startsAt,endsAt,state],map:"vs_people_availability_interval_branch_window_idx")
+ @@map("vs_people_availability_interval")
+}
+
+model PeopleAvailabilityRevision {
+ id String @id(map:"vs_people_availability_revision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ intervalId String @map("interval_id") @db.Uuid
+ version Int
+ state String @db.VarChar(20)
+ startsAt DateTime @map("starts_at") @db.Timestamptz(3)
+ endsAt DateTime @map("ends_at") @db.Timestamptz(3)
+ timezone String @db.VarChar(64)
+ sourceKind String @map("source_kind") @db.VarChar(30)
+ sourceReference String @map("source_reference") @db.VarChar(120)
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ interval PeopleAvailabilityInterval @relation(fields:[organizationId,schoolId,intervalId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_people_availability_revision_interval_fkey")
+ @@unique([organizationId,schoolId,intervalId,version],map:"vs_people_availability_revision_version_key")
+ @@index([organizationId,schoolId,intervalId,occurredAt],map:"vs_people_availability_revision_history_idx")
+ @@map("vs_people_availability_revision")
 }
 
 

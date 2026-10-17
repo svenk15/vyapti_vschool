@@ -2,7 +2,7 @@ import 'server-only';
 import {createPeopleServices} from '../../backend/composition/people';
 import type {PeopleFacade} from '../../backend/modules/people/application/employees';
 import type {Identity} from '../../shared/contracts/access';
-import {accountGateway} from './access';
+import {accountGateway,leadershipGateway} from './access';
 const people=createPeopleServices({databaseUrl:process.env.DATABASE_URL??''});
 async function scope(identity:Identity|null){const home=await accountGateway.getHome(identity);return home.scope;}
 export const peopleGateway={
@@ -13,4 +13,10 @@ export const peopleGateway={
  async bindAccount(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['bindAccount']>[4]){const current=await scope(identity);return people.bindAccount(identity,current.organizationId,current.schoolId,employeeId,input);},
  async endEmployment(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['endEmployment']>[4]){const current=await scope(identity);return people.endEmployment(identity,current.organizationId,current.schoolId,employeeId,input);},
  async updateCategory(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['updateCategory']>[4]){const current=await scope(identity);return people.updateCategory(identity,current.organizationId,current.schoolId,employeeId,input);},
+};
+
+export const peopleAvailabilityGateway={
+ async leadership(identity:Identity|null,date:unknown){const home=await leadershipGateway.getHome(identity);return people.leadership(identity,home.scope.organizationId,home.scope.schoolId,date);},
+ async recorder(identity:Identity|null,date:unknown){const home=await accountGateway.getHome(identity);return people.recorder(identity,home.scope.organizationId,home.scope.schoolId,date);},
+ async record(identity:Identity|null,input:Record<string,unknown>){const home=await accountGateway.getHome(identity);return people.record(identity,home.scope.organizationId,home.scope.schoolId,input);},
 };

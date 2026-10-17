@@ -89,6 +89,9 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | ImportRow | `vs_imports_import_row` | imports | MIGRATED | [imports LLD](modules/imports/DESIGN.md) |
 | SourceStudentMap | `vs_imports_source_student_map` | imports | MIGRATED | [imports LLD](modules/imports/DESIGN.md) |
 | Employee | `vs_people_employee` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
+| PeopleAvailabilityRecorderGrant | `vs_people_availability_recorder_grant` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
+| PeopleAvailabilityInterval | `vs_people_availability_interval` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
+| PeopleAvailabilityRevision | `vs_people_availability_revision` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | Person | `vs_people_person` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | PersonNameRevision | `vs_people_person_name_revision` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | AuditEntry | `vs_platform_audit_entry` | platform | MIGRATED | [platform LLD](modules/platform/DESIGN.md) |

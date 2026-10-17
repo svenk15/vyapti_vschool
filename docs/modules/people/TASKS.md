@@ -90,3 +90,6 @@ Run `pnpm demo:seed`; the PER-02 seed creates an isolated synthetic school, two 
 5. Sign out, sign in with the synthetic teacher credentials, then open `/admin/teachers`. Expect the server-side staff-profile access-denied state.
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
+### F07-A / LEA-23 — safe operational availability
+
+Implement the D09 People-owned availability interval, separate recorder designation, safe Principal read and minimal cross-branch collision port. Acceptance requires exact replay, expected-version history, current authorization/module checks, UNKNOWN for missing evidence, no private narrative in leadership/browser/export responses, real PostgreSQL scope/concurrency evidence, and directly inspected desktop/mobile production screens. Human acceptance remains PENDING.

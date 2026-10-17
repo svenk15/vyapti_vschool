@@ -1,5 +1,5 @@
 {
-  "revision": "4.10",
+  "revision": "4.11",
   "prefix": "vs_",
   "tables": [
     {
@@ -2450,6 +2450,69 @@
         "intendedPolicy": "Require verified tenant keys plus current live Access authority; WITH CHECK binds both branch keys on inserts/updates.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "PeopleAvailabilityRecorderGrant",
+      "table": "vs_people_availability_recorder_grant",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; designated_by_operator_id uuid; designated_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Separately designated operational availability recorder; independent of role.",
+      "constraints": "Scoped membership FK; UNIQUE(scope,id); UNIQUE(scope,account_id); positive version; runtime index",
+      "owner": "people",
+      "status": "MIGRATED",
+      "design": "docs/modules/people/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live People availability authority; WITH CHECK binds both branch keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "people",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "PeopleAvailabilityInterval",
+      "table": "vs_people_availability_interval",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; state AVAILABLE/UNAVAILABLE; starts_at/ends_at timestamptz(3); timezone varchar(64); source_kind; source_reference; recorded_by_account_id; recorded_at; version",
+      "responsibility": "Authoritative non-sensitive operational availability interval; no private leave narrative.",
+      "constraints": "Scoped Employee FK; actor FK; closed vocabularies; half-open maximum 31-day window; positive version; scope/window indexes",
+      "owner": "people",
+      "status": "MIGRATED",
+      "design": "docs/modules/people/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live People availability authority; WITH CHECK binds both branch keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "people",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "PeopleAvailabilityRevision",
+      "table": "vs_people_availability_revision",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; interval_id uuid; version; state; starts_at/ends_at; timezone; source_kind/reference; actor_account_id; occurred_at",
+      "responsibility": "Append-only availability revision history and attribution.",
+      "constraints": "Scoped interval FK; actor FK; closed vocabularies/window checks; UNIQUE(scope,interval_id,version); history index",
+      "owner": "people",
+      "status": "MIGRATED",
+      "design": "docs/modules/people/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live People availability authority; WITH CHECK binds both branch keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "people",
         "closureGate": "TEN-03"
       }
     }

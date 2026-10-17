@@ -1,11 +1,19 @@
 # People and staff identity — current state
 
-Last updated: 2026-10-10. Human review is tracked separately from implementation evidence. No imported completion or active execution timer.
+Last updated: 2026-10-17. Human review is tracked separately from implementation evidence. No imported completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |
 |---|---|---|---|
 | PER-01 | VERIFIED | PENDING | [Local verification](../../evidence/people-01-local/verification.json), JUnit reports, source `45ca6d6` |
 | PER-02 | VERIFIED | PENDING | [Local verification](../../evidence/people-02-local/verification.json), JUnit reports, tested source `e72125d` |
+
+## F07-A / LEA-23 safe operational availability — 17 October 2026
+
+Implementation is ENGINEERING_COMPLETE at `F07_PRODUCT_COMMIT`; human review remains PENDING. The People owner now provides separately designated recorder authority, branch-timezone bounded safe availability intervals, immutable expected-version revisions, exact-payload recovery, a safe Principal projection and a minimal `BUSY`/`FREE`/`UNKNOWN` cross-branch collision port. Private leave, payroll and medical narratives are excluded from the stored command contract and Principal response. Default dates use the selected branch timezone and invalid normalized calendar dates fail validation.
+
+Forward migration `20261017200000_people_operational_availability` is applied to development and test (80 migrations each). The three new People tables are registered under TEN-ADR-006 Path A; application authorization remains active and TEN-03 RLS verification is still a production gate. Focused unit 4/4, real-PostgreSQL functional 2/2, database-design/backend/boundary/type checks, current-source Chromium 2/2 and mobile 2/2 passed. `pnpm demo:seed` added or preserved fictional availability without changing credentials or manual records. [Evidence](../../evidence/principal-f07-availability-2026-10-17/README.md).
+
+F07 remains PARTIAL: D09 exact-occurrence cover approval, substitute acceptance, fresh collision/eligibility checks and Attendance-safe activation have not been implemented. No open/submitted Attendance reassignment is implied.
 
 ## Current checkpoint
 

@@ -1,12 +1,12 @@
 # LEA-23 — Review staffing availability without private reasons
 
 ## Identity and readiness
-- Baseline: NOT_STARTED; human review PENDING.
+- Current status: ENGINEERING_COMPLETE at `F07_PRODUCT_COMMIT`; human review PENDING. The broader F07 cover foundation remains PARTIAL.
 - Owner: People + Timetable. This names responsibility, not proof that an owner module exists.
 - Product decisions: D09. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F07. See execution queue.
 - Reference: approved Principal catalogue LEA-23; locate its actual explorer trigger in HTML, do not invent a hash route.
-- Proposed production route: `/leadership/staff/availability`. Reuse an existing equivalent route and preserve old links; this is not a claim it exists.
+- Production route: `/leadership/staff/availability`; designated recorder counterpart: `/admin/teachers/availability`.
 - Production composition: recipe L from 04_PRODUCTION_UX.md.
 
 ## Target product definition
@@ -38,6 +38,8 @@ Foreign-branch busy check prevents collision without exposing the foreign class 
 
 ## Demonstration and evidence
 Use fictional personas with distinct proposer/reviewer when required, a second branch, a denied actor and a retained unknown-outcome fixture. Demonstrate source → role action → counterpart action → persisted receipt → reload. For read-only flows demonstrate populated/empty/unavailable and forbidden deep link. Add screenshots at 1440×1000 and 390×844, exact executable commit, commands/results and recorded deviations. No credentials in evidence or Git.
+
+Current evidence: `docs/evidence/principal-f07-availability-2026-10-17/README.md`. It proves the People recorder → persisted interval → safe Principal projection journey, exact replay/version history and minimal collision port. It does not claim the later Timetable cover transition.
 
 ## Original supplied workflow contract
 The following is copied from the user's approved-pack catalogue to preserve scope. It is not evidence of implementation. Where new recommendations refine an earlier proposal, record the D-ID override when approved; do not silently narrow this contract.

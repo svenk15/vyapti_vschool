@@ -111,10 +111,11 @@
       "decisions": [
         "D09"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "scope": "Availability records and privacy projection; exact occurrence cover with approval+acceptance; scheduled Attendance atomic change.",
       "demo": "Substitute accepts before class; marking changes only after activation; open register conflicts.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "F07-A / LEA-23 safe People availability is engineering-verified: separate recorder designation, bounded versioned intervals, safe Principal projection, exact replay and minimal cross-branch collision. F07-B exact-occurrence cover approval/acceptance and Attendance-safe activation remain."
     },
     {
       "id": "F08",
@@ -481,10 +482,11 @@
       "decisions": [
         "D09"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-23.md",
       "kind": "workflow",
-      "workflow": "LEA-23"
+      "workflow": "LEA-23",
+      "completedSlice": "People recorder counterpart, safe Principal route, PostgreSQL lifecycle/security evidence and direct desktop/mobile comparison are complete; human review and release gates remain pending."
     },
     {
       "id": "WF-24",
@@ -698,7 +700,7 @@
     },
     {
       "id": "WF-38",
-      "title": "Follow the school’s urgent safety escalation procedure",
+      "title": "Follow the school\u2019s urgent safety escalation procedure",
       "dependsOn": [
         "F14"
       ],

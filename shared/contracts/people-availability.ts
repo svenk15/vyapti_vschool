@@ -1,0 +1,9 @@
+export type AvailabilityState='AVAILABLE'|'UNAVAILABLE'|'UNKNOWN';
+export type AvailabilitySourceKind='OPERATIONAL'|'APPROVED_REQUEST'|'CORRECTION';
+export type SafeAvailabilityInterval=Readonly<{intervalId:string;state:Exclude<AvailabilityState,'UNKNOWN'>;startsAt:string;endsAt:string;timezone:string;version:number;recordedAt:string}>;
+export type StaffAvailabilityItem=Readonly<{employeeId:string;displayName:string;staffNumber:string;state:AvailabilityState;intervals:readonly SafeAvailabilityInterval[]}>;
+export type LeadershipAvailability=Readonly<{schoolDate:string;timezone:string;observedAt:string;items:readonly StaffAvailabilityItem[]}>;
+export type RecorderAvailability=LeadershipAvailability&Readonly<{canRecord:true}>;
+export type RecordAvailabilityInput=Readonly<{employeeId:string;intervalId?:string;expectedVersion:number;state:Exclude<AvailabilityState,'UNKNOWN'>;startsAt:string;endsAt:string;timezone:string;sourceKind:AvailabilitySourceKind;sourceReference:string;key:string}>;
+export type RecordAvailabilityResult=SafeAvailabilityInterval&Readonly<{employeeId:string;replayed:boolean}>;
+export type AvailabilityCollision='BUSY'|'FREE'|'UNKNOWN';
