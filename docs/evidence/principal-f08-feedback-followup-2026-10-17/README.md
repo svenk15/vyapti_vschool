@@ -2,6 +2,8 @@
 
 Status: engineering complete; direct comparison complete with documented production-composition deviations; human review pending.
 
+Verified product source: `792344d960014972a311c835bddbb77a02f30349`. Normal production build: `lXAhv1RaKHcpGRWi6zmwK3j`. Isolated browser build: `SwSiNb0F3qLSA3wlXIZ`.
+
 The approved source is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`, workflow `LEA-18` (“Review feedback awaiting return”). It is a workflow explorer dialog. The production mapping is `/leadership/learning/feedback`, the exact-item staged route `/leadership/learning/feedback/follow-up/new`, its receipt and `/leadership/coordination/[id]` detail/action route.
 
 Implemented behavior:
