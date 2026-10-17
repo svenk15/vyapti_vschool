@@ -52,7 +52,7 @@
       "decisions": [
         "D03"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Register Coordination verification as real first adapter; owner-specific action/status and protected routing; no universal business decision persistence.",
       "demo": "Principal opens actual pending verification through inbox and owner commits result; unknown/revoked replay proved.",
       "kind": "foundation"

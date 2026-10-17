@@ -87,7 +87,8 @@ async function main(){
   }
 
   stage='awaiting-request';
-  if(!await getRequest(demo.awaitingRequestId)){
+  const awaitingRequest=await getRequest(demo.awaitingRequestId);
+  if(!awaitingRequest||awaitingRequest.status!=='AWAITING_VERIFICATION'){
    const source=pick('SESSION_SETUP_REVIEW','SUBMITTED');
    const created=await coordination.create(principal,people.organizationId,people.schoolId,{sessionId:source.id,kind:'SESSION_SETUP_REVIEW',concern:'OTHER',note:'Review the source configuration without copying protected Attendance content.',dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Assign the fictional source review.',key:command('awaiting','create')});
    const started=await coordination.start(worker,people.organizationId,people.schoolId,{requestId:created.requestId,expectedVersion:created.version,reason:null,key:command('awaiting','start')});
@@ -132,7 +133,7 @@ async function main(){
   demo.sourceDate=sessions[0].schoolDate.toISOString().slice(0,10);
   mkdirSync(directory,{recursive:true,mode:0o700});
   writeFileSync(path,`${JSON.stringify({...demo,organizationId:people.organizationId,schoolId:people.schoolId,principalEmail:people.adminEmail,workerEmail:people.teacherEmail},null,2)}\n`,{mode:0o600});
-  console.log(`Prepared or preserved Coordination lifecycle and LEA-10 batch examples. Private scenario: ${path}`);
+  console.log(`Prepared or preserved Coordination lifecycle, LEA-10 batch and F03 decision-inbox examples. Private scenario: ${path}`);
  }catch(error){
   throw new Error(`${stage.toUpperCase()}_${error instanceof Error&&/^[A-Z0-9_]+$/.test(error.message)?error.message:'LOCAL_DEMO_ERROR'}`);
  }finally{

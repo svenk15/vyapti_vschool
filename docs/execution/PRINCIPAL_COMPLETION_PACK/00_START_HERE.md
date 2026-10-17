@@ -9,7 +9,7 @@ Based on the supplied docs(1).zip, not an inspection of current application sour
 
 ## Live repository reconciliation — 17 October 2026
 
-F00 reconciled this imported programme against executable source `f75ad4f3e3b036132d0c72bbe6c95eceea296b1c`. The live 46-row matrix is authoritative: 12 workflows are ENGINEERING_COMPLETE, four are PARTIAL and 30 are NOT_STARTED after F18 completed LEA-46. F01/WF-10 are satisfied by the verified COORD-02/LEA-10 implementation rather than being rebuilt. On 17 October 2026 the repository owner explicitly approved D02–D19 for synthetic-only implementation with no exceptions; D01 remains unchanged. [SCREEN_MAP](SCREEN_MAP.md) records the production L/D/W/R specimens and the workflow-explorer mapping; [RESUME](RESUME.md) records the exact continuation point.
+F00 reconciled this imported programme against executable source `f75ad4f3e3b036132d0c72bbe6c95eceea296b1c`. The live 46-row matrix is authoritative: 12 workflows are ENGINEERING_COMPLETE, seven are PARTIAL and 27 are NOT_STARTED after F18 completed LEA-46 and F03 added the first supported slices of LEA-27, LEA-29 and LEA-31. F01/WF-10 are satisfied by the verified COORD-02/LEA-10 implementation rather than being rebuilt. On 17 October 2026 the repository owner explicitly approved D02–D19 for synthetic-only implementation with no exceptions; D01 remains unchanged. [SCREEN_MAP](SCREEN_MAP.md) records the production L/D/W/R specimens and the workflow-explorer mapping; [RESUME](RESUME.md) records the exact continuation point.
 
 ## Read order
 1. 01_BASELINE_AND_COVERAGE.md — exact 46-workflow inventory and inconsistencies.

@@ -1,0 +1,13 @@
+import 'server-only';
+import type {Identity} from '../../shared/contracts/access';
+import {createDecisionInboxServices} from '../../backend/composition/decisions';
+import {accountGateway} from './access';
+import {coordinationServices} from './coordination';
+
+const decisions=createDecisionInboxServices({coordination:coordinationServices});
+const scoped=async(identity:Identity|null)=>{const scope=(await accountGateway.getHome(identity)).scope;return {identity,organizationId:scope.organizationId,schoolId:scope.schoolId};};
+export const decisionGateway={
+ list:async(identity:Identity|null,input:Parameters<typeof decisions.list>[3]={})=>{const s=await scoped(identity);return decisions.list(s.identity,s.organizationId,s.schoolId,input);},
+ get:async(identity:Identity|null,owner:string,id:string)=>{const s=await scoped(identity);return decisions.get(s.identity,s.organizationId,s.schoolId,owner,id);},
+ decide:async(identity:Identity|null,owner:string,id:string,input:unknown)=>{const s=await scoped(identity);return decisions.decide(s.identity,s.organizationId,s.schoolId,owner,id,input);},
+};

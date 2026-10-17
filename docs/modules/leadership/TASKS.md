@@ -165,6 +165,14 @@ Engineering status: COORD-01 VERIFIED for the approved Attendance scope; LEA-09,
 - [x] Recognize the verified COORD-02/LEA-10 implementation as the current equivalent of F01/WF-10 instead of rebuilding it.
 - [x] Map real Principal routes to L, D, W and R production compositions without treating the workflow explorer as a complete page design.
 - [x] Capture and directly inspect current-source desktop and mobile specimens, record computed geometry, source hashes and explicit deviations.
-- [x] Preserve D01 as the only approved package decision; keep D02–D19 pending and retain all production gates.
+- [x] Preserve D01 and record the owner's 17 October 2026 approval of D02–D19 for synthetic-only implementation, with no exceptions and all production gates retained.
 
 Engineering status: ENGINEERING_COMPLETE. This documentation/evidence checkpoint changes no product code, schema, migration or database data. Human visual acceptance remains PENDING.
+
+## F03 — typed decision facade and first owner adapter
+
+- [x] Resolve the narrow D03 ownership, scope, action and replay contract in the Leadership and Coordination LLDs.
+- [x] Implement the framework-free typed adapter registry and Coordination verification adapter.
+- [x] Add Principal inbox/detail delivery without granting Coordination management or Attendance mutation.
+- [x] Verify the real owner transaction, exact recovery and revoked-result protection in PostgreSQL and Playwright.
+- [x] Record F03 separately from the still-incomplete LEA-27–31 workflows.

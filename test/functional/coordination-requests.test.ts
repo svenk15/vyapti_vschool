@@ -5,6 +5,7 @@ import {PrismaPg} from '@prisma/adapter-pg';
 import {createAccessServices} from '../../backend/composition/access';
 import {createAcademicServices} from '../../backend/composition/academics';
 import {createCoordinationServices} from '../../backend/composition/coordination';
+import {createDecisionInboxServices} from '../../backend/composition/decisions';
 import {createTenancyServices} from '../../backend/composition/tenancy';
 import {activeStaffFixture,schoolInput} from '../fixtures/access-management';
 
@@ -17,6 +18,7 @@ const academics=createAcademicServices({databaseUrl:url,releasedModules:['academ
 const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]});
 const now=new Date('2026-10-16T12:30:00.000Z');
 const coordination=createCoordinationServices({databaseUrl:url,releasedModules:released,mode:'synthetic',now:()=>now});
+const decisions=createDecisionInboxServices({coordination});
 const operator={operatorId:randomUUID(),verified:true as const};
 const reason='Synthetic Coordination integration';
 let scope:Awaited<ReturnType<typeof access.provisionSchool>>;
@@ -178,5 +180,22 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   const attendance=await source(),make=(key:string)=>coordination.submitBatch(creator,scope.organizationId,scope.schoolId,{sourceIds:[attendance.id],kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:null,assignmentReason:null,key}),[left,right]=await Promise.all([make(commandKey()),make(commandKey())]);
   expect([left.items[0]?.status,right.items[0]?.status].sort()).toEqual(['ALREADY_EXISTS','CREATED']);
   expect(await db.coordinationRequest.count({where:{organizationId:scope.organizationId,schoolId:scope.schoolId,sourceId:attendance.id,kind:'MISSING_REGISTER',status:{notIn:['RESOLVED','WITHDRAWN']}}})).toBe(1);
+ });
+
+ it('dispatches only the typed Coordination decision and protects an exact recovered result',async()=>{
+  const attendance=await source(),created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Prepare typed decision evidence',key:commandKey()}),started=await coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:created.version,reason:null,key:commandKey()}),submitted=await coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:started.version,kind:'NO_CHANGE_NEEDED',revision:null,reason:'The authoritative register state needs no change.',key:commandKey()});
+  const queue=await decisions.list(creator,scope.organizationId,scope.schoolId,{});expect(queue.items.some(item=>item.itemId===created.requestId&&item.owner==='COORDINATION_VERIFICATION')).toBe(true);
+  const detail=await decisions.get(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId);expect(detail).toMatchObject({version:submitted.version,allowedActions:['VERIFY','RETURN'],proposer:{accountId:worker.accountId}});
+  await expect(decisions.get(creator,scope.organizationId,scope.schoolId,'UNKNOWN_OWNER',created.requestId)).rejects.toMatchObject({code:'NOT_FOUND'});
+  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:worker.accountId,capability:'coordination.verify'});
+  expect((await decisions.list(worker,scope.organizationId,scope.schoolId,{})).items.some(item=>item.itemId===created.requestId)).toBe(false);
+  await expect(decisions.get(worker,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId)).rejects.toMatchObject({code:'NOT_FOUND'});
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:worker.accountId,capability:'coordination.verify'});
+  const key=commandKey(),input={action:'VERIFY',expectedVersion:submitted.version,reason:null,key} as const,committed=await decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input);expect(committed).toMatchObject({state:'RESOLVED',replayed:false});
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.verify'});
+  await expect(decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.verify'});
+  expect(await decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,input)).toMatchObject({...committed,replayed:true});
+  await expect(decisions.decide(creator,scope.organizationId,scope.schoolId,'COORDINATION_VERIFICATION',created.requestId,{...input,reason:'Changed verification payload'})).rejects.toMatchObject({code:'IDEMPOTENCY_CONFLICT'});
  });
 });

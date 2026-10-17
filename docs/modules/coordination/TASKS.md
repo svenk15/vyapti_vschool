@@ -30,4 +30,15 @@ Dependencies: COORD-01 engineering verification; approved LEA-10 contract dated 
 - [x] Verify desktop/mobile selection, filter/context clearing, final-only mutation, lost response and focus behavior.
 - [x] Extend duplicate-safe synthetic demo data and update LEA-10 evidence and matrix.
 
+## COORD-03 / F03 — typed decision facade and Coordination verification adapter
+
+Dependencies: F00 engineering-complete; D03 approved for synthetic-only implementation on 17 October 2026; COORD-01 verification lifecycle complete.
+
+- [x] Define the narrow typed owner registry without a generic decision table or cross-owner mutation.
+- [x] Project only currently authorized `AWAITING_VERIFICATION` Coordination items and owner-defined actions.
+- [x] Route verify/return and exact retry through the existing guarded Coordination commands.
+- [x] Add the production Principal inbox/detail composition and safe unavailable/empty/stale/unknown states.
+- [x] Verify PostgreSQL authority, replay/revocation/concurrency and focused desktop/mobile journeys.
+- [x] Extend synthetic seed/evidence and update F03 status without claiming all LEA-27–31 workflows complete.
+
 Human review, production retention, TEN-03, font portability and native accessibility remain PENDING.

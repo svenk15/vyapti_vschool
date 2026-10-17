@@ -1,6 +1,16 @@
 # Coordination — low-level design
 
-Status: approved Attendance-scoped first delivery plus LEA-10 bulk follow-up · 17 October 2026.
+Status: approved Attendance-scoped delivery, LEA-10 bulk follow-up and F03 typed decision adapter · 17 October 2026.
+
+## F03 typed decision-owner adapter
+
+Approved decision D03 does not create a universal approval aggregate. Leadership owns only a transport-neutral inbox facade and an explicit registry of typed owner adapters. The first registered adapter is `COORDINATION_VERIFICATION`; it projects Coordination requests in `AWAITING_VERIFICATION` only when the current actor has `coordination.verify`, is not the resolution proposer and still passes the existing Attendance evidence guard. Its owner-defined actions are `VERIFY` and `RETURN`. Unsupported operations, including information requests and recusal, are absent rather than rendered as disabled generic controls.
+
+The adapter maps `list`, `detail`, `decide` and protected replay onto the existing Coordination facade. `VERIFY` calls the existing atomic `CoordinationResolutionVerified` command; `RETURN` calls `CoordinationResolutionReturned` and requires a bounded reason. The owner transaction retains its lock order, expected version, independent-proposer check, Attendance evidence verification, immutable event, redacted audit and actor/command/key receipt. Leadership never writes a Coordination or Attendance table. Exact-payload retry reuses the owner receipt only after current account, branch, capability and source authorization; revoked authority denies the prior result.
+
+The browser-safe projection exposes the typed owner code, opaque owner item ID, version, due/submitted timestamps, safe Attendance source summary, permitted resolution claim and owner-defined actions. Lists order by owner `updated_at DESC, id DESC` and preserve the existing query-bound cursor and 25/default, 50/max bounds. The initial route `/leadership/decisions` is a production recipe-L inbox and `/leadership/decisions/COORDINATION_VERIFICATION/:id` is recipe D/W. The existing `/leadership/coordination` management and worker routes remain authoritative for create, assignment and work; the decision inbox grants none of those actions.
+
+No schema or migration is required for F03. It reuses `vs_coordination_request`, `vs_coordination_request_event`, `vs_coordination_command_receipt` and the existing scoped indexes. These tables remain branch-classified under TEN-ADR-006 Path A; application authorization is mandatory and TEN-03 remains the production gate. Focused verification must cover typed-owner rejection, proposer exclusion, independent verify/return, stale expected version, exact retry after a lost response, changed-payload conflict, and protected receipt denial after capability revocation.
 
 ## Scope and ownership
 

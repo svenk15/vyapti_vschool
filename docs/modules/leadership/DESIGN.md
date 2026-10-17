@@ -40,6 +40,12 @@ Verification requires fixed-capability unit checks, real PostgreSQL grant/revoca
 
 LDR-02 owns the Attendance due-register read projection and exact metric definition. LDR-03 owns session evidence freshness. LDR-04 through LDR-06 require the approved Coordination write owner. No later approval or sensitive-record authority is inferred from this foundation.
 
+## F03 decision inbox facade
+
+Leadership aggregates typed owner projections; it does not own approval state. `DecisionOwnerAdapter` is an application port with explicit `owner`, `list`, `get` and `decide` operations. The registry rejects unknown owners before dispatch. Every adapter returns only its own safe DTO and owner-defined allowed actions, and every call includes the authenticated identity plus exact organization and branch scope. The first adapter is Coordination verification as specified in the Coordination LLD. A visible inbox item or inbox navigation grant is never decision authority; the owner reauthorizes every read, write and replay.
+
+F03 supplies the reusable facade and one real adapter. It does not by itself complete LEA-27–31: request-information, response, recusal/routing and additional owner decisions require their explicit owner counterparts. No generic decision persistence, generic contact search or universal approve command is introduced.
+
 ## Coordination owner boundary — LEA-09, LEA-11 and LEA-15
 
 The approved Principal workflows establish an owner boundary but do not yet establish a complete product contract. Leadership may inspect the exact Attendance session through the existing `attendance.read_leadership` projection. It may not cancel, correct, relink or delete that session. Attendance retains all session lifecycle invariants and independently authorizes any later administrator action. A Coordination owner would persist the request/follow-up, versioned lifecycle, intent receipt and safe audit; it would refer to the exact scoped Attendance session and revision without copying its roster, marks, explanations or correction history.

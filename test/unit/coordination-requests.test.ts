@@ -1,6 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {randomUUID} from 'node:crypto';
 import {assignInput,batchInput,createInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
+import {createDecisionInboxUseCases,type DecisionOwnerAdapter} from '../../backend/modules/leadership/application/decisions';
 
 const key=()=>`coordination-${randomUUID()}`;
 
@@ -31,5 +32,14 @@ describe('coordination request contract',()=>{
   expect(localInstant('2026-10-16T16:30','Asia/Kolkata')?.toISOString()).toBe('2026-10-16T11:00:00.000Z');
   expect(()=>localInstant('2026-03-08T02:30','America/New_York')).toThrow('VALIDATION');
   expect(()=>localInstant('2026-11-01T01:30','America/New_York')).toThrow('VALIDATION');
+ });
+});
+
+describe('typed decision facade',()=>{
+ it('rejects unknown owners and invalid owner commands before dispatch',async()=>{
+  const calls:string[]=[],adapter={owner:'COORDINATION_VERIFICATION',list:async()=>({items:[],nextCursor:null,timezone:'Asia/Kolkata'}),get:async()=>{calls.push('get');throw new Error('unexpected');},decide:async()=>{calls.push('decide');throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1},organizationId=randomUUID(),schoolId=randomUUID(),itemId=randomUUID();
+  await expect(facade.get(identity,organizationId,schoolId,'UNKNOWN',itemId)).rejects.toMatchObject({code:'NOT_FOUND'});
+  await expect(facade.decide(identity,organizationId,schoolId,'COORDINATION_VERIFICATION',itemId,{action:'RETURN',expectedVersion:1,reason:null,key:key()})).rejects.toMatchObject({code:'VALIDATION'});
+  expect(calls).toEqual([]);
  });
 });
