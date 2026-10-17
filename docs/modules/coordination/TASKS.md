@@ -18,6 +18,19 @@ Dependencies: verified Principal Attendance source read; existing Attendance cor
 
 Human review, production retention, TEN-03, font portability and native accessibility remain PENDING.
 
+## COORD-04 / F04 — typed owner sources, handover and safe history
+
+Dependencies: F03 engineering-complete; D04 approved for synthetic-only implementation on 17 October 2026.
+
+- [x] Define an explicit typed source/assignee-policy registry with duplicate, foreign and unsupported-pair denial.
+- [x] Move Attendance inspection, evidence and current assignee policy behind its registered owner adapter without changing existing behavior.
+- [ ] Add the bounded, recoverable handover contract and preserve per-request assignment history.
+- [ ] Add the current-purpose 90-day safe event projection without exposing notes, tokens or restricted source contents.
+- [ ] Verify PostgreSQL replay/concurrency/revocation and focused Principal desktop/mobile journeys.
+- [ ] Extend synthetic seed/evidence and update F04 plus affected workflow accounting.
+
+Engineering status: IN_PROGRESS. No new source kind or Principal workflow is complete from the registry alone.
+
 ## COORD-02 — LEA-10 bounded bulk Attendance follow-ups
 
 Dependencies: COORD-01 engineering verification; approved LEA-10 contract dated 17 October 2026.

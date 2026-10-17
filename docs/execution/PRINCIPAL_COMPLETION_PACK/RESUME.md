@@ -1,6 +1,6 @@
 # Programme resume
 
-Task/subtask: F03 ENGINEERING_COMPLETE; LEA-27, LEA-29 and LEA-31 supported PARTIAL; next graph-eligible priority F04.
+Task/subtask: F04 IN_PROGRESS after its typed source/assignee-policy registry sub-slice; F03 remains ENGINEERING_COMPLETE.
 
 Approved D-IDs and evidence: D01 preserves the existing COORD-02/LEA-10 contract. On 17 October 2026 the repository owner explicitly approved D02–D19 for synthetic-only implementation exactly as recorded, with no exceptions. This does not authorize production enablement, providers, purchases, real external messages/payments or invented emergency procedures.
 
@@ -16,6 +16,6 @@ F03 verification: targeted unit 5/5; real-PostgreSQL 11/11; current-source Playw
 
 Evidence: `docs/evidence/principal-f03-decisions-2026-10-17/`. Private Principal credentials remain in ignored `artifacts/leadership-01/private-demo.json`; private Coordination scenario identifiers remain in ignored `artifacts/coordination-01/private-demo.json`; values are never committed or printed.
 
-Next action: start F04 under approved D04. Reconcile only the Coordination source/evidence registration, academic-assignee policy seam, bounded handover and event-projection contracts needed by F04. Preserve the existing Attendance follow-up behavior and owner authorization. F04 must prove foreign source denial and history-preserving handover before it can unlock its dependent workflow slices.
+Next action: implement F04 bounded handover with a durable 1–50 item intent, per-item current eligibility/version checks, retained assignment events, honest partial outcomes and exact replay. Then add the 90-day safe event projection. Preserve the existing Attendance follow-up behavior and owner authorization; do not register Learning until F08 supplies its exact owner contract.
 
 Pending gates: broader LEA-27 filters/multi-owner aggregation, broader LEA-29 actions, cross-owner LEA-31 status recovery, LEA-28 information request, LEA-30 recusal, human review, font portability, native VoiceOver/NVDA, TEN-03, retention/restore/load and production/provider enablement.

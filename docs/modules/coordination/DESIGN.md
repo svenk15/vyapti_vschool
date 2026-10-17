@@ -1,6 +1,14 @@
 # Coordination — low-level design
 
-Status: approved Attendance-scoped delivery, LEA-10 bulk follow-up and F03 typed decision adapter · 17 October 2026.
+Status: approved Attendance-scoped delivery, LEA-10 bulk follow-up, F03 typed decision adapter and active F04 typed-source extension · 17 October 2026.
+
+## F04 typed source and assignee-policy registry
+
+Approved synthetic-only D04 extends Coordination only through explicitly registered owner adapters. `CoordinationSourceAdapter` is a narrow owner contract: a literal `sourceType`, an allowlist of supported Coordination request kinds, scoped source inspection, owner evidence verification and a current-assignee eligibility predicate. The registry rejects duplicate registrations, unknown source types and unsupported source/kind pairs before an owner query. It never accepts a browser-provided module name or arbitrary repository handle.
+
+The first and only active registration remains Attendance: `ATTENDANCE_SESSION` with `MISSING_REGISTER` and `SESSION_SETUP_REVIEW`. `PrismaAttendanceCoordinationEvidence` owns Attendance module/capability checks, session reads, evidence checks and the source-specific assignee predicate. Coordination separately requires the candidate's active branch membership and current `coordination.work` designation before invoking that predicate. This removes direct Attendance-table and role-policy knowledge from Coordination while preserving every existing request, lock, transaction and response contract. It is also the academic-assignee policy seam required before F08 can add an explicit Learning adapter; F04 does not register or expose that future source.
+
+This sub-slice changes no browser DTO, route, table or migration. Stored rows continue to use the constrained `ATTENDANCE_SESSION` value. A future source requires its owner contract, application registration, shared DTO change, forward CHECK/FK/index migration and focused owner tests; registration alone cannot make a source valid. Focused verification covers duplicate/foreign/unsupported registry denial and the unchanged real-PostgreSQL Attendance Coordination suite. Bounded handover and the 90-day safe event projection remain the next F04 sub-slices; F04 remains IN_PROGRESS until those pass.
 
 ## F03 typed decision-owner adapter
 

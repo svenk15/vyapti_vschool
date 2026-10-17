@@ -2,6 +2,8 @@ import {describe,expect,it} from 'vitest';
 import {randomUUID} from 'node:crypto';
 import {assignInput,batchInput,createInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
 import {createDecisionInboxUseCases,type DecisionOwnerAdapter} from '../../backend/modules/leadership/application/decisions';
+import type {CoordinationSourceAdapter} from '../../backend/modules/coordination/contracts/source-adapter';
+import {CoordinationSourceRegistry} from '../../backend/modules/coordination/infrastructure/source-registry';
 
 const key=()=>`coordination-${randomUUID()}`;
 
@@ -41,5 +43,18 @@ describe('typed decision facade',()=>{
   await expect(facade.get(identity,organizationId,schoolId,'UNKNOWN',itemId)).rejects.toMatchObject({code:'NOT_FOUND'});
   await expect(facade.decide(identity,organizationId,schoolId,'COORDINATION_VERIFICATION',itemId,{action:'RETURN',expectedVersion:1,reason:null,key:key()})).rejects.toMatchObject({code:'VALIDATION'});
   expect(calls).toEqual([]);
+ });
+});
+
+describe('typed Coordination source registry',()=>{
+ const attendance={sourceType:'ATTENDANCE_SESSION',requestKinds:['MISSING_REGISTER','SESSION_SETUP_REVIEW'],inspect:async()=>{throw new Error('not called');},verify:async()=>{},eligibleAssignee:async()=>true} satisfies CoordinationSourceAdapter;
+ it('resolves only an explicitly registered source and supported request kind',()=>{
+  const registry=new CoordinationSourceRegistry([attendance]);
+  expect(registry.resolve('ATTENDANCE_SESSION','MISSING_REGISTER')).toBe(attendance);
+  expect(()=>registry.resolve('LEARNING_ASSIGNMENT','MISSING_REGISTER')).toThrow('NOT_FOUND');
+  expect(()=>registry.resolve('ATTENDANCE_SESSION','ACADEMIC_FOLLOW_UP')).toThrow('NOT_FOUND');
+ });
+ it('rejects duplicate owner registrations at composition time',()=>{
+  expect(()=>new CoordinationSourceRegistry([attendance,attendance])).toThrow('Duplicate Coordination source adapter');
  });
 });
