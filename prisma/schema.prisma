@@ -830,6 +830,48 @@ model CoordinationBatchItem {
  @@map("vs_coordination_batch_item")
 }
 
+model CoordinationHandover {
+ id String @id(map:"vs_coordination_handover_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ fromAccountId String @map("from_account_id") @db.Uuid
+ toAccountId String @map("to_account_id") @db.Uuid
+ idempotencyKey String @map("idempotency_key") @db.VarChar(100)
+ inputHash String @map("input_hash") @db.Char(64)
+ payload Json
+ state String @db.VarChar(20)
+ itemCount Int @map("item_count")
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ completedAt DateTime? @map("completed_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,id],map:"vs_coordination_handover_scope_id_key")
+ @@unique([organizationId,schoolId,actorAccountId,idempotencyKey],map:"vs_coordination_handover_intent_key")
+ @@index([organizationId,schoolId,state,updatedAt(sort: Desc),id(sort: Desc)],map:"vs_coordination_handover_state_idx")
+ @@map("vs_coordination_handover")
+}
+
+model CoordinationHandoverItem {
+ id String @id(map:"vs_coordination_handover_item_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ handoverId String @map("handover_id") @db.Uuid
+ ordinal Int
+ requestId String @map("request_id") @db.Uuid
+ expectedVersion Int @map("expected_version")
+ status String @db.VarChar(24)
+ resultVersion Int? @map("result_version")
+ errorCode String? @map("error_code") @db.VarChar(40)
+ errorMessage String? @map("error_message") @db.VarChar(240)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ completedAt DateTime? @map("completed_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,handoverId,ordinal],map:"vs_coordination_handover_item_ordinal_key")
+ @@unique([organizationId,schoolId,handoverId,requestId],map:"vs_coordination_handover_item_request_key")
+ @@index([organizationId,schoolId,handoverId,status,ordinal],map:"vs_coordination_handover_item_status_idx")
+ @@map("vs_coordination_handover_item")
+}
+
 model OperatorAuditEntry {
  id String @id @db.Uuid
  operatorId String @map("operator_id") @db.Uuid

@@ -2221,6 +2221,48 @@
         "owner": "coordination",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "CoordinationHandover",
+      "owner": "coordination",
+      "table": "vs_coordination_handover",
+      "fields": "id/org/school/actor/from/to uuid; key/hash/payload; state/count/timestamps/version",
+      "responsibility": "Durable reviewed F04 Coordination handover intent and recoverable receipt root.",
+      "constraints": "Scoped School and account FKs; distinct outgoing/successor; unique actor/key; item-count/state/version checks; scoped state index",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only the current authorized initiating manager may resume or read the exact handover; successor eligibility and each request version are rechecked independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CoordinationHandoverItem",
+      "owner": "coordination",
+      "table": "vs_coordination_handover_item",
+      "fields": "id/org/school/handover/request uuid; ordinal/expected_version/status/result_version/error/timestamps",
+      "responsibility": "Explicit request candidate and safe per-item transfer outcome with assignment history retained on the request.",
+      "constraints": "Scoped handover/request FKs; positive version and ordinal; unique handover ordinal/request; status/result pairing; batch/status index",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Item visibility follows the protected initiating handover and never grants source or request access independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

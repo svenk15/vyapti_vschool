@@ -182,6 +182,23 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   expect(await db.coordinationRequest.count({where:{organizationId:scope.organizationId,schoolId:scope.schoolId,sourceId:attendance.id,kind:'MISSING_REGISTER',status:{notIn:['RESOLVED','WITHDRAWN']}}})).toBe(1);
  });
 
+ it('hands over eligible open work independently with exact replay and retained assignment history',async()=>{
+  const firstSource=await source(),secondSource=await source(),first=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:firstSource.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Initial accountable owner',key:commandKey()}),second=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:secondSource.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Initial accountable owner',key:commandKey()}),key=commandKey(),input={fromAccountId:worker.accountId,toAccountId:secondWorker.accountId,items:[{requestId:first.requestId,expectedVersion:first.version},{requestId:second.requestId,expectedVersion:second.version+1}],reason:'Transfer current operational responsibility.',key};
+  const receipt=await coordination.handover(creator,scope.organizationId,scope.schoolId,input);
+  expect(receipt).toMatchObject({state:'PARTIAL',counts:{total:2,transferred:1,failed:1,pending:0},replayed:false});
+  expect(receipt.items.map(item=>item.status)).toEqual(['TRANSFERRED','FAILED']);
+  expect(receipt.items[1]?.error?.code).toBe('REQUEST_CHANGED');
+  expect((await coordination.get(creator,scope.organizationId,scope.schoolId,first.requestId)).assignee?.accountId).toBe(secondWorker.accountId);
+  expect((await coordination.get(creator,scope.organizationId,scope.schoolId,second.requestId)).assignee?.accountId).toBe(worker.accountId);
+  const history=(await coordination.get(creator,scope.organizationId,scope.schoolId,first.requestId)).history;
+  expect(history.at(-1)).toMatchObject({type:'REASSIGNED',previousAssignee:{accountId:worker.accountId},assignee:{accountId:secondWorker.accountId},reason:'Transfer current operational responsibility.'});
+  expect(await coordination.handover(creator,scope.organizationId,scope.schoolId,input)).toMatchObject({id:receipt.id,replayed:true,counts:receipt.counts});
+  await expect(coordination.handover(creator,scope.organizationId,scope.schoolId,{...input,reason:'Changed handover reason.'})).rejects.toMatchObject({code:'IDEMPOTENCY_CONFLICT'});
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.assign'});
+  await expect(coordination.getHandover(creator,scope.organizationId,scope.schoolId,receipt.id)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.assign'});
+ });
+
  it('dispatches only the typed Coordination decision and protects an exact recovered result',async()=>{
   const attendance=await source(),created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Prepare typed decision evidence',key:commandKey()}),started=await coordination.start(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:created.version,reason:null,key:commandKey()}),submitted=await coordination.submit(worker,scope.organizationId,scope.schoolId,{requestId:created.requestId,expectedVersion:started.version,kind:'NO_CHANGE_NEEDED',revision:null,reason:'The authoritative register state needs no change.',key:commandKey()});
   const queue=await decisions.list(creator,scope.organizationId,scope.schoolId,{});expect(queue.items.some(item=>item.itemId===created.requestId&&item.owner==='COORDINATION_VERIFICATION')).toBe(true);

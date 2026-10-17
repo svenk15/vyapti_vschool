@@ -107,6 +107,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | CoordinationCommandReceipt | `vs_coordination_command_receipt` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationBatch | `vs_coordination_batch` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationBatchItem | `vs_coordination_batch_item` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
+| CoordinationHandover | `vs_coordination_handover` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
+| CoordinationHandoverItem | `vs_coordination_handover_item` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | Enrollment | `vs_students_enrollment` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |
 | SectionPlacement | `vs_students_section_placement` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |
 | Student | `vs_students_student` | students | MIGRATED | [students LLD](modules/students/DESIGN.md) |

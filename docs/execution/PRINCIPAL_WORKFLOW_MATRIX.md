@@ -29,7 +29,7 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-23 | Review staffing availability without private reasons | staff | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-24 | Approve temporary cover when delegated | staff | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-25 | Decide an assigned staff request | staff | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-26 | Hand over open work when leadership changes | staff | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-26 | Hand over open work when leadership changes | staff | 2 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | F04 provides bounded per-item Coordination transfer, exact recovery, retained assignment history and current successor eligibility; F02 must still provide the separate temporary Access delegation/revocation counterpart and prove urgent revoke independent of partial transfer. The approved source is a workflow-explorer dialog while production uses recipe W/R routes. |
 | LEA-27 | Work from a purpose-scoped decision inbox | decisions | 2 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | F03 supplies a typed current-authority inbox and the real Coordination verification adapter; other owner adapters plus the approved type/state/due filters, reference search and stable due/submitted sorting remain absent |
 | LEA-28 | Request information before deciding | decisions | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-29 | Approve, reject or return an assigned item | decisions | 2 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Coordination verify/return is routed through its guarded owner transaction with consequence review, version and stable intent; other owners and their source-defined action sets remain absent |
@@ -53,12 +53,12 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 12 ENGINEERING_COMPLETE, 7 PARTIAL, 27 NOT_STARTED. Human acceptance remains pending for all 46.
+Engineering: 12 ENGINEERING_COMPLETE, 8 PARTIAL, 26 NOT_STARTED. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. Principal completion F00 and the current-equivalent F01/WF-10 are engineering-complete. The production L/D/W/R mapping is recorded in `docs/execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md`.
 2. LEA-10 remains production-gated by Coordination retention/backup-deletion policy and TEN-03; these gates do not reduce its engineering status.
-3. D02–D19 are approved for synthetic-only implementation with no exceptions. F03 is engineering-complete; the next graph-eligible priority is F04, followed by F08 where its dependency is satisfied. Production authority and provider gates remain separate.
+3. D02–D19 are approved for synthetic-only implementation with no exceptions. F03 is engineering-complete; F04 has completed its typed-registry and bounded-handover sub-slices and next adds the safe 90-day event projection. F08 follows when F04 is engineering-complete. Production authority and provider gates remain separate.
 
 LEA-09/10/11/15 use the implemented Coordination owner. LEA-15 remains an independently authorized Attendance operation rather than a direct Principal mutation. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

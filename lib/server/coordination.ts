@@ -15,6 +15,8 @@ export const coordinationGateway={
  previewBatch:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.previewBatch(s.identity,s.organizationId,s.schoolId,input);},
  submitBatch:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.submitBatch(s.identity,s.organizationId,s.schoolId,input);},
  getBatch:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.getBatch(s.identity,s.organizationId,s.schoolId,id);},
+ handover:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.handover(s.identity,s.organizationId,s.schoolId,input);},
+ getHandover:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.getHandover(s.identity,s.organizationId,s.schoolId,id);},
  create:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.create(s.identity,s.organizationId,s.schoolId,input);},
  assign:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.assign(s.identity,s.organizationId,s.schoolId,input);},
  start:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.start(s.identity,s.organizationId,s.schoolId,input);},

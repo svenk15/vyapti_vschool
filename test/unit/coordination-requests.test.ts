@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {randomUUID} from 'node:crypto';
-import {assignInput,batchInput,createInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
+import {assignInput,batchInput,createInput,handoverInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
 import {createDecisionInboxUseCases,type DecisionOwnerAdapter} from '../../backend/modules/leadership/application/decisions';
 import type {CoordinationSourceAdapter} from '../../backend/modules/coordination/contracts/source-adapter';
 import {CoordinationSourceRegistry} from '../../backend/modules/coordination/infrastructure/source-registry';
@@ -28,6 +28,14 @@ describe('coordination request contract',()=>{
 
  it('normalizes an explicit bounded bulk selection through the single-request rules',()=>{
   const sourceIds=[randomUUID(),randomUUID()];expect(batchInput({sourceIds,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'  Fictional follow-up  ',dueLocal:null,assigneeAccountId:null,assignmentReason:null,key:key()})).toMatchObject({sourceIds,kind:'MISSING_REGISTER',note:'Fictional follow-up'});
+ });
+
+ it('binds one bounded handover to distinct owners and explicit request versions',()=>{
+  const fromAccountId=randomUUID(),toAccountId=randomUUID(),items=[{requestId:randomUUID(),expectedVersion:2},{requestId:randomUUID(),expectedVersion:4}];
+  expect(handoverInput({fromAccountId,toAccountId,items,reason:'  Leadership responsibility changed.  ',key:key()})).toEqual({fromAccountId,toAccountId,items,reason:'Leadership responsibility changed.',key:expect.any(String)});
+  expect(()=>handoverInput({fromAccountId,toAccountId:fromAccountId,items,reason:'No self transfer',key:key()})).toThrow('VALIDATION');
+  expect(()=>handoverInput({fromAccountId,toAccountId,items:[items[0],items[0]],reason:'Duplicate',key:key()})).toThrow('VALIDATION');
+  expect(()=>handoverInput({fromAccountId,toAccountId,items:Array.from({length:51},()=>({requestId:randomUUID(),expectedVersion:1})),reason:'Too many',key:key()})).toThrow('VALIDATION');
  });
 
  it('converts an unambiguous branch-local due time and rejects DST gaps and overlaps',()=>{
