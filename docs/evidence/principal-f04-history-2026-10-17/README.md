@@ -2,6 +2,8 @@
 
 Date: 17 October 2026. Human acceptance: **PENDING**.
 
+Verified product source: `d992a546cc2095e79bca8caf87c7ec0b2abf9a78`.
+
 ## Outcome
 
 The synthetic-only Principal workspace exposes `/leadership/history` only to a current `coordination.history` designation. It searches immutable Coordination events by exact follow-up reference, retained organization actor or an inclusive branch-local date range of at most 90 days. The projection omits notes, reasons, evidence narrative/revision, source identifiers/content and command data. A linked follow-up is opened through its own current authorization check.
