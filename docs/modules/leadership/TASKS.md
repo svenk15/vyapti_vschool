@@ -176,3 +176,10 @@ Engineering status: ENGINEERING_COMPLETE. This documentation/evidence checkpoint
 - [x] Add Principal inbox/detail delivery without granting Coordination management or Attendance mutation.
 - [x] Verify the real owner transaction, exact recovery and revoked-result protection in PostgreSQL and Playwright.
 - [x] Record F03 separately from the still-incomplete LEA-27–31 workflows.
+
+## LEA-27 — purpose-scoped decision inbox directory
+
+- [x] Define the registered-owner list query, exact reference, supported filters, deterministic ordering and query-bound pagination without generic approval persistence.
+- [x] Implement server-side Coordination predicates and expose only current owner-authorized decision summaries.
+- [x] Add recipe-L exact search, filter/sort drawers, safe URL state, filtered empty state and preserved detail navigation.
+- [x] Record current-source PostgreSQL, sequential desktop/mobile browser, build and direct-comparison evidence; then update the matrix. Human review remains PENDING.

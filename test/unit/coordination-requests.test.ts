@@ -72,7 +72,13 @@ describe('typed decision facade',()=>{
   const calls:string[]=[],adapter={owner:'COORDINATION_VERIFICATION',list:async()=>({items:[],nextCursor:null,timezone:'Asia/Kolkata'}),get:async()=>{calls.push('get');throw new Error('unexpected');},decide:async()=>{calls.push('decide');throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1},organizationId=randomUUID(),schoolId=randomUUID(),itemId=randomUUID();
   await expect(facade.get(identity,organizationId,schoolId,'UNKNOWN',itemId)).rejects.toMatchObject({code:'NOT_FOUND'});
   await expect(facade.decide(identity,organizationId,schoolId,'COORDINATION_VERIFICATION',itemId,{action:'RETURN',expectedVersion:1,reason:null,key:key()})).rejects.toMatchObject({code:'VALIDATION'});
-  expect(calls).toEqual([]);
+ expect(calls).toEqual([]);
+ });
+ it('normalizes only supported inbox query fields before owner dispatch',async()=>{
+  let seen:unknown;const adapter={owner:'COORDINATION_VERIFICATION',list:async(_actor,_organizationId,_schoolId,input)=>{seen=input;return {items:[],nextCursor:null,timezone:'Asia/Kolkata'};},get:async()=>{throw new Error('unexpected');},decide:async()=>{throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1};
+  const queue=await facade.list(identity,randomUUID(),randomUUID(),{reference:'  COORD-00000000-0000-4000-8000-000000000000  ',type:'ATTENDANCE_FOLLOW_UP',state:'READY',due:'NO_DUE_DATE',sort:'submitted',order:'desc',limit:'10'});
+  expect(seen).toMatchObject({reference:'COORD-00000000-0000-4000-8000-000000000000',type:'ATTENDANCE_FOLLOW_UP',state:'READY',due:'NO_DUE_DATE',sort:'submitted',order:'desc',limit:10});expect(queue.query).toMatchObject({sort:'submitted',order:'desc'});
+  await expect(facade.list(identity,randomUUID(),randomUUID(),{type:'UNKNOWN'})).rejects.toMatchObject({code:'VALIDATION'});await expect(facade.list(identity,randomUUID(),randomUUID(),{due:'TODAY'})).rejects.toMatchObject({code:'VALIDATION'});await expect(facade.list(identity,randomUUID(),randomUUID(),{sort:'title'})).rejects.toMatchObject({code:'VALIDATION'});
  });
 });
 

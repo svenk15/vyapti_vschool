@@ -546,7 +546,7 @@
       "decisions": [
         "D03"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-27.md",
       "kind": "workflow",
       "workflow": "LEA-27"

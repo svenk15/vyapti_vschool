@@ -3,7 +3,7 @@ import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPrev
 import {AccessError} from '../../access/contracts/index';
 import {assignInput,batchInput,batchPreviewInput,createInput,handoverInput,historyFindingInput,historyInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
 
-export type CoordinationListInput=Readonly<{status?:unknown;kind?:unknown;assignment?:unknown;cursor?:unknown;limit?:unknown}>;
+export type CoordinationListInput=Readonly<{status?:unknown;kind?:unknown;assignment?:unknown;requestId?:unknown;decisionType?:unknown;duePeriod?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}>;
 export interface CoordinationRepository {
  availability(actor:Identity,organizationId:string,schoolId:string):Promise<CoordinationAvailability>;
  list(actor:Identity,organizationId:string,schoolId:string,input:CoordinationListInput):Promise<CoordinationQueue>;
