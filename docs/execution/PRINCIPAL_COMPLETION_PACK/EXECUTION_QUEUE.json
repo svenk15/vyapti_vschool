@@ -247,10 +247,11 @@
       "decisions": [
         "D18"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Concrete facility/service owner, incident lifecycle and independent restoration evidence; Coordination/notice handoffs.",
       "demo": "Outage routed, restored and independently verified; notice acknowledgement remains unchanged.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "Synthetic Facilities reporting, assigned coordination, independent restoration verification, closure, exact-key recovery, typed Coordination handoff, separate Communication entry and unchanged acknowledgement evidence are verified. Production roster/publication policy and non-Facilities services remain unavailable."
     },
     {
       "id": "F17",
@@ -799,10 +800,11 @@
       "decisions": [
         "D18"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-44.md",
       "kind": "workflow",
-      "workflow": "LEA-44"
+      "workflow": "LEA-44",
+      "completedSlice": "Factual Facilities impact, explicit coordinator, immutable owner evidence, independent verification, typed follow-up, lost-response recovery and unchanged notice acknowledgement are verified in the production composition."
     },
     {
       "id": "WF-45",

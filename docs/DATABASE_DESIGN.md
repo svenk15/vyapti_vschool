@@ -105,6 +105,9 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SupportProcedure | `vs_support_procedure` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
 | SupportReferral | `vs_support_referral` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
 | SupportReferralEvent | `vs_support_referral_event` | support | MIGRATED | [support LLD](modules/support/DESIGN.md) |
+| FacilitiesCapabilityGrant | `vs_facilities_capability_grant` | facilities | MIGRATED | [facilities LLD](modules/facilities/DESIGN.md) |
+| FacilitiesIncident | `vs_facilities_incident` | facilities | MIGRATED | [facilities LLD](modules/facilities/DESIGN.md) |
+| FacilitiesIncidentEvent | `vs_facilities_incident_event` | facilities | MIGRATED | [facilities LLD](modules/facilities/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandProfile | `vs_branding_brand_profile` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
 | BrandRevision | `vs_branding_brand_revision` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |

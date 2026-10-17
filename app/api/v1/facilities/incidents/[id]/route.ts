@@ -1,0 +1,1 @@
+import {facilitiesItem} from '@/lib/server/facilities-http';export const GET=(request:Request,{params}:{params:Promise<{id:string}>})=>params.then(({id})=>facilitiesItem(request,id));export const POST=GET;

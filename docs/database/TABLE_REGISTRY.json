@@ -2126,7 +2126,17 @@
       "constraints": "Scoped Membership/Account FKs; unique scope/account; active lookup index; positive version.",
       "status": "MIGRATED",
       "design": "docs/modules/events/DESIGN.md",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified tenant scope plus the exact current meeting-manager designation; WITH CHECK binds both scope keys.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"events","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus the exact current meeting-manager designation; WITH CHECK binds both scope keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "EventsMeeting",
@@ -2137,7 +2147,17 @@
       "constraints": "Scoped School/Account FKs; state, duration, text, lifecycle and positive-version checks; manager/state/time indexes.",
       "status": "MIGRATED",
       "design": "docs/modules/events/DESIGN.md",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified tenant scope plus current meeting-manager or exact active participant authority; WITH CHECK binds both scope keys.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"events","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus current meeting-manager or exact active participant authority; WITH CHECK binds both scope keys.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "EventsMeetingParticipant",
@@ -2148,7 +2168,17 @@
       "constraints": "Scoped Meeting/Account plus kind-specific scoped source FKs; unique meeting/account; kind/provenance and response/attendance checks; participant inbox index.",
       "status": "MIGRATED",
       "design": "docs/modules/events/DESIGN.md",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified tenant scope plus current meeting-manager or exact participant provenance; removed/revoked participants are denied.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"events","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus current meeting-manager or exact participant provenance; removed/revoked participants are denied.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "EventsMeetingAction",
@@ -2159,7 +2189,17 @@
       "constraints": "Scoped Meeting/Account FKs; positive source version; meeting/due and owner/due indexes.",
       "status": "MIGRATED",
       "design": "docs/modules/events/DESIGN.md",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified tenant scope and exact current meeting action authority; Coordination reads through its typed adapter only.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"events","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope and exact current meeting action authority; Coordination reads through its typed adapter only.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "EventsMeetingEvent",
@@ -2170,7 +2210,17 @@
       "constraints": "Scoped Meeting/Account FKs; unique meeting/number; allowlisted type; immutable trigger.",
       "status": "MIGRATED",
       "design": "docs/modules/events/DESIGN.md",
-      "rls": {"classification":"BRANCH","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified tenant scope plus current meeting-manager or exact permitted participant history authority.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"events","closureGate":"TEN-03"}
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant scope plus current meeting-manager or exact permitted participant history authority.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "events",
+        "closureGate": "TEN-03"
+      }
     },
     {
       "model": "LearningAssignment",
@@ -3614,7 +3664,7 @@
       "responsibility": "Explicit resource or branch Support purpose grant.",
       "constraints": "Scoped membership/Student FKs; conditional capability/resource check; partial unique grants; active lookup index."
     },
-{
+    {
       "owner": "support",
       "status": "MIGRATED",
       "design": "docs/modules/support/DESIGN.md",
@@ -3635,7 +3685,7 @@
       "responsibility": "Minimal recorded urgent-procedure handoff evidence.",
       "constraints": "Scoped Procedure FK; status/version checks; recorder and responsible inbox indexes."
     },
-{
+    {
       "owner": "support",
       "status": "MIGRATED",
       "design": "docs/modules/support/DESIGN.md",
@@ -3656,7 +3706,7 @@
       "responsibility": "Versioned published school urgent-contact procedure.",
       "constraints": "Scoped School FK; unique version and current published row; status/version checks; current index."
     },
-{
+    {
       "owner": "support",
       "status": "MIGRATED",
       "design": "docs/modules/support/DESIGN.md",
@@ -3677,7 +3727,7 @@
       "responsibility": "Restricted specialist referral and safe handoff status.",
       "constraints": "Scoped Student FK; closed state/version checks; referrer and specialist inbox indexes."
     },
-{
+    {
       "owner": "support",
       "status": "MIGRATED",
       "design": "docs/modules/support/DESIGN.md",
@@ -3697,6 +3747,69 @@
       "fields": "id/org/school/referral/actor uuid; sequence/type/safe details/time",
       "responsibility": "Append-only privacy-minimized referral lifecycle evidence.",
       "constraints": "Scoped Referral FK; unique sequence; append-only trigger; history index."
+    },
+    {
+      "owner": "facilities",
+      "status": "MIGRATED",
+      "design": "docs/modules/facilities/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Facilities purpose and exact incident authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "facilities",
+        "closureGate": "TEN-03"
+      },
+      "model": "FacilitiesCapabilityGrant",
+      "table": "vs_facilities_capability_grant",
+      "fields": "id/org/school/membership/account/operator uuid; capability; grant/revoke/version",
+      "responsibility": "Explicit branch Facilities purpose grant.",
+      "constraints": "Scoped membership/account FKs; partial active capability uniqueness; active actor lookup."
+    },
+    {
+      "owner": "facilities",
+      "status": "MIGRATED",
+      "design": "docs/modules/facilities/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Facilities purpose and exact incident authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "facilities",
+        "closureGate": "TEN-03"
+      },
+      "model": "FacilitiesIncident",
+      "table": "vs_facilities_incident",
+      "fields": "id/org/school uuid; facility/period/impact; reporter/coordinator/proposer/verifier; state/version/timestamps",
+      "responsibility": "Facilities-owned factual service incident and restoration state.",
+      "constraints": "Scoped School/account FKs; interval/state/restoration/version checks; state and coordinator queues."
+    },
+    {
+      "owner": "facilities",
+      "status": "MIGRATED",
+      "design": "docs/modules/facilities/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live Facilities purpose and exact incident authorization; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "facilities",
+        "closureGate": "TEN-03"
+      },
+      "model": "FacilitiesIncidentEvent",
+      "table": "vs_facilities_incident_event",
+      "fields": "id/org/school/incident/actor uuid; sequence/transition/evidence/version/time",
+      "responsibility": "Append-only Facilities incident lifecycle evidence.",
+      "constraints": "Scoped Incident/account FKs; unique sequence; append-only trigger; history index."
     }
   ],
   "rlsPlan": {

@@ -1,0 +1,10 @@
+export const facilitiesCapabilities=['INCIDENT_REPORT','INCIDENT_COORDINATE','RESTORATION_VERIFY','INCIDENT_CLOSE'] as const;
+export type FacilitiesCapability=typeof facilitiesCapabilities[number];
+export type FacilitiesIncidentState='OPEN'|'INVESTIGATING'|'RESTORATION_PROPOSED'|'VERIFIED_RESTORED'|'CLOSED';
+export type FacilitiesActor=Readonly<{accountId:string;displayName:string}>;
+export type FacilitiesCandidate=FacilitiesActor&Readonly<{capabilities:readonly FacilitiesCapability[]}>;
+export type FacilitiesEvent=Readonly<{number:number;type:string;fromState:FacilitiesIncidentState|null;toState:FacilitiesIncidentState;evidence:string|null;actor:FacilitiesActor;occurredAt:string;incidentVersion:number}>;
+export type FacilitiesIncidentSummary=Readonly<{id:string;facility:string;affectedFrom:string;affectedTo:string;impact:string;state:FacilitiesIncidentState;version:number;coordinator:FacilitiesActor;reporter:FacilitiesActor;updatedAt:string;role:'REPORTER'|'COORDINATOR'|'VERIFIER'|'CLOSER'}>;
+export type FacilitiesIncidentDetail=FacilitiesIncidentSummary&Readonly<{timezone:string;restorationEvidence:string|null;restorationProposedBy:FacilitiesActor|null;restorationVerifiedBy:FacilitiesActor|null;verifiedAt:string|null;closedAt:string|null;history:readonly FacilitiesEvent[];can:{acknowledge:boolean;proposeRestoration:boolean;verifyRestoration:boolean;close:boolean;coordinate:boolean;prepareNotice:boolean}}>;
+export type FacilitiesCommandResult=Readonly<{incidentId:string;state:FacilitiesIncidentState;version:number;replayed:boolean}>;
+export type FacilitiesCommandStatus=Readonly<{state:'UNKNOWN'}|{state:'FOUND';result:FacilitiesCommandResult}>;

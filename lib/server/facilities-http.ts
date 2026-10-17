@@ -1,0 +1,12 @@
+import 'server-only';
+import {randomUUID} from 'node:crypto';
+import {AccessError} from '../../backend/modules/access/contracts';
+import {getIdentity} from './auth';
+import {facilitiesGateway} from './facilities';
+const headers={'Cache-Control':'private, no-store'};
+const failure=(error:unknown)=>{const code=error instanceof AccessError?error.code:'UNAVAILABLE',status=code==='UNAUTHENTICATED'?401:code==='FORBIDDEN'?403:code==='NOT_FOUND'?404:code==='VALIDATION'?422:code==='UNAVAILABLE'||code==='RELEASE_UNAVAILABLE'||code==='MODULE_NOT_LICENSED'||code==='MODULE_DISABLED'?503:409,messages:Record<string,string>={UNAUTHENTICATED:'Sign in to continue.',FORBIDDEN:'Your current Facilities purpose does not allow this action.',NOT_FOUND:'This service incident is unavailable in your current scope.',VALIDATION:'Check the incident details and affected period.',CONFLICT:'This action is not valid for the current incident state.',STALE_VERSION:'The incident changed. Reload and review its current evidence.',IDEMPOTENCY_CONFLICT:'This retry key belongs to different incident details.',UNAVAILABLE:'Facilities service is temporarily unavailable.'};return Response.json({code,message:messages[code]??messages.UNAVAILABLE,requestId:randomUUID(),retryable:status===503},{status,headers});};
+async function body(request:Request){if(Number(request.headers.get('content-length')??0)>16*1024)throw new AccessError('VALIDATION');return request.json();}
+export async function facilitiesCandidates(){try{return Response.json({items:await facilitiesGateway.candidates(await getIdentity())},{headers});}catch(error){return failure(error);}}
+export async function facilitiesCollection(request:Request){try{const identity=await getIdentity();if(request.method==='GET')return Response.json({items:await facilitiesGateway.list(identity)},{headers});return Response.json(await facilitiesGateway.report(identity,await body(request),randomUUID()),{status:201,headers});}catch(error){return failure(error);}}
+export async function facilitiesItem(request:Request,id:string){try{const identity=await getIdentity();if(request.method==='GET')return Response.json(await facilitiesGateway.get(identity,id),{headers});return Response.json(await facilitiesGateway.transition(identity,id,await body(request),randomUUID()),{headers});}catch(error){return failure(error);}}
+export async function facilitiesStatus(_request:Request,key:string){try{return Response.json(await facilitiesGateway.status(await getIdentity(),key),{headers});}catch(error){return failure(error);}}

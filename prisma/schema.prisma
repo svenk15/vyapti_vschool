@@ -3627,3 +3627,67 @@ model AssessmentsReportRevision {
   @@index([organizationId, schoolId, cycleId, status], map: "vs_assessments_report_cycle_status_idx")
   @@map("vs_assessments_report_revision")
 }
+
+model FacilitiesCapabilityGrant {
+  id                  String    @id(map: "vs_facilities_capability_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  capability          String    @db.VarChar(32)
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_facilities_capability_grant_scope_id_key")
+  @@index([organizationId, schoolId, accountId, capability, revokedAt], map: "vs_facilities_capability_grant_active_idx")
+  @@map("vs_facilities_capability_grant")
+}
+
+model FacilitiesIncident {
+  id                          String    @id(map: "vs_facilities_incident_pkey") @db.Uuid
+  organizationId              String    @map("organization_id") @db.Uuid
+  schoolId                    String    @map("school_id") @db.Uuid
+  facility                    String    @db.VarChar(120)
+  affectedFrom                DateTime  @map("affected_from") @db.Timestamptz(3)
+  affectedTo                  DateTime  @map("affected_to") @db.Timestamptz(3)
+  impact                      String    @db.VarChar(1000)
+  reporterAccountId           String    @map("reporter_account_id") @db.Uuid
+  coordinatorAccountId        String    @map("coordinator_account_id") @db.Uuid
+  state                       String    @db.VarChar(24)
+  restorationEvidence         String?   @map("restoration_evidence") @db.VarChar(1000)
+  restorationProposedById     String?   @map("restoration_proposed_by_id") @db.Uuid
+  restorationVerifiedById     String?   @map("restoration_verified_by_id") @db.Uuid
+  version                     Int
+  reportedAt                  DateTime  @map("reported_at") @db.Timestamptz(3)
+  investigationStartedAt      DateTime? @map("investigation_started_at") @db.Timestamptz(3)
+  restorationProposedAt       DateTime? @map("restoration_proposed_at") @db.Timestamptz(3)
+  restorationVerifiedAt       DateTime? @map("restoration_verified_at") @db.Timestamptz(3)
+  closedAt                    DateTime? @map("closed_at") @db.Timestamptz(3)
+  updatedAt                   DateTime  @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_facilities_incident_scope_id_key")
+  @@index([organizationId, schoolId, state, updatedAt(sort: Desc), id], map: "vs_facilities_incident_state_idx")
+  @@index([organizationId, schoolId, coordinatorAccountId, state, updatedAt(sort: Desc), id], map: "vs_facilities_incident_coordinator_idx")
+  @@map("vs_facilities_incident")
+}
+
+model FacilitiesIncidentEvent {
+  id              String   @id(map: "vs_facilities_incident_event_pkey") @db.Uuid
+  organizationId  String   @map("organization_id") @db.Uuid
+  schoolId        String   @map("school_id") @db.Uuid
+  incidentId      String   @map("incident_id") @db.Uuid
+  number          Int
+  type            String   @db.VarChar(32)
+  fromState       String?  @map("from_state") @db.VarChar(24)
+  toState         String   @map("to_state") @db.VarChar(24)
+  evidence        String?  @db.VarChar(1000)
+  actorAccountId  String   @map("actor_account_id") @db.Uuid
+  incidentVersion Int      @map("incident_version")
+  occurredAt      DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, incidentId, number], map: "vs_facilities_incident_event_number_key")
+  @@index([organizationId, schoolId, incidentId, occurredAt, id], map: "vs_facilities_incident_event_history_idx")
+  @@map("vs_facilities_incident_event")
+}
