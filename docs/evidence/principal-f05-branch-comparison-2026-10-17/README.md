@@ -2,6 +2,8 @@
 
 Status: engineering verification complete for the synthetic-only LEA-40 slice; human review pending; production disclosure and retention gates remain open.
 
+Implementation checkpoint: `0929ad8` (`Complete bounded Principal branch comparison`). The normal production build `6IdNEhQunU6fmFKvJvngh` is served at `http://127.0.0.1:3400`.
+
 ## Authority and data boundary
 
 - Decision authority: D06 in `docs/execution/PRINCIPAL_COMPLETION_PACK/02_PRODUCT_DECISIONS.md`.

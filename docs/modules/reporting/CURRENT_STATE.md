@@ -4,7 +4,7 @@ Last updated: 2026-10-17.
 
 ## F05 / LEA-40 bounded branch comparison — 17 October 2026
 
-Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY.
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. Implementation checkpoint `0929ad8`; production build `6IdNEhQunU6fmFKvJvngh`.
 
 Reporting now exposes `/leadership/reports/compare` for the D06 whole-branch retained-evidence comparison. An operator must enumerate every account/institution/target-branch `attendance-register-coverage.v1` grant; neither Principal role nor institution membership implies it. Every availability/read transaction rechecks the current Principal context, target branch status and the Attendance release/entitlement/activation chain. The query is bounded to 1–20 explicitly selected branches and 1–31 local dates. It selects the latest nonremoved whole-branch snapshot per branch/date, rejects subgroup and malformed payloads, shows source dates/UTC cutoffs/definition status, and excludes incompatible rows from the combined result. The combined rate is calculated from summed received and due counts, never from branch percentages. Revoked, disabled and otherwise withheld branches contribute no name, value or residual count.
 
