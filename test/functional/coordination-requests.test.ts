@@ -55,7 +55,7 @@ beforeAll(async()=>{
  const principal=await activeStaffFixture(db,scope,['PRINCIPAL']);creator=principal.identity;
  const second=await activeStaffFixture(db,scope,['SCHOOL_ADMIN']);secondWorker=second.identity;
  const withoutCoordination=await activeStaffFixture(db,scope,['SCHOOL_ADMIN']);undesignated=withoutCoordination.identity;
- for(const capability of ['coordination.create','coordination.assign','coordination.verify','coordination.manage'] as const)await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability});
+ for(const capability of ['coordination.create','coordination.assign','coordination.verify','coordination.manage','coordination.history'] as const)await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability});
  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:worker.accountId,capability:'coordination.work'});
  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:secondWorker.accountId,capability:'coordination.work'});
 });
@@ -197,6 +197,15 @@ describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
   await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.assign'});
   await expect(coordination.getHandover(creator,scope.organizationId,scope.schoolId,receipt.id)).rejects.toMatchObject({code:'FORBIDDEN'});
   await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.assign'});
+ });
+
+ it('projects bounded safe history without notes, evidence narrative or source contents',async()=>{
+  const attendance=await source(),created=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'Secret operational note must not project.',dueLocal:null,assigneeAccountId:worker.accountId,assignmentReason:'Secret assignment reason must not project.',key:commandKey()}),history=await coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'reference',value:created.requestId,fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25});
+  expect(history.items.map(item=>item.type)).toEqual(['ASSIGNED','CREATED']);
+  expect(JSON.stringify(history)).not.toContain('Secret operational note');expect(JSON.stringify(history)).not.toContain('Secret assignment reason');expect(JSON.stringify(history)).not.toContain(attendance.id);
+  expect((await coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'actor',value:worker.accountId,fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25})).items.some(item=>item.requestId===created.requestId)).toBe(true);
+  expect((await coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'actor',value:randomUUID(),fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25})).items).toEqual([]);
+  await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.history'});await expect(coordination.history(creator,scope.organizationId,scope.schoolId,{attribute:'date',value:null,fromDate:'2026-10-16',toDate:'2026-10-16',cursor:null,limit:25})).rejects.toMatchObject({code:'FORBIDDEN'});await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability:'coordination.history'});
  });
 
  it('dispatches only the typed Coordination decision and protects an exact recovered result',async()=>{

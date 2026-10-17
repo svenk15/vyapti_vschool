@@ -1,16 +1,18 @@
 # LEA-42 — Review decision and follow-up history
 
 ## Identity and readiness
-- Baseline: NOT_STARTED; human review PENDING.
+- Current engineering status: PARTIAL; safe search/sequence/source-open path verified, optional separate review-finding record absent; human review PENDING.
 - Owner: Coordination + decision owners + Reporting. This names responsibility, not proof that an owner module exists.
 - Product decisions: D04. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F04,F03. See execution queue.
 - Reference: approved Principal catalogue LEA-42; locate its actual explorer trigger in HTML, do not invent a hash route.
-- Proposed production route: `/leadership/history`. Reuse an existing equivalent route and preserve old links; this is not a claim it exists.
+- Production route: `/leadership/history`.
 - Production composition: recipe L from 04_PRODUCTION_UX.md.
 
 ## Target product definition
 Search safe owner event timelines by exact reference, eligible actor or bounded dates up to90days. Current purpose and scope rechecked; arbitrary platform audit browsing prohibited. Separate review finding routes through Coordination.
+
+Current implementation covers the read-only history projection and a link to the existing independently guarded Coordination request. It intentionally does not claim the optional separate review-finding record: no generic finding table or unsupported action was introduced.
 
 ## Lifecycle, data and ownership
 Append-only events, safe IDs/transitions/time/attribution only; inactive actor retains historical display reference. Finding never rewrites source event.

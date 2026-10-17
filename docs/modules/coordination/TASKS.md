@@ -25,11 +25,11 @@ Dependencies: F03 engineering-complete; D04 approved for synthetic-only implemen
 - [x] Define an explicit typed source/assignee-policy registry with duplicate, foreign and unsupported-pair denial.
 - [x] Move Attendance inspection, evidence and current assignee policy behind its registered owner adapter without changing existing behavior.
 - [x] Add the bounded, recoverable handover contract and preserve per-request assignment history.
-- [ ] Add the current-purpose 90-day safe event projection without exposing notes, tokens or restricted source contents.
-- [ ] Verify PostgreSQL replay/concurrency/revocation and focused Principal desktop/mobile journeys.
-- [ ] Extend synthetic seed/evidence and update F04 plus affected workflow accounting.
+- [x] Add the current-purpose 90-day safe event projection without exposing notes, tokens or restricted source contents.
+- [x] Verify PostgreSQL replay/concurrency/revocation and focused Principal desktop/mobile journeys.
+- [x] Extend synthetic seed/evidence and update F04 plus affected workflow accounting.
 
-Engineering status: IN_PROGRESS. No new source kind or Principal workflow is complete from the registry alone.
+Engineering status: ENGINEERING_COMPLETE for the F04 foundation. LEA-42 remains PARTIAL because its safe read/search/source-open path is complete while the optional separate review-finding record is not implemented by this slice. Human review remains PENDING.
 
 ## COORD-02 — LEA-10 bounded bulk Attendance follow-ups
 

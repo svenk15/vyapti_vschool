@@ -4,7 +4,7 @@ Source: docs(1).zip, inspected 17 October 2026. Live reconciliation at source `f
 
 ## Live reconciliation result
 
-The current matrix contains exactly 46 mutually exclusive rows: 11 ENGINEERING_COMPLETE, five PARTIAL and 30 NOT_STARTED. LEA-10 moved from the imported snapshot's NOT_STARTED state to ENGINEERING_COMPLETE through the verified COORD-02 implementation. F00 therefore treats F01 and WF-10 as satisfied current equivalents. No other workflow status was advanced and human review remains PENDING for all 46.
+The authoritative current matrix contains exactly 46 mutually exclusive rows: 12 ENGINEERING_COMPLETE, nine PARTIAL and 25 NOT_STARTED. This baseline document records the imported reconciliation; `docs/execution/PRINCIPAL_WORKFLOW_MATRIX.md` records later verified advances, including F18, F03 and F04. Human review remains PENDING for all 46.
 
 ## Important reconciliations
 
@@ -60,7 +60,7 @@ The current matrix contains exactly 46 mutually exclusive rows: 11 ENGINEERING_C
 | LEA-39 | Drill into a metric and export permitted evidence | ENGINEERING_COMPLETE | Preserve; regression and visual acceptance only |
 | LEA-40 | Compare branches responsibly | NOT_STARTED | [Definition](workflows/LEA-40.md) |
 | LEA-41 | Prepare a leadership review brief | NOT_STARTED | [Definition](workflows/LEA-41.md) |
-| LEA-42 | Review decision and follow-up history | NOT_STARTED | [Definition](workflows/LEA-42.md) |
+| LEA-42 | Review decision and follow-up history | PARTIAL in live repository | Safe F04 search/sequence/source-open path verified; optional separate review-finding record remains absent; [Definition](workflows/LEA-42.md) |
 | LEA-43 | Review financial exceptions under a separate grant | NOT_STARTED | [Definition](workflows/LEA-43.md) |
 | LEA-44 | Coordinate a school service interruption | NOT_STARTED | [Definition](workflows/LEA-44.md) |
 | LEA-45 | Review a source-linked leadership draft | NOT_STARTED | [Definition](workflows/LEA-45.md) |

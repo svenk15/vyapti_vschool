@@ -45,7 +45,7 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-39 | Drill into a metric and export permitted evidence | reports | 1 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Operator-designated, exact-definition exports are verified for every currently supported Principal aggregate: Attendance coverage, Learning assignment completion/feedback turnaround, Timetable exceptions and Communication notice coverage. Unsupported future owner metrics are not implied. |
 | LEA-40 | Compare branches responsibly | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-41 | Prepare a leadership review brief | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-42 | Review decision and follow-up history | reports | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
+| LEA-42 | Review decision and follow-up history | reports | 2 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | F04 supplies a separately designated, branch-scoped ≤90-day safe Coordination event search by exact reference/retained organization actor/date, append-only sequence and independently authorized source link. Protected narrative/source/command data is omitted. The optional separate review-finding record is not implemented, so no finding action is presented. The explorer dialog maps to the production recipe-L route. |
 | LEA-43 | Review financial exceptions under a separate grant | services | 5 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-44 | Coordinate a school service interruption | services | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-45 | Review a source-linked leadership draft | assistant | 7 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,12 +53,12 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 12 ENGINEERING_COMPLETE, 8 PARTIAL, 26 NOT_STARTED. Human acceptance remains pending for all 46.
+Engineering: 12 ENGINEERING_COMPLETE, 9 PARTIAL, 25 NOT_STARTED. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. Principal completion F00 and the current-equivalent F01/WF-10 are engineering-complete. The production L/D/W/R mapping is recorded in `docs/execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md`.
 2. LEA-10 remains production-gated by Coordination retention/backup-deletion policy and TEN-03; these gates do not reduce its engineering status.
-3. D02–D19 are approved for synthetic-only implementation with no exceptions. F03 is engineering-complete; F04 has completed its typed-registry and bounded-handover sub-slices and next adds the safe 90-day event projection. F08 follows when F04 is engineering-complete. Production authority and provider gates remain separate.
+3. D02–D19 are approved for synthetic-only implementation with no exceptions. F03 and F04 are engineering-complete; LEA-42 remains partial only for its optional separate review-finding record. F08 is the next eligible foundation under D10. Production authority and provider gates remain separate.
 
 LEA-09/10/11/15 use the implemented Coordination owner. LEA-15 remains an independently authorized Attendance operation rather than a direct Principal mutation. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

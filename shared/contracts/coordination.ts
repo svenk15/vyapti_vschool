@@ -1,4 +1,4 @@
-export const coordinationCapabilities=['coordination.create','coordination.assign','coordination.work','coordination.verify','coordination.manage'] as const;
+export const coordinationCapabilities=['coordination.create','coordination.assign','coordination.work','coordination.verify','coordination.manage','coordination.history'] as const;
 export type CoordinationCapability=typeof coordinationCapabilities[number];
 export const coordinationStatuses=['OPEN','IN_PROGRESS','AWAITING_VERIFICATION','RESOLVED','WITHDRAWN'] as const;
 export type CoordinationStatus=typeof coordinationStatuses[number];
@@ -23,3 +23,6 @@ export type CoordinationBatchReceipt=Readonly<{id:string;state:'PROCESSING'|'COM
 export type CoordinationHandoverInput=Readonly<{fromAccountId:string;toAccountId:string;items:readonly Readonly<{requestId:string;expectedVersion:number}>[];reason:string;key:string}>;
 export type CoordinationHandoverItemResult=Readonly<{ordinal:number;requestId:string;expectedVersion:number;status:'PENDING'|'TRANSFERRED'|'FAILED';resultVersion:number|null;error:{code:string;message:string}|null}>;
 export type CoordinationHandoverReceipt=Readonly<{id:string;state:'PROCESSING'|'COMPLETED'|'PARTIAL';input:CoordinationHandoverInput;from:CoordinationActorSummary;to:CoordinationActorSummary;counts:{total:number;transferred:number;failed:number;pending:number};items:readonly CoordinationHandoverItemResult[];createdAt:string;updatedAt:string;completedAt:string|null;replayed:boolean}>;
+export type CoordinationHistoryAttribute='reference'|'actor'|'date';
+export type CoordinationHistoryItem=Readonly<{eventId:string;requestId:string;number:number;type:string;fromStatus:CoordinationStatus|null;toStatus:CoordinationStatus|null;actor:CoordinationActorSummary;previousAssignee:CoordinationActorSummary|null;assignee:CoordinationActorSummary|null;occurredAt:string}>;
+export type CoordinationHistory=Readonly<{items:readonly CoordinationHistoryItem[];nextCursor:string|null;timezone:string;query:{attribute:CoordinationHistoryAttribute;value:string|null;fromDate:string;toDate:string}}>;

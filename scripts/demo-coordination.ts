@@ -47,7 +47,7 @@ async function main(){
   if(!roles.includes('SCHOOL_ADMIN'))await access.institutionOperation({kind:'SetBranchMembership',organizationId:people.organizationId,schoolId:people.schoolId,accountId:worker.accountId,status:'ACTIVE',roles:[...roles,'SCHOOL_ADMIN'].sort() as RoleCode[],expectedVersion:membership.version,key:demo.roleKey,reason:'Authorize fictional Attendance coordination worker'},local.operator);
 
   stage='capability-grants';
-  for(const [accountId,capabilities] of [[principal.accountId,['coordination.create','coordination.assign','coordination.verify','coordination.manage']],[worker.accountId,['coordination.work']]] as const){
+  for(const [accountId,capabilities] of [[principal.accountId,['coordination.create','coordination.assign','coordination.verify','coordination.manage','coordination.history']],[worker.accountId,['coordination.work']]] as const){
    for(const capability of capabilities){
     if(!await db.coordinationCapabilityGrant.findFirst({where:{organizationId:people.organizationId,schoolId:people.schoolId,accountId,capability,revokedAt:null}}))await coordination.grant(local.operator,{organizationId:people.organizationId,schoolId:people.schoolId,accountId,capability});
    }
@@ -133,7 +133,7 @@ async function main(){
   demo.sourceDate=sessions[0].schoolDate.toISOString().slice(0,10);
   mkdirSync(directory,{recursive:true,mode:0o700});
   writeFileSync(path,`${JSON.stringify({...demo,organizationId:people.organizationId,schoolId:people.schoolId,principalEmail:people.adminEmail,workerEmail:people.teacherEmail},null,2)}\n`,{mode:0o600});
-  console.log(`Prepared or preserved Coordination lifecycle, LEA-10 batch and F03 decision-inbox examples. Private scenario: ${path}`);
+  console.log(`Prepared or preserved Coordination lifecycle, LEA-10 batch, F03 decision-inbox and F04 safe-history examples. Private scenario: ${path}`);
  }catch(error){
   throw new Error(`${stage.toUpperCase()}_${error instanceof Error&&/^[A-Z0-9_]+$/.test(error.message)?error.message:'LOCAL_DEMO_ERROR'}`);
  }finally{

@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {randomUUID} from 'node:crypto';
-import {assignInput,batchInput,createInput,handoverInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
+import {assignInput,batchInput,createInput,handoverInput,historyInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
 import {createDecisionInboxUseCases,type DecisionOwnerAdapter} from '../../backend/modules/leadership/application/decisions';
 import type {CoordinationSourceAdapter} from '../../backend/modules/coordination/contracts/source-adapter';
 import {CoordinationSourceRegistry} from '../../backend/modules/coordination/infrastructure/source-registry';
@@ -36,6 +36,14 @@ describe('coordination request contract',()=>{
   expect(()=>handoverInput({fromAccountId,toAccountId:fromAccountId,items,reason:'No self transfer',key:key()})).toThrow('VALIDATION');
   expect(()=>handoverInput({fromAccountId,toAccountId,items:[items[0],items[0]],reason:'Duplicate',key:key()})).toThrow('VALIDATION');
   expect(()=>handoverInput({fromAccountId,toAccountId,items:Array.from({length:51},()=>({requestId:randomUUID(),expectedVersion:1})),reason:'Too many',key:key()})).toThrow('VALIDATION');
+ });
+
+ it('accepts only an exact bounded safe-history search',()=>{
+  const requestId=randomUUID();expect(historyInput({attribute:'reference',value:requestId,fromDate:'2026-07-19',toDate:'2026-10-16',cursor:null,limit:50})).toMatchObject({attribute:'reference',value:requestId,limit:50});
+  expect(historyInput({attribute:'date',value:'ignored',fromDate:'2026-10-01',toDate:'2026-10-16'})).toMatchObject({attribute:'date',value:null,limit:25});
+  expect(()=>historyInput({attribute:'date',value:null,fromDate:'2026-07-18',toDate:'2026-10-16'})).toThrow('VALIDATION');
+  expect(()=>historyInput({attribute:'actor',value:'not-an-id',fromDate:'2026-10-01',toDate:'2026-10-16'})).toThrow('VALIDATION');
+  expect(()=>historyInput({attribute:'date',value:null,fromDate:'2026-10-17',toDate:'2026-10-16'})).toThrow('VALIDATION');
  });
 
  it('converts an unambiguous branch-local due time and rejects DST gaps and overlaps',()=>{

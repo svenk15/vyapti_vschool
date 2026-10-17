@@ -66,9 +66,9 @@
       "decisions": [
         "D04"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Typed source/evidence registration, academic-assignee policy seam, bounded handover and event projections.",
-      "demo": "Existing Attendance follow-up remains unchanged; foreign source kind denied; handover preserves history.",
+      "demo": "Existing Attendance follow-up remains unchanged; foreign source kind denied; bounded handover preserves assignment history; safe 90-day event search omits protected content and reauthorizes linked sources.",
       "kind": "foundation"
     },
     {
@@ -745,7 +745,7 @@
       "decisions": [
         "D04"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "definition": "workflows/LEA-42.md",
       "kind": "workflow",
       "workflow": "LEA-42"

@@ -25,6 +25,14 @@ The application first creates one durable handover intent keyed by organization,
 
 The Principal route `/leadership/handover` lists only open assigned requests the current actor can manage, allows one outgoing owner and eligible successor, reviews explicit items and consequences, and confirms once. The receipt reports transferred and failed items independently and links only to Coordination requests still authorized at render time. Unknown outcome keeps the exact key/payload for status recovery. Revocation blocks both resume and receipt disclosure. In-flow edits are memory-only; no durable draft exists.
 
+## F04 safe Coordination history projection
+
+`coordination.history` is a separate trusted-operator designation. It grants only the safe Coordination event projection and is not included in request-manager capabilities. It does not permit request content, notes, evidence narrative, source contents, commands or mutation. Every query rechecks the active account/token, Organization, School, branch membership and exact current grant. Revocation denies the next query. Opening a linked request or owner source uses that route's own current authorization; a safe historical reference never becomes source authority.
+
+The query accepts one allowlisted attribute: exact Coordination request UUID, exact eligible organization account UUID, or date. Every query also requires inclusive branch-local `fromDate` and `toDate`, each `YYYY-MM-DD`, with a valid non-reversed span of at most 90 calendar days. Actor search first resolves the account through a retained organization Person binding, School membership or institution grant; an unknown or foreign candidate returns a safe empty result. This permits attribution searches after access is revoked without granting the historical actor any current access. Date conversion uses the branch timezone and an exclusive next-day upper bound. Results order by `occurred_at DESC, number DESC, id DESC`, use an opaque cursor containing only that safe position, and allow 1–50 rows.
+
+Each row contains request ID, immutable event number/type, safe from/to states, historical actor display reference, optional previous/current assignee display references and occurrence timestamp. It explicitly omits reason, note, evidence kind/revision, command key/hash/result, Attendance session identity and all source content. Historical attribution remains when an account is inactive because names resolve from the retained verified organization binding. No new persistence is required; the read uses `vs_coordination_request_event` with the existing scope/request/time index. A forward migration extends only the capability CHECK to `coordination.history`; migration history is otherwise unchanged.
+
 ## F03 typed decision-owner adapter
 
 Approved decision D03 does not create a universal approval aggregate. Leadership owns only a transport-neutral inbox facade and an explicit registry of typed owner adapters. The first registered adapter is `COORDINATION_VERIFICATION`; it projects Coordination requests in `AWAITING_VERIFICATION` only when the current actor has `coordination.verify`, is not the resolution proposer and still passes the existing Attendance evidence guard. Its owner-defined actions are `VERIFY` and `RETURN`. Unsupported operations, including information requests and recusal, are absent rather than rendered as disabled generic controls.
@@ -62,10 +70,11 @@ Capabilities are independent operator-designated branch grants:
 | `coordination.work` | Read currently assigned work, start it and submit a resolution claim |
 | `coordination.verify` | Verify or return another account's proposed resolution |
 | `coordination.manage` | Withdraw/reopen and read managed requests |
+| `coordination.history` | Search the bounded safe event projection only |
 
 No fixed role receives these capabilities automatically. The existing verified operator boundary provisions/revokes the grants. Every protected operation rechecks current account/token, active Organization/School/membership, exact grant, Attendance release/entitlement/activation/dependencies and source scope. Managers also need an existing Attendance read capability appropriate to their role. Assignment requires an active branch membership, `coordination.work`, and current source-module authority: a missing-register assignee needs school Attendance read; a setup-review assignee needs the existing Attendance lifecycle capability applicable to the current session state. Assignment grants no Attendance access. Revocation or reassignment immediately removes assignment-derived Coordination visibility.
 
-Currently authorized request managers may read all requests in their branch; an eligible current assignee may read only their assigned requests. Parent and Student projections do not exist. Direct IDs, cursor values, evidence references and branch identifiers are candidates only and are always re-scoped on the server.
+Currently authorized request managers may read all requests in their branch; an eligible current assignee may read only their assigned requests. `coordination.history` is not a request-manager grant. Parent and Student projections do not exist. Direct IDs, cursor values, evidence references and branch identifiers are candidates only and are always re-scoped on the server.
 
 ## Attendance evidence port
 
@@ -91,7 +100,7 @@ All physical names use the Coordination owner prefix and snake_case columns.
 
 ### `vs_coordination_capability_grant`
 
-`id`, `organization_id`, `school_id`, `membership_id`, `account_id`, `capability`, `granted_by_operator_id`, `granted_at`, nullable `revoked_at`, `version`. Unique scope/account/capability; active lookup index. Capability CHECK limits the five values above. Scoped membership/account foreign keys prevent cross-branch grants.
+`id`, `organization_id`, `school_id`, `membership_id`, `account_id`, `capability`, `granted_by_operator_id`, `granted_at`, nullable `revoked_at`, `version`. Unique scope/account/capability; active lookup index. Capability CHECK limits the six values above. Scoped membership/account foreign keys prevent cross-branch grants.
 
 ### `vs_coordination_request`
 
