@@ -591,7 +591,7 @@
       "decisions": [
         "D03"
       ],
-      "status": "PLANNED",
+      "status": "COMPLETE",
       "definition": "workflows/LEA-30.md",
       "kind": "workflow",
       "workflow": "LEA-30"

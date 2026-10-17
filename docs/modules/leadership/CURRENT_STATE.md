@@ -1,5 +1,11 @@
 # Principal leadership current state
 
+## 17 October 2026 — LEA-30 owner recusal completed
+
+LEA-30 is ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY at source `1b90a484dc89ffd562fef2b8ca948180f830798f`. Leadership registers recusal only on owners that implement it. Coordination supplies live reviewer candidates, stages Evidence → Conflict and route → Receipt, retains in-flow values, uses a stable owner key after response loss and ends the original reviewer's access after the final owner mutation. The selected reviewer receives no grant; they must retain pre-existing current owner/source authority. An unassigned recusal exposes only reference, version, recusal time and eligible reviewer names to a current institution steward, never the protected body or note.
+
+The 46-row matrix now records 31 ENGINEERING_COMPLETE, one PARTIAL (LEA-32) and 14 NOT_STARTED. LEA-27 through LEA-31 explicitly cover the sole currently registered owner, Coordination; future owner registrations require their own typed list/detail/information/decision/recusal/status evidence. Focused verification passed 216/216 repository unit tests, 18/18 real-PostgreSQL Coordination tests, and sequential one-worker 2/2 desktop plus 2/2 mobile Playwright checks. Development and test both have 90 migrations. Evidence: [principal-lea-30-recusal-2026-10-17](../../evidence/principal-lea-30-recusal-2026-10-17/README.md). Human review and all production gates remain PENDING.
+
 ## 17 October 2026 — LEA-28 typed owner information request completed
 
 Leadership now dispatches a bounded request-information command only through the selected registered owner adapter. For Coordination, the staged Principal composition previews the owner-resolved proposer and question, preserves the stable owner key after a lost response, labels the committed result as waiting rather than approved/rejected, and links to the owning counterpart. An OPEN owner question removes decision actions; an ANSWERED projection displays the refreshed evidence and requires a new expected-version confirmation. Leadership stores no generic question, contact, message, decision or receipt.

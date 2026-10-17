@@ -1,5 +1,11 @@
 # Coordination current state
 
+## 17 October 2026 — COORD-06 / LEA-30 recusal and independent route verified
+
+The registered Coordination decision owner now supports D03 conflict recusal without adding generic approval authority. Migration `20261018170000_coordination_decision_recusal` adds the optional current reviewer and immutable scoped recusal row. The owner transaction locks and reauthorizes the request, validates a pre-authorized independent reviewer, advances version, stores the optional protected note only in owner evidence, writes safe event/audit/receipt metadata and denies the recused actor from detail, decision, information and recovery paths. Exact replay is available only under current branch capability; changed input conflicts.
+
+When no eligible reviewer is selected, a current institution administrator sees only minimal unassigned routing metadata. Steward routing rechecks the selected reviewer's live account, membership, explicit `coordination.verify`, source access and separation; it grants nothing, uses expected version and exact receipt replay, and denies a recused steward or revoked institution authority. Focused unit passed 14/14, real PostgreSQL passed 18/18, the full repository unit checkpoint passed 216/216, and sequential one-worker Chromium/mobile journeys passed 2/2 each. Both databases hold 90 migrations. Source: `1b90a484dc89ffd562fef2b8ca948180f830798f`; evidence: [LEA-30](../../evidence/principal-lea-30-recusal-2026-10-17/README.md). Human review, retention, TEN-03, font portability, native accessibility and production enablement remain PENDING.
+
 ## 17 October 2026 — COORD-07 / LEA-28 information request verified
 
 The registered Coordination decision owner now supports the approved D03/D08 information-request lifecycle. An independent current reviewer asks one bounded question of the current eligible resolution proposer; the owner records one OPEN child, advances request evidence and removes verify/return actions while waiting. The proposer answers through the assigned Coordination screen under current `coordination.work` and registered-source eligibility. The response advances owner evidence again, so the reviewer must load and confirm a fresh version. Owner transitions cancel unanswered questions; stale/former/revoked responses are denied.
