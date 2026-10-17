@@ -23,3 +23,10 @@ export type AssessmentCycleResult=Readonly<{command:'CreateAssessmentCyclePlan';
 export type AssessmentFreezeResult=Readonly<{command:'FreezeAssessmentCohort';cycleId:string;version:number;state:'OPEN';cohortCount:number;replayed:boolean}>;
 export type AssessmentPlanningResult=AssessmentScaleResult|AssessmentCycleResult|AssessmentFreezeResult;
 export type AssessmentPlanningCommandStatus=Readonly<{state:'UNKNOWN'}>|Readonly<{state:'FOUND';result:AssessmentPlanningResult}>;
+
+export type AssessmentMarkWorkspace=Readonly<{
+ definitionVersion:'assessment-mark-entry.v1';asOf:string;timezone:string;
+ assignments:readonly Readonly<{cycleId:string;cycleName:string;cycleCode:string;cycleState:'OPEN'|'MARKING';cycleVersion:number;planItemId:string;subjectName:string;sectionName:string;maximumScaled:number;scaleMinimumScaled:number;scalePrecision:number;scaleName:string;pupils:readonly Readonly<{cohortMemberId:string;studentId:string;displayName:string;admissionNumber:string;state:AssessmentOutcomeState|null;scoreScaled:number|null;outcomeVersion:number}>[]}>[];
+}>;
+export type AssessmentMarkResult=Readonly<{command:'SaveAssessmentMarkRevision';cycleId:string;planItemId:string;cohortMemberId:string;outcomeId:string;state:AssessmentOutcomeState;revision:number;version:number;replayed:boolean}>;
+export type AssessmentMarkCommandStatus=Readonly<{state:'UNKNOWN'}>|Readonly<{state:'FOUND';result:AssessmentMarkResult}>;
