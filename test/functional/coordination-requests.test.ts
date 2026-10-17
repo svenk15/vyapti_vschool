@@ -7,6 +7,7 @@ import {createAcademicServices} from '../../backend/composition/academics';
 import {createCoordinationServices} from '../../backend/composition/coordination';
 import {createDecisionInboxServices} from '../../backend/composition/decisions';
 import {createTenancyServices} from '../../backend/composition/tenancy';
+import {createReportingServices} from '../../backend/composition/reporting';
 import {activeStaffFixture,schoolInput} from '../fixtures/access-management';
 
 const url=process.env.TEST_DATABASE_URL??'';
@@ -18,6 +19,7 @@ const academics=createAcademicServices({databaseUrl:url,releasedModules:['academ
 const db=new PrismaClient({adapter:new PrismaPg({connectionString:url}),log:[]});
 const now=new Date('2026-10-16T12:30:00.000Z');
 const coordination=createCoordinationServices({databaseUrl:url,releasedModules:released,mode:'synthetic',now:()=>now});
+const reporting=createReportingServices({databaseUrl:url,releasedModules:released,snapshotMode:'synthetic',now:()=>now});
 const decisions=createDecisionInboxServices({coordination});
 const operator={operatorId:randomUUID(),verified:true as const};
 const reason='Synthetic Coordination integration';
@@ -60,9 +62,22 @@ beforeAll(async()=>{
  await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:secondWorker.accountId,capability:'coordination.work'});
 });
 
-afterAll(async()=>{await coordination.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
+afterAll(async()=>{await reporting.disconnect();await coordination.disconnect();await academics.disconnect();await tenancy.disconnect();await access.disconnect();await db.$disconnect();});
 
 describe('Coordination Attendance follow-ups in PostgreSQL',()=>{
+ it('links weekly review actions without mutating their owner lifecycle',async()=>{
+  const attendance=await source(),request=await coordination.create(creator,scope.organizationId,scope.schoolId,{sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'Fictional weekly review source note.',dueLocal:'2026-10-16T19:00',key:commandKey()});
+  await reporting.grantLeadershipComparison(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId});
+  await reporting.grantBriefCapability(operator,{organizationId:scope.organizationId,accountId:creator.accountId,capability:'GENERATE'});await reporting.grantBriefCapability(operator,{organizationId:scope.organizationId,accountId:creator.accountId,capability:'SHARE'});
+  const snapshot=await db.reportingSnapshot.create({data:{id:randomUUID(),organizationId:scope.organizationId,schoolId:scope.schoolId,actorAccountId:creator.accountId,reportType:'attendance-register-coverage.v1',definitionVersion:'register-coverage.v1',query:{date:'2026-10-16'},schoolDate:new Date('2026-10-16T00:00:00.000Z'),sourceAsOf:now,capturedAt:now,payload:{asOf:now.toISOString(),schoolDate:'2026-10-16',timezone:'Asia/Kolkata',definitionVersion:'register-coverage.v1',duePolicy:'SESSION_END_NO_GRACE',counts:{scheduled:1,due:1,received:0,awaiting:1,notDue:0,cancelled:0},query:{classId:null,status:null,teacherId:null,sort:'due',order:'asc'},filters:{classes:[],teachers:[]},awaiting:{items:[],total:1,nextCursor:null}},payloadHash:'c'.repeat(64),rowCount:1,idempotencyKey:randomUUID(),inputHash:'d'.repeat(64),version:1}}),eventCount=await db.coordinationRequestEvent.count({where:{requestId:request.requestId}}),key=randomUUID(),input={kind:'WEEKLY_REVIEW' as const,title:'Weekly school review',purpose:'Review retained evidence and owned follow-ups',interpretation:'One register follow-up remains open.',periodStart:'2026-10-10',periodEnd:'2026-10-16',timezone:'Asia/Kolkata',snapshotIds:[snapshot.id],actionRequestIds:[request.requestId],recipientAccountIds:[creator.accountId],key};
+  const created=await reporting.createBrief(creator,scope.organizationId,scope.schoolId,input);expect(await reporting.createBrief(creator,scope.organizationId,scope.schoolId,input)).toMatchObject({...created,replayed:true});
+  const finalized=await reporting.finalizeBrief(creator,scope.organizationId,scope.schoolId,created.briefId,{expectedVersion:created.version,key:randomUUID()}),detail=await reporting.getBrief(creator,scope.organizationId,scope.schoolId,created.briefId);
+  expect(finalized.state).toBe('FINALIZED');expect(detail).toMatchObject({kind:'WEEKLY_REVIEW',periodStart:'2026-10-10',periodEnd:'2026-10-16',actions:[{requestId:request.requestId,status:'OPEN'}]});expect(await db.coordinationRequestEvent.count({where:{requestId:request.requestId}})).toBe(eventCount);expect(await db.reportingBriefAction.count({where:{briefId:created.briefId,requestId:request.requestId}})).toBe(1);
+  for(const capability of ['coordination.create','coordination.assign','coordination.verify','coordination.manage'] as const)await coordination.revoke(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability});
+  await expect(reporting.getBrief(creator,scope.organizationId,scope.schoolId,created.briefId)).rejects.toMatchObject({code:'FORBIDDEN'});
+  for(const capability of ['coordination.create','coordination.assign','coordination.verify','coordination.manage'] as const)await coordination.grant(operator,{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:creator.accountId,capability});
+ });
+
  it('enforces designation, active uniqueness, scope and exact idempotent creation',async()=>{
   const attendance=await source(),key=commandKey(),input={sessionId:attendance.id,kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'Operational note unique to audit exclusion 72ec.',dueLocal:'2026-10-16T19:00',key} as const;
   const created=await coordination.create(creator,scope.organizationId,scope.schoolId,input);

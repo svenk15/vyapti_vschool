@@ -92,6 +92,20 @@ Engineering status: the approved LEA-06 current, unavailable and retained-last-k
 
 Engineering status: F05, LEA-40 and LEA-41 are ENGINEERING_COMPLETE for approved synthetic-only scope with direct reference/application comparison. Human review PENDING. Real-data retention/disclosure, TEN-03, font portability and native accessibility remain release gates.
 
+## WF-07 / LEA-07 — weekly leadership review
+
+- [x] Add the immutable weekly-review kind, bounded period and append-only Coordination action-reference contract through a forward Path A migration.
+- [x] Publish the narrow Coordination review projection and recheck typed owner/source access for author and every recipient.
+- [x] Extend the existing brief revision/save/finalize/share/read boundary without changing Coordination lifecycle state.
+- [x] Implement `/leadership/reviews/new` recipe-W composition and live carried-action detail with empty, unavailable, changed-evidence and unknown-outcome states.
+- [x] Extend non-destructive fictional seed data with a review containing open, overdue, evidence-ready and verified-closed actions.
+- [x] Verify normalization, PostgreSQL scope/replay/concurrency/immutability, desktop/mobile browser journey and direct reference comparison.
+- [x] Update matrix, evidence and current state; human review remains PENDING and synthetic-only gates remain active.
+
+Design readiness: complete under D04/D06. This task uses existing Coordination requests only; it does not authorize generic tasks, new owner lifecycles, durable UI drafts or automatic action publication.
+
+Engineering status: LEA-07 is ENGINEERING_COMPLETE for approved synthetic-only scope with direct reference/application comparison. Human review PENDING. Real-data retention/disclosure, TEN-03, font portability and native accessibility remain release gates.
+
 ## Experience overlay consumption
 
 EX-12 adopts the existing attendance overview, server-filtered detail and authorized CSV export. Preserve owner denominator/as-of semantics, formula-safe export and ExportRun audit; never compute school totals from one cursor page or export rendered DOM rows.

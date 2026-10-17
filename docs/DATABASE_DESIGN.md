@@ -112,6 +112,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | ReportingBriefRevision | `vs_reporting_brief_revision` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingBriefSection | `vs_reporting_brief_section` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingBriefRecipient | `vs_reporting_brief_recipient` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingBriefAction | `vs_reporting_brief_action` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingBriefReceipt | `vs_reporting_brief_receipt` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | CoordinationCapabilityGrant | `vs_coordination_capability_grant` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationRequest | `vs_coordination_request` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |

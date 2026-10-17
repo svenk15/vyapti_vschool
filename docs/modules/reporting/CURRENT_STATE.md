@@ -2,6 +2,18 @@
 
 Last updated: 2026-10-17.
 
+## WF-07 / LEA-07 weekly leadership review — 17 October 2026
+
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. Tested implementation source is recorded in the dedicated evidence checkpoint after commit; production build ID `FgV2cbIPB8CbyorHQPlZc`.
+
+Reporting now provides `/leadership/reviews/new` as a staged school-week review over the existing brief aggregate. A weekly revision stores a 1–31-date inclusive branch-local period, one or more immutable whole-branch Attendance snapshots, 0–50 immutable references to existing Coordination actions and explicit Principal recipients. Action status remains live and Coordination-owned. Save, revise, finalize, share and read recheck current Reporting source rights plus Coordination manager/source authority for the author and every recipient. Finalization and sharing never assign, verify, close, reopen or duplicate an action. Changed dates clear selected evidence/actions and require an exact period reload; committed-response recovery preserves the same payload and idempotency key.
+
+Forward migration `20261018000000_reporting_weekly_review` adds the immutable brief kind, nullable all-or-none period fields for weekly revisions and registered Path A table `vs_reporting_brief_action`. Existing LEA-41 rows were forward-backfilled as `EVIDENCE_BRIEF`. Development and test retain 86 forward migrations. No database was reset and no applied migration changed. The new incremental seed helper is composed into `pnpm demo:seed`, uses the existing Principal/Coordination fictional records through owner facades, and preserves its private review ID in ignored `artifacts/leadership-01/private-demo.json`.
+
+Focused evidence: weekly normalization unit 3/3; real-PostgreSQL Coordination suite 14/14 including immutable action linking, protected replay and revoked-authority denial; sequential one-worker Playwright 1/1 desktop and 1/1 mobile for the staged review, committed-response recovery, finalize-without-close, reload and current action link. `pnpm check` passed lint, TypeScript, 30 documentation checks, 135 table contracts, boundaries, portable backend and 208/208 units; production build `FgV2cbIPB8CbyorHQPlZc` passed. The complete guarded `pnpm demo:seed` command exited successfully against the development database. Desktop/mobile reference/application captures were directly inspected. The approved LEA-07 source is a workflow-explorer dialog; production uses recipe W and the shared Principal shell, so shell/detail composition differs by design. See [evidence](../../evidence/principal-lea-07-weekly-review-2026-10-17/README.md).
+
+Real-data retention/backup deletion and disclosure policy, TEN-03, font portability, native VoiceOver/NVDA, actual browser 200% zoom and human review remain pending.
+
 ## F05 / LEA-41 evidence-backed leadership brief — 17 October 2026
 
 Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. Implementation checkpoint `4e61deb`; production build `YojMoKMwoNyiWSJpXYkBw`.

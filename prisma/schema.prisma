@@ -873,6 +873,7 @@ model ReportingBrief {
  organizationId String @map("organization_id") @db.Uuid
  anchorSchoolId String @map("anchor_school_id") @db.Uuid
  createdByAccountId String @map("created_by_account_id") @db.Uuid
+ kind String @db.VarChar(24)
  state String @db.VarChar(20)
  currentRevisionNumber Int @map("current_revision_number")
  version Int
@@ -898,6 +899,9 @@ model ReportingBriefRevision {
  purpose String @db.VarChar(200)
  interpretation String @db.VarChar(4000)
  nextActions String? @map("next_actions") @db.VarChar(2000)
+ periodStart DateTime? @map("period_start") @db.Date
+ periodEnd DateTime? @map("period_end") @db.Date
+ timezone String? @db.VarChar(64)
  createdByAccountId String @map("created_by_account_id") @db.Uuid
  createdAt DateTime @map("created_at") @db.Timestamptz(3)
  finalizedAt DateTime? @map("finalized_at") @db.Timestamptz(3)
@@ -936,6 +940,22 @@ model ReportingBriefRecipient {
  @@unique([revisionId,accountId],map:"vs_reporting_brief_recipient_account_key")
  @@index([organizationId,accountId,sharedAt,briefId],map:"vs_reporting_brief_recipient_inbox_idx")
  @@map("vs_reporting_brief_recipient")
+}
+
+model ReportingBriefAction {
+ id String @id(map:"vs_reporting_brief_action_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ briefId String @map("brief_id") @db.Uuid
+ revisionId String @map("revision_id") @db.Uuid
+ position Int
+ requestId String @map("request_id") @db.Uuid
+ requestVersion Int @map("request_version")
+ @@unique([revisionId,position],map:"vs_reporting_brief_action_position_key")
+ @@unique([revisionId,requestId],map:"vs_reporting_brief_action_request_key")
+ @@index([organizationId,briefId,revisionId],map:"vs_reporting_brief_action_revision_idx")
+ @@index([organizationId,schoolId,requestId,revisionId],map:"vs_reporting_brief_action_request_idx")
+ @@map("vs_reporting_brief_action")
 }
 
 model ReportingBriefReceipt {

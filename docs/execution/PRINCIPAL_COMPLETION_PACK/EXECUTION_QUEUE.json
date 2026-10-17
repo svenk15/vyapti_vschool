@@ -96,7 +96,7 @@
         "D07",
         "D08"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Distinct pupil detail and explanation reviewer grants; correction request and clarification counterpart; retain Attendance mutations in owner.",
       "demo": "Parent flags own record; reviewer clarifies/corrects via owner; other guardian denied; explanation acceptance changes no mark.",
       "kind": "foundation"

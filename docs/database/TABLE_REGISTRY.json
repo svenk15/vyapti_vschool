@@ -2676,9 +2676,9 @@
     {
       "model": "ReportingBrief",
       "table": "vs_reporting_brief",
-      "fields": "id uuid PK; organization_id uuid; anchor_school_id uuid; created_by_account_id uuid; state varchar(20); current_revision_number int; version int; created_at timestamptz(3); finalized_at/shared_at/withdrawn_at timestamptz(3) nullable; withdrawn_by_account_id uuid nullable; withdrawal_reason varchar(500) nullable",
-      "responsibility": "Institution brief root and optimistic-concurrency/lifecycle boundary.",
-      "constraints": "Scoped anchor School and actor FKs; state/timestamp consistency CHECKs; positive revision/version; UNIQUE(organization_id,id); author/list indexes",
+      "fields": "id uuid PK; organization_id uuid; anchor_school_id uuid; created_by_account_id uuid; kind varchar(24); state varchar(20); current_revision_number int; version int; created_at timestamptz(3); finalized_at/shared_at/withdrawn_at timestamptz(3) nullable; withdrawn_by_account_id uuid nullable; withdrawal_reason varchar(500) nullable",
+      "responsibility": "Institution evidence-brief or weekly-review root and optimistic-concurrency/lifecycle boundary.",
+      "constraints": "Scoped anchor School and actor FKs; fixed kind and state/timestamp consistency CHECKs; positive revision/version; UNIQUE(organization_id,id); author/list indexes",
       "owner": "reporting",
       "status": "MIGRATED",
       "design": "docs/modules/reporting/DESIGN.md",
@@ -2687,9 +2687,9 @@
     {
       "model": "ReportingBriefRevision",
       "table": "vs_reporting_brief_revision",
-      "fields": "id uuid PK; organization_id uuid; brief_id uuid; number int; state varchar(20); title varchar(160); purpose varchar(200); interpretation varchar(4000); next_actions varchar(2000) nullable; created_by_account_id uuid; created_at timestamptz(3); finalized_at timestamptz(3) nullable; input_hash char(64)",
+      "fields": "id uuid PK; organization_id uuid; brief_id uuid; number int; state varchar(20); title varchar(160); purpose varchar(200); interpretation varchar(4000); next_actions varchar(2000) nullable; period_start date nullable; period_end date nullable; timezone varchar(64) nullable; created_by_account_id uuid; created_at timestamptz(3); finalized_at timestamptz(3) nullable; input_hash char(64)",
       "responsibility": "Append-only reviewed narrative/source/audience version; facts remain source-derived.",
-      "constraints": "Scoped Brief and actor FKs; positive number; bounded nonblank text and state/finalized consistency CHECKs; UNIQUE(organization_id,brief_id,number); immutable-content trigger; revision lookup index",
+      "constraints": "Scoped Brief and actor FKs; positive number; bounded nonblank text, nullable all-or-none period up to 31 inclusive days and state/finalized consistency CHECKs; UNIQUE(organization_id,brief_id,number); immutable-content trigger; revision lookup index",
       "owner": "reporting",
       "status": "MIGRATED",
       "design": "docs/modules/reporting/DESIGN.md",
@@ -2716,6 +2716,17 @@
       "status": "MIGRATED",
       "design": "docs/modules/reporting/DESIGN.md",
       "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id"],"intendedPolicy":"Require verified institution context and exact recipient or share authority; recipient content remains immutable.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
+    },
+    {
+      "model": "ReportingBriefAction",
+      "table": "vs_reporting_brief_action",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; brief_id uuid; revision_id uuid; position int; request_id uuid; request_version int",
+      "responsibility": "Immutable ordered pointer from one weekly-review revision to a Coordination-owned action; no private resolution text or copied source data.",
+      "constraints": "Scoped Revision/Brief, School and CoordinationRequest FKs; position 1–50; positive request version; UNIQUE(revision_id,position) and UNIQUE(revision_id,request_id); immutable trigger; revision and request lookup indexes",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {"classification":"INSTITUTION","scopeColumns":["organization_id","school_id"],"intendedPolicy":"Require verified institution context, exact anchor-school scope and current Reporting plus Coordination source/action authority; immutable WITH CHECK binds both scope columns.","enforcement":"PATH_A_DEFERRED_TEN_03","owner":"reporting","closureGate":"TEN-03"}
     },
     {
       "model": "ReportingBriefReceipt",

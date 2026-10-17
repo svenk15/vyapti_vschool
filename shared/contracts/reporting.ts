@@ -26,14 +26,17 @@ export type LeadershipBranchComparison=Readonly<{
 }>;
 export type LeadershipBriefCapability='GENERATE'|'SHARE';
 export type LeadershipBriefState='DRAFT'|'FINALIZED'|'WITHDRAWN';
+export type LeadershipBriefKind='EVIDENCE_BRIEF'|'WEEKLY_REVIEW';
 export type LeadershipBriefSourceOption=Readonly<{snapshotId:string;schoolId:string;branchName:string;schoolDate:string;definitionVersion:string;sourceAsOf:string;counts:Readonly<{due:number;received:number;awaiting:number}>}>;
 export type LeadershipBriefRecipientOption=Readonly<{accountId:string;label:string}>;
-export type LeadershipBriefAvailability=Readonly<{enabled:boolean;canGenerate:boolean;canShare:boolean;reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null;sources:readonly LeadershipBriefSourceOption[];recipients:readonly LeadershipBriefRecipientOption[]}>;
-export type LeadershipBriefDraftInput=Readonly<{title:string;purpose:string;interpretation:string;nextActions?:string;snapshotIds:readonly string[];recipientAccountIds:readonly string[];key:string}>;
+export type LeadershipReviewAction=Readonly<{requestId:string;version:number;kind:string;sourceType:string;sourceId:string;status:'OPEN'|'IN_PROGRESS'|'AWAITING_VERIFICATION'|'RESOLVED';assignee:Readonly<{accountId:string;displayName:string}>|null;dueAt:string|null;overdue:boolean;evidence:Readonly<{kind:string;revision:number|null}>|null;updatedAt:string}>;
+export type LeadershipReviewActionProjection=Readonly<{status:'AVAILABLE'|'UNAVAILABLE'|'LIMIT_EXCEEDED'|'FORBIDDEN';timezone:string;periodStart:string;periodEnd:string;items:readonly LeadershipReviewAction[]}>;
+export type LeadershipBriefAvailability=Readonly<{enabled:boolean;canGenerate:boolean;canShare:boolean;reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null;anchorSchoolId:string;sources:readonly LeadershipBriefSourceOption[];recipients:readonly LeadershipBriefRecipientOption[];weeklyReview:LeadershipReviewActionProjection}>;
+export type LeadershipBriefDraftInput=Readonly<{kind?:LeadershipBriefKind;title:string;purpose:string;interpretation:string;nextActions?:string;periodStart?:string;periodEnd?:string;timezone?:string;actionRequestIds?:readonly string[];snapshotIds:readonly string[];recipientAccountIds:readonly string[];key:string}>;
 export type LeadershipBriefCommandResult=Readonly<{briefId:string;revisionNumber:number;state:LeadershipBriefState;version:number;replayed:boolean}>;
 export type LeadershipBriefSection=LeadershipBriefSourceOption&Readonly<{position:number;limitations:readonly string[]}>;
 export type LeadershipBriefRecipient=LeadershipBriefRecipientOption&Readonly<{position:number;sharedAt:string|null;firstReadAt:string|null}>;
-export type LeadershipBriefDetail=Readonly<{briefId:string;organizationId:string;anchorSchoolId:string;state:LeadershipBriefState;version:number;revisionNumber:number;title:string;purpose:string;interpretation:string;nextActions:string|null;createdAt:string;finalizedAt:string|null;sharedAt:string|null;withdrawnAt:string|null;sections:readonly LeadershipBriefSection[];recipients:readonly LeadershipBriefRecipient[];canFinalize:boolean;canShare:boolean;canWithdraw:boolean;isRecipient:boolean}>;
+export type LeadershipBriefDetail=Readonly<{briefId:string;organizationId:string;anchorSchoolId:string;kind:LeadershipBriefKind;state:LeadershipBriefState;version:number;revisionNumber:number;title:string;purpose:string;interpretation:string;nextActions:string|null;periodStart:string|null;periodEnd:string|null;timezone:string|null;createdAt:string;finalizedAt:string|null;sharedAt:string|null;withdrawnAt:string|null;sections:readonly LeadershipBriefSection[];actions:readonly LeadershipReviewAction[];recipients:readonly LeadershipBriefRecipient[];canFinalize:boolean;canShare:boolean;canWithdraw:boolean;isRecipient:boolean}>;
 
 export type SchoolReadinessItemId='school'|'academics'|'staff'|'students'|'attendance';
 export type SetupResponsibleRole='SCHOOL_ADMIN'|'INSTITUTION_ADMIN'|'ASSIGNED_TEACHER';

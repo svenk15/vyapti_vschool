@@ -19,6 +19,7 @@ const demos = [
   { name: "ATT-02 submitted attendance and correction base", script: "scripts/demo-attendance-01.ts" },
   { name: "LDR-02 Principal Attendance coverage", script: "scripts/demo-principal-attendance.ts", required: true },
   { name: "LEA-09/11/15 Attendance Coordination", script: "scripts/demo-coordination.ts", required: true },
+  { name: "LEA-07 weekly leadership review", script: "scripts/demo-principal-weekly-review.ts", required: true },
   { name: "Administrator Today connected review queues", script: "scripts/demo-dashboard.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
   { name: "SA-38 Admissions intake", script: "scripts/demo-admissions.ts", required: true },
