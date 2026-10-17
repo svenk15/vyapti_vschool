@@ -202,10 +202,11 @@
       "decisions": [
         "D14"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "scope": "Event-owner scheduling lifecycle, explicit purpose-granted participants, versioned responses and agreed actions.",
       "demo": "Family invite accepted, changed time resets response, completed meeting creates one reviewed action.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "F13-A/B owner foundation: explicit manager grant, exact participant provenance, draft/proposal, accept/decline, all-accepted confirmation, explicit completion attendance, individually owned action sources, replay and revocation are PostgreSQL verified. Coordination adapter and production journeys remain."
     },
     {
       "id": "F14",
@@ -216,7 +217,7 @@
       "decisions": [
         "D16"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "scope": "Restricted referral, reviewed procedure/contact configuration and safe status; no invented emergency service.",
       "demo": "Synthetic referral to specialist; referrer status-only; missing urgent procedure honestly unavailable.",
       "kind": "foundation"
@@ -695,7 +696,8 @@
       "status": "PLANNED",
       "definition": "workflows/LEA-36.md",
       "kind": "workflow",
-      "workflow": "LEA-36"
+      "workflow": "LEA-36",
+      "completedSlice": "Events owner foundation is verified. Typed Coordination handoff, remaining lifecycle commands, real counterpart screens, seed and direct visual comparison remain."
     },
     {
       "id": "WF-37",

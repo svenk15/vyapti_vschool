@@ -169,6 +169,11 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SchoolEventRecipient | `vs_events_recipient` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
 | SchoolEventGuardianBinding | `vs_events_guardian_binding` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
 | SchoolEventStudentBinding | `vs_events_student_binding` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| EventsMeetingManagerGrant | `vs_events_meeting_manager_grant` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| EventsMeeting | `vs_events_meeting` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| EventsMeetingParticipant | `vs_events_meeting_participant` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| EventsMeetingAction | `vs_events_meeting_action` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
+| EventsMeetingEvent | `vs_events_meeting_event` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
 | LearningAssignment | `vs_learning_assignment` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | LearningAssignmentVersion | `vs_learning_assignment_version` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |
 | LearningAssignmentRecipient | `vs_learning_assignment_recipient` | learning | MIGRATED | [learning LLD](modules/learning/DESIGN.md) |

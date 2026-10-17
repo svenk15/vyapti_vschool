@@ -2798,7 +2798,108 @@ model SchoolEventStudentBinding {
  recipient SchoolEventRecipient @relation(fields:[organizationId,schoolId,recipientId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_events_student_binding_recipient_fkey")
  @@unique([recipientId,accessId],map:"vs_events_student_binding_access_key")
  @@index([organizationId,schoolId,studentId,accessId],map:"vs_events_student_binding_student_idx")
- @@map("vs_events_student_binding")
+  @@map("vs_events_student_binding")
+}
+
+model EventsMeetingManagerGrant {
+ id String @id(map:"vs_events_meeting_manager_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,accountId],map:"vs_events_meeting_manager_grant_account_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_events_meeting_manager_grant_active_idx")
+ @@map("vs_events_meeting_manager_grant")
+}
+
+model EventsMeeting {
+ id String @id(map:"vs_events_meeting_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ organizerAccountId String @map("organizer_account_id") @db.Uuid
+ purpose String @db.VarChar(160)
+ agenda String @db.VarChar(2000)
+ startsAt DateTime @map("starts_at") @db.Timestamptz(3)
+ endsAt DateTime @map("ends_at") @db.Timestamptz(3)
+ timezone String @db.VarChar(80)
+ status String @db.VarChar(16)
+ scheduleRevision Int @map("schedule_revision")
+ version Int
+ summary String? @db.VarChar(2000)
+ proposedAt DateTime? @map("proposed_at") @db.Timestamptz(3)
+ confirmedAt DateTime? @map("confirmed_at") @db.Timestamptz(3)
+ completedAt DateTime? @map("completed_at") @db.Timestamptz(3)
+ cancelledAt DateTime? @map("cancelled_at") @db.Timestamptz(3)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ participants EventsMeetingParticipant[]
+ actions EventsMeetingAction[]
+ @@unique([organizationId,schoolId,id],map:"vs_events_meeting_scope_id_key")
+ @@index([organizationId,schoolId,status,startsAt,id],map:"vs_events_meeting_list_idx")
+ @@index([organizationId,schoolId,organizerAccountId,status,startsAt,id],map:"vs_events_meeting_organizer_idx")
+ @@map("vs_events_meeting")
+}
+
+model EventsMeetingParticipant {
+ id String @id(map:"vs_events_meeting_participant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ meetingId String @map("meeting_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ kind String @db.VarChar(12)
+ membershipId String? @map("membership_id") @db.Uuid
+ guardianAccessId String? @map("guardian_access_id") @db.Uuid
+ studentId String? @map("student_id") @db.Uuid
+ displayNameSnapshot String @map("display_name_snapshot") @db.VarChar(210)
+ responseStatus String @map("response_status") @db.VarChar(12)
+ responseVersion Int @map("response_version")
+ respondedAt DateTime? @map("responded_at") @db.Timestamptz(3)
+ attendanceStatus String @map("attendance_status") @db.VarChar(12)
+ removedAt DateTime? @map("removed_at") @db.Timestamptz(3)
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ meeting EventsMeeting @relation(fields:[organizationId,schoolId,meetingId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_events_meeting_participant_meeting_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_events_meeting_participant_scope_id_key")
+ @@unique([organizationId,schoolId,meetingId,accountId],map:"vs_events_meeting_participant_account_key")
+ @@index([organizationId,schoolId,accountId,responseStatus,createdAt,id],map:"vs_events_meeting_participant_inbox_idx")
+ @@index([organizationId,schoolId,meetingId,responseStatus,id],map:"vs_events_meeting_participant_meeting_idx")
+ @@map("vs_events_meeting_participant")
+}
+
+model EventsMeetingAction {
+ id String @id(map:"vs_events_meeting_action_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ meetingId String @map("meeting_id") @db.Uuid
+ ownerAccountId String @map("owner_account_id") @db.Uuid
+ description String @db.VarChar(500)
+ dueAt DateTime @map("due_at") @db.Timestamptz(3)
+ sourceVersion Int @map("source_version")
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ meeting EventsMeeting @relation(fields:[organizationId,schoolId,meetingId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_events_meeting_action_meeting_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_events_meeting_action_scope_id_key")
+ @@index([organizationId,schoolId,meetingId,dueAt,id],map:"vs_events_meeting_action_meeting_idx")
+ @@index([organizationId,schoolId,ownerAccountId,dueAt,id],map:"vs_events_meeting_action_owner_idx")
+ @@map("vs_events_meeting_action")
+}
+
+model EventsMeetingEvent {
+ id String @id(map:"vs_events_meeting_event_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ meetingId String @map("meeting_id") @db.Uuid
+ number Int
+ type String @db.VarChar(28)
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ safeDetails Json @map("safe_details")
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,meetingId,number],map:"vs_events_meeting_event_number_key")
+ @@index([organizationId,schoolId,meetingId,occurredAt,id],map:"vs_events_meeting_event_history_idx")
+ @@map("vs_events_meeting_event")
 }
 
 model LearningAssignment {

@@ -110,3 +110,15 @@ Real PostgreSQL Guardian and Student portal journeys passed with a Friday school
 Limitations: PAR-18 remains partial for advanced event interactions. An Events `HOLIDAY` category never changes the academic calendar; closures come only from the Academics-owned pinned calendar. Recurrence, response/withdrawal, capacity and consent remain separately owned gaps. Font portability, native accessibility, TEN-03 and human review remain pending.
 
 Next action: commit and serve EV-04, then select the smallest independently implementable Parent/Student gap whose product contract is already approved.
+
+## F13 / LEA-36
+
+Status: **OWNER_FOUNDATION_VERIFIED / WORKFLOW_PARTIAL / HUMAN_REVIEW_PENDING**
+
+Approved D14 is recorded in the Events LLD. Forward migration `20261019020000_events_meetings` is applied to development and test; both designated databases contain 102 forward migrations. It adds five BRANCH-class Path-A tables for an explicit meeting-manager grant, meeting root, exact participants, agreed actions and append-only lifecycle events. Neither database was reset and no applied migration was edited.
+
+The portable Events facade now supports trusted manager designation, guarded participant discovery, durable draft save, exact proposal, participant accept/decline, confirmation only after all active participants accept, explicit completion attendance and individually owned action sources. Acceptance remains distinct from attendance. A decline cannot be confirmed. Same-key replay returns one completion without duplicate action rows, and suspended staff participants lose protected detail access. Principal role alone is insufficient; current module, membership and explicit meeting-manager authority are checked on every manager operation.
+
+Focused unit validation passed 2/2. Real-PostgreSQL lifecycle/security passed 2/2 against `vyapti_vschool_test`, including accepted completion/replay, decline denial and participant revocation. TypeScript, focused ESLint, portable-backend, boundary, documentation, database-design and diff checks passed. The unchanged F11-D PostgreSQL file also passed 4/4 after the migration, proving compatibility.
+
+LEA-36 remains PARTIAL. The typed `EVENT_MEETING_ACTION` Coordination adapter, reschedule/reset, participant removal/cancellation commands, protected status recovery, Principal and family/staff routes, incremental seed, desktop/mobile comparison, keyboard checks and production build are still required. No production meeting data is authorized while retention and TEN-03 gates remain open.

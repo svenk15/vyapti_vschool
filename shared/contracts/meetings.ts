@@ -1,0 +1,10 @@
+export type MeetingStatus='DRAFT'|'PROPOSED'|'CONFIRMED'|'COMPLETED'|'CANCELLED';
+export type MeetingResponseStatus='PENDING'|'ACCEPTED'|'DECLINED';
+export type MeetingAttendanceStatus='UNKNOWN'|'ATTENDED'|'ABSENT';
+export type MeetingParticipantCandidate=Readonly<{participantId:string;accountId:string;kind:'STAFF'|'FAMILY';displayName:string}>;
+export type MeetingParticipant=Readonly<{id:string;accountId:string;kind:'STAFF'|'FAMILY';displayName:string;responseStatus:MeetingResponseStatus;responseVersion:number;attendanceStatus:MeetingAttendanceStatus;removed:boolean;version:number}>;
+export type MeetingAction=Readonly<{id:string;ownerAccountId:string;ownerDisplayName:string;description:string;dueAt:string;sourceVersion:number}>;
+export type MeetingDetail=Readonly<{id:string;purpose:string;agenda:string;startsAt:string;endsAt:string;timezone:string;status:MeetingStatus;scheduleRevision:number;version:number;summary:string|null;participants:readonly MeetingParticipant[];actions:readonly MeetingAction[];can:{manage:boolean;respond:boolean;viewSummary:boolean}}>;
+export type MeetingSummary=Pick<MeetingDetail,'id'|'purpose'|'startsAt'|'endsAt'|'timezone'|'status'|'scheduleRevision'|'version'>;
+export type MeetingCommandResult=Readonly<{meetingId:string;status:MeetingStatus;version:number;scheduleRevision:number;replayed:boolean}>;
+export type MeetingCommandStatus=Readonly<{state:'UNKNOWN'}>|Readonly<{state:'FOUND';result:MeetingCommandResult}>;
