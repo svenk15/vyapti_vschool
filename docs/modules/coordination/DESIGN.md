@@ -1,14 +1,26 @@
 # Coordination — low-level design
 
-Status: approved Attendance-scoped delivery, LEA-10 bulk follow-up, F03 typed decision adapter and active F04 typed-source extension · 17 October 2026.
+Status: approved typed Attendance/Learning delivery, LEA-10 bulk follow-up, F03 typed decision adapter, F04 typed-source extension and F08-B Learning follow-up · 17 October 2026.
 
 ## F04 typed source and assignee-policy registry
 
 Approved synthetic-only D04 extends Coordination only through explicitly registered owner adapters. `CoordinationSourceAdapter` is a narrow owner contract: a literal `sourceType`, an allowlist of supported Coordination request kinds, scoped source inspection, owner evidence verification and a current-assignee eligibility predicate. The registry rejects duplicate registrations, unknown source types and unsupported source/kind pairs before an owner query. It never accepts a browser-provided module name or arbitrary repository handle.
 
-The first and only active registration remains Attendance: `ATTENDANCE_SESSION` with `MISSING_REGISTER` and `SESSION_SETUP_REVIEW`. `PrismaAttendanceCoordinationEvidence` owns Attendance module/capability checks, session reads, evidence checks and the source-specific assignee predicate. Coordination separately requires the candidate's active branch membership and current `coordination.work` designation before invoking that predicate. This removes direct Attendance-table and role-policy knowledge from Coordination while preserving every existing request, lock, transaction and response contract. It is also the academic-assignee policy seam required before F08 can add an explicit Learning adapter; F04 does not register or expose that future source.
+The active registrations are Attendance `ATTENDANCE_SESSION` with `MISSING_REGISTER`/`SESSION_SETUP_REVIEW`, and synthetic-only Learning `LEARNING_RECIPIENT` with `LEARNING_SUPPORT_REVIEW`. Each owner adapter performs its module, source-read, evidence and source-specific assignee checks. Coordination separately requires active branch membership and current `coordination.work` before invoking the owner predicate. Coordination therefore contains no Attendance- or Learning-table authorization policy.
 
 This sub-slice changes no browser DTO, route, table or migration. Stored rows continue to use the constrained `ATTENDANCE_SESSION` value. A future source requires its owner contract, application registration, shared DTO change, forward CHECK/FK/index migration and focused owner tests; registration alone cannot make a source valid. Focused verification covers duplicate/foreign/unsupported registry denial and the unchanged real-PostgreSQL Attendance Coordination suite. Bounded handover and the 90-day safe event projection remain the next F04 sub-slices; F04 remains IN_PROGRESS until those pass.
+
+## F08-B — typed Learning evidence and academic follow-up
+
+Approved D10/D04 adds exactly one second registered source: `LEARNING_RECIPIENT` with request kind `LEARNING_SUPPORT_REVIEW`. Its source key is the scoped immutable `vs_learning_assignment_recipient.id`; source version is the published `LearningAssignmentVersion.version_no`. The owner projection contains assignment title, class, subject, learner display name, effective deadline, effective status and current policy event number. It never contains response text, feedback, policy reason, diagnosis, inferred risk or family contact data. A caller must hold a live exact `RECIPIENT_STATUS_READ` grant for the source section/subject. Aggregate `learning.read_leadership` alone cannot open the named source.
+
+Creation uses the existing Coordination aggregate with concern `LEARNING_PROGRESS`. A factual bounded note, explicit branch-local review time, eligible assignee and assignment reason are required. Eligibility requires active branch membership, `coordination.work`, and both exact current Learning grants `RECIPIENT_STATUS_READ` and `RECIPIENT_POLICY_MANAGE` for the source class/subject. Assignment grants no Learning access. Work follows the existing `OPEN -> IN_PROGRESS -> AWAITING_VERIFICATION -> RESOLVED` lifecycle; the proposer cannot independently verify.
+
+The only Learning owner evidence is `LEARNING_POLICY_EVENT`, carrying the immutable positive `event_no` for the exact recipient. The adapter verifies it is still the latest policy event before submission and again before independent closure. `NO_CHANGE_NEEDED` remains permitted with no revision and a bounded factual resolution reason. A later policy event makes the earlier proposed evidence stale and closure fails without changing Coordination. Learning remains the only writer of recipient policy.
+
+The existing Attendance-only source foreign key cannot represent this typed union. Forward migration `20261017170000_coordination_learning_source` replaces it with a fail-closed deferred trigger that checks the scoped source against `vs_attendance_session` or `vs_learning_assignment_recipient` according to `source_type`, and extends the exact value allowlists. Follow-up migration `20261017171000_coordination_source_pair_checks` adds fail-closed source/kind, kind/concern and source/evidence pairing constraints without editing the applied migration. The existing scoped active-source unique index continues to prevent duplicate active requests. No new table is introduced. Application authorization remains mandatory and TEN-03 remains the production gate.
+
+The production entry is contextual from `/leadership/learning/evidence`; `/leadership/learning/concerns/new` stages details, review and receipt. Generic Coordination manager/worker detail pages render the discriminated source and link back to the authorized Learning evidence. Verification requires real PostgreSQL source integrity, exact grants, cross-scope and revoked access, assignee eligibility, event staleness, replay and independent closure, plus one-worker desktop/mobile source-to-outcome coverage. Synthetic mode remains required pending retained-note production policy.
 
 ## F04 bounded Coordination handover
 
@@ -45,13 +57,13 @@ No schema or migration is required for F03. It reuses `vs_coordination_request`,
 
 ## Scope and ownership
 
-Coordination owns operational follow-up requests, current assignment, lifecycle, notes, evidence references and immutable history for LEA-09, LEA-10, LEA-11 and LEA-15. Attendance remains the owner of sessions, registers, correction revisions and cancellation. A Coordination command never changes Attendance data. The first release accepts only `ATTENDANCE_SESSION` sources and request kinds `MISSING_REGISTER` and `SESSION_SETUP_REVIEW`; it is not a generic workflow, messaging, safeguarding, disciplinary, assessment or approval engine.
+Coordination owns operational follow-up requests, current assignment, lifecycle, notes, evidence references and immutable history for LEA-09, LEA-10, LEA-11, LEA-15 and LEA-19. Attendance remains the owner of sessions, registers, correction revisions and cancellation; Learning remains the owner of assignment recipients and policy events. A Coordination command never changes either owner table. Only explicitly registered Attendance and Learning pairs are accepted; Coordination is not a generic workflow, messaging, safeguarding, disciplinary, assessment or approval engine.
 
 The runtime defaults to disabled. `VSCHOOL_COORDINATION_MODE=synthetic` enables this slice only for fictional local/test data because no approved retention and backup-deletion policy currently covers the operational note bodies. Production and real-client data remain blocked independently of application verification.
 
 ## Aggregate, values and invariants
 
-`CoordinationRequest` is the aggregate root. It is scoped by `organizationId` and `schoolId` and references one exact Attendance session UUID. It stores the source version observed at creation, kind, bounded concern, optional current assignee, optional due instant, bounded creator note, lifecycle version and current resolution claim. Source display facts are never copied into Coordination storage.
+`CoordinationRequest` is the aggregate root. It is scoped by `organizationId` and `schoolId` and references one exact registered owner-source UUID plus its literal source type. It stores the source version observed at creation, kind, bounded concern, optional current assignee, optional due instant, bounded creator note, lifecycle version and current resolution claim. Source display facts are never copied into Coordination storage.
 
 Lifecycle: `OPEN → IN_PROGRESS → AWAITING_VERIFICATION → RESOLVED`. An authorized verifier may return `AWAITING_VERIFICATION → IN_PROGRESS`. An authorized manager may withdraw `OPEN`, `IN_PROGRESS`, or `AWAITING_VERIFICATION` to terminal `WITHDRAWN`; an authorized manager may reopen `RESOLVED → OPEN` only after fresh source eligibility and active-request uniqueness checks. Reassignment is limited to `OPEN` or `IN_PROGRESS`. The resolution proposer cannot verify the same claim.
 
@@ -65,25 +77,26 @@ Capabilities are independent operator-designated branch grants:
 
 | Capability | Permitted operation |
 |---|---|
-| `coordination.create` | Create an eligible Attendance request and read managed requests |
+| `coordination.create` | Create an eligible registered-source request and read managed requests |
 | `coordination.assign` | Assign/reassign an eligible worker and change the optional due time |
 | `coordination.work` | Read currently assigned work, start it and submit a resolution claim |
 | `coordination.verify` | Verify or return another account's proposed resolution |
 | `coordination.manage` | Withdraw/reopen and read managed requests |
 | `coordination.history` | Search the bounded safe event projection only |
 
-No fixed role receives these capabilities automatically. The existing verified operator boundary provisions/revokes the grants. Every protected operation rechecks current account/token, active Organization/School/membership, exact grant, Attendance release/entitlement/activation/dependencies and source scope. Managers also need an existing Attendance read capability appropriate to their role. Assignment requires an active branch membership, `coordination.work`, and current source-module authority: a missing-register assignee needs school Attendance read; a setup-review assignee needs the existing Attendance lifecycle capability applicable to the current session state. Assignment grants no Attendance access. Revocation or reassignment immediately removes assignment-derived Coordination visibility.
+No fixed role receives these capabilities automatically. The existing verified operator boundary provisions/revokes the grants. Every protected operation rechecks current account/token, active Organization/School/membership, exact grant, registered owner release/entitlement/activation/dependencies and source scope. Managers also need the owner-specific read authority defined by the adapter. Assignment requires active branch membership, `coordination.work`, and current source-module authority: Attendance keeps its session predicates; Learning requires both exact recipient status-read and policy-manager grants for the source section/subject. Assignment grants no owner-module access. Revocation or reassignment immediately removes assignment-derived Coordination visibility.
 
 Currently authorized request managers may read all requests in their branch; an eligible current assignee may read only their assigned requests. `coordination.history` is not a request-manager grant. Parent and Student projections do not exist. Direct IDs, cursor values, evidence references and branch identifiers are candidates only and are always re-scoped on the server.
 
-## Attendance evidence port
+## Owner evidence adapters
 
-Coordination depends on a narrow `AttendanceCoordinationEvidencePort`, implemented inside Attendance infrastructure. It inspects an exact scoped session and verifies evidence inside the caller's database transaction; Coordination never imports an Attendance repository or writes Attendance tables.
+Coordination depends on the narrow registered `CoordinationSourceAdapter`, implemented inside each owner infrastructure. An adapter inspects one exact scoped source, verifies evidence and evaluates assignee eligibility inside the caller's database transaction. Coordination never imports an owner repository or writes an Attendance or Learning table.
 
 - `ATTENDANCE_CORRECTION` must identify an immutable `CORRECTION` revision number belonging to the exact session.
 - `ATTENDANCE_CANCELLATION` must identify an immutable `CANCEL` revision number for the exact session and current cancelled result.
 - A `SESSION_SETUP_REVIEW` already assigned and started while the source was eligible remains workable after an authorized Attendance cancellation so the assignee can submit that exact `CANCEL` revision. Creating a new review for an already-cancelled source remains blocked. `MISSING_REGISTER` work never remains eligible after cancellation.
 - `NO_CHANGE_NEEDED` carries no external receipt and requires a bounded operational reason plus independent verifier acceptance.
+- `LEARNING_POLICY_EVENT` must be the latest immutable positive recipient policy event for the exact Learning source; a later event makes the claim stale.
 
 Failed or foreign evidence throws before the Coordination transition, so no partial status/history/receipt is committed. `RESOLVED` means the follow-up was independently verified; it does not assert an Attendance change unless the checked owner evidence proves one.
 
@@ -93,8 +106,8 @@ All physical names use the Coordination owner prefix and snake_case columns.
 
 | Physical table (Prisma model) | Physical columns | Responsibility | Constraints and indexes |
 |---|---|---|---|
-| `vs_coordination_capability_grant` (CoordinationCapabilityGrant) | id/org/school/membership/account uuid; capability; operator/grant/revoke timestamps; version | Operator-designated branch capability for the Attendance-scoped Coordination owner. | Scoped membership FK; capability/version checks; unique account/capability; active lookup index |
-| `vs_coordination_request` (CoordinationRequest) | id/org/school/source/actor/assignee uuid; kind/concern/status; due/note/resolution; timestamps/version | Attendance-scoped operational follow-up aggregate with current assignment and verified outcome. | Scoped School/Attendance FKs; state/text/evidence/version checks; partial unique active source/kind; queue/assignee indexes |
+| `vs_coordination_capability_grant` (CoordinationCapabilityGrant) | id/org/school/membership/account uuid; capability; operator/grant/revoke timestamps; version | Operator-designated branch capability for the typed-source Coordination owner. | Scoped membership FK; capability/version checks; unique account/capability; active lookup index |
+| `vs_coordination_request` (CoordinationRequest) | id/org/school/source/actor/assignee uuid; kind/concern/status; due/note/resolution; timestamps/version | Typed Attendance or Learning operational follow-up aggregate with current assignment and verified owner outcome. | Scoped School FK and deferred typed source-integrity trigger; exact source/kind/concern/evidence pairing; state/text/version checks; partial unique active source/kind; queue/assignee indexes |
 | `vs_coordination_request_event` (CoordinationRequestEvent) | id/org/school/request/actor/assignee uuid; number/event/states/reason/evidence/timestamp | Immutable authorized request assignment and lifecycle history. | Scoped request FK; unique request/number; text/evidence checks; immutable update/delete trigger |
 | `vs_coordination_command_receipt` (CoordinationCommandReceipt) | id/org/school/actor/request uuid; command/key/hash/result/timestamp | Exact-key replay and unknown-outcome recovery for Coordination mutations. | Scoped request FK; unique actor/command/key; request lookup index; safe bounded result contract |
 

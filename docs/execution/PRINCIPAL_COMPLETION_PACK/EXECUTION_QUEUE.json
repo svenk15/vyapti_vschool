@@ -128,7 +128,7 @@
       "scope": "Recipient extensions/excusal, status evidence grant and academic follow-up evidence adapter.",
       "demo": "Extend one recipient, excuse another, submit work; aggregate reconciles without Parent feedback access.",
       "kind": "foundation",
-      "completedSlice": "F08-A recipient extension/excusal, separate named-status evidence, effective Student/Parent status and assignment-completion.v2 are engineering-verified; F08-B typed Coordination academic-evidence adapter remains."
+      "completedSlice": "F08-A recipient policy and F08-B typed recipient Coordination evidence are engineering-verified; LEA-17 and LEA-19 are complete. F08 remains partial for LEA-18's distinct aggregate feedback-turnaround source and subject-lead follow-up."
     },
     {
       "id": "F09",
@@ -389,7 +389,7 @@
       "decisions": [
         "D10"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-17.md",
       "kind": "workflow",
       "workflow": "LEA-17"
@@ -404,7 +404,7 @@
       "decisions": [
         "D10"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "definition": "workflows/LEA-18.md",
       "kind": "workflow",
       "workflow": "LEA-18"
@@ -419,7 +419,7 @@
       "decisions": [
         "D10"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-19.md",
       "kind": "workflow",
       "workflow": "LEA-19"

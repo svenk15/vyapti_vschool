@@ -2164,8 +2164,8 @@
       "owner": "coordination",
       "table": "vs_coordination_request",
       "fields": "id/org/school/source/actor/assignee uuid; kind/concern/status; due/note/resolution; timestamps/version",
-      "responsibility": "Attendance-scoped operational follow-up aggregate with current assignment and verified outcome.",
-      "constraints": "Scoped School/Attendance FKs; state/text/evidence/version checks; partial unique active source/kind; queue/assignee indexes",
+      "responsibility": "Typed Attendance or Learning operational follow-up aggregate with current assignment and verified owner outcome.",
+      "constraints": "Scoped School FK and deferred typed source-integrity trigger; exact source/kind/concern/evidence pairing; state/text/version checks; partial unique active source/kind; queue/assignee indexes",
       "status": "MIGRATED",
       "design": "docs/modules/coordination/DESIGN.md",
       "rls": {

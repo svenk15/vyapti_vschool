@@ -2,10 +2,12 @@ export const coordinationCapabilities=['coordination.create','coordination.assig
 export type CoordinationCapability=typeof coordinationCapabilities[number];
 export const coordinationStatuses=['OPEN','IN_PROGRESS','AWAITING_VERIFICATION','RESOLVED','WITHDRAWN'] as const;
 export type CoordinationStatus=typeof coordinationStatuses[number];
-export type CoordinationRequestKind='MISSING_REGISTER'|'SESSION_SETUP_REVIEW';
-export type CoordinationConcern='MISSING_REGISTER'|'WRONG_TIME'|'WRONG_OFFERING'|'DUPLICATE'|'OTHER';
-export type CoordinationEvidenceKind='ATTENDANCE_CORRECTION'|'ATTENDANCE_CANCELLATION'|'NO_CHANGE_NEEDED';
-export type CoordinationSourceSummary=Readonly<{type:'ATTENDANCE_SESSION';id:string;version:number;schoolDate:string;startsAt:string;endsAt:string;sectionName:string;subjectName:string;teacherName:string|null;state:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';eligible:boolean}>;
+export type CoordinationRequestKind='MISSING_REGISTER'|'SESSION_SETUP_REVIEW'|'LEARNING_SUPPORT_REVIEW';
+export type CoordinationConcern='MISSING_REGISTER'|'WRONG_TIME'|'WRONG_OFFERING'|'DUPLICATE'|'LEARNING_PROGRESS'|'OTHER';
+export type CoordinationEvidenceKind='ATTENDANCE_CORRECTION'|'ATTENDANCE_CANCELLATION'|'LEARNING_POLICY_EVENT'|'NO_CHANGE_NEEDED';
+export type CoordinationSourceSummary=
+ |Readonly<{type:'ATTENDANCE_SESSION';id:string;version:number;schoolDate:string;startsAt:string;endsAt:string;sectionName:string;subjectName:string;teacherName:string|null;state:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';eligible:boolean}>
+ |Readonly<{type:'LEARNING_RECIPIENT';id:string;version:number;assignmentId:string;title:string;sectionName:string;subjectName:string;studentName:string;effectiveDueAt:string;policyVersion:number;state:'UPCOMING'|'AWAITING'|'SUBMITTED'|'EXCUSED';eligible:boolean}>;
 export type CoordinationActorSummary=Readonly<{accountId:string;displayName:string}>;
 export type CoordinationEvent=Readonly<{number:number;type:string;fromStatus:CoordinationStatus|null;toStatus:CoordinationStatus|null;actor:CoordinationActorSummary;previousAssignee:CoordinationActorSummary|null;assignee:CoordinationActorSummary|null;reason:string|null;evidenceKind:CoordinationEvidenceKind|null;evidenceRevision:number|null;occurredAt:string}>;
 export type CoordinationRequest=Readonly<{id:string;version:number;kind:CoordinationRequestKind;concern:CoordinationConcern;status:CoordinationStatus;timezone:string;source:CoordinationSourceSummary;creator:CoordinationActorSummary;assignee:CoordinationActorSummary|null;dueAt:string|null;overdue:boolean;note:string|null;resolution:{proposer:CoordinationActorSummary;kind:CoordinationEvidenceKind;revision:number|null;reason:string}|null;createdAt:string;updatedAt:string;resolvedAt:string|null;withdrawnAt:string|null;can:{assign:boolean;work:boolean;verify:boolean;manage:boolean};history:readonly CoordinationEvent[]}>;

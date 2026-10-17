@@ -59,9 +59,9 @@ Human acceptance remains PENDING. Marks, rubrics, return/reopen, Student reply, 
 - [x] Add the Principal navigation/page with cutoff, denominator definition, filters, responsive rows and truthful unavailable/empty states.
 - [x] Extend `pnpm demo:seed` with repeat-safe submitted and awaiting fictional pairs.
 - [x] Pass focused unit, real-PostgreSQL, build and sequential desktop/mobile browser checks and directly inspect the reference/application captures.
-- [ ] Add extension/excused rules, permitted pupil evidence and a scoped teaching follow-up only after their owner/product contracts exist.
+- [x] Add extension/excused rules, permitted named status evidence and the typed recipient follow-up under approved D10/D04.
 
-Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PARTIAL. Human review PENDING.
+Engineering status: LEA-17 ENGINEERING_COMPLETE after F08-A/F08-B; human review PENDING.
 
 ## F08-A — Learning recipient policy and named status evidence
 
@@ -72,9 +72,9 @@ Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PART
 - [x] Upgrade current Principal completion to the pinned v2 denominator without exposing learner identity or reasons.
 - [x] Add staged manager UI plus permitted Student/Parent status and incremental fictional seed.
 - [x] Pass focused unit, real PostgreSQL, sequential desktop/mobile browser, migration, boundary, build and visual checks.
-- [ ] Implement the typed Coordination academic-evidence adapter and eligible assignee flow in F08-B.
+- [x] Implement the typed Coordination academic-evidence adapter and eligible assignee flow in F08-B.
 
-Engineering status: F08-A ENGINEERING_VERIFIED; F08 remains PARTIAL until F08-B supplies the typed Coordination academic-evidence adapter and eligible assignee flow. Human review PENDING.
+Engineering status: F08-A and F08-B ENGINEERING_VERIFIED. F08 remains PARTIAL for the distinct LEA-18 aggregate feedback-turnaround source; LEA-17 and LEA-19 are ENGINEERING_COMPLETE. Human review PENDING.
 
 ## LEA-18 — Principal feedback-turnaround oversight
 
@@ -83,6 +83,6 @@ Engineering status: F08-A ENGINEERING_VERIFIED; F08 remains PARTIAL until F08-B 
 - [x] Exclude private drafts, content, learner/Teacher identity, later-revision resets and staff-performance inference.
 - [x] Pass focused real-PostgreSQL and sequential desktop/mobile browser verification; the current-source repository and production-build gates are recorded with the checkpoint evidence.
 - [x] Directly inspect the approved LEA-18 reference against the application states and record remaining deviations.
-- [ ] Add subject-lead coordination only after its owner, assignee authority and note lifecycle are approved.
+- [ ] Add a distinct aggregate feedback-turnaround source and subject-lead coordination under approved D10/D04; do not reuse named recipient evidence.
 
-Engineering status: supported descriptive read slice VERIFIED. Full LEA-18 remains PARTIAL until coordination is authorized and implemented. Human review PENDING.
+Engineering status: supported descriptive read slice VERIFIED. Full LEA-18 remains PARTIAL until the aggregate owner source and coordination composition are implemented. Human review PENDING.

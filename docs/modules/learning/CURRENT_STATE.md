@@ -95,3 +95,13 @@ Student work uses the latest effective deadline and denies new drafts/submission
 Focused verification passed: 16/16 unit checks; 2/2 affected real-PostgreSQL Learning tests; focused lint and TypeScript; backend, boundary, docs and 111-table database checks; normal and isolated production builds; sequential one-worker Chromium desktop 1/1 and mobile 1/1. The browser journey deliberately loses the final response and recovers the same receipt without a second event. Final desktop/mobile list, review and unknown-outcome captures were directly inspected; evidence is in [F08-A recipient policy](../../evidence/principal-f08-recipient-policy-2026-10-17/README.md).
 
 F08 remains PARTIAL. F08-B must register the typed Learning evidence adapter with Coordination, define eligible academic assignees through the approved D10/D04 boundary, and verify source reauthorization plus follow-up outcome. Human review, font portability, native accessibility, TEN-03, retained-note production policy and deployment remain pending.
+
+## F08-B / LEA-17 / LEA-19 academic follow-up
+
+Status: LEA-17_ENGINEERING_COMPLETE / LEA-19_ENGINEERING_COMPLETE / F08_PARTIAL / HUMAN_REVIEW_PENDING.
+
+The exact named recipient evidence now links to a staged factual follow-up. The real published assignment version and latest policy event are resolved on the server. An assignee must simultaneously retain active branch membership, `coordination.work`, and exact `RECIPIENT_STATUS_READ` plus `RECIPIENT_POLICY_MANAGE` grants for the source class/subject. Learning verifies only its latest immutable policy event (or an explicit no-change claim); private response and feedback content remain excluded. Coordination preserves source reauthorization, exact replay, stale-evidence denial, separation of proposer/reviewer and immutable history.
+
+Migrations `20261017170000_coordination_learning_source` and `20261017171000_coordination_source_pair_checks` are applied to both local databases; each has 75 migrations and none pending. Focused unit, real-PostgreSQL and sequential one-worker desktop/mobile evidence is recorded at [F08-B Learning follow-up](../../evidence/principal-f08-learning-followup-2026-10-17/README.md). Direct visual inspection found and corrected source-specific withdrawal language. The reference is a workflow explorer dialog, while the production implementation uses the approved routed evidence/create/receipt/detail recipe.
+
+F08 remains PARTIAL for LEA-18: its aggregate feedback-turnaround cohort needs a distinct versioned owner source and subject-lead predicate. Named recipient evidence cannot be reused to imply that aggregate authority. Human review, font portability, native accessibility, TEN-03, retained-note production policy and deployment remain pending.

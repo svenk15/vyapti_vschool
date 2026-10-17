@@ -107,9 +107,9 @@ Engineering status: LEA-46 ENGINEERING_COMPLETE; visual comparison complete with
 - [x] Present the owner-supplied period, class and subject filters, server cutoff and exact denominator definition.
 - [x] Render submitted, awaiting and not-yet-due facts without private drafts, response content or learner identities.
 - [x] Verify desktop/mobile composition, keyboard focus, URL filter state and direct approved-reference comparison.
-- [ ] Complete extension/excused groups, permitted evidence and teaching follow-up after their owner contracts exist.
+- [x] Complete extension/excused groups, permitted named evidence and typed teaching follow-up through F08-A/F08-B.
 
-Engineering status: supported read slice VERIFIED at `2e03897`; full LEA-17 PARTIAL. Human review PENDING.
+Engineering status: LEA-17 ENGINEERING_COMPLETE after the supported read slice at `2e03897`, F08-A recipient policy and F08-B typed Learning Coordination evidence. Human review PENDING. LEA-18 remains a separate partial aggregate feedback-turnaround workflow.
 
 ## LEA-34 — Notice delivery and acknowledgement coverage
 

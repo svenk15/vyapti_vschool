@@ -18,6 +18,20 @@ Dependencies: verified Principal Attendance source read; existing Attendance cor
 
 Human review, production retention, TEN-03, font portability and native accessibility remain PENDING.
 
+## COORD-05 / F08-B — Learning academic evidence adapter
+
+Dependencies: F04 engineering-complete; F08-A engineering-complete; D10 and D04 approved for synthetic-only implementation on 17 October 2026.
+
+- [x] Register only `LEARNING_RECIPIENT` / `LEARNING_SUPPORT_REVIEW` with typed named-status inspection.
+- [x] Add the forward conditional source-integrity migration and exact CHECK extensions.
+- [x] Require current exact status-read plus policy-manager grants for an eligible assignee.
+- [x] Verify latest immutable Learning policy-event evidence without reading response or feedback content.
+- [x] Add contextual Principal creation and source-aware Coordination work/verification screens.
+- [x] Verify PostgreSQL isolation, revocation, stale evidence, replay and independent closure.
+- [x] Extend synthetic seed, browser comparison and F08/LEA-19 evidence without inferring human acceptance.
+
+Engineering status: F08-B and LEA-19 ENGINEERING_COMPLETE; human review PENDING. F08 remains PARTIAL only because LEA-18 still needs a distinct aggregate feedback-turnaround follow-up source contract and implementation.
+
 ## COORD-04 / F04 — typed owner sources, handover and safe history
 
 Dependencies: F03 engineering-complete; D04 approved for synthetic-only implementation on 17 October 2026.

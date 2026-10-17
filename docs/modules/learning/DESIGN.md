@@ -120,6 +120,10 @@ Student submission authority derives `effectiveDueAt` from the latest event unde
 
 Unit checks cover exact input shape, reason bounds, future/later deadline and reversal rules. Real PostgreSQL checks cover exact grant scope, cross-tenant/branch denial, revocation, event append-only enforcement, version races, exact replay, extension after the original deadline, excusal/reversal, submitted-work immutability, effective-deadline submission, Parent content isolation and `assignment-completion.v2` reconciliation. Browser checks cover the staged manager actions, reload/recovery, Principal aggregate, Student/Parent permitted status, desktop/mobile layout and keyboard focus. Human acceptance, native accessibility, font portability, retained-note production policy and TEN-03 remain pending.
 
+### F08-B Coordination evidence boundary
+
+Learning implements the registered `LEARNING_RECIPIENT` adapter inside Learning infrastructure. Named inspection repeats the same live module and exact `RECIPIENT_STATUS_READ` authority as the manager evidence page. Assignee eligibility additionally requires exact `RECIPIENT_POLICY_MANAGE`; Coordination independently requires active membership and `coordination.work`. The adapter returns status-only facts and verifies only the latest immutable recipient policy `event_no`. It exposes no response, feedback or policy reason and performs no Coordination write. Coordination owns the request lifecycle and invokes this adapter in its transaction; Learning remains the only policy writer.
+
 ## LEA-17 — bounded Principal assignment-completion oversight
 
 ### Supported owner contract
@@ -130,9 +134,9 @@ The read-only PostgreSQL transaction joins the current immutable published Assig
 
 The stable ordering is `(due_at, assignment_id)` and its cursor is bound to the effective dates and class/subject filters. Existing scoped due and assignment-version keys support this bounded query; no schema, migration or write transaction changes. Reads acquire no mutation locks.
 
-### Explicit incomplete contract
+### Completed LEA-17 composition
 
-The current owner model has no extension/excusal policy, pupil-level permitted-evidence projection or teaching follow-up lifecycle. Those reference stages remain visible as unsupported limitations and no dead action is rendered. The supported slice therefore does not claim full LEA-17 completion. Verification requires real PostgreSQL denominator, pagination, cross-scope and revocation cases; direct desktop/mobile reference comparison; private-content exclusion; current-source build; and a repeat-safe fictional submitted/awaiting seed scenario.
+F08-A adds exact per-recipient extension/excusal history and separately designated named status evidence. F08-B connects that evidence to the typed Coordination lifecycle through a contextual source link and an exactly eligible academic assignee. Learning response and feedback content remain excluded. Verification covers the PostgreSQL denominator, pagination, cross-scope and revocation cases, source reauthorization, exact replay, independent verification, direct desktop/mobile comparison and repeat-safe fictional scenarios.
 
 ## LEA-18 — descriptive feedback-turnaround projection
 
@@ -142,7 +146,7 @@ Definition `feedback-turnaround.v1` includes immutable `LearningSubmissionAttemp
 
 The read executes in one `REPEATABLE READ` transaction and returns accepted, first-published and awaiting counts, median elapsed seconds, branch timezone, interval, cutoff, filter options and definition metadata. It returns no Student, Teacher or account identifier; response, draft and feedback text; ranking; target; SLA; overdue flag; or comparative performance label. Existing submission accepted-time, feedback-version submission/publication, offering, section and subject indexes support the bounded query. There is no schema, migration, mutation, lock or duplicated report table.
 
-The current owner model has no assignment-cancellation or published-feedback withdrawal lifecycle, so the projection fabricates neither. LEA-18 coordination, assignee and operational-note stages remain absent because their owner and authority contract is still unresolved. Verification covers exact cohort boundaries, private-draft exclusion, first publication despite later revisions, awaiting and empty cohorts, filtering, cross-scope/revoked authority, no sensitive fields, and desktop/mobile comparison with the approved LEA-18 workflow. The supported descriptive slice remains PARTIAL until the coordination stage is designed and implemented.
+The current owner model has no assignment-cancellation or published-feedback withdrawal lifecycle, so the projection fabricates neither. LEA-18 coordination remains absent: F08-B's recipient source cannot represent the aggregate feedback-turnaround cohort. A narrow owner source must pin the class/subject/cohort version, exact subject-lead eligibility and evidence disposition without revealing Student or Teacher content. Verification covers exact cohort boundaries, private-draft exclusion, first publication despite later revisions, awaiting and empty cohorts, filtering, cross-scope/revoked authority, no sensitive fields, and desktop/mobile comparison with the approved LEA-18 workflow. The supported descriptive slice remains PARTIAL until that separate source is implemented.
 
 ## LEA-03 — private text draft and on-time submission
 

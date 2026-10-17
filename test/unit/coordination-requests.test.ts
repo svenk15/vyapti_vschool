@@ -12,13 +12,17 @@ describe('coordination request contract',()=>{
   expect(createInput({sessionId:randomUUID(),kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:'Register was not submitted.',dueLocal:'2026-10-16T16:30',key:key()})).toMatchObject({kind:'MISSING_REGISTER',concern:'MISSING_REGISTER'});
   expect(createInput({sessionId:randomUUID(),kind:'SESSION_SETUP_REVIEW',concern:'OTHER',note:null,dueLocal:null,assigneeAccountId:randomUUID(),assignmentReason:'Please review the source setup.',key:key()})).toMatchObject({kind:'SESSION_SETUP_REVIEW',assignmentReason:'Please review the source setup.'});
   expect(resolutionInput({requestId:randomUUID(),expectedVersion:3,kind:'NO_CHANGE_NEEDED',revision:null,reason:'The register was submitted before assignment.',key:key()})).toMatchObject({kind:'NO_CHANGE_NEEDED',revision:null});
-  expect(resolutionInput({requestId:randomUUID(),expectedVersion:3,kind:'ATTENDANCE_CORRECTION',revision:2,reason:'Correction revision 2 addresses the request.',key:key()})).toMatchObject({kind:'ATTENDANCE_CORRECTION',revision:2});
+ expect(resolutionInput({requestId:randomUUID(),expectedVersion:3,kind:'ATTENDANCE_CORRECTION',revision:2,reason:'Correction revision 2 addresses the request.',key:key()})).toMatchObject({kind:'ATTENDANCE_CORRECTION',revision:2});
+  const recipientId=randomUUID();expect(createInput({sourceType:'LEARNING_RECIPIENT',sourceId:recipientId,kind:'LEARNING_SUPPORT_REVIEW',concern:'LEARNING_PROGRESS',note:'The published assignment remains incomplete.',dueLocal:'2026-10-20T15:30',assigneeAccountId:randomUUID(),assignmentReason:'Review the permitted status evidence.',key:key()})).toMatchObject({sourceType:'LEARNING_RECIPIENT',sourceId:recipientId,kind:'LEARNING_SUPPORT_REVIEW',concern:'LEARNING_PROGRESS'});
+  expect(resolutionInput({requestId:randomUUID(),expectedVersion:3,kind:'LEARNING_POLICY_EVENT',revision:1,reason:'The reviewed extension is now effective.',key:key()})).toMatchObject({kind:'LEARNING_POLICY_EVENT',revision:1});
  });
 
  it('rejects mismatched kinds, unknown fields, invalid evidence and unsafe text',()=>{
   expect(()=>createInput({sessionId:randomUUID(),kind:'MISSING_REGISTER',concern:'OTHER',note:null,dueLocal:null,key:key()})).toThrow('VALIDATION');
   expect(()=>createInput({sessionId:randomUUID(),kind:'SESSION_SETUP_REVIEW',concern:'OTHER',note:'ok',dueLocal:null,key:key(),browserAuthority:true})).toThrow('VALIDATION');
   expect(()=>createInput({sessionId:randomUUID(),kind:'SESSION_SETUP_REVIEW',concern:'OTHER',note:'ok',dueLocal:null,assigneeAccountId:randomUUID(),assignmentReason:null,key:key()})).toThrow('VALIDATION');
+  expect(()=>createInput({sourceType:'LEARNING_RECIPIENT',sourceId:randomUUID(),kind:'LEARNING_SUPPORT_REVIEW',concern:'LEARNING_PROGRESS',note:null,dueLocal:'2026-10-20T15:30',assigneeAccountId:randomUUID(),assignmentReason:'Missing factual note',key:key()})).toThrow('VALIDATION');
+  expect(()=>createInput({sourceType:'LEARNING_RECIPIENT',sourceId:randomUUID(),kind:'SESSION_SETUP_REVIEW',concern:'OTHER',note:'Wrong source pairing',dueLocal:null,key:key()})).toThrow('VALIDATION');
   expect(()=>resolutionInput({requestId:randomUUID(),expectedVersion:1,kind:'NO_CHANGE_NEEDED',revision:1,reason:'No change',key:key()})).toThrow('VALIDATION');
  expect(()=>assignInput({requestId:randomUUID(),assigneeAccountId:randomUUID(),dueLocal:null,expectedVersion:1,reason:'line\nbreak',key:key()})).toThrow('VALIDATION');
   expect(()=>batchInput({sourceIds:[],kind:'MISSING_REGISTER',concern:'MISSING_REGISTER',note:null,dueLocal:null,assigneeAccountId:null,assignmentReason:null,key:key()})).toThrow('VALIDATION');
@@ -64,11 +68,13 @@ describe('typed decision facade',()=>{
 
 describe('typed Coordination source registry',()=>{
  const attendance={sourceType:'ATTENDANCE_SESSION',requestKinds:['MISSING_REGISTER','SESSION_SETUP_REVIEW'],inspect:async()=>{throw new Error('not called');},verify:async()=>{},eligibleAssignee:async()=>true} satisfies CoordinationSourceAdapter;
+ const learning={sourceType:'LEARNING_RECIPIENT',requestKinds:['LEARNING_SUPPORT_REVIEW'],inspect:async()=>{throw new Error('not called');},verify:async()=>{},eligibleAssignee:async()=>true} satisfies CoordinationSourceAdapter;
  it('resolves only an explicitly registered source and supported request kind',()=>{
-  const registry=new CoordinationSourceRegistry([attendance]);
+  const registry=new CoordinationSourceRegistry([attendance,learning]);
   expect(registry.resolve('ATTENDANCE_SESSION','MISSING_REGISTER')).toBe(attendance);
+  expect(registry.resolve('LEARNING_RECIPIENT','LEARNING_SUPPORT_REVIEW')).toBe(learning);
   expect(()=>registry.resolve('LEARNING_ASSIGNMENT','MISSING_REGISTER')).toThrow('NOT_FOUND');
-  expect(()=>registry.resolve('ATTENDANCE_SESSION','ACADEMIC_FOLLOW_UP')).toThrow('NOT_FOUND');
+  expect(()=>registry.resolve('LEARNING_RECIPIENT','MISSING_REGISTER')).toThrow('NOT_FOUND');
  });
  it('rejects duplicate owner registrations at composition time',()=>{
   expect(()=>new CoordinationSourceRegistry([attendance,attendance])).toThrow('Duplicate Coordination source adapter');

@@ -23,9 +23,9 @@ export const learningManagerCapabilities=['RECIPIENT_POLICY_MANAGE','RECIPIENT_S
 export type LearningManagerCapability=typeof learningManagerCapabilities[number];
 export type LearningRecipientPolicyAction='EXTEND'|'EXCUSE'|'REVERSE_EXCUSAL';
 export type LearningRecipientStatus='UPCOMING'|'AWAITING'|'SUBMITTED'|'EXCUSED';
-export type LearningManagerAssignment={assignmentId:string;assignmentVersionId:string;title:string;classId:string;classLabel:string;subjectId:string;subjectName:string;defaultDueAt:string;recipientCount:number};
+export type LearningManagerAssignment={assignmentId:string;assignmentVersionId:string;assignmentVersion:number;title:string;classId:string;classLabel:string;subjectId:string;subjectName:string;defaultDueAt:string;recipientCount:number};
 export type LearningManagerWorkspace={timezone:string;capabilities:readonly LearningManagerCapability[];assignments:readonly LearningManagerAssignment[]};
-export type LearningRecipientEvidence={recipientId:string;studentId:string;studentName:string;assignmentId:string;assignmentVersionId:string;assignmentTitle:string;classLabel:string;subjectName:string;defaultDueAt:string;effectiveDueAt:string;excused:boolean;submitted:boolean;status:LearningRecipientStatus;policyVersion:number};
+export type LearningRecipientEvidence={recipientId:string;studentId:string;studentName:string;assignmentId:string;assignmentVersionId:string;assignmentVersion:number;assignmentTitle:string;classLabel:string;subjectName:string;defaultDueAt:string;effectiveDueAt:string;excused:boolean;submitted:boolean;status:LearningRecipientStatus;policyVersion:number};
 export type LearningRecipientEvidencePage={timezone:string;assignment:LearningManagerAssignment;items:readonly LearningRecipientEvidence[]};
 export type LearningRecipientPolicyResult={recipientId:string;assignmentId:string;eventId:string;version:number;action:LearningRecipientPolicyAction;effectiveDueAt:string;excused:boolean;occurredAt:string;replayed:boolean};
 
