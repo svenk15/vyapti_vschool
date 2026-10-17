@@ -156,11 +156,11 @@
       "decisions": [
         "D13"
       ],
-      "status": "IN_PROGRESS",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Versioned author/reviewer/publisher workflow and durable in-app reminder; provider attempt seam without fake email.",
       "demo": "Publish reviewed exact version; remind one eligible unacknowledged recipient; revoke another before dispatch.",
       "kind": "foundation",
-      "completedSlice": "LEA-34 durable portal reminder is engineering-complete; independent exact-revision review/publish remains."
+      "completedSlice": "D13 text-only portal foundation is engineering-complete: separate AUTHOR/REVIEW/PUBLISH designations, immutable proposal revisions, server-assigned independent exact-digest review, return/reject reasons, final reauthorization and frozen-recipient publication join the already-verified LEA-34 durable portal reminder."
     },
     {
       "id": "F11",
@@ -619,10 +619,11 @@
         "D13",
         "D15"
       ],
-      "status": "PLANNED",
+      "status": "PARTIAL",
       "definition": "workflows/LEA-32.md",
       "kind": "workflow",
-      "workflow": "LEA-32"
+      "workflow": "LEA-32",
+      "completedSlice": "Text-only audience, immutable draft revision, review submission and final portal publication are verified; required Documents/attachment capability remains F12."
     },
     {
       "id": "WF-33",
@@ -635,10 +636,11 @@
         "D03",
         "D13"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-33.md",
       "kind": "workflow",
-      "workflow": "LEA-33"
+      "workflow": "LEA-33",
+      "completedSlice": "Exact assigned revision inspection, independent approve/return/reject, changed-revision invalidation and separate publisher action are verified."
     },
     {
       "id": "WF-34",

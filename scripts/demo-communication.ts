@@ -35,6 +35,10 @@ type Demo = {
   noticeId?: string;
   studentNoticeId?: string;
   reminderId?: string;
+  reviewProposalId?: string;
+  reviewRevisionId?: string;
+  reviewSaveKey?: string;
+  reviewSubmitKey?: string;
 };
 
 function save(value: Demo) {
@@ -62,7 +66,7 @@ function load(): Demo {
 async function main() {
   const local = localAccessConfig();
   const demo = load();
-  const people = JSON.parse(readFileSync(peoplePath, 'utf8')) as {adminEmail: string; password: string; organizationId: string; schoolId: string};
+  const people = JSON.parse(readFileSync(peoplePath, 'utf8')) as {adminEmail: string; password: string; teacherEmail: string; teacherPassword: string; organizationId: string; schoolId: string};
   const guardianFixture = JSON.parse(readFileSync(guardiansPath, 'utf8')) as {studentId?: string};
   const studentFixture = JSON.parse(readFileSync(studentPath, 'utf8')) as {studentId?: string};
   demo.studentPublishKey ??= randomUUID();
@@ -81,6 +85,9 @@ async function main() {
     const account = await db.userAccount.findUnique({where: {normalizedEmail: people.adminEmail.toLowerCase()}});
     if (!account || account.status !== 'ACTIVE' || !await new BcryptPasswords().verify(people.password, account.passwordHash)) throw new Error('SYNTHETIC_ADMIN_REQUIRED');
     const admin = {accountId: account.id, tokenVersion: account.tokenVersion};
+    const reviewerAccount = await db.userAccount.findUnique({where: {normalizedEmail: people.teacherEmail.toLowerCase()}});
+    if (!reviewerAccount || reviewerAccount.status !== 'ACTIVE' || !await new BcryptPasswords().verify(people.teacherPassword, reviewerAccount.passwordHash ?? '')) throw new Error('SYNTHETIC_REVIEWER_REQUIRED');
+    const reviewer = {accountId: reviewerAccount.id, tokenVersion: reviewerAccount.tokenVersion};
 
     stage = 'entitlement';
     const entitlement = await db.organizationEntitlement.findUnique({where: {organizationId_moduleId: {organizationId: people.organizationId, moduleId: 'communication'}}});
@@ -101,6 +108,9 @@ async function main() {
     await guardians.grantManager(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId});
     await communication.grantPublisher(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId});
     await communication.grantReminderManager(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId});
+    await communication.grantNoticeWorkflow(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId, action: 'AUTHOR'});
+    await communication.grantNoticeWorkflow(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId, action: 'PUBLISH'});
+    await communication.grantNoticeWorkflow(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: reviewer.accountId, action: 'REVIEW'});
 
     stage = 'audience';
     demo.studentId ??= guardianFixture.studentId;
@@ -148,6 +158,22 @@ async function main() {
       demo.studentNoticeId = published.noticeId;
     }
 
+    stage = 'review-proposal';
+    demo.reviewSaveKey ??= randomUUID();
+    demo.reviewSubmitKey ??= randomUUID();
+    const existingProposal = demo.reviewProposalId ? await db.communicationNoticeProposal.findFirst({where: {id: demo.reviewProposalId, organizationId: people.organizationId, schoolId: people.schoolId}, select: {id: true, currentRevisionId: true, status: true}}) : null;
+    if (demo.reviewProposalId && !existingProposal) throw new Error('SYNTHETIC_REVIEW_PROPOSAL_CONFLICT');
+    if (!existingProposal) {
+      const saved = await communication.saveProposal(admin, people.organizationId, people.schoolId, null, {expectedVersion: 0, sectionId: placement.sectionId, title: 'Family curriculum evening', body: 'Please review the curriculum evening arrangements for this class. The approved notice will appear in the family and student portals.', requiresAcknowledgement: true, key: demo.reviewSaveKey}, randomUUID());
+      const submitted = await communication.submitProposal(admin, people.organizationId, people.schoolId, saved.proposalId, {expectedVersion: saved.version, revisionId: saved.revisionId, key: demo.reviewSubmitKey}, randomUUID());
+      demo.reviewProposalId = submitted.proposalId;
+      demo.reviewRevisionId = submitted.revisionId;
+    } else {
+      demo.reviewRevisionId = existingProposal.currentRevisionId ?? undefined;
+    }
+    const reviewerInbox = await communication.listReviewProposals(reviewer, people.organizationId, people.schoolId);
+    if (existingProposal?.status === 'IN_REVIEW' && !reviewerInbox.some(item => item.proposalId === existingProposal.id)) throw new Error('SYNTHETIC_REVIEW_ASSIGNMENT_CONFLICT');
+
     stage = 'leadership-coverage';
     const coverage = await communication.listLeadership(admin, people.organizationId, people.schoolId);
     if (!coverage.items.some(item => item.noticeId === demo.noticeId)
@@ -159,7 +185,7 @@ async function main() {
     const reminder = await communication.sendAcknowledgementReminder(admin, people.organizationId, people.schoolId, reminderSource.noticeId, {versionId: reminderSource.versionId, expectedRevision: reminderSource.revision, key: demo.reminderKey}, randomUUID());
     demo.reminderId = reminder.reminderId;
     save(demo);
-    console.log(`Prepared or preserved immutable Parent and Student school notices and verified Principal aggregate coverage. Private credentials: ${path}`);
+    console.log(`Prepared or preserved immutable portal notices, an exact-revision review scenario and Principal aggregate coverage. Private credentials and IDs: ${path}`);
   } catch (error) {
     const code = error instanceof Error && /^[A-Z0-9_]+$/.test(error.message) ? error.message : 'LOCAL_DEMO_ERROR';
     throw new Error(`${stage.toUpperCase()}_${code}`);

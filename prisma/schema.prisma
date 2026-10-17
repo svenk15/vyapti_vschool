@@ -2018,6 +2018,85 @@ model CommunicationPublisherGrant {
  @@map("vs_communication_publisher_grant")
 }
 
+model CommunicationNoticeWorkflowGrant {
+ id String @id(map:"vs_communication_notice_workflow_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ action String @db.VarChar(20)
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,accountId,action],map:"vs_communication_notice_workflow_grant_scope_action_key")
+ @@index([organizationId,schoolId,action,accountId,revokedAt],map:"vs_communication_notice_workflow_grant_active_idx")
+ @@map("vs_communication_notice_workflow_grant")
+}
+
+model CommunicationNoticeProposal {
+ id String @id(map:"vs_communication_notice_proposal_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ status String @db.VarChar(20)
+ authorAccountId String @map("author_account_id") @db.Uuid
+ assignedReviewerAccountId String? @map("assigned_reviewer_account_id") @db.Uuid
+ currentRevisionId String? @map("current_revision_id") @db.Uuid
+ publishedNoticeId String? @map("published_notice_id") @db.Uuid
+ version Int
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
+ revisions CommunicationNoticeProposalRevision[]
+ decisions CommunicationNoticeProposalDecision[]
+ @@unique([organizationId,schoolId,id],map:"vs_communication_notice_proposal_scope_id_key")
+ @@index([organizationId,schoolId,authorAccountId,updatedAt(sort:Desc),id],map:"vs_communication_notice_proposal_author_idx")
+ @@index([organizationId,schoolId,assignedReviewerAccountId,status,updatedAt(sort:Desc),id],map:"vs_communication_notice_proposal_reviewer_idx")
+ @@map("vs_communication_notice_proposal")
+}
+
+model CommunicationNoticeProposalRevision {
+ id String @id(map:"vs_communication_notice_proposal_revision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ proposalId String @map("proposal_id") @db.Uuid
+ number Int
+ audienceSectionId String @map("audience_section_id") @db.Uuid
+ audienceLabel String @map("audience_label") @db.VarChar(160)
+ title String @db.VarChar(120)
+ body String @db.VarChar(10000)
+ requiresAcknowledgement Boolean @map("requires_acknowledgement")
+ attachmentDigest String @map("attachment_digest") @db.Char(64)
+ channel String @db.VarChar(20)
+ scheduleKind String @map("schedule_kind") @db.VarChar(20)
+ approvalDigest String @map("approval_digest") @db.Char(64)
+ createdByAccountId String @map("created_by_account_id") @db.Uuid
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ proposal CommunicationNoticeProposal @relation(fields:[organizationId,schoolId,proposalId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_notice_proposal_revision_proposal_fkey")
+ decisions CommunicationNoticeProposalDecision[]
+ @@unique([organizationId,schoolId,id],map:"vs_communication_notice_proposal_revision_scope_id_key")
+ @@unique([organizationId,schoolId,proposalId,number],map:"vs_communication_notice_proposal_revision_number_key")
+ @@index([organizationId,schoolId,proposalId,number(sort:Desc),id],map:"vs_communication_notice_proposal_revision_sequence_idx")
+ @@map("vs_communication_notice_proposal_revision")
+}
+
+model CommunicationNoticeProposalDecision {
+ id String @id(map:"vs_communication_notice_proposal_decision_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ proposalId String @map("proposal_id") @db.Uuid
+ revisionId String @map("revision_id") @db.Uuid
+ reviewerAccountId String @map("reviewer_account_id") @db.Uuid
+ action String @db.VarChar(20)
+ reason String @db.VarChar(500)
+ approvalDigest String @map("approval_digest") @db.Char(64)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ proposal CommunicationNoticeProposal @relation(fields:[organizationId,schoolId,proposalId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_notice_proposal_decision_proposal_fkey")
+ revision CommunicationNoticeProposalRevision @relation(fields:[organizationId,schoolId,revisionId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_communication_notice_proposal_decision_revision_fkey")
+ @@unique([organizationId,schoolId,proposalId,revisionId],map:"vs_communication_notice_proposal_decision_revision_key")
+ @@index([organizationId,schoolId,proposalId,createdAt(sort:Desc),id],map:"vs_communication_notice_proposal_decision_sequence_idx")
+ @@map("vs_communication_notice_proposal_decision")
+}
+
 model CommunicationReminderManagerGrant {
  id String @id(map:"vs_communication_reminder_manager_grant_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid
@@ -2056,7 +2135,7 @@ model CommunicationNoticeVersion {
  noticeId String @map("notice_id") @db.Uuid
  versionNo Int @map("version_no")
  title String @db.VarChar(120)
- body String @db.VarChar(5000)
+ body String @db.VarChar(10000)
  requiresAcknowledgement Boolean @map("requires_acknowledgement")
  audienceSectionId String @map("audience_section_id") @db.Uuid
  audienceLabel String @map("audience_label") @db.VarChar(160)

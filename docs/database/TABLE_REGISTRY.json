@@ -1,5 +1,5 @@
 {
-  "revision": "4.12",
+  "revision": "4.13",
   "prefix": "vs_",
   "tables": [
     {
@@ -1608,6 +1608,90 @@
           "school_id"
         ],
         "intendedPolicy": "Current active Administrator membership plus active explicit publisher grant.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationNoticeWorkflowGrant",
+      "owner": "communication",
+      "table": "vs_communication_notice_workflow_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/membership/account/operator uuid; action AUTHOR/REVIEW/PUBLISH; granted/revoked timestamps; version",
+      "responsibility": "Trusted-operator source-specific authority for authoring, exact-revision review or final publication.",
+      "constraints": "Scoped membership FK; closed action vocabulary; unique scope/account/action; active action lookup index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live source-specific Communication authority; WITH CHECK binds both branch keys on writes.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationNoticeProposal",
+      "owner": "communication",
+      "table": "vs_communication_notice_proposal",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school uuid; status; author/reviewer/current_revision/published_notice uuid; version; timestamps",
+      "responsibility": "Versioned notice workflow root separating preparation, independent review and publication.",
+      "constraints": "Scoped School/published Notice FKs; global actor FKs; status/version/published-state checks; author/reviewer indexes",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live source-specific Communication authority; WITH CHECK binds both branch keys on writes.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationNoticeProposalRevision",
+      "owner": "communication",
+      "table": "vs_communication_notice_proposal_revision",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/proposal/section/creator uuid; number; audience/title/body/ack; attachment/approval digests; PORTAL/IMMEDIATE; created_at",
+      "responsibility": "Immutable exact content, audience and delivery-mode revision reviewed by digest.",
+      "constraints": "Scoped Proposal/Section FKs; creator FK; unique proposal number; digest/channel/schedule checks; sequence index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live source-specific Communication authority; WITH CHECK binds both branch keys on writes.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "communication",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CommunicationNoticeProposalDecision",
+      "owner": "communication",
+      "table": "vs_communication_notice_proposal_decision",
+      "status": "MIGRATED",
+      "design": "docs/modules/communication/DESIGN.md",
+      "fields": "id/org/school/proposal/revision/reviewer uuid; action; reason; approval_digest; created_at",
+      "responsibility": "Immutable independent approve, return or reject evidence for one exact proposal revision.",
+      "constraints": "Scoped Proposal/Revision FKs; reviewer FK; closed action/digest checks; one decision per exact revision; history index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified tenant keys plus current live source-specific Communication authority; WITH CHECK binds both branch keys on writes.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "communication",
         "closureGate": "TEN-03"

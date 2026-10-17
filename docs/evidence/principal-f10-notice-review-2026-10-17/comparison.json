@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-17T07:34:11.236Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "credentialPath": "artifacts/people-02/private-demo.json",
+  "scenarioPath": "artifacts/communication-01/private-demo.json",
+  "applicationRoutes": {
+    "author": "/admin/communication/proposals/956d7e6f-096c-4ef6-b98f-259df0ff83b2",
+    "review": "/leadership/notices/review/956d7e6f-096c-4ef6-b98f-259df0ff83b2"
+  },
+  "referenceWorkflow": "LEA-33",
+  "states": {
+    "reviewPublishedPersistence": {
+      "persistedAfterReload": true
+    },
+    "publication": {
+      "persistedAfterReload": true
+    },
+    "authorPublishedMobile": {
+      "overflow": false,
+      "titleSize": "28px",
+      "keyboardFocusReturn": true
+    },
+    "reviewApprovedMobile": {
+      "overflow": false,
+      "titleSize": "28px"
+    }
+  }
+}

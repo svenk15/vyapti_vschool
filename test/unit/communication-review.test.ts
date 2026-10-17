@@ -1,0 +1,7 @@
+import {describe,expect,it} from 'vitest';
+import {noticeProposalDecisionInput,noticeProposalTransitionInput,noticeWorkflowAction,saveNoticeProposalInput} from '../../backend/modules/communication/domain/notices';
+const id='00000000-0000-4000-8000-000000000001',key='00000000-0000-4000-8000-000000000002';
+describe('Communication exact-revision review rules',()=>{
+ it('validates bounded text-only proposal fields and fixed workflow actions',()=>{expect(saveNoticeProposalInput({expectedVersion:0,sectionId:id,title:'  School update ',body:' Portal message ',requiresAcknowledgement:true,key})).toMatchObject({title:'School update',body:'Portal message'});expect(noticeWorkflowAction('REVIEW')).toBe('REVIEW');expect(()=>noticeWorkflowAction('SEND')).toThrow('VALIDATION');expect(()=>saveNoticeProposalInput({expectedVersion:0,sectionId:id,title:'Update',body:'x'.repeat(10001),requiresAcknowledgement:true,key})).toThrow('VALIDATION');});
+ it('requires actionable return/reject reasons and an exact positive transition version',()=>{expect(noticeProposalDecisionInput({expectedVersion:2,revisionId:id,action:'APPROVE',reason:'',key})).toMatchObject({action:'APPROVE',reason:'Approved exact notice revision'});expect(()=>noticeProposalDecisionInput({expectedVersion:2,revisionId:id,action:'RETURN',reason:'short',key})).toThrow('VALIDATION');expect(()=>noticeProposalTransitionInput({expectedVersion:0,revisionId:id,key})).toThrow('VALIDATION');});
+});
