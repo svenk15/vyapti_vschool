@@ -12,11 +12,11 @@ LEA-20 verification: focused unit 14/14 and real-PostgreSQL readiness/handoff/se
 
 Remaining workflow gaps:
 
-- LEA-32 PARTIAL: text-only targeted notice is verified; attachment completion requires a real scanner, authenticated Documents serving/link contract and direct completed reference comparison. An adapter double is insufficient.
+- LEA-32 PARTIAL: text-only targeted notice is verified. Provider-independent immutable promotion, revocable grants, current-authority/current-safety authenticated serving, owner receipts and the Communication link contract are authorized engineering work. A real SAFE runtime demonstration additionally requires a real local scanner; an adapter double is insufficient.
 - LEA-45 PARTIAL: the deterministic source-linked Assistant boundary is verified at `58ae335`; production completion requires approved provider, data region, retention and real-provider evaluation. The deterministic adapter is not a provider integration.
-- LEA-22 NOT_STARTED: report publication requires the complete real-scanned Documents path plus its exact publication/audience contract. Missing provider configuration does not authorize simulated completion.
+- LEA-22 NOT_STARTED: report publication requires the complete real-scanned Documents path plus six unresolved publication choices: publisher separation, template/signatory, explicit audience selection, release timing, publisher handoff and withdrawal authority. D11 and D15 remain settled and must not be reopened.
 
-No remaining incomplete workflow is independently eligible for ENGINEERING_COMPLETE under the current provider and Documents restrictions. Continue only when the scanner/serving contract or Assistant provider/region/retention configuration is available, or when an independently approved workflow is added. Do not downgrade these concrete external dependencies to a generic technical-design blocker.
+The exact independently eligible next slice is **DOC-02A provider-independent immutable promotion and authenticated serving** as defined in the 18 October 2026 closure delta in `docs/modules/documents/DESIGN.md`. It does not require a production provider or retention choice. Do not claim a SAFE runtime demonstration until a real scanner is installed, configured with current signatures and exercised fail closed. The consolidated accounting, classifications, decisions and verification plan are in `PRINCIPAL_CLOSURE_PLAN.md`.
 
 Demo credentials remain in ignored `artifacts/people-02/private-demo.json` and related private artifact files; never copy their values into Git or documentation. One healthy production demo is running at `http://127.0.0.1:3402`. It serves application implementation commit `0ffaf54` from normal build `LTj3s3qCdKwbxIexlHvZh`; the later evidence-only commit does not change executable application files.
 

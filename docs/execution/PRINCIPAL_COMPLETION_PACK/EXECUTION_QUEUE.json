@@ -176,7 +176,7 @@
       "scope": "Subtasks: plan+scale+cohort; teacher mark revisions; independent moderation; report revision/audience. Each checkpoint demo-able; register a distinct owner.",
       "demo": "Teacher records marks, reviewer returns then approves revised set, publisher prepares report; no missing-as-zero.",
       "kind": "foundation",
-      "completedSlice": "F11-A readiness, F11-B planning, F11-C exact-assignment Teacher mark revisions and F11-D independent moderation are verified: owner recovery, dated frozen cohort, distinct outcome states, append-only revisions, explicit moderator authority, information/recusal, fresh-evidence decisions, protected replay, focused seed and direct desktop/mobile inspection. Principal cycle selection, typed Coordination handoff and report publication remain."
+      "completedSlice": "F11-A readiness, F11-B planning, F11-C exact-assignment Teacher mark revisions, F11-D independent moderation and LEA-20 exact-cycle Coordination handoff are verified. Report revision, audience and publication remain."
     },
     {
       "id": "F12",
@@ -191,7 +191,7 @@
       "scope": "Follow DOC-00/01/02 etc canonical tasks: metadata/quarantine, private adapter, real scanning, conditional owner links, authenticated serving and deletion policy.",
       "demo": "Safe file serves; EICAR-style safe test fixture per scanner docs quarantined; scanner failure blocks download; no real personal files.",
       "kind": "foundation",
-      "completedSlice": "DOC-01 schema/domain/ports/Prisma persistence and guarded local storage are verified; ClamAV adapter fails closed and supports controlled rescan. Real scanner execution, owner linking and authenticated serving remain."
+      "completedSlice": "DOC-01 schema/domain/ports/Prisma persistence and guarded local storage are verified; the ClamAV adapter fails closed and supports controlled rescan. Provider-independent promotion/grant/serving, Communication owner linking, real scanner execution and completed browser verification remain distinct gaps."
     },
     {
       "id": "F13",

@@ -1,6 +1,6 @@
 # Documents / shared file-safety current state
 
-Last updated: 17 October 2026.
+Last updated: 18 October 2026.
 
 Status: **DOC-01 ENGINEERING_COMPLETE / DOC-02 PARTIAL / F12 PARTIAL / HUMAN_REVIEW_PENDING**.
 
@@ -25,9 +25,9 @@ Evidence: `docs/evidence/documents-f12-foundation-2026-10-17/README.md`.
 
 ## Remaining F12 / LEA-32 work
 
-1. Configure a real non-production ClamAV engine with current signatures and verify clean, EICAR-blocked and unavailable outcomes through the command adapter.
-2. Add the Communication-specific owner authorization/link transaction so an exact READY immutable DocumentVersion enters the notice approval digest.
-3. Add same-origin authenticated streaming which rechecks current Communication recipient purpose, notice/version state, grant and current asset safety for every request.
-4. Add the notice author/reviewer/publisher browser states and direct desktop/mobile comparison. Until these pass, F12 and LEA-32 remain PARTIAL.
+1. Implement the already-authorized provider-independent DOC-02A lifecycle: exact READY-asset promotion, immutable DocumentVersion, revocable purpose grant, protected replay/status and same-origin streaming. This does not require choosing a production provider and is the next eligible code slice.
+2. Add the Communication-specific adapter and atomic revision link so exact ordered attachment versions enter the proposal approval digest; any change requires new review.
+3. Configure a real non-production ClamAV engine with current signatures and verify clean, EICAR-blocked and unavailable outcomes. The current Apple Silicon workstation has no `clamscan`, `clamdscan` or `freshclam` executable.
+4. Verify every download against current Communication recipient purpose, current notice/version state, current grant and current asset safety. Add author/reviewer/publisher browser states and direct desktop/mobile comparison. Until these pass, F12 and LEA-32 remain PARTIAL.
 
 Human acceptance, native accessibility, TEN-03, provider/security review, retention/deletion, backup/restore and production enablement remain pending.

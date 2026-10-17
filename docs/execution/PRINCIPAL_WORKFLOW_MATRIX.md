@@ -1,6 +1,6 @@
 # Principal workflow implementation matrix
 
-Updated 19 October 2026 from the approved 46-workflow catalog. The approved reference is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`. Status columns remain separate: engineering, direct visual comparison, and human review. This inventory does not authorize later-phase sensitive or approval semantics.
+Updated 18 October 2026 from the approved 46-workflow catalog. The approved reference is `docs/execution/VSchool_Execution_Pack/references/approved/packs/VSchool_Principal_Leadership_Workflows/VSchool_Principal_Leadership_Workflows.html`. Status columns remain separate: engineering, direct visual comparison, and human review. This inventory does not authorize later-phase sensitive or approval semantics. Some evidence directory names use 19 October from the earlier execution queue; Git and filesystem timestamps establish that those captures were produced on 18 October 2026 IST, so the historical paths remain unchanged.
 
 | Workflow | Outcome | Owner area | Phase | Engineering status | Visual status | Human review | Exact gap / next dependency |
 |---|---|---|---:|---|---|---|---|

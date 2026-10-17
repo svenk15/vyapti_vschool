@@ -50,6 +50,18 @@ The recommended first-slice values in the first, second, fourth and sixth rows a
 
 Until a real scanner is configured and exercised, no user-facing upload can be called secure or complete.
 
+## 18 October 2026 closure design delta — DOC-02A
+
+The remaining work is not one external-provider blocker. D15 already authorizes a provider-independent lifecycle that can be implemented against the canonical ports before a scanner is installed:
+
+- `promoteReadyUpload(actor, uploadId, owner, classification, key)` reauthorizes the exact consuming owner, locks the account/scope/upload/asset/document in the documented order, requires the current asset to be `READY` with current `CLEAN` scan evidence for the same hash, creates or advances one immutable DocumentVersion, and creates one ACTIVE owner-purpose grant. Exact replay returns the original version; changed payload conflicts.
+- `openAuthorizedVersion(actor, versionId, ownerCandidate)` treats every browser value as a candidate. Documents resolves the active grant, calls the registered owner adapter for current permission, rechecks the Document/version relationship and current asset scan pointer, then opens the private object. Any revoked purpose, withdrawn owner publication, non-CLEAN current scan, missing object or owner denial fails closed without disclosing existence.
+- The hosting adapter streams the bytes with the stored normalized media type, a sanitized `Content-Disposition`, `X-Content-Type-Options: nosniff`, `Cache-Control: private, no-store` and no storage key or reusable public URL. A route handler performs only bounded multipart/body parsing and maps typed errors.
+- Link/replay evidence needs a Documents-owned exact-command receipt because upload-session idempotency does not cover later promotion. Add it only through a forward BRANCH migration with Path A registration; do not overload Communication receipts or expose the content hash.
+- The first owner adapter is Communication. It accepts only an exact current proposal revision controlled by an AUTHOR grant for upload/link and an exact current frozen NoticeVersion recipient for download. Ordered DocumentVersion IDs enter `attachment_digest`; changing the set or order creates a new proposal revision and invalidates prior approval.
+
+Unit and PostgreSQL tests may use a clearly named deterministic scanner double to prove transitions and transactions. Development remains `SCAN_UNAVAILABLE` until a real configured scanner produces evidence, so the runtime cannot use the double to make an asset downloadable.
+
 ## Installed physical schema (DOC-01)
 
 | Physical table (logical model) | Exact physical columns | Purpose | Constraints / indexes |

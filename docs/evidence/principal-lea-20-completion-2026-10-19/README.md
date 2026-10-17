@@ -2,6 +2,8 @@
 
 Verified implementation commit: `0ffaf54`. Human review remains **PENDING**.
 
+Timestamp provenance: the directory name retained the earlier queue date `2026-10-19`, but the machine clock, filesystem timestamps and Git commits show that these captures and commits were produced on 18 October 2026 in IST. The historical directory is intentionally not renamed.
+
 ## Implemented outcome
 
 - Principal selects an exact authorized Assessments cycle through URL state; branch scope and oversight are rechecked on the server.

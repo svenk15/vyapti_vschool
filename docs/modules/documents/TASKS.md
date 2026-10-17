@@ -26,8 +26,10 @@ Status: ENGINEERING_COMPLETE_FOUNDATION; migration `20261018090000_documents_saf
 
 - [x] Implement local private storage restricted to explicitly guarded development/test composition.
 - [x] Implement a ClamAV command adapter; absent or failed ClamAV remains `SCAN_UNAVAILABLE` and controlled rescan rechecks owner authority.
+- [ ] Add idempotent READY-asset promotion into an immutable DocumentVersion and revocable owner-purpose grant.
+- [ ] Add current-authority, current-safety same-origin download streaming with safe headers and no public object reference.
+- [ ] Add thin hosting composition and bounded upload/status/rescan/link/download routes; keep business policy in Documents and consuming-owner adapters.
 - [ ] Configure and exercise a real non-production ClamAV engine/signature set; no current local executable is installed.
-- [ ] Implement upload/finalize recovery and current-authority same-origin download.
 - [ ] Verify malicious/mismatch/oversize/expired/revoked cases and provider metadata privacy.
 
 Status: PARTIAL; no user route or SAFE-file claim until the real scanner is exercised. Authenticated download remains with the first consuming-owner link.
@@ -52,6 +54,7 @@ Status: NOT_STARTED; depends on DOC-03 and accepted file limits.
 ## DOC-05 — Communication attachments
 
 - [ ] Freeze exact clean versions into one immutable NoticeVersion.
+- [ ] Include ordered attachment-version identities in the proposal revision approval digest so any attachment change invalidates approval.
 - [ ] Reauthorize the current exact Parent/Student notice purpose for every download.
 - [ ] Preserve withdrawal as a content-free state and deny prior attachment access.
 
