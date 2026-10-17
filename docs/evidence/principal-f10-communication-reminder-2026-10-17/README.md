@@ -27,4 +27,6 @@ The routed page preserves reload/recovery and current authorization, and the mob
 
 ## Source and private demo data
 
-The captures and checks verified the intended working tree immediately before its focused checkpoint commit. Exact commit provenance is recorded by the following documentation-only checkpoint. Private seed values remain only in ignored `artifacts/communication-01/private-demo.json`, `artifacts/leadership-01/private-demo.json` and `artifacts/people-02/private-demo.json`.
+The captures and checks verified product source `82ed50fcfa59a1886081c732827dcf2dda79a0df`; normal production build ID `nGKFp1wOlN8wl9gcaqMJd`. Private seed values remain only in ignored `artifacts/communication-01/private-demo.json`, `artifacts/leadership-01/private-demo.json` and `artifacts/people-02/private-demo.json`.
+
+The final full `pnpm demo:seed` refresh preserved earlier successful records but stopped at LDR-01 because the existing private People credential no longer authenticated; it did not overwrite the private password or any existing data. The Communication fixture used for verification had already been refreshed successfully at this checkpoint and remains available.
