@@ -3691,3 +3691,122 @@ model FacilitiesIncidentEvent {
   @@index([organizationId, schoolId, incidentId, occurredAt, id], map: "vs_facilities_incident_event_history_idx")
   @@map("vs_facilities_incident_event")
 }
+
+model FinanceCapabilityGrant {
+  id                  String    @id(map: "vs_finance_capability_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  capability          String    @db.VarChar(32)
+  currency            String?   @db.Char(3)
+  approvalLimitMinor  BigInt?   @map("approval_limit_minor")
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_finance_capability_grant_scope_id_key")
+  @@index([organizationId, schoolId, accountId, capability, currency, revokedAt], map: "vs_finance_capability_grant_active_idx")
+  @@map("vs_finance_capability_grant")
+}
+
+model FinanceLedgerEntry {
+  id              String   @id(map: "vs_finance_ledger_entry_pkey") @db.Uuid
+  organizationId  String   @map("organization_id") @db.Uuid
+  schoolId        String   @map("school_id") @db.Uuid
+  kind            String   @db.VarChar(12)
+  currency        String   @db.Char(3)
+  amountMinor     BigInt   @map("amount_minor")
+  sourceKind      String   @map("source_kind") @db.VarChar(24)
+  sourceRef       String   @map("source_ref") @db.VarChar(120)
+  providerEventId String?  @map("provider_event_id") @db.VarChar(120)
+  occurredAt      DateTime @map("occurred_at") @db.Timestamptz(3)
+  createdAt       DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_finance_ledger_entry_scope_id_key")
+  @@unique([organizationId, schoolId, sourceKind, sourceRef], map: "vs_finance_ledger_entry_source_key")
+  @@index([organizationId, schoolId, currency, occurredAt, id], map: "vs_finance_ledger_entry_currency_cutoff_idx")
+  @@map("vs_finance_ledger_entry")
+}
+
+model FinanceAllocation {
+  id             String   @id(map: "vs_finance_allocation_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  paymentEntryId String   @map("payment_entry_id") @db.Uuid
+  chargeEntryId  String   @map("charge_entry_id") @db.Uuid
+  currency       String   @db.Char(3)
+  amountMinor    BigInt   @map("amount_minor")
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_finance_allocation_scope_id_key")
+  @@unique([organizationId, schoolId, paymentEntryId, chargeEntryId], map: "vs_finance_allocation_pair_key")
+  @@index([organizationId, schoolId, currency, createdAt, id], map: "vs_finance_allocation_currency_idx")
+  @@map("vs_finance_allocation")
+}
+
+model FinanceReconciliation {
+  id                   String   @id(map: "vs_finance_reconciliation_pkey") @db.Uuid
+  organizationId       String   @map("organization_id") @db.Uuid
+  schoolId              String   @map("school_id") @db.Uuid
+  currency              String   @db.Char(3)
+  cutoffAt              DateTime @map("cutoff_at") @db.Timestamptz(3)
+  state                 String   @db.VarChar(16)
+  chargeMinor           BigInt   @map("charge_minor")
+  paymentMinor          BigInt   @map("payment_minor")
+  allocatedMinor        BigInt   @map("allocated_minor")
+  unmatchedChargeMinor  BigInt   @map("unmatched_charge_minor")
+  unallocatedPaymentMinor BigInt @map("unallocated_payment_minor")
+  exceptionCount        Int      @map("exception_count")
+  definitionVersion     Int      @map("definition_version")
+  sourceDigest          String   @map("source_digest") @db.Char(64)
+  createdAt             DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_finance_reconciliation_scope_id_key")
+  @@index([organizationId, schoolId, currency, cutoffAt(sort: Desc), id], map: "vs_finance_reconciliation_latest_idx")
+  @@map("vs_finance_reconciliation")
+}
+
+model FinanceException {
+  id                       String    @id(map: "vs_finance_exception_pkey") @db.Uuid
+  organizationId           String    @map("organization_id") @db.Uuid
+  schoolId                 String    @map("school_id") @db.Uuid
+  reconciliationId         String    @map("reconciliation_id") @db.Uuid
+  currency                 String    @db.Char(3)
+  kind                     String    @db.VarChar(20)
+  amountMinor              BigInt    @map("amount_minor")
+  requesterAccountId       String    @map("requester_account_id") @db.Uuid
+  reviewerAccountId        String    @map("reviewer_account_id") @db.Uuid
+  reason                   String    @db.VarChar(1000)
+  state                    String    @db.VarChar(12)
+  version                  Int
+  requestedAt              DateTime  @map("requested_at") @db.Timestamptz(3)
+  decisionReason           String?   @map("decision_reason") @db.VarChar(1000)
+  decidedAt                DateTime? @map("decided_at") @db.Timestamptz(3)
+  updatedAt                DateTime  @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_finance_exception_scope_id_key")
+  @@index([organizationId, schoolId, reviewerAccountId, state, requestedAt, id], map: "vs_finance_exception_reviewer_idx")
+  @@index([organizationId, schoolId, requesterAccountId, requestedAt(sort: Desc), id], map: "vs_finance_exception_requester_idx")
+  @@map("vs_finance_exception")
+}
+
+model FinanceExceptionEvent {
+  id              String   @id(map: "vs_finance_exception_event_pkey") @db.Uuid
+  organizationId  String   @map("organization_id") @db.Uuid
+  schoolId        String   @map("school_id") @db.Uuid
+  exceptionId     String   @map("exception_id") @db.Uuid
+  number          Int
+  type            String   @db.VarChar(16)
+  fromState       String?  @map("from_state") @db.VarChar(12)
+  toState         String   @map("to_state") @db.VarChar(12)
+  actorAccountId  String   @map("actor_account_id") @db.Uuid
+  reason          String?  @db.VarChar(1000)
+  exceptionVersion Int     @map("exception_version")
+  occurredAt      DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, exceptionId, number], map: "vs_finance_exception_event_number_key")
+  @@index([organizationId, schoolId, exceptionId, occurredAt, id], map: "vs_finance_exception_event_history_idx")
+  @@map("vs_finance_exception_event")
+}

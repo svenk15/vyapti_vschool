@@ -1,17 +1,18 @@
 import type {CoordinationSourceSummary} from './coordination';
 
-export const decisionOwners=['COORDINATION_VERIFICATION','ASSESSMENTS_MODERATION'] as const;
+export const decisionOwners=['COORDINATION_VERIFICATION','ASSESSMENTS_MODERATION','FINANCE_EXCEPTION'] as const;
 export type DecisionOwner=typeof decisionOwners[number];
 export type DecisionAction='VERIFY'|'APPROVE'|'RETURN'|'REJECT'|'REQUEST_INFORMATION'|'RECUSE';
 export const decisionRecusalCategories=['PERSONAL_CONFLICT','REQUESTER_OR_SUBJECT','OTHER_DUTY_CONFLICT'] as const;
 export type DecisionRecusalCategory=typeof decisionRecusalCategories[number];
 export type DecisionReviewer=Readonly<{accountId:string;displayName:string}>;
-export type DecisionType='ATTENDANCE_FOLLOW_UP'|'LEARNING_FOLLOW_UP'|'ASSESSMENT_MODERATION';
+export type DecisionType='ATTENDANCE_FOLLOW_UP'|'LEARNING_FOLLOW_UP'|'ASSESSMENT_MODERATION'|'FINANCE_EXCEPTION';
 export type DecisionDuePeriod='OVERDUE'|'NEXT_7_DAYS'|'LATER'|'NO_DUE_DATE';
 export type DecisionSort='due'|'submitted';
 export type DecisionOrder='asc'|'desc';
 export type AssessmentModerationSourceSummary=Readonly<{type:'ASSESSMENT_PLAN';cycleName:string;sectionName:string;subjectName:string;scaleName:string;state:'PENDING';evidenceVersion:number;evidenceDigest:string;evidenceDigestPrefix:string;counts:Readonly<{numeric:number;notAssessed:number;absent:number;excused:number;total:number}>}>;
-export type DecisionSourceSummary=CoordinationSourceSummary|AssessmentModerationSourceSummary;
+export type FinanceExceptionSourceSummary=Readonly<{type:'FINANCE_EXCEPTION';currency:string;amountMinor:string;kind:'CONCESSION'|'REFUND_REQUEST';reconciliationState:'RECONCILED'|'UNRECONCILED';cutoffAt:string;sourceDigestPrefix:string;state:'PENDING'}>;
+export type DecisionSourceSummary=CoordinationSourceSummary|AssessmentModerationSourceSummary|FinanceExceptionSourceSummary;
 export type DecisionQuery=Readonly<{reference:string|null;type:DecisionType|null;state:'READY'|null;due:DecisionDuePeriod|null;sort:DecisionSort;order:DecisionOrder}>;
 export type DecisionSummary=Readonly<{
  owner:DecisionOwner;

@@ -4,9 +4,10 @@ import {createDecisionInboxServices} from '../../backend/composition/decisions';
 import {accountGateway} from './access';
 import {coordinationServices} from './coordination';
 import {assessmentsServices} from './assessments';
+import {financeServices} from './finance';
 
 if(!assessmentsServices)throw new Error('Assessments decision service unavailable');
-const decisions=createDecisionInboxServices({coordination:coordinationServices,assessments:assessmentsServices});
+const decisions=createDecisionInboxServices({coordination:coordinationServices,assessments:assessmentsServices,finance:financeServices});
 const scoped=async(identity:Identity|null)=>{const scope=(await accountGateway.getHome(identity)).scope;return {identity,organizationId:scope.organizationId,schoolId:scope.schoolId};};
 export const decisionGateway={
  list:async(identity:Identity|null,input:Parameters<typeof decisions.list>[3]={})=>{const s=await scoped(identity);return decisions.list(s.identity,s.organizationId,s.schoolId,input);},

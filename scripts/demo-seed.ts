@@ -41,6 +41,7 @@ const demos = [
   { name: "F13 Principal, staff and family meetings", script: "scripts/demo-meetings.ts", required: true },
   { name: "F14 restricted specialist support", script: "scripts/demo-support.ts", required: true },
   { name: "F16 Facilities service incident", script: "scripts/demo-facilities.ts", required: true },
+  { name: "F15 synthetic Finance reconciliation and exception", script: "scripts/demo-finance.ts", required: true },
 ] as const;
 
 function prepareImportSample(): void {

@@ -1,0 +1,1 @@
+import {financeStatus} from '@/lib/server/finance-http';export const dynamic='force-dynamic';export async function GET(request:Request,{params}:{params:Promise<{id:string;key:string}>}){const {id,key}=await params;return financeStatus(request,id,key);}

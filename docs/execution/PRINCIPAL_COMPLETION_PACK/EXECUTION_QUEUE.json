@@ -232,10 +232,11 @@
       "decisions": [
         "D17"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Subtasks: full Finance LLD; exact-money ledger and charge/receipt facts; allocation/reconciliation; bounded independent decision; safe oversight port. No live payments.",
       "demo": "Synthetic posted charge/payment/reconciliation drives real aggregate; simulated provider adapter labelled, not real settlement.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "Exact-money synthetic Finance owner, immutable ledger/allocation/reconciliation, bounded branch grants, assigned exception lifecycle and typed decision adapter are verified."
     },
     {
       "id": "F16",
@@ -784,10 +785,11 @@
       "decisions": [
         "D17"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-43.md",
       "kind": "workflow",
-      "workflow": "LEA-43"
+      "workflow": "LEA-43",
+      "completedSlice": "Authorized summary, requester recovery, assigned bounded Principal decision, owner receipt, concurrent serialization and direct desktop/mobile comparison are verified; no money movement is implied."
     },
     {
       "id": "WF-44",
