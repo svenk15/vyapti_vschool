@@ -1,6 +1,6 @@
 # LEA-37 / LEA-38 restricted support evidence
 
-Tested worktree base: `154427c`. The exact checkpoint commit is recorded in the subsequent resume update. Human review is **PENDING**.
+Tested checkpoint: `9233507`. E2E build ID: `VGwDcGQTmdhzgwAioco6W`. Human review is **PENDING**.
 
 ## Implemented journeys
 
