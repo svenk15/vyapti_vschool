@@ -1,5 +1,11 @@
 # Coordination current state
 
+## LEA-12 Attendance pupil-pattern source — 17 October 2026
+
+Commit `b4e2b0fba27449faa5e38feb728445a78d6efdf8` registers the distinct `ATTENDANCE_PUPIL_PATTERN` / `PUPIL_ATTENDANCE_SUPPORT` pair. The source key is an immutable Attendance snapshot, and Coordination receives only factual identity/count/date evidence through the typed owner adapter. Creator and protected replay require current named-pupil authority; an assignee independently requires the same pupil grant and `coordination.work`. The only supported evidence claim is `NO_CHANGE_NEEDED`; assignment grants no Attendance correction, marking, family-contact or care authority.
+
+Forward migration `20261018201000_coordination_pupil_pattern_source` extends the exact pair/source constraints and source guard without changing earlier `ATTENDANCE_SESSION` rows. Focused PostgreSQL evidence proves typed creation, exact snapshot replay and denial after source-authority revocation. Desktop/mobile browser evidence covers the staged review and durable receipt in `docs/evidence/principal-lea-12-pupil-attendance-2026-10-18/`. Human review and production gates remain PENDING.
+
 ## 17 October 2026 — COORD-06 / LEA-30 recusal and independent route verified
 
 The registered Coordination decision owner now supports D03 conflict recusal without adding generic approval authority. Migration `20261018170000_coordination_decision_recusal` adds the optional current reviewer and immutable scoped recusal row. The owner transaction locks and reauthorizes the request, validates a pre-authorized independent reviewer, advances version, stores the optional protected note only in owner evidence, writes safe event/audit/receipt metadata and denies the recused actor from detail, decision, information and recovery paths. Exact replay is available only under current branch capability; changed input conflicts.

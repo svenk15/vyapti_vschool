@@ -107,6 +107,15 @@ The portal UX review reproduced the reported empty-day discrepancy without chang
 
 No product completion is assumed. Pilot deployment/provider, staff activation delivery procedure, backup targets and school retention requirements must be resolved in FND-02 before real-data release. Module-specific risks are listed in DESIGN.md.
 
+### LEA-12 factual named-pupil review — 17 October 2026
+
+- **Implementation:** Commit `b4e2b0fba27449faa5e38feb728445a78d6efdf8` adds an Attendance-owned explicit named-pupil grant, immutable factual snapshot, 1–90 branch-local day query, 1–90 absent-session threshold, production Principal route and typed Coordination support handoff. Principal role and aggregate Attendance access do not substitute for the named grant.
+- **Semantics:** Only latest effective marks from SUBMITTED frozen rosters contribute outcomes. Two absent sessions on one date remain two sessions, one date and one unique pupil. Due OPEN/SCHEDULED historical-placement coverage is listed and counted separately and never becomes absence.
+- **Persistence:** Forward migrations `20261018200000_attendance_pupil_review` and `20261018201000_coordination_pupil_pattern_source` are applied in development and test. Both databases contain 94 migrations. TEN-03 policy intent is registered; broad RLS enforcement remains incomplete.
+- **Verification:** Repository gate passed with 223/223 unit tests and 152 table contracts. Focused real-PostgreSQL test passed 1/1, including exact snapshot replay, typed handoff and revocation denial. Sequential one-worker Playwright passed 2/2 at desktop and 2/2 at mobile against build `2b2tYiuJKORt1jochoH1F`; production build `YRNo7gD26XhtwB9sfz7T1` passed with the recorded 4 GiB heap. The earlier 2 GiB E2E build exhausted memory before tests and is not claimed as verification.
+- **Visual evidence:** Direct inspection covered the approved LEA-12 explorer, the populated review, confirmation and receipt at 1440×1000 and 390×844. A mobile horizontal-table defect found during inspection was corrected to a labeled card composition. Evidence: `docs/evidence/principal-lea-12-pupil-attendance-2026-10-18/`.
+- **Seed/release:** `pnpm demo:seed` now reuses a fictional submitted absence, provisions only the exact named grant and writes the ignored scenario to `artifacts/attendance-pupil-review/private-demo.json`. Protected pupil review remains synthetic-only pending real policy, TEN-03, native accessibility, font portability and human acceptance.
+
 ### 11 October 2026 — SA-27 staged correction composition
 
 - **Implementation:** `/admin/attendance/sessions/:id` now follows the approved `Select the record` → `Record evidence` → `Confirm` order. Student, contextual-session, status, reason and review values survive Back/Continue in memory. Validation occurs at the owning stage and the correction request is sent only by final confirmation. No durable draft storage was added.
