@@ -332,7 +332,7 @@
       "decisions": [
         "D07"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-12.md",
       "kind": "workflow",
       "workflow": "LEA-12"
@@ -348,7 +348,7 @@
         "D07",
         "D08"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-13.md",
       "kind": "workflow",
       "workflow": "LEA-13"

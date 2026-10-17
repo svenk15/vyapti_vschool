@@ -16,5 +16,7 @@ export const attendanceExplanationsGateway={
  withdraw:(identity:Identity|null,input:Parameters<ReturnType<typeof createAttendanceExplanationServices>['withdraw']>[1])=>service().withdraw(required(identity),input),
  async listReviewer(identity:Identity|null){const {actor,organizationId,schoolId}=await admin(identity);return service().listReviewer(actor,organizationId,schoolId);},
  async getReviewer(identity:Identity|null,id:unknown){const {actor,organizationId,schoolId}=await admin(identity);return service().getReviewer(actor,organizationId,schoolId,id);},
+ async requestClarification(identity:Identity|null,input:Omit<Parameters<ReturnType<typeof createAttendanceExplanationServices>['requestClarification']>[1],'organizationId'|'schoolId'>){const {actor,organizationId,schoolId}=await admin(identity);return service().requestClarification(actor,{organizationId,schoolId,...input});},
+ respondClarification:(identity:Identity|null,input:Parameters<ReturnType<typeof createAttendanceExplanationServices>['respondClarification']>[1])=>service().respondClarification(required(identity),input),
  async review(identity:Identity|null,input:Omit<Parameters<ReturnType<typeof createAttendanceExplanationServices>['review']>[1],'organizationId'|'schoolId'>){const {actor,organizationId,schoolId}=await admin(identity);return service().review(actor,{organizationId,schoolId,...input});}
 };

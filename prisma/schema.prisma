@@ -2219,6 +2219,7 @@ model AttendanceExplanationReviewerGrant {
   version             Int
 
   @@unique([organizationId, schoolId, accountId], map: "vs_attendance_explanation_reviewer_scope_account_key")
+  @@unique([organizationId, schoolId, id], map: "vs_attendance_explanation_reviewer_scope_id_key")
   @@index([organizationId, schoolId, accountId, revokedAt], map: "vs_attendance_explanation_reviewer_active_idx")
   @@map("vs_attendance_explanation_reviewer_grant")
 }
@@ -2268,6 +2269,7 @@ model AttendanceExplanation {
   studentId           String    @map("student_id") @db.Uuid
   guardianAccessId    String    @map("guardian_access_id") @db.Uuid
   submitterAccountId  String    @map("submitter_account_id") @db.Uuid
+  assignedReviewerGrantId String? @map("assigned_reviewer_grant_id") @db.Uuid
   category            String    @db.VarChar(40)
   explanation         String    @db.VarChar(1000)
   status              String    @db.VarChar(16)
@@ -2284,6 +2286,29 @@ model AttendanceExplanation {
   @@index([organizationId, schoolId, status, submittedAt, id], map: "vs_attendance_explanation_review_idx")
   @@index([organizationId, schoolId, sessionId, studentId], map: "vs_attendance_explanation_session_student_idx")
   @@map("vs_attendance_explanation")
+}
+
+model AttendanceExplanationClarification {
+  id                       String    @id(map: "vs_attendance_explanation_clarification_pkey") @db.Uuid
+  organizationId           String    @map("organization_id") @db.Uuid
+  schoolId                 String    @map("school_id") @db.Uuid
+  explanationId            String    @map("explanation_id") @db.Uuid
+  studentId                String    @map("student_id") @db.Uuid
+  reviewerGrantId          String    @map("reviewer_grant_id") @db.Uuid
+  requestedByAccountId     String    @map("requested_by_account_id") @db.Uuid
+  originatorAccessId       String    @map("originator_access_id") @db.Uuid
+  originatorAccountId      String    @map("originator_account_id") @db.Uuid
+  question                 String    @db.VarChar(1000)
+  answer                   String?   @db.VarChar(1000)
+  status                   String    @db.VarChar(16)
+  version                  Int
+  requestedAt              DateTime  @map("requested_at") @db.Timestamptz(3)
+  answeredAt               DateTime? @map("answered_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_attendance_explanation_clarification_scope_id_key")
+  @@index([organizationId, schoolId, explanationId, requestedAt, id], map: "vs_attendance_explanation_clarification_history_idx")
+  @@index([originatorAccessId, originatorAccountId, status, requestedAt], map: "vs_attendance_explanation_clarification_originator_idx")
+  @@map("vs_attendance_explanation_clarification")
 }
 
 model AdmissionCycle {

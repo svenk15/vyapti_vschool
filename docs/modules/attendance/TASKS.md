@@ -184,3 +184,12 @@ Depends on: FAM-03, ATT-02. Human acceptance is not an implementation dependency
 - [x] Compare the approved Parent/Admin compositions directly at desktop/mobile, complete the focused browser journey, seed fictional data and record current-source evidence.
 
 Status: **ENGINEERING_VERIFIED** for the authorized fictional-data slice. Human review is **PENDING**. Protected-text retention remains a real-data release blocker.
+
+## LEA-13 — Assigned review and source-bound clarification
+
+- [x] Add the server-bound reviewer grant and Attendance-owned clarification child through a forward migration and table registry update.
+- [x] Extend the portable explanation facade with reviewer request and exact-originator response commands using expected versions and stable keys.
+- [x] Block disposition while clarification is open; reload refreshed evidence after answer; prove accept/decline never mutates the Attendance mark.
+- [x] Add Principal review and Parent response compositions, recovery/error states and incremental fictional seed data.
+- [x] Verify exact reviewer/originator authority, co-guardian denial, revocation, replay, stale evidence and narrative exclusion using real PostgreSQL and focused browser journeys.
+- [x] Compare the approved production composition at desktop/mobile, record font/native-accessibility deviations and keep human review pending.

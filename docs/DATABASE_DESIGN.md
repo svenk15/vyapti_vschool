@@ -80,6 +80,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SessionRosterEntry | `vs_attendance_session_roster_entry` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceExplanationReviewerGrant | `vs_attendance_explanation_reviewer_grant` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendanceExplanation | `vs_attendance_explanation` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
+| AttendanceExplanationClarification | `vs_attendance_explanation_clarification` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendancePupilReviewGrant | `vs_attendance_pupil_review_grant` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendancePupilReviewSnapshot | `vs_attendance_pupil_review_snapshot` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | BrandAsset | `vs_branding_brand_asset` | branding | MIGRATED | [branding LLD](modules/branding/DESIGN.md) |
