@@ -44,3 +44,14 @@ Human acceptance remains PENDING. STW-31 remains partial for published assessmen
 - [x] Evaluate the effective publication's pinned academic calendar per civil date and active placement campus; verify one closure and one approved extra teaching day through guarded Parent and Student reads.
 
 Human acceptance remains PENDING. PAR-18 remains partial for advanced event interactions.
+
+## F13 — LEA-36 explicit meetings
+
+- [x] Record the D14 owner, authority, lifecycle, participant, response, completion, action-source, persistence and recovery contract.
+- [ ] Add forward meeting grant/root/participant/action/event persistence and TEN-03 registrations.
+- [ ] Implement guarded manager and participant operations through the Events facade.
+- [ ] Register the minimal `EVENT_MEETING_ACTION` Coordination source adapter without direct foreign-owner writes.
+- [ ] Implement Principal and real participant routes, incremental seed and all interaction states.
+- [ ] Verify PostgreSQL lifecycle/isolation/replay/concurrency, browser journeys, direct desktop/mobile comparison and required repository gates.
+
+Human acceptance and production gates remain PENDING.

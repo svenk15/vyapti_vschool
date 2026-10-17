@@ -60,6 +60,50 @@ This is read-only presentation composition. There is no transaction, idempotency
 
 Verification reuses the existing PostgreSQL owner evidence and adds a focused browser journey with both purposes and a six-day published pattern. It must show the effective teaching week and permitted event together, retain From/category URL state, reach the separately guarded timetable/detail routes, and remain usable at desktop/mobile widths with keyboard focus. The generic PAR-18 review prototype remains the visual authority for shell, hierarchy, controls and spacing; the operational combined read view is an explicit supported composition extension.
 
+## F13 — explicit meetings and accountable actions / LEA-36
+
+**Design readiness (19 October 2026).** Approved D14 authorizes synthetic-only implementation. Events owns a separate meeting aggregate; an ordinary published `MEETING` calendar event is not a meeting invitation, response or attendance record. Coordination continues to own follow-up work. A Principal role, calendar publisher grant, participant row or linked Coordination request never grants access to another owner's student, family, HR or case data.
+
+The trusted operator designates `MEETING_MANAGER` authority for an active branch member. An eligible staff participant is an active membership/account in the same branch. An eligible family participant is an accepted, non-revoked Guardian access/account in the same branch; the exact Guardian access is retained as provenance and rechecked on every participant read/response. The meeting participant row is the explicit bounded meeting-purpose grant. The browser supplies only a candidate participant reference returned by the guarded eligibility query. Selection returns display name and kind, never email, private notes or child/case detail.
+
+Lifecycle is `DRAFT -> PROPOSED -> CONFIRMED -> COMPLETED` or `CANCELLED`. Drafts are Events-owned durable records visible only to the organizer/manager. Proposal requires 1-20 distinct eligible participants, an offset-qualified start/end of 15 minutes to 8 hours, a 1-160 character purpose and an agenda of at most 2,000 characters. Each active participant response is `PENDING`, `ACCEPTED` or `DECLINED`; acceptance is never attendance. Confirmation requires every active participant to accept. A schedule change increments `schedule_revision`, returns the meeting to `PROPOSED` and resets every active response to `PENDING`. Removal preserves the participant evidence but immediately denies future detail/summary access. Completion requires `CONFIRMED`, an explicit `ATTENDED`/`ABSENT` value for every active participant, a bounded shared summary and zero or more explicit actions. Decline can therefore never mark a meeting held.
+
+Each agreed action has one currently active same-branch staff owner, due instant, bounded non-sensitive description and an immutable Events source version. A typed Events-to-Coordination adapter exposes only meeting purpose, action description, owner display, due time, meeting state and source version. Creating the Coordination request is a separate guarded Coordination command and receipt; Events infrastructure never writes Coordination tables. Private agenda/summary text and other participant identities are excluded from that adapter. The source pair is `EVENT_MEETING_ACTION` + `MEETING_FOLLOW_UP`; completion does not claim that an action is coordinated until the Coordination receipt exists.
+
+### Persistence and queries
+
+| Table | Physical fields | Responsibility | Constraints and indexes |
+| --- | --- | --- | --- |
+| `vs_events_meeting_manager_grant` | id/org/school/membership/account/operator uuid; grant/revoke times; version | Explicit synthetic-only meeting manager designation. | Scoped Membership/Account FKs; unique scope/account; active lookup index; positive version. |
+| `vs_events_meeting` | id/org/school/organizer uuid; purpose/agenda; starts/ends/timezone; state/schedule revision/version; summary and lifecycle times | Versioned meeting root distinct from calendar publication. | Scoped School/Account FKs; state, duration, text, lifecycle and positive-version checks; manager/state/time indexes. |
+| `vs_events_meeting_participant` | id/org/school/meeting/account uuid; kind; membership or Guardian access/student provenance; display snapshot; response/attendance; versions/times | Explicit participant purpose, response and actual-attendance evidence. | Scoped Meeting/Account plus kind-specific scoped source FKs; unique meeting/account; kind/provenance and response/attendance checks; participant inbox index. |
+| `vs_events_meeting_action` | id/org/school/meeting/owner uuid; description/due; source version; created time | Exact individually owned agreed-action source for Coordination. | Scoped Meeting/Account FKs; positive source version; meeting/due and owner/due indexes. |
+| `vs_events_meeting_event` | id/org/school/meeting/actor uuid; number/type; safe details; occurred time | Append-only lifecycle, response, removal and completion evidence. | Scoped Meeting/Account FKs; unique meeting/number; allowlisted type; immutable trigger. |
+
+All are BRANCH tables with `(organization_id, school_id)`, Path-A TEN-03 registration and mandatory application authorization. Reads join meeting -> participant and independently recheck live account, active manager designation or exact participant provenance. Manager list uses `(scope,status,starts_at,id)`; participant inbox uses `(scope,account_id,response_status,starts_at,id)` through the meeting join. No read acquires mutation locks.
+
+Mutations run at `SERIALIZABLE` and lock account -> Organization `SHARE` -> School `UPDATE` -> Meeting `UPDATE`. They check the actor, module release/entitlement/activation, exact manager or participant authority, expected meeting/participant version and actor-scoped command receipt. Same key plus exact input returns the original semantic result; changed input conflicts. Status lookup reauthorizes before disclosure and returns `UNKNOWN` honestly. Platform audit/outbox/receipt and meeting event commit atomically with the owner change.
+
+```mermaid
+sequenceDiagram
+  participant P as Principal manager
+  participant E as Events facade
+  participant DB as PostgreSQL
+  participant X as Exact participant
+  participant C as Coordination facade
+  P->>E: save/propose exact meeting and participants
+  E->>DB: guards + locks + meeting/participants/event/receipt
+  X->>E: accept or decline expected schedule revision
+  E->>DB: recheck exact provenance + response/event/receipt
+  P->>E: confirm then complete with explicit attendance/actions
+  E->>DB: completion/action sources/event/receipt
+  P->>C: create MEETING_FOLLOW_UP from one action source
+  C->>E: typed minimal source read under current authority
+  C->>DB: Coordination-owned request/audit/receipt
+```
+
+The Principal production composition uses `/leadership/meetings`, `/leadership/meetings/new` and `/leadership/meetings/:id`; family/staff counterparts use their existing authenticated shells and a bounded meeting inbox/detail. Required states are draft, proposed/pending, accepted, declined, changed schedule, confirmed, completed, cancelled, removed/revoked, stale version, unknown/recovered result and unavailable. The shared summary excludes private notes. Human acceptance, protected-text retention, native accessibility, font portability, TEN-03 and production enablement remain separate gates.
+
 ### Persistence
 
 | Table | Physical fields | Responsibility | Constraints and indexes |
