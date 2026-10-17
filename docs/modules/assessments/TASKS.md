@@ -7,6 +7,8 @@
 - [x] Implement pure reconciliation, portable facade and Prisma projection.
 - [x] Add explicit synthetic oversight grant/provisioning and incremental demo seed.
 - [x] Add Principal recipe-L route and gated navigation.
+- [x] Add authorized exact-cycle selection and URL state.
+- [x] Add the typed Assessments readiness source, eligible planner and exact-evidence Coordination handoff.
 - [x] Verify unit, real PostgreSQL, desktop/mobile browser, build and direct comparison.
 
 ## F11-B — cycle planning and frozen cohort

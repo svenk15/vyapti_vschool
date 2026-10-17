@@ -445,11 +445,11 @@
       "decisions": [
         "D11"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-20.md",
       "kind": "workflow",
       "workflow": "LEA-20",
-      "completedSlice": "Exact readiness, separately authorized real planning, dated cohort freeze and exact-assignment Teacher mark revisions are verified. Authorized Principal cycle selection and typed Assessments-to-Coordination source handoff remain."
+      "completedSlice": "Exact authorized cycle selection, separately authorized planning and mark entry, frozen-denominator reconciliation, typed Assessments-to-Coordination assignment, stale-evidence rejection, exact owner recheck and source-linked durable detail are verified."
     },
     {
       "id": "WF-21",

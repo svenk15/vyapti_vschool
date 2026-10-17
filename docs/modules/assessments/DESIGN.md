@@ -1,6 +1,6 @@
 # Assessments owner design
 
-Status: **D11 SYNTHETIC BASELINE APPROVED / F11-A, F11-B AND F11-C VERIFIED / F11-D READY**.
+Status: **D11 SYNTHETIC BASELINE APPROVED / F11-A, F11-B, F11-C AND F11-D VERIFIED / LEA-20 AND LEA-21 ENGINEERING_COMPLETE**.
 
 The repository owner approved D11 for synthetic-only implementation on 17 October 2026. Assessments owns its scale, cycle, frozen cohort, plan items, mark outcomes and revisions, moderation decisions, report revisions and publication receipts. Academics supplies exact year, section and subject identities; Students supplies dated enrollment/placement facts; Access supplies live accounts and branch memberships. Assessments never writes those owners. Documents will own generated report bytes later; no PDF or download is claimed by F11-A.
 
@@ -45,7 +45,7 @@ All new tables are BRANCH classified with `organization_id` and `school_id`, sco
 
 ### Read contract
 
-`getLeadershipReadiness(identity, scope, cycleId?)` selects the newest visible cycle when no ID is supplied and returns:
+`getLeadershipReadiness(identity, scope, cycleId?)` selects the newest visible cycle when no ID is supplied, rejects an ID outside the verified branch, returns the authorized cycle choices in deterministic `updated_at DESC, id DESC` order and returns:
 
 - cycle, scheme, scale, source cutoff and branch timezone;
 - exact required slots from required plan items × frozen active cohort;
@@ -63,7 +63,13 @@ F11-A setup is an operator-only synthetic provisioner used to establish exact ow
 
 ### API and UI contract
 
-`/leadership/assessments` is recipe L. It shows cycle/source context, reconciled outcome metrics, distinct moderation/report blockers, populated/empty/unavailable/forbidden states and no mutation controls. The later Coordination handoff is enabled only after an Assessments source adapter can reauthorize the exact cycle/evidence version; F11-A does not relabel another owner adapter.
+`/leadership/assessments` is recipe L. It shows an authorized URL-backed exact-cycle selector, cycle/source context, reconciled outcome metrics, distinct moderation/report blockers and populated/empty/unavailable/forbidden states. Browser cycle input is only a candidate; the owner repeats branch and oversight authorization. When blockers remain, the page can start one bounded `ASSESSMENT_READINESS_FOLLOW_UP` without granting mark, moderation or publication authority.
+
+### Typed Coordination handoff
+
+Assessments implements the Coordination source-evidence port for `ASSESSMENT_READINESS`; Coordination never reads or writes Assessments tables. Source setup rechecks the exact cycle, current Principal oversight and current module state, then offers only a current Assessments planning designee who independently holds `coordination.work`. The source summary contains cycle/version, section, source cutoff and aggregate blocker counts, without pupil identities or marks.
+
+The readiness evidence revision is a monotonic exact-owner token derived from the cycle version plus current outcome revisions, moderation versions and report revision numbers. Completion accepts only `ASSESSMENT_READINESS_RECHECK` for that exact current revision. Changed owner evidence returns stale evidence and requires a fresh submission. `NO_CHANGE_NEEDED` is not an Assessments completion claim. Coordination retains its existing serializable request/version/idempotency/audit transaction; every inspect, submit, verify and replay lookup reauthorizes the relevant source or Coordination purpose. A typed request can be withdrawn or reassigned without changing Assessments history.
 
 ### Sequence
 
@@ -86,8 +92,8 @@ sequenceDiagram
 ### Verification criteria
 
 - Unit: scaled score/state validation and reconciliation, including numeric zero.
-- PostgreSQL: scope/FKs, grant requirement, frozen denominator, all outcome states, revoked grant/module denial and snapshot consistency.
-- Browser: populated/empty/unavailable and forbidden deep-link states at 1440×1000 and 390×844, keyboard focus and no overflow.
+- PostgreSQL: scope/FKs, grant requirement, frozen denominator, all outcome states, revoked grant/module denial, snapshot consistency, typed request creation/replay, stale evidence rejection, exact recheck and independent verification.
+- Browser: populated/empty/unavailable and forbidden deep-link states, exact cycle selection and the staged Coordination handoff at 1440×1000 and 390×844, keyboard focus and no overflow.
 - Direct reference comparison uses Principal explorer LEA-20 for stage/labels and recipe L for production composition. Human acceptance, native accessibility, font portability, TEN-03 and production enablement remain separate.
 
 ## Remaining F11 slices
