@@ -1,11 +1,11 @@
-export const studentPortalPurposes=['profile.read_self','attendance.read_self','timetable.read_self','communication.notice.read_self','calendar.event.read_self','learning.assignment.read_self'] as const;
+export const studentPortalPurposes=['profile.read_self','attendance.read_self','attendance.correction.request_self','timetable.read_self','communication.notice.read_self','calendar.event.read_self','learning.assignment.read_self'] as const;
 export type StudentPortalPurpose=typeof studentPortalPurposes[number];
 export type StudentPortalAccessStatus='INVITE_SENT'|'DELIVERY_FAILED'|'OPERATOR_REQUIRED'|'ACCESS_ENABLED'|'ACCESS_REMOVED';
 export type StudentPortalAccessRecord=Readonly<{accessId:string;studentId:string;studentName:string;email:string;status:StudentPortalAccessStatus;version:number;authorizedAt:string;acceptedAt:string|null;revokedAt:string|null;invitationId:string|null;deliveryFailureReason:string|null;purposes:readonly StudentPortalPurpose[]}>;
 export type StudentPortalAuthorizationResult=Readonly<{accessId:string;invitationId:string;status:StudentPortalAccessStatus;version:number;replayed:boolean}>;
 export type StudentPortalContext=Readonly<{accessId:string;studentId:string;displayName:string;admissionNumber:string;institutionName:string;schoolName:string;schoolCode:string;timezone:string;academicYear:string;classLabel:string;enrollmentFrom:string;enrollmentUntil:string;purposes:readonly StudentPortalPurpose[]}>;
 export type StudentPortalWorkspace=Readonly<{accountId:string;displayName:string;contexts:readonly StudentPortalContext[]}>;
-export type StudentSelfAttendanceItem=Readonly<{sessionId:string;date:string;startsAt:string;subjectName:string;sectionName:string;status:'PRESENT'|'ABSENT'|'LATE'|'EXCUSED'|null;lateMinutes:number|null;sessionState:'OPEN'|'SUBMITTED'|'CANCELLED'}>;
+export type StudentSelfAttendanceItem=Readonly<{sessionId:string;date:string;startsAt:string;subjectName:string;sectionName:string;status:'PRESENT'|'ABSENT'|'LATE'|'EXCUSED'|null;lateMinutes:number|null;sourceRevision:number|null;sessionState:'OPEN'|'SUBMITTED'|'CANCELLED'}>;
 export type StudentSelfAttendanceHistory=Readonly<{studentId:string;timezone:string;from:string;until:string;items:readonly StudentSelfAttendanceItem[]}>
 export type StudentSelfTimetablePeriod=Readonly<{periodKey:string;label:string;kind:'LESSON'|'BREAK';startLocal:string;endLocal:string;position:number}>;
 export type StudentSelfTimetableDay=Readonly<{date:string;periods:readonly StudentSelfTimetablePeriod[]}>;

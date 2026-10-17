@@ -34,6 +34,7 @@ const demos = [
   { name: "F07-A Principal staffing availability", script: "scripts/demo-principal-availability.ts", required: true },
   { name: "F07-B exact occurrence cover", script: "scripts/demo-timetable-cover.ts", required: true },
   { name: "Parent Attendance explanation and branch review", script: "scripts/demo-attendance-explanations.ts", required: true },
+  { name: "LEA-14 Attendance correction request and routing", script: "scripts/demo-attendance-correction-requests.ts", required: true },
   { name: "Parent and Student one-off school calendar", script: "scripts/demo-events.ts", required: true },
   { name: "Teacher Learning publication and Parent/Student views", script: "scripts/demo-learning.ts", required: true },
 ] as const;
@@ -124,6 +125,7 @@ function main(): void {
   console.log("- artifacts/guardians-01/private-demo.json");
   console.log("- artifacts/communication-01/private-demo.json");
   console.log("- artifacts/attendance-explanations/private-demo.json");
+  console.log("- artifacts/attendance-correction-requests/private-demo.json");
   console.log("- artifacts/events-01/private-demo.json");
   console.log("- artifacts/learning-01/private-demo.json");
   console.log("- artifacts/students-portal/private-demo.json");

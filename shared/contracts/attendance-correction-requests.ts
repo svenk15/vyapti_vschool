@@ -1,0 +1,6 @@
+import type {AttendanceStatus} from './attendance';
+export type AttendanceCorrectionRequesterKind='GUARDIAN'|'STUDENT'|'TEACHER';
+export type AttendanceCorrectionRequestStatus='SUBMITTED'|'IN_REVIEW'|'CHANGED'|'APPLIED'|'DECLINED'|'WITHDRAWN';
+export type AttendanceCorrectionRequestItem=Readonly<{id:string;organizationId:string;schoolId:string;sessionId:string;studentId:string;studentName:string;schoolDate:string;subjectName:string;sectionName:string;sourceRevision:number;currentRevision:number;originalStatus:AttendanceStatus;originalLateMinutes:number|null;proposedStatus:AttendanceStatus;proposedLateMinutes:number|null;reason:string;requesterKind:AttendanceCorrectionRequesterKind;requesterAccountId:string;status:AttendanceCorrectionRequestStatus;version:number;assignedReviewerAccountId:string|null;reviewerNote:string|null;appliedAttendanceRevision:number|null;createdAt:string;updatedAt:string}>;
+export type AttendanceCorrectionRequestResult=Readonly<{id:string;status:AttendanceCorrectionRequestStatus;version:number;appliedAttendanceRevision:number|null;replayed:boolean}>;
+export type AttendanceCorrectionGrantPurpose='REQUEST_GUARDIAN'|'REQUEST_STUDENT'|'REQUEST_TEACHER'|'ROUTE'|'REVIEW';

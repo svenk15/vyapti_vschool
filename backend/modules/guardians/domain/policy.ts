@@ -1,6 +1,13 @@
-import {guardianPurposes,type GuardianPurpose} from '../../../../shared/contracts/guardians';
+import type {GuardianPurpose} from '../../../../shared/contracts/guardians';
 export class GuardianError extends Error{constructor(public readonly code:'UNAUTHENTICATED'|'FORBIDDEN'|'NOT_FOUND'|'VALIDATION'|'CONFLICT'|'STALE_VERSION'|'IDEMPOTENCY_CONFLICT'|'INVITATION_INVALID'|'RELEASE_UNAVAILABLE'|'MODULE_NOT_LICENSED'|'MODULE_DISABLED'|'UNAVAILABLE'){super(code);this.name='GuardianError';}}
-export const FAMILY_PURPOSES:readonly GuardianPurpose[]=guardianPurposes.filter(purpose=>purpose!=='communication.notice.read'&&purpose!=='attendance.explanation.submit'&&purpose!=='calendar.event.read_child'&&purpose!=='learning.assignment.read_child');
+// Keep the invitation bundle explicit. New purpose grants must never become
+// ambient family authority merely because their contract is added to the
+// browser-safe purpose union.
+export const FAMILY_PURPOSES:readonly GuardianPurpose[]=[
+ 'child.summary.read',
+ 'attendance.read_child',
+ 'timetable.read_child',
+];
 export const NOTICE_PURPOSE:GuardianPurpose='communication.notice.read';
 export const EXPLANATION_PURPOSE:GuardianPurpose='attendance.explanation.submit';
 export const CALENDAR_PURPOSE:GuardianPurpose='calendar.event.read_child';

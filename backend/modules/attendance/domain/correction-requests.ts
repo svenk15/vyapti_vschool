@@ -1,0 +1,10 @@
+import type {AttendanceCorrectionRequesterKind} from '../../../../shared/contracts/attendance-correction-requests';
+import type {AttendanceStatus} from '../../../../shared/contracts/attendance';
+export class AttendanceCorrectionRequestError extends Error{constructor(public readonly code:'UNAUTHENTICATED'|'FORBIDDEN'|'NOT_FOUND'|'VALIDATION'|'CONFLICT'|'STALE_VERSION'|'IDEMPOTENCY_CONFLICT'|'RELEASE_UNAVAILABLE'|'MODULE_NOT_LICENSED'|'MODULE_DISABLED'|'UNAVAILABLE'){super(code);this.name='AttendanceCorrectionRequestError';}}
+const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+export const requiredUuid=(value:unknown)=>{if(typeof value!=='string'||!uuidPattern.test(value))throw new AttendanceCorrectionRequestError('VALIDATION');return value;};
+export const positiveVersion=(value:unknown)=>{if(typeof value!=='number'||!Number.isSafeInteger(value)||value<1)throw new AttendanceCorrectionRequestError('VALIDATION');return value;};
+export const requesterKind=(value:unknown):AttendanceCorrectionRequesterKind=>{if(value!=='GUARDIAN'&&value!=='STUDENT'&&value!=='TEACHER')throw new AttendanceCorrectionRequestError('VALIDATION');return value;};
+export const attendanceStatus=(value:unknown):AttendanceStatus=>{if(value!=='PRESENT'&&value!=='ABSENT'&&value!=='LATE'&&value!=='EXCUSED')throw new AttendanceCorrectionRequestError('VALIDATION');return value;};
+export const lateMinutes=(status:AttendanceStatus,value:unknown)=>{if(status!=='LATE'){if(value!==undefined&&value!==null)throw new AttendanceCorrectionRequestError('VALIDATION');return null;}if(typeof value!=='number'||!Number.isSafeInteger(value)||value<1||value>480)throw new AttendanceCorrectionRequestError('VALIDATION');return value;};
+export const narrative=(value:unknown,min=5,max=1000)=>{if(typeof value!=='string')throw new AttendanceCorrectionRequestError('VALIDATION');const text=value.normalize('NFC').trim();if(text.length<min||text.length>max||/[\u0000-\u001f]/.test(text))throw new AttendanceCorrectionRequestError('VALIDATION');return text;};

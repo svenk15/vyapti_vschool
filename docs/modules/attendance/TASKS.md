@@ -193,3 +193,11 @@ Status: **ENGINEERING_VERIFIED** for the authorized fictional-data slice. Human 
 - [x] Add Principal review and Parent response compositions, recovery/error states and incremental fictional seed data.
 - [x] Verify exact reviewer/originator authority, co-guardian denial, revocation, replay, stale evidence and narrative exclusion using real PostgreSQL and focused browser journeys.
 - [x] Compare the approved production composition at desktop/mobile, record font/native-accessibility deviations and keep human review pending.
+
+## LEA-14 — Review an attendance correction request
+
+- [x] Record exact Student/session/source-revision ownership, lifecycle, requester/router/reviewer authority, owner-receipt closure, indexes, replay and failure states in DESIGN.md.
+- [x] Add forward-only request/grant/event persistence and purpose allowlists; register every tenant table for the TEN-03 closure gate.
+- [x] Implement Parent, Student and assigned-Teacher contextual request/status/withdraw operations, Principal routing and explicit reviewer apply/decline operations through portable facades.
+- [x] Keep Attendance mutation inside its existing guarded owner command and require its exact committed receipt before APPLIED.
+- [ ] Complete incremental synthetic seed, current-source PostgreSQL/browser/repository/build verification, direct responsive comparison and evidence. Human acceptance remains PENDING.

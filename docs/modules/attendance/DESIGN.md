@@ -464,6 +464,58 @@ The production composition uses the shared recipe-D review page at `/leadership/
 
 ## Migration, retention and handoff
 
+## LEA-14 — Exact attendance correction requests
+
+**Design readiness (18 October 2026):** D07/D08 approve this fictional-data slice. Attendance owns the request and the final correction. Coordination is not reused as correction authority. Parent, Student and assigned Teacher entry points accept a browser candidate Student/session, then server-side requester ports resolve the exact live purpose and scoped source before any request is written.
+
+The source invariant is `(organization_id, school_id, session_id, student_id, source_revision)`. The session must be `SUBMITTED`, the Student must be in its frozen roster, and `AttendanceRecord.current_revision` must equal `source_revision`. Original values are copied from Attendance; proposed status uses the existing allowlist and LATE rule. One partial unique index permits one active `SUBMITTED`, `IN_REVIEW` or `CHANGED` request for that exact source. A source change yields durable `CHANGED`; it never overwrites the newer record. A new request must originate from the newly loaded source.
+
+Authority is explicit and live:
+
+- a Guardian requires the exact accepted, unrevoked child link, `attendance.correction.request_child`, and `REQUEST_GUARDIAN` grant;
+- a Student requires the exact accepted, unrevoked self link, `attendance.correction.request_self`, and `REQUEST_STUDENT` grant;
+- a Teacher requires active Teacher membership, active employment/identity, dated assignment to the exact offering, frozen-roster membership and `REQUEST_TEACHER` grant;
+- routing requires a current Principal membership plus `ROUTE`; it grants no source-read or correction permission;
+- review requires active School Administrator membership plus `REVIEW`; applying then invokes the existing Attendance `correct` command, which independently rechecks `attendance.correct`, module state, scope and session version.
+
+The lifecycle is `SUBMITTED → IN_REVIEW → APPLIED | DECLINED`, with `CHANGED` when evidence moves and `WITHDRAWN` from any nonterminal requester state. APPLIED is committed only after the request adapter reads the exact `AttendanceSessionCorrected` owner receipt for the same organization, reviewer actor, correction key, session and one Student change. The request row stores that correction key and committed Attendance revision. No request or routing action writes Attendance records.
+
+| Physical table | Contract and access path |
+|---|---|
+| `vs_attendance_correction_grant` (AttendanceCorrectionGrant) | id/org/school/account/operator uuid; purpose; granted/revoked timestamps; version | Explicit requester, Principal router or Attendance reviewer authority; no purpose implies mark mutation authority. | Account FK; purpose/version checks; unique scope/account/purpose; active purpose lookup index |
+| `vs_attendance_correction_request` (AttendanceCorrectionRequest) | id/org/school/session/student/requester/reviewer grants/accounts uuid; exact source/proposed values and revisions; status/version; reason/reviewer note; correction key/receipt revision; timestamps | Exact submitted Attendance mark correction request routed separately from Attendance correction authority. | Scoped session/roster/grant FKs; value/state/version checks; one active request per source revision; router/reviewer/requester indexes |
+| `vs_attendance_correction_request_event` (AttendanceCorrectionRequestEvent) | id/org/school/request/actor uuid; type; request_version; safe details jsonb; occurred_at | Immutable request routing, source-change, disposition and withdrawal evidence without protected narrative duplication. | Scoped request/account FKs; type/version checks; history index; immutable update/delete trigger |
+
+Requester history uses `requester_account_id, created_at DESC, id`; routing uses `scope,status,created_at,id`; assigned review uses `scope,assigned_reviewer_grant_id,status,created_at,id`. Item composition joins the scoped Session → Offering → Subject/Section, frozen roster display snapshot, current AttendanceRecord revision and assigned grant. No global Person or Student search participates.
+
+All mutations use PostgreSQL transactions and expected request versions. Submit, route, withdraw and decide bind stable actor/scope/command/key receipts to normalized business input; transport request IDs are excluded from the input hash. Same key and business input returns the original semantic result, while changed input conflicts. Review first snapshots current evidence. The Attendance correction is a deliberately separated owner transaction; its stable key makes response-loss replay safe. Request closure locks and rechecks the request and requires the exact owner receipt. Concurrent source changes therefore yield `CHANGED` or a stale request result, never a second correction. Reads do not acquire write locks.
+
+```mermaid
+sequenceDiagram
+  actor R as Authorized requester
+  actor P as Principal router
+  actor V as Attendance reviewer
+  participant H as Next host
+  participant C as Correction-request use cases
+  participant A as Attendance owner
+  participant D as PostgreSQL
+  R->>H: Exact Student/session/source revision + proposed fact + key
+  H->>C: Validated command and current identity
+  C->>D: Recheck purpose, assignment/link, roster and source; write SUBMITTED + receipt
+  P->>C: Route expected request version to explicit reviewer grant
+  C->>D: Recheck Principal and reviewer grants; write IN_REVIEW
+  V->>C: Apply expected request/source version + correction key
+  C->>D: Recheck assigned reviewer and source
+  C->>A: Existing guarded Attendance correct command
+  A->>D: Commit revision and exact owner receipt
+  C->>D: Verify owner receipt; write APPLIED + immutable event
+  D-->>R: Reauthorized persisted status and committed revision
+```
+
+The production routes are contextual Parent, Student and Teacher request/status screens, Principal routing at `/leadership/attendance/correction-requests`, and assigned review at `/admin/attendance/correction-requests`. In-flow Back/Continue retains safe values. An unknown response retains the exact key and payload for retry. Status disclosure rechecks the original current purpose/assignment and explicit grant. Scope loss returns a protected unavailable result. Recipe W uses the shared stepper, fact lists, cards, alerts, badges and responsive shell; reference-less changed/unknown states use the established shared patterns.
+
+Verification requires unit/type validation; real PostgreSQL submit/replay, route/apply, exact owner receipt, changed source, withdrawal, revoked disclosure, cross-scope denial and concurrent correction evidence; and one-worker desktop/mobile browser coverage of requester → Principal → reviewer → persisted status. Synthetic protected-text mode remains required. Human review, font portability, native accessibility and TEN-03 remain separate gates.
+
 Implement tables only in the task that first uses them; migrate from empty database and the previous task checkpoint. Add scoped unique indexes before composite FKs; detect existing duplicates before adding constraints. SQL append-only/null-campus/range safeguards must appear in reviewed migrations and real-DB tests. No seed may erase prior data. Use synthetic fixtures and clean only owned test records. Preserve schema-compatible app rollback; use a reviewed forward migration when incompatible. Retention changes must preserve required immutable evidence and legal holds under the school-approved policy, not an ad hoc DELETE.
 
 Roster completeness/exact identity set, all-excused denominator, retries lost after commit, same key/different payload, stale version, two tabs, revoked assignment, school-midnight/DST invalid/ambiguous time, open-vs-transfer, calendar changes, correction-vs-cancel, audit/outbox rollback, scope isolation and 40-pupil usability. Time entry ambiguity requires explicit offset selection; do not guess a DST instant.

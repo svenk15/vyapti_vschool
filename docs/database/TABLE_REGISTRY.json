@@ -1,5 +1,5 @@
 {
-  "revision": "4.17",
+  "revision": "4.18",
   "prefix": "vs_",
   "tables": [
     {
@@ -280,7 +280,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; account_id uuid; person_id uuid; verified_at timestamptz(3); verified_by uuid",
       "responsibility": "Deliberate verified account-to-person link; People supplies scoped Person reference.",
-      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)→Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)",
+      "constraints": "FK organization/account/verifier; FK(organization_id,person_id)\u2192Person; UNIQUE(organization_id,account_id); UNIQUE(organization_id,person_id)",
       "rls": {
         "classification": "INSTITUTION",
         "scopeColumns": [
@@ -300,7 +300,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; account_id uuid nullable; kind varchar(40); occurred_at timestamptz(3); request_id uuid; actor_account_id uuid nullable; decision varchar(12) nullable; safe_reason varchar(80) nullable; policy_snapshot jsonb nullable",
       "responsibility": "Redacted auth/recovery evidence including internal cross-institution policy decisions. request_id is the correlation ID; no password, raw token or raw unknown identifier.",
-      "constraints": "FK accounts when present; index(account_id,occurred_at,id); immutable except one guarded NULL→account_id association for an initially unknown reset attempt resolved in the same locked transaction; cross-institution details only via operator/security authorization",
+      "constraints": "FK accounts when present; index(account_id,occurred_at,id); immutable except one guarded NULL\u2192account_id association for an initially unknown reset attempt resolved in the same locked transaction; cross-institution details only via operator/security authorization",
       "rls": {
         "classification": "GLOBAL_SECURITY",
         "scopeColumns": [],
@@ -318,7 +318,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; code varchar(40); name varchar(160); status ACTIVE/INACTIVE; version int",
       "responsibility": "Optional subordinate site; no campus-level grants in first release.",
-      "constraints": "FK(scope)→School; UNIQUE(scope,id); UNIQUE(scope,code)",
+      "constraints": "FK(scope)\u2192School; UNIQUE(scope,id); UNIQUE(scope,code)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -418,7 +418,7 @@
       "design": "docs/modules/access/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; code SCHOOL_ADMIN/TEACHER/PRINCIPAL",
       "responsibility": "Fixed permission mapping in code; no arbitrary permission JSON.",
-      "constraints": "FK(scope,membership_id)→membership; UNIQUE(scope,membership_id,code); role CHECK changed forward by `20261016000100_principal_branch_role`",
+      "constraints": "FK(scope,membership_id)\u2192membership; UNIQUE(scope,membership_id,code); role CHECK changed forward by `20261016000100_principal_branch_role`",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -561,7 +561,7 @@
       "design": "docs/modules/attendance/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; session_id uuid; student_id uuid; status PRESENT/ABSENT/LATE/EXCUSED; late_minutes int nullable; current_revision int",
       "responsibility": "Current submitted status; one per roster pupil. No blank record stored before submit.",
-      "constraints": "FK(scope,session_id,student_id)→SessionRosterEntry UNIQUE(scope,session_id,student_id); UNIQUE(scope,session_id,student_id); CHECK recognized status; CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL); current_revision>=1; unique key supports roster join",
+      "constraints": "FK(scope,session_id,student_id)\u2192SessionRosterEntry UNIQUE(scope,session_id,student_id); UNIQUE(scope,session_id,student_id); CHECK recognized status; CHECK (status='LATE' AND late_minutes BETWEEN 1 AND 480) OR (status<>'LATE' AND late_minutes IS NULL); current_revision>=1; unique key supports roster join",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -771,7 +771,7 @@
       "design": "docs/modules/imports/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; job_id uuid; preview_revision int; row_number int; input_hash char(64); normalized jsonb nullable; decision CREATE/NO_CHANGE/ERROR/CONFLICT; status PENDING/SUCCEEDED/FAILED/SKIPPED; expected_references jsonb; result jsonb nullable; error_code varchar(80) nullable; errors jsonb",
       "responsibility": "Normalized bounded row and column-safe preview errors stay in owned ImportRow until terminal retention expiry; status changes in a School-guard transaction.",
-      "constraints": "FK(scope,job_id)→ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); CHECK row 2–1001, decision/status values and nullable normalized object/expected-reference object/errors array shapes; index(scope,job_id,status,row_number); partial index(scope,job_id,row_number) where normalized is not null",
+      "constraints": "FK(scope,job_id)\u2192ImportJob; UNIQUE(scope,job_id,preview_revision,row_number); CHECK row 2\u20131001, decision/status values and nullable normalized object/expected-reference object/errors array shapes; index(scope,job_id,status,row_number); partial index(scope,job_id,row_number) where normalized is not null",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -854,7 +854,7 @@
       "design": "docs/modules/people/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; person_id uuid; version int; previous_first_name varchar(100); previous_last_name varchar(100); corrected_first_name varchar(100); corrected_last_name varchar(100); reason varchar(500); actor_account_id uuid; school_id uuid; occurred_at timestamptz(3)",
       "responsibility": "Append-only People-owned identity correction history. Names and reason stay in this owned storage and are excluded from receipts/outbox/audit diffs.",
-      "constraints": "FK(organization_id,person_id)→Person; FK actor account; scoped School context FK; UNIQUE(organization_id,person_id,version); index(organization_id,person_id,version desc); CHECK version>=2, bounded names/reason; append-only trigger",
+      "constraints": "FK(organization_id,person_id)\u2192Person; FK actor account; scoped School context FK; UNIQUE(organization_id,person_id,version); index(organization_id,person_id,version desc); CHECK version>=2, bounded names/reason; append-only trigger",
       "rls": {
         "classification": "INSTITUTION",
         "scopeColumns": [
@@ -1081,7 +1081,7 @@
       "design": "docs/modules/students/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; person_id uuid; admission_number varchar(40); admitted_on date nullable; admission_date_verified_at timestamptz(3) nullable; admission_date_verified_by uuid nullable; admission_date_verification_reason varchar(500) nullable; status ACTIVE/ARCHIVED; version int; created_at timestamptz(3)",
       "responsibility": "Students-owned branch identity and admission number; the Person remains People-owned and is never inferred by name or email.",
-      "constraints": "FK(scope)→School; FK(organization_id,person_id)→Person; FK admission_date_verified_by→UserAccount; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number and coherent date evidence; index(scope,status,id)",
+      "constraints": "FK(scope)\u2192School; FK(organization_id,person_id)\u2192Person; FK admission_date_verified_by\u2192UserAccount; UNIQUE(scope,id); UNIQUE(scope,admission_number); UNIQUE(scope,person_id); CHECK status/version/admission_number and coherent date evidence; index(scope,status,id)",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -1123,7 +1123,7 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid nullable; actor_account_id uuid; expected_revision int; new_revision int; changes jsonb; reason varchar(500); occurred_at timestamptz(3); request_id uuid",
       "responsibility": "Append-only institution or branch configuration history with an atomically enlisted revision.",
-      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5–500; append-only",
+      "constraints": "FKs organization, scoped nullable School and actor account; indexes for institution/branch history and actor; new_revision=expected_revision+1; reason 5\u2013500; append-only",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -1144,7 +1144,7 @@
       "design": "docs/modules/tenancy/DESIGN.md",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; module_id varchar(40); need varchar(1000); status SUBMITTED; submitted_by_account_id uuid; submitted_at timestamptz(3)",
       "responsibility": "Immutable, non-binding branch capability-interest submission for institution review; it has no entitlement, activation, purchase or payment effect.",
-      "constraints": "FK organization; composite scoped School FK; FK submitter account; module_id limited to attendance/family/fees/transport; need 5–1000; status SUBMITTED; UNIQUE(scope,id); branch-history, institution-review and submitter indexes",
+      "constraints": "FK organization; composite scoped School FK; FK submitter account; module_id limited to attendance/family/fees/transport; need 5\u20131000; status SUBMITTED; UNIQUE(scope,id); branch-history, institution-review and submitter indexes",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
@@ -1923,6 +1923,69 @@
           "school_id"
         ],
         "intendedPolicy": "Exact original submitter with live child purpose or the exact currently assigned reviewer grant; protected text excluded from general evidence.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AttendanceCorrectionGrant",
+      "owner": "attendance",
+      "table": "vs_attendance_correction_grant",
+      "status": "MIGRATED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id/org/school/account/operator uuid; purpose; granted/revoked timestamps; version",
+      "responsibility": "Explicit requester, Principal router or Attendance reviewer authority; no purpose implies mark mutation authority.",
+      "constraints": "Account FK; purpose/version checks; unique scope/account/purpose; active purpose lookup index",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context plus the exact live requester, router or reviewer grant; application authorization remains mandatory and Attendance mutation keeps its owner guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AttendanceCorrectionRequest",
+      "owner": "attendance",
+      "table": "vs_attendance_correction_request",
+      "status": "MIGRATED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id/org/school/session/student/requester/reviewer grants/accounts uuid; exact source/proposed values and revisions; status/version; reason/reviewer note; correction key/receipt revision; timestamps",
+      "responsibility": "Exact submitted Attendance mark correction request routed separately from Attendance correction authority.",
+      "constraints": "Scoped session/roster/grant FKs; value/state/version checks; one active request per source revision; router/reviewer/requester indexes",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context plus the exact live requester, router or reviewer grant; application authorization remains mandatory and Attendance mutation keeps its owner guard.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "attendance",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "AttendanceCorrectionRequestEvent",
+      "owner": "attendance",
+      "table": "vs_attendance_correction_request_event",
+      "status": "MIGRATED",
+      "design": "docs/modules/attendance/DESIGN.md",
+      "fields": "id/org/school/request/actor uuid; type; request_version; safe details jsonb; occurred_at",
+      "responsibility": "Immutable request routing, source-change, disposition and withdrawal evidence without protected narrative duplication.",
+      "constraints": "Scoped request/account FKs; type/version checks; history index; immutable update/delete trigger",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context plus the exact live requester, router or reviewer grant; application authorization remains mandatory and Attendance mutation keeps its owner guard.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "attendance",
         "closureGate": "TEN-03"
@@ -2853,7 +2916,7 @@
       "table": "vs_reporting_brief_section",
       "fields": "id uuid PK; organization_id uuid; brief_id uuid; revision_id uuid; position int; school_id uuid; snapshot_id uuid; metric varchar(80)",
       "responsibility": "Ordered pointer to an immutable allowlisted Reporting snapshot; no copied raw payload.",
-      "constraints": "Scoped Revision/Brief, School and Snapshot FKs; fixed metric CHECK; position 1–20; UNIQUE(revision_id,position) and UNIQUE(revision_id,snapshot_id); immutable trigger",
+      "constraints": "Scoped Revision/Brief, School and Snapshot FKs; fixed metric CHECK; position 1\u201320; UNIQUE(revision_id,position) and UNIQUE(revision_id,snapshot_id); immutable trigger",
       "owner": "reporting",
       "status": "MIGRATED",
       "design": "docs/modules/reporting/DESIGN.md",
@@ -2873,7 +2936,7 @@
       "table": "vs_reporting_brief_recipient",
       "fields": "id uuid PK; organization_id uuid; brief_id uuid; revision_id uuid; position int; account_id uuid; shared_at timestamptz(3) nullable; first_read_at timestamptz(3) nullable",
       "responsibility": "Explicit reviewed portal audience and delivery/read facts.",
-      "constraints": "Scoped Revision/Brief and Account FKs; position 1–20; first_read requires shared; UNIQUE(revision_id,position) and UNIQUE(revision_id,account_id); recipient inbox index; content/audience immutable trigger",
+      "constraints": "Scoped Revision/Brief and Account FKs; position 1\u201320; first_read requires shared; UNIQUE(revision_id,position) and UNIQUE(revision_id,account_id); recipient inbox index; content/audience immutable trigger",
       "owner": "reporting",
       "status": "MIGRATED",
       "design": "docs/modules/reporting/DESIGN.md",
@@ -2893,7 +2956,7 @@
       "table": "vs_reporting_brief_action",
       "fields": "id uuid PK; organization_id uuid; school_id uuid; brief_id uuid; revision_id uuid; position int; request_id uuid; request_version int",
       "responsibility": "Immutable ordered pointer from one weekly-review revision to a Coordination-owned action; no private resolution text or copied source data.",
-      "constraints": "Scoped Revision/Brief, School and CoordinationRequest FKs; position 1–50; positive request version; UNIQUE(revision_id,position) and UNIQUE(revision_id,request_id); immutable trigger; revision and request lookup indexes",
+      "constraints": "Scoped Revision/Brief, School and CoordinationRequest FKs; position 1\u201350; positive request version; UNIQUE(revision_id,position) and UNIQUE(revision_id,request_id); immutable trigger; revision and request lookup indexes",
       "owner": "reporting",
       "status": "MIGRATED",
       "design": "docs/modules/reporting/DESIGN.md",

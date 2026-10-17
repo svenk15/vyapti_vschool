@@ -2311,6 +2311,70 @@ model AttendanceExplanationClarification {
   @@map("vs_attendance_explanation_clarification")
 }
 
+model AttendanceCorrectionGrant {
+  id                  String    @id(map: "vs_attendance_correction_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  purpose             String    @db.VarChar(24)
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_attendance_correction_grant_scope_id_key")
+  @@unique([organizationId, schoolId, accountId, purpose], map: "vs_attendance_correction_grant_scope_account_purpose_key")
+  @@index([organizationId, schoolId, purpose, revokedAt, accountId], map: "vs_attendance_correction_grant_active_idx")
+  @@map("vs_attendance_correction_grant")
+}
+
+model AttendanceCorrectionRequest {
+  id                       String    @id(map: "vs_attendance_correction_request_pkey") @db.Uuid
+  organizationId           String    @map("organization_id") @db.Uuid
+  schoolId                 String    @map("school_id") @db.Uuid
+  sessionId                String    @map("session_id") @db.Uuid
+  studentId                String    @map("student_id") @db.Uuid
+  sourceRevision           Int       @map("source_revision")
+  originalStatus           String    @map("original_status") @db.VarChar(16)
+  originalLateMinutes      Int?      @map("original_late_minutes")
+  proposedStatus           String    @map("proposed_status") @db.VarChar(16)
+  proposedLateMinutes      Int?      @map("proposed_late_minutes")
+  reason                   String    @db.VarChar(1000)
+  requesterGrantId         String    @map("requester_grant_id") @db.Uuid
+  requesterAccountId       String    @map("requester_account_id") @db.Uuid
+  requesterKind            String    @map("requester_kind") @db.VarChar(16)
+  assignedReviewerGrantId  String?   @map("assigned_reviewer_grant_id") @db.Uuid
+  status                   String    @db.VarChar(16)
+  version                  Int
+  reviewerNote             String?   @map("reviewer_note") @db.VarChar(1000)
+  correctionCommandKey     String?   @map("correction_command_key") @db.Uuid
+  appliedAttendanceRevision Int?     @map("applied_attendance_revision")
+  createdAt                DateTime  @map("created_at") @db.Timestamptz(3)
+  updatedAt                DateTime  @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_attendance_correction_request_scope_id_key")
+  @@index([organizationId, schoolId, status, createdAt, id], map: "vs_attendance_correction_request_route_idx")
+  @@index([organizationId, schoolId, assignedReviewerGrantId, status, createdAt, id], map: "vs_attendance_correction_request_reviewer_idx")
+  @@index([requesterAccountId, createdAt(sort: Desc), id], map: "vs_attendance_correction_request_requester_idx")
+  @@map("vs_attendance_correction_request")
+}
+
+model AttendanceCorrectionRequestEvent {
+  id             String   @id(map: "vs_attendance_correction_request_event_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  requestId      String   @map("request_id") @db.Uuid
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  type           String   @db.VarChar(24)
+  requestVersion Int      @map("request_version")
+  details        Json
+  occurredAt     DateTime @map("occurred_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_attendance_correction_request_event_scope_id_key")
+  @@index([organizationId, schoolId, requestId, occurredAt, id], map: "vs_attendance_correction_request_event_history_idx")
+  @@map("vs_attendance_correction_request_event")
+}
+
 model AdmissionCycle {
  id String @id(map:"vs_admissions_cycle_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid
