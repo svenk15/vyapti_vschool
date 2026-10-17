@@ -12,10 +12,10 @@
 ## F11-B — cycle planning and frozen cohort
 
 - [x] Resolve the narrow planning authority, command, transaction, frozen-cohort and recovery contract.
-- [ ] Add planning-grant and owner-receipt persistence with forward migration and TEN-03 registration.
-- [ ] Implement separately authorized scale, plan and freeze commands with exact Academics/Students checks, versions and replay.
-- [ ] Add the real Administrator planning screen and recovery states.
-- [ ] Verify domain, PostgreSQL, browser, direct visual comparison and build evidence.
+- [x] Add planning-grant and owner-receipt persistence with forward migration and TEN-03 registration.
+- [x] Implement separately authorized scale, plan and freeze commands with exact Academics/Students checks, versions and replay.
+- [x] Add the real Administrator planning screen and recovery states.
+- [x] Verify domain, PostgreSQL, browser, direct visual inspection and build evidence.
 
 ## F11-C — assigned-Teacher mark revisions
 

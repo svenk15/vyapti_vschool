@@ -1,6 +1,6 @@
 # Assessments owner design
 
-Status: **D11 SYNTHETIC BASELINE APPROVED / F11-A VERIFIED / F11-B DESIGN READY**.
+Status: **D11 SYNTHETIC BASELINE APPROVED / F11-A AND F11-B VERIFIED / F11-C DESIGN REQUIRED**.
 
 The repository owner approved D11 for synthetic-only implementation on 17 October 2026. Assessments owns its scale, cycle, frozen cohort, plan items, mark outcomes and revisions, moderation decisions, report revisions and publication receipts. Academics supplies exact year, section and subject identities; Students supplies dated enrollment/placement facts; Access supplies live accounts and branch memberships. Assessments never writes those owners. Documents will own generated report bytes later; no PDF or download is claimed by F11-A.
 
@@ -29,6 +29,8 @@ All new tables are BRANCH classified with `organization_id` and `school_id`, sco
 | Physical table (logical model) | Exact physical columns | Purpose | Constraints / indexes |
 |---|---|---|---|
 | `vs_assessments_oversight_grant` (AssessmentsOversightGrant) | id/org/school/membership/account/operator uuid; grant/revoke timestamps; version | Explicit Principal oversight designation; Principal role alone is insufficient. | Scoped membership/account FKs; unique scope account; active lookup index; positive version. |
+| `vs_assessments_planning_grant` (AssessmentsPlanningGrant) | id/org/school/membership/account/operator uuid; grant/revoke timestamps; version | Explicit School Administrator planning designation. | Scoped membership/account FKs; unique scope account; active lookup index; positive version. |
+| `vs_assessments_command_receipt` (AssessmentsCommandReceipt) | id/org/school/actor uuid; command/key/hash/result/time | Owner replay and lost-response evidence for planning commands. | Scoped School/actor FKs; unique actor command intent; hash and actor-time indexes. |
 | `vs_assessments_scale` (AssessmentsScale) | id/org/school uuid; code/name; integer min/max; precision/rounding; status/version/time | Versioned exact-decimal scoring scale. | Scoped School FK; unique code; bounded precision/range/rounding/status checks. |
 | `vs_assessments_cycle` (AssessmentsCycle) | id/org/school/year/section/scale uuid; code/name; scheme/state/cutoff/version/timestamps | Assessment scheme and readiness root pinned to exact academic scope. | Scoped School/Year/Section/Scale FKs; unique code; state/version checks; state/update index. |
 | `vs_assessments_plan_item` (AssessmentsPlanItem) | id/org/school/cycle/subject uuid; max scaled; weight bp; required; position | Frozen required or optional subject requirement. | Scoped Cycle/Subject FKs; unique cycle subject; score/weight/position checks; cycle index. |

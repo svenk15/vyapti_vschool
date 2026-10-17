@@ -3385,6 +3385,48 @@
         "owner": "assessments",
         "closureGate": "TEN-03"
       },
+      "model": "AssessmentsPlanningGrant",
+      "table": "vs_assessments_planning_grant",
+      "fields": "id/org/school/membership/account/operator uuid; grant/revoke timestamps; version",
+      "responsibility": "Explicit School Administrator assessment-planning designation.",
+      "constraints": "Scoped membership/account FKs; unique scope account; active lookup index; positive version."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
+      "model": "AssessmentsCommandReceipt",
+      "table": "vs_assessments_command_receipt",
+      "fields": "id/org/school/actor uuid; command/key/hash/result/time",
+      "responsibility": "Assessments-owned replay and lost-response evidence for planning commands.",
+      "constraints": "Scoped School/actor FKs; unique actor command intent; hash and actor-time indexes."
+    },
+    {
+      "owner": "assessments",
+      "status": "MIGRATED",
+      "design": "docs/modules/assessments/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require verified branch context, current live authorization and exact Assessments purpose; WITH CHECK binds both scope columns.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "assessments",
+        "closureGate": "TEN-03"
+      },
       "model": "AssessmentsPlanItem",
       "table": "vs_assessments_plan_item",
       "fields": "id/org/school/cycle/subject uuid; max scaled; weight bp; required; position",

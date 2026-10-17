@@ -22,6 +22,7 @@ const routes:readonly Route[]=[
  {label:'Admissions',href:'/admin/admissions',icon:'students',permission:'admissions.manage',modules:['admissions','student_core']},
  {label:'Imports',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
  {label:'Academics',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
+ {label:'Assessment planning',href:'/admin/assessments',icon:'academics',permission:'school.manage',modules:['assessments','academic_core','student_core']},
  {label:'Timetable',href:'/admin/timetable',icon:'calendar',permission:'timetable.manage',modules:['timetable','academic_core','staff_core']},
  {label:'Cover coordination',href:'/admin/timetable/cover',icon:'people',permission:'timetable.manage',modules:['timetable','academic_core','staff_core','attendance']},
  {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
@@ -31,7 +32,7 @@ const routes:readonly Route[]=[
  {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
 const sections:readonly Readonly<{label:string;hrefs:readonly string[]}>[]=[
- {label:'Operations',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/users','/admin/academics','/admin/timetable','/admin/timetable/cover','/admin/reports/attendance','/admin/communication','/admin/events']},
+ {label:'Operations',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/users','/admin/academics','/admin/assessments','/admin/timetable','/admin/timetable/cover','/admin/reports/attendance','/admin/communication','/admin/events']},
  {label:'Management',hrefs:['/admin/teachers','/admin/imports','/admin/admissions','/admin/classes','/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
 ];
 

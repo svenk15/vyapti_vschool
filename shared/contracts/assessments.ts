@@ -9,3 +9,17 @@ export type AssessmentReadiness=Readonly<{
  readyForApproval:boolean;
  subjects:readonly Readonly<{planItemId:string;subjectName:string;required:boolean;maximumScaled:number;weightBasisPoints:number;numeric:number;notAssessed:number;absent:number;excused:number;missing:number;moderationStatus:'PENDING'|'APPROVED'|'RETURNED'|'REJECTED'|null}>[];
 }>;
+
+export type AssessmentPlanningWorkspace=Readonly<{
+ definitionVersion:'assessment-planning.v1';asOf:string;timezone:string;
+ scales:readonly Readonly<{id:string;code:string;name:string;minimumScaled:number;maximumScaled:number;precision:number;rounding:'HALF_UP'|'HALF_EVEN';version:number}>[];
+ years:readonly Readonly<{id:string;code:string;name:string;startsOn:string;endsOn:string;sections:readonly Readonly<{id:string;code:string;name:string;gradeName:string}>[]}>[];
+ subjects:readonly Readonly<{id:string;code:string;name:string}>[];
+ cycles:readonly Readonly<{id:string;code:string;name:string;state:AssessmentCycleState;version:number;schemeVersion:number;sourceCutoff:string;academicYearId:string;academicYearName:string;sectionId:string;sectionName:string;scaleId:string;scaleName:string;planItemCount:number;cohortCount:number}>[];
+}>;
+
+export type AssessmentScaleResult=Readonly<{command:'CreateAssessmentScale';scaleId:string;version:number;replayed:boolean}>;
+export type AssessmentCycleResult=Readonly<{command:'CreateAssessmentCyclePlan';cycleId:string;version:number;state:'DRAFT';planItemCount:number;replayed:boolean}>;
+export type AssessmentFreezeResult=Readonly<{command:'FreezeAssessmentCohort';cycleId:string;version:number;state:'OPEN';cohortCount:number;replayed:boolean}>;
+export type AssessmentPlanningResult=AssessmentScaleResult|AssessmentCycleResult|AssessmentFreezeResult;
+export type AssessmentPlanningCommandStatus=Readonly<{state:'UNKNOWN'}>|Readonly<{state:'FOUND';result:AssessmentPlanningResult}>;

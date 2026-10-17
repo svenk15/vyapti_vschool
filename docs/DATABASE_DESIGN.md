@@ -87,6 +87,8 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | AttendancePupilReviewGrant | `vs_attendance_pupil_review_grant` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AttendancePupilReviewSnapshot | `vs_attendance_pupil_review_snapshot` | attendance | MIGRATED | [attendance LLD](modules/attendance/DESIGN.md) |
 | AssessmentsOversightGrant | `vs_assessments_oversight_grant` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsPlanningGrant | `vs_assessments_planning_grant` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
+| AssessmentsCommandReceipt | `vs_assessments_command_receipt` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsScale | `vs_assessments_scale` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsCycle | `vs_assessments_cycle` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |
 | AssessmentsPlanItem | `vs_assessments_plan_item` | assessments | MIGRATED | [assessments LLD](modules/assessments/DESIGN.md) |

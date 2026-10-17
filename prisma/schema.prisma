@@ -3180,6 +3180,40 @@ model AssessmentsOversightGrant {
   @@map("vs_assessments_oversight_grant")
 }
 
+model AssessmentsPlanningGrant {
+  id                  String    @id(map: "vs_assessments_planning_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  schoolId            String    @map("school_id") @db.Uuid
+  membershipId        String    @map("membership_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_planning_scope_id_key")
+  @@unique([organizationId, schoolId, accountId], map: "vs_assessments_planning_account_key")
+  @@index([organizationId, schoolId, accountId, revokedAt], map: "vs_assessments_planning_active_idx")
+  @@map("vs_assessments_planning_grant")
+}
+
+model AssessmentsCommandReceipt {
+  id             String   @id(map: "vs_assessments_command_receipt_pkey") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  schoolId       String   @map("school_id") @db.Uuid
+  actorAccountId String   @map("actor_account_id") @db.Uuid
+  command        String   @db.VarChar(80)
+  key            String   @db.Uuid
+  inputHash      String   @map("input_hash") @db.Char(64)
+  response       Json
+  createdAt      DateTime @map("created_at") @db.Timestamptz(3)
+
+  @@unique([organizationId, schoolId, id], map: "vs_assessments_receipt_scope_id_key")
+  @@unique([organizationId, schoolId, actorAccountId, command, key], map: "vs_assessments_receipt_intent_key")
+  @@index([organizationId, schoolId, actorAccountId, createdAt(sort: Desc)], map: "vs_assessments_receipt_actor_idx")
+  @@map("vs_assessments_command_receipt")
+}
+
 model AssessmentsScale {
   id             String   @id(map: "vs_assessments_scale_pkey") @db.Uuid
   organizationId String   @map("organization_id") @db.Uuid

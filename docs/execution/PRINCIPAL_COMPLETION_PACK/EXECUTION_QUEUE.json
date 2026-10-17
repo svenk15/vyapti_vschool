@@ -176,7 +176,7 @@
       "scope": "Subtasks: plan+scale+cohort; teacher mark revisions; independent moderation; report revision/audience. Each checkpoint demo-able; register a distinct owner.",
       "demo": "Teacher records marks, reviewer returns then approves revised set, publisher prepares report; no missing-as-zero.",
       "kind": "foundation",
-      "completedSlice": "F11-A readiness foundation is verified: exact scale/version, frozen cohort, distinct outcome states, explicit oversight grant, recipe-L Principal projection, idempotent synthetic seed and direct desktop/mobile comparison. Counterpart cycle/mark operations, moderation and publication remain."
+      "completedSlice": "F11-A readiness and F11-B planning are verified: exact scale/version, separately authorized Administrator cycle planning, owner receipt recovery, dated frozen cohort, distinct outcome states, explicit oversight grant, recipe-L Principal projection, idempotent focused seed and direct desktop/mobile inspection. Assigned-Teacher mark revisions, Principal cycle selection, typed Coordination handoff, moderation and publication remain."
     },
     {
       "id": "F12",
@@ -444,7 +444,7 @@
       "definition": "workflows/LEA-20.md",
       "kind": "workflow",
       "workflow": "LEA-20",
-      "completedSlice": "Exact readiness projection and production view are verified. Authorized cycle selection, real counterpart cycle/mark operations and typed Assessments-to-Coordination source handoff remain."
+      "completedSlice": "Exact readiness projection plus separately authorized real scale/cycle planning and dated cohort freeze are verified. Assigned-Teacher mark revisions, authorized Principal cycle selection and typed Assessments-to-Coordination source handoff remain."
     },
     {
       "id": "WF-21",
