@@ -28,6 +28,10 @@ export const coordinationGateway={
  returnResolution:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.returnResolution(s.identity,s.organizationId,s.schoolId,input);},
  requestInformation:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.requestInformation(s.identity,s.organizationId,s.schoolId,input);},
  respondInformation:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.respondInformation(s.identity,s.organizationId,s.schoolId,input);},
+ decisionReviewers:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.decisionReviewers(s.identity,s.organizationId,s.schoolId,input);},
+ recuseDecision:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.recuseDecision(s.identity,s.organizationId,s.schoolId,input);},
+ decisionRouteQueue:async(identity:Identity|null)=>{const s=await scoped(identity);return coordination.decisionRouteQueue(s.identity,s.organizationId,s.schoolId);},
+ routeDecision:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.routeDecision(s.identity,s.organizationId,s.schoolId,input);},
  withdraw:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.withdraw(s.identity,s.organizationId,s.schoolId,input);},
  reopen:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.reopen(s.identity,s.organizationId,s.schoolId,input);},
 };

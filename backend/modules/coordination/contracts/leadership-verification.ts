@@ -1,5 +1,5 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {CoordinationCommandStatus,CoordinationInformationResult,CoordinationMutationResult,CoordinationQueue,CoordinationRequest} from '../../../../shared/contracts/coordination';
+import type {CoordinationAssignee,CoordinationCommandStatus,CoordinationDecisionRecusalResult,CoordinationInformationResult,CoordinationMutationResult,CoordinationQueue,CoordinationRequest} from '../../../../shared/contracts/coordination';
 
 export interface CoordinationVerificationFacade {
  list(actor:Identity,organizationId:unknown,schoolId:unknown,input:unknown):Promise<CoordinationQueue>;
@@ -8,4 +8,6 @@ export interface CoordinationVerificationFacade {
  returnResolution(actor:Identity,organizationId:unknown,schoolId:unknown,input:unknown):Promise<CoordinationMutationResult>;
  decisionStatus(actor:Identity,organizationId:unknown,schoolId:unknown,input:unknown):Promise<CoordinationCommandStatus>;
  requestInformation(actor:Identity,organizationId:unknown,schoolId:unknown,input:unknown):Promise<CoordinationInformationResult>;
+ decisionReviewers(actor:Identity,organizationId:unknown,schoolId:unknown,input:unknown):Promise<readonly CoordinationAssignee[]>;
+ recuseDecision(actor:Identity,organizationId:unknown,schoolId:unknown,input:unknown):Promise<CoordinationDecisionRecusalResult>;
 }

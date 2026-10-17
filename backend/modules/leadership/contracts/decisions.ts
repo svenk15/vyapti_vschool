@@ -1,10 +1,11 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {DecisionAction,DecisionCommandStatus,DecisionDetail,DecisionDuePeriod,DecisionInformationResult,DecisionOrder,DecisionOwner,DecisionResult,DecisionSort,DecisionSummary,DecisionType} from '../../../../shared/contracts/decisions';
+import type {DecisionAction,DecisionCommandStatus,DecisionDetail,DecisionDuePeriod,DecisionInformationResult,DecisionOrder,DecisionOwner,DecisionRecusalCategory,DecisionRecusalResult,DecisionResult,DecisionReviewer,DecisionSort,DecisionSummary,DecisionType} from '../../../../shared/contracts/decisions';
 
 export type DecisionListInput=Readonly<{reference?:unknown;type?:unknown;state?:unknown;due?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}>;
 export type ValidDecisionListInput=Readonly<{reference:string|null;type:DecisionType|null;state:'READY'|null;due:DecisionDuePeriod|null;sort:DecisionSort;order:DecisionOrder;cursor:string|null;limit:number}>;
 export type DecisionCommand=Readonly<{action:DecisionAction;expectedVersion:number;reason:string|null;key:string}>;
 export type DecisionInformationCommand=Readonly<{expectedVersion:number;question:string;responseDueAt:string|null;key:string}>;
+export type DecisionRecusalCommand=Readonly<{expectedVersion:number;category:DecisionRecusalCategory;note:string|null;routedToAccountId:string|null;key:string}>;
 
 export interface DecisionOwnerAdapter {
  readonly owner:DecisionOwner;
@@ -13,4 +14,6 @@ export interface DecisionOwnerAdapter {
  decide(actor:Identity,organizationId:string,schoolId:string,itemId:string,input:DecisionCommand):Promise<DecisionResult>;
  status(actor:Identity,organizationId:string,schoolId:string,itemId:string,input:DecisionCommand):Promise<DecisionCommandStatus>;
  requestInformation(actor:Identity,organizationId:string,schoolId:string,itemId:string,input:DecisionInformationCommand):Promise<DecisionInformationResult>;
+ reviewers(actor:Identity,organizationId:string,schoolId:string,itemId:string):Promise<readonly DecisionReviewer[]>;
+ recuse(actor:Identity,organizationId:string,schoolId:string,itemId:string,input:DecisionRecusalCommand):Promise<DecisionRecusalResult>;
 }

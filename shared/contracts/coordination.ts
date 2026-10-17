@@ -22,6 +22,10 @@ export type CoordinationCommandStatus=
  | Readonly<{state:'FOUND';result:CoordinationMutationResult}>;
 export type CoordinationInformationRequest=Readonly<{id:string;question:string;responseDueAt:string|null;requester:CoordinationActorSummary;recipient:CoordinationActorSummary;status:'OPEN'|'ANSWERED'|'CANCELLED';responseText:string|null;requestedAt:string;answeredAt:string|null;version:number}>;
 export type CoordinationInformationResult=Readonly<{requestId:string;informationRequestId:string;requestVersion:number;informationVersion:number;status:'OPEN'|'ANSWERED'|'CANCELLED';replayed:boolean}>;
+export type CoordinationDecisionRecusalResult=Readonly<{requestId:string;version:number;routedTo:CoordinationActorSummary|null;replayed:boolean}>;
+export type CoordinationDecisionRouteItem=Readonly<{requestId:string;reference:string;version:number;recusedAt:string;reviewers:readonly CoordinationAssignee[]}>;
+export type CoordinationDecisionRouteQueue=Readonly<{items:readonly CoordinationDecisionRouteItem[];timezone:string}>;
+export type CoordinationDecisionRouteResult=Readonly<{requestId:string;version:number;routedTo:CoordinationActorSummary;replayed:boolean}>;
 export type CoordinationAssignee=Readonly<{accountId:string;displayName:string}>;
 export type CoordinationSourceSetup=Readonly<{source:CoordinationSourceSummary;assignees:readonly CoordinationAssignee[];timezone:string}>;
 export type CoordinationBatchItemStatus='PENDING'|'CREATED'|'ALREADY_EXISTS'|'FAILED';

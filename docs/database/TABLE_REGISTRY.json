@@ -2247,9 +2247,9 @@
       "model": "CoordinationRequest",
       "owner": "coordination",
       "table": "vs_coordination_request",
-      "fields": "id/org/school/source/actor/assignee uuid; kind/concern/status; due/note/resolution; timestamps/version",
+      "fields": "id/org/school/source/actor/assignee/verification_reviewer uuid; kind/concern/status; due/note/resolution; timestamps/version",
       "responsibility": "Typed Attendance or Learning operational follow-up aggregate with current assignment and verified owner outcome.",
-      "constraints": "Scoped School FK and deferred typed source-integrity trigger; exact source/kind/concern/evidence pairing; state/text/version checks; partial unique active source/kind; queue/assignee indexes",
+      "constraints": "Scoped School and optional verification-reviewer FKs plus deferred typed source-integrity trigger; exact source/kind/concern/evidence pairing; state/text/version checks; partial unique active source/kind; queue/assignee/reviewer indexes",
       "status": "MIGRATED",
       "design": "docs/modules/coordination/DESIGN.md",
       "rls": {
@@ -2259,6 +2259,27 @@
           "school_id"
         ],
         "intendedPolicy": "Only current designated request managers and the currently eligible assignee may access the exact branch request; source authority is rechecked independently.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "CoordinationDecisionRecusal",
+      "owner": "coordination",
+      "table": "vs_coordination_decision_recusal",
+      "fields": "id/org/school/request/recused/routed uuid; category/note/request_version/occurred_at",
+      "responsibility": "Immutable owner-specific conflict and independent route evidence; note is protected.",
+      "constraints": "Scoped request/account FKs; category/note/version checks; one recusal per request/account; route and actor indexes; immutable trigger",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only current owner-authorized reviewers may create or inspect their exact recusal; institution stewards receive minimal routing metadata without the protected body.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "coordination",
         "closureGate": "TEN-03"

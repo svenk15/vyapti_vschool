@@ -13,11 +13,12 @@ config({path:'.env.local',quiet:true});
 config({quiet:true});
 
 const peoplePath='artifacts/people-02/private-demo.json';
+const attendancePath='artifacts/attendance-01/private-demo.json';
 const directory='artifacts/coordination-01';
 const path=`${directory}/private-demo.json`;
 
 type People={adminEmail:string;password:string;teacherEmail:string;teacherPassword:string;organizationId:string;schoolId:string;accountId:string;teacherAccountId:string};
-type Demo={roleKey:string;missingCreateKey:string;resolvedCreateKey:string;resolvedStartKey:string;resolvedSubmitKey:string;resolvedVerifyKey:string;informationRequestKey?:string;informationRequestId?:string;historyFindingKey?:string;historyFindingId?:string;fullBatchKey?:string;mixedBatchKey?:string;fullBatchId?:string;mixedBatchId?:string;missingRequestId?:string;resolvedRequestId?:string;unassignedRequestId?:string;inProgressRequestId?:string;awaitingRequestId?:string;returnedRequestId?:string;withdrawnRequestId?:string;sourceDate?:string};
+type Demo={roleKey:string;reviewerRoleKey?:string;missingCreateKey:string;resolvedCreateKey:string;resolvedStartKey:string;resolvedSubmitKey:string;resolvedVerifyKey:string;informationRequestKey?:string;informationRequestId?:string;historyFindingKey?:string;historyFindingId?:string;fullBatchKey?:string;mixedBatchKey?:string;fullBatchId?:string;mixedBatchId?:string;missingRequestId?:string;resolvedRequestId?:string;unassignedRequestId?:string;inProgressRequestId?:string;awaitingRequestId?:string;returnedRequestId?:string;withdrawnRequestId?:string;sourceDate?:string};
 
 const key=(value:string)=>{const hash=createHash('sha256').update(value).digest('hex').slice(0,32);return `${hash.slice(0,8)}-${hash.slice(8,12)}-4${hash.slice(13,16)}-a${hash.slice(17,20)}-${hash.slice(20)}`;};
 const initial=(scope:string):Demo=>({roleKey:key(`coord-role:${scope}`),missingCreateKey:key(`coord-missing:${scope}`),resolvedCreateKey:key(`coord-resolved:${scope}`),resolvedStartKey:key(`coord-start:${scope}`),resolvedSubmitKey:key(`coord-submit:${scope}`),resolvedVerifyKey:key(`coord-verify:${scope}`)});
@@ -26,6 +27,7 @@ async function main(){
  const local=localAccessConfig();
  if(!existsSync(peoplePath))throw new Error('PEOPLE_DEMO_REQUIRED');
  const people=JSON.parse(readFileSync(peoplePath,'utf8')) as People;
+ const attendance=existsSync(attendancePath)?JSON.parse(readFileSync(attendancePath,'utf8')) as {teacherTwoAccountId?:string;teacherTwoEmail?:string}:null;
  const scopeKey=`${people.organizationId}:${people.schoolId}`;
  const demo:Demo=existsSync(path)?JSON.parse(readFileSync(path,'utf8')) as Demo:initial(scopeKey);
  const db=new PrismaClient({adapter:new PrismaPg({connectionString:local.databaseUrl}),log:[]});
@@ -50,6 +52,7 @@ async function main(){
     if(!await db.coordinationCapabilityGrant.findFirst({where:{organizationId:people.organizationId,schoolId:people.schoolId,accountId,capability,revokedAt:null}}))await coordination.grant(local.operator,{organizationId:people.organizationId,schoolId:people.schoolId,accountId,capability});
    }
   }
+  if(attendance?.teacherTwoAccountId&&attendance.teacherTwoEmail){const reviewerMembership=await db.schoolMembership.findFirst({where:{organizationId:people.organizationId,schoolId:people.schoolId,accountId:attendance.teacherTwoAccountId,status:'ACTIVE'},include:{grants:{select:{code:true}}}});if(reviewerMembership){const roles=reviewerMembership.grants.map(item=>item.code).filter((value):value is RoleCode=>value==='SCHOOL_ADMIN'||value==='TEACHER'||value==='PRINCIPAL');demo.reviewerRoleKey??=key(`coord-reviewer-role:${scopeKey}`);if(!roles.includes('SCHOOL_ADMIN'))await access.institutionOperation({kind:'SetBranchMembership',organizationId:people.organizationId,schoolId:people.schoolId,accountId:attendance.teacherTwoAccountId,status:'ACTIVE',roles:[...roles,'SCHOOL_ADMIN'].sort() as RoleCode[],expectedVersion:reviewerMembership.version,key:demo.reviewerRoleKey,reason:'Authorize fictional independent Coordination reviewer'},local.operator);if(!await db.coordinationCapabilityGrant.findFirst({where:{organizationId:people.organizationId,schoolId:people.schoolId,accountId:attendance.teacherTwoAccountId,capability:'coordination.verify',revokedAt:null}}))await coordination.grant(local.operator,{organizationId:people.organizationId,schoolId:people.schoolId,accountId:attendance.teacherTwoAccountId,capability:'coordination.verify'});}}
 
   stage='sources';
   const now=new Date();
@@ -141,8 +144,8 @@ async function main(){
 
   demo.sourceDate=sessions[0].schoolDate.toISOString().slice(0,10);
   mkdirSync(directory,{recursive:true,mode:0o700});
-  writeFileSync(path,`${JSON.stringify({...demo,organizationId:people.organizationId,schoolId:people.schoolId,principalEmail:people.adminEmail,workerEmail:people.teacherEmail},null,2)}\n`,{mode:0o600});
-  console.log(`Prepared or preserved Coordination lifecycle, LEA-10 batch, typed decision, LEA-28 information-request and F04 safe-history examples. Private scenario: ${path}`);
+  writeFileSync(path,`${JSON.stringify({...demo,organizationId:people.organizationId,schoolId:people.schoolId,principalEmail:people.adminEmail,workerEmail:people.teacherEmail,reviewerEmail:attendance?.teacherTwoEmail??null,reviewerCredentialFile:attendance?.teacherTwoEmail?attendancePath:null},null,2)}\n`,{mode:0o600});
+  console.log(`Prepared or preserved Coordination lifecycle, typed decisions, information-request, independent-reviewer and safe-history examples. Private scenario: ${path}`);
  }catch(error){
   throw new Error(`${stage.toUpperCase()}_${error instanceof Error&&/^[A-Z0-9_]+$/.test(error.message)?error.message:'LOCAL_DEMO_ERROR'}`);
  }finally{

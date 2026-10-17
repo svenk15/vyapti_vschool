@@ -107,3 +107,10 @@ Dependencies: F00 engineering-complete; D03 approved for synthetic-only implemen
 Engineering status: LEA-31 ENGINEERING_COMPLETE for the registered Coordination owner; human review PENDING.
 
 Human review, production retention, TEN-03, font portability and native accessibility remain PENDING.
+### COORD-06 / LEA-30 — Decision recusal and independent route
+
+- [x] Add nullable current verification reviewer plus immutable scoped recusal evidence in one forward migration and registry contract.
+- [x] Derive candidates from current grants, identity, membership, source authority and separation; never create a grant from routing.
+- [x] Add owner commands for recusal and institution-steward routing with expected version, exact receipt replay and protected note handling.
+- [x] Deny recused/wrong-reviewer reads, decisions, information requests and status disclosure; prove concurrency and cross-scope denial in PostgreSQL.
+- [x] Add Principal staged UI, counterpart routed-reviewer journey, deterministic synthetic data and direct desktop/mobile reference comparison.

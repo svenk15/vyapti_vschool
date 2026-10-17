@@ -210,3 +210,9 @@ Engineering status: ENGINEERING_COMPLETE. This documentation/evidence checkpoint
 - [x] Reuse the verified staged evidence → consequence → final confirmation composition and owner atomic transaction.
 - [x] Confirm expected-version conflict, independent proposer/reviewer identity, exact replay, changed-payload conflict, lost-response recovery and revoked-result denial from current-source evidence.
 - [x] Preserve the direct LEA-29 reference/application comparison and record human review PENDING.
+### LEA-30 — Recuse and route a conflict of interest
+
+- [x] Register owner-specific reviewer candidates, recusal and steward routing on the typed decision adapter; no generic approval or permission store.
+- [x] Compose the staged Evidence → Conflict and route → Receipt experience with retained in-flow values, accessible focus and current-source owner links.
+- [x] Prove live recipient eligibility, no grant creation, exact replay, stale/concurrent denial, recused-account denial across routes, and institution-steward routing when unassigned.
+- [x] Compare desktop/mobile production composition directly with approved `LEA-30`; record routed-shell/font deviations and human review separately.

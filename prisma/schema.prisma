@@ -1008,15 +1008,35 @@ model CoordinationRequest {
  resolutionKind String? @map("resolution_kind") @db.VarChar(40)
  resolutionRevision Int? @map("resolution_revision")
  resolutionReason String? @map("resolution_reason") @db.VarChar(1000)
+ verificationReviewerAccountId String? @map("verification_reviewer_account_id") @db.Uuid
  createdAt DateTime @map("created_at") @db.Timestamptz(3)
  updatedAt DateTime @map("updated_at") @db.Timestamptz(3)
  resolvedAt DateTime? @map("resolved_at") @db.Timestamptz(3)
  withdrawnAt DateTime? @map("withdrawn_at") @db.Timestamptz(3)
  version Int
+ decisionRecusals CoordinationDecisionRecusal[]
  @@unique([organizationId,schoolId,id],map:"vs_coordination_request_scope_id_key")
  @@index([organizationId,schoolId,status,updatedAt(sort: Desc),id(sort: Desc)],map:"vs_coordination_request_queue_idx")
  @@index([organizationId,schoolId,assigneeAccountId,status,updatedAt(sort: Desc),id(sort: Desc)],map:"vs_coordination_request_assignee_idx")
  @@map("vs_coordination_request")
+}
+
+model CoordinationDecisionRecusal {
+ id String @id(map:"vs_coordination_decision_recusal_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ requestId String @map("request_id") @db.Uuid
+ recusedAccountId String @map("recused_account_id") @db.Uuid
+ routedToAccountId String? @map("routed_to_account_id") @db.Uuid
+ category String @db.VarChar(40)
+ note String? @db.VarChar(500)
+ requestVersion Int @map("request_version")
+ occurredAt DateTime @map("occurred_at") @db.Timestamptz(3)
+ request CoordinationRequest @relation(fields:[organizationId,schoolId,requestId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_coordination_decision_recusal_request_fkey")
+ @@unique([organizationId,schoolId,requestId,recusedAccountId],map:"vs_coordination_decision_recusal_actor_key")
+ @@index([organizationId,schoolId,requestId,occurredAt(sort: Desc)],map:"vs_coordination_decision_recusal_request_idx")
+ @@index([organizationId,schoolId,routedToAccountId,occurredAt(sort: Desc)],map:"vs_coordination_decision_recusal_route_idx")
+ @@map("vs_coordination_decision_recusal")
 }
 
 model CoordinationRequestEvent {
