@@ -4,7 +4,7 @@ Last updated: 2026-10-17.
 
 ## WF-07 / LEA-07 weekly leadership review — 17 October 2026
 
-Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. Tested implementation source is recorded in the dedicated evidence checkpoint after commit; production build ID `FgV2cbIPB8CbyorHQPlZc`.
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY. Tested implementation source `f37b296d5877c37be23ebb7b5b62e1b0e1e93343`; production build ID `FgV2cbIPB8CbyorHQPlZc`.
 
 Reporting now provides `/leadership/reviews/new` as a staged school-week review over the existing brief aggregate. A weekly revision stores a 1–31-date inclusive branch-local period, one or more immutable whole-branch Attendance snapshots, 0–50 immutable references to existing Coordination actions and explicit Principal recipients. Action status remains live and Coordination-owned. Save, revise, finalize, share and read recheck current Reporting source rights plus Coordination manager/source authority for the author and every recipient. Finalization and sharing never assign, verify, close, reopen or duplicate an action. Changed dates clear selected evidence/actions and require an exact period reload; committed-response recovery preserves the same payload and idempotency key.
 

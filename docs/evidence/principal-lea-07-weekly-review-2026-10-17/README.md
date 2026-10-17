@@ -2,7 +2,7 @@
 
 Human review: **PENDING**. Deployment: **SYNTHETIC_ONLY**.
 
-Verified implementation source: recorded after the focused commit. Production build ID: `FgV2cbIPB8CbyorHQPlZc`.
+Verified implementation source: `f37b296d5877c37be23ebb7b5b62e1b0e1e93343`. Production build ID: `FgV2cbIPB8CbyorHQPlZc`.
 
 ## Scope
 
