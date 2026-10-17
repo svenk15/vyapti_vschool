@@ -28,11 +28,13 @@ type Demo = {
   activationKey: string;
   publishKey: string;
   studentPublishKey?: string;
+  reminderKey?: string;
   accessId?: string;
   parentAccountId?: string;
   studentId?: string;
   noticeId?: string;
   studentNoticeId?: string;
+  reminderId?: string;
 };
 
 function save(value: Demo) {
@@ -64,6 +66,7 @@ async function main() {
   const guardianFixture = JSON.parse(readFileSync(guardiansPath, 'utf8')) as {studentId?: string};
   const studentFixture = JSON.parse(readFileSync(studentPath, 'utf8')) as {studentId?: string};
   demo.studentPublishKey ??= randomUUID();
+  demo.reminderKey ??= randomUUID();
   const db = new PrismaClient({adapter: new PrismaPg({connectionString: local.databaseUrl}), log: []});
   const tenancy = createTenancyServices({databaseUrl: local.databaseUrl, releasedModules: modules});
   let invitationToken = '';
@@ -97,6 +100,7 @@ async function main() {
     stage = 'authority';
     await guardians.grantManager(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId});
     await communication.grantPublisher(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId});
+    await communication.grantReminderManager(local.operator, {organizationId: people.organizationId, schoolId: people.schoolId, accountId: admin.accountId});
 
     stage = 'audience';
     demo.studentId ??= guardianFixture.studentId;
@@ -150,6 +154,10 @@ async function main() {
       || !coverage.items.some(item => item.noticeId === demo.studentNoticeId)) {
       throw new Error('SYNTHETIC_PRINCIPAL_NOTICE_COVERAGE_REQUIRED');
     }
+    const reminderSource = coverage.items.find(item => item.noticeId === demo.noticeId);
+    if (!reminderSource) throw new Error('SYNTHETIC_PRINCIPAL_NOTICE_COVERAGE_REQUIRED');
+    const reminder = await communication.sendAcknowledgementReminder(admin, people.organizationId, people.schoolId, reminderSource.noticeId, {versionId: reminderSource.versionId, expectedRevision: reminderSource.revision, key: demo.reminderKey}, randomUUID());
+    demo.reminderId = reminder.reminderId;
     save(demo);
     console.log(`Prepared or preserved immutable Parent and Student school notices and verified Principal aggregate coverage. Private credentials: ${path}`);
   } catch (error) {

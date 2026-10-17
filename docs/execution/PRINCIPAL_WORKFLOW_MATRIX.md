@@ -37,7 +37,7 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 | LEA-31 | Recover an uncertain or outdated decision | decisions | 2 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | Coordination exact-intent retry, protected original receipt and revoked-result denial are verified; the cross-owner status route and stale-evidence restart remain absent |
 | LEA-32 | Prepare a targeted school notice | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-33 | Approve or return a proposed communication | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
-| LEA-34 | Follow up delivery or acknowledgement gaps | communication | 2 | PARTIAL | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | The exact Principal-only `notice-coverage.v1` read projection is verified with separate frozen audience/read/acknowledgement facts and no recipient/body disclosure; reminder/resend remains absent because provider outcomes, recipient reauthorization and deduplication command semantics are not approved or implemented; the approved pack supplies a workflow dialog rather than an exact production page composition |
+| LEA-34 | Follow up delivery or acknowledgement gaps | communication | 2 | ENGINEERING_COMPLETE | DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS | PENDING | The Principal-only `notice-coverage.v1` projection and staged portal-reminder command are verified: exact publication/version binding, current purpose reauthorization, acknowledged/revoked/24-hour/max-three suppression, durable per-recipient outcomes, exact replay and protected replay denial. D13 keeps email/provider delivery outside this synthetic-only checkpoint; the approved explorer dialog maps to the routed recipe-W composition. |
 | LEA-35 | Handle an escalated family concern or complaint | communication | 2 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-36 | Run a family or staff meeting with follow-up actions | communication | 3 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
 | LEA-37 | Refer a concern to an authorized specialist | support | 6 | NOT_STARTED | NOT_STARTED | PENDING | Later owner/module or explicit product authority is not established in the live application |
@@ -53,12 +53,12 @@ Updated 17 October 2026 from the approved 46-workflow catalog. The approved refe
 
 ## Current counts
 
-Engineering: 15 ENGINEERING_COMPLETE, 7 PARTIAL, 24 NOT_STARTED. Human acceptance remains pending for all 46.
+Engineering: 16 ENGINEERING_COMPLETE, 6 PARTIAL, 24 NOT_STARTED. Human acceptance remains pending for all 46.
 
 ## Active sequence
 
 1. Principal completion F00 and the current-equivalent F01/WF-10 are engineering-complete. The production L/D/W/R mapping is recorded in `docs/execution/PRINCIPAL_COMPLETION_PACK/SCREEN_MAP.md`.
 2. LEA-10 remains production-gated by Coordination retention/backup-deletion policy and TEN-03; these gates do not reduce its engineering status.
-3. D02–D19 are approved for synthetic-only implementation with no exceptions. F03, F04 and F08 are engineering-complete; LEA-17, LEA-18 and LEA-19 are engineering-complete. Production authority, retention, accessibility and provider gates remain separate.
+3. D02–D19 are approved for synthetic-only implementation with no exceptions. F03, F04 and F08 are engineering-complete; LEA-17, LEA-18, LEA-19 and LEA-34 are engineering-complete. F10 remains in progress for independent communication review/publish. Production authority, retention, accessibility and provider gates remain separate.
 
 LEA-09/10/11/15 use the implemented Coordination owner. LEA-15 remains an independently authorized Attendance operation rather than a direct Principal mutation. Financial, assessment moderation/publication, sensitive support, staff appraisal, legal/consent, external-provider, institution-wide and production authority remain explicit product/release gates.

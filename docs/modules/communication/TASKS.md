@@ -20,3 +20,14 @@ The full SA-35/SA-36 programme remains partial: draft resume, scheduling, email/
 - [x] Verify exact-purpose, cross-class/branch/tenant, transfer, revocation, replay, current-version and withdrawal behavior with real PostgreSQL and desktop/mobile Playwright.
 
 Status: **ENGINEERING_VERIFIED** for the text-notice slice. The 15 October eight-hour programme approved the decision-sheet rules. Attachments remain outside this slice until their file-owner contract exists, so STW-27 is partial; STW-28 is engineering-complete. Human review remains pending.
+
+## COM-03 — Principal acknowledgement reminder
+
+- [ ] Add the separately designated synthetic-only reminder manager authority.
+- [ ] Preview the exact current acknowledgement gap without recipient identity.
+- [ ] Commit one durable provider-less in-app reminder per currently eligible unacknowledged recipient with 24-hour and maximum-three enforcement.
+- [ ] Reauthorize replay and suppress revoked, acknowledged and policy-limited recipients.
+- [ ] Surface the durable reminder on the authorized Parent/Student notice projection without changing read or acknowledgement facts.
+- [ ] Complete staged Principal browser, real PostgreSQL isolation/replay/concurrency and desktop/mobile comparison evidence.
+
+This task does not implement email, provider delivery, background retry, retention policy or the separate notice review/publish lifecycle.

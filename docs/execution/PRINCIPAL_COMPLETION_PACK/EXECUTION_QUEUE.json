@@ -154,10 +154,11 @@
       "decisions": [
         "D13"
       ],
-      "status": "PLANNED",
+      "status": "IN_PROGRESS",
       "scope": "Versioned author/reviewer/publisher workflow and durable in-app reminder; provider attempt seam without fake email.",
       "demo": "Publish reviewed exact version; remind one eligible unacknowledged recipient; revoke another before dispatch.",
-      "kind": "foundation"
+      "kind": "foundation",
+      "completedSlice": "LEA-34 durable portal reminder is engineering-complete; independent exact-revision review/publish remains."
     },
     {
       "id": "F11",
@@ -644,7 +645,7 @@
       "decisions": [
         "D13"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-34.md",
       "kind": "workflow",
       "workflow": "LEA-34"

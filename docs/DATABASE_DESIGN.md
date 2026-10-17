@@ -121,6 +121,9 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | CommunicationPublisherGrant | `vs_communication_publisher_grant` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNotice | `vs_communication_notice` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | CommunicationNoticeVersion | `vs_communication_notice_version` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
+| CommunicationReminderManagerGrant | `vs_communication_reminder_manager_grant` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
+| CommunicationReminder | `vs_communication_reminder` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
+| CommunicationReminderDelivery | `vs_communication_reminder_delivery` | communication | MIGRATED | [communication LLD](modules/communication/DESIGN.md) |
 | EventPublisherGrant | `vs_events_publisher_grant` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
 | SchoolEvent | `vs_events_event` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |
 | SchoolEventVersion | `vs_events_event_version` | events | MIGRATED | [events LLD](modules/events/DESIGN.md) |

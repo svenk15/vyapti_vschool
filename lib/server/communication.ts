@@ -11,6 +11,8 @@ export const communicationGateway={
  async publish(identity:Identity|null,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().publish(actor,organizationId,schoolId,input,requestId);},
  async listAdmin(identity:Identity|null){const {actor,organizationId,schoolId}=await scope(identity);return service().listAdmin(actor,organizationId,schoolId);},
  async listLeadership(identity:Identity|null,input:Readonly<{limit?:number}>={}){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().listLeadership(actor,home.scope.organizationId,home.scope.schoolId,input);},
+ async previewAcknowledgementReminder(identity:Identity|null,noticeId:unknown,versionId:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().previewAcknowledgementReminder(actor,home.scope.organizationId,home.scope.schoolId,noticeId,versionId);},
+ async sendAcknowledgementReminder(identity:Identity|null,noticeId:unknown,input:unknown,requestId:string){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().sendAcknowledgementReminder(actor,home.scope.organizationId,home.scope.schoolId,noticeId,input,requestId);},
  listParent:(identity:Identity|null,studentId:unknown)=>service().listParent(required(identity),studentId),
  detailParent:(identity:Identity|null,studentId:unknown,noticeId:unknown)=>service().detailParent(required(identity),studentId,noticeId),
  markRead:(identity:Identity|null,input:{studentId:unknown;noticeId:unknown;versionId:unknown})=>service().markRead(required(identity),input),

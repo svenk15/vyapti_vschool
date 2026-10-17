@@ -39,6 +39,7 @@ export function FamilyNotice({notice, studentId, backHref}: {notice: NoticeDetai
   return <div className="family-notice-detail">
     {error && <Alert tone="danger" title="Acknowledgement not saved" onDismiss={() => setError('')}>{error}</Alert>}
     <Card className="padded notice-reading-card">
+      {notice.latestReminderAt && !ack && notice.status === 'PUBLISHED' && <Alert tone="info" title="Acknowledgement reminder">The school sent a portal reminder on {new Date(notice.latestReminderAt).toLocaleString()}. This is reminder {notice.reminderCount} for this notice version.</Alert>}
       {notice.status === 'WITHDRAWN'
         ? <Alert tone="warning" title="This notice was withdrawn">Protected notice content is no longer available. Contact the school if you need clarification.</Alert>
         : <p className="notice-reading-body">{notice.body}</p>}

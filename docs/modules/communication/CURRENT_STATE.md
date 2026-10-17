@@ -26,7 +26,17 @@ The Communication-owned `notice-coverage.v1` read projection is VERIFIED; the co
 
 Focused evidence: Access unit 10/10, real PostgreSQL Communication 3/3, and the combined current-source Communication journey 3/3 Chromium plus 3/3 mobile, sequentially with one worker. Desktop/mobile reference and application captures were directly inspected. No schema or migration changed; both local databases retain all 64 migrations. `pnpm demo:seed` continues to create or preserve the existing fictional Parent/Student notices and now verifies their Principal aggregate coverage. See [evidence](../../evidence/principal-lea-34-communication-2026-10-16/README.md).
 
-Reminder/resend is not implemented: provider delivery outcomes, per-recipient reauthorization, channel policy and idempotent deduplication/replay are not yet an approved owner command. Production-provider review, TEN-03, font portability, native accessibility and human review remain pending.
+At this 16 October checkpoint reminder/resend was not implemented. The following COM-03 checkpoint supersedes that limitation for durable portal reminders; external provider delivery remains unavailable.
+
+## 17 October 2026 — COM-03 / LEA-34 portal acknowledgement reminders
+
+COM-03 and LEA-34 are **ENGINEERING_VERIFIED** for the approved synthetic-only portal-reminder outcome; human review remains **PENDING**. The Principal starts from current notice coverage, reviews aggregate current eligibility, confirms the exact immutable publication version and receives a durable aggregate receipt. Recipient identity, notice body, contact and family relationship data never enter the Principal DTO.
+
+The Communication owner now stores a logical reminder and per-recipient outcomes. It reauthorizes the current Principal and the separate operator-designated reminder-manager grant, then intersects the frozen audience with current exact notice-purpose access. Already acknowledged, revoked, inactive, 24-hour-limited and max-three recipients are suppressed without being reported as contacted. Exact actor/key/payload replay returns the original semantic receipt; a changed payload conflicts, and revoked authority cannot disclose a protected replay. Parent and Student notice details expose only their own durable portal-reminder count and latest time under their existing live purpose checks. Email/provider delivery is not simulated.
+
+Focused evidence: Communication unit 4/4; real-PostgreSQL Communication 4/4 after 77 forward migrations; focused Administrator publish/Parent acknowledgement → Principal reminder → Student portal-item browser journey 2/2 in Chromium and 2/2 in mobile Chromium, sequentially with one worker. TypeScript, focused ESLint, backend/boundary/docs/database-design checks and the production build passed. Desktop/mobile reference and application captures were directly inspected. See [evidence](../../evidence/principal-f10-communication-reminder-2026-10-17/README.md).
+
+F10 remains **IN_PROGRESS** because the distinct author/reviewer/publisher lifecycle for LEA-33 is not yet complete. Production provider selection/review, TEN-03, font portability, native accessibility and human review remain pending.
 
 ### LEA-39 notice-coverage export — 16 October 2026
 

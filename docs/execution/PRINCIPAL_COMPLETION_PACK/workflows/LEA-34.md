@@ -1,7 +1,7 @@
 # LEA-34 — Follow up delivery or acknowledgement gaps
 
 ## Identity and readiness
-- Baseline: PARTIAL; human review PENDING.
+- Current engineering status: ENGINEERING_COMPLETE for the approved synthetic-only portal-reminder outcome; human review PENDING. Email/provider delivery remains a deployment/provider gate under D13 rather than a simulated completion claim.
 - Owner: Communication. This names responsibility, not proof that an owner module exists.
 - Product decisions: D13. Must be approved or satisfied by a newer accepted equivalent.
 - Foundation dependencies: F10. See execution queue.

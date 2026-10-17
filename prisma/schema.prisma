@@ -1830,6 +1830,21 @@ model CommunicationPublisherGrant {
  @@map("vs_communication_publisher_grant")
 }
 
+model CommunicationReminderManagerGrant {
+ id String @id(map:"vs_communication_reminder_manager_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ membershipId String @map("membership_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,accountId],map:"vs_communication_reminder_manager_scope_account_key")
+ @@index([organizationId,schoolId,accountId,revokedAt],map:"vs_communication_reminder_manager_active_idx")
+ @@map("vs_communication_reminder_manager_grant")
+}
+
 model CommunicationNotice {
  id String @id(map:"vs_communication_notice_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid
@@ -1922,6 +1937,49 @@ model CommunicationAcknowledgement {
  @@unique([organizationId,schoolId,noticeVersionId,recipientAccountId],map:"vs_communication_ack_version_account_key")
  @@index([organizationId,schoolId,recipientAccountId,acknowledgedAt(sort:Desc)],map:"vs_communication_ack_account_idx")
  @@map("vs_communication_acknowledgement")
+}
+
+model CommunicationReminder {
+ id String @id(map:"vs_communication_reminder_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ noticeId String @map("notice_id") @db.Uuid
+ noticeVersionId String @map("notice_version_id") @db.Uuid
+ noticeRevision Int @map("notice_revision")
+ actorAccountId String @map("actor_account_id") @db.Uuid
+ audience String @db.VarChar(30)
+ channel String @db.VarChar(20)
+ idempotencyKey String @map("idempotency_key") @db.Uuid
+ inputHash String @map("input_hash") @db.Char(64)
+ candidateCount Int @map("candidate_count")
+ acceptedCount Int @map("accepted_count")
+ acknowledgedCount Int @map("acknowledged_count")
+ ineligibleCount Int @map("ineligible_count")
+ policyLimitedCount Int @map("policy_limited_count")
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,id],map:"vs_communication_reminder_scope_id_key")
+ @@unique([organizationId,schoolId,actorAccountId,idempotencyKey],map:"vs_communication_reminder_actor_key")
+ @@index([organizationId,schoolId,noticeVersionId,createdAt(sort:Desc),id],map:"vs_communication_reminder_version_idx")
+ @@map("vs_communication_reminder")
+}
+
+model CommunicationReminderDelivery {
+ id String @id(map:"vs_communication_reminder_delivery_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ reminderId String @map("reminder_id") @db.Uuid
+ noticeVersionId String @map("notice_version_id") @db.Uuid
+ recipientId String @map("recipient_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ channel String @db.VarChar(20)
+ outcome String @db.VarChar(30)
+ dedupKey String @map("dedup_key") @db.Char(64)
+ createdAt DateTime @map("created_at") @db.Timestamptz(3)
+ @@unique([organizationId,schoolId,dedupKey],map:"vs_communication_reminder_delivery_dedup_key")
+ @@unique([reminderId,recipientId],map:"vs_communication_reminder_delivery_recipient_key")
+ @@index([organizationId,schoolId,noticeVersionId,accountId,channel,outcome,createdAt(sort:Desc)],map:"vs_communication_reminder_delivery_policy_idx")
+ @@index([organizationId,schoolId,accountId,noticeVersionId,createdAt(sort:Desc)],map:"vs_communication_reminder_delivery_portal_idx")
+ @@map("vs_communication_reminder_delivery")
 }
 
 model EventPublisherGrant {
