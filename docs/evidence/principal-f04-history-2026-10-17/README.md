@@ -2,7 +2,7 @@
 
 Date: 17 October 2026. Human acceptance: **PENDING**.
 
-Verified product source: `d992a546cc2095e79bca8caf87c7ec0b2abf9a78`.
+Verified product source: `94c7679d25e8a77b5b3042b109e400cf6204e535`.
 
 ## Outcome
 
