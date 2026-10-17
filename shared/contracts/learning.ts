@@ -19,7 +19,7 @@ export type LearningTeacherSubmissionSummary={submissionId:string;studentId:stri
 export type LearningTeacherSubmissionDetail=LearningTeacherSubmissionSummary&{assignmentId:string;assignmentTitle:string;text:string;effectiveDueAt:string;timezone:string};
 export type LearningTeacherFeedback=LearningTeacherSubmissionDetail&{feedbackRevision:number;draft:LearningFeedbackDraft|null;published:LearningPublishedFeedback|null};
 
-export const learningManagerCapabilities=['RECIPIENT_POLICY_MANAGE','RECIPIENT_STATUS_READ'] as const;
+export const learningManagerCapabilities=['RECIPIENT_POLICY_MANAGE','RECIPIENT_STATUS_READ','FEEDBACK_FOLLOW_UP'] as const;
 export type LearningManagerCapability=typeof learningManagerCapabilities[number];
 export type LearningRecipientPolicyAction='EXTEND'|'EXCUSE'|'REVERSE_EXCUSAL';
 export type LearningRecipientStatus='UPCOMING'|'AWAITING'|'SUBMITTED'|'EXCUSED';
@@ -44,7 +44,8 @@ export type LeadershipLearningOverview={
  limitations:{extensionsSupported:boolean;excusedSupported:boolean;pupilDetailSupported:boolean;followUpSupported:boolean};
 };
 
-export type LeadershipFeedbackTurnaroundQuery={fromDate:string;toDate:string;classId:string|null;subjectId:string|null};
+export type LeadershipFeedbackTurnaroundQuery={fromDate:string;toDate:string;classId:string|null;subjectId:string|null;cursor:string|null;limit:number};
+export type LeadershipFeedbackAwaitingItem={submissionId:string;assignmentId:string;assignmentTitle:string;classId:string;classLabel:string;subjectId:string;subjectName:string;acceptedAt:string};
 export type LeadershipFeedbackTurnaroundOverview={
  asOf:string;
  timezone:string;
@@ -55,5 +56,6 @@ export type LeadershipFeedbackTurnaroundOverview={
  filters:{classes:readonly LeadershipLearningFilter[];subjects:readonly LeadershipLearningFilter[]};
  counts:{acceptedSubmissions:number;firstFeedbackPublished:number;awaitingFeedback:number};
  medianTurnaroundSeconds:number|null;
- limitations:{privateDraftsExcluded:true;laterRevisionsIgnored:true;studentDetailSupported:false;coordinationSupported:false};
+ awaiting:{items:readonly LeadershipFeedbackAwaitingItem[];total:number;nextCursor:string|null};
+ limitations:{privateDraftsExcluded:true;laterRevisionsIgnored:true;studentDetailSupported:false;coordinationSupported:true};
 };

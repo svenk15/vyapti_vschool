@@ -83,6 +83,6 @@ Engineering status: F08-A and F08-B ENGINEERING_VERIFIED. F08 remains PARTIAL fo
 - [x] Exclude private drafts, content, learner/Teacher identity, later-revision resets and staff-performance inference.
 - [x] Pass focused real-PostgreSQL and sequential desktop/mobile browser verification; the current-source repository and production-build gates are recorded with the checkpoint evidence.
 - [x] Directly inspect the approved LEA-18 reference against the application states and record remaining deviations.
-- [ ] Add a distinct aggregate feedback-turnaround source and subject-lead coordination under approved D10/D04; do not reuse named recipient evidence.
+- [x] Add the approved exact accepted-submission feedback source, cursor-paginated safe awaiting projection and exact subject-lead coordination under D10/D04; do not reuse named recipient evidence or expose private content.
 
-Engineering status: supported descriptive read slice VERIFIED. Full LEA-18 remains PARTIAL until the aggregate owner source and coordination composition are implemented. Human review PENDING.
+Engineering status: LEA-18 and F08 ENGINEERING_COMPLETE. Human review PENDING.

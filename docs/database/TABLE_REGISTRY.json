@@ -1996,7 +1996,7 @@
       "owner": "learning",
       "table": "vs_learning_manager_grant",
       "fields": "id/org/school/membership/account/section/subject uuid; capability; operator/grant/revoke timestamps; version",
-      "responsibility": "Explicit exact class/subject designation for recipient-policy mutation or separate named-status evidence.",
+      "responsibility": "Explicit exact class/subject designation for recipient-policy mutation, separate named-status evidence or feedback follow-up.",
       "constraints": "Scoped membership/Section/Subject FKs; capability/version checks; unique account/scope/capability; active lookup index",
       "status": "MIGRATED",
       "design": "docs/modules/learning/DESIGN.md",

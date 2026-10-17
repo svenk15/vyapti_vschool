@@ -1,0 +1,9 @@
+import {redirect} from 'next/navigation';
+import {Alert,Breadcrumbs,PageHeader,PageStack} from '@/components/ui/primitives';
+import {CoordinationCreate} from '@/components/coordination-create';
+import {getIdentity} from '@/lib/server/auth';
+import {coordinationGateway} from '@/lib/server/coordination';
+
+export const dynamic='force-dynamic';
+const one=(value:string|string[]|undefined)=>Array.isArray(value)?value[0]:value;
+export default async function NewFeedbackFollowUp({searchParams}:{searchParams:Promise<{submission?:string|string[]}>}){const identity=await getIdentity();if(!identity)redirect('/sign-in');const submissionId=one((await searchParams).submission);let setup=null;if(submissionId)setup=await coordinationGateway.sourceSetup(identity,{sourceType:'LEARNING_FEEDBACK_SUBMISSION',sourceId:submissionId,kind:'LEARNING_FEEDBACK_FOLLOW_UP'}).catch(()=>null);return <main id="main-content" className="container page-space"><PageStack className="coordination-create-page"><Breadcrumbs items={[{label:'Feedback turnaround',href:'/leadership/learning/feedback'},{label:'New feedback follow-up'}]}/><PageHeader eyebrow="Learning coordination" title="Coordinate feedback return" description="Assign one accepted submission that is still awaiting its first published feedback version. Private learner work remains hidden."/>{setup&&setup.assignees.length?<CoordinationCreate source={setup.source} kind="LEARNING_FEEDBACK_FOLLOW_UP" assignees={setup.assignees} timezone={setup.timezone} returnHref="/leadership/learning/feedback"/>:<Alert tone="warning" title={setup?'No eligible subject coordinator':'Feedback source unavailable'}>{setup?'No current worker holds the exact class/subject feedback-follow-up designation and Coordination work capability.':'The exact accepted submission is no longer awaiting feedback or is outside your authorized branch scope.'}</Alert>}</PageStack></main>;}

@@ -12,6 +12,7 @@ export const coordinationGateway={
  get:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.get(s.identity,s.organizationId,s.schoolId,id);},
  eligibleAssignees:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.eligibleAssignees(s.identity,s.organizationId,s.schoolId,id);},
  sourceAssignees:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.sourceAssignees(s.identity,s.organizationId,s.schoolId,input);},
+ sourceSetup:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.sourceSetup(s.identity,s.organizationId,s.schoolId,input);},
  previewBatch:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.previewBatch(s.identity,s.organizationId,s.schoolId,input);},
  submitBatch:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.submitBatch(s.identity,s.organizationId,s.schoolId,input);},
  getBatch:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return coordination.getBatch(s.identity,s.organizationId,s.schoolId,id);},

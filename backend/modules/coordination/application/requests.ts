@@ -1,5 +1,5 @@
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
-import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPreview,CoordinationBatchReceipt,CoordinationCapability,CoordinationHandoverReceipt,CoordinationHistory,CoordinationMutationResult,CoordinationQueue,CoordinationRequest} from '../../../../shared/contracts/coordination';
+import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPreview,CoordinationBatchReceipt,CoordinationCapability,CoordinationHandoverReceipt,CoordinationHistory,CoordinationMutationResult,CoordinationQueue,CoordinationRequest,CoordinationSourceSetup} from '../../../../shared/contracts/coordination';
 import {AccessError} from '../../access/contracts/index';
 import {assignInput,batchInput,batchPreviewInput,createInput,handoverInput,historyInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
 
@@ -10,6 +10,7 @@ export interface CoordinationRepository {
  get(actor:Identity,organizationId:string,schoolId:string,requestId:string):Promise<CoordinationRequest>;
  eligibleAssignees(actor:Identity,organizationId:string,schoolId:string,requestId:string):Promise<readonly CoordinationAssignee[]>;
  sourceAssignees(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof sourceAssigneeInput>):Promise<readonly CoordinationAssignee[]>;
+ sourceSetup(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof sourceAssigneeInput>):Promise<CoordinationSourceSetup>;
  previewBatch(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof batchPreviewInput>):Promise<CoordinationBatchPreview>;
  submitBatch(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof batchInput>):Promise<CoordinationBatchReceipt>;
  getBatch(actor:Identity,organizationId:string,schoolId:string,batchId:string):Promise<CoordinationBatchReceipt>;
@@ -35,6 +36,7 @@ export function createCoordinationUseCases(repository:CoordinationRepository){re
  get(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,requestId:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.get(s.actor,s.organizationId,s.schoolId,id(requestId));},
  eligibleAssignees(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,requestId:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.eligibleAssignees(s.actor,s.organizationId,s.schoolId,id(requestId));},
  sourceAssignees(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.sourceAssignees(s.actor,s.organizationId,s.schoolId,sourceAssigneeInput(record(input)));},
+ sourceSetup(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.sourceSetup(s.actor,s.organizationId,s.schoolId,sourceAssigneeInput(record(input)));},
  previewBatch(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.previewBatch(s.actor,s.organizationId,s.schoolId,batchPreviewInput(record(input)));},
  submitBatch(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.submitBatch(s.actor,s.organizationId,s.schoolId,batchInput(record(input)));},
  getBatch(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,batchId:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.getBatch(s.actor,s.organizationId,s.schoolId,id(batchId));},

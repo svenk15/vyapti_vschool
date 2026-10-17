@@ -22,6 +22,14 @@ The existing Attendance-only source foreign key cannot represent this typed unio
 
 The production entry is contextual from `/leadership/learning/evidence`; `/leadership/learning/concerns/new` stages details, review and receipt. Generic Coordination manager/worker detail pages render the discriminated source and link back to the authorized Learning evidence. Verification requires real PostgreSQL source integrity, exact grants, cross-scope and revoked access, assignee eligibility, event staleness, replay and independent closure, plus one-worker desktop/mobile source-to-outcome coverage. Synthetic mode remains required pending retained-note production policy.
 
+## F08-C — typed feedback-publication follow-up
+
+Approved LEA-18 uses the exact immutable Learning submission as the second Learning source. `LEARNING_FEEDBACK_SUBMISSION` supports only `LEARNING_FEEDBACK_FOLLOW_UP` with concern `FEEDBACK_AWAITING`. It exposes assignment/class/subject, accepted time and `AWAITING`/`PUBLISHED` state without learner, Teacher, response, draft or feedback content. New requests require the source still be awaiting its first publication.
+
+The eligible worker must hold active branch membership, `coordination.work` and the exact class/subject Learning `FEEDBACK_FOLLOW_UP` designation. Principal inspection and independent verification use current `learning.read_leadership`; neither authority grants feedback authoring. Closure accepts the earliest immutable `LEARNING_FEEDBACK_PUBLICATION` version for the exact submission, or independently verified `NO_CHANGE_NEEDED`. Private drafts never satisfy evidence, and later publication versions never reset it. The existing Coordination transaction, version, idempotency, replay, separation and history rules remain unchanged.
+
+Forward migration `20261017172000_coordination_learning_feedback_source` extends exact capability/source/kind/concern/evidence checks and the deferred source-integrity trigger. It does not add a table or edit prior migrations. The existing partial active-source unique index prevents duplicate open follow-ups for the same submission. Synthetic-only and retained-note/TEN-03 production gates remain.
+
 ## F04 bounded Coordination handover
 
 The F04 owner slice transfers only Coordination requests already visible in one authorized branch. It does not grant or revoke Access authority and therefore does not complete LEA-26, whose Access counterpart remains F02. Input is an explicit ordered selection of 1–50 unique `{requestId, expectedVersion}` items, the exact outgoing assignee, one currently eligible successor, a required normalized reason (1–1,000 characters) and a 16–100 character command key. Transfer takes effect at the server commit time; scheduled delegation, confidential source access and source-owner decisions are outside this command.

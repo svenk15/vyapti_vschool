@@ -124,11 +124,11 @@
       "decisions": [
         "D10"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "scope": "Recipient extensions/excusal, status evidence grant and academic follow-up evidence adapter.",
       "demo": "Extend one recipient, excuse another, submit work; aggregate reconciles without Parent feedback access.",
       "kind": "foundation",
-      "completedSlice": "F08-A recipient policy and F08-B typed recipient Coordination evidence are engineering-verified; LEA-17 and LEA-19 are complete. F08 remains partial for LEA-18's distinct aggregate feedback-turnaround source and subject-lead follow-up."
+      "completedSlice": "F08-A recipient policy, F08-B typed recipient Coordination evidence and F08-C exact feedback-publication follow-up are engineering-verified; LEA-17, LEA-18 and LEA-19 are complete."
     },
     {
       "id": "F09",
@@ -404,7 +404,7 @@
       "decisions": [
         "D10"
       ],
-      "status": "PARTIAL",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-18.md",
       "kind": "workflow",
       "workflow": "LEA-18"
@@ -696,7 +696,7 @@
     },
     {
       "id": "WF-38",
-      "title": "Follow the school’s urgent safety escalation procedure",
+      "title": "Follow the school\u2019s urgent safety escalation procedure",
       "dependsOn": [
         "F14"
       ],

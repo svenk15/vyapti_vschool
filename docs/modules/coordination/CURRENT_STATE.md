@@ -73,3 +73,13 @@ Coordination now registers the synthetic-only `LEARNING_RECIPIENT` source and `L
 Forward migrations `20261017170000_coordination_learning_source` and `20261017171000_coordination_source_pair_checks` are applied to development and test, bringing each to 75 migrations. They replace the Attendance-only source FK with a deferrable conditional source-integrity trigger, extend exact value checks, and enforce source/kind/concern/evidence pairing; existing rows and migration history are preserved. PostgreSQL verification covers scoped creation, exact replay, independent verification, stale owner evidence, revoked authority and foreign scope while retaining the existing Attendance adapter regression. The staged Principal route and source-aware queue/detail/action screens were compared directly with LEA-19 at 1440×1000 and 390×844. The production application uses the agreed routed recipe instead of reproducing the explorer dialog.
 
 Evidence: [F08-B Learning follow-up](../../evidence/principal-f08-learning-followup-2026-10-17/README.md). F08 remains partial only for LEA-18's separate aggregate feedback-turnaround source. Operational-note retention, TEN-03, native accessibility, font portability, deployment and human acceptance remain pending.
+
+## 17 October 2026 — F08-C feedback-publication evidence / LEA-18
+
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING.
+
+Coordination now registers `LEARNING_FEEDBACK_SUBMISSION` only for `LEARNING_FEEDBACK_FOLLOW_UP`. Learning owns exact accepted-attempt inspection, exact class/subject assignee eligibility and earliest immutable feedback-publication verification. Coordination retains staged creation, assignment, current worker checks, independent verification, exact replay, active-request uniqueness and append-only history. Browser identifiers remain candidates; trusted source linkage and versions are resolved on the server.
+
+Migration `20261017172000_coordination_learning_feedback_source` is applied to both local databases, bringing each to 76 migrations. Database checks enforce the new source/kind/concern/evidence pairs and conditional source integrity. The complete affected Learning PostgreSQL file passed 19/19, including private-draft rejection, exact publication evidence, replay, pagination, current authority and revocation. Unit 23/23 and the applicable architecture/document/build/browser checks also passed. Evidence: [F08-C feedback follow-up](../../evidence/principal-f08-feedback-followup-2026-10-17/README.md).
+
+Production remains disabled outside the approved synthetic mode and blocked by operational-note retention/backup-deletion policy, TEN-03, native accessibility and the other release gates. Human review remains pending.

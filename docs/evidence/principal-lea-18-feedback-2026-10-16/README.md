@@ -1,6 +1,6 @@
 # LEA-18 Principal feedback-turnaround evidence
 
-Status: supported descriptive read slice engineering-verified; full LEA-18 partial; human review pending.
+Status: full LEA-18 engineering complete through F08-C; direct comparison complete with documented production-composition deviations; human review pending.
 
 ## Contract and source
 
@@ -8,7 +8,7 @@ Status: supported descriptive read slice engineering-verified; full LEA-18 parti
 - Application route: `/leadership/learning/feedback`.
 - Learning owns `feedback-turnaround.v1`; Leadership only presents the browser-safe aggregate.
 - Cohort: accepted submissions within explicit branch-timezone boundaries. First publication is the earliest immutable FeedbackVersion for the exact submission at or before the server as-of instant.
-- No schema or migration change. Development and test retain 64 migrations.
+- The original aggregate slice introduced no schema. F08-C adds forward migration `20261017172000_coordination_learning_feedback_source`; development and test each have 76 applied migrations.
 
 ## Functional and security verification
 
@@ -28,10 +28,12 @@ The first retry of the mobile project failed before Playwright began because Pri
 - `application-mobile.png` and `reference-mobile.png`: inspected at 390×844.
 - Inspection found and corrected the fourth desktop metric wrapping to a second row, nested-route double selection, wrong top-bar label, and inconsistent narrow-card flow.
 - Final application captures show one active Feedback turnaround destination, a four-card desktop row, a two-by-two mobile summary, bounded filters, explicit as-of/timezone, and readable definition/exclusion sections without horizontal overflow.
-- The approved source is a workflow-review dialog rather than an exact production page. The application implements the explicitly approved descriptive aggregate and omits the workflow's subject-lead coordination stage. It is a bounded shared-shell extension, not an exact full-workflow fidelity claim.
+- The approved source is a workflow-review dialog rather than an exact production page. F08-C now implements its subject-lead coordination stage through the agreed routed production recipe. The persistent shell, exact-item table, staged create/receipt/detail routes and durable evidence lifecycle are documented composition extensions rather than a pixel copy of the explorer dialog.
 
 Known deviation: the documented font portability exception remains. Native VoiceOver/NVDA was not executed.
 
-## Remaining work
+## F08-C completion addendum — 17 October 2026
 
-LEA-18 remains partial because subject-lead assignee authority, operational-note ownership, coordination lifecycle and verified follow-up outcome are not approved or implemented. The page deliberately exposes no dead coordination control. Human review, TEN-03 and production gates remain pending.
+Learning now returns a bounded cursor-paginated list of exact accepted submissions awaiting their first published feedback version, without learner identity or private response/feedback content. A Principal can create one staged `LEARNING_FEEDBACK_FOLLOW_UP`; the assignee must retain active branch membership, `coordination.work` and the exact class/subject `FEEDBACK_FOLLOW_UP` designation. A private feedback draft cannot close the request. The earliest immutable student-facing feedback publication for that exact submission is accepted as evidence and independently rechecked before closure; later versions do not reset the source fact.
+
+Current F08-C checks and routed evidence are recorded in `../principal-f08-feedback-followup-2026-10-17/README.md`. Human review, font portability, native VoiceOver/NVDA, Coordination operational-note retention/backup-deletion policy, TEN-03 and production enablement remain pending.

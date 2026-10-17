@@ -30,7 +30,19 @@ Dependencies: F04 engineering-complete; F08-A engineering-complete; D10 and D04 
 - [x] Verify PostgreSQL isolation, revocation, stale evidence, replay and independent closure.
 - [x] Extend synthetic seed, browser comparison and F08/LEA-19 evidence without inferring human acceptance.
 
-Engineering status: F08-B and LEA-19 ENGINEERING_COMPLETE; human review PENDING. F08 remains PARTIAL only because LEA-18 still needs a distinct aggregate feedback-turnaround follow-up source contract and implementation.
+Engineering status: F08-B and LEA-19 ENGINEERING_COMPLETE; human review PENDING. Superseded next action: F08-C is complete below.
+
+## COORD-06 / F08-C — Learning feedback follow-up adapter
+
+Dependencies: F04 and F08-B engineering-complete; D10/D04 approved for synthetic-only implementation on 17 October 2026.
+
+- [x] Register only `LEARNING_FEEDBACK_SUBMISSION` + `LEARNING_FEEDBACK_FOLLOW_UP` and fail closed for every other pair.
+- [x] Require exact class/subject `FEEDBACK_FOLLOW_UP` plus `coordination.work` for assignment and work visibility.
+- [x] Verify the earliest immutable `LEARNING_FEEDBACK_PUBLICATION`; reject private drafts, foreign submissions and stale/unsupported evidence.
+- [x] Extend source-integrity and exact pairing constraints by forward migration without rewriting prior migrations.
+- [x] Verify exact replay, independent closure, revocation, tenant/branch isolation and the routed desktop/mobile journey.
+
+Engineering status: ENGINEERING_COMPLETE. Human review PENDING.
 
 ## COORD-04 / F04 — typed owner sources, handover and safe history
 

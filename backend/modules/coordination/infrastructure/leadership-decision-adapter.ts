@@ -6,7 +6,7 @@ import type {DecisionCommand,DecisionListInput,DecisionOwnerAdapter} from '../..
 
 const summary=(request:CoordinationRequestSummary):DecisionSummary=>{
  if(!request.can.verify||request.status!=='AWAITING_VERIFICATION'||!request.resolution)throw new AccessError('NOT_FOUND');
- const learning=request.source.type==='LEARNING_RECIPIENT';return {owner:'COORDINATION_VERIFICATION',itemId:request.id,version:request.version,reference:`COORD-${request.id.slice(0,8).toUpperCase()}`,typeLabel:learning?'Learning follow-up verification':'Attendance follow-up verification',title:`${request.source.sectionName} · ${request.source.subjectName}`,description:`${learning?request.source.title:request.source.schoolDate} · ${request.resolution.kind.replaceAll('_',' ').toLowerCase()}`,state:'READY',submittedAt:request.updatedAt,dueAt:request.dueAt,source:request.source,allowedActions:['VERIFY','RETURN']};
+ const learning=request.source.type!=='ATTENDANCE_SESSION';return {owner:'COORDINATION_VERIFICATION',itemId:request.id,version:request.version,reference:`COORD-${request.id.slice(0,8).toUpperCase()}`,typeLabel:learning?'Learning follow-up verification':'Attendance follow-up verification',title:`${request.source.sectionName} · ${request.source.subjectName}`,description:`${learning?request.source.title:request.source.schoolDate} · ${request.resolution.kind.replaceAll('_',' ').toLowerCase()}`,state:'READY',submittedAt:request.updatedAt,dueAt:request.dueAt,source:request.source,allowedActions:['VERIFY','RETURN']};
 };
 
 export class CoordinationVerificationDecisionAdapter implements DecisionOwnerAdapter {
