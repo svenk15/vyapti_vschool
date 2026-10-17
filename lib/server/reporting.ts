@@ -2,7 +2,7 @@ import 'server-only';
 import {createReportingServices} from '../../backend/composition/reporting';
 import type {AttendanceReportInput} from '../../backend/modules/reporting/application/attendance-report';
 import type {Identity} from '../../shared/contracts/access';
-import type {LeadershipAttendanceExportInput,LeadershipLearningExportInput} from '../../shared/contracts/reporting';
+import type {LeadershipAttendanceExportInput,LeadershipBranchComparisonInput,LeadershipLearningExportInput} from '../../shared/contracts/reporting';
 import {accountGateway,leadershipGateway} from './access';
 import {reportingRuntimeConfiguration} from './reporting-runtime-configuration';
 const reporting=createReportingServices(reportingRuntimeConfiguration());
@@ -21,4 +21,6 @@ export const reportingGateway={
  getLeadershipSnapshot:async(identity:Identity|null,id:string)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.getSnapshot(identity,scope.organizationId,scope.schoolId,id);},
  captureLeadershipAttendanceSnapshot:async(identity:Identity|null,input:{query:LeadershipAttendanceExportInput;key:string})=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.captureAttendanceSnapshot(identity,scope.organizationId,scope.schoolId,input);},
  removeLeadershipSnapshot:async(identity:Identity|null,input:{id:string;expectedVersion:number;key:string;confirmed:true})=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.removeSnapshot(identity,scope.organizationId,scope.schoolId,input);},
+ leadershipComparisonAvailability:async(identity:Identity|null)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.leadershipComparisonAvailability(identity,scope.organizationId,scope.schoolId);},
+ compareLeadershipBranches:async(identity:Identity|null,input:LeadershipBranchComparisonInput)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.compareLeadershipBranches(identity,scope.organizationId,scope.schoolId,input);},
 };

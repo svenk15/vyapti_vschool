@@ -1,6 +1,18 @@
 # Attendance review, completeness and exports — current state
 
-Last updated: 2026-10-16. Principal completion batch started 08:19 IST; intended handover 16:19 IST.
+Last updated: 2026-10-17.
+
+## F05 / LEA-40 bounded branch comparison — 17 October 2026
+
+Status: ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY.
+
+Reporting now exposes `/leadership/reports/compare` for the D06 whole-branch retained-evidence comparison. An operator must enumerate every account/institution/target-branch `attendance-register-coverage.v1` grant; neither Principal role nor institution membership implies it. Every availability/read transaction rechecks the current Principal context, target branch status and the Attendance release/entitlement/activation chain. The query is bounded to 1–20 explicitly selected branches and 1–31 local dates. It selects the latest nonremoved whole-branch snapshot per branch/date, rejects subgroup and malformed payloads, shows source dates/UTC cutoffs/definition status, and excludes incompatible rows from the combined result. The combined rate is calculated from summed received and due counts, never from branch percentages. Revoked, disabled and otherwise withheld branches contribute no name, value or residual count.
+
+Forward migration `20261017230000_reporting_branch_comparison` adds registered Path A table `vs_reporting_comparison_grant`; development and test both retain 84 applied migrations. No database was reset and no applied migration changed. The guarded Principal helper now idempotently preserves the current branch grant and verifies its retained snapshot in ignored `artifacts/leadership-01/private-demo.json`; it does not fabricate a second branch or overwrite credentials/manual data.
+
+Focused evidence: branch-comparison unit 3/3; real-PostgreSQL functional 1/1; sequential one-worker Playwright 2/2 desktop and 2/2 mobile. The coherent repository gate passed lint, TypeScript, documentation, 128-table database design, boundaries, portable backend and 205/205 unit tests. The final production build passed with build ID `6IdNEhQunU6fmFKvJvngh`; isolated Playwright build `QYMWNv7odp-WM3fgzxFAE` served the focused journeys. PostgreSQL covers no automatic grant, explicit enumeration, foreign-organization denial, subgroup exclusion, weighted totals, revocation without residue, target-module disablement and current Principal reauthorization. The browser evidence covers the routed production comparison and the immutable LEA-40 workflow reference at 1440×1000 and 390×844. Direct inspection confirmed the approved select → qualify → compare sequence, visible limitations/cutoffs, mobile labelled records and no operational drill-down. The reference remains a workflow-explorer dialog; production uses recipe L, so composition differences are explicit. See [evidence](../../evidence/principal-f05-branch-comparison-2026-10-17/README.md).
+
+LEA-41 leadership brief remains the unfinished half of F05. Human review, font portability, native VoiceOver/NVDA, actual browser 200% zoom, TEN-03, real-data retention/backup deletion and production disclosure policy remain pending.
 
 ## LEA-06 retained aggregate snapshots — 16 October 2026
 

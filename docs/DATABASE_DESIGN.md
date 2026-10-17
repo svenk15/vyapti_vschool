@@ -106,6 +106,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | ReportingExportGrant | `vs_reporting_export_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingSnapshotManagerGrant | `vs_reporting_snapshot_manager_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | ReportingSnapshot | `vs_reporting_snapshot` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
+| ReportingComparisonGrant | `vs_reporting_comparison_grant` | reporting | MIGRATED | [reporting LLD](modules/reporting/DESIGN.md) |
 | CoordinationCapabilityGrant | `vs_coordination_capability_grant` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationRequest | `vs_coordination_request` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |
 | CoordinationRequestEvent | `vs_coordination_request_event` | coordination | MIGRATED | [coordination LLD](modules/coordination/DESIGN.md) |

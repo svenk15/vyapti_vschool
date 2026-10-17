@@ -73,6 +73,25 @@ Design readiness: complete under [LEA-06](DESIGN.md#lea-06--retained-aggregate-s
 
 Engineering status: the approved LEA-06 current, unavailable and retained-last-known states are VERIFIED for synthetic local/test data. Real-data use remains disabled pending retention and backup-deletion policy. Human review PENDING.
 
+## F05 — Reporting comparisons and briefs
+
+### LEA-40 bounded branch comparison
+
+- [x] Resolve the D06 whole-branch allowlist, explicit target-branch authority, 20-branch/31-date bounds, compatibility rules and weighted-total arithmetic in the owner LLD.
+- [x] Add the operator-designated institution comparison grant with a forward Path A migration and registry entry.
+- [x] Read only latest immutable whole-branch `attendance-register-coverage.v1` snapshots; exclude subgroup snapshots and malformed payloads.
+- [x] Implement the `/leadership/reports/compare` route with authorized branch selection, visible UTC cutoffs, limitations, withheld count and no operational drilldown.
+- [x] Verify PostgreSQL authorization/revocation/module gates and weighted totals, then compare the desktop/mobile journey directly with LEA-40.
+- [x] Extend the guarded synthetic seed, evidence, matrix and current-state record; keep production disclosure/retention and human review pending.
+
+### LEA-41 leadership brief
+
+- [x] Record the approved immutable-snapshot, separate generation/share authority, revision and all-sections live-read rules without migrating speculative tables.
+- [ ] Finalize exact brief/revision/section/recipient/receipt DDL and command contract after the LEA-40 source/grant boundary is verified.
+- [ ] Implement, verify, seed and compare the complete portal brief journey.
+
+Engineering status: F05 is IN_PROGRESS. LEA-40 is ENGINEERING_COMPLETE with direct reference/application comparison; LEA-41 remains NOT_STARTED. Human review PENDING.
+
 ## Experience overlay consumption
 
 EX-12 adopts the existing attendance overview, server-filtered detail and authorized CSV export. Preserve owner denominator/as-of semantics, formula-safe export and ExportRun audit; never compute school totals from one cursor page or export rendered DOM rows.

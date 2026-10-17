@@ -839,6 +839,21 @@ model ReportingSnapshot {
  @@map("vs_reporting_snapshot")
 }
 
+model ReportingComparisonGrant {
+ id String @id(map:"vs_reporting_comparison_grant_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ accountId String @map("account_id") @db.Uuid
+ metric String @db.VarChar(80)
+ grantedByOperatorId String @map("granted_by_operator_id") @db.Uuid
+ grantedAt DateTime @map("granted_at") @db.Timestamptz(3)
+ revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,accountId,schoolId,metric],map:"vs_reporting_comparison_grant_scope_metric_key")
+ @@index([organizationId,accountId,metric,revokedAt,schoolId],map:"vs_reporting_comparison_grant_active_idx")
+ @@map("vs_reporting_comparison_grant")
+}
+
 model CoordinationCapabilityGrant {
  id String @id(map:"vs_coordination_capability_grant_pkey") @db.Uuid
  organizationId String @map("organization_id") @db.Uuid

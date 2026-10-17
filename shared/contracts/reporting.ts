@@ -10,6 +10,20 @@ export type LeadershipExportAvailability=Readonly<{canExport:boolean;reportTypes
 export type LeadershipSnapshotAvailability=Readonly<{enabled:boolean;canManage:boolean;reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null}>;
 export type LeadershipReportSnapshotSummary=Readonly<{id:string;reportType:'attendance-register-coverage.v1';definitionVersion:string;schoolDate:string;sourceAsOf:string;capturedAt:string;rowCount:number;version:number;removedAt:string|null}>;
 export type LeadershipReportSnapshot=LeadershipReportSnapshotSummary&Readonly<{query:LeadershipAttendanceExportInput;payload:LeadershipRegisterCoverage;replayed:boolean}>;
+export type LeadershipComparisonMetric='attendance-register-coverage.v1';
+export type LeadershipComparisonAvailability=Readonly<{enabled:boolean;metric:LeadershipComparisonMetric;branches:readonly Readonly<{id:string;name:string;timezone:string}>[];reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null}>;
+export type LeadershipBranchComparisonInput=Readonly<{branchIds:readonly string[];fromDate:string;toDate:string}>;
+export type LeadershipBranchComparisonRow=Readonly<{
+ branchId:string;branchName:string;timezone:string;status:'COMPARABLE'|'NOT_COMPARABLE';reason:'NO_SNAPSHOTS'|'DATE_COVERAGE_DIFFERS'|'SOURCE_DEFINITION_DIFFERS'|null;
+ dates:readonly string[];definitionVersion:string|null;duePolicy:string|null;sourceCutoffFrom:string|null;sourceCutoffTo:string|null;
+ counts:Readonly<{due:number;received:number;awaiting:number}>;rate:Readonly<{numerator:number;denominator:number;value:number|null}>;
+}>;
+export type LeadershipBranchComparison=Readonly<{
+ metric:LeadershipComparisonMetric;fromDate:string;toDate:string;asOf:string;withheldBranchCount:number;
+ branches:readonly LeadershipBranchComparisonRow[];
+ combined:Readonly<{includedBranchCount:number;numerator:number;denominator:number;value:number|null}>;
+ limitations:readonly string[];
+}>;
 
 export type SchoolReadinessItemId='school'|'academics'|'staff'|'students'|'attendance';
 export type SetupResponsibleRole='SCHOOL_ADMIN'|'INSTITUTION_ADMIN'|'ASSIGNED_TEACHER';

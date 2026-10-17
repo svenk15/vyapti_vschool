@@ -2641,6 +2641,26 @@
         "owner": "academics",
         "closureGate": "TEN-03"
       }
+    },
+    {
+      "model": "ReportingComparisonGrant",
+      "table": "vs_reporting_comparison_grant",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid target resource; account_id uuid; metric varchar(80); granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Operator-designated institution-level authority to compare one allowlisted whole-branch aggregate for one enumerated target branch; no operational branch access.",
+      "constraints": "Organization, scoped School and Account FKs; fixed metric CHECK; positive version; UNIQUE(organization_id,account_id,school_id,metric); active grant lookup index",
+      "owner": "reporting",
+      "status": "MIGRATED",
+      "design": "docs/modules/reporting/DESIGN.md",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require server-verified institution context plus current explicit Reporting comparison authority; school_id is an enumerated target resource and never broadens operational branch access.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "reporting",
+        "closureGate": "TEN-03"
+      }
     }
   ],
   "rlsPlan": {

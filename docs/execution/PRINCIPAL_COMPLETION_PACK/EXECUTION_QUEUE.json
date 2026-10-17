@@ -81,7 +81,7 @@
       "decisions": [
         "D06"
       ],
-      "status": "PLANNED",
+      "status": "IN_PROGRESS",
       "scope": "Enumerated aggregate branches, compatible metrics, brief revisions/recipients and snapshot gating.",
       "demo": "Different branch grants/calendars show qualified comparison; withdrawn recipient cannot read brief.",
       "kind": "foundation"
@@ -724,7 +724,7 @@
       "decisions": [
         "D06"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-40.md",
       "kind": "workflow",
       "workflow": "LEA-40"

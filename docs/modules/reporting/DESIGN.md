@@ -57,6 +57,7 @@ Reporting tables are planned except the implemented RPT-02 ExportRun, LEA-39 Rep
 | `vs_reporting_export_grant` (ReportingExportGrant) | id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int | Operator-designated branch authority for Principal aggregate export; Principal role or report-read authority never creates this grant automatically. | Composite FK(scope,membership_id,account_id)->SchoolMembership; UNIQUE(scope,account_id); CHECK version>0; active lookup index(scope,account_id,revoked_at) |
 | `vs_reporting_snapshot_manager_grant` (ReportingSnapshotManagerGrant) | id uuid PK; organization_id uuid; school_id uuid; membership_id uuid; account_id uuid; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int | Operator-designated branch authority for Principal aggregate snapshot capture/removal; report-read alone never creates this grant. | Composite FK(scope,membership_id,account_id)->SchoolMembership; UNIQUE(scope,account_id); CHECK version>0; active lookup index(scope,account_id,revoked_at) |
 | `vs_reporting_snapshot` (ReportingSnapshot) | id/scope/actor uuid; report_type/definition_version; query jsonb; school_date; source_as_of/captured_at; payload jsonb nullable; payload_hash; row_count; capture/removal intent metadata; version | Immutable bounded aggregate Principal report snapshot; explicit removal clears only the protected payload and retains minimal deletion metadata. | Scoped School and actor/remover Account FKs; UNIQUE(scope,id) and capture intent; CHECK version, row bound and active/removed payload state; list and actor indexes |
+| `vs_reporting_comparison_grant` (ReportingComparisonGrant) | id uuid PK; organization_id uuid; school_id uuid target resource; account_id uuid; metric varchar(80); granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int | Operator-designated institution-level authority to compare one allowlisted whole-branch aggregate for one enumerated target branch; no operational branch access. | Organization, scoped School and Account FKs; fixed metric CHECK; positive version; UNIQUE(organization_id,account_id,school_id,metric); active grant lookup index |
 
 ## Read workflows and joins
 
@@ -255,6 +256,38 @@ sequenceDiagram
 ```
 
 Verification: pure use-case bound and exact-retry tests; real PostgreSQL proves no automatic manager grant, synthetic-mode gate, current read/manage authority, immutable payload after source change, cross-branch and revoked denial, duplicate-click replay/conflict, safe audit, explicit removal/replay and stale-link denial. One-worker desktop/mobile browser evidence covers capture, reload, source change without recalculation, current-vs-retained labels, keyboard focus, confirmation/removal and the approved LEA-06 reference state. Font portability, native accessibility, TEN-03, retention/backup deletion, production data and human review remain pending.
+
+## F05 / LEA-40 — bounded branch comparison
+
+**Design-readiness note (17 October 2026):** D06 is approved for synthetic implementation. The first F05 consumer compares only retained `attendance-register-coverage.v1` snapshots. It is read-only and whole-branch: class, Teacher, status and other subgroup filters are rejected. Reporting remains the snapshot owner; no Attendance row is read or written by the comparison path. Assignment completion, feedback turnaround and published reconciliation exceptions remain separately allowlisted future source adapters and do not appear until they have equivalent immutable snapshot contracts.
+
+An operator designates `reporting.compare` separately for each account, institution, target branch and metric. A Principal role, branch membership, institution-admin role, export grant or snapshot-manager grant does not imply this authority. The actor must still hold a current active Principal context in the same institution. A target-branch grant permits only the aggregate snapshot comparison; it does not make that branch selectable as an operational workspace and does not authorize snapshot detail, export or owner drilldown. Revocation removes the branch and all of its values from the next result. Browser branch IDs are candidates intersected with current grants.
+
+`compareBranches(actor, currentScope, {branchIds,fromDate,toDate})` accepts 1–20 unique UUID branch IDs and an inclusive 1–31-day range. The repository reauthorizes the current account, token, organization and Principal membership, resolves only active comparison grants in that institution, and rechecks the Attendance release, institution entitlement and activation for every included target branch. It selects the latest non-removed snapshot per `(school_id,school_date)` within the range, restricted to `attendance-register-coverage.v1`, whole-branch query fields and the approved definition/due-policy vocabulary. Payloads that fail the runtime shape check are unavailable rather than trusted.
+
+Branches are comparable only when each has one source snapshot for the same set of local dates and every source has the same definition version and due policy. This deliberately treats different teaching-day coverage, missing dates, definition changes and cutoff-policy changes as not comparable. Each branch displays its own timezone and minimum/maximum UTC source cutoff. A non-comparable branch remains visible with its limitation but contributes nothing to the combined result. The combined ratio is `sum(received) / sum(due)` across comparable included branches; it is never an average of branch percentages. A missing/revoked/disabled requested branch increments only `withheldBranchCount`; it contributes no name, zero or residual total and cannot be opened through the summary grant.
+
+Physical table `vs_reporting_comparison_grant` is INSTITUTION-classified because it intentionally authorizes an enumerated cross-branch aggregate inside one institution; `school_id` identifies the allowed target resource rather than the current database branch context. Columns are: `id uuid` PK; `organization_id uuid`; `school_id uuid`; `account_id uuid`; `metric varchar(80)` fixed to `attendance-register-coverage.v1`; `granted_by_operator_id uuid`; `granted_at timestamptz(3)`; `revoked_at timestamptz(3)` nullable; and positive `version int`. It has scoped Organization/School and Account FKs, `UNIQUE(organization_id,account_id,school_id,metric)`, and an active lookup index `(organization_id,account_id,metric,revoked_at,school_id)`. No backfill occurs. TEN-03 must enforce verified institution context plus current Reporting comparison policy; application authorization remains mandatory. Production remains disabled until snapshot retention and aggregate-disclosure review are approved.
+
+```mermaid
+sequenceDiagram
+  actor P as Principal
+  participant W as Comparison page
+  participant R as Reporting comparison use case
+  participant D as Reporting persistence
+  P->>W: Select granted branches and 1–31 local dates
+  W->>R: Candidate branch IDs and range
+  R->>D: Reauthorize current Principal and intersect active grants
+  D->>D: Read latest immutable whole-branch snapshots per branch/date
+  D-->>R: Included, withheld and qualified comparability rows
+  R-->>W: Counts, denominators, UTC cutoffs and limitations
+```
+
+Verification requires pure range/branch validation and weighted-total arithmetic; real PostgreSQL no-auto-grant, target enumeration, cross-institution denial, revoked-branch removal without residual totals, module denial, malformed/subgroup snapshot exclusion and `1/2 + 9/10 = 10/12`; and one-worker desktop/mobile browser comparison against LEA-40 with keyboard selection and no operational branch link. Human review, native accessibility, exact font portability, TEN-03 and production disclosure/retention remain pending.
+
+## F05 / LEA-41 — leadership brief contract (implementation follows LEA-40)
+
+D06 authorizes an immutable snapshot-backed portal brief with `DRAFT → FINALIZED → WITHDRAWN`, bounded narrative, explicit audience and live rights to every included section. Brief generation and portal sharing are separate designations. Revisions pin Reporting snapshot IDs and their source metadata; source changes never recalculate a finalized brief. Adding a source or audience creates a new draft revision. A finalized revision is immutable. Every recipient read rechecks current access to every included branch/metric and fails closed for the whole brief; this release does not synthesize a reduced artifact. Because v1 sources contain no staff identifiers, the staff-detail-grant rule is fail-closed for any future source that declares such identifiers. Exact columns, commands, receipt scope and indexes will be finalized immediately before the LEA-41 implementation slice rather than migrated speculatively with LEA-40.
 
 ## Migration, retention and handoff
 
