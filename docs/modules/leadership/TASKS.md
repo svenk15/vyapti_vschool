@@ -196,6 +196,14 @@ Engineering status: ENGINEERING_COMPLETE. This documentation/evidence checkpoint
 - [x] Add recipe-L exact search, filter/sort drawers, safe URL state, filtered empty state and preserved detail navigation.
 - [x] Record current-source PostgreSQL, sequential desktop/mobile browser, build and direct-comparison evidence; then update the matrix. Human review remains PENDING.
 
+## LEA-28 — request information before deciding
+
+- [x] Add the typed per-owner request-information operation without generic decision persistence.
+- [x] Preview the server-resolved Coordination proposer and bounded question before final submission.
+- [x] Suppress verify/return while the owner child is OPEN and show ANSWERED evidence only after a fresh read.
+- [x] Link the counterpart to the owning Coordination work screen rather than a generic message/contact route.
+- [x] Complete focused browser comparison/evidence and then update the matrix; human acceptance remains PENDING.
+
 ## LEA-29 — source-defined assigned decision
 
 - [x] Reconcile the approved owner-defined action contract with the existing Coordination verification adapter; do not require fictional owner modules or generic approve/reject commands.

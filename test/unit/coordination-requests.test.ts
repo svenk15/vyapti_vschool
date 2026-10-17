@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {randomUUID} from 'node:crypto';
-import {assignInput,batchInput,createInput,handoverInput,historyFindingInput,historyInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
+import {assignInput,batchInput,createInput,handoverInput,historyFindingInput,historyInput,informationRequestInput,informationResponseInput,localInstant,resolutionInput} from '../../backend/modules/coordination/domain/requests';
 import {createDecisionInboxUseCases,type DecisionOwnerAdapter} from '../../backend/modules/leadership/application/decisions';
 import type {CoordinationSourceAdapter} from '../../backend/modules/coordination/contracts/source-adapter';
 import {CoordinationSourceRegistry} from '../../backend/modules/coordination/infrastructure/source-registry';
@@ -65,23 +65,31 @@ describe('coordination request contract',()=>{
   expect(()=>localInstant('2026-03-08T02:30','America/New_York')).toThrow('VALIDATION');
   expect(()=>localInstant('2026-11-01T01:30','America/New_York')).toThrow('VALIDATION');
  });
+
+ it('validates bounded information questions and counterpart responses',()=>{
+  const requestId=randomUUID(),informationRequestId=randomUUID();
+  expect(informationRequestInput({requestId,expectedVersion:4,question:'  Which source check supports this recommendation?  ',responseDueAt:'2026-10-20T10:30:00.000Z',key:key()})).toMatchObject({requestId,expectedVersion:4,question:'Which source check supports this recommendation?'});
+  expect(informationResponseInput({requestId,informationRequestId,expectedRequestVersion:5,expectedInformationVersion:1,response:'  The current immutable revision was checked.  ',key:key()})).toMatchObject({informationRequestId,response:'The current immutable revision was checked.'});
+  expect(()=>informationRequestInput({requestId,expectedVersion:4,question:'',responseDueAt:null,key:key()})).toThrow('VALIDATION');
+  expect(()=>informationResponseInput({requestId,informationRequestId,expectedRequestVersion:5,expectedInformationVersion:1,response:'x'.repeat(1001),key:key()})).toThrow('VALIDATION');
+ });
 });
 
 describe('typed decision facade',()=>{
  it('rejects unknown owners and invalid owner commands before dispatch',async()=>{
-  const calls:string[]=[],adapter={owner:'COORDINATION_VERIFICATION',list:async()=>({items:[],nextCursor:null,timezone:'Asia/Kolkata'}),get:async()=>{calls.push('get');throw new Error('unexpected');},decide:async()=>{calls.push('decide');throw new Error('unexpected');},status:async()=>{calls.push('status');throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1},organizationId=randomUUID(),schoolId=randomUUID(),itemId=randomUUID();
+  const calls:string[]=[],adapter={owner:'COORDINATION_VERIFICATION',list:async()=>({items:[],nextCursor:null,timezone:'Asia/Kolkata'}),get:async()=>{calls.push('get');throw new Error('unexpected');},decide:async()=>{calls.push('decide');throw new Error('unexpected');},status:async()=>{calls.push('status');throw new Error('unexpected');},requestInformation:async()=>{calls.push('requestInformation');throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1},organizationId=randomUUID(),schoolId=randomUUID(),itemId=randomUUID();
   await expect(facade.get(identity,organizationId,schoolId,'UNKNOWN',itemId)).rejects.toMatchObject({code:'NOT_FOUND'});
   await expect(facade.decide(identity,organizationId,schoolId,'COORDINATION_VERIFICATION',itemId,{action:'RETURN',expectedVersion:1,reason:null,key:key()})).rejects.toMatchObject({code:'VALIDATION'});
  expect(calls).toEqual([]);
  });
  it('normalizes only supported inbox query fields before owner dispatch',async()=>{
-  let seen:unknown;const adapter={owner:'COORDINATION_VERIFICATION',list:async(_actor,_organizationId,_schoolId,input)=>{seen=input;return {items:[],nextCursor:null,timezone:'Asia/Kolkata'};},get:async()=>{throw new Error('unexpected');},decide:async()=>{throw new Error('unexpected');},status:async()=>{throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1};
+  let seen:unknown;const adapter={owner:'COORDINATION_VERIFICATION',list:async(_actor,_organizationId,_schoolId,input)=>{seen=input;return {items:[],nextCursor:null,timezone:'Asia/Kolkata'};},get:async()=>{throw new Error('unexpected');},decide:async()=>{throw new Error('unexpected');},status:async()=>{throw new Error('unexpected');},requestInformation:async()=>{throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1};
   const queue=await facade.list(identity,randomUUID(),randomUUID(),{reference:'  COORD-00000000-0000-4000-8000-000000000000  ',type:'ATTENDANCE_FOLLOW_UP',state:'READY',due:'NO_DUE_DATE',sort:'submitted',order:'desc',limit:'10'});
   expect(seen).toMatchObject({reference:'COORD-00000000-0000-4000-8000-000000000000',type:'ATTENDANCE_FOLLOW_UP',state:'READY',due:'NO_DUE_DATE',sort:'submitted',order:'desc',limit:10});expect(queue.query).toMatchObject({sort:'submitted',order:'desc'});
   await expect(facade.list(identity,randomUUID(),randomUUID(),{type:'UNKNOWN'})).rejects.toMatchObject({code:'VALIDATION'});await expect(facade.list(identity,randomUUID(),randomUUID(),{due:'TODAY'})).rejects.toMatchObject({code:'VALIDATION'});await expect(facade.list(identity,randomUUID(),randomUUID(),{sort:'title'})).rejects.toMatchObject({code:'VALIDATION'});
  });
  it('validates and dispatches one owner status intent without changing it',async()=>{
-  let seen:unknown;const adapter={owner:'COORDINATION_VERIFICATION',list:async()=>({items:[],nextCursor:null,timezone:'UTC'}),get:async()=>{throw new Error('unexpected');},decide:async()=>{throw new Error('unexpected');},status:async(_actor,_organizationId,_schoolId,_itemId,input)=>{seen=input;return {state:'UNKNOWN' as const};}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1},input={action:'RETURN',expectedVersion:4,reason:'Needs current owner evidence',key:key()};
+  let seen:unknown;const adapter={owner:'COORDINATION_VERIFICATION',list:async()=>({items:[],nextCursor:null,timezone:'UTC'}),get:async()=>{throw new Error('unexpected');},decide:async()=>{throw new Error('unexpected');},status:async(_actor,_organizationId,_schoolId,_itemId,input)=>{seen=input;return {state:'UNKNOWN' as const};},requestInformation:async()=>{throw new Error('unexpected');}} satisfies DecisionOwnerAdapter,facade=createDecisionInboxUseCases([adapter]),identity={accountId:randomUUID(),tokenVersion:1},input={action:'RETURN',expectedVersion:4,reason:'Needs current owner evidence',key:key()};
   await expect(facade.status(identity,randomUUID(),randomUUID(),'COORDINATION_VERIFICATION',randomUUID(),input)).resolves.toEqual({state:'UNKNOWN'});
   expect(seen).toEqual(input);
  });

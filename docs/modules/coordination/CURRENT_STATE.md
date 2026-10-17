@@ -1,5 +1,15 @@
 # Coordination current state
 
+## 17 October 2026 — COORD-07 / LEA-28 information request verified
+
+The registered Coordination decision owner now supports the approved D03/D08 information-request lifecycle. An independent current reviewer asks one bounded question of the current eligible resolution proposer; the owner records one OPEN child, advances request evidence and removes verify/return actions while waiting. The proposer answers through the assigned Coordination screen under current `coordination.work` and registered-source eligibility. The response advances owner evidence again, so the reviewer must load and confirm a fresh version. Owner transitions cancel unanswered questions; stale/former/revoked responses are denied.
+
+Forward migration `20261018103000_coordination_information_requests` is applied to development and test, bringing both to 89 migrations. It adds the registered branch-scoped `vs_coordination_information_request` table with one-OPEN uniqueness, scoped request/account relationships, state/text/version checks and request/recipient indexes. Path-A application authorization remains active and TEN-03 remains the production closure gate.
+
+Focused current-source verification passed 13/13 unit and 16/16 real-PostgreSQL tests. Sequential one-worker Chromium and mobile each passed the real request → exact lost-response retry → counterpart response → fresh review → decision journey plus the immutable reference capture, 2/2 per viewport. The current source production build passed as part of Chromium startup. Captures were directly inspected; the explorer-to-routed-production composition and portable-font deviations remain explicit. The guarded synthetic seed passed twice without adding another question or changing credentials. Evidence: [LEA-28](../../evidence/principal-lea-28-information-2026-10-17/README.md).
+
+LEA-28 is ENGINEERING_COMPLETE for every currently registered owner (Coordination is the sole owner). Future decision owners must register their own recipient/reply contract. Human review, native accessibility, actual 200% browser zoom, retention, TEN-03 and production enablement remain PENDING.
+
 ## 17 October 2026 — WF-42 / LEA-42 separate review finding
 
 LEA-42 is ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY at source `94c7679d25e8a77b5b3042b109e400cf6204e535`. The existing safe bounded history now offers a separate staged finding/escalation only when the actor holds both `coordination.history` and the trusted `coordination.history.finding` designation. The command binds one exact request event, normalized bounded text and a stable key. It writes an immutable Coordination-owned record and safe receipt/audit metadata without changing the request version, owner lifecycle, source evidence or prior events. General history actors never receive finding text.

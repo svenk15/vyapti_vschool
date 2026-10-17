@@ -1,5 +1,11 @@
 # Principal leadership current state
 
+## 17 October 2026 — LEA-28 typed owner information request completed
+
+Leadership now dispatches a bounded request-information command only through the selected registered owner adapter. For Coordination, the staged Principal composition previews the owner-resolved proposer and question, preserves the stable owner key after a lost response, labels the committed result as waiting rather than approved/rejected, and links to the owning counterpart. An OPEN owner question removes decision actions; an ANSWERED projection displays the refreshed evidence and requires a new expected-version confirmation. Leadership stores no generic question, contact, message, decision or receipt.
+
+The 46-row matrix now records 30 ENGINEERING_COMPLETE, one PARTIAL (LEA-32) and 15 NOT_STARTED. LEA-27, LEA-28, LEA-29 and LEA-31 explicitly cover all currently registered owners; later owner registrations remain owner-module tasks rather than implied support. Focused evidence is in [principal-lea-28-information-2026-10-17](../../evidence/principal-lea-28-information-2026-10-17/README.md). Human review and all production gates remain PENDING.
+
 ## 16 October 2026 — LEA-04 live-access completion
 
 LEA-04 is ENGINEERING_COMPLETE; human review remains PENDING.

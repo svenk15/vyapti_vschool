@@ -44,7 +44,9 @@ LDR-02 owns the Attendance due-register read projection and exact metric definit
 
 Leadership aggregates typed owner projections; it does not own approval state. `DecisionOwnerAdapter` is an application port with explicit `owner`, `list`, `get` and `decide` operations. The registry rejects unknown owners before dispatch. Every adapter returns only its own safe DTO and owner-defined allowed actions, and every call includes the authenticated identity plus exact organization and branch scope. The first adapter is Coordination verification as specified in the Coordination LLD. A visible inbox item or inbox navigation grant is never decision authority; the owner reauthorizes every read, write and replay.
 
-F03 supplies the reusable facade and one real adapter. It does not by itself complete LEA-27–31: request-information, response, recusal/routing and additional owner decisions require their explicit owner counterparts. No generic decision persistence, generic contact search or universal approve command is introduced.
+F03 supplies the reusable facade and one real adapter. LEA-28 is implemented only for the registered Coordination owner through its typed `requestInformation` command and owner-owned counterpart response; this does not grant the same action to future owners. Recusal/routing and additional owner decisions still require explicit owner counterparts. No generic decision persistence, generic contact search or universal approve command is introduced.
+
+For WF-28, Leadership validates and dispatches `{expectedVersion,question,responseDueAt,key}` to the selected typed owner. It stores no question, message, recipient or receipt. The owner detail returns only the current authorized child projection and removes decision actions while it is OPEN. After an ANSWERED child changes the owner version, the Principal must reload the safe evidence and make a new expected-version confirmation. Coordination remains responsible for recipient resolution, source authority, reply, persistence, exact replay and protected audit evidence.
 
 ### LEA-27 directory completion delta
 

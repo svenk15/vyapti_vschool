@@ -2265,6 +2265,27 @@
       }
     },
     {
+      "model": "CoordinationInformationRequest",
+      "owner": "coordination",
+      "table": "vs_coordination_information_request",
+      "fields": "id/org/school/request/requester/recipient uuid; question/response; response_due_at/status/timestamps/version",
+      "responsibility": "One owner-scoped actionable question to the current authorized resolution proposer and its versioned response.",
+      "constraints": "Scoped request FK; account FKs; state/text/version checks; one OPEN child per request; request/status/time and recipient/status/due indexes",
+      "status": "MIGRATED",
+      "design": "docs/modules/coordination/DESIGN.md",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Only the current authorized reviewer may ask the current eligible proposer; only that proposer may answer; owner reads require live request/source authority.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "coordination",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
       "model": "CoordinationRequestEvent",
       "owner": "coordination",
       "table": "vs_coordination_request_event",

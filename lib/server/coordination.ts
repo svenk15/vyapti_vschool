@@ -26,6 +26,8 @@ export const coordinationGateway={
  submit:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.submit(s.identity,s.organizationId,s.schoolId,input);},
  verify:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.verify(s.identity,s.organizationId,s.schoolId,input);},
  returnResolution:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.returnResolution(s.identity,s.organizationId,s.schoolId,input);},
+ requestInformation:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.requestInformation(s.identity,s.organizationId,s.schoolId,input);},
+ respondInformation:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.respondInformation(s.identity,s.organizationId,s.schoolId,input);},
  withdraw:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.withdraw(s.identity,s.organizationId,s.schoolId,input);},
  reopen:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return coordination.reopen(s.identity,s.organizationId,s.schoolId,input);},
 };

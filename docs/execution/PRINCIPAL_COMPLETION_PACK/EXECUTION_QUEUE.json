@@ -562,10 +562,11 @@
         "D03",
         "D08"
       ],
-      "status": "PLANNED",
+      "status": "ENGINEERING_COMPLETE",
       "definition": "workflows/LEA-28.md",
       "kind": "workflow",
-      "workflow": "LEA-28"
+      "workflow": "LEA-28",
+      "completedSlice": "The registered Coordination owner resolves the current proposer, persists one open question, provides an authorized counterpart reply, advances owner evidence, suppresses decisions while waiting, rejects stale/former participants and preserves exact owner replay without generic decision persistence."
     },
     {
       "id": "WF-29",
@@ -705,7 +706,7 @@
     },
     {
       "id": "WF-38",
-      "title": "Follow the school’s urgent safety escalation procedure",
+      "title": "Follow the school\u2019s urgent safety escalation procedure",
       "dependsOn": [
         "F14"
       ],

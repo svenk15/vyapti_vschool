@@ -5,7 +5,6 @@ import {PrismaPg} from '@prisma/adapter-pg';
 import {PrismaClient} from '../generated/prisma/client';
 import {createAccessServices} from '../backend/composition/access';
 import {createCoordinationServices} from '../backend/composition/coordination';
-import {BcryptPasswords} from '../backend/modules/access/infrastructure/passwords';
 import {localAccessConfig} from './access-local-config';
 import type {RoleCode} from '../shared/contracts/access';
 import type {CoordinationRequestKind} from '../shared/contracts/coordination';
@@ -18,7 +17,7 @@ const directory='artifacts/coordination-01';
 const path=`${directory}/private-demo.json`;
 
 type People={adminEmail:string;password:string;teacherEmail:string;teacherPassword:string;organizationId:string;schoolId:string;accountId:string;teacherAccountId:string};
-type Demo={roleKey:string;missingCreateKey:string;resolvedCreateKey:string;resolvedStartKey:string;resolvedSubmitKey:string;resolvedVerifyKey:string;historyFindingKey?:string;historyFindingId?:string;fullBatchKey?:string;mixedBatchKey?:string;fullBatchId?:string;mixedBatchId?:string;missingRequestId?:string;resolvedRequestId?:string;unassignedRequestId?:string;inProgressRequestId?:string;awaitingRequestId?:string;returnedRequestId?:string;withdrawnRequestId?:string;sourceDate?:string};
+type Demo={roleKey:string;missingCreateKey:string;resolvedCreateKey:string;resolvedStartKey:string;resolvedSubmitKey:string;resolvedVerifyKey:string;informationRequestKey?:string;informationRequestId?:string;historyFindingKey?:string;historyFindingId?:string;fullBatchKey?:string;mixedBatchKey?:string;fullBatchId?:string;mixedBatchId?:string;missingRequestId?:string;resolvedRequestId?:string;unassignedRequestId?:string;inProgressRequestId?:string;awaitingRequestId?:string;returnedRequestId?:string;withdrawnRequestId?:string;sourceDate?:string};
 
 const key=(value:string)=>{const hash=createHash('sha256').update(value).digest('hex').slice(0,32);return `${hash.slice(0,8)}-${hash.slice(8,12)}-4${hash.slice(13,16)}-a${hash.slice(17,20)}-${hash.slice(20)}`;};
 const initial=(scope:string):Demo=>({roleKey:key(`coord-role:${scope}`),missingCreateKey:key(`coord-missing:${scope}`),resolvedCreateKey:key(`coord-resolved:${scope}`),resolvedStartKey:key(`coord-start:${scope}`),resolvedSubmitKey:key(`coord-submit:${scope}`),resolvedVerifyKey:key(`coord-verify:${scope}`)});
@@ -36,8 +35,7 @@ async function main(){
  try{
   const principalAccount=await db.userAccount.findUnique({where:{normalizedEmail:people.adminEmail.toLowerCase()}});
   const workerAccount=await db.userAccount.findUnique({where:{normalizedEmail:people.teacherEmail.toLowerCase()}});
-  const passwords=new BcryptPasswords();
-  if(!principalAccount||!workerAccount||principalAccount.status!=='ACTIVE'||workerAccount.status!=='ACTIVE'||!await passwords.verify(people.password,principalAccount.passwordHash)||!await passwords.verify(people.teacherPassword,workerAccount.passwordHash))throw new Error('SYNTHETIC_IDENTITIES_REQUIRED');
+  if(!principalAccount||!workerAccount||principalAccount.status!=='ACTIVE'||workerAccount.status!=='ACTIVE'||principalAccount.id!==people.accountId||workerAccount.id!==people.teacherAccountId)throw new Error('SYNTHETIC_IDENTITIES_REQUIRED');
   const principal={accountId:principalAccount.id,tokenVersion:principalAccount.tokenVersion};
   const worker={accountId:workerAccount.id,tokenVersion:workerAccount.tokenVersion};
 
@@ -96,6 +94,14 @@ async function main(){
    demo.awaitingRequestId=created.requestId;
   }
 
+  stage='information-request';
+  const informationOwner=await db.coordinationRequest.findUniqueOrThrow({where:{id:demo.awaitingRequestId!}}),existingInformation=await db.coordinationInformationRequest.findFirst({where:{organizationId:people.organizationId,schoolId:people.schoolId,requestId:informationOwner.id},orderBy:{requestedAt:'desc'}});
+  if(!existingInformation&&informationOwner.status==='AWAITING_VERIFICATION'){
+   demo.informationRequestKey??=command('information','request');
+   const result=await coordination.requestInformation(principal,people.organizationId,people.schoolId,{requestId:informationOwner.id,expectedVersion:informationOwner.version,question:'Which current source check supports this no-change recommendation?',responseDueAt:null,key:demo.informationRequestKey});
+   demo.informationRequestId=result.informationRequestId;
+  }else if(existingInformation)demo.informationRequestId=existingInformation.id;
+
   stage='returned-request';
   if(!await getRequest(demo.returnedRequestId)){
    const source=pick('SESSION_SETUP_REVIEW','SUBMITTED');
@@ -136,7 +142,7 @@ async function main(){
   demo.sourceDate=sessions[0].schoolDate.toISOString().slice(0,10);
   mkdirSync(directory,{recursive:true,mode:0o700});
   writeFileSync(path,`${JSON.stringify({...demo,organizationId:people.organizationId,schoolId:people.schoolId,principalEmail:people.adminEmail,workerEmail:people.teacherEmail},null,2)}\n`,{mode:0o600});
-  console.log(`Prepared or preserved Coordination lifecycle, LEA-10 batch, F03 decision-inbox and F04 safe-history examples. Private scenario: ${path}`);
+  console.log(`Prepared or preserved Coordination lifecycle, LEA-10 batch, typed decision, LEA-28 information-request and F04 safe-history examples. Private scenario: ${path}`);
  }catch(error){
   throw new Error(`${stage.toUpperCase()}_${error instanceof Error&&/^[A-Z0-9_]+$/.test(error.message)?error.message:'LOCAL_DEMO_ERROR'}`);
  }finally{

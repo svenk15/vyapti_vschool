@@ -2855,3 +2855,24 @@ model DocumentsDocumentGrant {
   @@index([organizationId, schoolId, ownerModule, ownerResourceType, ownerResourceId, status], map: "vs_documents_grant_active_idx")
   @@map("vs_documents_document_grant")
 }
+
+model CoordinationInformationRequest {
+ id String @id(map:"vs_coordination_information_request_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ requestId String @map("request_id") @db.Uuid
+ requesterAccountId String @map("requester_account_id") @db.Uuid
+ recipientAccountId String @map("recipient_account_id") @db.Uuid
+ question String @db.VarChar(1000)
+ responseDueAt DateTime? @map("response_due_at") @db.Timestamptz(3)
+ status String @db.VarChar(16)
+ responseText String? @map("response_text") @db.VarChar(1000)
+ requestedAt DateTime @map("requested_at") @db.Timestamptz(3)
+ answeredAt DateTime? @map("answered_at") @db.Timestamptz(3)
+ cancelledAt DateTime? @map("cancelled_at") @db.Timestamptz(3)
+ version Int
+ @@unique([organizationId,schoolId,id],map:"vs_coordination_information_scope_id_key")
+ @@index([organizationId,schoolId,requestId,status,requestedAt(sort: Desc)],map:"vs_coordination_information_request_idx")
+ @@index([organizationId,schoolId,recipientAccountId,status,responseDueAt],map:"vs_coordination_information_recipient_idx")
+ @@map("vs_coordination_information_request")
+}

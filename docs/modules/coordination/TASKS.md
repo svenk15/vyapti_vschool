@@ -1,5 +1,20 @@
 # Coordination tasks
 
+## COORD-07 / WF-28 — owner information request
+
+Dependencies: F03 engineering-complete; D03 and D08 approved for synthetic-only implementation on 17 October 2026.
+
+- [x] Resolve the recipient from the current owner proposer and registered-source eligibility; accept no browser contact authority.
+- [x] Add one scoped OPEN child question with bounded text, optional response expectation and forward-only persistence.
+- [x] Recheck independent reviewer authority and current owner/source state before request and protected replay.
+- [x] Add the assigned proposer counterpart response with live work/source authority and expected parent/child versions.
+- [x] Increment owner evidence on request and response; suppress decision controls while waiting and require fresh review after answer.
+- [x] Cancel unanswered questions on owner lifecycle transition and reject stale/former-participant replies.
+- [x] Preserve exact-key retry and changed-payload conflict through Coordination-owned receipts without a generic receipt service.
+- [x] Complete focused PostgreSQL/browser/reference verification and evidence before marking LEA-28 complete.
+
+Human review, retention, TEN-03, font portability and native accessibility remain PENDING.
+
 ## COORD-01 — Attendance follow-up foundation
 
 Dependencies: verified Principal Attendance source read; existing Attendance correction/cancellation owners; explicit product decisions dated 16 October 2026.

@@ -11,7 +11,7 @@ export type CoordinationSourceSummary=
  |Readonly<{type:'LEARNING_FEEDBACK_SUBMISSION';id:string;version:number;assignmentId:string;title:string;sectionName:string;subjectName:string;acceptedAt:string;firstPublishedAt:string|null;state:'AWAITING'|'PUBLISHED';eligible:boolean}>;
 export type CoordinationActorSummary=Readonly<{accountId:string;displayName:string}>;
 export type CoordinationEvent=Readonly<{number:number;type:string;fromStatus:CoordinationStatus|null;toStatus:CoordinationStatus|null;actor:CoordinationActorSummary;previousAssignee:CoordinationActorSummary|null;assignee:CoordinationActorSummary|null;reason:string|null;evidenceKind:CoordinationEvidenceKind|null;evidenceRevision:number|null;occurredAt:string}>;
-export type CoordinationRequest=Readonly<{id:string;version:number;kind:CoordinationRequestKind;concern:CoordinationConcern;status:CoordinationStatus;timezone:string;source:CoordinationSourceSummary;creator:CoordinationActorSummary;assignee:CoordinationActorSummary|null;dueAt:string|null;overdue:boolean;note:string|null;resolution:{proposer:CoordinationActorSummary;kind:CoordinationEvidenceKind;revision:number|null;reason:string}|null;createdAt:string;updatedAt:string;resolvedAt:string|null;withdrawnAt:string|null;can:{assign:boolean;work:boolean;verify:boolean;manage:boolean};history:readonly CoordinationEvent[]}>;
+export type CoordinationRequest=Readonly<{id:string;version:number;kind:CoordinationRequestKind;concern:CoordinationConcern;status:CoordinationStatus;timezone:string;source:CoordinationSourceSummary;creator:CoordinationActorSummary;assignee:CoordinationActorSummary|null;dueAt:string|null;overdue:boolean;note:string|null;resolution:{proposer:CoordinationActorSummary;kind:CoordinationEvidenceKind;revision:number|null;reason:string}|null;informationRequest:CoordinationInformationRequest|null;createdAt:string;updatedAt:string;resolvedAt:string|null;withdrawnAt:string|null;can:{assign:boolean;work:boolean;verify:boolean;manage:boolean;respondInformation:boolean};history:readonly CoordinationEvent[]}>;
 export type CoordinationRequestSummary=Omit<CoordinationRequest,'history'>;
 export type CoordinationQueue=Readonly<{items:readonly CoordinationRequestSummary[];nextCursor:string|null;timezone:string;capabilities:readonly CoordinationCapability[]}>;
 export type CoordinationAvailability=Readonly<{enabled:boolean;capabilities:readonly CoordinationCapability[];reason:'REAL_DATA_POLICY_PENDING'|'NOT_DESIGNATED'|null}>;
@@ -20,6 +20,8 @@ export type CoordinationCommandStatus=
  | Readonly<{state:'UNKNOWN'}>
  | Readonly<{state:'CHANGED';currentVersion:number;currentState:CoordinationStatus}>
  | Readonly<{state:'FOUND';result:CoordinationMutationResult}>;
+export type CoordinationInformationRequest=Readonly<{id:string;question:string;responseDueAt:string|null;requester:CoordinationActorSummary;recipient:CoordinationActorSummary;status:'OPEN'|'ANSWERED'|'CANCELLED';responseText:string|null;requestedAt:string;answeredAt:string|null;version:number}>;
+export type CoordinationInformationResult=Readonly<{requestId:string;informationRequestId:string;requestVersion:number;informationVersion:number;status:'OPEN'|'ANSWERED'|'CANCELLED';replayed:boolean}>;
 export type CoordinationAssignee=Readonly<{accountId:string;displayName:string}>;
 export type CoordinationSourceSetup=Readonly<{source:CoordinationSourceSummary;assignees:readonly CoordinationAssignee[];timezone:string}>;
 export type CoordinationBatchItemStatus='PENDING'|'CREATED'|'ALREADY_EXISTS'|'FAILED';

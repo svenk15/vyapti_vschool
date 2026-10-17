@@ -1,7 +1,7 @@
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
-import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPreview,CoordinationBatchReceipt,CoordinationCapability,CoordinationCommandStatus,CoordinationHandoverReceipt,CoordinationHistory,CoordinationHistoryFindingResult,CoordinationMutationResult,CoordinationQueue,CoordinationRequest,CoordinationSourceSetup} from '../../../../shared/contracts/coordination';
+import type {CoordinationAssignee,CoordinationAvailability,CoordinationBatchPreview,CoordinationBatchReceipt,CoordinationCapability,CoordinationCommandStatus,CoordinationHandoverReceipt,CoordinationHistory,CoordinationHistoryFindingResult,CoordinationInformationResult,CoordinationMutationResult,CoordinationQueue,CoordinationRequest,CoordinationSourceSetup} from '../../../../shared/contracts/coordination';
 import {AccessError} from '../../access/contracts/index';
-import {assignInput,batchInput,batchPreviewInput,createInput,handoverInput,historyFindingInput,historyInput,id,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
+import {assignInput,batchInput,batchPreviewInput,createInput,handoverInput,historyFindingInput,historyInput,id,informationRequestInput,informationResponseInput,reasonTransitionInput,resolutionInput,sourceAssigneeInput,transitionInput} from '../domain/requests';
 
 export type CoordinationListInput=Readonly<{status?:unknown;kind?:unknown;assignment?:unknown;requestId?:unknown;decisionType?:unknown;duePeriod?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}>;
 export interface CoordinationRepository {
@@ -25,6 +25,8 @@ export interface CoordinationRepository {
  verify(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof transitionInput>):Promise<CoordinationMutationResult>;
  returnResolution(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof reasonTransitionInput>):Promise<CoordinationMutationResult>;
  decisionStatus(actor:Identity,organizationId:string,schoolId:string,input:{requestId:string;expectedVersion:number;reason:string|null;key:string;action:'VERIFY'|'RETURN'}):Promise<CoordinationCommandStatus>;
+ requestInformation(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof informationRequestInput>):Promise<CoordinationInformationResult>;
+ respondInformation(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof informationResponseInput>):Promise<CoordinationInformationResult>;
  withdraw(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof reasonTransitionInput>):Promise<CoordinationMutationResult>;
  reopen(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof reasonTransitionInput>):Promise<CoordinationMutationResult>;
  grant(operator:OperatorPrincipal,input:{organizationId:string;schoolId:string;accountId:string;capability:CoordinationCapability}):Promise<{grantId:string;version:number}>;
@@ -53,6 +55,8 @@ export function createCoordinationUseCases(repository:CoordinationRepository){re
  verify(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.verify(s.actor,s.organizationId,s.schoolId,transitionInput(record(input)));},
  returnResolution(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.returnResolution(s.actor,s.organizationId,s.schoolId,reasonTransitionInput(record(input)));},
  decisionStatus(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId),value=record(input);if(value.action!=='VERIFY'&&value.action!=='RETURN')throw new AccessError('VALIDATION');const payload={requestId:value.requestId,expectedVersion:value.expectedVersion,reason:value.reason,key:value.key};return repository.decisionStatus(s.actor,s.organizationId,s.schoolId,{...(value.action==='VERIFY'?transitionInput(payload):reasonTransitionInput(payload)),action:value.action});},
+ requestInformation(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.requestInformation(s.actor,s.organizationId,s.schoolId,informationRequestInput(record(input)));},
+ respondInformation(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.respondInformation(s.actor,s.organizationId,s.schoolId,informationResponseInput(record(input)));},
  withdraw(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.withdraw(s.actor,s.organizationId,s.schoolId,reasonTransitionInput(record(input)));},
  reopen(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:unknown){const s=scope(actorValue,organizationId,schoolId);return repository.reopen(s.actor,s.organizationId,s.schoolId,reasonTransitionInput(record(input)));},
  grant(operator:OperatorPrincipal,input:{organizationId:string;schoolId:string;accountId:string;capability:CoordinationCapability}){return repository.grant(operator,{organizationId:id(input.organizationId),schoolId:id(input.schoolId),accountId:id(input.accountId),capability:input.capability});},
