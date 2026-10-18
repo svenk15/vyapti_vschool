@@ -17,6 +17,8 @@ export async function selectedSchoolId(identity:Identity|null):Promise<string|un
 export const contextGateway={getContexts:access.getContexts,switchContext:access.switchContext,createBranch:access.createBranch};
 export const accountGateway={getHome:async(identity:Identity|null,schoolId?:string)=>access.getAccountHome(identity,schoolId??await selectedSchoolId(identity)),getSelf:access.getSelfAccount};
 export const appearanceGateway={
+ getEffective:(identity:Identity|null,organizationId:string,schoolId?:string)=>access.getEffectiveTheme(identity,organizationId,schoolId),
+ getVerifiedPortalTheme:(identity:Identity|null,organizationId:string,schoolId:string,source:'GUARDIAN_CHILD'|'STUDENT_SELF')=>access.getEffectiveThemeForVerifiedPortalContext({identity,organizationId,schoolId,source,verified:true}),
  getInstitution:(identity:Identity|null,organizationId:string)=>access.getAppearanceConfiguration(identity,organizationId),
  updateInstitution:(identity:Identity|null,organizationId:string,input:unknown)=>access.updateInstitutionTheme(identity,organizationId,input),
  async getBranch(identity:Identity|null){const home=await accountGateway.getHome(identity);return access.getAppearanceConfiguration(identity,home.scope.organizationId,home.scope.schoolId);},

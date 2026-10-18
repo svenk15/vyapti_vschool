@@ -75,6 +75,14 @@ it('tenant appearance rejects stale, changed replay, foreign scope and invalid p
  await expect(db.organization.update({where:{id:scope.organizationId},data:{themeId:'unknown'}})).rejects.toThrow();
  await expect(db.school.update({where:{id:scope.schoolId},data:{themeOverride:'unknown'}})).rejects.toThrow();
 });
+it('owner-verified family or Student rendering resolves an active scope without granting Access membership',async()=>{
+ const {scope}=await provision(),portalAccount=await provision();
+ await db.organization.update({where:{id:scope.organizationId},data:{themeId:'porcelain'}});
+ expect(await service.getEffectiveThemeForVerifiedPortalContext({identity:portalAccount.identity,organizationId:scope.organizationId,schoolId:scope.schoolId,source:'GUARDIAN_CHILD',verified:true})).toEqual({themeId:'porcelain',source:'institution'});
+ expect(await db.schoolMembership.count({where:{organizationId:scope.organizationId,schoolId:scope.schoolId,accountId:portalAccount.identity.accountId}})).toBe(0);
+ await db.userAccount.update({where:{id:portalAccount.identity.accountId},data:{status:'DISABLED',version:{increment:1}}});
+ await expect(service.getEffectiveThemeForVerifiedPortalContext({identity:portalAccount.identity,organizationId:scope.organizationId,schoolId:scope.schoolId,source:'STUDENT_SELF',verified:true})).rejects.toThrow('UNAUTHENTICATED');
+});
 it('institution and branch creation persist validated optional appearance without collapsing inheritance',async()=>{
  const {scope,identity}=await provision(),created=await service.institutionOperation({kind:'CreateInstitution',organizationId:randomUUID(),accountId:scope.accountId,name:'Synthetic themed institution',themeId:'porcelain',key:randomUUID(),reason:'Synthetic themed institution creation'},operator);
  expect(await db.organization.findUniqueOrThrow({where:{id:created.organizationId},select:{themeId:true}})).toEqual({themeId:'porcelain'});

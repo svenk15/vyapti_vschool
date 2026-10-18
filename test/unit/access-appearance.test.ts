@@ -8,6 +8,7 @@ const config:AppearanceConfiguration={organizationId,schoolId:null,selection:'fo
 class FakeAppearance implements AppearanceRepository {
   lastInstitution?:ThemeUpdateInput;lastBranch?:BranchThemeUpdateInput;
   async effective():Promise<ResolvedTheme>{return config.effective;}
+  async effectiveVerifiedPortalContext():Promise<ResolvedTheme>{return config.effective;}
   async configuration():Promise<AppearanceConfiguration>{return config;}
   async updateInstitution(_identity:typeof identity,_organizationId:string,input:ThemeUpdateInput):Promise<ThemeUpdateResult>{this.lastInstitution=input;return {...config,selection:input.themeId,effective:{themeId:input.themeId,source:'institution'},replayed:false};}
   async updateBranch(_identity:typeof identity,_organizationId:string,_schoolId:string,input:BranchThemeUpdateInput):Promise<ThemeUpdateResult>{this.lastBranch=input;return {...config,schoolId,selection:input.themeId,effective:{themeId:input.themeId??'forest',source:input.themeId===null?'institution':'branch'},replayed:false};}
@@ -31,5 +32,12 @@ describe('Access appearance contract',()=>{
     expect(()=>service.updateInstitutionTheme(identity,organizationId,{...valid,expectedVersion:0})).toThrow('VALIDATION');
     expect(()=>service.updateInstitutionTheme(identity,organizationId,{...valid,key:'bad'})).toThrow('VALIDATION');
     expect(()=>service.updateInstitutionTheme(identity,organizationId,{...valid,reason:'no'})).toThrow('VALIDATION');
+  });
+  it('accepts only an owner-verified guardian or student portal context',async()=>{
+    const service=createAppearanceUseCases(new FakeAppearance());
+    await expect(service.getEffectiveThemeForVerifiedPortalContext({identity,organizationId,schoolId,source:'GUARDIAN_CHILD',verified:true})).resolves.toEqual(config.effective);
+    await expect(service.getEffectiveThemeForVerifiedPortalContext({identity,organizationId,schoolId,source:'STUDENT_SELF',verified:true})).resolves.toEqual(config.effective);
+    expect(()=>service.getEffectiveThemeForVerifiedPortalContext({identity,organizationId,schoolId,source:'GUARDIAN_CHILD',verified:false})).toThrow('FORBIDDEN');
+    expect(()=>service.getEffectiveThemeForVerifiedPortalContext({identity,organizationId,schoolId,source:'SCHOOL_ADMIN',verified:true})).toThrow('FORBIDDEN');
   });
 });

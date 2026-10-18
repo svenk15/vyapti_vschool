@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, Ref } from "react";
 import { resolveThemeId, type BrandPalette, type ThemeId } from "@/shared/contracts/branding";
 
-export function BrandSurface({palette="forest",children,className=""}:{palette?:BrandPalette|ThemeId;children:ReactNode;className?:string}) {
- return <div data-vs-theme={resolveThemeId(palette)} className={`brand-surface ${className}`}>{children}</div>;
+export function BrandSurface({palette,children,className=""}:{palette?:BrandPalette|ThemeId;children:ReactNode;className?:string}) {
+ return <div {...(palette?{'data-vs-theme':resolveThemeId(palette)}:{})} className={`brand-surface ${className}`}>{children}</div>;
 }
 export function Button({variant="primary",size="normal",loading=false,children,className="",disabled,type="button",...props}:ButtonHTMLAttributes<HTMLButtonElement>&{variant?:"primary"|"secondary"|"ghost"|"danger";size?:"normal"|"small";loading?:boolean}) {
  return <button type={type} className={`btn btn-${variant} btn-${size} ${className}`} disabled={disabled||loading} aria-busy={loading||undefined} {...props}>{loading&&<span className="spinner" aria-hidden="true"/>}{children}</button>;

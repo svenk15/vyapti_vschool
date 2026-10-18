@@ -28,8 +28,10 @@ async function signIn(page:Page){
 }
 
 test('authorized appearance settings preview, cancel, save, inherit, and surface a stale write',async({page})=>{
+  const hydrationErrors:string[]=[];page.on('console',message=>{if(message.type()==='error'&&/hydration/i.test(message.text()))hydrationErrors.push(message.text());});
   await signIn(page);
   await page.goto('/admin/branding/manage');
+  await expect(page.locator('.brand-surface').first()).toHaveAttribute('data-vs-theme','forest');
   const settings=page.locator('.portal-appearance-settings');
   await expect(settings.getByRole('radio',{name:/Use institution theme/})).toBeChecked();
   await expect(settings.getByText('Currently Refined Forest')).toBeVisible();
@@ -50,6 +52,7 @@ test('authorized appearance settings preview, cancel, save, inherit, and surface
   await settings.getByRole('button',{name:'Save changes'}).click();
   await expect(settings.getByText('Theme updated.')).toBeVisible();
   await page.reload();
+  await expect(page.locator('.brand-surface').first()).toHaveAttribute('data-vs-theme','amethyst');
   await expect(settings.getByRole('radio',{name:/Amethyst & Pearl/})).toBeChecked();
 
   const identity={accountId:scope.accountId,tokenVersion:1};
@@ -76,6 +79,8 @@ test('authorized appearance settings preview, cancel, save, inherit, and surface
 
   await page.screenshot({path:`${evidence}/appearance-settings-${test.info().project.name}.png`,fullPage:true});
   await page.reload();
+  await expect(page.locator('.brand-surface').first()).toHaveAttribute('data-vs-theme','amethyst');
   await expect(institution.getByRole('radio',{name:/Amethyst & Pearl/})).toBeChecked();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  expect(hydrationErrors).toEqual([]);
 });
