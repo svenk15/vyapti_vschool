@@ -125,3 +125,7 @@ Append later task records without deleting this checkpoint. Human review remains
 ### Administrator completion review — 10 October 2026
 
 The historical completion review originally classified SA-18 as partial. SA-COMP-07 superseded its exact-identity finding, and SA-COMP-12 superseded the admission-date gap. The original review remains dated evidence; the task table and current checkpoint above are authoritative.
+
+## M01 current demo persona verification — 18 October 2026
+
+The existing fictional Student account has two independently accepted, unrevoked contexts and no staff or Guardian authority. The live build redirects it from the shared chooser to `/student`; both school contexts render at desktop/mobile sizes. Focused real-PostgreSQL Student portal tests passed 5/5, including exact identity binding, foreign-resource denial, independent-context revocation, invalid invitation states and acceptance/revocation serialization. No Student access row, purpose, schema or migration changed. Evidence: [M01](../../evidence/must-have-m01-2026-10-18/README.md). Human review and release gates remain PENDING.

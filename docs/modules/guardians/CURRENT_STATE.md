@@ -44,3 +44,7 @@ ATT-05 migration `20261015140000_attendance_explanations` extends the purpose ch
 - PAR-18 is partial: published child Timetable is implemented, while the broader Calendar/Events owner is absent.
 - PAR-50 is engineering-complete. Its approved optional other-session path is now supported through ACC-01 without adding Parent/child authority. Human review remains pending.
 - Other Parent workflows remain at their existing product-decision or owner-design gates. The next implementation action is the smallest independently authorized workflow after consolidated human review or a resolved owner contract; do not infer approval for later Fees, messaging, consent, custody or wellbeing behavior.
+
+## M01 current demo persona verification — 18 October 2026
+
+The existing fictional Parent account has two accepted, unrevoked child links and no staff membership. The live build redirects it from the shared chooser to `/family`; both child contexts render at desktop/mobile sizes. Focused real-PostgreSQL Guardians tests passed 6/6, including intended-account/wrong-account handling, no staff side effect, delivery failure isolation, per-child removal and concurrency. No Guardian data, purpose, schema or migration changed. Evidence: [M01](../../evidence/must-have-m01-2026-10-18/README.md). Human review and release gates remain PENDING.

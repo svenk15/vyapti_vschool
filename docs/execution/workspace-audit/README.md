@@ -18,6 +18,8 @@ Audit date: 18 October 2026 (Asia/Kolkata). This is a read-only implementation a
 
 The five authoritative catalogues contain 250 workflows. Institution Administrator/shared administration is identified where it appears in the School Administrator shell, but is not added to the 63-workflow School Administrator count. Platform Operator workflows are outside this audit.
 
+> **18 October follow-up:** M01 current-source verification found that the Parent and Student rows were valid. `/choose-workspace` intentionally exposes only staff options and directly redirects an authorized personal account to `/family` or `/student`. The audit capture sampled for a selector option instead of awaiting that redirect, so the “no authorized option” observation is superseded by [`must-have-m01-2026-10-18`](../../evidence/must-have-m01-2026-10-18/README.md). The original capture remains historical evidence.
+
 ## Reconciled status
 
 | Workspace | Total | Engineering complete | Partial | In progress | Not started | Needs revalidation | Human accepted |

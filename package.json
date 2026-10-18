@@ -40,6 +40,7 @@
     "demo:branding": "node --import tsx scripts/demo-branding.ts",
     "demo:academics": "node --import tsx scripts/demo-academics.ts",
     "demo:seed": "node --import tsx scripts/demo-seed.ts",
+    "demo:verify-personas": "node scripts/verify-demo-personas.mjs",
     "imports:purge-expired": "node --import tsx scripts/imports-operator.ts purge-expired"
   },
   "dependencies": {
