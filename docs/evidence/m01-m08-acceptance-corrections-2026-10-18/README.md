@@ -8,7 +8,7 @@ This checkpoint corrects the presentation and acceptance-fixture findings report
 
 - Baseline HEAD inspected before the corrections: `93bfce31d7ba3527218c250edd7ff3b83534ab4a`.
 - Executable application build: `.next/BUILD_ID` `6HsxC8NaJEOapzYcQQBcg`, served at `http://127.0.0.1:3400`.
-- The final focused Git commit is recorded in the packaged `REVIEW_HANDOVER.md`; this evidence directory is part of that checkpoint.
+- Focused application/test/seed/evidence fix commit: `3bf10bf` (`Correct M01-M08 acceptance presentation and fixtures`).
 - Database migration state stayed at 117 applied migrations in development and test. No migration was created or changed.
 
 ## Corrections

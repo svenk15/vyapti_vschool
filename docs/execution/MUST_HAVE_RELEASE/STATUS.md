@@ -2,7 +2,9 @@
 
 Status date: 18 October 2026 (Asia/Kolkata). Catalogue counts remain those in the [workspace audit](../workspace-audit/README.md) until an owning catalogue row gains new evidence.
 
-Integrated application candidate: source `c7b2abd`, production build `lA2wtzNon2bc8hg3fJSJN`. The documentation-only closure commit may be newer than the executable application source.
+Integrated baseline: source `c7b2abd`, production build `lA2wtzNon2bc8hg3fJSJN`. Bounded acceptance-correction source: `3bf10bf`, with application build `6HsxC8NaJEOapzYcQQBcg` served at `http://127.0.0.1:3400`. The build contains the application tree later committed in `3bf10bf`; final seed/evidence-only amendments do not affect the served bundle.
+
+The correction checkpoint preserves the M01–M08 owner/security results and supersedes affected presentation, connected-fixture and obsolete Attendance-test evidence. See [bounded correction evidence](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md).
 
 | Journey | Functional/security | Visual | Human acceptance | Production readiness | Exact remaining gap | Executable source / evidence |
 |---|---|---|---|---|---|---|

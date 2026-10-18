@@ -6,7 +6,7 @@ Human acceptance: **PENDING**. This pack records engineering evidence and a shor
 
 ## Bounded correction addendum
 
-The external-review corrections are recorded in [M01–M08 bounded acceptance corrections](../../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). That checkpoint updates presentation, demo linkage and obsolete browser coverage while retaining every owner/security contract. Its final review ZIP records the exact fix commit and executable build. The frozen candidate below remains the provenance for the earlier assisted review; it is not relabelled as the corrected source.
+The external-review corrections are recorded in [M01–M08 bounded acceptance corrections](../../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Focused fix commit `3bf10bf` updates presentation, demo linkage and obsolete browser coverage while retaining every owner/security contract. Application build `6HsxC8NaJEOapzYcQQBcg` serves that application tree. The frozen candidate below remains the provenance for the earlier assisted review; it is not relabelled as the corrected source.
 
 ## Frozen candidate
 
