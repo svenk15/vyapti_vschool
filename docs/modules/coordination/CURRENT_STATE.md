@@ -1,5 +1,9 @@
 # Coordination current state
 
+## M01–M08 source-provenance correction — 18 October 2026
+
+The investigated resolved follow-up retained a Scheduled Attendance source. The product display and immutable source evidence were consistent; historical test resolution prose incorrectly called that source submitted. The fixture now describes the scheduled authoritative source, and the focused return/resubmit/verify journey passed 1/1. No Coordination or Attendance state was changed. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
+
 ## Must-have M08 current-source checkpoint (18 October 2026)
 
 Status: VERIFIED_CURRENT_SOURCE / HUMAN_REVIEW_PENDING

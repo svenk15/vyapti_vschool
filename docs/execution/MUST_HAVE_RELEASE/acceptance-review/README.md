@@ -4,6 +4,10 @@ Prepared: 18 October 2026 (Asia/Kolkata)
 
 Human acceptance: **PENDING**. This pack records engineering evidence and a shortened manual review; it does not declare production readiness.
 
+## Bounded correction addendum
+
+The external-review corrections are recorded in [M01–M08 bounded acceptance corrections](../../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). That checkpoint updates presentation, demo linkage and obsolete browser coverage while retaining every owner/security contract. Its final review ZIP records the exact fix commit and executable build. The frozen candidate below remains the provenance for the earlier assisted review; it is not relabelled as the corrected source.
+
 ## Frozen candidate
 
 | Item | Value |
@@ -15,7 +19,7 @@ Human acceptance: **PENDING**. This pack records engineering evidence and a shor
 | Demo | `http://127.0.0.1:3400` |
 | Database | development and dedicated test databases: 117 forward migrations applied; none pending in the recorded integrated checkpoint; the focused current-source E2E runs reconfirmed test at 117/117 |
 
-The review added only acceptance-test maintenance and this review pack. No application, business, authorization, schema, migration or seed source changed after the normal candidate build. Pre-existing modified historical screenshots and unrelated local files remain outside this checkpoint.
+The original assisted review added only acceptance-test maintenance and this review pack. The later bounded correction addendum changes presentation and synthetic seed linkage; it changes no business, authorization, schema or migration contract. Pre-existing modified historical screenshots and unrelated local files remain outside both checkpoints.
 
 ## Outcome
 

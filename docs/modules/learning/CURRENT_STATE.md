@@ -1,5 +1,9 @@
 # Learning current state
 
+## M01–M08 acceptance correction — 18 October 2026
+
+Student assignment guidance now reflects draft, submitted and feedback-available state. The connected Learning seed binds its narrow Parent/Student read purposes to the exact documented accounts and creates a fresh immutable publication audience when an older assignment lacks those bindings; it does not rewrite old assignments or history. Parent Learning and Student home use the shared card stack. Focused Learning Playwright passed 1/1, the guarded connected seed validator passed, and current desktop/mobile states were inspected. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
+
 ## Must-have M06 current-source checkpoint (18 October 2026)
 
 Status: VERIFIED_CURRENT_SOURCE / HUMAN_REVIEW_PENDING

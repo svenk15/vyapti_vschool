@@ -2,6 +2,8 @@
 
 “Applicable” means the cited evidence still covers unchanged application code in candidate `c7b2abd`. Newly executed browser checks used isolated build `g4-EoQgL-ZjpAo949JeiB`; current persona captures used normal demo build `lA2wtzNon2bc8hg3fJSJN`.
 
+The later bounded correction checkpoint changes shared presentation, exact synthetic Learning linkage and obsolete test expectations. Its [current captures and focused results](../../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md) supersede the affected visual/harness rows while reusing unchanged owner persistence and authorization evidence.
+
 | Requirement | Existing evidence/source | Still applicable? | Missing verification | Result |
 |---|---|---:|---|---|
 | M01: five personas reach only intended workspaces | M01 Guardian/Student PostgreSQL 11/11; workspace smoke; current `demo:verify-personas` | Yes | Human review | PASS |

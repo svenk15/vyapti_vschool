@@ -1,5 +1,9 @@
 # Session attendance and accountable corrections — current state
 
+## M01–M08 acceptance-test maintenance — 18 October 2026
+
+The historical combined Attendance browser spec now follows the current Teacher entry, staged SA-27 correction composition, reset-before-cancel rule and non-disclosing unauthorized audit response. Its focused current-source run passed 1/1. This repairs redundant regression coverage without excluding the spec or weakening assertions; Attendance business behavior and schema are unchanged. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
+
 Last updated: 2026-10-15. No imported task completion or active execution timer. IAM-03 human acceptance is recorded separately in Access CURRENT_STATE for the exact reviewed source.
 
 ## TT-07 effective-Teacher integration — 17 October 2026

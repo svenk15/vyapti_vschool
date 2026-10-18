@@ -44,6 +44,7 @@ const demos = [
   { name: "F16 Facilities service incident", script: "scripts/demo-facilities.ts", required: true },
   { name: "F15 synthetic Finance reconciliation and exception", script: "scripts/demo-finance.ts", required: true },
   { name: "F17 source-linked reviewed Assistant", script: "scripts/demo-assistant.ts", required: true },
+  { name: "M01-M08 connected presentation scenario", script: "scripts/demo-must-have-presentation.ts", required: true },
 ] as const;
 
 function prepareImportSample(): void {
@@ -142,9 +143,12 @@ function main(): void {
   console.log("- artifacts/facilities-01/private-demo.json");
   console.log("- artifacts/assistant-01/private-demo.json");
   console.log("- artifacts/students-portal/private-demo.json");
+  console.log("- artifacts/must-have-presentation/private-demo.json");
   if (existsSync("artifacts/imports-01/sample-roster-v2.csv")) console.log("- artifacts/imports-01/sample-roster-v2.csv");
   if (existsSync("artifacts/imports-01/sample-roster-partial-v2.csv")) console.log("- artifacts/imports-01/sample-roster-partial-v2.csv");
   console.log(`\nPrimary administrator/teacher credentials: artifacts/people-02/private-demo.json`);
+  console.log("Parent notice credentials: artifacts/communication-01/private-demo.json");
+  console.log("Independent reviewer credentials: artifacts/attendance-01/private-demo.json");
   console.log(`Connected attendance walkthrough date: ${attendance.recommendedDate} (${attendance.recommendedSessionIds.length} assigned sessions)`);
   console.log("Other feature command receipts and synthetic IDs remain in their ignored artifacts/<task>/ files.");
   console.log("Feature access is enabled only for implemented local demos; server release and human acceptance remain tracked per task and reviewed source.");

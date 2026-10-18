@@ -19,7 +19,7 @@ Automated checks already verified persistence, isolation, replay, stale versions
 ## 1. School Administrator — 8–10 minutes
 
 1. Sign in with the Administrator entry from the People credential file and choose **School administration**.
-   - Expect the Today page with 3 active Students, 1/7 submitted registers and attention items.
+   - Expect the Today page and grouped navigation: Today, Teaching & academics, People & access, Communication & work, optional Services, and School management.
    - Compare [desktop](screenshots/candidate-administrator-desktop.png) or [mobile](screenshots/candidate-administrator-mobile.png).
 2. Open **Academics**, then **Classes**.
    - Expect the open synthetic year, Grade 8 / Demo Section A, Mathematics Demo and the assigned Teacher.
@@ -31,7 +31,7 @@ Automated checks already verified persistence, isolation, replay, stale versions
    - Expect a published schedule and explicit Submitted/Scheduled/Awaiting states. OPEN must not be labelled absent.
    - Compare [timetable](screenshots/m04-timetable-desktop.png).
 5. If using the Communication fixture, open **Communication** and inspect the proposal list.
-   - Expect separate author/reviewer/publisher status; approval alone must not claim publication.
+   - Expect title/revision, audience/recipient count, and publication/read status to be visually separate; approval alone must not claim publication.
    - Compare [author](screenshots/m05-author-desktop.png).
 
 Result: [ ] PASS  [ ] ISSUE  [ ] NOT TESTED
@@ -68,7 +68,7 @@ Notes:
    - Expect the exact immutable version and explicit acknowledgement.
    - Compare [message](screenshots/m05-parent-message-desktop.png).
 4. Open **Learning**.
-   - Expect assignment instructions only. Private Student draft, submitted response and Teacher feedback must remain absent.
+   - Expect **Local habitats field notes** for the connected learner and assignment instructions only. Private Student draft, submitted response and Teacher feedback must remain absent.
    - Compare [Learning](screenshots/m06-family-learning-desktop.png).
 5. With the assessment Parent fixture, open **Results** and download the available synthetic report; inspect the withdrawn item.
    - Expect authorized private download only for the current child and no download action after withdrawal.
@@ -86,7 +86,7 @@ Notes:
 2. Open **Attendance** and **Timetable**.
    - Expect own factual records and own published lessons only.
 3. Open **Work**, then the accepted assignment.
-   - Expect the immutable submitted response and published feedback. Parent visibility is intentionally different.
+   - Expect the feedback-available state to offer **Read feedback** without draft-submission instructions. The immutable response and published feedback remain Student-only.
    - Compare [feedback](screenshots/m06-student-feedback-mobile.png).
 4. Open **Messages** using the Communication Student fixture.
    - Expect the same published notice version only when `communication.notice.read_self` is currently granted.

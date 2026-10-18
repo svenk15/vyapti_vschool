@@ -1,5 +1,9 @@
 # Communication — current state
 
+## M01–M08 acceptance correction — 18 October 2026
+
+The Administrator notice tables now separate title/revision, audience/recipient count, and publication/read metadata with the shared stacked-cell recipe. Published status uses the same badge structure on desktop and mobile. The current focused Communication journey passed 4/4, and both viewports were directly inspected. No notice lifecycle, audience, authority or persistence contract changed. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
+
 Last updated: 18 October 2026.
 
 ## 18 October 2026 — M05 current-source release journey

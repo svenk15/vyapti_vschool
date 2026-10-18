@@ -1,5 +1,9 @@
 # Students, enrollment and placement history — current state
 
+## M01–M08 acceptance correction — 18 October 2026
+
+SA-18 now presents school-office wording and shows the exact Person ID or admission-number reference field only for the selected existing-record mode. Exact resolution, validation, atomic persistence, replay and scope are unchanged. Focused registration Playwright passed 3/3 and the desktop/mobile states were inspected. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
+
 Last updated: 2026-10-15. This is an independent project checkpoint; no completion was imported.
 
 ## Must-have M03 connected checkpoint — 18 October 2026

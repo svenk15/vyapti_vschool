@@ -62,7 +62,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
     <button type="button" className="portal-sidebar-close" onClick={()=>close(true)}><span aria-hidden="true">×</span><span className="sr-only">Close menu panel</span></button>
    </div>
    <div className="portal-school-identity"><strong>{home.institutionName}</strong><span>{home.schoolName} · School workspace</span></div>
-   <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.filter(group=>group.items.length>0).map((group,index)=>{const groupKey=group.id??`${index}-${group.label}`;return <PortalNavigationGroup key={groupKey} group={group} groupKey={groupKey} activeHref={currentItem?.href??null} onNavigate={()=>close()} firstItemRef={index===0?firstItem:undefined} expanded={expandedGroup===groupKey} onToggle={key=>setDisclosureState({pathname,group:expandedGroup===key?null:key})}/>;})}</nav></div>
+   <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.filter(group=>group.items.length>0).map((group,index)=>{const groupKey=group.id??`${index}-${group.label}`,focusTarget=group.collapsible===true?expandedGroup===groupKey:index===0;return <PortalNavigationGroup key={groupKey} group={group} groupKey={groupKey} activeHref={currentItem?.href??null} onNavigate={()=>close()} firstItemRef={focusTarget?firstItem:undefined} expanded={expandedGroup===groupKey} onToggle={key=>setDisclosureState({pathname,group:expandedGroup===key?null:key})}/>;})}</nav></div>
    <footer className="portal-sidebar-footer">
     <Link className="portal-identity" href={accountHref} aria-label={`${identityLabel}, ${roleLabel} account`} onClick={()=>close()}>
      <span className="portal-identity-avatar" aria-hidden="true">{initials}</span>

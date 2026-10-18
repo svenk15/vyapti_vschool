@@ -1,0 +1,290 @@
+{
+  "capturedAt": "2026-10-18T09:58:18.398Z",
+  "base": "http://127.0.0.1:3400",
+  "results": [
+    {
+      "name": "admin-navigation-desktop",
+      "pathname": "/admin",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollWidth": 1440,
+      "scrollHeight": 1087,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "64px",
+      "activeElement": "Skip to content☰Open navigationvVSchoolTodayVSchool People db1f722bInstitution S",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1087.03125
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "admin-navigation-mobile",
+      "pathname": "/admin",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollWidth": 390,
+      "scrollHeight": 1974,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "48px",
+      "activeElement": "Today",
+      "focusRect": {
+        "top": 188.578125,
+        "bottom": 232.578125
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "admin-communication-desktop",
+      "pathname": "/admin/communication",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollWidth": 1440,
+      "scrollHeight": 1000,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "64px",
+      "activeElement": "Skip to content☰Open navigationvVSchoolCommunicationVSchool People db1f722bInsti",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1000
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "admin-communication-mobile",
+      "pathname": "/admin/communication",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollWidth": 390,
+      "scrollHeight": 1983,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "48px",
+      "activeElement": "Skip to content☰Open navigationvVSchoolCommunicationVSchool People db1f722bInsti",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1982.5
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "admin-registration-new-desktop",
+      "pathname": "/admin/students/register",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollWidth": 1440,
+      "scrollHeight": 1000,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "64px",
+      "activeElement": "Skip to content☰Open navigationvVSchoolStudentsVSchool People db1f722bInstitutio",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1000
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "admin-registration-existing-mobile",
+      "pathname": "/admin/students/register",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollWidth": 390,
+      "scrollHeight": 1418,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "48px",
+      "activeElement": "Skip to content☰Open navigationvVSchoolStudentsVSchool People db1f722bInstitutio",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1418.296875
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "principal-dashboard-desktop",
+      "pathname": "/leadership",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollWidth": 1440,
+      "scrollHeight": 1000,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "64px",
+      "activeElement": "Skip to content☰Open navigationvVSchoolMy dayVSchool People db1f722bInstitution ",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1000
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "principal-dashboard-mobile",
+      "pathname": "/leadership",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollWidth": 390,
+      "scrollHeight": 1141,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "48px",
+      "activeElement": "Skip to content☰Open navigationvVSchoolMy dayVSchool People db1f722bInstitution ",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1141.09375
+      },
+      "fixedNavRect": null
+    },
+    {
+      "name": "parent-learning-desktop",
+      "pathname": "/family/learning",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollWidth": 1440,
+      "scrollHeight": 1000,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "64px",
+      "activeElement": "Skip to contentOpen parent navigationLearningVSchool People db1f722bVVSchool×Clo",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1000
+      },
+      "fixedNavRect": {
+        "top": 0,
+        "bottom": 0
+      }
+    },
+    {
+      "name": "parent-learning-mobile",
+      "pathname": "/family/learning",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollWidth": 390,
+      "scrollHeight": 844,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "48px",
+      "activeElement": "View assignment →",
+      "focusRect": {
+        "top": 430.5625,
+        "bottom": 470.5625
+      },
+      "fixedNavRect": {
+        "top": 781,
+        "bottom": 844
+      }
+    },
+    {
+      "name": "student-home-desktop",
+      "pathname": "/student",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollWidth": 1440,
+      "scrollHeight": 1215,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "64px",
+      "activeElement": "Skip to contentOpen Student navigationMy daySynthetic Academic Year 2026–27VVSch",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1215.03125
+      },
+      "fixedNavRect": {
+        "top": 0,
+        "bottom": 0
+      }
+    },
+    {
+      "name": "student-home-mobile",
+      "pathname": "/student",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollWidth": 390,
+      "scrollHeight": 1907,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "48px",
+      "activeElement": "Open account help →",
+      "focusRect": {
+        "top": 756.40625,
+        "bottom": 773.40625
+      },
+      "fixedNavRect": {
+        "top": 781,
+        "bottom": 844
+      }
+    },
+    {
+      "name": "student-assignment-state-desktop",
+      "pathname": "/student/assignments/2187ab2f-63cb-48d9-bd44-82bc13c29986",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scrollWidth": 1440,
+      "scrollHeight": 1000,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "64px",
+      "activeElement": "Skip to contentOpen Student navigationAssignmentsSynthetic Academic Year 2026–27",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1000
+      },
+      "fixedNavRect": {
+        "top": 0,
+        "bottom": 0
+      }
+    },
+    {
+      "name": "student-assignment-state-mobile",
+      "pathname": "/student/assignments/2187ab2f-63cb-48d9-bd44-82bc13c29986",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scrollWidth": 390,
+      "scrollHeight": 1193,
+      "bodyFont": "Arial, Helvetica, sans-serif",
+      "bodySize": "15px",
+      "mainPaddingBottom": "48px",
+      "activeElement": "Skip to contentOpen Student navigationAssignmentsSynthetic Academic Year 2026–27",
+      "focusRect": {
+        "top": 0,
+        "bottom": 1192.875
+      },
+      "fixedNavRect": {
+        "top": 781,
+        "bottom": 844
+      }
+    }
+  ]
+}

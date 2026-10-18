@@ -1,5 +1,9 @@
 # Shared VSchool experience system — current state
 
+## M01–M08 acceptance correction — 18 October 2026
+
+The Administrator shell now groups its existing guarded destinations by daily work, teaching, people, communication, services and school management. Shared stacked table metadata, 24px card stacks, mobile fixed-navigation safe-area spacing and focus scroll margins were applied to the affected Administrator, Parent and Student surfaces. Direct 1440×1000 and 390×844 inspection found no root overflow; the last focused Student control remained above the fixed navigation. This is automated visual evidence, not native accessibility or human acceptance. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md).
+
 DS-01 locally verified and accepted on 3 October 2026. No active timer. Gallery previews do not imply operational school features.
 
 | Task | Implementation | Human review | Evidence |

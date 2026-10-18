@@ -1,5 +1,9 @@
 # Principal leadership current state
 
+## M01–M08 acceptance correction — 18 October 2026
+
+The Principal home now uses concise school-facing explanations. The optional-summary empty state no longer implies that whole modules are disabled. Current desktop/mobile captures were inspected; no metric, capability, route or owner projection changed. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
+
 ## 17 October 2026 — LEA-30 owner recusal completed
 
 LEA-30 is ENGINEERING_COMPLETE / DIRECT_COMPARISON_COMPLETE_WITH_DEVIATIONS / HUMAN_REVIEW_PENDING / SYNTHETIC_ONLY at source `1b90a484dc89ffd562fef2b8ca948180f830798f`. Leadership registers recusal only on owners that implement it. Coordination supplies live reviewer candidates, stages Evidence → Conflict and route → Receipt, retains in-flow values, uses a stable owner key after response loss and ends the original reviewer's access after the final owner mutation. The selected reviewer receives no grant; they must retain pre-existing current owner/source authority. An unassigned recusal exposes only reference, version, recusal time and eligible reviewer names to a current institution steward, never the protected body or note.
