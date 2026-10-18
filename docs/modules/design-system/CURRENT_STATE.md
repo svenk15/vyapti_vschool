@@ -1,5 +1,11 @@
 # Shared VSchool experience system — current state
 
+## UX-08 integrated presentation checkpoint — 18 October 2026
+
+UX-01–08 are engineering-verified through implementation source `d57fe8c` and standard production build `BIXjEBxrscUilW5ZTAgW9`. All four themes passed desktop/mobile gallery coverage and direct inspection; appearance settings passed at both viewports; current-source Administrator, Teacher, Principal, Parent and Student protected journeys cover server-resolved theme and scope behavior. The Access owner passed 11 real-PostgreSQL tests, the idempotent guarded appearance fixture ran twice without duplicates, and `pnpm check` passed 59 files/261 unit tests plus lint, types, documentation, database design and architecture checks. Evidence: [UX-08](../../evidence/ux-revamp-08-2026-10-18/README.md).
+
+Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain PENDING. Playwright mobile/device-scale runs are not recorded as native browser zoom.
+
 ## UX-02 semantic foundation — 18 October 2026
 
 The shared presentation layer now exposes Refined Forest, Amethyst & Pearl, Porcelain & Ink, and Linen & Bronze through validated semantic variables. Inter 4.1 is self-hosted from the official release under the bundled SIL Open Font License. `BrandSurface` emits only a validated `data-vs-theme`; unknown values fail safely to Forest. Existing SVG navigation and empty-state icons share the approved 1.75px stroke, and the mobile form/table grids no longer expand the document beyond 390px.

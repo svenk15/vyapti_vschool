@@ -11,7 +11,7 @@ Updated: 18 October 2026 (Asia/Kolkata)
 | UX-05 | VERIFIED | DIRECT_INSPECTION_WITH_RECORDED_SHELL_DEBT | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-06 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-07 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-08 | NOT_STARTED | NOT_STARTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-08 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -38,10 +38,14 @@ UX-06 migrates the shared protected shell and Administrator Today, Students and 
 
 UX-07 is implemented at `21f3a805f5e882be29c39989b13bd0311af9779a`. Teacher uses the approved bounded task workspace; Principal, Parent and Student use the shared protected composition and semantic theme values. Parent/Student mobile drawers now expose modal semantics, lock background scroll, retain permission-filtered destinations and return focus to either menu trigger. Student has a reachable More control. Focused type/boundary/backend checks and one-worker PostgreSQL-backed desktop/mobile journeys passed for all four workspaces. Direct inspection found and corrected a clipped Parent mobile context label. Exact Parent/Student states and explicitly labelled Teacher/Principal pattern comparisons are recorded in [UX-07 evidence](../../evidence/ux-revamp-07-2026-10-18/README.md).
 
+UX-08 is implemented at `d57fe8c`. `pnpm demo:seed` now includes one guarded, idempotent appearance scenario whose institution is Forest, whose initial branch inherits that value and whose second branch explicitly overrides it with Amethyst. The fixture proves that changing the institution to Linen does not overwrite the branch override, then restores Forest; Porcelain and Linen remain available for local preview without becoming tenant authority. A second seed run created no duplicate records and never overwrote existing credentials or manually created data. The ignored private artifact is `artifacts/appearance-01/private-demo.json`.
+
+The four themes passed desktop and mobile gallery journeys, appearance settings passed at both viewports, and protected workspace journeys cover Administrator, Teacher, Principal, Parent and Student effective themes and context changes. Direct inspection of all four desktop galleries and representative mobile/settings captures found consistent hierarchy, spacing, controls and bounded table behavior. Theme contrast pairs all exceed 4.5:1. Real-PostgreSQL Access verification passed 11/11 against `vyapti_vschool_test`; the integrated `pnpm check` passed 59 unit files/261 tests plus lint, types, docs, database design, boundaries and backend checks. The standard 4 GiB build passed with build ID `BIXjEBxrscUilW5ZTAgW9`. See [UX-08 evidence](../../evidence/ux-revamp-08-2026-10-18/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Implement UX-08: verify all four themes across required route families, extend only missing idempotent synthetic fixtures, record contrast and responsive coverage, run the integrated checkpoint, and prepare the current-source demo.
+Keep the verified UX-01–08 demo stable for consolidated owner review. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
