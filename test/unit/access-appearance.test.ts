@@ -4,7 +4,7 @@ import {createAppearanceUseCases,type AppearanceRepository} from '../../backend/
 import type {AppearanceConfiguration,BranchThemeUpdateInput,ResolvedTheme,ThemeUpdateInput,ThemeUpdateResult} from '../../shared/contracts/branding';
 
 const identity={accountId:randomUUID(),tokenVersion:1},organizationId=randomUUID(),schoolId=randomUUID();
-const config:AppearanceConfiguration={organizationId,schoolId:null,selection:'forest',effective:{themeId:'forest',source:'institution'},version:1};
+const config:AppearanceConfiguration={organizationId,schoolId:null,selection:'forest',inheritedTheme:null,effective:{themeId:'forest',source:'institution'},version:1};
 class FakeAppearance implements AppearanceRepository {
   lastInstitution?:ThemeUpdateInput;lastBranch?:BranchThemeUpdateInput;
   async effective():Promise<ResolvedTheme>{return config.effective;}

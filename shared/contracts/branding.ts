@@ -6,6 +6,7 @@ export type AppearanceConfiguration = Readonly<{
   organizationId:string;
   schoolId:string|null;
   selection:ThemeId|null;
+  inheritedTheme:ThemeId|null;
   effective:ResolvedTheme;
   version:number;
 }>;

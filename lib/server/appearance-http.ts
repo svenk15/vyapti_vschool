@@ -1,0 +1,13 @@
+import 'server-only';
+import {randomUUID} from 'node:crypto';
+import {AccessError} from '../../backend/modules/access/contracts';
+import {getIdentity} from './auth';
+import {appearanceGateway} from './access';
+
+const headers={'Cache-Control':'private, no-store'};
+function failure(error:unknown){const code=error instanceof AccessError?error.code:'UNAVAILABLE',status=code==='UNAUTHENTICATED'?401:code==='FORBIDDEN'?403:code==='NOT_FOUND'?404:code==='VALIDATION'?422:code==='UNAVAILABLE'?503:409,messages:Record<string,string>={UNAUTHENTICATED:'Sign in to continue.',FORBIDDEN:'You cannot change this appearance.',NOT_FOUND:'This appearance configuration is unavailable.',VALIDATION:'Check the selected theme and try again.',STALE_VERSION:'Appearance changed. Review the current selection before saving again.',IDEMPOTENCY_CONFLICT:'This request key belongs to another appearance change.',UNAVAILABLE:'Appearance settings are temporarily unavailable.'};return Response.json({code,message:messages[code]??'This appearance change conflicts with current state.',requestId:randomUUID(),retryable:status===503},{status,headers});}
+async function body(request:Request){if(!process.env.NEXTAUTH_URL||request.headers.get('origin')!==new URL(process.env.NEXTAUTH_URL).origin)throw new AccessError('FORBIDDEN');const bytes=await request.arrayBuffer();if(bytes.byteLength>8192)throw new AccessError('VALIDATION');let value:unknown;try{value=JSON.parse(new TextDecoder().decode(bytes));}catch{throw new AccessError('VALIDATION');}if(!value||typeof value!=='object'||Array.isArray(value))throw new AccessError('VALIDATION');const input=value as Record<string,unknown>;if(typeof input.key!=='string'||request.headers.get('idempotency-key')!==input.key)throw new AccessError('VALIDATION');return input;}
+export async function institutionAppearance(_request:Request,organizationId:string){try{return Response.json(await appearanceGateway.getInstitution(await getIdentity(),organizationId),{headers});}catch(error){return failure(error);}}
+export async function updateInstitutionAppearance(request:Request,organizationId:string){try{return Response.json(await appearanceGateway.updateInstitution(await getIdentity(),organizationId,await body(request)),{headers});}catch(error){return failure(error);}}
+export async function branchAppearance(){try{return Response.json(await appearanceGateway.getBranch(await getIdentity()),{headers});}catch(error){return failure(error);}}
+export async function updateBranchAppearance(request:Request){try{return Response.json(await appearanceGateway.updateBranch(await getIdentity(),await body(request)),{headers});}catch(error){return failure(error);}}
