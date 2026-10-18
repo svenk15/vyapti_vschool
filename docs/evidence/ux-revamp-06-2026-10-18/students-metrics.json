@@ -1,0 +1,109 @@
+{
+  "checkedAt": "2026-10-18T14:32:09.839Z",
+  "browser": "Playwright Chromium on macOS",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "metrics": {
+    "heading": {
+      "width": 420.296875,
+      "height": 36,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "28px",
+      "fontWeight": "600",
+      "lineHeight": "36px",
+      "padding": "0px"
+    },
+    "table": {
+      "width": 1136,
+      "height": 172,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22px",
+      "padding": "0px"
+    },
+    "tableHeader": {
+      "width": 555.65625,
+      "height": 40,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "lineHeight": "18px",
+      "padding": "11px 16px"
+    },
+    "tableCell": {
+      "width": 555.65625,
+      "height": 65,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22px",
+      "padding": "12px 16px"
+    },
+    "drawer": {
+      "width": 400,
+      "height": 1000,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22px",
+      "padding": "0px"
+    },
+    "drawerHeader": {
+      "width": 399,
+      "height": 81,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22px",
+      "padding": "20px 24px"
+    },
+    "drawerSummary": {
+      "width": 351,
+      "height": 46,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "lineHeight": "22px",
+      "padding": "12px 0px"
+    },
+    "drawerOption": {
+      "width": 351,
+      "height": 44,
+      "fontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "20px",
+      "padding": "10px 0px"
+    },
+    "overflow": false
+  },
+  "renderedFonts": {
+    "heading": [
+      {
+        "familyName": "Inter Variable",
+        "glyphCount": 8
+      }
+    ],
+    "studentName": [
+      {
+        "familyName": "Inter Variable",
+        "glyphCount": 8
+      }
+    ],
+    "drawerTitle": [
+      {
+        "familyName": "Inter Variable",
+        "glyphCount": 4
+      }
+    ],
+    "sidebar": [
+      {
+        "familyName": "Inter Variable",
+        "glyphCount": 5
+      }
+    ]
+  }
+}
