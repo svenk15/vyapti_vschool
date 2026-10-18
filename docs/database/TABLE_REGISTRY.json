@@ -378,9 +378,9 @@
       "table": "vs_access_organization",
       "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; name varchar(160); status ACTIVE/SUSPENDED; trust_mode OPERATOR_CLI/HYBRID/EMAIL varchar(20) default OPERATOR_CLI; version int; created_at timestamptz(3); configuration_version int default 1",
-      "responsibility": "Contractual tenant; trust mode controls provisioning/recovery channels only; existing rows backfilled to OPERATOR_CLI.",
-      "constraints": "CHECK trust_mode allowed; CHECK version>0; UNIQUE(id); CHECK configuration_version>0",
+      "fields": "id uuid PK; name varchar(160); status ACTIVE/SUSPENDED; trust_mode OPERATOR_CLI/HYBRID/EMAIL varchar(20) default OPERATOR_CLI; theme_id varchar(20) default forest; version int; created_at timestamptz(3); configuration_version int default 1",
+      "responsibility": "Contractual tenant; trust mode controls provisioning/recovery channels only; concrete theme_id owns the authenticated portal default. Existing rows backfill to OPERATOR_CLI and forest.",
+      "constraints": "CHECK trust_mode allowed; CHECK theme_id in forest/amethyst/porcelain/linen; CHECK version>0; UNIQUE(id); CHECK configuration_version>0",
       "rls": {
         "classification": "INSTITUTION_ROOT",
         "scopeColumns": [
@@ -437,9 +437,9 @@
       "table": "vs_access_school",
       "status": "MIGRATED",
       "design": "docs/modules/access/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); office_email varchar(254) nullable; office_phone varchar(40) nullable; office_address varchar(500) nullable; support_label varchar(160) nullable; support_email varchar(254) nullable; support_phone varchar(40) nullable; support_hours varchar(500) nullable; support_published_at timestamptz(3) nullable; status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
-      "responsibility": "Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1. Owns the administrator-published trusted branch support snapshot used by personal account workspaces.",
-      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); office contact normalization/bounds; support columns are all absent or complete with label, hours, publication time and at least one normalized contact; CHECK configuration_version>0",
+      "fields": "id uuid PK; organization_id uuid; code varchar(40); name varchar(160); timezone varchar(64); theme_override varchar(20) nullable; office_email varchar(254) nullable; office_phone varchar(40) nullable; office_address varchar(500) nullable; support_label varchar(160) nullable; support_email varchar(254) nullable; support_phone varchar(40) nullable; support_hours varchar(500) nullable; support_published_at timestamptz(3) nullable; status ACTIVE/SUSPENDED; version int; created_at timestamptz(3); configuration_version int default 1",
+      "responsibility": "Operational scope and serialization guard. Timezone immutable once sessions exist in Phase 1. Nullable theme_override owns the authenticated portal branch override; NULL inherits the institution theme. Owns the administrator-published trusted branch support snapshot used by personal account workspaces.",
+      "constraints": "FK organization; UNIQUE(organization_id,id); UNIQUE(organization_id,code); theme_override NULL or forest/amethyst/porcelain/linen; office contact normalization/bounds; support columns are all absent or complete with label, hours, publication time and at least one normalized contact; CHECK configuration_version>0",
       "rls": {
         "classification": "BRANCH_DIRECTORY",
         "scopeColumns": [

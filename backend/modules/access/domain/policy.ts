@@ -1,4 +1,5 @@
 import type { ProvisionInput, RoleCode } from "../../../../shared/contracts/access";
+import {isThemeId} from '../../../../shared/contracts/branding';
 export class AccessError extends Error {
   constructor(public readonly code: "VALIDATION" | "INDEPENDENT_ROUTE_UNAVAILABLE" | "PROVISION_CONFLICT" | "UNAUTHENTICATED" | "NOT_FOUND" | "UNAVAILABLE" | "FORBIDDEN" | "CONFLICT" | "STALE_VERSION" | "LAST_ADMIN" | "TIMEZONE_IN_USE" | "IDEMPOTENCY_CONFLICT" | "INVALID_CURSOR" | "INVALID_ACTIVATION" | "INVITATION_INVALID" | "MODULE_NOT_LICENSED" | "RELEASE_UNAVAILABLE" | "DEPENDENCY_DISABLED" | "PREVIEW_STALE" | "MODULE_DISABLED" | "CALENDAR_REQUIRED" | "CALENDAR_IN_USE" | "PERIOD_OVERLAP" | "SOURCE_EXPIRED" | "NON_TEACHING_DAY" | "NO_ELIGIBLE_TEACHER" | "TEACHER_TIME_CONFLICT" | "ROSTER_IN_USE" | "STUDENT_IN_USE" | "PERSON_SHARED" | "EMPTY_ROSTER" | "ROSTER_TOO_LARGE" | "DEADLINE_PASSED") { super(code); }
 }
@@ -12,7 +13,7 @@ export function validPassword(value: string): boolean {
 export function normalizeProvision(input: ProvisionInput): ProvisionInput {
   const text=(value:string,max:number) => { const result=value.normalize("NFC").trim(); if(!result||result.length>max||/[\u0000-\u001f]/.test(result))throw new AccessError("VALIDATION");return result; };
   const result={...input,organizationName:text(input.organizationName,160),schoolName:text(input.schoolName,160),schoolCode:text(input.schoolCode,40),adminEmail:normalizeEmail(input.adminEmail)};
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(result.adminEmail)||result.adminEmail.length>254||!validPassword(result.password)||result.timezone.length>64)throw new AccessError("VALIDATION");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(result.adminEmail)||result.adminEmail.length>254||!validPassword(result.password)||result.timezone.length>64||(result.themeId!==undefined&&!isThemeId(result.themeId)))throw new AccessError("VALIDATION");
   try { new Intl.DateTimeFormat("en",{timeZone:result.timezone}); } catch { throw new AccessError("VALIDATION"); }
   return result;
 }

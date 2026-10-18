@@ -23,6 +23,7 @@ model Organization {
   version              Int
   createdAt            DateTime @map("created_at") @db.Timestamptz(3)
   configurationVersion Int      @default(1) @map("configuration_version")
+  themeId              String   @default("forest") @map("theme_id") @db.VarChar(20)
   schools              School[]
   institutionGrants InstitutionGrant[]
   configurationChanges ConfigurationChange[]
@@ -71,6 +72,7 @@ model School {
   version              Int
   createdAt            DateTime           @map("created_at") @db.Timestamptz(3)
   configurationVersion Int                @default(1) @map("configuration_version")
+  themeOverride        String?            @map("theme_override") @db.VarChar(20)
   organization         Organization       @relation(fields: [organizationId], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "vs_access_school_r0_fkey")
   configurationChanges ConfigurationChange[]
   campuses             Campus[]

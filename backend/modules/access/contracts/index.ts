@@ -7,4 +7,5 @@ export type {LeadershipDelegationFacade,LeadershipDelegationRepository} from '..
 export type {DelegatedAuthorityFact,DelegatedAuthorityPort,DelegatedAuthorityTransaction} from './delegated-authority';
 
 export type { InstitutionFacade,InstitutionRepository } from "../application/institutions";
+export type {AppearanceFacade,AppearanceRepository} from '../application/appearance';
 export type {AccountSessionFacade, AccountSessionRepository} from '../application/sessions';

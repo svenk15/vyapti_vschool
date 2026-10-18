@@ -30,9 +30,9 @@ export class PrismaInstitutionRepository implements InstitutionRepository {
   await this.current(tx,identity);const org=await tx.organization.findFirst({where:{id:organizationId,status:'ACTIVE',institutionGrants:{some:{accountId:identity.accountId,status:'ACTIVE',role:'INSTITUTION_ADMIN'}}}});if(!org)throw new AccessError('NOT_FOUND');
   const replay=await this.receipt(tx,organizationId,identity.accountId,'CreateBranch',input.key,hash);if(replay)return replay;
   if(org.configurationVersion!==input.expectedRevision)throw new AccessError('STALE_VERSION');if(await tx.school.count({where:{organizationId}})>=100)throw new AccessError('CONFLICT');
-  const now=this.now(),s=await tx.school.create({data:{id:randomUUID(),organizationId,code:input.code,name:input.name,timezone:input.timezone,status:'ACTIVE',version:1,createdAt:now}}),revision=org.configurationVersion+1;
+  const now=this.now(),s=await tx.school.create({data:{id:randomUUID(),organizationId,code:input.code,name:input.name,timezone:input.timezone,themeOverride:input.themeId??null,status:'ACTIVE',version:1,createdAt:now}}),revision=org.configurationVersion+1;
   await tx.organization.update({where:{id:org.id},data:{configurationVersion:revision,version:{increment:1}}});const result={organizationId,resourceId:s.id,version:1,revision,replayed:false};
-  await this.writer(tx).append({organizationId,schoolId:s.id,actorAccountId:identity.accountId,command:'CreateBranch',key:input.key,inputHash:hash,response:result,expectedRevision:org.configurationVersion,newRevision:revision,reason:input.reason,requestId:randomUUID(),occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'ACCOUNT',resourceId:s.id,version:1}});return result;
+  await this.writer(tx).append({organizationId,schoolId:s.id,actorAccountId:identity.accountId,command:'CreateBranch',key:input.key,inputHash:hash,response:result,expectedRevision:org.configurationVersion,newRevision:revision,reason:input.reason,requestId:randomUUID(),occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'ACCOUNT',resourceId:s.id,version:1,themeId:input.themeId??null}});return result;
  });}
  async operate(command:InstitutionCommand,operator:OperatorPrincipal){const {organizationId,accountId,key,reason}=command,hash=createHash('sha256').update(canonical({schemaVersion:1,operatorId:operator.operatorId,command})).digest('hex');return this.retry(async tx=>{
   await tx.$executeRaw`SELECT pg_advisory_xact_lock(1448302674,1)`;
@@ -46,7 +46,7 @@ export class PrismaInstitutionRepository implements InstitutionRepository {
   const replay=org?await this.receipt(tx,organizationId,accountId,command.kind,key,hash):null;if(replay)return replay;
   const now=this.now(),expectedRevision=org?.configurationVersion??0;let resourceId:string,version:number;
   if(command.kind==='CreateInstitution'){
-   if(org)throw new AccessError('CONFLICT');org=await tx.organization.create({data:{id:organizationId,name:command.name,status:'ACTIVE',trustMode:'HYBRID',version:1,createdAt:now}});
+   if(org)throw new AccessError('CONFLICT');org=await tx.organization.create({data:{id:organizationId,name:command.name,status:'ACTIVE',trustMode:'HYBRID',themeId:command.themeId??'forest',version:1,createdAt:now}});
    const grant=await tx.institutionGrant.create({data:{id:randomUUID(),organizationId,accountId,role:'INSTITUTION_ADMIN',status:'ACTIVE',version:1,grantedAt:now,grantedBy:operator.operatorId}});resourceId=grant.id;version=1;
   }else if(command.kind==='SetInstitutionGrant'){
    const old=await tx.institutionGrant.findUnique({where:{organizationId_accountId_role:{organizationId,accountId,role:'INSTITUTION_ADMIN'}}});if((old?.version??0)!==command.expectedVersion)throw new AccessError('STALE_VERSION');if(!old&&command.status==='REVOKED')throw new AccessError('NOT_FOUND');
@@ -60,6 +60,6 @@ export class PrismaInstitutionRepository implements InstitutionRepository {
    await tx.roleGrant.deleteMany({where:{...scope,membershipId:member.id}});await tx.roleGrant.createMany({data:command.roles.map(code=>({id:randomUUID(),...scope,membershipId:member.id,code}))});resourceId=member.id;version=member.version;
   }
   const revision=expectedRevision+1;if(command.kind!=='CreateInstitution')await tx.organization.update({where:{id:organizationId},data:{configurationVersion:revision,version:{increment:1}}});
-  const result={organizationId,resourceId,version,revision,replayed:false};await this.writer(tx).append({organizationId,...(command.kind==='SetBranchMembership'?{schoolId:command.schoolId}:{}),actorAccountId:accountId,command:command.kind,key,inputHash:hash,response:result,expectedRevision,newRevision:revision,reason,requestId:randomUUID(),occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'OPERATOR',operatorId:operator.operatorId,resourceId,version,...(command.kind!=='CreateInstitution'?{status:command.status}:{}),...(command.kind==='SetBranchMembership'?{roles:command.roles}:{})}});return result;
+  const result={organizationId,resourceId,version,revision,replayed:false};await this.writer(tx).append({organizationId,...(command.kind==='SetBranchMembership'?{schoolId:command.schoolId}:{}),actorAccountId:accountId,command:command.kind,key,inputHash:hash,response:result,expectedRevision,newRevision:revision,reason,requestId:randomUUID(),occurredAt:now.toISOString(),changes:{schemaVersion:1,principalKind:'OPERATOR',operatorId:operator.operatorId,resourceId,version,...(command.kind!=='CreateInstitution'?{status:command.status}:{}),...(command.kind==='SetBranchMembership'?{roles:command.roles}:{}),...(command.kind==='CreateInstitution'?{themeId:command.themeId??'forest'}:{})}});return result;
  });}
 }

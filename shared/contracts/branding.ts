@@ -1,6 +1,18 @@
 export const themeIds = ["forest", "amethyst", "porcelain", "linen"] as const;
 export type ThemeId = (typeof themeIds)[number];
 
+export type ResolvedTheme = Readonly<{themeId:ThemeId;source:'branch'|'institution'|'default'}>;
+export type AppearanceConfiguration = Readonly<{
+  organizationId:string;
+  schoolId:string|null;
+  selection:ThemeId|null;
+  effective:ResolvedTheme;
+  version:number;
+}>;
+export type ThemeUpdateInput = Readonly<{themeId:ThemeId;expectedVersion:number;key:string;reason:string}>;
+export type BranchThemeUpdateInput = Readonly<{themeId:ThemeId|null;expectedVersion:number;key:string;reason:string}>;
+export type ThemeUpdateResult = AppearanceConfiguration & Readonly<{replayed:boolean}>;
+
 /** Kept only until UX-03 migrates persisted Branding revisions. */
 export type LegacyBrandPalette = "indigo" | "clay";
 export type BrandPalette = ThemeId | LegacyBrandPalette;

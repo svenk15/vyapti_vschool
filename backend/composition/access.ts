@@ -27,6 +27,8 @@ import {PrismaAccountPreferenceRepository} from '../modules/access/infrastructur
 import {createLeadershipDelegationUseCases} from '../modules/access/application/delegations';
 import {PrismaLeadershipDelegationRepository} from '../modules/access/infrastructure/delegations';
 import {PrismaDelegatedAuthority} from '../modules/access/infrastructure/delegated-authority';
+import {createAppearanceUseCases} from '../modules/access/application/appearance';
+import {PrismaAppearanceRepository} from '../modules/access/infrastructure/appearance';
 export function createAccessServices(config:{databaseUrl:string;now?:()=>Date;cursorSecret?:string;emailSender?:AccessEmailSender}) {
  const db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]});
  const context=new PrismaVerifiedDatabaseContext(),employeeAccess=new PrismaEmployeeAccessVerification(),delegatedAuthority=new PrismaDelegatedAuthority(context,employeeAccess),repository=new PrismaAccessRepository(db,tx=>new PrismaProvisionEvidence(tx),context,config.now,delegatedAuthority);
@@ -40,5 +42,6 @@ export function createAccessServices(config:{databaseUrl:string;now?:()=>Date;cu
  const staffInvites=createStaffInviteUseCases(new PrismaStaffInviteRepository(db,context,employeeAccess,tx=>new PrismaCommandEvidence(tx),config.now),emailSender,new OpaqueActivationTokens(),passwords,config.now??(()=>new Date()));
  const delegations=createLeadershipDelegationUseCases(new PrismaLeadershipDelegationRepository(db,context,employeeAccess,delegatedAuthority,config.now),randomUUID);
  const institutions=createInstitutionUseCases(new PrismaInstitutionRepository(db,tx=>new PrismaInstitutionEvidence(tx),(identity,schoolId)=>core.getAccountHome(identity,schoolId),config.now,delegatedAuthority));
- return {...institutions,...activation,...management,...passwordReset,...staffInvites,...sessions,...preferences,...delegations,...core,disconnect:()=>db.$disconnect()};
+ const appearance=createAppearanceUseCases(new PrismaAppearanceRepository(db,tx=>new PrismaInstitutionEvidence(tx),config.now));
+ return {...institutions,...appearance,...activation,...management,...passwordReset,...staffInvites,...sessions,...preferences,...delegations,...core,disconnect:()=>db.$disconnect()};
 }

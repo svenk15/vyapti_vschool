@@ -74,6 +74,6 @@ export type SchoolSupportConfiguration = Readonly<{
   timezone: string;
   publishedAt: string;
 }>;
-export type ProvisionInput = { organizationName: string; schoolCode: string; schoolName: string; timezone: string; adminEmail: string; password: string };
+export type ProvisionInput = { organizationName: string; schoolCode: string; schoolName: string; timezone: string; adminEmail: string; password: string; themeId?:import('./branding').ThemeId };
 export type OperatorPrincipal = Readonly<{ operatorId: string; verified: true }>;
 export type ProvisionResult = Readonly<{ organizationId: string; schoolId: string; accountId: string; membershipId: string }>;
