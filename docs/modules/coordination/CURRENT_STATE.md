@@ -1,5 +1,15 @@
 # Coordination current state
 
+## Must-have M08 current-source checkpoint (18 October 2026)
+
+Status: VERIFIED_CURRENT_SOURCE / HUMAN_REVIEW_PENDING
+
+The existing LEA-08–11/15 Attendance follow-up contract was exercised on current source as one connected worker/Principal journey. A Principal created an exact missing-register request, the designated worker encountered stale state safely, lost and regained `coordination.work`, submitted factual no-change evidence, received an independent return, supplied refreshed exact source evidence and obtained independent closure. A separate setup-review request linked to the current Attendance source, performed cancellation only through the guarded Attendance operation, submitted the exact cancellation revision and obtained independent verification. Coordination assignment did not grant or write Attendance authority.
+
+Focused real-PostgreSQL Coordination verification passed 18/18 against `vyapti_vschool_test`, with 117 migrations applied and none pending. Sequential one-worker Playwright passed 1/1 desktop and 1/1 mobile on isolated build `Wrd7P85a7tJo0u_ZOsWfN`. Direct capture inspection covered awaiting verification, resolved evidence, Attendance cancellation closure and the populated queue. Two obsolete UI-text assertions were aligned with the already accepted named-pupil authority wording and regrouped `Follow-ups` navigation label; no product authorization or test condition was weakened. Evidence: [must-have M08](../../evidence/must-have-m08-2026-10-18/README.md).
+
+Human review, protected operational-note production retention/backup-deletion policy, font portability, native accessibility, TEN-03 and production readiness remain pending.
+
 ## LEA-12 Attendance pupil-pattern source — 17 October 2026
 
 Commit `b4e2b0fba27449faa5e38feb728445a78d6efdf8` registers the distinct `ATTENDANCE_PUPIL_PATTERN` / `PUPIL_ATTENDANCE_SUPPORT` pair. The source key is an immutable Attendance snapshot, and Coordination receives only factual identity/count/date evidence through the typed owner adapter. Creator and protected replay require current named-pupil authority; an assignee independently requires the same pupil grant and `coordination.work`. The only supported evidence claim is `NO_CHANGE_NEEDED`; assignment grants no Attendance correction, marking, family-contact or care authority.
