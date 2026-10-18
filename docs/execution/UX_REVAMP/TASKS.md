@@ -5,7 +5,7 @@ Status values separate engineering, visual comparison, human acceptance, and pro
 | Task | Outcome | Dependencies | Required evidence | State |
 |---|---|---|---|---|
 | UX-01 | Baseline, authority record, actual route/component inventory, source/build provenance | Current repository | Documentation validation and focused diff | VERIFIED |
-| UX-02 | Four-preset semantic tokens, verified self-hosted Inter, consistent existing SVG icons, migrated shared primitives/gallery | UX-01 | Unit/style checks; gallery at desktop/mobile and four themes; computed font provenance | NOT_STARTED |
+| UX-02 | Four-preset semantic tokens, verified self-hosted Inter, consistent existing SVG icons, migrated shared primitives/gallery | UX-01 | Unit/style checks; gallery at desktop/mobile and four themes; computed font provenance | VERIFIED |
 | UX-03 | Versioned institution theme and nullable branch override in existing appearance owner; forward migration; authorization/audit/isolation | UX-02; Branding/Access LLD delta | Real PostgreSQL defaults/backfill/inheritance/stale/replay/isolation tests; DB gates | NOT_STARTED |
 | UX-04 | Reusable ThemePicker in supported institution/branch creation and authorized appearance settings | UX-03 | Focused unit/browser flows for selection, preview/cancel/save/conflict | NOT_STARTED |
 | UX-05 | Server theme resolution for protected/public contexts and safe context switching/cache identity | UX-03–04 | First-paint/hydration/publication/context-switch browser tests and security negatives | NOT_STARTED |

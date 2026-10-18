@@ -4,11 +4,11 @@ Phase 1 · Revision 1 · 3 October 2026. Runtime implementation limits are expli
 
 ## Purpose and boundaries
 
-The design system owns shared presentation primitives, tokens and interaction contracts. It owns no pupil, institution permission or database business state. Module screens import components/ui and compose them; they cannot introduce a competing button/table/form system. BrandSurface receives a validated public palette; no ad hoc CSS injection. System fonts avoid remote font tracking and render without an extra network dependency.
+The design system owns shared presentation primitives, tokens and interaction contracts. It owns no pupil, institution permission or database business state. Module screens import components/ui and compose them; they cannot introduce a competing button/table/form system. BrandSurface receives a validated public theme identifier; no ad hoc CSS injection. Inter 4.1 is bundled locally under the SIL Open Font License and loaded through `next/font/local`; no browser request is made to a font CDN.
 
 DS-ADR-001: native HTML semantics first, small typed React wrappers, no unnecessary UI library dependency. Native dialog provides modal/inert behavior and Escape; shared boundary Tab/Shift+Tab wrapping keeps keyboard focus on visible enabled dialog controls. Native input/select/date/file controls retain browser behavior. Tests and manual assistive-tech review remain required. Advanced async combobox/grid/chart widgets will use a evaluated accessible implementation when their first concrete module requires them, with a design-system task before feature use.
 
-DS-ADR-002: one calm neutral surface system with constrained brand tokens. Default Forest, alternate Indigo/Clay. Semantic feedback and keyboard focus remain consistent. Dark mode is a future contrast-reviewed token variant, not a global invert filter.
+DS-ADR-002: one calm semantic surface system with four constrained presentation presets: Refined Forest (default), Amethyst & Pearl, Porcelain & Ink, and Linen & Bronze. Semantic feedback and keyboard focus remain consistent. Persisted `indigo` and `clay` values are temporary read-only compatibility aliases until UX-03 migrates the existing Branding owner. Dark mode is a future contrast-reviewed token variant, not a global invert filter.
 
 ## Component ownership and inventory
 
@@ -30,7 +30,7 @@ See components/ui/primitives.tsx (Button, ButtonLink, Badge, Card, PageHeader, A
 
 ## Tokens and recipes
 
-Bible §17 is the shared product rule. CSS variables in app/globals.css and palettes in branding/domain/theme.ts are implementation tokens. spacing 4/8 multiples; cards 12px; controls 7px; primary actions 44px; visible ring. Operational typography target 14–16 body, 12–14 labels/metadata. Welcome pages may use serif display headings; school workflows use system sans. Validate each text/control pair in each palette. High-contrast/forced-colors must preserve input edges and selected states; preserve browser zoom. Motion respects prefers-reduced-motion.
+Bible §17 is the shared product rule. CSS variables in `app/globals.css` and the browser-safe theme catalogue in `shared/contracts/branding.ts` are the implementation tokens. Spacing uses the approved 4–64px scale; cards use 12px radii; controls use 8px radii and 40px desktop/44px mobile targets; focus uses a visible two-pixel ring. Operational typography is local Inter with the documented system fallback. Validate each text/control pair in each theme. High-contrast/forced-colors must preserve input edges and selected states; preserve browser zoom. Motion respects `prefers-reduced-motion`.
 
 All module screens use PageHeader → context/actions → filter/form/content → feedback. List state matrix: initial/loading/empty/no matches/partial error/permission denied/ready. Form: pristine/dirty/validating/submitting/unknown result/conflict/success. Unknown result is never a green success toast. Define keyboard order and focus target on every overlay/error. Table compact preference changes padding, never removes access labels.
 
@@ -70,7 +70,7 @@ sequenceDiagram
 
 ## DS-01 — Review and adopt the shared UI foundation
 
-Use the included component gallery. Review all controls and three palettes, data table sort/search/pagination, dialog/drawer keyboard behavior, tabs/errors/loading, branding and responsive composition. Improve components centrally, not by module-specific duplication. Record visual owner acceptance separately from automated checks; update UI inventory and token contracts.
+Use the included component gallery. Review all controls and four approved themes, data table sort/search/pagination, dialog/drawer keyboard behavior, tabs/errors/loading, branding and responsive composition. Improve components centrally, not by module-specific duplication. Record visual owner acceptance separately from automated checks; update UI inventory and token contracts.
 
 **Manual demo:** Visit /design-system; change palettes; search/sort/page sample table; open modal, Escape, verify focus; use arrow-key tabs; inspect mobile form and error state.
 

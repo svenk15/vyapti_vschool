@@ -44,6 +44,8 @@ Raised surface is `#FFFFFF`; dialog backdrop is `rgba(16,24,20,0.40)`. Divider f
 
 Self-hosted Inter is the target. Required fallback: `Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`. Final exact captures wait for the asset; fallback captures are labelled as such. Metrics, dates, times, and numeric table columns use tabular numerals.
 
+The bundled asset is the official Inter 4.1 `InterVariable.woff2` release from `rsms/inter`, stored at `app/fonts/InterVariable.woff2` with SHA-256 `693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3`. Its official SIL Open Font License is stored beside it at `app/fonts/LICENSE.txt` with SHA-256 `262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a`. Next.js loads it locally; rendered pages make no external font request.
+
 | Use | Size / line height | Weight | Other |
 |---|---|---|---|
 | Page title | 28 / 36 px | 600 | `-0.02em`; mobile 24 / 32 px |

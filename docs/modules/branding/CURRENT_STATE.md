@@ -1,5 +1,9 @@
 # School branding and sign-in identity — current state
 
+## UX-02 presentation projection — 18 October 2026
+
+Public and protected Branding read projections now return only the approved `forest`, `amethyst`, `porcelain`, or `linen` theme IDs. Existing stored `indigo` and `clay` revisions remain valid under the applied database constraint and map to Amethyst/Linen at the browser-safe boundary. Unknown stored values fail safely to Forest. This checkpoint changes no write authority, publication transaction, schema, migration, or immutable history. UX-03 remains responsible for the forward persistence migration and concrete institution/nullable branch inheritance model. Focused real-PostgreSQL publication/concurrency/revocation checks pass; evidence is recorded in [UX-02](../../evidence/ux-revamp-02-2026-10-18/README.md).
+
 BRD-01 locally verified and accepted on 3 October 2026. No active timer. Public previews do not imply authentication or tenant access.
 
 | Task | Implementation | Human review | Evidence |

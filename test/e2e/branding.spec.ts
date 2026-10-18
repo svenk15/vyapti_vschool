@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 const profiles = [
-  { slug: "greenwood-north", institution: "Greenwood Schools", branch: "North Campus", primary: "#245c49", support: "office@greenwood.example" },
-  { slug: "greenwood-south", institution: "Greenwood Schools", branch: "South Campus", primary: "#854e3c", support: "office@greenwood.example" },
-  { slug: "aster-central", institution: "Aster Learning Trust", branch: "Central School", primary: "#464985", support: "office@aster.example" },
+  { slug: "greenwood-north", institution: "Greenwood Schools", branch: "North Campus", theme: "forest", primary: "#246B53", support: "office@greenwood.example" },
+  { slug: "greenwood-south", institution: "Greenwood Schools", branch: "South Campus", theme: "linen", primary: "#795237", support: "office@greenwood.example" },
+  { slug: "aster-central", institution: "Aster Learning Trust", branch: "Central School", theme: "amethyst", primary: "#7045A2", support: "office@aster.example" },
 ];
 
 test("all three brand previews resolve exact institution, branch, palette and help identity", async ({ page }) => {
@@ -11,7 +11,8 @@ test("all three brand previews resolve exact institution, branch, palette and he
     await page.goto(`/sign-in/${profile.slug}`);
     await expect(page.locator(".school-identity")).toContainText(profile.institution);
     await expect(page.locator(".school-identity")).toContainText(profile.branch);
-    await expect(page.locator(".login-surface")).toHaveAttribute("style", new RegExp(profile.primary));
+    await expect(page.locator(".login-surface")).toHaveAttribute("data-vs-theme",profile.theme);
+    await expect(page.locator(".login-surface")).toHaveCSS("--vs-primary",profile.primary);
     await expect(page.getByText(/Authentication is not connected/)).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.getByRole("button", { name: "Need help?" }).click();

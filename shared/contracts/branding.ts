@@ -1,13 +1,96 @@
-export type BrandPalette = "forest" | "indigo" | "clay";
-export const palettes = {
-  forest: { name: "Forest", primary: "#245c49", onPrimary: "#ffffff", soft: "#e9f1e9", accent: "#dbe9b9" },
-  indigo: { name: "Indigo", primary: "#464985", onPrimary: "#ffffff", soft: "#eeedf6", accent: "#dedcf0" },
-  clay: { name: "Clay", primary: "#854e3c", onPrimary: "#ffffff", soft: "#f7eee8", accent: "#eed9c9" },
-} as const;
+export const themeIds = ["forest", "amethyst", "porcelain", "linen"] as const;
+export type ThemeId = (typeof themeIds)[number];
+
+/** Kept only until UX-03 migrates persisted Branding revisions. */
+export type LegacyBrandPalette = "indigo" | "clay";
+export type BrandPalette = ThemeId | LegacyBrandPalette;
+
+export type ThemeTokens = Readonly<{
+  name: string;
+  canvas: string;
+  surface: string;
+  surfaceSubtle: string;
+  text: string;
+  textMuted: string;
+  border: string;
+  primary: string;
+  primaryHover: string;
+  primaryPressed: string;
+  onPrimary: string;
+  selectionBg: string;
+  selectionText: string;
+  sidebarBg: string;
+  sidebarText: string;
+  sidebarMuted: string;
+  sidebarHover: string;
+  sidebarActive: string;
+  sidebarActiveText: string;
+  focusRing: string;
+  /** Compatibility aliases for the existing safe branding preview contract. */
+  soft: string;
+  accent: string;
+}>;
+
+export const themes: Readonly<Record<ThemeId, ThemeTokens>> = {
+  forest: {
+    name: "Refined Forest", canvas: "#F6F8F5", surface: "#FFFFFF", surfaceSubtle: "#EEF3EF",
+    text: "#1F3028", textMuted: "#56665D", border: "#DCE5DF", primary: "#246B53",
+    primaryHover: "#1D5945", primaryPressed: "#174837", onPrimary: "#FFFFFF",
+    selectionBg: "#E4F0E9", selectionText: "#194D3B", sidebarBg: "#183D33",
+    sidebarText: "#EDF5F0", sidebarMuted: "#B9CFC3", sidebarHover: "#214B3F",
+    sidebarActive: "#2B584A", sidebarActiveText: "#FFFFFF", focusRing: "#246B53",
+    soft: "#EEF3EF", accent: "#E4F0E9",
+  },
+  amethyst: {
+    name: "Amethyst & Pearl", canvas: "#FAF8FC", surface: "#FFFFFF", surfaceSubtle: "#F2EDF6",
+    text: "#2B2333", textMuted: "#6B6075", border: "#E5DFEB", primary: "#7045A2",
+    primaryHover: "#5E378C", primaryPressed: "#4E2C77", onPrimary: "#FFFFFF",
+    selectionBg: "#EEE5F6", selectionText: "#57317B", sidebarBg: "#30223E",
+    sidebarText: "#F1EBF6", sidebarMuted: "#C8B9D5", sidebarHover: "#3D2B4E",
+    sidebarActive: "#503860", sidebarActiveText: "#FFFFFF", focusRing: "#7045A2",
+    soft: "#F2EDF6", accent: "#EEE5F6",
+  },
+  porcelain: {
+    name: "Porcelain & Ink", canvas: "#F7F9FC", surface: "#FFFFFF", surfaceSubtle: "#EFF3F8",
+    text: "#19283F", textMuted: "#596A80", border: "#DCE4EF", primary: "#284FAC",
+    primaryHover: "#214292", primaryPressed: "#1B3577", onPrimary: "#FFFFFF",
+    selectionBg: "#E5EDFB", selectionText: "#21458F", sidebarBg: "#EFF3F9",
+    sidebarText: "#24354D", sidebarMuted: "#5B6C83", sidebarHover: "#E4EBF5",
+    sidebarActive: "#D9E5F8", sidebarActiveText: "#1B408A", focusRing: "#284FAC",
+    soft: "#EFF3F8", accent: "#E5EDFB",
+  },
+  linen: {
+    name: "Linen & Bronze", canvas: "#FAF9F6", surface: "#FFFFFF", surfaceSubtle: "#F2EEE7",
+    text: "#302C27", textMuted: "#6C6358", border: "#E4DFD6", primary: "#795237",
+    primaryHover: "#66442E", primaryPressed: "#533723", onPrimary: "#FFFFFF",
+    selectionBg: "#EFE4D7", selectionText: "#654229", sidebarBg: "#EDE9E2",
+    sidebarText: "#332D26", sidebarMuted: "#6D6256", sidebarHover: "#E5DED3",
+    sidebarActive: "#DED1BF", sidebarActiveText: "#4F3623", focusRing: "#795237",
+    soft: "#F2EEE7", accent: "#EFE4D7",
+  },
+};
+
+/** Transitional catalogue for persisted pre-UX-03 revisions. */
+export const palettes: Readonly<Record<BrandPalette, ThemeTokens>> = {
+  ...themes,
+  indigo: themes.amethyst,
+  clay: themes.linen,
+};
+
+export function isThemeId(value: unknown): value is ThemeId {
+  return typeof value === "string" && Object.prototype.hasOwnProperty.call(themes, value);
+}
+
+export function resolveThemeId(value: unknown): ThemeId {
+  if (isThemeId(value)) return value;
+  if (value === "indigo") return "amethyst";
+  if (value === "clay") return "linen";
+  return "forest";
+}
 
 export type PublicBrand = Readonly<{
   slug: string; institutionName: string; branchName: string; monogram: string;
-  palette: BrandPalette; welcome: string; supportEmail: string;
+  palette: ThemeId; welcome: string; supportEmail: string;
 }>;
 
 export function contrastRatio(a: string, b: string): number {
@@ -35,5 +118,5 @@ export function validatePublicBrand(value: unknown): value is PublicBrand {
     && typeof brand.welcome === "string" && brand.welcome.length <= 180
     && typeof brand.supportEmail === "string" && brand.supportEmail.length <= 254
     && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(brand.supportEmail)
-    && typeof brand.palette === "string" && Object.prototype.hasOwnProperty.call(palettes, brand.palette);
+    && isThemeId(brand.palette);
 }

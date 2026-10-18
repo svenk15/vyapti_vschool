@@ -8,7 +8,7 @@ import {ListToolbar} from './portal/list-toolbar';
 import {FilterDrawer,type FilterSelection} from './portal/filter-drawer';
 import {SortDrawer,type SortSelection} from './portal/sort-drawer';
 import {CommandFeedback} from './portal/command-feedback';
-import type {BrandPalette} from '@/shared/contracts/branding';
+import {themeIds,themes,type ThemeId} from '@/shared/contracts/branding';
 import {AuthLayout} from '@/components/auth-layout';
 import {InstitutionContextSummary} from '@/components/institution-context';
 import {PortalNavigationGroup} from '@/components/portal-navigation-group';
@@ -16,13 +16,13 @@ import {PortalNavigationGroup} from '@/components/portal-navigation-group';
 const records=[{id:'001',name:'Asha Example',section:'8 · A',status:'Present'},{id:'002',name:'Ravi Example',section:'8 · A',status:'Absent'},{id:'003',name:'Mina Example',section:'8 · B',status:'Late'},{id:'004',name:'Arun Example',section:'8 · B',status:'Excused'},{id:'005',name:'Leela Example',section:'9 · A',status:'Present'},{id:'006',name:'Noor Example',section:'9 · A',status:'Present'}];
 
 export function ComponentGallery(){
- const [palette,setPalette]=useState<BrandPalette>('forest'),[query,setQuery]=useState(''),[appliedQuery,setAppliedQuery]=useState(''),[attribute,setAttribute]=useState('student'),[filters,setFilters]=useState<FilterSelection>({attendance:[]}),[sort,setSort]=useState<SortSelection>({by:'name',order:'ascending'}),[filterOpen,setFilterOpen]=useState(false),[sortOpen,setSortOpen]=useState(false),[dialog,setDialog]=useState(false),[drawer,setDrawer]=useState(false),[toast,setToast]=useState(''),[density,setDensity]=useState('comfortable'),[dates,setDates]=useState({from:'2026-10-01',to:'2026-10-31'}),[file,setFile]=useState('');
+ const [palette,setPalette]=useState<ThemeId>('forest'),[query,setQuery]=useState(''),[appliedQuery,setAppliedQuery]=useState(''),[attribute,setAttribute]=useState('student'),[filters,setFilters]=useState<FilterSelection>({attendance:[]}),[sort,setSort]=useState<SortSelection>({by:'name',order:'ascending'}),[filterOpen,setFilterOpen]=useState(false),[sortOpen,setSortOpen]=useState(false),[dialog,setDialog]=useState(false),[drawer,setDrawer]=useState(false),[toast,setToast]=useState(''),[density,setDensity]=useState('comfortable'),[dates,setDates]=useState({from:'2026-10-01',to:'2026-10-31'}),[file,setFile]=useState('');
  const rows=useMemo(()=>records.filter(record=>`${record.name} ${record.section}`.toLowerCase().includes(appliedQuery.toLowerCase())&&(!(filters.attendance?.length)||(filters.attendance??[]).includes(record.status.toLowerCase()))).sort((left,right)=>{const key=sort.by==='section'?'section':'name',comp=left[key].localeCompare(right[key])||left.id.localeCompare(right.id);return sort.order==='descending'?-comp:comp;}),[appliedQuery,filters,sort]);
  const filterCount=Object.values(filters).reduce((count,values)=>count+values.length,0),sortSummary=`${sort.by==='section'?'Class':'Student'} ${sort.order==='descending'?'Z–A':'A–Z'}`;
  return <BrandSurface palette={palette}>
   <main id="main-content" className="container page-space">
    <Breadcrumbs items={[{label:'VSchool',href:'/'},{label:'Design system'}]}/>
-   <PageHeader eyebrow="VSCHOOL DESIGN SYSTEM · V1" title="Familiar on every page." description="A calm, consistent foundation for every school, branch and module." actions={<SelectField label="Preview palette" value={palette} onChange={event=>setPalette(event.target.value as BrandPalette)}><option value="forest">Forest</option><option value="indigo">Indigo</option><option value="clay">Clay</option></SelectField>}/>
+   <PageHeader eyebrow="VSCHOOL DESIGN SYSTEM · V1" title="Familiar on every page." description="A calm, consistent foundation for every school, branch and module." actions={<SelectField label="Preview theme" value={palette} onChange={event=>setPalette(event.target.value as ThemeId)}>{themeIds.map(id=><option value={id} key={id}>{themes[id].name}</option>)}</SelectField>}/>
    <Alert title="Interactive component gallery">All records are synthetic examples. Controls demonstrate reusable UI behavior; they do not save school data.</Alert>
    <div className="gallery-nav"><a href="#actions">Actions</a><a href="#forms">Forms</a><a href="#data">Tables</a><a href="#feedback">Feedback</a><a href="#patterns">Patterns</a><a href="#workspace">Workspace</a><a href="#authentication">Authentication</a></div>
 

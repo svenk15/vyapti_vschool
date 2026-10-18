@@ -44,18 +44,47 @@ test("modal and drawer contain keyboard focus and return it to the trigger", asy
   }
 });
 
-test("gallery supports all palettes and negative states at 360px", async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 800 });
+test("gallery supports all approved themes and negative states at the required viewport", async ({ page }) => {
+  const viewport = test.info().project.name === "mobile"
+    ? { width: 390, height: 844 }
+    : { width: 1440, height: 1000 };
+  await page.setViewportSize(viewport);
   await page.goto("/design-system");
-  for (const palette of ["forest", "indigo", "clay"]) {
-    await page.getByLabel("Preview palette").selectOption(palette);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await expect(page.locator("html")).toHaveAttribute("data-vs-theme", "forest");
+  expect(await page.locator("body").evaluate(node => getComputedStyle(node).fontFamily)).toContain("Inter");
+  for (const palette of ["forest", "amethyst", "porcelain", "linen"]) {
+    await page.getByLabel("Preview theme").selectOption(palette);
+    await expect(page.locator(".brand-surface").first()).toHaveAttribute("data-vs-theme",palette);
+    const layout = await page.evaluate(() => ({
+      viewport: window.innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      bodyWidth: document.body.scrollWidth,
+      tableScroll: Array.from(document.querySelectorAll<HTMLElement>(".table-scroll")).map(node => ({
+        left: Math.round(node.getBoundingClientRect().left),
+        right: Math.round(node.getBoundingClientRect().right),
+        width: Math.round(node.getBoundingClientRect().width),
+        clientWidth: node.clientWidth,
+        scrollWidth: node.scrollWidth,
+        overflowX: getComputedStyle(node).overflowX,
+      })),
+      overflowing: Array.from(document.querySelectorAll<HTMLElement>("body *"))
+      .filter(node => !node.closest(".table-scroll"))
+      .map(node => ({
+        element: `${node.tagName.toLowerCase()}${node.id ? `#${node.id}` : ""}${node.className && typeof node.className === "string" ? `.${node.className.trim().replace(/\s+/g, ".")}` : ""}`,
+        right: Math.round(node.getBoundingClientRect().right),
+        width: Math.round(node.getBoundingClientRect().width),
+      }))
+      .filter(item => item.right > window.innerWidth + 1)
+      .sort((left, right) => right.right - left.right)
+      .slice(0, 8),
+    }));
+    expect(layout.documentWidth, JSON.stringify(layout)).toBeLessThanOrEqual(layout.viewport);
     await expect(page.getByRole("button", { name: "Saving example" })).toBeDisabled();
     await expect(page.getByRole("button", { name: "Saving example" })).toHaveAttribute("aria-busy", "true");
     await expect(page.getByRole("button", { name: "Unavailable", exact: true })).toBeDisabled();
     await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "true");
     await expect(page.getByLabel("Email address")).toHaveAccessibleDescription(/Enter an email address/);
-    await page.screenshot({ path: `artifacts/ds-01-${palette}-${test.info().project.name}.png`, fullPage: true });
+    await page.screenshot({ path: `docs/evidence/ux-revamp-02-2026-10-18/gallery-${palette}-${test.info().project.name}.png`, fullPage: true });
   }
   await page.getByRole("tab", { name: "Empty", exact: true }).focus();
   await page.keyboard.press("End");

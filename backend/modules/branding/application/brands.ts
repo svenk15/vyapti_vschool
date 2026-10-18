@@ -1,6 +1,6 @@
 import type {Identity} from '../../../../shared/contracts/access';
 import type {BrandFields,BrandingCommandResult,BrandingDelegationResult,BrandingWorkspace,PublicBrandRecord} from '../../../../shared/contracts/branding-management';
-import type {BrandPalette} from '../../../../shared/contracts/branding';
+import type {ThemeId} from '../../../../shared/contracts/branding';
 import {BrandingError,normalizeBrandFields,normalizeHost,normalizeSlug} from '../domain/brand';
 const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export type SanitizedBrandImage=Readonly<{bytes:Uint8Array;sha256:string;width:number;height:number}>;
@@ -8,7 +8,7 @@ export interface BrandAssetSanitizer{sanitize(input:Uint8Array):SanitizedBrandIm
 export interface BrandingSecurity{issueToken():{token:string;hash:string};hashToken(value:string):string}
 export interface BrandingRepository{
  workspace(actor:Identity,organizationId:string,schoolId:string):Promise<BrandingWorkspace>;
- effectivePalette(organizationId:string,schoolId:string):Promise<BrandPalette|null>;
+ effectivePalette(organizationId:string,schoolId:string):Promise<ThemeId|null>;
  createProfile(actor:Identity,organizationId:string,schoolId:string,slug:string,fields:BrandFields,key:string,reason:string):Promise<BrandingCommandResult>;
  saveDraft(actor:Identity,organizationId:string,schoolId:string,profileId:string,version:number,fields:BrandFields,key:string,reason:string):Promise<BrandingCommandResult>;
  uploadLogo(actor:Identity,organizationId:string,schoolId:string,profileId:string,version:number,asset:{bytes:Uint8Array;sha256:string;width:number;height:number},key:string,reason:string):Promise<{assetId:string;sha256:string;version:number}>;

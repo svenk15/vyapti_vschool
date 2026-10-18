@@ -1,5 +1,11 @@
 # Shared VSchool experience system — current state
 
+## UX-02 semantic foundation — 18 October 2026
+
+The shared presentation layer now exposes Refined Forest, Amethyst & Pearl, Porcelain & Ink, and Linen & Bronze through validated semantic variables. Inter 4.1 is self-hosted from the official release under the bundled SIL Open Font License. `BrandSurface` emits only a validated `data-vs-theme`; unknown values fail safely to Forest. Existing SVG navigation and empty-state icons share the approved 1.75px stroke, and the mobile form/table grids no longer expand the document beyond 390px.
+
+The persistence migration is intentionally not part of this checkpoint. Existing Branding rows and editor contracts can still contain `indigo`/`clay`; current read projections map them to Amethyst/Linen until UX-03 adds the forward schema/data migration. Human visual acceptance and native accessibility remain PENDING. Evidence: [UX-02](../../evidence/ux-revamp-02-2026-10-18/README.md).
+
 ## M01–M08 acceptance correction — 18 October 2026
 
 The Administrator shell now groups its existing guarded destinations by daily work, teaching, people, communication, services and school management. Shared stacked table metadata, 24px card stacks, mobile fixed-navigation safe-area spacing and focus scroll margins were applied to the affected Administrator, Parent and Student surfaces. Direct 1440×1000 and 390×844 inspection found no root overflow; the last focused Student control remained above the fixed navigation. This is automated visual evidence, not native accessibility or human acceptance. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md).

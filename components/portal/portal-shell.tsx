@@ -6,7 +6,7 @@ import {useCallback,useEffect,useRef,useState,type ReactNode} from 'react';
 import type {AdminHome} from '@/shared/contracts/access';
 import {AccessSignOut} from '@/components/access-login';
 import {BranchSwitcher} from '@/components/institution-context';
-import {PortalNavigationGroup,portalItemMatchSpecificity,type PortalNavigationGroupData} from '@/components/portal-navigation-group';
+import {PortalIcon,PortalNavigationGroup,portalItemMatchSpecificity,type PortalNavigationGroupData} from '@/components/portal-navigation-group';
 
 type PortalShellProps={
  home:AdminHome;
@@ -50,7 +50,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
  const identityLabel=accountDisplayName?.trim()||roleLabel,initials=identityLabel.split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();
  return <div className="portal-shell" data-density={preferences?.density} data-reduced-motion={preferences?.reducedMotion}>
   <header className="portal-topbar">
-   <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls="portal-navigation" aria-expanded={open} onClick={()=>open?close(true):setOpenOnPath(pathname)}><span aria-hidden="true">{open?'×':'☰'}</span><span className="sr-only">{open?'Close navigation':'Open navigation'}</span></button>
+   <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls="portal-navigation" aria-expanded={open} onClick={()=>open?close(true):setOpenOnPath(pathname)}><span aria-hidden="true"><PortalIcon name={open?'close':'menu'}/></span><span className="sr-only">{open?'Close navigation':'Open navigation'}</span></button>
    <Link className="portal-mobile-brand" href={homeHref}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
    <span className="portal-workspace-label">{currentItem?.label??roleLabel}</span>
    <div className="portal-top-context"><BranchSwitcher home={home} contextHref={contextHref}/>{academicYearLabel&&<span className="portal-top-year" aria-label={`Academic year ${academicYearLabel}`}>{academicYearLabel}</span>}</div>
@@ -59,7 +59,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
   <aside ref={sidebar} id="portal-navigation" className={`portal-sidebar${open?' portal-sidebar-open':''}`} aria-label={`${roleLabel} menu`}>
    <div className="portal-sidebar-heading">
     <Link className="portal-brand" href={homeHref} aria-label={`VSchool ${roleLabel.toLowerCase()}`}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
-    <button type="button" className="portal-sidebar-close" onClick={()=>close(true)}><span aria-hidden="true">×</span><span className="sr-only">Close menu panel</span></button>
+    <button type="button" className="portal-sidebar-close" onClick={()=>close(true)}><span aria-hidden="true"><PortalIcon name="close"/></span><span className="sr-only">Close menu panel</span></button>
    </div>
    <div className="portal-school-identity"><strong>{home.institutionName}</strong><span>{home.schoolName} · School workspace</span></div>
    <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.filter(group=>group.items.length>0).map((group,index)=>{const groupKey=group.id??`${index}-${group.label}`,focusTarget=group.collapsible===true?expandedGroup===groupKey:index===0;return <PortalNavigationGroup key={groupKey} group={group} groupKey={groupKey} activeHref={currentItem?.href??null} onNavigate={()=>close()} firstItemRef={focusTarget?firstItem:undefined} expanded={expandedGroup===groupKey} onToggle={key=>setDisclosureState({pathname,group:expandedGroup===key?null:key})}/>;})}</nav></div>
