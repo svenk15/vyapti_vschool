@@ -8,7 +8,8 @@ Updated: 18 October 2026 (Asia/Kolkata)
 | UX-02 | VERIFIED | AUTOMATED_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-03 | VERIFIED | NOT_APPLICABLE_PERSISTENCE_SLICE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-04 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-05–UX-08 | NOT_STARTED | NOT_STARTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-05 | VERIFIED | DIRECT_INSPECTION_WITH_RECORDED_SHELL_DEBT | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-06–UX-08 | NOT_STARTED | NOT_STARTED | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -29,10 +30,12 @@ UX-03 adds one concrete Access-owned institution theme and one nullable branch o
 
 UX-04 is implemented at `1045cee4bb764b73985edaf60d0b0c038fda800a`. One reusable accessible radio-card picker is used by institution settings, branch settings, and branch creation. Local preview never becomes tenant authority; cancel restores persisted state; saves use only the UX-03 owner commands; stale writes retain the attempted choice and show current versus attempted values. The verified operator institution-creation input already accepts the optional theme without adding a browser operator path. Focused lint/type/unit 2/2, real-PostgreSQL 10/10, owner/boundary/docs/database checks, the dedicated 4 GiB E2E build, and one-worker desktop/mobile browser journeys passed. Final captures were directly inspected. See [UX-04 evidence](../../evidence/ux-revamp-04-2026-10-18/README.md).
 
+UX-05 is implemented at `1157a6c9f2cce9d6b668a2cfb28b5770423c6558`. Protected Administrator, Teacher and Principal shells now resolve Access-owned appearance from the active authorized scope on the server. Parent and Student pages compose the theme only after the owner module authorizes the selected child/self context; Access rechecks the live account and active tenant. Generic entry remains Forest and public school sign-in remains bound to immutable Branding publication. Focused unit 3/3, real-PostgreSQL 11/11, owner/boundary/docs checks, both 4 GiB builds, desktop/mobile appearance and Administrator context journeys, and desktop Parent/Student/public-brand journeys passed. Direct screenshot inspection confirms correct picker/public rendering and records legacy protected-shell colors for UX-06/UX-07 rather than overstating full visual theming. See [UX-05 evidence](../../evidence/ux-revamp-05-2026-10-18/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Implement UX-05: resolve effective appearance server-side for protected and published public contexts, preserve generic Forest entry, and prove context switching updates the theme without draft leakage, hydration mismatch, or shared cache identity.
+Implement UX-06: migrate the shared protected shell plus Administrator Today, Students and registration compositions to semantic theme variables and the production recipes, then compare equivalent desktop/mobile/intermediate states.
