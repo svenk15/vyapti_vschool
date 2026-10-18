@@ -1,5 +1,15 @@
 # Assessments current state
 
+## Must-have M07 current-source checkpoint (18 October 2026)
+
+Status: VERIFIED_CURRENT_SOURCE / HUMAN_REVIEW_PENDING
+
+The existing F11-E and DOC-02A implementation was reverified on current source as one connected synthetic Assessment-report journey. A Principal explicitly handed off one approved revision and audience, the exact generated PDF passed the real local ClamAV quarantine/promotion path, a deliberately lost publication response recovered through the original command key without a duplicate publication, and current-purpose Family and Student accounts downloaded through authenticated Documents streaming. A separately authorized withdrawal then blocked subsequent Family serving while preserving the immutable publication history.
+
+Focused real-PostgreSQL publication lifecycle tests passed 4/4 against `vyapti_vschool_test`, with 117 migrations applied and none pending. The isolated 4 GiB build passed with build ID `Wrd7P85a7tJo0u_ZOsWfN`. Sequential one-worker Playwright passed 1/1 desktop and 1/1 mobile, including real scanner use, keyboard focus, authenticated downloads, withdrawal and responsive overflow assertions. New current-source captures were directly inspected. Evidence: [must-have M07](../../evidence/must-have-m07-2026-10-18/README.md).
+
+Human review, production template/signatory approval, production storage/region/retention/scanner-service policy, font portability, native accessibility, TEN-03 and production readiness remain pending. The synthetic local scanner evidence does not authorize real pupil documents.
+
 Last updated: 19 October 2026.
 
 Status: **F11-A THROUGH F11-E VERIFIED / LEA-20, LEA-21 AND LEA-22 ENGINEERING_COMPLETE / HUMAN_REVIEW_PENDING**.
