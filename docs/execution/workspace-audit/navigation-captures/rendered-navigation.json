@@ -1,0 +1,847 @@
+{
+  "checkedAt": "2026-10-18T04:04:24.720Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "sourceBuildId": "jCObsKqoFwjNr2pibKzUn",
+  "observations": [
+    {
+      "workspace": "administrator",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "available": true,
+      "servedPath": "/admin",
+      "groups": [
+        {
+          "label": "Operations",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "Today",
+              "href": "/admin",
+              "current": true
+            },
+            {
+              "label": "Attendance",
+              "href": "/admin/attendance/sessions",
+              "current": false
+            },
+            {
+              "label": "Students",
+              "href": "/admin/students",
+              "current": false
+            },
+            {
+              "label": "Staff & access",
+              "href": "/admin/users",
+              "current": false
+            },
+            {
+              "label": "Academics",
+              "href": "/admin/academics",
+              "current": false
+            },
+            {
+              "label": "Assessment planning",
+              "href": "/admin/assessments",
+              "current": false
+            },
+            {
+              "label": "Timetable",
+              "href": "/admin/timetable",
+              "current": false
+            },
+            {
+              "label": "Cover coordination",
+              "href": "/admin/timetable/cover",
+              "current": false
+            },
+            {
+              "label": "Reports",
+              "href": "/admin/reports/attendance",
+              "current": false
+            },
+            {
+              "label": "Communication",
+              "href": "/admin/communication",
+              "current": false
+            },
+            {
+              "label": "Calendar & events",
+              "href": "/admin/events",
+              "current": false
+            },
+            {
+              "label": "My requests",
+              "href": "/admin/requests",
+              "current": false
+            },
+            {
+              "label": "Assigned follow-ups",
+              "href": "/admin/coordination",
+              "current": false
+            },
+            {
+              "label": "Facilities incidents",
+              "href": "/admin/services/incidents",
+              "current": false
+            },
+            {
+              "label": "Financial exceptions",
+              "href": "/admin/finance/exceptions",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Management",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "Staff profiles",
+              "href": "/admin/teachers",
+              "current": false
+            },
+            {
+              "label": "Imports",
+              "href": "/admin/imports",
+              "current": false
+            },
+            {
+              "label": "Admissions",
+              "href": "/admin/admissions",
+              "current": false
+            },
+            {
+              "label": "Classes and teachers",
+              "href": "/admin/classes",
+              "current": false
+            },
+            {
+              "label": "School setup",
+              "href": "/admin/setup",
+              "current": false
+            },
+            {
+              "label": "School settings",
+              "href": "/admin/school",
+              "current": false
+            },
+            {
+              "label": "Branch module access",
+              "href": "/admin/modules",
+              "current": false
+            },
+            {
+              "label": "Sign-in branding",
+              "href": "/admin/branding",
+              "current": false
+            },
+            {
+              "label": "Branch activity",
+              "href": "/admin/activity",
+              "current": false
+            },
+            {
+              "label": "Staff availability",
+              "href": "/admin/teachers/availability",
+              "current": false
+            }
+          ]
+        }
+      ],
+      "quickNavigation": []
+    },
+    {
+      "workspace": "administrator",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "available": true,
+      "servedPath": "/admin",
+      "groups": [
+        {
+          "label": "Operations",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "Today",
+              "href": "/admin",
+              "current": true
+            },
+            {
+              "label": "Attendance",
+              "href": "/admin/attendance/sessions",
+              "current": false
+            },
+            {
+              "label": "Students",
+              "href": "/admin/students",
+              "current": false
+            },
+            {
+              "label": "Staff & access",
+              "href": "/admin/users",
+              "current": false
+            },
+            {
+              "label": "Academics",
+              "href": "/admin/academics",
+              "current": false
+            },
+            {
+              "label": "Assessment planning",
+              "href": "/admin/assessments",
+              "current": false
+            },
+            {
+              "label": "Timetable",
+              "href": "/admin/timetable",
+              "current": false
+            },
+            {
+              "label": "Cover coordination",
+              "href": "/admin/timetable/cover",
+              "current": false
+            },
+            {
+              "label": "Reports",
+              "href": "/admin/reports/attendance",
+              "current": false
+            },
+            {
+              "label": "Communication",
+              "href": "/admin/communication",
+              "current": false
+            },
+            {
+              "label": "Calendar & events",
+              "href": "/admin/events",
+              "current": false
+            },
+            {
+              "label": "My requests",
+              "href": "/admin/requests",
+              "current": false
+            },
+            {
+              "label": "Assigned follow-ups",
+              "href": "/admin/coordination",
+              "current": false
+            },
+            {
+              "label": "Facilities incidents",
+              "href": "/admin/services/incidents",
+              "current": false
+            },
+            {
+              "label": "Financial exceptions",
+              "href": "/admin/finance/exceptions",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Management",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "Staff profiles",
+              "href": "/admin/teachers",
+              "current": false
+            },
+            {
+              "label": "Imports",
+              "href": "/admin/imports",
+              "current": false
+            },
+            {
+              "label": "Admissions",
+              "href": "/admin/admissions",
+              "current": false
+            },
+            {
+              "label": "Classes and teachers",
+              "href": "/admin/classes",
+              "current": false
+            },
+            {
+              "label": "School setup",
+              "href": "/admin/setup",
+              "current": false
+            },
+            {
+              "label": "School settings",
+              "href": "/admin/school",
+              "current": false
+            },
+            {
+              "label": "Branch module access",
+              "href": "/admin/modules",
+              "current": false
+            },
+            {
+              "label": "Sign-in branding",
+              "href": "/admin/branding",
+              "current": false
+            },
+            {
+              "label": "Branch activity",
+              "href": "/admin/activity",
+              "current": false
+            },
+            {
+              "label": "Staff availability",
+              "href": "/admin/teachers/availability",
+              "current": false
+            }
+          ]
+        }
+      ],
+      "quickNavigation": []
+    },
+    {
+      "workspace": "teacher",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "available": true,
+      "servedPath": "/teacher/today",
+      "groups": [
+        {
+          "label": "Teaching",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My teaching day",
+              "href": "/teacher/today",
+              "current": true
+            },
+            {
+              "label": "My classes",
+              "href": "/teacher/classes",
+              "current": false
+            },
+            {
+              "label": "Assignments",
+              "href": "/teacher/learning",
+              "current": false
+            },
+            {
+              "label": "Assessment marks",
+              "href": "/teacher/assessments",
+              "current": false
+            },
+            {
+              "label": "Attendance history",
+              "href": "/teacher/history",
+              "current": false
+            },
+            {
+              "label": "My timetable",
+              "href": "/teacher/timetable",
+              "current": false
+            },
+            {
+              "label": "Cover requests",
+              "href": "/teacher/cover",
+              "current": false
+            },
+            {
+              "label": "Meetings",
+              "href": "/teacher/meetings",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Personal",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My account",
+              "href": "/account",
+              "current": false
+            }
+          ]
+        }
+      ],
+      "quickNavigation": []
+    },
+    {
+      "workspace": "teacher",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "available": true,
+      "servedPath": "/teacher/today",
+      "groups": [
+        {
+          "label": "Teaching",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My teaching day",
+              "href": "/teacher/today",
+              "current": true
+            },
+            {
+              "label": "My classes",
+              "href": "/teacher/classes",
+              "current": false
+            },
+            {
+              "label": "Assignments",
+              "href": "/teacher/learning",
+              "current": false
+            },
+            {
+              "label": "Assessment marks",
+              "href": "/teacher/assessments",
+              "current": false
+            },
+            {
+              "label": "Attendance history",
+              "href": "/teacher/history",
+              "current": false
+            },
+            {
+              "label": "My timetable",
+              "href": "/teacher/timetable",
+              "current": false
+            },
+            {
+              "label": "Cover requests",
+              "href": "/teacher/cover",
+              "current": false
+            },
+            {
+              "label": "Meetings",
+              "href": "/teacher/meetings",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Personal",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My account",
+              "href": "/account",
+              "current": false
+            }
+          ]
+        }
+      ],
+      "quickNavigation": []
+    },
+    {
+      "workspace": "student",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "available": false,
+      "reason": "No authorized workspace option was returned by the current demo."
+    },
+    {
+      "workspace": "student",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "available": false,
+      "reason": "No authorized workspace option was returned by the current demo."
+    },
+    {
+      "workspace": "parent-guardian",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "available": false,
+      "reason": "No authorized workspace option was returned by the current demo."
+    },
+    {
+      "workspace": "parent-guardian",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "available": false,
+      "reason": "No authorized workspace option was returned by the current demo."
+    },
+    {
+      "workspace": "principal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "available": true,
+      "servedPath": "/leadership",
+      "groups": [
+        {
+          "label": "Principal home",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My day",
+              "href": "/leadership",
+              "current": true
+            }
+          ]
+        },
+        {
+          "label": "Attendance",
+          "collapsible": true,
+          "expanded": "true",
+          "items": [
+            {
+              "label": "Register coverage",
+              "href": "/leadership/attendance",
+              "current": false
+            },
+            {
+              "label": "Pupil attendance",
+              "href": "/leadership/attendance/pupils",
+              "current": false
+            },
+            {
+              "label": "Explanations",
+              "href": "/leadership/attendance/explanations",
+              "current": false
+            },
+            {
+              "label": "Correction requests",
+              "href": "/leadership/attendance/correction-requests",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Teaching & staff",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "Timetable & cover",
+              "href": "/leadership/timetable",
+              "current": false
+            },
+            {
+              "label": "Staff availability",
+              "href": "/leadership/staff/availability",
+              "current": false
+            },
+            {
+              "label": "Staff requests",
+              "href": "/leadership/staff/requests",
+              "current": false
+            },
+            {
+              "label": "Learning",
+              "href": "/leadership/learning",
+              "current": false
+            },
+            {
+              "label": "Assessments",
+              "href": "/leadership/assessments",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Communication",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "Notice coverage",
+              "href": "/leadership/communication",
+              "current": false
+            },
+            {
+              "label": "Family concerns",
+              "href": "/leadership/concerns",
+              "current": false
+            },
+            {
+              "label": "Meetings",
+              "href": "/leadership/meetings",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "My work",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "My decisions",
+              "href": "/leadership/decisions",
+              "current": false
+            },
+            {
+              "label": "Follow-ups",
+              "href": "/leadership/coordination",
+              "current": false
+            },
+            {
+              "label": "Handover",
+              "href": "/leadership/handover",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Reports & insights",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "Reports",
+              "href": "/leadership/reports",
+              "current": false
+            },
+            {
+              "label": "Decision history",
+              "href": "/leadership/history",
+              "current": false
+            },
+            {
+              "label": "Evidence assistant",
+              "href": "/leadership/assistant",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Conditional areas",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "Financial exceptions",
+              "href": "/leadership/finance/exceptions",
+              "current": false
+            },
+            {
+              "label": "Facilities incidents",
+              "href": "/leadership/services/incidents",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Utilities",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My account",
+              "href": "/leadership/account",
+              "current": false
+            }
+          ]
+        }
+      ],
+      "quickNavigation": []
+    },
+    {
+      "workspace": "principal",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "available": true,
+      "servedPath": "/leadership",
+      "groups": [
+        {
+          "label": "Principal home",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My day",
+              "href": "/leadership",
+              "current": true
+            }
+          ]
+        },
+        {
+          "label": "Attendance",
+          "collapsible": true,
+          "expanded": "true",
+          "items": [
+            {
+              "label": "Register coverage",
+              "href": "/leadership/attendance",
+              "current": false
+            },
+            {
+              "label": "Pupil attendance",
+              "href": "/leadership/attendance/pupils",
+              "current": false
+            },
+            {
+              "label": "Explanations",
+              "href": "/leadership/attendance/explanations",
+              "current": false
+            },
+            {
+              "label": "Correction requests",
+              "href": "/leadership/attendance/correction-requests",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Teaching & staff",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "Timetable & cover",
+              "href": "/leadership/timetable",
+              "current": false
+            },
+            {
+              "label": "Staff availability",
+              "href": "/leadership/staff/availability",
+              "current": false
+            },
+            {
+              "label": "Staff requests",
+              "href": "/leadership/staff/requests",
+              "current": false
+            },
+            {
+              "label": "Learning",
+              "href": "/leadership/learning",
+              "current": false
+            },
+            {
+              "label": "Assessments",
+              "href": "/leadership/assessments",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Communication",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "Notice coverage",
+              "href": "/leadership/communication",
+              "current": false
+            },
+            {
+              "label": "Family concerns",
+              "href": "/leadership/concerns",
+              "current": false
+            },
+            {
+              "label": "Meetings",
+              "href": "/leadership/meetings",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "My work",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "My decisions",
+              "href": "/leadership/decisions",
+              "current": false
+            },
+            {
+              "label": "Follow-ups",
+              "href": "/leadership/coordination",
+              "current": false
+            },
+            {
+              "label": "Handover",
+              "href": "/leadership/handover",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Reports & insights",
+          "collapsible": true,
+          "expanded": "false",
+          "items": [
+            {
+              "label": "Reports",
+              "href": "/leadership/reports",
+              "current": false
+            },
+            {
+              "label": "Decision history",
+              "href": "/leadership/history",
+              "current": false
+            },
+            {
+              "label": "Evidence assistant",
+              "href": "/leadership/assistant",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Conditional areas",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "Financial exceptions",
+              "href": "/leadership/finance/exceptions",
+              "current": false
+            },
+            {
+              "label": "Facilities incidents",
+              "href": "/leadership/services/incidents",
+              "current": false
+            }
+          ]
+        },
+        {
+          "label": "Utilities",
+          "collapsible": false,
+          "expanded": null,
+          "items": [
+            {
+              "label": "My account",
+              "href": "/leadership/account",
+              "current": false
+            }
+          ]
+        }
+      ],
+      "quickNavigation": []
+    }
+  ]
+}

@@ -46,8 +46,8 @@ Functional/security status, reference comparison, and human acceptance remain se
 | PAR-20 Review published homework | `#/flow/PAR-20` | Learning | PARTIAL_SUPPORTED_SLICE | REFERENCE_LESS_NARROW_EXTENSION | Immutable text assignment read is verified through exact frozen Guardian binding and independent live `learning.assignment.read_child`; returned feedback, questions and richer reference workflow remain absent. | PENDING |
 | PAR-21 Read returned feedback | `#/flow/PAR-21` | Learning | DEFERRED_BY_ACCEPTED_LEA_04_DECISION | NOT_STARTED | LEA-04 deliberately publishes guidance only to the submitting Student. Parent assignment access does not grant feedback; a future Parent audience/visibility contract is required. | PENDING |
 | PAR-22 Ask a learning question | `#/flow/PAR-22` | Learning + Communication | DESIGN_READINESS_REQUIRED | NOT_STARTED | Question routing and permitted recipient contract | PENDING |
-| PAR-23 Read published results | `#/flow/PAR-23` | Assessments | DESIGN_READINESS_REQUIRED | NOT_STARTED | Published result/version/scale owner and child-purpose read | PENDING |
-| PAR-24 Download an authorized report | `#/flow/PAR-24` | Assessments/Documents | DESIGN_READINESS_REQUIRED | NOT_STARTED | Reauthorized artifact generation, storage and expiring delivery | PENDING |
+| PAR-23 Read published results | `#/flow/PAR-23` | Assessments | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_DEVIATIONS | Exact accepted child-purpose read of one current immutable publication is verified; synthetic report policy remains a production gate | PENDING |
+| PAR-24 Download an authorized report | `#/flow/PAR-24` | Assessments/Documents | ENGINEERING_COMPLETE | DIRECT_COMPARISON_WITH_DEVIATIONS | Authenticated download rechecks current Guardian purpose, current publication and current clean scan state; production storage/retention/scanner policy remains gated | PENDING |
 | PAR-25 Request a result clarification | `#/flow/PAR-25` | Assessments/Requests | DESIGN_READINESS_REQUIRED | NOT_STARTED | Clarification owner, routing and result-version link | PENDING |
 | PAR-26 Review a fee invoice | `#/flow/PAR-26` | Finance | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Payer mandate and finance-purpose authority | PENDING |
 | PAR-27 Pay an authorized invoice | `#/flow/PAR-27` | Finance/Payments | BLOCKED_PRODUCT_DECISION | NOT_STARTED | Provider, issuer, payable-state, idempotency and settlement contract | PENDING |
@@ -157,10 +157,10 @@ Sources: `workflow-tasks/WF-PAR-11.md`, `WF-PAR-12.md`, `WF-SA-29.md`, the match
 
 | Functional/security status | Count |
 |---|---:|
-| `ENGINEERING_COMPLETE` | 12 |
+| `ENGINEERING_COMPLETE` | 14 |
 | `PARTIAL` | 2 |
 | `BLOCKED_PRODUCT_DECISION` | 22 |
-| `DESIGN_READINESS_REQUIRED` | 16 |
+| `DESIGN_READINESS_REQUIRED` | 14 |
 | **Total** | **52** |
 
 Human review remains PENDING for every row. Direct comparison is limited to the approved current-slice states named above; functional tests are not counted as visual evidence. TT-06 Parent is engineering-verified through FAM-04 and represented by the implemented Timetable portion of PAR-18. EV-01/EV-02 provide the one-off typed Events agenda and EV-04 composes it with the independently authorized effective teaching week; pinned academic-calendar closure/extra-day semantics are verified and PAR-18 remains partial for advanced interactions. PAR-14 is engineering-complete through COM-01. PAR-11/PAR-12 are engineering-complete for the explicitly authorized fictional-data slice; protected-text retention still blocks real data.
