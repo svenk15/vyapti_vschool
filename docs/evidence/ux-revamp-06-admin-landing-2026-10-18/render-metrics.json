@@ -1,0 +1,970 @@
+{
+  "capturedAt": "2026-10-18T16:38:05.571Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "browser": "Playwright Chromium",
+  "zoomEvidence": "Playwright default page zoom; visualViewport.scale is recorded. This is not Chromium device-scale emulation.",
+  "themeEvidence": "Each screenshot uses the same authorized server data and DOM. A visual-only data-vs-theme override exercises the four approved token sets without changing stored branch configuration.",
+  "desktop": {
+    "label": "desktop-after",
+    "cssViewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "outerViewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "visualViewport": {
+      "width": 1440,
+      "height": 1000,
+      "scale": 1
+    },
+    "devicePixelRatio": 1,
+    "documentZoom": "1",
+    "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "bodyFontSize": "14px",
+    "interLoaded": true,
+    "headingFont": {
+      "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "size": "28px",
+      "lineHeight": "36px"
+    },
+    "rootOverflow": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "hasHorizontal": false
+    },
+    "summary": {
+      "rect": {
+        "x": 272,
+        "y": 187.25,
+        "width": 1136,
+        "height": 122,
+        "bottom": 309.25
+      },
+      "items": [
+        {
+          "width": 378,
+          "height": 120
+        },
+        {
+          "width": 378,
+          "height": 120
+        },
+        {
+          "width": 378,
+          "height": 120
+        }
+      ]
+    },
+    "workGrid": {
+      "rect": {
+        "x": 272,
+        "y": 333.25,
+        "width": 1136,
+        "height": 627,
+        "bottom": 960.25
+      },
+      "columns": "741.328px 370.656px",
+      "gap": "24px"
+    },
+    "sessionTableDisplay": "block",
+    "sessionCardsDisplay": "none",
+    "sidebar": {
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 1000,
+        "bottom": 1000
+      },
+      "navClientHeight": 697,
+      "navScrollHeight": 697,
+      "navOverflow": "auto",
+      "footer": {
+        "x": 0,
+        "y": 850,
+        "width": 240,
+        "height": 150,
+        "bottom": 1000
+      }
+    },
+    "primaryActionVisible": true,
+    "theme": "forest",
+    "colors": {
+      "primary": "#246b53",
+      "canvas": "#f6f8f5",
+      "surface": "#fff"
+    }
+  },
+  "mobile": {
+    "label": "mobile-after",
+    "cssViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "outerViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "visualViewport": {
+      "width": 390,
+      "height": 844,
+      "scale": 1
+    },
+    "devicePixelRatio": 1,
+    "documentZoom": "1",
+    "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "bodyFontSize": "14px",
+    "interLoaded": true,
+    "headingFont": {
+      "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "size": "24px",
+      "lineHeight": "32px"
+    },
+    "rootOverflow": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "hasHorizontal": false
+    },
+    "summary": {
+      "rect": {
+        "x": 16,
+        "y": 303.5,
+        "width": 358,
+        "height": 340,
+        "bottom": 643.5
+      },
+      "items": [
+        {
+          "width": 356,
+          "height": 112
+        },
+        {
+          "width": 356,
+          "height": 113
+        },
+        {
+          "width": 356,
+          "height": 113
+        }
+      ]
+    },
+    "workGrid": {
+      "rect": {
+        "x": 16,
+        "y": 667.5,
+        "width": 358,
+        "height": 1521,
+        "bottom": 2188.5
+      },
+      "columns": "358px",
+      "gap": "24px"
+    },
+    "sessionTableDisplay": "none",
+    "sessionCardsDisplay": "grid",
+    "sidebar": {
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "bottom": 0
+      },
+      "navClientHeight": 0,
+      "navScrollHeight": 0,
+      "navOverflow": "auto",
+      "footer": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "bottom": 0
+      }
+    },
+    "primaryActionVisible": true,
+    "theme": "forest",
+    "colors": {
+      "primary": "#246b53",
+      "canvas": "#f6f8f5",
+      "surface": "#fff"
+    }
+  },
+  "themes": {
+    "forest-desktop": {
+      "label": "forest-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 122,
+          "bottom": 309.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 333.25,
+          "width": 1136,
+          "height": 627,
+          "bottom": 960.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "forest",
+      "colors": {
+        "primary": "#246b53",
+        "canvas": "#f6f8f5",
+        "surface": "#fff"
+      }
+    },
+    "amethyst-desktop": {
+      "label": "amethyst-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 122,
+          "bottom": 309.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 333.25,
+          "width": 1136,
+          "height": 627,
+          "bottom": 960.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "amethyst",
+      "colors": {
+        "primary": "#7045a2",
+        "canvas": "#faf8fc",
+        "surface": "#fff"
+      }
+    },
+    "porcelain-desktop": {
+      "label": "porcelain-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 122,
+          "bottom": 309.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 333.25,
+          "width": 1136,
+          "height": 627,
+          "bottom": 960.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "porcelain",
+      "colors": {
+        "primary": "#284fac",
+        "canvas": "#f7f9fc",
+        "surface": "#fff"
+      }
+    },
+    "linen-desktop": {
+      "label": "linen-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 122,
+          "bottom": 309.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          },
+          {
+            "width": 378,
+            "height": 120
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 333.25,
+          "width": 1136,
+          "height": 627,
+          "bottom": 960.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "linen",
+      "colors": {
+        "primary": "#795237",
+        "canvas": "#faf9f6",
+        "surface": "#fff"
+      }
+    },
+    "forest-mobile": {
+      "label": "forest-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 340,
+          "bottom": 643.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 112
+          },
+          {
+            "width": 356,
+            "height": 113
+          },
+          {
+            "width": 356,
+            "height": 113
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 667.5,
+          "width": 358,
+          "height": 1521,
+          "bottom": 2188.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "forest",
+      "colors": {
+        "primary": "#246b53",
+        "canvas": "#f6f8f5",
+        "surface": "#fff"
+      }
+    },
+    "amethyst-mobile": {
+      "label": "amethyst-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 340,
+          "bottom": 643.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 112
+          },
+          {
+            "width": 356,
+            "height": 113
+          },
+          {
+            "width": 356,
+            "height": 113
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 667.5,
+          "width": 358,
+          "height": 1521,
+          "bottom": 2188.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "amethyst",
+      "colors": {
+        "primary": "#7045a2",
+        "canvas": "#faf8fc",
+        "surface": "#fff"
+      }
+    },
+    "porcelain-mobile": {
+      "label": "porcelain-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 340,
+          "bottom": 643.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 112
+          },
+          {
+            "width": 356,
+            "height": 113
+          },
+          {
+            "width": 356,
+            "height": 113
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 667.5,
+          "width": 358,
+          "height": 1521,
+          "bottom": 2188.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "porcelain",
+      "colors": {
+        "primary": "#284fac",
+        "canvas": "#f7f9fc",
+        "surface": "#fff"
+      }
+    },
+    "linen-mobile": {
+      "label": "linen-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 340,
+          "bottom": 643.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 112
+          },
+          {
+            "width": 356,
+            "height": 113
+          },
+          {
+            "width": 356,
+            "height": 113
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 667.5,
+          "width": 358,
+          "height": 1521,
+          "bottom": 2188.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "theme": "linen",
+      "colors": {
+        "primary": "#795237",
+        "canvas": "#faf9f6",
+        "surface": "#fff"
+      }
+    }
+  },
+  "keyboard": {
+    "desktop": {
+      "registerFocused": true,
+      "next": {
+        "tag": "A",
+        "text": "School setup"
+      }
+    },
+    "mobile": {
+      "focusInsideAfterOpen": true,
+      "focusReturnedAfterEscape": true
+    }
+  },
+  "sidebar": {
+    "communication": {
+      "visible": true,
+      "aboveFooter": true,
+      "rect": {
+        "top": 569,
+        "bottom": 633
+      },
+      "nav": {
+        "top": 153,
+        "bottom": 850
+      },
+      "footer": {
+        "top": 850,
+        "bottom": 1000
+      }
+    }
+  }
+}

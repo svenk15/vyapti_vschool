@@ -1111,20 +1111,30 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 .admin-dashboard{max-width:1440px}
 .admin-dashboard .page-heading h1{font-size:28px;font-weight:600;line-height:36px;letter-spacing:-.02em}
-.dashboard-summary-grid{gap:16px;margin-bottom:24px}
-.dashboard-metric{min-height:0;padding:24px}
-.dashboard-metric p,.dashboard-metric span{color:var(--vs-text-muted);font-size:12px;line-height:18px}.dashboard-metric strong{font-size:30px;font-weight:600;line-height:36px;letter-spacing:0;font-variant-numeric:tabular-nums}
-.dashboard-work-grid{gap:24px}.dashboard-primary-column,.dashboard-secondary-column{gap:24px}
+.admin-dashboard .page-heading .button-row{justify-content:flex-end}
+.admin-dashboard .page-heading .btn-primary{border-color:var(--vs-primary);background:var(--vs-primary);color:var(--vs-on-primary)}
+.dashboard-summary-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));min-height:112px;margin-bottom:24px;overflow:hidden}
+.dashboard-summary-item{display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:16px;min-width:0;padding:20px}
+.dashboard-summary-item+.dashboard-summary-item{border-left:1px solid var(--vs-border)}
+.dashboard-summary-item>div{display:grid;gap:2px;min-width:0}
+.dashboard-summary-item p,.dashboard-summary-item span{margin:0;color:var(--vs-text-muted);font-size:12px;line-height:18px}.dashboard-summary-item strong{margin:2px 0;font-size:30px;font-weight:600;line-height:36px;letter-spacing:0;font-variant-numeric:tabular-nums}
+.dashboard-summary-icon{display:grid;width:20px;height:20px;place-items:center;color:var(--vs-primary)}.dashboard-summary-icon .dashboard-icon{width:20px;height:20px}
+.dashboard-work-grid{grid-template-columns:minmax(0,2fr) minmax(300px,1fr);gap:24px}.dashboard-primary-column,.dashboard-secondary-column{gap:24px}
 .dashboard-card-title{padding:20px 24px;border-color:var(--vs-border)}
 .dashboard-card-title h2{font-size:18px;font-weight:600;line-height:26px;letter-spacing:0}
-.dashboard-work-list,.dashboard-session-list{padding-inline:24px}.dashboard-work-row{gap:16px;padding:16px 0;border-color:var(--vs-border)}
+.dashboard-work-list,.dashboard-session-list{padding-inline:24px}.dashboard-work-row{gap:16px;min-height:72px;padding:12px 0;border-color:var(--vs-border)}
 .dashboard-work-row h3{font-size:16px;line-height:24px}.dashboard-work-row p{margin-top:4px;color:var(--vs-text-muted);font-size:12px;line-height:18px}
 .admin-dashboard .page-heading .btn,.dashboard-work-row .btn,.dashboard-quick-list>a{min-height:40px;padding:9px 16px;border-color:var(--vs-border);border-radius:8px;background:var(--vs-surface);color:var(--vs-text);gap:8px;font-size:14px;font-weight:600;line-height:20px}
 .admin-dashboard .page-heading .btn:hover,.dashboard-work-row .btn:hover,.dashboard-quick-list>a:hover{border-color:var(--vs-primary);background:var(--vs-surface-subtle);color:var(--vs-text)}
-.dashboard-work-icon{background:var(--warning-bg);color:var(--warning-text)}
+.admin-dashboard .page-heading .btn-primary,.admin-dashboard .page-heading .btn-primary:hover{border-color:var(--vs-primary);background:var(--vs-primary);color:var(--vs-on-primary)}.admin-dashboard .page-heading .btn-primary:hover{border-color:var(--vs-primary-hover);background:var(--vs-primary-hover)}
+.dashboard-work-icon{width:40px;height:40px;background:var(--warning-bg);color:var(--warning-text)}.dashboard-work-icon .dashboard-icon{width:20px;height:20px}
 .dashboard-readiness-card>p{padding-inline:24px;color:var(--vs-text-muted);font-size:14px;line-height:22px}.dashboard-readiness-card>progress{width:calc(100% - 48px);margin-inline:24px;background:var(--vs-surface-subtle)}.dashboard-readiness-card>progress::-webkit-progress-bar{background:var(--vs-surface-subtle)}
-.dashboard-readiness-badges{padding-inline:24px}.dashboard-quick-list{padding:0 24px 24px}
-.dashboard-session-row{border-color:var(--vs-border);color:var(--vs-text)}.dashboard-session-row time,.dashboard-session-row span:not(.badge){color:var(--vs-text-muted)}
+.dashboard-readiness-badges{padding-inline:24px}.dashboard-quick-list{padding:0}
+.dashboard-quick-card .dashboard-card-title{border-bottom:1px solid var(--vs-border);padding-bottom:20px}
+.dashboard-quick-list>a{display:grid;grid-template-columns:20px minmax(0,1fr) 18px;justify-content:stretch;min-height:56px;padding:16px 24px;border:0;border-bottom:1px solid var(--vs-border);border-radius:0;text-align:left}.dashboard-quick-list>a:last-child{border-bottom:0}.dashboard-quick-list>a>span{min-width:0}.dashboard-quick-list>a .dashboard-icon:last-child{width:16px;height:16px;justify-self:end}
+.dashboard-sessions-table{border-bottom:0}.dashboard-sessions-table .data-table{table-layout:auto;white-space:normal}.dashboard-sessions-table .data-table th{padding:11px 14px}.dashboard-sessions-table .data-table td{height:56px;padding:12px 14px;vertical-align:middle}.dashboard-sessions-table .data-table th:first-child,.dashboard-sessions-table .data-table td:first-child{padding-left:24px}.dashboard-sessions-table .data-table th:last-child,.dashboard-sessions-table .data-table td:last-child{padding-right:24px;text-align:right}.dashboard-sessions-table .data-table td:nth-child(1){width:82px}.dashboard-sessions-table .data-table td:nth-child(5){width:118px}.dashboard-sessions-table .data-table td:nth-child(6){width:118px}
+.dashboard-session-action{display:inline-flex;min-height:40px;align-items:center;color:var(--vs-primary);font-size:13px;font-weight:600;text-decoration:none}.dashboard-sessions-mobile{display:none}.dashboard-session-row{border-color:var(--vs-border);color:var(--vs-text)}.dashboard-session-row time,.dashboard-session-row span:not(.badge){color:var(--vs-text-muted)}
+.portal-nav-scroll{scrollbar-gutter:stable;padding-bottom:16px}
 
 .portal-page-content .students-directory-shell,.portal-page-content .branch-edit-shell{max-width:1440px;padding-inline:32px}
 .students-page,.sort-drawer{font:inherit}
@@ -1161,8 +1171,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .portal-topbar{padding-inline:16px}.portal-context-single{display:none}.portal-context-control .field{width:min(100%,220px)}
  .portal-page-content .container,.portal-page-content .students-directory-shell,.portal-page-content .branch-edit-shell{padding-inline:16px}.portal-page-content .page-space{padding-top:24px;padding-bottom:48px}
  .portal-page-content .page-heading h1,.admin-dashboard .page-heading h1,.students-page>.page-heading h1{font-size:24px;line-height:32px}
- .dashboard-summary-grid{grid-template-columns:minmax(0,1fr);gap:12px}.dashboard-metric{display:flex;min-height:0;padding:16px}.dashboard-metric .dashboard-icon{display:block}.dashboard-secondary-column{grid-template-columns:minmax(0,1fr)}
- .dashboard-card-title{padding:16px}.dashboard-work-list,.dashboard-session-list{padding-inline:16px}.dashboard-work-row{grid-template-columns:34px minmax(0,1fr);gap:12px}.dashboard-work-row .btn{grid-column:2;justify-self:start}.dashboard-readiness-card>p{padding-inline:16px}.dashboard-readiness-card>progress{width:calc(100% - 32px);margin-inline:16px}.dashboard-readiness-badges{padding-inline:16px}.dashboard-quick-list{padding:0 16px 16px}
+ .admin-dashboard .page-heading .button-row{display:grid;grid-template-columns:minmax(0,1fr);width:100%}.admin-dashboard .page-heading .btn{width:100%}
+ .dashboard-summary-strip{grid-template-columns:minmax(0,1fr);min-height:0}.dashboard-summary-item{padding:16px}.dashboard-summary-item+.dashboard-summary-item{border-top:1px solid var(--vs-border);border-left:0}.dashboard-secondary-column{grid-template-columns:minmax(0,1fr)}
+ .dashboard-card-title{padding:16px}.dashboard-work-list,.dashboard-session-list{padding-inline:16px}.dashboard-work-row{grid-template-columns:40px minmax(0,1fr);gap:12px}.dashboard-work-row .btn{grid-column:2;justify-self:start}.dashboard-readiness-card>p{padding-inline:16px}.dashboard-readiness-card>progress{width:calc(100% - 32px);margin-inline:16px}.dashboard-readiness-badges{padding-inline:16px}.dashboard-quick-list>a{padding:14px 16px}
+ .dashboard-sessions-table{display:none}.dashboard-sessions-mobile{display:grid;padding-inline:16px}.dashboard-session-row{min-height:88px}
  .students-page>.page-heading .button-row{width:100%}.students-page>.page-heading .btn{flex:1}.students-directory-table .data-table tbody th,.students-directory-table .data-table tbody td{min-height:0;padding:0}
  .sort-drawer .drawer-header{padding:16px}.sort-drawer .drawer-attributes{padding:0 16px 16px}.sort-drawer .drawer-footer{padding:16px}.sort-drawer .drawer-footer .btn{min-height:44px}
  .student-enrollment-grid{grid-template-columns:minmax(0,1fr)}.student-enrollment-stepper li{font-size:12px;line-height:18px}.student-enrollment-workflow .workflow-actions{margin-top:24px}

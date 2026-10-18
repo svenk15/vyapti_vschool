@@ -4,11 +4,12 @@ Updated: 18 October 2026 (Asia/Kolkata)
 
 - Completed tasks: UX-01 baseline/inventory through UX-08 four-theme route coverage, synthetic fixture and integrated verification.
 - Starting HEAD: `a2ed44ca15913d2441188e9ad5f3914d46ce1914`; UX-01 checkpoint: `b13260877e622b59f1035fd648ea7c15f7cf7517`.
-- Latest verified standard build ID: `BIXjEBxrscUilW5ZTAgW9`; UX-07 dedicated E2E build ID: `ac6dW5CgZ3zgI80yzsZH6`. Both use the repository's known 4 GiB build configuration.
+- Latest verified standard build ID: `UAN_bJ2MGUKTq2k5wmiwG`; UX-07 dedicated E2E build ID: `ac6dW5CgZ3zgI80yzsZH6`. Both use the repository's known 4 GiB build configuration.
 - UX-03 implementation source: `fc5d1d459ab7579d85462ebb59c8caeddff77b2f`.
 - UX-04 implementation source: `1045cee4bb764b73985edaf60d0b0c038fda800a`.
 - UX-05 implementation source: `1157a6c9f2cce9d6b668a2cfb28b5770423c6558`.
 - UX-06 implementation source: `d536d38`. Standard build ID: `ABlDRANE3itKw2m9gh8eT`; the verified demo serves this standard build at `http://127.0.0.1:3400`.
+- UX-06 Administrator landing correction: the focused checkpoint containing this record; standard build ID `UAN_bJ2MGUKTq2k5wmiwG`, served at `http://127.0.0.1:3400`. Direct before/after, four-theme, responsive, font, focus and sidebar evidence is in [the correction record](../../evidence/ux-revamp-06-admin-landing-2026-10-18/README.md).
 - UX-07 implementation source: `21f3a805f5e882be29c39989b13bd0311af9779a`; isolated build ID `ac6dW5CgZ3zgI80yzsZH6`.
 - UX-08 implementation source: `d57fe8c`; standard build ID `BIXjEBxrscUilW5ZTAgW9`. `pnpm demo:seed` includes the idempotent UX appearance scenario; its ignored private artifact is `artifacts/appearance-01/private-demo.json`.
 - Schema/migrations: forward migration `20261019073000_access_tenant_theme_configuration` is applied to development and test; both have 118 migrations. Organization stores concrete `theme_id`; School stores nullable `theme_override`. Existing Branding publication history/constraints remain unchanged.
