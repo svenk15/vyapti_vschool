@@ -16,6 +16,7 @@ Date: 18 October 2026 (Asia/Kolkata)
 - After the assertion repairs, `pnpm test:functional test/functional/institution-context.test.ts test/functional/reporting-leadership-brief.test.ts` passed 2 files and 7 tests. The broad suite was not repeated because the other 263 tests and application code were unchanged.
 - Focused ESLint passed for all final repair files.
 - `NODE_OPTIONS=--max-old-space-size=4096 pnpm build` passed and produced build `lA2wtzNon2bc8hg3fJSJN`.
+- `pnpm demo:start` served that normal build at `http://127.0.0.1:3400`; the health endpoint returned `ready: true`, the sign-in page returned HTTP 200 and unauthenticated `/admin` returned the expected redirect to `/sign-in`.
 - The M01–M08 evidence directories contain each journey's focused PostgreSQL, one-worker browser and inspected desktop/mobile evidence. M07 and M08 additionally used isolated production build `Wrd7P85a7tJo0u_ZOsWfN` before this integrated normal build.
 
 ## Evidence index
