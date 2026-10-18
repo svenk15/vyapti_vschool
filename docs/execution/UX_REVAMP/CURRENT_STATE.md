@@ -10,7 +10,8 @@ Updated: 18 October 2026 (Asia/Kolkata)
 | UX-04 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-05 | VERIFIED | DIRECT_INSPECTION_WITH_RECORDED_SHELL_DEBT | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-06 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-07–UX-08 | NOT_STARTED | NOT_STARTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-07 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-08 | NOT_STARTED | NOT_STARTED | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -35,10 +36,12 @@ UX-05 is implemented at `1157a6c9f2cce9d6b668a2cfb28b5770423c6558`. Protected Ad
 
 UX-06 migrates the shared protected shell and Administrator Today, Students and registration compositions to semantic theme values and the production recipes. Today is a direct destination; navigation remains server filtered and independently authorized. Students retains real server-backed search/filter/sort/pagination and registration retains exact identity resolution and final-confirmation persistence. Focused lint/type/boundary/backend/docs checks, isolated and standard 4 GiB builds, desktop/mobile Students and registration journeys, Administrator authorization/sign-out, 1024/768 shell breakpoints, keyboard drawer behavior, and real populated development Today captures passed. Equivalent screenshots and computed Inter metrics were directly inspected; retained contract differences are explicit. See [UX-06 evidence](../../evidence/ux-revamp-06-2026-10-18/README.md).
 
+UX-07 is implemented at `21f3a805f5e882be29c39989b13bd0311af9779a`. Teacher uses the approved bounded task workspace; Principal, Parent and Student use the shared protected composition and semantic theme values. Parent/Student mobile drawers now expose modal semantics, lock background scroll, retain permission-filtered destinations and return focus to either menu trigger. Student has a reachable More control. Focused type/boundary/backend checks and one-worker PostgreSQL-backed desktop/mobile journeys passed for all four workspaces. Direct inspection found and corrected a clipped Parent mobile context label. Exact Parent/Student states and explicitly labelled Teacher/Principal pattern comparisons are recorded in [UX-07 evidence](../../evidence/ux-revamp-07-2026-10-18/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Implement UX-07: migrate Teacher, Student, Parent/Guardian and Principal M01–M08 compositions to the shared semantic presentation recipes, then verify affected navigation, focus and authorized context behavior at desktop/mobile viewports.
+Implement UX-08: verify all four themes across required route families, extend only missing idempotent synthetic fixtures, record contrast and responsive coverage, run the integrated checkpoint, and prepare the current-source demo.

@@ -10,7 +10,7 @@ Status values separate engineering, visual comparison, human acceptance, and pro
 | UX-04 | Reusable ThemePicker in supported institution/branch creation and authorized appearance settings | UX-03 | Focused unit/browser flows for selection, preview/cancel/save/conflict | VERIFIED |
 | UX-05 | Server theme resolution for protected/public contexts and safe context switching/cache identity | UX-03–04 | First-paint/hydration/publication/context-switch browser tests and security negatives | VERIFIED |
 | UX-06 | Shared shell plus Administrator M01–M08 priority screens using production recipes | UX-02, UX-05 | Matched reference/application desktop/mobile/intermediate captures; keyboard and representative interactions | VERIFIED |
-| UX-07 | Teacher, Student, Parent/Guardian and Principal M01–M08 compositions | UX-06 | Cross-workspace matched captures, navigation/focus/context tests | NOT_STARTED |
+| UX-07 | Teacher, Student, Parent/Guardian and Principal M01–M08 compositions | UX-06 | Cross-workspace matched captures, navigation/focus/context tests | VERIFIED |
 | UX-08 | Four-theme route coverage, idempotent synthetic fixtures, contrast and integrated checkpoint | UX-01–07 | Required route/theme matrix, PostgreSQL/security checks, focused E2E, 4 GiB build, one real 200% journey where possible | NOT_STARTED |
 
 ## Common acceptance
