@@ -1,0 +1,47 @@
+{
+  "capturedAt": "2026-10-18T11:04:14.137Z",
+  "assignment": {
+    "id": "53360807-2779-474f-8373-7ecdb91e5a55",
+    "title": "Connected learning review · 18 Oct 2026",
+    "deadline": "2026-11-05T10:00:00.000Z",
+    "revision": 2,
+    "versionId": "3f490eaf-348e-4af2-b9d7-db67b560ff10"
+  },
+  "audience": {
+    "studentId": "090a16d2-5bfa-44a4-9e79-c089515adbab",
+    "recipientId": "ba25afab-424a-4727-8aa6-3a0138751422",
+    "guardianBindingCount": 2,
+    "studentBindingCount": 1
+  },
+  "submission": {
+    "id": "7d513269-8b90-4988-885d-cc65a679ad95",
+    "attemptNo": 1,
+    "acceptedAt": "2026-10-18T11:03:39.572Z"
+  },
+  "feedback": {
+    "versionId": "5e2caa27-eb5e-4503-99bc-bad11e54bb93",
+    "version": 1,
+    "publishedAt": "2026-10-18T11:03:40.498Z"
+  },
+  "credentialFiles": {
+    "teacher": "artifacts/people-02/private-demo.json",
+    "parent": "artifacts/guardians-01/private-demo.json",
+    "student": "artifacts/students-portal/private-demo.json"
+  },
+  "olderSimilarlyNamedAssignments": [
+    {
+      "id": "809a6aba-4a31-4e9b-bd9a-49a96c08916b",
+      "title": "Local habitats field notes",
+      "deadline": "2026-10-29T04:14:02.841Z",
+      "createdAt": "2026-10-15T04:14:02.895Z",
+      "immutableVersionId": "dd7e85f5-e748-4585-b84d-46fa458eb952"
+    },
+    {
+      "id": "331ffd25-1d0f-4c03-a9d1-f6084573a646",
+      "title": "Local habitats field notes",
+      "deadline": "2026-11-01T09:57:54.503Z",
+      "createdAt": "2026-10-18T09:57:54.544Z",
+      "immutableVersionId": "88817631-b1d7-4642-a893-57e5fc384b4f"
+    }
+  ]
+}

@@ -19,6 +19,6 @@
 | Finding | Investigation | Result |
 |---|---|---|
 | Mobile fixed navigation might hide reachable content/focus | Current Parent Learning and Student home captured at 390×844 after focusing their last meaningful main control; root width, focus rectangle and fixed-nav rectangle recorded. | No overlap or unreachable final control reproduced after the shared safe-area spacing. Student focus bottom 773.4px; nav top 781px. Native assistive-technology and actual zoom remain pending. |
-| Resolved follow-up displayed Scheduled while the prose described submitted | Current source type, immutable request evidence and closure capture were inspected; focused journey exercised return, resubmit and independent closure. | Product state was Scheduled throughout. The inconsistency was test/evidence prose, not source mutation or an authorization defect. |
+| Resolved follow-up displayed Scheduled while the prose described submitted | Current source type, immutable request evidence and closure capture were inspected; focused journey exercised return, resubmit and independent closure. The exact Scheduled missing-register capture and the separate Cancelled session-setup capture are now labelled independently in `../m01-m08-review-gap-closure-2026-10-18/`. | Product state was Scheduled throughout. The inconsistency was test/evidence prose plus a packaged-image selection error, not source mutation or an authorization defect. |
 
 No business-rule, tenant-boundary, identity-resolution or owner-authorization defect was confirmed in this pass.

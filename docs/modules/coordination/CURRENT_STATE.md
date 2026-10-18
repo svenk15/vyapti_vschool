@@ -143,3 +143,11 @@ Coordination now registers `EVENT_MEETING_ACTION` only for `MEETING_FOLLOW_UP`. 
 Forward migration `20261019021000_coordination_meeting_action_source` is applied to development and test, bringing both to 103 migrations. It extends existing source/kind/concern checks and the scoped conditional source trigger; it adds no table and edits no migration history. Real-PostgreSQL meeting verification passed 3/3, including typed source inspection, exact assignee eligibility, request creation and no duplicate action side effect. The production Principal journey reaches the staged Coordination receipt through the exact completed action and passed focused Chromium/mobile checks. Evidence: [LEA-36 meeting follow-up](../../evidence/principal-lea-36-meetings-2026-10-19/README.md).
 
 Operational-note retention, TEN-03, native accessibility, font portability, deployment and human acceptance remain pending.
+
+## 18 October 2026 — M01–M08 source-evidence labelling closure
+
+Status: IMPLEMENTATION_UNCHANGED / FOCUSED_CURRENT_STATE_EVIDENCE_COMPLETE / HUMAN_REVIEW_PENDING.
+
+The resolved missing-register request is now captured and labelled separately from the cancelled session-setup review. The missing-register source remains `Scheduled`, and both its proposed resolution and immutable history state that the scheduled source remains authoritative and needs no Attendance change. The separate session-setup review remains `Cancelled` and cites Attendance cancellation revision 1. The earlier package selected the wrong resolved screenshot; this was an evidence-selection defect, not a source-state or authorization defect.
+
+No application, owner contract, schema or migration changed. Evidence: [M01–M08 review-gap closure](../../evidence/m01-m08-review-gap-closure-2026-10-18/README.md). Human acceptance and all existing release gates remain pending.

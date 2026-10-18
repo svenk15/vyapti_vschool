@@ -133,3 +133,11 @@ Forward migration `20261017172000_coordination_learning_feedback_source` is appl
 Verification on the current implementation: Coordination/reporting unit 23/23; full affected real-PostgreSQL Learning file 19/19; TypeScript, focused lint, backend, boundaries, docs and 111-table database design; normal and isolated production builds; filtered one-worker Chromium 3/3 and mobile 3/3 across the staged journey plus aggregate/reference states. The initial browser attempt reused a stale `.next-e2e` build and failed before exercising the new UI; rebuilding the isolated target resolved it without changing product assertions. Screenshots were directly inspected at 1440×1000 and 390×844. Evidence: [F08-C feedback follow-up](../../evidence/principal-f08-feedback-followup-2026-10-17/README.md).
 
 F08 and LEA-17/18/19 are engineering-complete. Human review, font portability, native accessibility, Coordination operational-note retention/backup-deletion policy, TEN-03 and deployment remain pending.
+
+## 18 October 2026 — M01–M08 targeted review-gap closure
+
+Status: IMPLEMENTATION_UNCHANGED / FOCUSED_CURRENT_STATE_EVIDENCE_COMPLETE / HUMAN_REVIEW_PENDING.
+
+The exact Student **Your work** submitted/feedback page was opened and inspected. It contains the immutable accepted receipt, published guidance and submitted response, and it omits the draft editor plus Save draft, Review submission and Submit assignment actions. A fresh connected synthetic assignment, `Connected learning review · 18 Oct 2026`, was then exercised with separate authorized Teacher, Student and Parent accounts through draft save, submission and published feedback. The selected Parent sees the exact assignment and deadline but not the Student response or Teacher feedback. Older immutable `Local habitats field notes` fixtures remain unchanged.
+
+No application, contract, schema or migration changed. The running candidate build was reused and no rebuild was needed. Focused screenshots and persisted scenario identifiers are recorded in [M01–M08 review-gap closure](../../evidence/m01-m08-review-gap-closure-2026-10-18/README.md). Human acceptance and all existing release gates remain pending.
