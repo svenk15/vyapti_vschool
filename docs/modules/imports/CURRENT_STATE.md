@@ -1,5 +1,9 @@
 # Previewed, resumable student roster import — current state
 
+## 18 October 2026 — must-have M03 connected checkpoint
+
+The current demo's `/admin/imports` preview composition and its relationship to manual registration, Student placement and separately guarded Parent/Student access were rechecked at desktop/mobile sizes. Focused Students/Imports PostgreSQL suites passed 26/26, including preview non-writes, exact hash/key replay, resumable row processing, safe partial outcomes, cancellation and scoped denial. Evidence: [M03](../../evidence/must-have-m03-2026-10-18/README.md). No import row, schema, migration or credential changed; human review and release gates remain pending.
+
 ## 11 October 2026 — SA-24 Administrator reconciliation checkpoint
 
 `/admin/imports/manage` now implements the approved three-stage reconciliation composition over real Imports operations. Administrators select a current branch import from a deterministic signed-cursor page, review the eligible action, confirm it, and receive durable row counts/results. Exact-key recovery checks server status after an interrupted confirmation response; bounded processing remains replay-safe. Cancellation and advanced recovery remain available at `/admin/imports/operations?jobId=…`.

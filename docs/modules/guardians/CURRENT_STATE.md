@@ -6,6 +6,8 @@ FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e
 
 The combined Parent/Student handover, current build/migration provenance and manual walkthrough are recorded in [15 October consolidated evidence](../../evidence/parent-student-consolidated-2026-10-15/README.md).
 
+**Must-have M03 connected checkpoint (18 October 2026):** The exact seeded Student detail exposed its real Parent and Student access panels, and both accepted personal accounts entered their two authorized contexts at desktop/mobile sizes. The unchanged M01 Guardian/Student portal PostgreSQL 11/11 result is reused alongside M03's focused Students/Imports 26/26 result. Registration remains committed independently of post-commit delivery, and access remains separately scoped and revocable. [Evidence](../../evidence/must-have-m03-2026-10-18/README.md). Human review and release gates remain pending.
+
 **LEA-01 supported slice (15 October 2026):** Guardian access now supports the independent, non-backfilled `learning.assignment.read_child` purpose. Learning freezes the exact accepted Guardian binding at assignment publication and rechecks the same live access/purpose for every Parent read. Later grants do not add recipients retroactively. Focused Learning PostgreSQL and desktop/mobile browser evidence passed; PAR-20 remains a supported partial workflow because returned feedback, questions and its richer reference workflow are not implemented. See [Learning evidence](../../evidence/learning-publication-2026-10-15/README.md). Human review remains PENDING.
 
 ## Implemented

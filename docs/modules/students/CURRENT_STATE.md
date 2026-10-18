@@ -2,6 +2,10 @@
 
 Last updated: 2026-10-15. This is an independent project checkpoint; no completion was imported.
 
+## Must-have M03 connected checkpoint — 18 October 2026
+
+The current demo was inspected through manual registration, the exact Student detail with enrollment plus Parent/Student access controls, and both accepted personal workspaces at desktop/mobile sizes. Each personal persona exposed two authorized contexts. Focused Students and Imports real-PostgreSQL suites passed 26/26; M01's unchanged Guardians/Student portal 11/11 remains applicable. Evidence: [M03](../../evidence/must-have-m03-2026-10-18/README.md). This verifies the must-have connected slice without adding durable generic drafts or changing any broader catalogue status. Human review and existing release gates remain pending.
+
 ## STW-44 Student account sessions — 16 October 2026
 
 The Access-owned Student account workflow is engineering-complete; human review remains PENDING. `/student/account/sessions` lists only the authenticated global account's active privacy-safe sessions and uses the approved two-stage review/confirmation composition. Selection survives Back/Continue in memory; only final confirmation revokes. A second real browser loses protected access after its session is revoked, while the current session remains active until the separate Account sign-out action. No Student, enrollment or placement table changed and no new tenant authority was introduced. Evidence and focused unit/PostgreSQL/desktop/mobile results: [STW-44](../../evidence/student-sessions-stw-44-2026-10-16/README.md).
