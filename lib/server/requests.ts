@@ -9,6 +9,7 @@ const requests=createRequestsServices({databaseUrl:process.env.DATABASE_URL??'',
 const scoped=async(identity:Identity|null)=>{const scope=(await accountGateway.getHome(identity)).scope;return {identity,...scope};};
 const familyScoped=async(identity:Identity|null,studentId:string)=>{if(!identity)throw new AccessError('UNAUTHENTICATED');const workspace=await guardiansGateway.workspace(identity),child=workspace.children.find(item=>item.studentId===studentId);if(!child)throw new AccessError('NOT_FOUND');return {identity,organizationId:child.organizationId,schoolId:child.schoolId,studentId:child.studentId};};
 export const requestsGateway={
+ reviewAvailability:async(identity:Identity|null)=>{const s=await scoped(identity);return requests.reviewAvailability(s.identity,s.organizationId,s.schoolId);},
  list:async(identity:Identity|null)=>{const s=await scoped(identity);return requests.list(s.identity,s.organizationId,s.schoolId);},
  get:async(identity:Identity|null,id:string)=>{const s=await scoped(identity);return requests.get(s.identity,s.organizationId,s.schoolId,id);},
  create:async(identity:Identity|null,input:unknown)=>{const s=await scoped(identity);return requests.create(s.identity,s.organizationId,s.schoolId,input);},

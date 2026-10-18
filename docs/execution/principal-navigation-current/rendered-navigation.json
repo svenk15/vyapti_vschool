@@ -1,0 +1,131 @@
+{
+  "capturedAt": "2026-10-18T03:07:56.973Z",
+  "source": "http://127.0.0.1:3400/leadership",
+  "groups": [
+    {
+      "label": "Leadership",
+      "items": [
+        {
+          "label": "My school today",
+          "href": "/leadership",
+          "current": "page"
+        },
+        {
+          "label": "My decisions",
+          "href": "/leadership/decisions",
+          "current": null
+        },
+        {
+          "label": "Evidence assistant",
+          "href": "/leadership/assistant",
+          "current": null
+        },
+        {
+          "label": "Attendance oversight",
+          "href": "/leadership/attendance",
+          "current": null
+        },
+        {
+          "label": "Staff availability",
+          "href": "/leadership/staff/availability",
+          "current": null
+        },
+        {
+          "label": "Staff requests",
+          "href": "/leadership/staff/requests",
+          "current": null
+        },
+        {
+          "label": "Family concerns",
+          "href": "/leadership/concerns",
+          "current": null
+        },
+        {
+          "label": "Meetings",
+          "href": "/leadership/meetings",
+          "current": null
+        },
+        {
+          "label": "Facilities incidents",
+          "href": "/leadership/services/incidents",
+          "current": null
+        },
+        {
+          "label": "Financial exceptions",
+          "href": "/leadership/finance/exceptions",
+          "current": null
+        },
+        {
+          "label": "Operational follow-ups",
+          "href": "/leadership/coordination",
+          "current": null
+        },
+        {
+          "label": "Leadership handover",
+          "href": "/leadership/handover",
+          "current": null
+        },
+        {
+          "label": "Decision history",
+          "href": "/leadership/history",
+          "current": null
+        },
+        {
+          "label": "Timetable exceptions",
+          "href": "/leadership/timetable",
+          "current": null
+        },
+        {
+          "label": "Cover requests",
+          "href": "/leadership/cover",
+          "current": null
+        },
+        {
+          "label": "Assignment completion",
+          "href": "/leadership/learning",
+          "current": null
+        },
+        {
+          "label": "Feedback turnaround",
+          "href": "/leadership/learning/feedback",
+          "current": null
+        },
+        {
+          "label": "Learning evidence",
+          "href": "/leadership/learning/evidence",
+          "current": null
+        },
+        {
+          "label": "Assessment readiness",
+          "href": "/leadership/assessments",
+          "current": null
+        },
+        {
+          "label": "Report publication",
+          "href": "/leadership/assessments/publications",
+          "current": null
+        },
+        {
+          "label": "Notice coverage",
+          "href": "/leadership/communication",
+          "current": null
+        },
+        {
+          "label": "Reports",
+          "href": "/leadership/reports",
+          "current": null
+        }
+      ]
+    },
+    {
+      "label": "Personal",
+      "items": [
+        {
+          "label": "My account",
+          "href": "/leadership/account",
+          "current": null
+        }
+      ]
+    }
+  ]
+}

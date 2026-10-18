@@ -28,6 +28,7 @@ export const learningGateway={
  async leadershipOverview(identity:Identity|null,query:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().leadershipLearningOverview(actor,home.scope.organizationId,home.scope.schoolId,query);},
  async leadershipFeedbackTurnaround(identity:Identity|null,query:unknown){const actor=required(identity),home=await leadershipGateway.getHome(actor);return service().leadershipFeedbackTurnaround(actor,home.scope.organizationId,home.scope.schoolId,query);},
  async managerWorkspace(identity:Identity|null){const {actor,organizationId,schoolId}=await scope(identity);return service().managerWorkspace(actor,organizationId,schoolId);},
+ async managerAvailability(identity:Identity|null){const {actor,organizationId,schoolId}=await scope(identity);return service().managerAvailability(actor,organizationId,schoolId);},
  async recipientEvidence(identity:Identity|null,assignmentId:unknown){const {actor,organizationId,schoolId}=await scope(identity);return service().recipientEvidence(actor,organizationId,schoolId,assignmentId);},
  async applyRecipientPolicy(identity:Identity|null,assignmentId:unknown,input:unknown,requestId:string){const {actor,organizationId,schoolId}=await scope(identity);return service().applyRecipientPolicy(actor,organizationId,schoolId,assignmentId,input,requestId);},
 };

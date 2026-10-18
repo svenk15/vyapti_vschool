@@ -1,8 +1,20 @@
 import Link from 'next/link';
 import type {Ref} from 'react';
+
 export type PortalIconName='home'|'school'|'settings'|'modules'|'branding'|'staff'|'people'|'students'|'import'|'academics'|'classes'|'attendance'|'calendar'|'mail'|'report'|'activity'|'account'|'menu'|'down';
-export type PortalNavigationItem=Readonly<{href:string;label:string;icon?:PortalIconName}>;
-export type PortalNavigationGroupData=Readonly<{label:string;items:readonly PortalNavigationItem[]}>;
+export type PortalRouteMatch=Readonly<{path:string;exact?:boolean}>;
+export type PortalNavigationItem=Readonly<{href:string;label:string;icon?:PortalIconName;matches?:readonly PortalRouteMatch[]}>;
+export type PortalNavigationGroupData=Readonly<{id?:string;label:string;items:readonly PortalNavigationItem[];icon?:PortalIconName;collapsible?:boolean;showLabel?:boolean}>;
+
+export function portalRouteMatches(pathname:string,match:PortalRouteMatch){
+ return match.exact===true?pathname===match.path:pathname===match.path||pathname.startsWith(`${match.path}/`);
+}
+
+export function portalItemMatchSpecificity(pathname:string,item:PortalNavigationItem){
+ const matches=item.matches??[{path:item.href,exact:item.href==='/'||item.href.split('/').filter(Boolean).length===1}];
+ return matches.reduce((specificity,match)=>portalRouteMatches(pathname,match)?Math.max(specificity,match.path.length):specificity,-1);
+}
+
 export function PortalIcon({name='home'}:{name?:PortalIconName}){
  const common={viewBox:'0 0 24 24',focusable:false,'aria-hidden':true} as const;
  if(name==='home')return <svg {...common}><path d="M3 10 12 3l9 7v10H3Z M9 20v-7h6v7"/></svg>;
@@ -25,7 +37,8 @@ export function PortalIcon({name='home'}:{name?:PortalIconName}){
  if(name==='down')return <svg {...common}><path d="m6 9 6 6 6-6"/></svg>;
  return null;
 }
-export function PortalNavigationGroup({group,activeHref,onNavigate,firstItemRef}:{group:PortalNavigationGroupData;activeHref:string|null;onNavigate?:()=>void;firstItemRef?:Ref<HTMLAnchorElement>}){
- const id=`nav-${group.label.replaceAll(' ','-').toLowerCase()}`;
- return <section className="portal-nav-group" aria-labelledby={id}><h2 id={id}>{group.label}</h2>{group.items.map((item,index)=>{const current=item.href===activeHref;return <Link ref={index===0?firstItemRef:undefined} key={item.href} href={item.href} aria-current={current?'page':undefined} onClick={onNavigate}><span className="portal-nav-icon"><PortalIcon name={item.icon}/></span><span>{item.label}</span></Link>;})}</section>;
+
+export function PortalNavigationGroup({group,groupKey=group.id??group.label.toLowerCase().replace(/[^a-z0-9]+/g,'-'),activeHref,onNavigate,firstItemRef,expanded,onToggle}:{group:PortalNavigationGroupData;groupKey?:string;activeHref:string|null;onNavigate?:()=>void;firstItemRef?:Ref<HTMLAnchorElement>;expanded?:boolean;onToggle?:(groupKey:string)=>void}){
+ const id=`portal-nav-${groupKey.replace(/[^a-z0-9-]/gi,'-').toLowerCase()}`,itemsId=`${id}-items`,showLabel=group.showLabel!==false,collapsible=group.collapsible===true,isExpanded=!collapsible||expanded===true;
+ return <section className={`portal-nav-group${collapsible?' portal-nav-group-collapsible':''}`} aria-label={!showLabel?group.label:undefined}>{collapsible?<button type="button" id={id} className="portal-nav-disclosure" aria-expanded={isExpanded} aria-controls={itemsId} onClick={()=>onToggle?.(groupKey)}>{group.icon&&<span className="portal-nav-icon"><PortalIcon name={group.icon}/></span>}<span>{group.label}</span><span className="portal-nav-chevron"><PortalIcon name="down"/></span></button>:showLabel?<h2 id={id}>{group.label}</h2>:null}<div id={itemsId} className="portal-nav-group-items" hidden={!isExpanded}>{group.items.map((item,index)=>{const current=item.href===activeHref;return <Link ref={index===0?firstItemRef:undefined} key={`${item.href}:${item.label}`} href={item.href} aria-current={current?'page':undefined} onClick={onNavigate}>{item.icon&&<span className="portal-nav-icon"><PortalIcon name={item.icon}/></span>}<span>{item.label}</span></Link>;})}</div></section>;
 }

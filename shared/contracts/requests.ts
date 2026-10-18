@@ -8,6 +8,7 @@ export type RequestDecisionSummary=Readonly<{id:string;number:number;action:Requ
 export type RequestEventSummary=Readonly<{id:string;type:'ACKNOWLEDGED'|'APPEALED';reason:string|null;reviewDueOn:string|null;occurredAt:string}>;
 export type RequestCaseDetail=Readonly<{id:string;reference:string;category:RequestCategorySummary;kind:RequestKind;state:RequestState;title:string;narrative:string;desiredOutcome:string|null;publicOutcome:string|null;studentId:string|null;submittedAt:string;updatedAt:string;closedAt:string|null;acknowledgedAt:string|null;reviewDueOn:string|null;appealDeadlineAt:string|null;version:number;role:'ORIGINATOR'|'REVIEWER';can:{acknowledge:boolean;appeal:boolean;decide:boolean;respond:boolean;withdraw:boolean};history:readonly RequestDecisionSummary[];events:readonly RequestEventSummary[]}>;
 export type RequestQueue=Readonly<{items:readonly RequestCaseSummary[];categories:readonly RequestCategorySummary[]}>;
+export type RequestReviewAvailability=Readonly<{staff:boolean;family:boolean}>;
 export type RequestMutationResult=Readonly<{caseId:string;reference:string;state:RequestState;version:number;replayed:boolean}>;
 export type RequestCreateInput=Readonly<{categoryCode:RequestCategoryCode;title:string;narrative:string;desiredOutcome?:string|null;studentId?:string|null;implicatesReviewer:boolean;key:string}>;
 export type RequestDecisionInput=Readonly<{action:RequestAction;expectedVersion:number;reason?:string|null;publicOutcome?:string|null;key:string}>;

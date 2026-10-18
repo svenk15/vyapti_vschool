@@ -5,6 +5,7 @@ import {AccessError,uuidPattern} from '../../access/contracts/index';
 export type PupilReviewQuery=Readonly<{fromDate:string;toDate:string;threshold:number}>;
 export type PupilReviewSnapshotInput=PupilReviewQuery&Readonly<{studentId:string;key:string;requestId:string}>;
 export interface AttendancePupilReviewRepository {
+ available(actor:Identity,organizationId:string,schoolId:string):Promise<boolean>;
  review(actor:Identity,organizationId:string,schoolId:string,input:PupilReviewQuery):Promise<LeadershipPupilPatternReview>;
  snapshot(actor:Identity,organizationId:string,schoolId:string,input:PupilReviewSnapshotInput):Promise<AttendancePupilReviewSnapshotResult>;
  grant(operator:OperatorPrincipal,input:{organizationId:string;schoolId:string;accountId:string;studentId:string}):Promise<{grantId:string;version:number}>;
@@ -17,6 +18,7 @@ const key=(value:unknown)=>{if(typeof value!=='string'||value.length<16||value.l
 const query=(input:Record<string,unknown>):PupilReviewQuery=>{const fromDate=date(input.fromDate),toDate=date(input.toDate),threshold=input.threshold;if(typeof threshold!=='number'||!Number.isInteger(threshold)||threshold<1||threshold>90)throw new AccessError('VALIDATION');const days=Math.floor((new Date(`${toDate}T00:00:00Z`).getTime()-new Date(`${fromDate}T00:00:00Z`).getTime())/86400000)+1;if(days<1||days>90)throw new AccessError('VALIDATION');return {fromDate,toDate,threshold};};
 
 export function createAttendancePupilReviewUseCases(repository:AttendancePupilReviewRepository){return {
+ available(actorValue:Identity|null,organizationId:unknown,schoolId:unknown){return repository.available(identity(actorValue),id(organizationId),id(schoolId));},
  review(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:Record<string,unknown>){return repository.review(identity(actorValue),id(organizationId),id(schoolId),query(input));},
  snapshot(actorValue:Identity|null,organizationId:unknown,schoolId:unknown,input:Record<string,unknown>){const q=query(input);return repository.snapshot(identity(actorValue),id(organizationId),id(schoolId),{...q,studentId:id(input.studentId),key:key(input.key),requestId:id(input.requestId)});},
  grant(operator:OperatorPrincipal,input:{organizationId:unknown;schoolId:unknown;accountId:unknown;studentId:unknown}){return repository.grant(operator,{organizationId:id(input.organizationId),schoolId:id(input.schoolId),accountId:id(input.accountId),studentId:id(input.studentId)});},

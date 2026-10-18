@@ -3,15 +3,17 @@ import {Alert,Badge,Card,EmptyState,PageHeader,PageStack,StatCard} from '@/compo
 import {SelectField} from '@/components/ui/forms';
 import {getIdentity} from '@/lib/server/auth';
 import {assessmentsGateway} from '@/lib/server/assessments';
+import {PrincipalAssessmentsNavigation} from '@/components/principal-area-navigation';
+import {principalNavigationGateway} from '@/lib/server/principal-navigation';
 
 export const dynamic='force-dynamic';
 const label=(value:string)=>value.replaceAll('_',' ').toLowerCase();
 
 export default async function LeadershipAssessments({searchParams}:{searchParams:Promise<{cycle?:string}>}){
  const identity=await getIdentity();if(!identity)redirect('/sign-in');
- const params=await searchParams;let view,error=false;
+ const params=await searchParams;let view,error=false;const navigation=await principalNavigationGateway.assessments(identity);
  try{view=await assessmentsGateway.leadershipReadiness(identity,params.cycle);}catch{error=true;}
- return <main id="main-content" className="container page-space"><PageStack>
+ return <main id="main-content" className="container page-space"><PrincipalAssessmentsNavigation current="readiness" availability={navigation}/><PageStack>
   <PageHeader eyebrow="Assessment oversight" title="Assessment and report readiness" description="Frozen cohort outcomes, moderation and report states from one exact scheme version." actions={view&&!view.readyForApproval?<a className="btn btn-primary" href={`/leadership/coordination/new?assessmentCycle=${encodeURIComponent(view.cycle.id)}&kind=ASSESSMENT_READINESS_FOLLOW_UP&return=${encodeURIComponent(`/leadership/assessments?cycle=${view.cycle.id}`)}`}>Create readiness follow-up</a>:undefined}/>
   {error||!view?<Alert tone="danger" title="Assessment readiness unavailable">No readiness count is shown. Check the current branch, Assessments module and explicit oversight grant.</Alert>:<>
    <Card className="padded"><form method="get" className="compact-toolbar"><SelectField label="Assessment cycle" name="cycle" defaultValue={view.cycle.id}>{view.cycles.map(cycle=><option key={cycle.id} value={cycle.id}>{cycle.name} · {cycle.academicYearName} · {cycle.sectionName} · scheme {cycle.schemeVersion}</option>)}</SelectField><button className="btn btn-secondary" type="submit">View cycle</button></form></Card>

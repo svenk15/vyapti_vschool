@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-18T03:47:55.297Z",
+  "base": "http://127.0.0.1:3400",
+  "desktop": {
+    "currentCount": 1,
+    "accountHref": "/leadership/account",
+    "signOutHref": "/leadership/context?destination=sign-out",
+    "groups": [
+      "Attendance",
+      "Teaching & staff",
+      "Communication",
+      "My work",
+      "Reports & insights"
+    ],
+    "contextualTabs": [
+      "Assignment completion",
+      "Feedback turnaround",
+      "Pupil evidence"
+    ],
+    "collapseOnCurrentPage": true,
+    "historyRestored": true,
+    "otherWorkspaceShell": true,
+    "overflow": false
+  },
+  "mobile": {
+    "firstDestinationFocused": true,
+    "drawerStayedOpenOnExpansion": true,
+    "escapeDismissed": true,
+    "focusRestored": true,
+    "overflow": false
+  }
+}

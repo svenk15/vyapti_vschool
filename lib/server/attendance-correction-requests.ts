@@ -8,6 +8,7 @@ let services:ReturnType<typeof createAttendanceCorrectionRequestServices>|undefi
 const service=()=>services??(()=>{throw new AttendanceCorrectionRequestError('UNAVAILABLE');})();
 const required=(identity:Identity|null)=>{if(!identity)throw new AttendanceCorrectionRequestError('UNAUTHENTICATED');return identity;};
 export const attendanceCorrectionRequestsGateway={
+ async routingAvailable(identity:Identity|null){const actor=required(identity),scope=(await leadershipGateway.getHome(actor)).scope;return service().routingAvailable(actor,scope.organizationId,scope.schoolId);},
  submit:(identity:Identity|null,input:Parameters<ReturnType<typeof createAttendanceCorrectionRequestServices>['submit']>[1])=>service().submit(required(identity),input),
  listOwn:(identity:Identity|null,kind:unknown,studentId?:unknown)=>service().listOwn(required(identity),kind,studentId),
  getOwn:(identity:Identity|null,kind:unknown,id:unknown,studentId?:unknown)=>service().getOwn(required(identity),kind,id,studentId),

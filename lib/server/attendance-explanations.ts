@@ -10,6 +10,7 @@ const service=()=>{if(!services)throw failure??new AttendanceExplanationError('U
 const required=(identity:Identity|null)=>{if(!identity)throw new AttendanceExplanationError('UNAUTHENTICATED');return identity;};
 async function admin(identity:Identity|null){const actor=required(identity),home=await accountGateway.getHome(actor);return {actor,...home.scope};}
 export const attendanceExplanationsGateway={
+ async reviewerAvailable(identity:Identity|null){const {actor,organizationId,schoolId}=await admin(identity);return service().reviewerAvailable(actor,organizationId,schoolId);},
  submit:(identity:Identity|null,input:Parameters<ReturnType<typeof createAttendanceExplanationServices>['submit']>[1])=>service().submit(required(identity),input),
  listParent:(identity:Identity|null,studentId:unknown)=>service().listParent(required(identity),studentId),
  getParent:(identity:Identity|null,studentId:unknown,id:unknown)=>service().getParent(required(identity),studentId,id),

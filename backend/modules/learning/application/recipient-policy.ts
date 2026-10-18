@@ -4,6 +4,7 @@ import {AccessError} from '../../access/contracts/index';
 import {managerCapability,policyId,recipientPolicyInput} from '../domain/recipient-policy';
 
 export interface LearningRecipientPolicyRepository{
+ managerAvailability(actor:Identity,input:{organizationId:string;schoolId:string}):Promise<Readonly<{capabilities:readonly LearningManagerCapability[]}>>;
  managerWorkspace(actor:Identity,input:{organizationId:string;schoolId:string}):Promise<LearningManagerWorkspace>;
  recipientEvidence(actor:Identity,input:{organizationId:string;schoolId:string;assignmentId:string}):Promise<LearningRecipientEvidencePage>;
  apply(actor:Identity,input:{organizationId:string;schoolId:string;assignmentId:string;requestId:string}&ReturnType<typeof recipientPolicyInput>):Promise<LearningRecipientPolicyResult>;
@@ -12,6 +13,7 @@ export interface LearningRecipientPolicyRepository{
 }
 const scope=(actor:Identity|null,organizationId:unknown,schoolId:unknown)=>{if(!actor)throw new AccessError('UNAUTHENTICATED');return {actor,organizationId:policyId(organizationId),schoolId:policyId(schoolId)};};
 export function createLearningRecipientPolicyUseCases(repository:LearningRecipientPolicyRepository){return {
+ managerAvailability(identity:Identity|null,organizationId:unknown,schoolId:unknown){const s=scope(identity,organizationId,schoolId);return repository.managerAvailability(s.actor,{organizationId:s.organizationId,schoolId:s.schoolId});},
  managerWorkspace(identity:Identity|null,organizationId:unknown,schoolId:unknown){const s=scope(identity,organizationId,schoolId);return repository.managerWorkspace(s.actor,{organizationId:s.organizationId,schoolId:s.schoolId});},
  recipientEvidence(identity:Identity|null,organizationId:unknown,schoolId:unknown,assignmentId:unknown){const s=scope(identity,organizationId,schoolId);return repository.recipientEvidence(s.actor,{organizationId:s.organizationId,schoolId:s.schoolId,assignmentId:policyId(assignmentId)});},
  applyRecipientPolicy(identity:Identity|null,organizationId:unknown,schoolId:unknown,assignmentId:unknown,value:unknown,requestId:unknown){const s=scope(identity,organizationId,schoolId);return repository.apply(s.actor,{organizationId:s.organizationId,schoolId:s.schoolId,assignmentId:policyId(assignmentId),requestId:policyId(requestId),...recipientPolicyInput(value)});},

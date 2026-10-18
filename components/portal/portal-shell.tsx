@@ -6,7 +6,7 @@ import {useCallback,useEffect,useRef,useState,type ReactNode} from 'react';
 import type {AdminHome} from '@/shared/contracts/access';
 import {AccessSignOut} from '@/components/access-login';
 import {BranchSwitcher} from '@/components/institution-context';
-import {PortalNavigationGroup,type PortalNavigationGroupData} from '@/components/portal-navigation-group';
+import {PortalNavigationGroup,portalItemMatchSpecificity,type PortalNavigationGroupData} from '@/components/portal-navigation-group';
 
 type PortalShellProps={
  home:AdminHome;
@@ -16,6 +16,7 @@ type PortalShellProps={
  roleLabel:string;
  academicYearLabel?:string|null;
  accountDisplayName?:string|null;
+ accountHref?:string;
  contextHref?:string;
  stagedSignOutHref?:string;
  children:ReactNode;
@@ -25,9 +26,9 @@ type PortalShellProps={
 
 const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),input:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,contextHref='/admin/context',stagedSignOutHref='/admin/context?destination=sign-out',children,contentClassName,preferences}:PortalShellProps){
- const pathname=usePathname(),[openOnPath,setOpenOnPath]=useState<string|null>(null),toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
- const currentItem=groups.flatMap(group=>group.items).filter(item=>item.href===homeHref?pathname===homeHref:pathname===item.href||pathname.startsWith(`${item.href}/`)).sort((left,right)=>right.href.length-left.href.length)[0];
+export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,accountHref='/account',contextHref='/admin/context',stagedSignOutHref='/admin/context?destination=sign-out',children,contentClassName,preferences}:PortalShellProps){
+ const pathname=usePathname(),entries=groups.flatMap((group,index)=>group.items.map(item=>({group,groupKey:group.id??`${index}-${group.label}`,item,specificity:portalItemMatchSpecificity(pathname,item)}))),currentEntry=entries.filter(entry=>entry.specificity>=0).sort((left,right)=>right.specificity-left.specificity)[0],currentItem=currentEntry?.item,activeCollapsibleGroup=currentEntry?.group.collapsible===true?currentEntry.groupKey:null;
+ const [openOnPath,setOpenOnPath]=useState<string|null>(null),[disclosureState,setDisclosureState]=useState<{pathname:string;group:string|null}>(()=>({pathname,group:activeCollapsibleGroup})),expandedGroup=disclosureState.pathname===pathname?disclosureState.group:activeCollapsibleGroup,toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
  const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>toggle.current?.focus());},[]);
  useEffect(()=>{
   if(!open)return;
@@ -61,9 +62,9 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
     <button type="button" className="portal-sidebar-close" onClick={()=>close(true)}><span aria-hidden="true">×</span><span className="sr-only">Close menu panel</span></button>
    </div>
    <div className="portal-school-identity"><strong>{home.institutionName}</strong><span>{home.schoolName} · School workspace</span></div>
-   <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.map((group,index)=><PortalNavigationGroup key={group.label} group={group} activeHref={currentItem?.href??null} onNavigate={()=>close()} firstItemRef={index===0?firstItem:undefined}/>)}</nav></div>
+   <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.filter(group=>group.items.length>0).map((group,index)=>{const groupKey=group.id??`${index}-${group.label}`;return <PortalNavigationGroup key={groupKey} group={group} groupKey={groupKey} activeHref={currentItem?.href??null} onNavigate={()=>close()} firstItemRef={index===0?firstItem:undefined} expanded={expandedGroup===groupKey} onToggle={key=>setDisclosureState({pathname,group:expandedGroup===key?null:key})}/>;})}</nav></div>
    <footer className="portal-sidebar-footer">
-    <Link className="portal-identity" href="/account" aria-label={`${identityLabel}, ${roleLabel} account`} onClick={()=>close()}>
+    <Link className="portal-identity" href={accountHref} aria-label={`${identityLabel}, ${roleLabel} account`} onClick={()=>close()}>
      <span className="portal-identity-avatar" aria-hidden="true">{initials}</span>
      <span><strong>{identityLabel}</strong><small>{roleLabel}</small></span>
     </Link>

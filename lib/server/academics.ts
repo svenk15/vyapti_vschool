@@ -38,6 +38,7 @@ export const academicsGateway={
  async teacherClasses(identity:Identity|null,date:string,offeringId?:string){const s=await scope(identity);return service().teacherClasses(identity,s.organizationId,s.schoolId,date,offeringId);},
  async teacherReadiness(identity:Identity|null,date:string){const s=await scope(identity);return service().teacherReadiness(identity,s.organizationId,s.schoolId,date);},
  async timetableCoverContext(identity:Identity|null,occurrenceId:string){const s=await scope(identity);return service().coverContext(identity,s.organizationId,s.schoolId,occurrenceId);},
+ async timetableCoverAvailable(identity:Identity|null){const s=await scope(identity);return service().coverAvailable(identity,s.organizationId,s.schoolId);},
  async timetableCoverInbox(identity:Identity|null){const s=await scope(identity);return service().coverInbox(identity,s.organizationId,s.schoolId);},
  async timetableCoverDetail(identity:Identity|null,coverId:string){const s=await scope(identity);return service().coverDetail(identity,s.organizationId,s.schoolId,coverId);},
  async proposeTimetableCover(identity:Identity|null,input:Record<string,unknown>){const s=await scope(identity);return service().proposeCover(identity,s.organizationId,s.schoolId,input);},

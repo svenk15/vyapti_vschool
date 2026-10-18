@@ -1,8 +1,12 @@
 # Principal production screen map
 
-Latest checkpoint: 18 October 2026. Executable application source: `c58992b0a9d5967a000f893a2a2212cfe9b7dcee`; build ID `JnLnbVA2I0X0O3MsVygcr`. F00 established the recipes; later rows record verified consumers without changing those recipe decisions.
+Latest checkpoint: 18 October 2026. F00 recipe baseline source: `c58992b0a9d5967a000f893a2a2212cfe9b7dcee`; build ID `JnLnbVA2I0X0O3MsVygcr`. The navigation checkpoint is the commit containing this record; its verified production build ID is `jCObsKqoFwjNr2pibKzUn`. F00 established the recipes; later rows record verified consumers without changing those recipe decisions.
 
 The approved Principal HTML is a workflow explorer. It remains authoritative for outcomes, stages, labels and failure semantics, while these real routes are the production compositions. Routed presentation is not recorded as a visual defect merely because the explorer uses a catalogue dialog. Shared VSchool components remain authoritative for buttons, cards, badges, focus and navigation. Human visual acceptance remains PENDING.
+
+## Principal navigation composition
+
+The production shell uses the approved two-level information architecture recorded in `docs/execution/PRINCIPAL_NAVIGATION_INVENTORY.md`: direct My day; expandable Attendance, Teaching & staff, Communication, My work, and Reports & insights groups; individually authorized Finance, Facilities, and Restricted support areas; and separate account/acting-access/sign-out utilities. Timetable & cover, Learning, and Assessments expose permission-filtered contextual tabs on their real routed pages. No category landing page, badge count, third sidebar level, or UX Studio theme change is introduced. Route ownership uses segment-aware, most-specific matches so briefs/reviews remain under Reports, Coordination children under Follow-ups, decision children under My decisions, and source Attendance sessions under Register coverage.
 
 | Recipe | Workflow and owner | Actual route | Explorer state | Supported production states | Measured specimen | Recorded mapping/deviation |
 |---|---|---|---|---|---|---|

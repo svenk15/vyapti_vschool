@@ -4,6 +4,7 @@ import {AssessmentsError,uuid} from '../domain/readiness';
 import {assignReportInput,publishReportInput,withdrawReportInput,type AssignReportInput,type PublishReportInput,type WithdrawReportInput} from '../domain/publication';
 type Scope={organizationId:string;schoolId:string};
 export interface AssessmentReportPublicationRepository{
+ available(actor:Identity,scope:Scope):Promise<boolean>;
  workspace(actor:Identity,scope:Scope):Promise<AssessmentReportPublicationWorkspace>;
  assign(actor:Identity,scope:Scope,input:AssignReportInput):Promise<AssessmentReportHandoffResult>;
  source(actor:Identity,scope:Scope,handoffId:string):Promise<AssessmentReportSource>;
@@ -14,6 +15,7 @@ export interface AssessmentReportPublicationRepository{
  grantCapability(operator:OperatorPrincipal,input:Scope&{accountId:string;capability:'PUBLISH'|'WITHDRAW'}):Promise<void>;
 }
 export function createAssessmentReportPublicationUseCases(repository:AssessmentReportPublicationRepository){const actor=(identity:Identity|null)=>{if(!identity)throw new AssessmentsError('UNAUTHENTICATED');return identity;};return {
+ publicationAvailable:(identity:Identity|null,organizationId:unknown,schoolId:unknown)=>repository.available(actor(identity),{organizationId:uuid(organizationId),schoolId:uuid(schoolId)}),
  publicationWorkspace:(identity:Identity|null,organizationId:unknown,schoolId:unknown)=>repository.workspace(actor(identity),{organizationId:uuid(organizationId),schoolId:uuid(schoolId)}),
  assignReportPublisher:(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:Record<string,unknown>)=>repository.assign(actor(identity),{organizationId:uuid(organizationId),schoolId:uuid(schoolId)},assignReportInput(input)),
  reportSource:(identity:Identity|null,organizationId:unknown,schoolId:unknown,handoffId:unknown)=>repository.source(actor(identity),{organizationId:uuid(organizationId),schoolId:uuid(schoolId)},uuid(handoffId)),

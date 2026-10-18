@@ -4,6 +4,8 @@ import {Alert,Badge,Card,EmptyState,PageHeader,PageStack,StatCard} from '@/compo
 import {getIdentity} from '@/lib/server/auth';
 import {leadershipTimetableGateway} from '@/lib/server/academics';
 import {reportingGateway} from '@/lib/server/reporting';
+import {PrincipalTimetableNavigation} from '@/components/principal-area-navigation';
+import {principalNavigationGateway} from '@/lib/server/principal-navigation';
 
 export const dynamic='force-dynamic';
 const first=(value:string|string[]|undefined)=>Array.isArray(value)?value[0]:value;
@@ -12,9 +14,9 @@ const day=(value:string)=>new Intl.DateTimeFormat('en-IN',{dateStyle:'medium',ti
 const label=(outcome:string)=>outcome==='BLOCKED_MANUAL_CONFLICT'?'Manual session conflict':outcome==='BLOCKED_DOMAIN_RULE'?'Blocked by owner rule':'Technical failure';
 
 export default async function LeadershipTimetable({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}){
- const identity=await getIdentity();if(!identity)redirect('/sign-in');const params=await searchParams;let overview,error=false;const availability=await reportingGateway.leadershipExportAvailability(identity).catch(()=>null);try{overview=await leadershipTimetableGateway.overview(identity,{cursor:first(params.cursor),staffingCursor:first(params.staffingCursor)});}catch{error=true;}
+ const identity=await getIdentity();if(!identity)redirect('/sign-in');const params=await searchParams;let overview,error=false;const [availability,navigation]=await Promise.all([reportingGateway.leadershipExportAvailability(identity).catch(()=>null),principalNavigationGateway.timetable(identity)]);try{overview=await leadershipTimetableGateway.overview(identity,{cursor:first(params.cursor),staffingCursor:first(params.staffingCursor)});}catch{error=true;}
  const reconciled=overview?overview.counts.created+overview.counts.alreadyReconciled:0,blocked=overview?overview.counts.blockedManualConflict+overview.counts.blockedDomainRule:0;
- return <main id="main-content" className="container page-space"><PageStack>
+ return <main id="main-content" className="container page-space"><PrincipalTimetableNavigation current="timetable" availability={navigation}/><PageStack>
   <PageHeader eyebrow="Academic oversight" title="Timetable exceptions" description="Published timetable occurrences that still need owner resolution in the current branch." actions={overview?.publication&&availability?.reportTypes.includes('timetable-exceptions.v1')?<Link className="btn btn-secondary" href="/leadership/reports/timetable">Export report</Link>:undefined}/>
   {error||!overview?<Alert tone="danger" title="Timetable oversight unavailable">No exception count is shown because the current publication or its authorized owner projection could not be read.</Alert>:!overview.publication?<EmptyState icon="calendar" title="No effective published timetable" description="Drafts and manual Attendance sessions are not treated as a published school timetable."/>:<>
    <Card className="padded"><div className="section-header"><div><Badge tone={overview.reconciliation?.state==='COMPLETE'?'success':overview.reconciliation?'warning':'neutral'}>{overview.reconciliation?.state??'Not reconciled'}</Badge><h2>Publication revision {overview.publication.revisionNo}</h2><p className="muted">{overview.publication.academicYearName} · Effective {day(overview.publication.effectiveFrom)}{overview.publication.effectiveUntil?` to ${day(overview.publication.effectiveUntil)}`:' onward'}</p></div><p className="small muted">As of {time(overview.asOf,overview.timezone)} · {overview.timezone}<br/>Validated through {overview.publication.validatedUntil?day(overview.publication.validatedUntil):'not recorded'}</p></div></Card>

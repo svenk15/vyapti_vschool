@@ -5,6 +5,7 @@ import {commandStatusInput,cycleInput,freezeInput,scaleInput,type CreateCycleInp
 import {markInput,type SaveMarkInput} from '../domain/marks';
 type Scope={organizationId:string;schoolId:string};
 export interface AssessmentsRepository{
+ leadershipReadinessAvailable(actor:Identity,scope:Scope):Promise<boolean>;
  leadershipReadiness(actor:Identity,scope:Scope,cycleId:string|null):Promise<AssessmentReadiness>;
  planningWorkspace(actor:Identity,scope:Scope):Promise<AssessmentPlanningWorkspace>;
  createScale(actor:Identity,scope:Scope,input:CreateScaleInput):Promise<AssessmentScaleResult>;
@@ -18,6 +19,7 @@ export interface AssessmentsRepository{
  grantPlanning(operator:OperatorPrincipal,input:Scope&{accountId:string}):Promise<void>;
 }
 export function createAssessmentsUseCases(repository:AssessmentsRepository){return {
+ leadershipReadinessAvailable(actor:Identity|null,organizationId:unknown,schoolId:unknown){if(!actor)throw new AssessmentsError('UNAUTHENTICATED');return repository.leadershipReadinessAvailable(actor,{organizationId:uuid(organizationId),schoolId:uuid(schoolId)});},
  leadershipReadiness(actor:Identity|null,organizationId:unknown,schoolId:unknown,cycleId?:unknown){if(!actor)throw new AssessmentsError('UNAUTHENTICATED');return repository.leadershipReadiness(actor,{organizationId:uuid(organizationId),schoolId:uuid(schoolId)},cycleId===undefined||cycleId===null?null:uuid(cycleId));},
  planningWorkspace(actor:Identity|null,organizationId:unknown,schoolId:unknown){if(!actor)throw new AssessmentsError('UNAUTHENTICATED');return repository.planningWorkspace(actor,{organizationId:uuid(organizationId),schoolId:uuid(schoolId)});},
  createScale(actor:Identity|null,organizationId:unknown,schoolId:unknown,input:Record<string,unknown>){if(!actor)throw new AssessmentsError('UNAUTHENTICATED');return repository.createScale(actor,{organizationId:uuid(organizationId),schoolId:uuid(schoolId)},scaleInput(input));},

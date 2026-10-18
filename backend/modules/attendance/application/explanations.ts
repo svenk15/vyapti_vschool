@@ -2,6 +2,7 @@ import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/acce
 import type {AttendanceExplanationClarificationResult,AttendanceExplanationItem,AttendanceExplanationResult} from '../../../../shared/contracts/attendance-explanations';
 import {category,decision,narrative,positiveVersion,requiredUuid} from '../domain/explanations';
 export interface AttendanceExplanationRepository{
+ reviewerAvailable(actor:Identity,input:{organizationId:string;schoolId:string}):Promise<boolean>;
  grantReviewer(operator:OperatorPrincipal,input:{organizationId:string;schoolId:string;accountId:string}):Promise<{grantId:string;version:number}>;
  submit(actor:Identity,input:{studentId:string;sessionId:string;category:ReturnType<typeof category>;explanation:string;key:string;requestId:string}):Promise<AttendanceExplanationResult>;
  listParent(actor:Identity,input:{studentId:string}):Promise<readonly AttendanceExplanationItem[]>;
@@ -14,6 +15,7 @@ export interface AttendanceExplanationRepository{
  review(actor:Identity,input:{organizationId:string;schoolId:string;id:string;expectedVersion:number;decision:'ACCEPTED'|'DECLINED';response:string;key:string;requestId:string}):Promise<AttendanceExplanationResult>;
 }
 export function createAttendanceExplanationUseCases(repository:AttendanceExplanationRepository){return {
+ reviewerAvailable:(actor:Identity,organizationId:unknown,schoolId:unknown)=>repository.reviewerAvailable(actor,{organizationId:requiredUuid(organizationId),schoolId:requiredUuid(schoolId)}),
  grantReviewer:(operator:OperatorPrincipal,input:{organizationId:unknown;schoolId:unknown;accountId:unknown})=>repository.grantReviewer(operator,{organizationId:requiredUuid(input.organizationId),schoolId:requiredUuid(input.schoolId),accountId:requiredUuid(input.accountId)}),
  submit:(actor:Identity,input:{studentId:unknown;sessionId:unknown;category:unknown;explanation:unknown;key:unknown;requestId:string})=>repository.submit(actor,{studentId:requiredUuid(input.studentId),sessionId:requiredUuid(input.sessionId),category:category(input.category),explanation:narrative(input.explanation),key:requiredUuid(input.key),requestId:requiredUuid(input.requestId)}),
  listParent:(actor:Identity,studentId:unknown)=>repository.listParent(actor,{studentId:requiredUuid(studentId)}),
