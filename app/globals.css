@@ -1167,3 +1167,48 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .sort-drawer .drawer-header{padding:16px}.sort-drawer .drawer-attributes{padding:0 16px 16px}.sort-drawer .drawer-footer{padding:16px}.sort-drawer .drawer-footer .btn{min-height:44px}
  .student-enrollment-grid{grid-template-columns:minmax(0,1fr)}.student-enrollment-stepper li{font-size:12px;line-height:18px}.student-enrollment-workflow .workflow-actions{margin-top:24px}
 }
+
+/* UX-07: cross-workspace protected compositions. */
+.teacher-portal-content .container{max-width:1120px}
+.leadership-portal-content .container,.family-portal-content .container,.student-portal-content .container{max-width:1440px}
+.family-portal-content,.student-portal-content{background:var(--vs-canvas);color:var(--vs-text)}
+.family-topbar-school{margin-left:auto;color:var(--vs-text-muted);font-size:12px;line-height:18px}
+.family-child-context-shell,.student-context-shell{max-width:1440px;padding:24px 32px 0}
+.family-child-context,.student-context-ribbon{min-height:72px;padding:14px 16px;border-color:var(--vs-border);border-radius:12px;background:var(--vs-surface-subtle)}
+.family-child-identity strong{color:var(--vs-text);font-size:14px;line-height:20px}.family-child-identity small{color:var(--vs-text-muted);font-size:12px;line-height:18px}
+.family-child-identity .portal-identity-avatar{background:var(--vs-surface);color:var(--vs-primary)}
+.family-child-selector{color:var(--vs-text-muted)}.family-child-selector select{min-height:44px;border-color:var(--vs-text-muted);border-radius:8px;background:var(--vs-surface);color:var(--vs-text);font-size:14px}
+.student-current-context{color:var(--vs-text-muted);font-size:12px;line-height:18px}
+.family-summary-grid,.student-home-grid{gap:24px}.family-child-grid{gap:16px}
+.student-next-class.populated{border-color:var(--vs-primary);background:var(--vs-primary);color:var(--vs-on-primary)}
+.student-focus-icon,.family-child-avatar{background:var(--vs-surface-subtle);color:var(--vs-primary)}
+.student-assignment-table,.student-week-table{border-color:var(--vs-border);background:var(--vs-surface)}
+.student-assignment-table thead th,.student-week-table th{background:var(--vs-surface-subtle);color:var(--vs-text-muted)}
+.student-assignment-table th,.student-assignment-table td,.student-week-table th,.student-week-table td{border-color:var(--vs-border)}
+.student-timetable-slot{border-color:var(--vs-primary);background:var(--vs-surface-subtle)}
+.family-bottom-nav,.student-bottom-nav{border-color:var(--vs-border);background:var(--vs-surface);box-shadow:0 -4px 16px color-mix(in srgb,var(--vs-text) 8%,transparent)}
+.family-bottom-nav a,.family-bottom-nav button,.student-bottom-nav a,.student-bottom-nav button{color:var(--vs-text-muted)}
+.family-bottom-nav a[aria-current=page],.student-bottom-nav a[aria-current=page]{color:var(--vs-primary)}
+
+@media(max-width:1199px){
+ .family-child-context-shell,.student-context-shell{padding-inline:24px}
+}
+@media(max-width:1023px){
+ .family-portal-shell .portal-topbar,.student-portal-shell .portal-topbar{grid-template-columns:44px minmax(0,1fr) auto}
+ .family-portal-shell .portal-workspace-label,.student-portal-shell .portal-workspace-label{display:block;min-width:0;overflow:hidden;color:var(--vs-text);font-size:14px;font-weight:600;line-height:20px;text-overflow:ellipsis;white-space:nowrap}
+ .family-portal-shell .family-topbar-school,.student-portal-shell .family-topbar-school{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+@media(max-width:767px){
+ .family-portal-shell .portal-topbar,.student-portal-shell .portal-topbar{grid-template-columns:44px minmax(0,1fr)}
+ .family-portal-shell .family-topbar-school,.student-portal-shell .family-topbar-school{display:none}
+ .family-child-context-shell,.student-context-shell{padding:16px 16px 0}
+ .family-child-context,.student-context-ribbon{min-height:0;padding:12px}
+ .family-child-context{grid-template-columns:minmax(0,1fr) auto;gap:10px}
+ .family-child-selector select{width:136px;min-width:136px;height:44px;padding:8px 30px 8px 10px;color:var(--vs-text)}
+ .family-selector-icon{right:10px}
+ .family-child-identity small{max-width:none}
+ .family-portal-content .page-space,.student-portal-content .page-space{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+ .family-bottom-nav,.student-bottom-nav{padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+ .family-bottom-nav a,.family-bottom-nav button,.student-bottom-nav a,.student-bottom-nav button{min-height:48px;font-size:11px;line-height:16px}
+ .family-bottom-nav a[aria-current=page],.student-bottom-nav a[aria-current=page]{box-shadow:inset 0 2px var(--vs-primary)}
+}
