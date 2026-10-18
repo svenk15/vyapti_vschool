@@ -56,7 +56,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
    <div className="portal-top-context"><BranchSwitcher home={home} contextHref={contextHref}/>{academicYearLabel&&<span className="portal-top-year" aria-label={`Academic year ${academicYearLabel}`}>{academicYearLabel}</span>}</div>
   </header>
   {open&&<div className="portal-sidebar-backdrop" aria-hidden="true" onClick={()=>close(true)}/>}
-  <aside ref={sidebar} id="portal-navigation" className={`portal-sidebar${open?' portal-sidebar-open':''}`} aria-label={`${roleLabel} menu`}>
+  <aside ref={sidebar} id="portal-navigation" className={`portal-sidebar${open?' portal-sidebar-open':''}`} aria-label={`${roleLabel} menu`} role={open?'dialog':undefined} aria-modal={open||undefined}>
    <div className="portal-sidebar-heading">
     <Link className="portal-brand" href={homeHref} aria-label={`VSchool ${roleLabel.toLowerCase()}`}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
     <button type="button" className="portal-sidebar-close" onClick={()=>close(true)}><span aria-hidden="true"><PortalIcon name="close"/></span><span className="sr-only">Close menu panel</span></button>

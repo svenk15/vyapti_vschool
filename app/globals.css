@@ -1069,3 +1069,101 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:767px){h1{font-size:24px;line-height:32px}.container{padding-inline:16px}.page-space{padding-top:24px;padding-bottom:48px}.padded{padding:16px}.page-heading{gap:16px}.field input:not([type=checkbox]):not([type=radio]),.field select,.field textarea{font-size:16px}.btn{min-height:44px}.two-columns,.form-grid{grid-template-columns:minmax(0,1fr)}}
 @media(pointer:coarse){.btn{min-height:44px}.btn-small{min-height:44px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* UX-06: shared protected shell and Administrator production compositions. */
+.portal-shell{grid-template-columns:240px minmax(0,1fr);grid-template-rows:64px minmax(0,1fr);background:var(--vs-canvas);font-family:inherit;font-size:14px;line-height:22px}
+.portal-sidebar{--portal-nav-surface:var(--vs-sidebar-bg);--portal-nav-text:var(--vs-sidebar-text);--portal-nav-muted:var(--vs-sidebar-muted);width:240px;background:var(--vs-sidebar-bg);color:var(--vs-sidebar-text);border-color:var(--vs-border)}
+.portal-sidebar-heading{padding:20px 16px 16px}
+.portal-brand{gap:12px;min-height:44px;padding-inline:12px;color:var(--vs-sidebar-text);font-size:22px;font-weight:600}
+.portal-brand-mark{width:32px;height:32px;border-color:var(--vs-sidebar-muted);border-radius:8px;color:var(--vs-sidebar-text)}
+.portal-school-identity{margin:0 16px 16px;padding:0 12px 16px;border-color:color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent)}
+.portal-school-identity strong{color:var(--vs-sidebar-text);font-size:14px;line-height:20px}.portal-school-identity span{color:var(--vs-sidebar-muted);font-size:12px;line-height:18px}
+.portal-nav-scroll{padding:0 16px 24px;scrollbar-color:var(--vs-sidebar-muted) transparent}
+.portal-sidebar nav{gap:24px}
+.portal-nav-group{gap:4px}
+.portal-nav-group h2{margin:0 12px 4px;color:var(--vs-sidebar-muted);font-size:11px;font-weight:600;line-height:16px;letter-spacing:.08em}
+.portal-nav-group-items{gap:4px}
+.portal-nav-group a,.portal-nav-disclosure{position:relative;gap:12px;min-height:44px;padding:12px;border-radius:8px;color:var(--vs-sidebar-text);font-size:14px;font-weight:500;line-height:20px}
+.portal-nav-disclosure{font-weight:600}
+.portal-nav-group-collapsible .portal-nav-group-items{padding:4px 0 0 20px}
+.portal-nav-group-collapsible a{min-height:44px;padding:12px;font-size:14px}
+.portal-nav-group a:hover,.portal-nav-disclosure:hover,.portal-nav-disclosure[aria-expanded=true]{background:var(--vs-sidebar-hover);color:var(--vs-sidebar-text)}
+.portal-nav-group a[aria-current=page]{background:var(--vs-sidebar-active);color:var(--vs-sidebar-active-text);font-weight:600;box-shadow:inset 3px 0 var(--vs-sidebar-active-text)}
+.portal-nav-icon{width:20px;height:20px;opacity:1}.portal-nav-icon svg{width:20px;height:20px;stroke-width:1.75}.portal-nav-group a[aria-current=page] .portal-nav-icon{color:inherit}
+.portal-nav-group a:focus-visible,.portal-brand:focus-visible,.portal-identity:focus-visible,.portal-sidebar button:focus-visible{outline-color:var(--vs-sidebar-text)}
+.portal-sidebar-footer{padding:16px;border-color:color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent)}
+.portal-identity{gap:12px;min-height:52px;padding:8px 12px;color:var(--vs-sidebar-text)}
+.portal-identity-avatar{width:32px;height:32px;background:var(--vs-sidebar-active);color:var(--vs-sidebar-active-text);font-size:12px}
+.portal-identity strong{font-size:14px;line-height:20px}.portal-identity small{color:var(--vs-sidebar-muted);font-size:12px;line-height:18px}
+.portal-sidebar-signout{margin-top:8px;padding-top:8px;border-color:color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent)}
+.portal-sidebar-signout .btn{min-height:44px;padding:12px;color:var(--vs-sidebar-muted);font-size:14px}.portal-sidebar-signout .btn:hover{background:var(--vs-sidebar-hover);color:var(--vs-sidebar-text)}
+.portal-sidebar-close{border-color:var(--vs-sidebar-muted);border-radius:8px;color:var(--vs-sidebar-text)}
+.portal-topbar{min-height:64px;padding:0 32px;border-color:var(--vs-border);background:color-mix(in srgb,var(--vs-surface) 96%,transparent)}
+.portal-workspace-label{color:var(--vs-text-muted);font-size:12px;line-height:18px}
+.portal-top-year{border-color:var(--vs-border);color:var(--vs-text-muted)}
+.portal-context-label,.portal-context-single,.portal-context-current span{color:var(--vs-text-muted)}
+.portal-context-current strong{color:var(--vs-text);font-size:14px;line-height:20px}
+.portal-context-control .field select{min-height:44px;font-size:14px}
+.portal-context-error{border-color:var(--vs-border);border-radius:8px;background:var(--vs-surface);box-shadow:var(--floating-shadow)}
+.portal-page-content .brand-surface{min-height:calc(100dvh - 64px)}
+.portal-page-content .container{max-width:1440px;padding-inline:32px}
+.portal-page-content .page-heading h1{font-size:28px;font-weight:600;line-height:36px;letter-spacing:-.02em}
+
+.admin-dashboard{max-width:1440px}
+.admin-dashboard .page-heading h1{font-size:28px;font-weight:600;line-height:36px;letter-spacing:-.02em}
+.dashboard-summary-grid{gap:16px;margin-bottom:24px}
+.dashboard-metric{min-height:0;padding:24px}
+.dashboard-metric p,.dashboard-metric span{color:var(--vs-text-muted);font-size:12px;line-height:18px}.dashboard-metric strong{font-size:30px;font-weight:600;line-height:36px;letter-spacing:0;font-variant-numeric:tabular-nums}
+.dashboard-work-grid{gap:24px}.dashboard-primary-column,.dashboard-secondary-column{gap:24px}
+.dashboard-card-title{padding:20px 24px;border-color:var(--vs-border)}
+.dashboard-card-title h2{font-size:18px;font-weight:600;line-height:26px;letter-spacing:0}
+.dashboard-work-list,.dashboard-session-list{padding-inline:24px}.dashboard-work-row{gap:16px;padding:16px 0;border-color:var(--vs-border)}
+.dashboard-work-row h3{font-size:16px;line-height:24px}.dashboard-work-row p{margin-top:4px;color:var(--vs-text-muted);font-size:12px;line-height:18px}
+.admin-dashboard .page-heading .btn,.dashboard-work-row .btn,.dashboard-quick-list>a{min-height:40px;padding:9px 16px;border-color:var(--vs-border);border-radius:8px;background:var(--vs-surface);color:var(--vs-text);gap:8px;font-size:14px;font-weight:600;line-height:20px}
+.admin-dashboard .page-heading .btn:hover,.dashboard-work-row .btn:hover,.dashboard-quick-list>a:hover{border-color:var(--vs-primary);background:var(--vs-surface-subtle);color:var(--vs-text)}
+.dashboard-work-icon{background:var(--warning-bg);color:var(--warning-text)}
+.dashboard-readiness-card>p{padding-inline:24px;color:var(--vs-text-muted);font-size:14px;line-height:22px}.dashboard-readiness-card>progress{width:calc(100% - 48px);margin-inline:24px;background:var(--vs-surface-subtle)}.dashboard-readiness-card>progress::-webkit-progress-bar{background:var(--vs-surface-subtle)}
+.dashboard-readiness-badges{padding-inline:24px}.dashboard-quick-list{padding:0 24px 24px}
+.dashboard-session-row{border-color:var(--vs-border);color:var(--vs-text)}.dashboard-session-row time,.dashboard-session-row span:not(.badge){color:var(--vs-text-muted)}
+
+.portal-page-content .students-directory-shell,.portal-page-content .branch-edit-shell{max-width:1440px;padding-inline:32px}
+.students-page,.sort-drawer{font:inherit}
+.students-page>.page-heading h1{font-size:28px;font-weight:600;line-height:36px;letter-spacing:-.02em}
+.students-page>.page-heading .page-description{font-size:14px;line-height:22px}
+.students-page>.page-heading .btn,.students-directory .list-toolbar-actions .btn{min-height:40px;padding:9px 16px;font-size:14px;font-weight:600;line-height:20px}
+.students-directory-tabs>span{font-size:14px;font-weight:600;line-height:20px}
+.students-directory .list-search-composition{height:44px;border-color:var(--vs-border);background:var(--vs-surface)}
+.students-directory-table{border-color:var(--vs-border);border-radius:12px;background:var(--vs-surface)}
+.students-directory-table .data-table{font-size:14px;line-height:22px}
+.students-directory-table .data-table thead th{min-height:40px;padding:11px 16px;background:var(--vs-surface-subtle);color:var(--vs-text-muted);font-size:12px;font-weight:600;line-height:18px}
+.students-directory-table .data-table tbody th,.students-directory-table .data-table tbody td{height:auto;min-height:56px;padding:12px 16px;font-size:14px;line-height:22px;border-color:var(--vs-border)}
+.students-directory-table .data-table tr:hover th,.students-directory-table .data-table tr:hover td{background:var(--vs-surface-subtle)}
+.students-directory-table .person-cell strong{font-size:14px;font-weight:600}.students-directory-table .person-cell span.small{font-size:12px;line-height:18px}
+.students-directory-table .badge{font-size:12px;font-weight:500}.students-directory-table .student-row-action{min-height:32px;padding:5px 12px;font-size:12px;font-weight:600}
+.student-manage-link{gap:12px;color:var(--vs-text)}.student-manage-link:hover{background:var(--vs-surface-subtle)}.student-action-icon{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;color:var(--vs-primary)}
+.sort-drawer{width:min(400px,100vw);border-radius:16px 0 0 16px;background:var(--vs-surface);color:var(--vs-text)}.sort-drawer::backdrop{background:var(--dialog-backdrop)}
+.sort-drawer .drawer-header{min-height:72px;padding:20px 24px}.sort-drawer .drawer-header h2{font-size:18px;font-weight:600;line-height:26px}.sort-drawer .drawer-attributes{padding:0 24px 24px}.sort-drawer .drawer-attribute>summary{min-height:44px;padding:12px 0;font-size:14px;font-weight:600}.sort-drawer .drawer-attribute .check-control{min-height:44px;padding:10px 0;font-size:14px}.sort-drawer .drawer-footer{padding:16px 24px}.sort-drawer .drawer-footer .btn{min-height:40px;padding:9px 16px;font-size:14px;font-weight:600}
+.student-enrollment-grid{grid-template-columns:minmax(0,760px) minmax(280px,320px);gap:24px}.student-enrollment-card{min-height:0}.student-enrollment-workflow{gap:24px}.student-enrollment-workflow .workflow-actions{margin-top:24px}
+
+@media(max-width:1199px){
+ .portal-topbar{padding-inline:24px}.portal-page-content .container,.portal-page-content .students-directory-shell,.portal-page-content .branch-edit-shell{padding-inline:24px}
+ .dashboard-work-grid{grid-template-columns:minmax(0,1fr)}.dashboard-secondary-column{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:1023px){
+ .portal-shell{display:block}
+ .portal-sidebar{display:none;position:fixed;inset:0 auto 0 0;width:min(320px,calc(100vw - 32px));height:100dvh;box-shadow:var(--floating-shadow)}.portal-sidebar-open{display:flex}
+ .portal-sidebar-heading{padding:12px 16px}.portal-sidebar-close{display:grid;place-items:center;width:44px;height:44px}.portal-nav-scroll{padding:8px 16px 24px}
+ .portal-sidebar-backdrop{position:fixed;inset:0;z-index:35;background:var(--dialog-backdrop);backdrop-filter:none}
+ .portal-topbar{display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:64px;gap:12px;min-height:64px;padding:0 24px}.portal-menu-toggle{display:inline-grid;place-items:center;width:44px;height:44px;border:1px solid var(--vs-border);border-radius:8px;background:var(--vs-surface);color:var(--vs-text)}.portal-mobile-brand,.portal-workspace-label{display:none}.portal-top-context{grid-column:2;grid-row:1;min-width:0}.portal-top-year{display:none}.portal-context-current{max-width:none}.portal-context-control{justify-content:flex-end}.portal-context-control .field{width:min(280px,42vw)}
+ .portal-page-content .brand-surface{min-height:calc(100dvh - 64px)}
+}
+@media(max-width:767px){
+ .portal-topbar{padding-inline:16px}.portal-context-single{display:none}.portal-context-control .field{width:min(100%,220px)}
+ .portal-page-content .container,.portal-page-content .students-directory-shell,.portal-page-content .branch-edit-shell{padding-inline:16px}.portal-page-content .page-space{padding-top:24px;padding-bottom:48px}
+ .portal-page-content .page-heading h1,.admin-dashboard .page-heading h1,.students-page>.page-heading h1{font-size:24px;line-height:32px}
+ .dashboard-summary-grid{grid-template-columns:minmax(0,1fr);gap:12px}.dashboard-metric{display:flex;min-height:0;padding:16px}.dashboard-metric .dashboard-icon{display:block}.dashboard-secondary-column{grid-template-columns:minmax(0,1fr)}
+ .dashboard-card-title{padding:16px}.dashboard-work-list,.dashboard-session-list{padding-inline:16px}.dashboard-work-row{grid-template-columns:34px minmax(0,1fr);gap:12px}.dashboard-work-row .btn{grid-column:2;justify-self:start}.dashboard-readiness-card>p{padding-inline:16px}.dashboard-readiness-card>progress{width:calc(100% - 32px);margin-inline:16px}.dashboard-readiness-badges{padding-inline:16px}.dashboard-quick-list{padding:0 16px 16px}
+ .students-page>.page-heading .button-row{width:100%}.students-page>.page-heading .btn{flex:1}.students-directory-table .data-table tbody th,.students-directory-table .data-table tbody td{min-height:0;padding:0}
+ .sort-drawer .drawer-header{padding:16px}.sort-drawer .drawer-attributes{padding:0 16px 16px}.sort-drawer .drawer-footer{padding:16px}.sort-drawer .drawer-footer .btn{min-height:44px}
+ .student-enrollment-grid{grid-template-columns:minmax(0,1fr)}.student-enrollment-stepper li{font-size:12px;line-height:18px}.student-enrollment-workflow .workflow-actions{margin-top:24px}
+}

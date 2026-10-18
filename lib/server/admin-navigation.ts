@@ -6,7 +6,7 @@ import type {PortalIconName} from '../../components/portal-navigation-group';
 import {memoizeModuleCapability} from './navigation-eligibility';
 
 export type AdminNavigationItem=Readonly<{label:string;href:string;icon:PortalIconName}>;
-export type AdminNavigationGroup=Readonly<{id:string;label:string;icon:PortalIconName;collapsible:true;items:readonly AdminNavigationItem[]}>;
+export type AdminNavigationGroup=Readonly<{id:string;label:string;icon:PortalIconName;collapsible:boolean;showLabel?:boolean;items:readonly AdminNavigationItem[]}>;
 type Route={label:string;href:string;icon:PortalIconName;permission:string;modules?:readonly ModuleId[];institutionAdmin?:boolean};
 
 const routes:readonly Route[]=[
@@ -31,8 +31,8 @@ const routes:readonly Route[]=[
  {label:'Calendar & events',href:'/admin/events',icon:'calendar',permission:'communication.publish',modules:['communication','academic_core','student_core']},
  {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
-const sections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[]}>[]=[
- {id:'today',label:'Today',icon:'home',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/events','/admin/reports/attendance']},
+const sections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[];collapsible?:boolean;showLabel?:boolean}>[]=[
+ {id:'daily-work',label:'Daily work',icon:'home',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/events','/admin/reports/attendance'],collapsible:false,showLabel:false},
  {id:'teaching-academics',label:'Teaching & academics',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/assessments','/admin/timetable','/admin/timetable/cover']},
  {id:'people-access',label:'People & access',icon:'people',hrefs:['/admin/users','/admin/teachers']},
  {id:'communication-work',label:'Communication & work',icon:'mail',hrefs:['/admin/communication']},
@@ -55,5 +55,5 @@ export async function getAdminNavigation(identity:Identity,home:AdminHome):Promi
  }));
  const visible=new Set(checks.filter(([,allowed])=>allowed).map(([href])=>href));
  const routeByHref=new Map(routes.map(route=>[route.href,route]));
- return sections.map(section=>({id:section.id,label:section.label,icon:section.icon,collapsible:true as const,items:section.hrefs.flatMap(href=>{const route=routeByHref.get(href);return route&&visible.has(href)?[{label:route.label,href:route.href,icon:route.icon}]:[];})})).filter(group=>group.items.length>0);
+ return sections.map(section=>({id:section.id,label:section.label,icon:section.icon,collapsible:section.collapsible??true,showLabel:section.showLabel,items:section.hrefs.flatMap(href=>{const route=routeByHref.get(href);return route&&visible.has(href)?[{label:route.label,href:route.href,icon:route.icon}]:[];})})).filter(group=>group.items.length>0);
 }
