@@ -2,6 +2,12 @@
 
 Last updated: 18 October 2026.
 
+## 18 October 2026 — M05 current-source release journey
+
+The must-have text-notice journey is **VERIFIED_CURRENT_SOURCE**; human review remains **PENDING**. The current seeded flow proves separate Administrator AUTHOR/PUBLISH authority, an independently assigned Teacher-backed REVIEW actor, frozen Parent and Student purpose-specific recipients, explicit read/acknowledgement facts and Principal aggregate coverage. The general Guardian fixture was not granted Communication access; the existing idempotent Communication fixture supplies the exact `communication.notice.read` purpose and child context.
+
+Focused real-PostgreSQL Communication tests passed 8/8 with all 117 migrations applied. Ten current-source desktop/mobile role surfaces were exercised and inspected. That inspection found mobile root overflow in the author and reviewer directory tables; they now use a scoped responsive card-table composition, with a 390 px DOM measurement proving no document overflow. Focused ESLint passed. Evidence: `docs/evidence/must-have-m05-2026-10-18/`. Font portability, native accessibility, production messaging/provider review, TEN-03 and human acceptance remain pending.
+
 ## 18 October 2026 — COM-05 / LEA-32 scanned notice attachments
 
 LEA-32 is **ENGINEERING_COMPLETE** for the approved synthetic portal contract; human review is **PENDING**. An AUTHOR saves the proposal before upload, Documents scans exact PDF/JPEG/PNG bytes, and only a real CLEAN verdict can produce an immutable version/grant. Every attachment edit creates a new notice proposal revision and review digest. The assigned independent reviewer sees exact filenames and approves that digest; the separate PUBLISH actor freezes ordered references into the immutable NoticeVersion and current recipient manifest.

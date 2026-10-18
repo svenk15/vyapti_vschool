@@ -1,0 +1,86 @@
+{
+  "checkedAt": "2026-10-18T05:14:09.301Z",
+  "buildId": "jCObsKqoFwjNr2pibKzUn",
+  "results": [
+    {
+      "viewport": "desktop",
+      "name": "admin-communication",
+      "path": "/admin/communication",
+      "heading": "Communication",
+      "tables": 2,
+      "cards": 2
+    },
+    {
+      "viewport": "desktop",
+      "name": "notice-reviews",
+      "path": "/leadership/notices/review",
+      "heading": "Notice reviews",
+      "tables": 1,
+      "cards": 1
+    },
+    {
+      "viewport": "desktop",
+      "name": "notice-coverage",
+      "path": "/leadership/communication",
+      "heading": "Notice coverage",
+      "tables": 1,
+      "cards": 4
+    },
+    {
+      "viewport": "desktop",
+      "name": "parent-messages",
+      "path": "/family/notices?child=090a16d2-5bfa-44a4-9e79-c089515adbab",
+      "heading": "Messages",
+      "tables": 0,
+      "cards": 3
+    },
+    {
+      "viewport": "desktop",
+      "name": "student-messages",
+      "path": "/student/notices",
+      "heading": "Messages",
+      "tables": 0,
+      "cards": 2
+    },
+    {
+      "viewport": "mobile",
+      "name": "admin-communication",
+      "path": "/admin/communication",
+      "heading": "Communication",
+      "tables": 2,
+      "cards": 2
+    },
+    {
+      "viewport": "mobile",
+      "name": "notice-reviews",
+      "path": "/leadership/notices/review",
+      "heading": "Notice reviews",
+      "tables": 1,
+      "cards": 1
+    },
+    {
+      "viewport": "mobile",
+      "name": "notice-coverage",
+      "path": "/leadership/communication",
+      "heading": "Notice coverage",
+      "tables": 1,
+      "cards": 4
+    },
+    {
+      "viewport": "mobile",
+      "name": "parent-messages",
+      "path": "/family/notices?child=090a16d2-5bfa-44a4-9e79-c089515adbab",
+      "heading": "Messages",
+      "tables": 0,
+      "cards": 3
+    },
+    {
+      "viewport": "mobile",
+      "name": "student-messages",
+      "path": "/student/notices",
+      "heading": "Messages",
+      "tables": 0,
+      "cards": 2
+    }
+  ]
+}
