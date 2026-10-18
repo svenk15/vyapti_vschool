@@ -139,7 +139,8 @@ test("controlled list recipes apply or discard drafts and retain unknown request
   await expect(page.getByRole("button", { name: "Filters (2)" })).toBeFocused();
   await expect(page.getByRole("row")).toHaveCount(5);
 
-  const sortTrigger = page.getByRole("button", { name: /Sort · Student A–Z/ });
+  const sortTrigger = page.getByRole("button", { name: "Sort", exact: true });
+  await expect(sortTrigger).toHaveAccessibleDescription("Currently sorted by Student A–Z");
   await sortTrigger.click();
   const sortDialog = page.getByRole("dialog", { name: "Sort" });
   await expect(sortDialog.locator("details")).toHaveCount(2);
@@ -149,12 +150,13 @@ test("controlled list recipes apply or discard drafts and retain unknown request
   await page.getByRole("radio", { name: "Descending", exact: true }).check();
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(sortTrigger).toBeFocused();
-  await expect(sortTrigger).toContainText("Student A–Z");
+  await expect(sortTrigger).toHaveAccessibleDescription("Currently sorted by Student A–Z");
   await sortTrigger.click();
   await page.getByRole("radio", { name: "Class", exact: true }).check();
   await page.getByRole("radio", { name: "Descending", exact: true }).check();
-  await page.getByRole("button", { name: "Apply sort" }).click();
-  await expect(page.getByRole("button", { name: /Sort · Class Z–A/ })).toBeFocused();
+  await page.getByRole("button", { name: "Apply", exact: true }).click();
+  await expect(sortTrigger).toBeFocused();
+  await expect(sortTrigger).toHaveAccessibleDescription("Currently sorted by Class Z–A");
 
   await expect(page.getByText("example-request-6f0f4d8a", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Retry same request" }).click();

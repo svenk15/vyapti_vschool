@@ -24,6 +24,7 @@ const demos = [
   { name: "LEA-07 weekly leadership review", script: "scripts/demo-principal-weekly-review.ts", required: true },
   { name: "Administrator Today connected review queues", script: "scripts/demo-dashboard.ts" },
   { name: "BRD-02 published synthetic brand", script: "scripts/demo-branding.ts" },
+  { name: "UX-08 inherited and overridden appearance", script: "scripts/demo-appearance.ts", required: true },
   { name: "SA-38 Admissions intake", script: "scripts/demo-admissions.ts", required: true },
   { name: "TT-01 weekly timetable pattern", script: "scripts/demo-timetable.ts", required: true },
   { name: "LEA-16 Principal timetable exceptions", script: "scripts/demo-principal-timetable.ts", required: true },
@@ -127,6 +128,7 @@ function main(): void {
   console.log("- artifacts/coordination-01/private-demo.json");
   console.log("- artifacts/requests-01/private-demo.json");
   console.log("- artifacts/dashboard-01/private-demo.json");
+  console.log("- artifacts/appearance-01/private-demo.json");
   console.log("- artifacts/admissions-01/private-demo.json");
   console.log("- artifacts/timetable-01/private-demo.json");
   console.log("- artifacts/students-03/private-demo.json");
