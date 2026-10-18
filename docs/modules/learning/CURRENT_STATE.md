@@ -1,5 +1,15 @@
 # Learning current state
 
+## Must-have M06 current-source checkpoint (18 October 2026)
+
+Status: VERIFIED_CURRENT_SOURCE / HUMAN_REVIEW_PENDING
+
+The current source was exercised as one connected assignment-to-feedback journey across all permitted projections: Teacher assignment and accepted-response review, exact Student immutable submission with published guidance, assignment-only Parent read, and Principal aggregate completion. The Parent journey used the fixture with the exact `learning.assignment.read_child` purpose; the general Guardian fixture was not broadened. Parent access continues to exclude Student drafts, accepted response text and Teacher feedback.
+
+Focused real-PostgreSQL Learning verification passed 19/19 against `vyapti_vschool_test` with all 117 repository migrations applied and none pending. Current-source browser inspection covered eight desktop and eight mobile states. Mobile measurements recorded `390px` client and scroll widths for every route, and direct screenshot review found the shared compositions usable without root overflow. Existing LEA-01–04 and LEA-17/18 owner evidence remains applicable; this checkpoint adds current-source cross-persona regression evidence rather than changing schema or business behavior. Evidence: [must-have M06](../../evidence/must-have-m06-2026-10-18/README.md).
+
+Human visual review, font portability, native accessibility, TEN-03 and production readiness remain pending.
+
 ## LEA-01
 
 Status: ENGINEERING_VERIFIED_SUPPORTED_SLICE / HUMAN_REVIEW_PENDING

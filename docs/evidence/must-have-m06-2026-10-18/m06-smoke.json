@@ -1,0 +1,94 @@
+{
+  "checkedAt": "2026-10-18T05:24:10.581Z",
+  "buildId": "jCObsKqoFwjNr2pibKzUn",
+  "results": [
+    {
+      "viewport": "mobile",
+      "name": "teacher-learning",
+      "path": "/teacher/learning",
+      "heading": "Teaching & learning",
+      "expected": "Submitted habitats review",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "viewport": "mobile",
+      "name": "teacher-assignment",
+      "path": "/teacher/learning/2187ab2f-63cb-48d9-bd44-82bc13c29986",
+      "heading": "Submitted habitats review",
+      "expected": "Submitted responses",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "viewport": "mobile",
+      "name": "teacher-feedback",
+      "path": "/teacher/learning/2187ab2f-63cb-48d9-bd44-82bc13c29986/submissions/6e618d1e-cdb1-45ce-9751-64bfb676fce7",
+      "heading": "Review student work",
+      "expected": "Review student work",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "viewport": "mobile",
+      "name": "student-assignments",
+      "path": "/student/assignments?student=090a16d2-5bfa-44a4-9e79-c089515adbab",
+      "heading": "Assignments",
+      "expected": "Submitted habitats review",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "viewport": "mobile",
+      "name": "student-feedback",
+      "path": "/student/assignments/2187ab2f-63cb-48d9-bd44-82bc13c29986?student=090a16d2-5bfa-44a4-9e79-c089515adbab&work=1",
+      "heading": "Your work",
+      "expected": "Published guidance",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "viewport": "mobile",
+      "name": "family-learning",
+      "path": "/family/learning?child=090a16d2-5bfa-44a4-9e79-c089515adbab",
+      "heading": "Learning",
+      "expected": "Submitted habitats review",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "viewport": "mobile",
+      "name": "family-assignment",
+      "path": "/family/learning/2187ab2f-63cb-48d9-bd44-82bc13c29986?child=090a16d2-5bfa-44a4-9e79-c089515adbab",
+      "heading": "Submitted habitats review",
+      "expected": "Read-only family view",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "viewport": "mobile",
+      "name": "principal-learning",
+      "path": "/leadership/learning",
+      "heading": "Assignment completion",
+      "expected": "Assignment completion",
+      "width": {
+        "client": 390,
+        "scroll": 390
+      }
+    }
+  ]
+}
