@@ -1,7 +1,7 @@
 import {createHash,randomUUID} from 'node:crypto';
 import type {Prisma,PrismaClient} from '../../../../generated/prisma/client';
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
-import type {SupportCapability,SupportCommandResult,SupportHandoffSummary,SupportProcedureView,SupportReferralDetail,SupportReferralSummary,SupportSpecialistCandidate} from '../../../../shared/contracts/support';
+import type {SupportCapability,SupportCommandResult,SupportHandoffSummary,SupportProcedureView,SupportReferralSummary,SupportSpecialistCandidate} from '../../../../shared/contracts/support';
 import {AccessError} from '../../access/contracts/index';
 import type {SupportPupilContextPort} from '../../students/contracts/support-pupil-context';
 import type {ReleaseManifest,VerifiedDatabaseContextPort} from '../../tenancy/contracts/index';

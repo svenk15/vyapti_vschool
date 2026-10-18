@@ -46,7 +46,7 @@ export function FamilyNotice({notice, studentId, backHref}: {notice: NoticeDetai
       {notice.status === 'PUBLISHED' && notice.attachments.length > 0 && <section className="notice-downloads" aria-labelledby="notice-downloads-title">
         <h2 id="notice-downloads-title">Attachments</h2>
         <ul>{notice.attachments.map(item => <li key={item.versionId}><span aria-hidden="true">📎</span><span>{item.filename}</span><a className="btn btn-secondary btn-normal" href={`/api/v1/documents/versions/${item.versionId}?grant=${item.grantId}`}>Download</a></li>)}</ul>
-        <p className="small muted">Each download rechecks your current access and the file's current safety state.</p>
+        <p className="small muted">Each download rechecks your current access and the file&apos;s current safety state.</p>
       </section>}
       <div className="section-divider"/>
       {notice.status === 'WITHDRAWN' ? <p className="muted">Acknowledgement is no longer available.</p> : notice.requiresAcknowledgement ? (ack
