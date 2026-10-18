@@ -7,7 +7,8 @@ Updated: 18 October 2026 (Asia/Kolkata)
 | UX-01 | VERIFIED | NOT_APPLICABLE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-02 | VERIFIED | AUTOMATED_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-03 | VERIFIED | NOT_APPLICABLE_PERSISTENCE_SLICE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-04–UX-08 | NOT_STARTED | NOT_STARTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-04 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-05–UX-08 | NOT_STARTED | NOT_STARTED | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -26,10 +27,12 @@ UX-02 adds the four exact semantic token sets, official locally served Inter 4.1
 
 UX-03 adds one concrete Access-owned institution theme and one nullable branch override with allowed-value constraints and forward-only migration. Institution and branch creation accept validated optional selections. Framework-independent use cases expose effective/editable reads plus versioned institution/branch updates; current institution/branch appearance authority, lock order, replay protection and atomic tenant evidence are preserved. Both designated local databases have all 118 migrations. Focused unit 2/2 and real-PostgreSQL Access 10/10 passed with defaults, inheritance, explicit Forest, clearing, stale/replay/isolation, rollback and revoked-receipt coverage. See [UX-03 evidence](../../evidence/ux-revamp-03-2026-10-18/README.md).
 
+UX-04 is implemented at `1045cee4bb764b73985edaf60d0b0c038fda800a`. One reusable accessible radio-card picker is used by institution settings, branch settings, and branch creation. Local preview never becomes tenant authority; cancel restores persisted state; saves use only the UX-03 owner commands; stale writes retain the attempted choice and show current versus attempted values. The verified operator institution-creation input already accepts the optional theme without adding a browser operator path. Focused lint/type/unit 2/2, real-PostgreSQL 10/10, owner/boundary/docs/database checks, the dedicated 4 GiB E2E build, and one-worker desktop/mobile browser journeys passed. Final captures were directly inspected. See [UX-04 evidence](../../evidence/ux-revamp-04-2026-10-18/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Implement UX-04: add the reusable accessible ThemePicker to supported institution/branch creation and existing authorized appearance settings, with local preview/cancel, version conflict, failure retention and focused browser evidence. UX-03's owner commands are the only persistence path.
+Implement UX-05: resolve effective appearance server-side for protected and published public contexts, preserve generic Forest entry, and prove context switching updates the theme without draft leakage, hydration mismatch, or shared cache identity.
