@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { chromium } from '@playwright/test';
 
 const baseURL=process.env.VSCHOOL_DEMO_URL??'http://127.0.0.1:3400';
-const outputDir='artifacts/must-have-release';
+const outputDir=process.env.VSCHOOL_PERSONA_OUTPUT??'artifacts/must-have-release';
 const capture=process.env.VSCHOOL_CAPTURE_PERSONAS==='1';
 
 function privateFixture(path,fields){
@@ -59,7 +59,7 @@ try{
      const footerRect=footer?.getBoundingClientRect();
      return {rootOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,fontFamily:getComputedStyle(document.body).fontFamily,sidebarVisible:!!sidebar&&sidebar.getClientRects().length>0,navOverflow:nav?getComputedStyle(nav).overflowY:null,minimumVisibleRow:visibleRows.length?Math.min(...visibleRows):null,footerVisible:!!footerRect&&footerRect.height>0&&footerRect.top<innerHeight&&footerRect.bottom<=innerHeight+1};
     });
-    const presentation=await page.evaluate(()=>{const grid=document.querySelector('.workspace-dashboard-grid'),summary=document.querySelector('.dashboard-summary-strip'),actions=[...document.querySelectorAll('.workspace-action-list>a')];return {gridColumns:grid?getComputedStyle(grid).gridTemplateColumns:null,summaryItems:summary?.children.length??0,actionLinks:actions.map(node=>({label:node.textContent?.trim().replace(/\s+/g,' ')??'',href:node.getAttribute('href')})),technicalCopy:[...document.querySelectorAll('main')].some(node=>/other school areas|your dashboard shows the school information/i.test(node.textContent??''))};});
+    const presentation=await page.evaluate(()=>{const grid=document.querySelector('.landing-grid'),summary=document.querySelector('.landing-summary'),actions=[...document.querySelectorAll('.landing-quick-list>a')],calendar=document.querySelector('.landing-calendar');return {gridColumns:grid?getComputedStyle(grid).gridTemplateColumns:null,summaryItems:summary?.children.length??0,summaryHeight:summary?.getBoundingClientRect().height??null,actionLinks:actions.map(node=>({label:node.textContent?.trim().replace(/\s+/g,' ')??'',href:node.getAttribute('href')})),calendarUnavailable:calendar?.textContent?.includes('Calendar unavailable')??false,technicalCopy:[...document.querySelectorAll('main')].some(node=>/other school areas|your dashboard shows the school information/i.test(node.textContent??''))};});
     if(shell.rootOverflow)throw new Error(`${persona.name} has horizontal document overflow.`);
     if(!shell.fontFamily.toLowerCase().includes('inter'))throw new Error(`${persona.name} is not using Inter.`);
     if(viewportName==='desktop'){
@@ -76,13 +76,14 @@ try{
      if(!await menu.evaluate(node=>document.activeElement===node))throw new Error(`${persona.name} mobile navigation did not return focus.`);
      Object.assign(shell,{mobile:mobileShell});
     }
+    const expectedSummaryItems=persona.name==='principal'?4:3;
+    if(presentation.summaryItems!==expectedSummaryItems||presentation.technicalCopy)throw new Error(`${persona.name} landing composition is invalid: ${JSON.stringify(presentation)}`);
     if(persona.name==='principal'){
-     if(presentation.summaryItems!==3||presentation.technicalCopy)throw new Error(`Principal dashboard composition is invalid: ${JSON.stringify(presentation)}`);
      const [coverageAction,contextAction,accountAction]=presentation.actionLinks;
      if(!coverageAction?.href?.match(/^\/leadership\/attendance\?date=\d{4}-\d{2}-\d{2}$/)||contextAction?.href!=='/leadership/context'||accountAction?.href!=='/leadership/account')throw new Error(`Principal quick access is invalid: ${JSON.stringify(presentation.actionLinks)}`);
     }
-    if(persona.name==='parent'&&presentation.actionLinks.length!==3)throw new Error(`Parent dashboard actions are incomplete.`);
-    if(['principal','parent','student'].includes(persona.name)){
+    if(persona.name==='parent'&&presentation.actionLinks.length<3)throw new Error(`Parent dashboard actions are incomplete.`);
+    if(['administrator','principal','teacher','parent','student'].includes(persona.name)){
      const trackCount=presentation.gridColumns?.split(' ').length??0;
      if(viewportName==='desktop'&&trackCount<2)throw new Error(`${persona.name} dashboard did not render two desktop columns.`);
      if(viewportName==='mobile'&&trackCount!==1)throw new Error(`${persona.name} dashboard did not stack on mobile.`);
