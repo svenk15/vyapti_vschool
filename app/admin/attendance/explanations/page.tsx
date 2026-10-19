@@ -1,5 +1,57 @@
-import {BrandSurface,Badge,ButtonLink,Card,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
+import {AttendanceAdminTabs} from '@/components/attendance-admin-tabs';
+import {Badge, BrandSurface, ButtonLink, Card, EmptyState, PageHeader, PageStack} from '@/components/ui/primitives';
+import {ServerTable} from '@/components/ui/server-table';
 import {attendanceExplanationsGateway} from '@/lib/server/attendance-explanations';
 import {getIdentity} from '@/lib/server/auth';
-export const dynamic='force-dynamic';
-export default async function ExplanationQueue(){const items=await attendanceExplanationsGateway.listReviewer(await getIdentity());return <BrandSurface><main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow="Attendance" title="Absence explanations" description="Review Parent explanations separately from attendance corrections." actions={<ButtonLink href="/admin/attendance/sessions?view=monitor" variant="secondary">Attendance sessions</ButtonLink>}/><Card className="directory-card"><div className="directory-heading"><div><h2>Awaiting review</h2><p className="muted small">Only explanations with current guardian purpose and branch authority are shown.</p></div><Badge tone={items.length?'warning':'neutral'}>{items.length}</Badge></div>{items.length===0?<EmptyState title="No explanations awaiting review" description="New eligible Parent submissions will appear here." icon="calendar"/>:<div className="table-scroll"><table className="data-table"><thead><tr><th>Student</th><th>Date</th><th>Class and subject</th><th>Category</th><th>Action</th></tr></thead><tbody>{items.map(item=><tr key={item.id}><th scope="row">{item.studentName}</th><td>{item.schoolDate}</td><td>{item.sectionName} · {item.subjectName}</td><td>{item.category.replaceAll('_',' ')}</td><td><ButtonLink variant="secondary" href={`/admin/attendance/explanations/${item.id}`}>Review</ButtonLink></td></tr>)}</tbody></table></div>}</Card></PageStack></main></BrandSurface>}
+
+export const dynamic = 'force-dynamic';
+
+const categoryLabel = (category: string) => category
+  .toLowerCase()
+  .split('_')
+  .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+  .join(' ');
+
+export default async function ExplanationQueue() {
+  const items = await attendanceExplanationsGateway.listReviewer(await getIdentity());
+  return (
+    <BrandSurface>
+      <main id="main-content" className="container page-space">
+        <PageStack className="attendance-queue-page">
+          <PageHeader
+            title="Attendance"
+            description="Review Parent explanations separately from corrections to the submitted register."
+            actions={<ButtonLink href="/admin/attendance/sessions" variant="primary">Schedule session</ButtonLink>}
+          />
+          <AttendanceAdminTabs active="explanations" />
+          <Card className="directory-card attendance-queue-card">
+            <div className="directory-heading">
+              <div>
+                <h2>Absence explanations</h2>
+                <p className="muted small">Only explanations with current guardian purpose and branch authority are shown.</p>
+              </div>
+              <Badge tone={items.length ? 'warning' : 'neutral'}>{items.length}</Badge>
+            </div>
+            {items.length === 0 ? (
+              <EmptyState title="No explanations awaiting review" description="New eligible Parent submissions will appear here." icon="calendar" />
+            ) : (
+              <ServerTable
+                caption="Absence explanations awaiting review"
+                rows={items}
+                rowKey={(item) => item.id}
+                className="attendance-queue-table"
+                columns={[
+                  {key: 'student', label: 'Student', rowHeader: true, render: (item) => item.studentName},
+                  {key: 'date', label: 'Date', render: (item) => item.schoolDate},
+                  {key: 'class', label: 'Class and subject', render: (item) => <span>{item.sectionName}<small className="sub">{item.subjectName}</small></span>},
+                  {key: 'category', label: 'Category', render: (item) => categoryLabel(item.category)},
+                  {key: 'action', label: 'Action', render: (item) => <ButtonLink variant="ghost" href={`/admin/attendance/explanations/${item.id}`}>Review explanation</ButtonLink>},
+                ]}
+              />
+            )}
+          </Card>
+        </PageStack>
+      </main>
+    </BrandSurface>
+  );
+}

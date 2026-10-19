@@ -14,7 +14,7 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-08 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-09 | VERIFIED | DOCUMENTED_FINITE_INVENTORY_AND_RECIPES | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-10 | VERIFIED | DIRECT_DASHBOARD_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-11 | IN_PROGRESS | STAFF_ACCESS_AND_ATTENDANCE_SESSION_DIRECTORY_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-11 | IN_PROGRESS | STAFF_ACCESS_AND_ATTENDANCE_DIRECTORY_FAMILY_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -55,10 +55,12 @@ The Staff access slice now presents `/admin/users` as a compact cursor-paginated
 
 The Attendance-session slice now presents `/admin/attendance/sessions?view=monitor` with the approved module heading, one primary schedule action, module tabs, a compact date/class toolbar and semantic session rows that become labelled mobile cards. Existing state-specific review, correction and cancellation behavior is unchanged. The exact `#/attendance` reference and populated application were directly compared at 1440×1000 and 390×844; inspection found and corrected a cascade-order defect that narrowed the mobile subject cell. Focused Chromium and Mobile Chromium journeys passed 1/1 each against real PostgreSQL, and the final 4 GiB build passed with build ID `3GSSQ2ciukY0XWp2I-MGec`. Prototype subject search, sort, summary denominators and pagination remain owner-query gaps and were not simulated client-side. See [Attendance directory evidence](../../evidence/ux-revamp-11-attendance-directory-2026-10-19/README.md).
 
+The Attendance correction-request and absence-explanation queues now use the shared inbox/directory recipe. Server-authorized rows, exact-source state and protected reviewer scope are unchanged; mobile rows expose every field and action without horizontal clipping. Direct inspection found and fixed two cascade-order issues in the shared Attendance mobile tabs and cards. Focused owner journeys passed 1/1 each in Chromium and Mobile Chromium against real PostgreSQL. The final 4 GiB build passed with build ID `6JiNwD4KtOD7F-bt8fQlx`. These queue layouts are accurately labelled design extensions because the approved pack specifies the Attendance module and SA-29 detail workflow but no exact production queue pages. See [Attendance queue evidence](../../evidence/ux-revamp-11-attendance-queues-2026-10-19/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Continue UX-11 with the Administrator Attendance correction-request and explanation queues. Reuse the verified directory/inbox recipes only where owner query and specialized interaction contracts permit them. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+Continue UX-11 with the next implemented M01–M08 directory family identified by the finite inventory, then migrate remaining matching directory consumers before starting UX-12. Reuse the verified directory/inbox recipes only where owner query and specialized interaction contracts permit them. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.

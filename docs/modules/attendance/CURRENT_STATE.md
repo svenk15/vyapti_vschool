@@ -222,3 +222,10 @@ Verification: focused unit 1/1; real-PostgreSQL lifecycle/security 3/3; sequenti
 - The owner query currently supports server date/class filtering but not subject search, server sort, summary denominators or pagination; those prototype features were not recreated with page-local data. The session record has no Teacher field, so the UI omits it rather than fabricating data.
 - Focused Chromium and Mobile Chromium Attendance journeys passed 1/1 each against the real PostgreSQL test database. The final 4 GiB production build passed with build ID `3GSSQ2ciukY0XWp2I-MGec`; development and test retain 118 applied migrations. Exact reference, before and final application captures were directly inspected in `docs/evidence/ux-revamp-11-attendance-directory-2026-10-19/`.
 - Human visual acceptance, native accessibility, actual browser 200% zoom, TEN-03 and production release remain PENDING.
+
+### UX-11 Attendance request queues — 19 October 2026
+
+- `/admin/attendance/correction-requests` and `/admin/attendance/explanations` now use the shared inbox/directory recipe with bounded headers, truthful counts, semantic server-authorized rows, one review action and labelled mobile cards. Explanations share the approved Attendance module tabs; correction requests retain their separate explicit-reviewer entry because the approved module tabs do not define that destination.
+- No query, mutation, grant, correction, clarification, version, idempotency or protected-text contract changed. The seeded correction queue is truthfully empty; the explanation queue uses the existing four authorized synthetic records.
+- Focused correction-request and explanation Playwright journeys passed 1/1 each in Chromium and Mobile Chromium against real PostgreSQL with 118 migrations. The final 4 GiB build passed with build ID `6JiNwD4KtOD7F-bt8fQlx`. Before/final desktop/mobile captures were directly inspected in `docs/evidence/ux-revamp-11-attendance-queues-2026-10-19/`.
+- These queues have no exact production page reference and are labelled shared-pattern design extensions. Human visual acceptance and all existing release gates remain PENDING.

@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import {redirect} from 'next/navigation';
 import {AccessError} from '@/backend/modules/access/contracts';
+import {AttendanceAdminTabs} from '@/components/attendance-admin-tabs';
 import {AttendanceScheduler} from '@/components/attendance-scheduler';
 import {AttendanceAdminList} from '@/components/attendance-admin-list';
 import {Alert,BrandSurface,ButtonLink,PageHeader,PageStack} from '@/components/ui/primitives';
@@ -24,5 +24,5 @@ export default async function ScheduleSessionsPage({searchParams}:{searchParams:
  }catch(error){if(error instanceof AccessError&&error.code==='UNAUTHENTICATED')redirect('/sign-in');unavailable=true;}
  if(!home||unavailable)return <BrandSurface><main id="main-content" className="container page-space"><PageStack><PageHeader title="Schedule attendance sessions" description="Plan and monitor class attendance for the active branch."/><Alert tone="danger" title="Attendance unavailable">Current branch permissions and module access are checked when loading and scheduling. Refresh after access or service issues are resolved.</Alert></PageStack></main></BrandSurface>;
  const monitor=first(params.view)==='monitor';
-  return <BrandSurface><main id="main-content" className="container page-space"><PageStack className="attendance-admin-page">{monitor?<><PageHeader title="Attendance" description={`${home.institutionName} · ${home.schoolName} · Monitor scheduled and submitted registers.`} actions={<ButtonLink href="/admin/attendance/sessions" variant="primary">Schedule session</ButtonLink>}/><nav className="workspace-tabs" aria-label="Attendance views"><Link href="/admin/attendance/sessions?view=monitor" aria-current="page">Sessions</Link><Link href="/admin/reports/attendance">Attendance reports</Link><Link href="/admin/attendance/explanations">Absence explanations</Link></nav><AttendanceAdminList sessions={sessions??[]} date={date} sectionId={sectionId} sections={sectionOptions} timezone={home.timezone}/></>:<AttendanceScheduler offerings={offerings??[]} today={today} timezone={home.timezone} home={home}/>}</PageStack></main></BrandSurface>;
+  return <BrandSurface><main id="main-content" className="container page-space"><PageStack className="attendance-admin-page">{monitor?<><PageHeader title="Attendance" description={`${home.institutionName} · ${home.schoolName} · Monitor scheduled and submitted registers.`} actions={<ButtonLink href="/admin/attendance/sessions" variant="primary">Schedule session</ButtonLink>}/><AttendanceAdminTabs active="sessions"/><AttendanceAdminList sessions={sessions??[]} date={date} sectionId={sectionId} sections={sectionOptions} timezone={home.timezone}/></>:<AttendanceScheduler offerings={offerings??[]} today={today} timezone={home.timezone} home={home}/>}</PageStack></main></BrandSurface>;
 }
