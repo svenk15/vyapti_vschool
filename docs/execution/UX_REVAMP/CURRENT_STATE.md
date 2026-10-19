@@ -19,6 +19,7 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-13 | VERIFIED | DIRECT_STAGED_FLOW_COMPARISON_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-14 | VERIFIED | SPECIALIZED_SURFACES_DIRECTLY_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-15 | PARTIAL | PORCELAIN_AND_REAL_SIGN_IN_DIRECTLY_INSPECTED;_BROWSER_OPERATOR_IDENTITY_MISSING | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-16 | VERIFIED_SUPPORTED_SCOPE | CURRENT_SOURCE_M01_M08_ROUTE_AND_STATE_REGRESSION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-17 | VERIFIED | FIVE_PRODUCTION_LANDINGS_AND_SHARED_CANDIDATE_VERIFIED | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
@@ -31,6 +32,8 @@ Updated: 19 October 2026 (Asia/Kolkata)
 - The working tree already contains unrelated modified historical evidence and local untracked material. They are excluded from UX commits.
 
 ## Verification
+
+UX-16 rechecked the current executable source across all five protected personas and public recovery. The sequential browser pass verified 11/11 desktop/mobile entry states and 15 authorized M01–M08 destination routes without a sign-in/context escape or `SERVICE_UNAVAILABLE` result. The underlying owner commands, PostgreSQL constraints, replay, revocation and transaction evidence is unchanged and is reused from the existing assisted-acceptance coverage. The independent UX-15 browser-operator contract remains partial and does not become accepted through this regression. See [UX-16 evidence](../../evidence/ux-revamp-16-m01-m08-2026-10-19/README.md).
 
 UX-01 documentation validation passed with `pnpm check:docs`: 30 indexed tasks, valid links, design coverage, statuses, and acyclic dependencies. The inventory contains all 203 current `app/**/page.tsx` routes plus the actual shared-shell owners. No application tests, builds, migrations, or browser captures were required for this documentation-only slice. Existing business evidence remains historical evidence for its tested source and is not relabelled as UX revamp verification.
 

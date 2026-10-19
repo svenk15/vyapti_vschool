@@ -16,9 +16,9 @@ const people=privateFixture('artifacts/people-02/private-demo.json',['adminEmail
 const family=privateFixture('artifacts/guardians-01/private-demo.json',['parentEmail','parentPassword']);
 const student=privateFixture('artifacts/students-portal/private-demo.json',['studentEmail','studentPassword']);
 const personas=[
- {name:'administrator',email:people.adminEmail,password:people.password,workspace:'School administration',path:'/admin'},
- {name:'principal',email:people.adminEmail,password:people.password,workspace:'Principal leadership',path:'/leadership'},
- {name:'teacher',email:people.teacherEmail,password:people.teacherPassword,workspace:'Teaching',path:'/teacher/today'},
+ {name:'administrator',email:people.adminEmail,password:people.password,workspace:'School administration',path:'/admin',reviewRoutes:['/admin/academics','/admin/students','/admin/communication']},
+ {name:'principal',email:people.adminEmail,password:people.password,workspace:'Principal leadership',path:'/leadership',reviewRoutes:['/leadership/assessments','/leadership/coordination']},
+ {name:'teacher',email:people.teacherEmail,password:people.teacherPassword,workspace:'Teaching',path:'/teacher/today',reviewRoutes:['/teacher/learning','/teacher/assessments']},
  {name:'parent',email:family.parentEmail,password:family.parentPassword,path:'/family',selector:'Switch child',minimumContexts:2},
  {name:'student',email:student.studentEmail,password:student.studentPassword,path:'/student',selector:'Switch school context',minimumContexts:2},
 ];
@@ -73,7 +73,7 @@ try{
      const mobileShell=await page.evaluate(()=>{const footer=document.querySelector('.portal-sidebar[role="dialog"] .portal-sidebar-footer')?.getBoundingClientRect();return {focusInside:!!document.activeElement?.closest('.portal-sidebar[role="dialog"]'),footerVisible:!!footer&&footer.height>0&&footer.top<innerHeight&&footer.bottom<=innerHeight+1};});
      if(!mobileShell.focusInside||!mobileShell.footerVisible)throw new Error(`${persona.name} mobile navigation focus or footer is invalid: ${JSON.stringify(mobileShell)}`);
      await page.keyboard.press('Escape');
-     if(!await menu.evaluate(node=>document.activeElement===node))throw new Error(`${persona.name} mobile navigation did not return focus.`);
+     const menuHandle=await menu.elementHandle();await page.waitForFunction(node=>document.activeElement===node,menuHandle,{timeout:2_000}).catch(()=>{throw new Error(`${persona.name} mobile navigation did not return focus.`);});
      Object.assign(shell,{mobile:mobileShell});
     }
     const expectedSummaryItems=persona.name==='principal'?4:3;
@@ -89,7 +89,9 @@ try{
      if(viewportName==='mobile'&&trackCount!==1)throw new Error(`${persona.name} dashboard did not stack on mobile.`);
     }
     if(capture)await page.screenshot({path:`${outputDir}/${persona.name}-${viewportName}.png`,fullPage:true});
-    results.push({persona:persona.name,viewport:viewportName,path:persona.path,contextCount,shell,presentation,ok:true});
+    const routeChecks=[],reviewHrefs=[...(persona.reviewRoutes??[]),...(['parent','student'].includes(persona.name)?presentation.actionLinks.map(item=>item.href).filter(Boolean):[])];
+    if(viewportName==='desktop'){for(const href of reviewHrefs){const probe=await context.newPage(),response=await probe.goto(new URL(href,baseURL).toString(),{waitUntil:'domcontentloaded'}),pathname=new URL(probe.url()).pathname,heading=(await probe.locator('h1').first().textContent())?.trim()??'',serviceUnavailable=await probe.getByText('SERVICE_UNAVAILABLE',{exact:true}).count()>0;if(!response?.ok()||['/sign-in','/choose-workspace','/family/access-unavailable','/student/access-unavailable'].includes(pathname)||!heading||serviceUnavailable)throw new Error(`${persona.name} review route failed: ${JSON.stringify({href,status:response?.status(),pathname,heading,serviceUnavailable})}`);routeChecks.push({href,status:response.status(),pathname,heading});await probe.close();}}
+    results.push({persona:persona.name,viewport:viewportName,path:persona.path,contextCount,shell,presentation,routeChecks,ok:true});
    } finally {await context.close();}
   }
  }
