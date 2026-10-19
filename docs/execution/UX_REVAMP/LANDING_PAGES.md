@@ -40,3 +40,17 @@ Order: header → four-metric Attendance summary → Attendance follow-up → At
 - The five gallery compositions are **new candidates**, not approved references. Production captures remain application evidence. Human acceptance remains pending.
 
 The reference manifest is [LANDING_REFERENCE_MANIFEST.json](LANDING_REFERENCE_MANIFEST.json). Remaining release gates are native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 restricted-role/RLS proof, provider/retention decisions, human acceptance and production release.
+
+## Review correction status — 19 October 2026
+
+The implementation/capture tables above describe the `784c5b9` executable checkpoint. They do not close the full landing contract. The current correction batch classifies the remaining work as follows:
+
+| Workspace | Implemented and verified | Presentation defects being corrected | Missing owner projection | Decision/gate |
+|---|---|---|---|---|
+| Administrator | Authorized header/actions, factual metrics, exception categories, sessions and quick access | Calendar range/state truthfulness, attention tone, explicit Subject/Class columns and 24px summary gap | Complete bounded published-event week read | Human review pending |
+| Teacher | Assigned Attendance sessions and guarded actions | Current/next class priority and narrower empty wording | Published Events reader and bounded feedback/teaching-work preview | Human review pending |
+| Student | Accepted context, Timetable/Learning/Attendance reads and authorized shortcuts | Distinguish no schedule from ended day; remove repeated context emphasis | Bounded due-work, feedback and notice preview | Human review pending |
+| Parent/Guardian | Accepted child context and guarded Attendance/Learning/Results reads | Human-readable Attendance state and redundant-context removal | Bounded acknowledgement/attention/notices preview | Human review pending |
+| Principal | Factual Attendance coverage and guarded destinations | Must be labelled as an Attendance-focused starting view until broader sections exist | Bounded decisions, follow-ups, exceptions, Learning, assessment readiness, communication coverage and published Events | Human review pending |
+
+`Missing owner projection` is an engineering/design classification, not automatically a product-decision blocker. Existing capabilities and resource-purpose rules will be reused where they already authorize the bounded read. Unsupported, unauthorized, loading, failed, successful-empty and not-loaded states must remain distinguishable.

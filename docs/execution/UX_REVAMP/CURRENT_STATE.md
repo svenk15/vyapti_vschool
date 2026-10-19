@@ -98,3 +98,17 @@ Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidenc
 ## Next action
 
 The presentation programme has no independently eligible implementation slice left under the current contracts. UX-15 remains partial only because browser institution creation needs an authenticated platform-operator browser principal; the existing trusted local operator command already accepts `themeId`. Do not create a browser-supplied trust assertion to close that gap. The owner-query gaps listed in `LANDING_PAGES.md` require separate backend feature contracts and are not presentation defects. See [FINAL_REPORT.md](FINAL_REPORT.md) for the bounded counts and review route. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+
+## Correction batch opened — 19 October 2026
+
+The external review of `vschool_ux_review_b1567b1.zip` supersedes the preceding statement that UX-15 was the only independently actionable gap. Historical evidence above remains unchanged. The five-workspace landing contract is **PARTIAL** while this correction batch is in progress.
+
+| Classification | Current scope |
+|---|---|
+| Implemented and verified | Existing authorized landing reads, protected shells, theme persistence, current route guards and the previously captured desktop/mobile compositions remain valid evidence for unchanged behavior. |
+| Presentation defects | Calendar completeness/state wording and duplicated month label; attention badge tone; ambiguous session columns; Administrator summary-to-grid spacing; role-specific daily-work wording/order; navigation grouping and stable Parent mobile shortcuts. |
+| Missing owner projection | Teacher/Principal published-event reads; bounded Teacher feedback/work preview; Student due-work/feedback/notices summary; Parent acknowledgement/attention/notices preview; bounded Principal decision/follow-up/exception/Learning/assessment/communication summary. Each must be checked against existing owner authority before being treated as a new decision. |
+| Unresolved product/authority decision | Browser institution creation still lacks an authenticated platform-operator principal. Any landing item whose disclosure or denominator is not already settled by an owner contract must remain absent and be recorded precisely. |
+| Human review | PENDING for this correction batch and for every unchanged workspace not explicitly accepted by the user. |
+
+Next action is the focused shared-component checkpoint, followed by the documented navigation mapping and then eligible role-specific owner compositions. The correction batch does not reopen backend behavior already verified unless the new bounded projection requires it.

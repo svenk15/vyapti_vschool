@@ -21,10 +21,10 @@ export default async function LeadershipHome(){
   {coverage?<>
    <LandingSummary label="School-day attendance summary" metrics={[{label:'Scheduled registers',value:String(coverage.counts.scheduled),detail:'Current school date',icon:'calendar'},{label:'Due registers',value:String(coverage.counts.due),detail:'Due by session end',icon:'clock'},{label:'Registers received',value:String(coverage.counts.received),detail:'Submitted records',icon:'check'},{label:'Awaiting submission',value:String(coverage.counts.awaiting),detail:`${coverage.counts.notDue} not due yet`,icon:'attention'}]}/>
    <div className="landing-grid"><div className="landing-column">
-    <LandingAttention title="Attendance follow-up" items={attention} totalLabel={coverage.awaiting.total?`${coverage.awaiting.total} awaiting`:'Up to date'} emptyTitle="No due registers awaiting submission" emptyDescription="Received and awaiting registers reconcile with today’s due total."/>
+    <LandingAttention title="Attendance follow-up" items={attention} totalLabel={coverage.awaiting.total?`${coverage.awaiting.total} awaiting`:'None awaiting'} totalTone={coverage.awaiting.total?'warning':'neutral'} emptyTitle="No due registers awaiting submission" emptyDescription="Received and awaiting registers reconcile with today’s due total."/>
     <Card className="padded"><SectionHeader title="Attendance oversight" description={`${coverage.counts.received} of ${coverage.counts.due} due registers received`}/><p className="muted">Figures use your current school and access as of {time(coverage.asOf,coverage.timezone)}.</p><a href={`/leadership/attendance?date=${coverage.schoolDate}`}>Review register coverage <span aria-hidden="true">→</span></a></Card>
    </div><div className="landing-column">
-    <LandingCalendar today={current.date} entries={[]} unavailable/>
+    <LandingCalendar today={current.date} entries={[]} loadedRange={{from:current.date,to:current.date,complete:false}} scopeKey={`${home.scope.organizationId}:${home.scope.schoolId}`} state="unsupported"/>
     <LandingQuickAccess links={[{label:'Register coverage',href:`/leadership/attendance?date=${coverage.schoolDate}`,icon:'report'},{label:'School context',href:'/leadership/context',icon:'settings'},{label:'My account',href:'/leadership/account',icon:'staff'}]}/>
    </div></div>
   </>:<Card className="padded leadership-unavailable-card"><EmptyState icon="calendar" title="Attendance overview unavailable" description="No register count is inferred. Open another authorized school area or try Attendance again later."/></Card>}
