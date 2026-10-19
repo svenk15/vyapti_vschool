@@ -20,7 +20,7 @@ test("logged-out home and setup redirect; API returns private 401",async({page})
 });
 test("administrator signs in, sees current scope and setup, rejects foreign school, signs out",async({page})=>{
  const errors:string[]=[];page.on("pageerror",error=>errors.push(error.name));await login(page);await expect(page).toHaveURL(/\/admin$/);
- await expect(page.getByRole("heading",{name:"Your school day, at a glance",exact:true})).toBeVisible();await expect(page.getByText(input.schoolName,{exact:false}).first()).toBeVisible();await expect(page.locator(".dashboard-summary-strip")).toHaveCount(1);await expect(page.locator(".dashboard-summary-item")).toHaveCount(3);
+ await expect(page.getByRole("heading",{name:"Your school day, at a glance",exact:true})).toBeVisible();await expect(page.getByText(input.schoolName,{exact:false}).first()).toBeVisible();await expect(page.locator(".landing-summary")).toHaveCount(1);await expect(page.locator(".landing-summary-item")).toHaveCount(3);
  const session=await(await page.request.get("/api/auth/session")).json();expect(session.identity).toEqual({accountId:ids.accountId,tokenVersion:1});expect(session.user).toBeUndefined();
  const cookies=await page.context().cookies();const cookie=cookies.find(c=>c.name.endsWith("session-token"));expect(cookie?.httpOnly).toBe(true);expect(cookie?.sameSite).toBe("Lax");
  const own=await page.request.get(`/api/v1/school?schoolId=${ids.schoolId}`);expect(own.status()).toBe(200);expect((await own.json()).scope.schoolId).toBe(ids.schoolId);

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "updatedOn": "2026-10-19",
+  "candidateRoute": "/design-system#landing-references",
+  "viewports": [
+    {"id": "desktop", "width": 1440, "height": 1000},
+    {"id": "mobile", "width": 390, "height": 844},
+    {"id": "tablet", "width": 768, "height": 1000},
+    {"id": "compactDesktop", "width": 1024, "height": 1000}
+  ],
+  "references": [
+    {"id": "landing-admin-approved-concept", "page": "Administrator", "source": "docs/evidence/ux-revamp-06-admin-landing-2026-10-18/refined-forest-concept.png", "fixture": "conceptual populated school day", "theme": "forest", "viewport": "concept capture", "status": "approved-composition-input", "component": "components/landing-page.tsx", "route": "/admin"},
+    {"id": "landing-admin-candidate", "page": "Administrator", "source": "components/landing-reference-gallery.tsx", "fixture": "deterministic 2026-10-19 populated", "theme": "all-four", "viewport": "desktop/mobile/tablet/compactDesktop", "status": "candidate-human-pending", "component": "components/landing-page.tsx", "route": "/admin"},
+    {"id": "landing-teacher-candidate", "page": "Teacher", "source": "components/landing-reference-gallery.tsx", "fixture": "deterministic 2026-10-19 populated", "theme": "all-four", "viewport": "desktop/mobile/tablet/compactDesktop", "status": "candidate-human-pending", "component": "components/landing-page.tsx", "route": "/teacher/today"},
+    {"id": "landing-student-candidate", "page": "Student", "source": "components/landing-reference-gallery.tsx", "fixture": "deterministic 2026-10-19 populated", "theme": "all-four", "viewport": "desktop/mobile/tablet/compactDesktop", "status": "candidate-human-pending", "component": "components/landing-page.tsx", "route": "/student"},
+    {"id": "landing-parent-candidate", "page": "Parent/Guardian", "source": "components/landing-reference-gallery.tsx", "fixture": "deterministic 2026-10-19 populated", "theme": "all-four", "viewport": "desktop/mobile/tablet/compactDesktop", "status": "candidate-human-pending", "component": "components/landing-page.tsx", "route": "/family"},
+    {"id": "landing-principal-candidate", "page": "Principal", "source": "components/landing-reference-gallery.tsx", "fixture": "deterministic 2026-10-19 populated", "theme": "all-four", "viewport": "desktop/mobile/tablet/compactDesktop", "status": "candidate-human-pending", "component": "components/landing-page.tsx", "route": "/leadership"}
+  ]
+}

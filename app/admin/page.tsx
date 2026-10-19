@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import {Alert,Badge,ButtonLink,Card,EmptyState,PageHeader} from '@/components/ui/primitives';
+import {Alert,ButtonLink,Card,EmptyState,PageHeader} from '@/components/ui/primitives';
 import {contextGateway,accountGateway} from '@/lib/server/access';
 import {getIdentity} from '@/lib/server/auth';
 import {moduleGateway} from '@/lib/server/tenancy';
@@ -8,6 +8,8 @@ import type {AdminHome} from '@/shared/contracts/access';
 import type {AttendanceReport,SchoolAdminOverview} from '@/shared/contracts/reporting';
 import {notFound,redirect} from 'next/navigation';
 import {AccessError} from '@/backend/modules/access/contracts';
+import {eventsGateway} from '@/lib/server/events';
+import {LandingAttention,LandingCalendar,LandingQuickAccess,LandingSessions,LandingSummary,type LandingCalendarEntry,type LandingSession} from '@/components/landing-page';
 
 export const dynamic='force-dynamic';
 const localDate=(date:Date,timezone:string)=>new Intl.DateTimeFormat('en-CA',{timeZone:timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(date);
@@ -22,23 +24,25 @@ const sessionStatus=(status:AttendanceReport['sessions']['items'][number]['statu
 const sessionTone=(status:AttendanceReport['sessions']['items'][number]['status'])=>status==='SUBMITTED'?'success' as const:status==='OPEN'?'warning' as const:'info' as const;
 
 export default async function AdminPage(){
- const identity=await getIdentity();let home:AdminHome|null=null,directory=null,summary:AttendanceReport|null=null,adminOverview:SchoolAdminOverview|null=null,summaryFailure=false;
+ const identity=await getIdentity();let home:AdminHome|null=null,directory=null,summary:AttendanceReport|null=null,adminOverview:SchoolAdminOverview|null=null,summaryFailure=false,calendarUnavailable=false,calendarRows:Awaited<ReturnType<typeof eventsGateway.listAdmin>>=[];
  try{home=await accountGateway.getHome(identity);}catch(error){if(error instanceof AccessError&&error.code==='UNAUTHENTICATED')redirect('/sign-in');if(error instanceof AccessError&&error.code==='NOT_FOUND')notFound();home=null;}
  if(!home)return <main id="main-content" className="container page-space"><Alert tone="danger" title="School overview unavailable">Your current school access could not be verified. Refresh or sign in again.</Alert></main>;
  directory=await contextGateway.getContexts(identity).catch(()=>null);
  adminOverview=await reportingGateway.schoolAdminOverview(identity).catch(()=>null);
- const canManageSchool=home.capabilities.includes('school.manage');
  const canReadAttendance=home.capabilities.includes('attendance.read_school')&&await moduleGateway.canUseCurrent(identity,'attendance','attendance.read_school');
  const canReadStudents=home.capabilities.includes('student.read')&&await moduleGateway.canUseCurrent(identity,'student_core','student.read');
  const canManageStudents=home.capabilities.includes('student.manage')&&await moduleGateway.canUseCurrent(identity,'student_core','student.manage');
  const canManageStaff=home.capabilities.includes('class.manage')&&await moduleGateway.canUseCurrent(identity,'staff_core','class.manage');
+ const canManageSchool=home.capabilities.includes('school.manage');
+ const canPublishCommunication=home.capabilities.includes('communication.publish');
  const today=localDate(new Date(),home.timezone);
  if(canReadAttendance){try{summary=await reportingGateway.overview(identity,{fromDate:today,toDate:tomorrow(today),limit:50});}catch{summaryFailure=true;}}
+ if(canPublishCommunication){try{calendarRows=await eventsGateway.listAdmin(identity);}catch{calendarUnavailable=true;}}
  const quickAccess=[
   ...(canReadStudents?[{label:'Student directory',href:'/admin/students',icon:'students' as const}]:[]),
   ...(canManageStaff?[{label:'Staff directory',href:'/admin/teachers',icon:'staff' as const}]:[]),
   ...(canReadAttendance?[{label:'Attendance report',href:`/admin/reports/attendance?fromDate=${today}&toDate=${tomorrow(today)}`,icon:'report' as const}]:[]),
-  ...(canManageSchool?[{label:'School settings',href:'/admin/school',icon:'gear' as const}]:[]),
+  ...(canManageSchool?[{label:'School settings',href:'/admin/school',icon:'settings' as const}]:[]),
  ];
  const managerDirectory=directory?.institutions.filter(institution=>institution.canManage)??[];
  const activeStudents=adminOverview?.readiness.find(item=>item.id==='students')?.count??0;
@@ -49,23 +53,23 @@ export default async function AdminPage(){
  const completion=adminOverview&&adminOverview.totalCount?Math.round(adminOverview.completeCount/adminOverview.totalCount*100):0;
  const remainingReadiness=adminOverview?.readiness.filter(item=>!item.complete)??[];
  const exceptionCategoryCount=adminOverview?.exceptions.length??0;
+ const eventDate=(value:string)=>value.slice(0,10);
+ const calendarEntries:LandingCalendarEntry[]=calendarRows.filter(row=>row.status==='PUBLISHED'||row.status==='CANCELED').map(row=>({id:row.id,title:row.title,startsOn:row.schedule.kind==='ALL_DAY'?row.schedule.startsOn:eventDate(row.schedule.startsAt),endsOn:row.schedule.kind==='ALL_DAY'?row.schedule.endsOn:eventDate(row.schedule.endsAt),timeLabel:row.schedule.kind==='ALL_DAY'?'All day':localTime(row.schedule.startsAt,home.timezone),typeLabel:row.category==='HOLIDAY'?'Holiday':row.category==='CLASS_EVENT'?'Class event':'Meeting',closure:row.category==='HOLIDAY'||row.status==='CANCELED',href:`/admin/events/${row.id}`}));
+ const landingSessions:LandingSession[]=todaySessions.map(item=>({id:item.id,time:localTime(item.startsAt,home.timezone),title:item.sectionName,context:item.subjectName,teacher:item.teacherName??undefined,status:sessionStatus(item.status),tone:sessionTone(item.status),href:`/admin/attendance/sessions/${item.id}`,actionLabel:item.status==='SUBMITTED'?'Review':'Open session'}));
  return <main id="main-content" className="container page-space admin-dashboard">
   <PageHeader title="Your school day, at a glance" description={`${longSchoolDate(today)} · ${home.schoolName}`} actions={<div className="button-row">{canManageStudents&&<ButtonLink href="/admin/students/register"><DashboardIcon name="plus"/> Register student</ButtonLink>}<ButtonLink href="/admin/setup" variant="secondary"><DashboardIcon name="gear"/> School setup</ButtonLink></div>}/>
   {!canReadAttendance&&<Alert tone="info" title="Attendance is unavailable in this branch">The attendance module or your current school-wide attendance capability is not active. Other authorized overview information remains available.</Alert>}
   {summaryFailure&&<Alert tone="warning" title="Today’s attendance summary is unavailable">No zero count or empty schedule has been inferred. <Link href="/admin">Retry Today</Link> or open Attendance when the service is restored.</Alert>}
   {!adminOverview&&<Alert tone="warning" title="School overview data is unavailable">Student readiness and attention items could not be loaded. Attendance remains separate below when it is available.</Alert>}
-  <Card aria-label="School-day summary" className="dashboard-summary-strip">
-   <div className="dashboard-summary-item"><span className="dashboard-summary-icon"><DashboardIcon name="check"/></span><div><p>Registers submitted</p><strong>{summary?`${summary.counts.submittedSessions} / ${scheduledCount}`:'—'}</strong><span>Of today’s non-cancelled sessions</span></div></div>
-   <div className="dashboard-summary-item"><span className="dashboard-summary-icon"><DashboardIcon name="students"/></span><div><p>Active students</p><strong>{adminOverview?activeStudents:'—'}</strong><span>{activeStudents?'Across current class placements':'No current placements'}</span></div></div>
-   <div className="dashboard-summary-item"><span className="dashboard-summary-icon"><DashboardIcon name="attention"/></span><div><p>Needs your attention</p><strong>{adminOverview?attentionCount:'—'}</strong><span>Attendance · import · staff access</span></div></div>
-  </Card>
-  <div className="dashboard-work-grid">
+  <LandingSummary label="School-day summary" metrics={[{label:'Registers submitted',value:summary?`${summary.counts.submittedSessions} / ${scheduledCount}`:'—',detail:'Of today’s non-cancelled sessions',icon:'check'},{label:'Active students',value:adminOverview?String(activeStudents):'—',detail:activeStudents?'Across current class placements':'No current placements',icon:'students'},{label:'Needs your attention',value:adminOverview?String(attentionCount):'—',detail:'Attendance · import · staff access',icon:'attention'}]}/>
+  <div className="dashboard-work-grid landing-grid">
    <div className="dashboard-primary-column">
-    {adminOverview&&<Card className="dashboard-work-card" aria-labelledby="attention-title"><div className="dashboard-card-title"><h2 id="attention-title">Needs your attention</h2><Badge tone={attentionCount?'warning':'success'}>{attentionCount?`${exceptionCategoryCount} ${exceptionCategoryCount===1?'category':'categories'} · ${attentionCount} ${attentionCount===1?'issue':'issues'}`:'Up to date'}</Badge></div>{adminOverview.exceptions.length?<div className="dashboard-work-list">{adminOverview.exceptions.map(item=><div className="dashboard-work-row" key={item.id}><span className="dashboard-work-icon"><DashboardIcon name={item.id}/></span><div><h3>{item.label}</h3><p>{item.detail}</p></div><ButtonLink href={item.href} variant="secondary"><DashboardIcon name="arrow"/>{item.actionLabel}</ButtonLink></div>)}</div>:<EmptyState title="No current exceptions" description="There are no started registers, roster imports or staff access items requiring action in this branch."/>}</Card>}
-    {canReadAttendance&&summary&&<Card className="dashboard-sessions-card"><div className="dashboard-card-title"><h2>Today’s sessions</h2><Link href={`/admin/reports/attendance?fromDate=${today}&toDate=${tomorrow(today)}`}>View all <DashboardIcon name="arrow"/></Link></div>{todaySessions.length?<><div className="table-scroll dashboard-sessions-table"><table className="data-table"><caption className="sr-only">Today’s authorized attendance sessions</caption><thead><tr><th scope="col">Time</th><th scope="col">Class</th><th scope="col">Subject</th><th scope="col">Teacher</th><th scope="col">Status</th><th scope="col">Action</th></tr></thead><tbody>{todaySessions.map(item=><tr key={item.id}><td><time dateTime={item.startsAt}>{localTime(item.startsAt,home.timezone)}</time></td><td>{item.sectionName}</td><td>{item.subjectName}</td><td>{item.teacherName??'Not assigned'}</td><td><Badge tone={sessionTone(item.status)}>{sessionStatus(item.status)}</Badge></td><td><Link className="dashboard-session-action" href={`/admin/attendance/sessions/${item.id}`}>{item.status==='SUBMITTED'?'Review':'Open session'}<span className="sr-only"> {item.subjectName} at {localTime(item.startsAt,home.timezone)}</span></Link></td></tr>)}</tbody></table></div><div className="dashboard-sessions-mobile">{todaySessions.map(item=><Link href={`/admin/attendance/sessions/${item.id}`} key={item.id} className="dashboard-session-row"><time dateTime={item.startsAt}>{localTime(item.startsAt,home.timezone)}</time><div><strong>{item.subjectName}</strong><span>{item.sectionName}{item.teacherName?` · ${item.teacherName}`:''}</span><Badge tone={sessionTone(item.status)}>{sessionStatus(item.status)}</Badge></div></Link>)}</div></>:<EmptyState icon="calendar" title="No sessions today" description={`No sessions are scheduled for ${longSchoolDate(today)}. Scheduled sessions will appear here with their current submission state.`} action={<ButtonLink href="/admin/attendance/sessions" variant="secondary">Schedule a session</ButtonLink>}/>}</Card>}
+    {adminOverview&&<LandingAttention items={adminOverview.exceptions.map(item=>({id:item.id,title:item.label,description:item.detail,href:item.href,actionLabel:item.actionLabel,icon:item.id==='imports'?'upload':item.id==='staff'?'staff':'clock'}))} totalLabel={attentionCount?`${exceptionCategoryCount} ${exceptionCategoryCount===1?'category':'categories'} · ${attentionCount} ${attentionCount===1?'issue':'issues'}`:'Up to date'} emptyTitle="No current exceptions" emptyDescription="There are no started registers, roster imports or staff access items requiring action in this branch."/>}
+    {canReadAttendance&&summary&&<LandingSessions sessions={landingSessions} viewAllHref={`/admin/reports/attendance?fromDate=${today}&toDate=${tomorrow(today)}`}/>}
    </div>
    <div className="dashboard-secondary-column">
-    <Card className="dashboard-quick-card" aria-labelledby="common-actions-title"><div className="dashboard-card-title"><h2 id="common-actions-title">Quick access</h2></div>{quickAccess.length?<div className="dashboard-quick-list">{quickAccess.map(action=><Link href={action.href} key={action.href}><DashboardIcon name={action.icon}/><span>{action.label}</span><DashboardIcon name="arrow"/></Link>)}</div>:<EmptyState title="No available destinations" description="Your current permissions do not expose any dashboard shortcuts in this branch."/>}</Card>
+    <LandingCalendar today={today} entries={calendarEntries} href={canPublishCommunication?'/admin/events':undefined} unavailable={!canPublishCommunication||calendarUnavailable}/>
+    {quickAccess.length?<LandingQuickAccess links={quickAccess}/>:<Card><EmptyState title="No available destinations" description="Your current permissions do not expose any dashboard shortcuts in this branch."/></Card>}
     {adminOverview&&<Card className="dashboard-readiness-card"><div className="dashboard-card-title"><h2>School setup</h2><Link href="/admin/setup">View setup <DashboardIcon name="arrow"/></Link></div><p>{adminOverview.completeCount} of {adminOverview.totalCount} foundations are ready.</p><progress aria-label="School setup completion" value={completion} max={100}/>{remainingReadiness.length?<ul className="dashboard-readiness-remaining" aria-label="Remaining setup requirements">{remainingReadiness.map(item=><li key={item.id}><strong>{item.label}</strong><span>{item.detail}</span></li>)}</ul>:<p className="dashboard-readiness-complete">All required foundations are ready.</p>}</Card>}
    </div>
   </div>

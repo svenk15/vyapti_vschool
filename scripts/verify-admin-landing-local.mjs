@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
 
 const root=process.cwd();
-const evidence=process.env.VSCHOOL_ADMIN_LANDING_EVIDENCE??`${root}/docs/evidence/ux-revamp-06-admin-landing-2026-10-18`;
+const evidence=process.env.VSCHOOL_ADMIN_LANDING_EVIDENCE??`${root}/docs/evidence/ux-revamp-17-landings-2026-10-19`;
 const baseURL=process.env.VSCHOOL_DEMO_URL??'http://127.0.0.1:3400';
 const credentials=JSON.parse(readFileSync(`${root}/artifacts/people-02/private-demo.json`,'utf8'));
 const themes=['forest','amethyst','porcelain','linen'];
@@ -28,7 +28,7 @@ async function metrics(page,label){
   return page.evaluate(label=>{
     const q=(selector)=>document.querySelector(selector);
     const rect=(selector)=>{const node=q(selector);if(!node)return null;const value=node.getBoundingClientRect();return {x:value.x,y:value.y,width:value.width,height:value.height,bottom:value.bottom};};
-    const summary=[...document.querySelectorAll('.dashboard-summary-item')].map(node=>{const value=node.getBoundingClientRect();return {width:value.width,height:value.height};});
+    const summary=[...document.querySelectorAll('.landing-summary-item')].map(node=>{const value=node.getBoundingClientRect();return {width:value.width,height:value.height};});
     const font=getComputedStyle(document.body);
     const heading=q('.admin-dashboard h1');
     const nav=q('.portal-nav-scroll');
@@ -49,16 +49,16 @@ async function metrics(page,label){
       interLoaded:document.fonts.check('14px Inter'),
       headingFont:heading?{family:getComputedStyle(heading).fontFamily,size:getComputedStyle(heading).fontSize,lineHeight:getComputedStyle(heading).lineHeight}:null,
       rootOverflow:{scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth,hasHorizontal:document.documentElement.scrollWidth>document.documentElement.clientWidth},
-      summary:{rect:rect('.dashboard-summary-strip'),items:summary},
+      summary:{rect:rect('.landing-summary'),items:summary},
       workGrid:{rect:rect('.dashboard-work-grid'),columns:q('.dashboard-work-grid')?getComputedStyle(q('.dashboard-work-grid')).gridTemplateColumns:null,gap:q('.dashboard-work-grid')?getComputedStyle(q('.dashboard-work-grid')).gap:null},
-      sessionTableDisplay:q('.dashboard-sessions-table')?getComputedStyle(q('.dashboard-sessions-table')).display:null,
-      sessionCardsDisplay:q('.dashboard-sessions-mobile')?getComputedStyle(q('.dashboard-sessions-mobile')).display:null,
+      sessionTableDisplay:q('.landing-session-table')?getComputedStyle(q('.landing-session-table')).display:null,
+      sessionCardsDisplay:q('.landing-session-cards')?getComputedStyle(q('.landing-session-cards')).display:null,
       sidebar:{rect:rect('.portal-sidebar'),navClientHeight:nav?.clientHeight??null,navScrollHeight:nav?.scrollHeight??null,navOverflow:nav?getComputedStyle(nav).overflowY:null,footer:footer?rect('.portal-sidebar-footer'):null},
       primaryActionVisible:!![...document.querySelectorAll('a')].find(node=>node.textContent?.includes('Register student')&&node.getBoundingClientRect().width>0),
-      actions:{primary:q('.page-heading .btn-primary')?.getAttribute('href')??null,secondary:q('.page-heading .btn-secondary')?.getAttribute('href')??null,quick:[...document.querySelectorAll('.dashboard-quick-list>a')].map(node=>({label:node.textContent?.trim().replace(/\s+/g,' ')??'',href:node.getAttribute('href')})),attention:[...document.querySelectorAll('.dashboard-work-row>a')].map(node=>node.getAttribute('href')),viewAll:q('.dashboard-sessions-card .dashboard-card-title a')?.getAttribute('href')??null,session:q('.dashboard-session-action')?.getAttribute('href')??null},
+      actions:{primary:q('.page-heading .btn-primary')?.getAttribute('href')??null,secondary:q('.page-heading .btn-secondary')?.getAttribute('href')??null,quick:[...document.querySelectorAll('.landing-quick-list>a')].map(node=>({label:node.textContent?.trim().replace(/\s+/g,' ')??'',href:node.getAttribute('href')})),attention:[...document.querySelectorAll('.landing-attention-row>a')].map(node=>node.getAttribute('href')),viewAll:q('.landing-sessions .landing-panel-header a')?.getAttribute('href')??null,session:q('.landing-session-table tbody a')?.getAttribute('href')??null},
       theme:q('.brand-surface')?.getAttribute('data-vs-theme')??null,
       colors:{primary:getComputedStyle(q('.brand-surface')??document.documentElement).getPropertyValue('--vs-primary').trim(),canvas:getComputedStyle(q('.brand-surface')??document.documentElement).getPropertyValue('--vs-canvas').trim(),surface:getComputedStyle(q('.brand-surface')??document.documentElement).getPropertyValue('--vs-surface').trim()},
-      semanticStyles:{expectedPrimary:resolvedColor('--vs-primary'),expectedSidebarActive:resolvedBackground('--vs-sidebar-active'),expectedSidebarActiveText:resolvedColor('--vs-sidebar-active-text'),expectedFocus:resolvedColor('--vs-focus-ring'),primaryAction:style('.page-heading .btn-primary'),ordinaryActionLink:style('.dashboard-card-title a'),sessionActionLink:style('.dashboard-session-action'),nonStatusIcon:style('.dashboard-summary-icon'),selectedNavigation:style('.portal-nav-group a[aria-current=page]'),progress:style('.dashboard-readiness-card progress')},
+      semanticStyles:{expectedPrimary:resolvedColor('--vs-primary'),expectedSidebarActive:resolvedBackground('--vs-sidebar-active'),expectedSidebarActiveText:resolvedColor('--vs-sidebar-active-text'),expectedFocus:resolvedColor('--vs-focus-ring'),primaryAction:style('.page-heading .btn-primary'),ordinaryActionLink:style('.landing-panel-header a'),sessionActionLink:style('.landing-session-table tbody a'),nonStatusIcon:style('.landing-summary-icon'),selectedNavigation:style('.portal-nav-group a[aria-current=page]'),progress:style('.dashboard-readiness-card progress')},
       readiness:{legacySuccessBadgeCount:document.querySelectorAll('.dashboard-readiness-badges .badge-success').length,remainingCount:document.querySelectorAll('.dashboard-readiness-remaining li').length,completeMessage:q('.dashboard-readiness-complete')?.textContent?.trim()??null}
     };
   },label);

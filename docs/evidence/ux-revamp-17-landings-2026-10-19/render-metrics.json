@@ -1,0 +1,2070 @@
+{
+  "capturedAt": "2026-10-19T06:56:08.364Z",
+  "baseURL": "http://127.0.0.1:3400",
+  "browser": "Playwright Chromium",
+  "zoomEvidence": "Playwright default page zoom; visualViewport.scale is recorded. This is not Chromium device-scale emulation.",
+  "themeEvidence": "Each screenshot uses the same authorized server data and DOM. A visual-only data-vs-theme override exercises the four approved token sets without changing stored branch configuration.",
+  "desktop": {
+    "label": "desktop-after",
+    "cssViewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "outerViewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "visualViewport": {
+      "width": 1440,
+      "height": 1000,
+      "scale": 1
+    },
+    "devicePixelRatio": 1,
+    "documentZoom": "1",
+    "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "bodyFontSize": "14px",
+    "interLoaded": true,
+    "headingFont": {
+      "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "size": "28px",
+      "lineHeight": "36px"
+    },
+    "rootOverflow": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "hasHorizontal": false
+    },
+    "summary": {
+      "rect": {
+        "x": 272,
+        "y": 187.25,
+        "width": 1136,
+        "height": 118,
+        "bottom": 305.25
+      },
+      "items": [
+        {
+          "width": 378,
+          "height": 116
+        },
+        {
+          "width": 378,
+          "height": 116
+        },
+        {
+          "width": 378,
+          "height": 116
+        }
+      ]
+    },
+    "workGrid": {
+      "rect": {
+        "x": 272,
+        "y": 305.25,
+        "width": 1136,
+        "height": 848,
+        "bottom": 1153.25
+      },
+      "columns": "741.328px 370.656px",
+      "gap": "24px"
+    },
+    "sessionTableDisplay": "block",
+    "sessionCardsDisplay": "none",
+    "sidebar": {
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 240,
+        "height": 1000,
+        "bottom": 1000
+      },
+      "navClientHeight": 697,
+      "navScrollHeight": 697,
+      "navOverflow": "auto",
+      "footer": {
+        "x": 0,
+        "y": 850,
+        "width": 240,
+        "height": 150,
+        "bottom": 1000
+      }
+    },
+    "primaryActionVisible": true,
+    "actions": {
+      "primary": "/admin/students/register",
+      "secondary": "/admin/setup",
+      "quick": [
+        {
+          "label": "Student directory",
+          "href": "/admin/students"
+        },
+        {
+          "label": "Staff directory",
+          "href": "/admin/teachers"
+        },
+        {
+          "label": "Attendance report",
+          "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+        },
+        {
+          "label": "School settings",
+          "href": "/admin/school"
+        }
+      ],
+      "attention": [
+        "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+        "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+        "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+      ],
+      "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+      "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+    },
+    "theme": "forest",
+    "colors": {
+      "primary": "#246b53",
+      "canvas": "#f6f8f5",
+      "surface": "#fff"
+    },
+    "semanticStyles": {
+      "expectedPrimary": "rgb(36, 107, 83)",
+      "expectedSidebarActive": "rgb(43, 88, 74)",
+      "expectedSidebarActiveText": "rgb(255, 255, 255)",
+      "expectedFocus": "rgb(36, 107, 83)",
+      "primaryAction": {
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(36, 107, 83)",
+        "outlineColor": "rgb(255, 255, 255)",
+        "accentColor": "auto"
+      },
+      "ordinaryActionLink": {
+        "color": "rgb(36, 107, 83)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "outlineColor": "rgb(36, 107, 83)",
+        "accentColor": "auto"
+      },
+      "sessionActionLink": {
+        "color": "rgb(36, 107, 83)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "outlineColor": "rgb(36, 107, 83)",
+        "accentColor": "auto"
+      },
+      "nonStatusIcon": {
+        "color": "rgb(36, 107, 83)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "outlineColor": "rgb(36, 107, 83)",
+        "accentColor": "auto"
+      },
+      "selectedNavigation": {
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(43, 88, 74)",
+        "outlineColor": "rgb(255, 255, 255)",
+        "accentColor": "auto"
+      },
+      "progress": {
+        "color": "rgb(31, 48, 40)",
+        "backgroundColor": "rgb(238, 243, 239)",
+        "outlineColor": "rgb(31, 48, 40)",
+        "accentColor": "rgb(36, 107, 83)"
+      }
+    },
+    "readiness": {
+      "legacySuccessBadgeCount": 0,
+      "remainingCount": 1,
+      "completeMessage": null
+    }
+  },
+  "mobile": {
+    "label": "mobile-after",
+    "cssViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "outerViewport": {
+      "width": 390,
+      "height": 844
+    },
+    "visualViewport": {
+      "width": 390,
+      "height": 844,
+      "scale": 1
+    },
+    "devicePixelRatio": 1,
+    "documentZoom": "1",
+    "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "bodyFontSize": "14px",
+    "interLoaded": true,
+    "headingFont": {
+      "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "size": "24px",
+      "lineHeight": "32px"
+    },
+    "rootOverflow": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "hasHorizontal": false
+    },
+    "summary": {
+      "rect": {
+        "x": 16,
+        "y": 303.5,
+        "width": 358,
+        "height": 328,
+        "bottom": 631.5
+      },
+      "items": [
+        {
+          "width": 356,
+          "height": 108
+        },
+        {
+          "width": 356,
+          "height": 109
+        },
+        {
+          "width": 356,
+          "height": 109
+        }
+      ]
+    },
+    "workGrid": {
+      "rect": {
+        "x": 16,
+        "y": 631.5,
+        "width": 358,
+        "height": 1589,
+        "bottom": 2220.5
+      },
+      "columns": "358px",
+      "gap": "24px"
+    },
+    "sessionTableDisplay": "none",
+    "sessionCardsDisplay": "grid",
+    "sidebar": {
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "bottom": 0
+      },
+      "navClientHeight": 0,
+      "navScrollHeight": 0,
+      "navOverflow": "auto",
+      "footer": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "bottom": 0
+      }
+    },
+    "primaryActionVisible": true,
+    "actions": {
+      "primary": "/admin/students/register",
+      "secondary": "/admin/setup",
+      "quick": [
+        {
+          "label": "Student directory",
+          "href": "/admin/students"
+        },
+        {
+          "label": "Staff directory",
+          "href": "/admin/teachers"
+        },
+        {
+          "label": "Attendance report",
+          "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+        },
+        {
+          "label": "School settings",
+          "href": "/admin/school"
+        }
+      ],
+      "attention": [
+        "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+        "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+        "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+      ],
+      "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+      "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+    },
+    "theme": "forest",
+    "colors": {
+      "primary": "#246b53",
+      "canvas": "#f6f8f5",
+      "surface": "#fff"
+    },
+    "semanticStyles": {
+      "expectedPrimary": "rgb(36, 107, 83)",
+      "expectedSidebarActive": "rgb(43, 88, 74)",
+      "expectedSidebarActiveText": "rgb(255, 255, 255)",
+      "expectedFocus": "rgb(36, 107, 83)",
+      "primaryAction": {
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(36, 107, 83)",
+        "outlineColor": "rgb(255, 255, 255)",
+        "accentColor": "auto"
+      },
+      "ordinaryActionLink": {
+        "color": "rgb(36, 107, 83)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "outlineColor": "rgb(36, 107, 83)",
+        "accentColor": "auto"
+      },
+      "sessionActionLink": {
+        "color": "rgb(36, 107, 83)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "outlineColor": "rgb(36, 107, 83)",
+        "accentColor": "auto"
+      },
+      "nonStatusIcon": {
+        "color": "rgb(36, 107, 83)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "outlineColor": "rgb(36, 107, 83)",
+        "accentColor": "auto"
+      },
+      "selectedNavigation": {
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(43, 88, 74)",
+        "outlineColor": "rgb(255, 255, 255)",
+        "accentColor": "auto"
+      },
+      "progress": {
+        "color": "rgb(31, 48, 40)",
+        "backgroundColor": "rgb(238, 243, 239)",
+        "outlineColor": "rgb(31, 48, 40)",
+        "accentColor": "rgb(36, 107, 83)"
+      }
+    },
+    "readiness": {
+      "legacySuccessBadgeCount": 0,
+      "remainingCount": 1,
+      "completeMessage": null
+    }
+  },
+  "intermediate": {
+    "tablet-1024": {
+      "label": "tablet-1024",
+      "cssViewport": {
+        "width": 1024,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1024,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1024,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1024,
+        "clientWidth": 1024,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 264,
+          "y": 187.25,
+          "width": 736,
+          "height": 136,
+          "bottom": 323.25
+        },
+        "items": [
+          {
+            "width": 244.65625,
+            "height": 134
+          },
+          {
+            "width": 244.671875,
+            "height": 134
+          },
+          {
+            "width": 244.671875,
+            "height": 134
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 264,
+          "y": 323.25,
+          "width": 736,
+          "height": 1077,
+          "bottom": 1400.25
+        },
+        "columns": "736px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "forest",
+      "colors": {
+        "primary": "#246b53",
+        "canvas": "#f6f8f5",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(36, 107, 83)",
+        "expectedSidebarActive": "rgb(43, 88, 74)",
+        "expectedSidebarActiveText": "rgb(255, 255, 255)",
+        "expectedFocus": "rgb(36, 107, 83)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(36, 107, 83)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(43, 88, 74)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(31, 48, 40)",
+          "backgroundColor": "rgb(238, 243, 239)",
+          "outlineColor": "rgb(31, 48, 40)",
+          "accentColor": "rgb(36, 107, 83)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "tablet-768": {
+      "label": "tablet-768",
+      "cssViewport": {
+        "width": 768,
+        "height": 900
+      },
+      "outerViewport": {
+        "width": 768,
+        "height": 900
+      },
+      "visualViewport": {
+        "width": 768,
+        "height": 900,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 768,
+        "clientWidth": 768,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 24,
+          "y": 211.5,
+          "width": 720,
+          "height": 136,
+          "bottom": 347.5
+        },
+        "items": [
+          {
+            "width": 239.328125,
+            "height": 134
+          },
+          {
+            "width": 239.328125,
+            "height": 134
+          },
+          {
+            "width": 239.328125,
+            "height": 134
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 24,
+          "y": 347.5,
+          "width": 720,
+          "height": 1077,
+          "bottom": 1424.5
+        },
+        "columns": "720px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "forest",
+      "colors": {
+        "primary": "#246b53",
+        "canvas": "#f6f8f5",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(36, 107, 83)",
+        "expectedSidebarActive": "rgb(43, 88, 74)",
+        "expectedSidebarActiveText": "rgb(255, 255, 255)",
+        "expectedFocus": "rgb(36, 107, 83)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(36, 107, 83)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(43, 88, 74)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(31, 48, 40)",
+          "backgroundColor": "rgb(238, 243, 239)",
+          "outlineColor": "rgb(31, 48, 40)",
+          "accentColor": "rgb(36, 107, 83)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    }
+  },
+  "themes": {
+    "forest-desktop": {
+      "label": "forest-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 118,
+          "bottom": 305.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 305.25,
+          "width": 1136,
+          "height": 848,
+          "bottom": 1153.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "forest",
+      "colors": {
+        "primary": "#246b53",
+        "canvas": "#f6f8f5",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(36, 107, 83)",
+        "expectedSidebarActive": "rgb(43, 88, 74)",
+        "expectedSidebarActiveText": "rgb(255, 255, 255)",
+        "expectedFocus": "rgb(36, 107, 83)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(36, 107, 83)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(43, 88, 74)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(31, 48, 40)",
+          "backgroundColor": "rgb(238, 243, 239)",
+          "outlineColor": "rgb(31, 48, 40)",
+          "accentColor": "rgb(36, 107, 83)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "amethyst-desktop": {
+      "label": "amethyst-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 118,
+          "bottom": 305.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 305.25,
+          "width": 1136,
+          "height": 848,
+          "bottom": 1153.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "amethyst",
+      "colors": {
+        "primary": "#7045a2",
+        "canvas": "#faf8fc",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(112, 69, 162)",
+        "expectedSidebarActive": "rgb(80, 56, 96)",
+        "expectedSidebarActiveText": "rgb(255, 255, 255)",
+        "expectedFocus": "rgb(112, 69, 162)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(112, 69, 162)",
+          "outlineColor": "rgb(112, 69, 162)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(112, 69, 162)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(112, 69, 162)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(112, 69, 162)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(112, 69, 162)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(112, 69, 162)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(112, 69, 162)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(80, 56, 96)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(43, 35, 51)",
+          "backgroundColor": "rgb(242, 237, 246)",
+          "outlineColor": "rgb(43, 35, 51)",
+          "accentColor": "rgb(112, 69, 162)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "porcelain-desktop": {
+      "label": "porcelain-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 118,
+          "bottom": 305.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 305.25,
+          "width": 1136,
+          "height": 848,
+          "bottom": 1153.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "porcelain",
+      "colors": {
+        "primary": "#284fac",
+        "canvas": "#f7f9fc",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(40, 79, 172)",
+        "expectedSidebarActive": "rgb(217, 229, 248)",
+        "expectedSidebarActiveText": "rgb(27, 64, 138)",
+        "expectedFocus": "rgb(40, 79, 172)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(40, 79, 172)",
+          "outlineColor": "rgb(40, 79, 172)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(40, 79, 172)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(40, 79, 172)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(40, 79, 172)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(40, 79, 172)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(40, 79, 172)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(40, 79, 172)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(27, 64, 138)",
+          "backgroundColor": "rgb(217, 229, 248)",
+          "outlineColor": "rgb(27, 64, 138)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(25, 40, 63)",
+          "backgroundColor": "rgb(239, 243, 248)",
+          "outlineColor": "rgb(25, 40, 63)",
+          "accentColor": "rgb(40, 79, 172)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "linen-desktop": {
+      "label": "linen-desktop",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "outerViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "visualViewport": {
+        "width": 1440,
+        "height": 1000,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "28px",
+        "lineHeight": "36px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 272,
+          "y": 187.25,
+          "width": 1136,
+          "height": 118,
+          "bottom": 305.25
+        },
+        "items": [
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          },
+          {
+            "width": 378,
+            "height": 116
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 272,
+          "y": 305.25,
+          "width": 1136,
+          "height": 848,
+          "bottom": 1153.25
+        },
+        "columns": "741.328px 370.656px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "block",
+      "sessionCardsDisplay": "none",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 240,
+          "height": 1000,
+          "bottom": 1000
+        },
+        "navClientHeight": 697,
+        "navScrollHeight": 697,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 850,
+          "width": 240,
+          "height": 150,
+          "bottom": 1000
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "linen",
+      "colors": {
+        "primary": "#795237",
+        "canvas": "#faf9f6",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(121, 82, 55)",
+        "expectedSidebarActive": "rgb(222, 209, 191)",
+        "expectedSidebarActiveText": "rgb(79, 54, 35)",
+        "expectedFocus": "rgb(121, 82, 55)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(121, 82, 55)",
+          "outlineColor": "rgb(121, 82, 55)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(121, 82, 55)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(121, 82, 55)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(121, 82, 55)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(121, 82, 55)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(121, 82, 55)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(121, 82, 55)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(79, 54, 35)",
+          "backgroundColor": "rgb(222, 209, 191)",
+          "outlineColor": "rgb(79, 54, 35)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(48, 44, 39)",
+          "backgroundColor": "rgb(242, 238, 231)",
+          "outlineColor": "rgb(48, 44, 39)",
+          "accentColor": "rgb(121, 82, 55)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "forest-mobile": {
+      "label": "forest-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 328,
+          "bottom": 631.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 108
+          },
+          {
+            "width": 356,
+            "height": 109
+          },
+          {
+            "width": 356,
+            "height": 109
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 631.5,
+          "width": 358,
+          "height": 1589,
+          "bottom": 2220.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "forest",
+      "colors": {
+        "primary": "#246b53",
+        "canvas": "#f6f8f5",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(36, 107, 83)",
+        "expectedSidebarActive": "rgb(43, 88, 74)",
+        "expectedSidebarActiveText": "rgb(255, 255, 255)",
+        "expectedFocus": "rgb(36, 107, 83)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(36, 107, 83)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(36, 107, 83)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(36, 107, 83)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(43, 88, 74)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(31, 48, 40)",
+          "backgroundColor": "rgb(238, 243, 239)",
+          "outlineColor": "rgb(31, 48, 40)",
+          "accentColor": "rgb(36, 107, 83)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "amethyst-mobile": {
+      "label": "amethyst-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 328,
+          "bottom": 631.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 108
+          },
+          {
+            "width": 356,
+            "height": 109
+          },
+          {
+            "width": 356,
+            "height": 109
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 631.5,
+          "width": 358,
+          "height": 1589,
+          "bottom": 2220.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "amethyst",
+      "colors": {
+        "primary": "#7045a2",
+        "canvas": "#faf8fc",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(112, 69, 162)",
+        "expectedSidebarActive": "rgb(80, 56, 96)",
+        "expectedSidebarActiveText": "rgb(255, 255, 255)",
+        "expectedFocus": "rgb(112, 69, 162)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(112, 69, 162)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(112, 69, 162)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(112, 69, 162)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(112, 69, 162)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(112, 69, 162)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(112, 69, 162)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(112, 69, 162)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(80, 56, 96)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(43, 35, 51)",
+          "backgroundColor": "rgb(242, 237, 246)",
+          "outlineColor": "rgb(43, 35, 51)",
+          "accentColor": "rgb(112, 69, 162)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "porcelain-mobile": {
+      "label": "porcelain-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 328,
+          "bottom": 631.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 108
+          },
+          {
+            "width": 356,
+            "height": 109
+          },
+          {
+            "width": 356,
+            "height": 109
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 631.5,
+          "width": 358,
+          "height": 1589,
+          "bottom": 2220.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "porcelain",
+      "colors": {
+        "primary": "#284fac",
+        "canvas": "#f7f9fc",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(40, 79, 172)",
+        "expectedSidebarActive": "rgb(217, 229, 248)",
+        "expectedSidebarActiveText": "rgb(27, 64, 138)",
+        "expectedFocus": "rgb(40, 79, 172)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(40, 79, 172)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(40, 79, 172)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(40, 79, 172)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(40, 79, 172)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(40, 79, 172)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(40, 79, 172)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(40, 79, 172)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(27, 64, 138)",
+          "backgroundColor": "rgb(217, 229, 248)",
+          "outlineColor": "rgb(27, 64, 138)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(25, 40, 63)",
+          "backgroundColor": "rgb(239, 243, 248)",
+          "outlineColor": "rgb(25, 40, 63)",
+          "accentColor": "rgb(40, 79, 172)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    },
+    "linen-mobile": {
+      "label": "linen-mobile",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "outerViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "devicePixelRatio": 1,
+      "documentZoom": "1",
+      "bodyFontFamily": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+      "bodyFontSize": "14px",
+      "interLoaded": true,
+      "headingFont": {
+        "family": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "size": "24px",
+        "lineHeight": "32px"
+      },
+      "rootOverflow": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "hasHorizontal": false
+      },
+      "summary": {
+        "rect": {
+          "x": 16,
+          "y": 303.5,
+          "width": 358,
+          "height": 328,
+          "bottom": 631.5
+        },
+        "items": [
+          {
+            "width": 356,
+            "height": 108
+          },
+          {
+            "width": 356,
+            "height": 109
+          },
+          {
+            "width": 356,
+            "height": 109
+          }
+        ]
+      },
+      "workGrid": {
+        "rect": {
+          "x": 16,
+          "y": 631.5,
+          "width": 358,
+          "height": 1589,
+          "bottom": 2220.5
+        },
+        "columns": "358px",
+        "gap": "24px"
+      },
+      "sessionTableDisplay": "none",
+      "sessionCardsDisplay": "grid",
+      "sidebar": {
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        },
+        "navClientHeight": 0,
+        "navScrollHeight": 0,
+        "navOverflow": "auto",
+        "footer": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0
+        }
+      },
+      "primaryActionVisible": true,
+      "actions": {
+        "primary": "/admin/students/register",
+        "secondary": "/admin/setup",
+        "quick": [
+          {
+            "label": "Student directory",
+            "href": "/admin/students"
+          },
+          {
+            "label": "Staff directory",
+            "href": "/admin/teachers"
+          },
+          {
+            "label": "Attendance report",
+            "href": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20"
+          },
+          {
+            "label": "School settings",
+            "href": "/admin/school"
+          }
+        ],
+        "attention": [
+          "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd",
+          "/admin/imports?jobId=7c002ce2-76b1-4a35-ae1e-800724216b6a",
+          "/admin/users?membershipId=5d882e89-b8bc-478f-91ae-455c662fc31c"
+        ],
+        "viewAll": "/admin/reports/attendance?fromDate=2026-10-19&toDate=2026-10-20",
+        "session": "/admin/attendance/sessions/8715fe78-b2a3-450f-9f72-b78e0e90fdbd"
+      },
+      "theme": "linen",
+      "colors": {
+        "primary": "#795237",
+        "canvas": "#faf9f6",
+        "surface": "#fff"
+      },
+      "semanticStyles": {
+        "expectedPrimary": "rgb(121, 82, 55)",
+        "expectedSidebarActive": "rgb(222, 209, 191)",
+        "expectedSidebarActiveText": "rgb(79, 54, 35)",
+        "expectedFocus": "rgb(121, 82, 55)",
+        "primaryAction": {
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgb(121, 82, 55)",
+          "outlineColor": "rgb(255, 255, 255)",
+          "accentColor": "auto"
+        },
+        "ordinaryActionLink": {
+          "color": "rgb(121, 82, 55)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(121, 82, 55)",
+          "accentColor": "auto"
+        },
+        "sessionActionLink": {
+          "color": "rgb(121, 82, 55)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(121, 82, 55)",
+          "accentColor": "auto"
+        },
+        "nonStatusIcon": {
+          "color": "rgb(121, 82, 55)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "outlineColor": "rgb(121, 82, 55)",
+          "accentColor": "auto"
+        },
+        "selectedNavigation": {
+          "color": "rgb(79, 54, 35)",
+          "backgroundColor": "rgb(222, 209, 191)",
+          "outlineColor": "rgb(79, 54, 35)",
+          "accentColor": "auto"
+        },
+        "progress": {
+          "color": "rgb(48, 44, 39)",
+          "backgroundColor": "rgb(242, 238, 231)",
+          "outlineColor": "rgb(48, 44, 39)",
+          "accentColor": "rgb(121, 82, 55)"
+        }
+      },
+      "readiness": {
+        "legacySuccessBadgeCount": 0,
+        "remainingCount": 1,
+        "completeMessage": null
+      }
+    }
+  },
+  "keyboard": {
+    "desktop": {
+      "registerFocused": true,
+      "next": {
+        "tag": "A",
+        "text": "School setup"
+      }
+    },
+    "mobile": {
+      "focusInsideAfterOpen": true,
+      "focusReturnedAfterEscape": true
+    }
+  },
+  "sidebar": {
+    "communication": {
+      "visible": true,
+      "aboveFooter": true,
+      "rect": {
+        "top": 569,
+        "bottom": 633
+      },
+      "nav": {
+        "top": 153,
+        "bottom": 850
+      },
+      "footer": {
+        "top": 850,
+        "bottom": 1000
+      }
+    }
+  }
+}

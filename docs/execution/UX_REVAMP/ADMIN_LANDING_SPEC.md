@@ -36,10 +36,10 @@ The supported verification widths are 390, 768, 1024 and 1440 CSS pixels. Browse
 
 Forest, Amethyst & Pearl, Porcelain & Ink, and Linen & Bronze use the same composition. Primary actions, action links, non-status icons, selected navigation, focus rings, progress indicators and selected controls resolve through semantic theme tokens. Success, warning and error states retain their semantic colours.
 
-The page renders current authorized synthetic records honestly. Awkward fixture labels or times are evidence/data observations, not permission to rewrite immutable records. No calendar is rendered until an authorized event projection exists.
+The page renders current authorized synthetic records honestly. Awkward fixture labels or times are evidence/data observations, not permission to rewrite immutable records. The Events owner now supplies the calendar through its existing publisher-authorized projection. It remains independently unavailable when the current actor lacks that grant or the Events module chain fails; timetable sessions never substitute for calendar entries.
 
 ## Acceptance boundary
 
-Completion requires equivalent-state desktop/mobile screenshots, the four theme states, intermediate-width overflow checks, expanded navigation, a final-section capture, keyboard/focus checks and focused shared-shell regression across Administrator, Teacher, Principal, Parent and Student. Functional verification, visual inspection, human acceptance and production readiness remain separate.
+Completion requires equivalent-state desktop/mobile screenshots, the four theme states, intermediate-width overflow checks, expanded navigation, a final-section capture, keyboard/focus checks and focused shared-shell regression across Administrator, Teacher, Principal, Parent and Student. The right column is Calendar, Quick access and School setup. Functional verification, visual inspection, human acceptance and production readiness remain separate.
 
 This checkpoint does not complete Principal, Parent, Teacher or Student page composition; browser institution-creation theme selection; Porcelain published sign-in support; or verification of the branded sign-in capture labelled “Authentication is not connected”.

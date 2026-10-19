@@ -20,6 +20,7 @@ Status values separate engineering, visual comparison, human acceptance, and pro
 | UX-14 | Timetable, Attendance and assessment entry | UX-13 | Specialized desktop/mobile, keyboard and owner-regression evidence | VERIFIED |
 | UX-15 | Settings, theme selection and public entry gaps | UX-14 | Institution creation, publication compatibility and real sign-in evidence | PARTIAL |
 | UX-16 | Integrated M01–M08 presentation regression | UX-09–15 | Five-workspace route/state matrix, focused functional regressions and final 4 GiB build | NOT_STARTED |
+| UX-17 | Consolidated five-workspace landing compositions and shared candidate gallery | UX-10; accepted landing contract | Authoritative landing map; shared component states; production desktop/mobile/intermediate and four-theme comparisons | IN_PROGRESS |
 
 ## Common acceptance
 
