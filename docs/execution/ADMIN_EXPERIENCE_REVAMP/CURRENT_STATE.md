@@ -15,5 +15,6 @@
 1. Shell/Students checkpoint committed as `1671c8f`.
 2. Staff/School/Academics directly inspected at desktop/mobile. Staff tabs now sit below the page header, duplicate cross-links were removed, and School details no longer exposes an unsupported draft action. Evidence: `docs/evidence/admin-experience-revamp-02-2026-10-19/`.
 3. Attendance/Timetable directly inspected at desktop/mobile. Authorized Corrections is now reachable, Attendance tabs follow the approved information architecture, unsupported Attendance draft controls were removed, and report/cover tables have labelled mobile records without root overflow. Evidence: `docs/evidence/admin-experience-revamp-03-2026-10-19/`.
-4. Continue Communication/Calendar/Assessments, then remaining routes in [PAGE_COVERAGE.md](PAGE_COVERAGE.md).
+4. Communication/Calendar/Assessments directly inspected at desktop/mobile. Communication local navigation no longer duplicates My work, local tabs follow the page header, and Assessments has one clear header action without a repeated workflow-entry card. Evidence: `docs/evidence/admin-experience-revamp-04-2026-10-19/`. Production build `W9MFAx9O5BmaQ4d0_zuhB` passed with the established 4 GiB heap; focused ESLint and TypeScript passed. Human visual acceptance remains PENDING.
+5. Continue the remaining routes in [PAGE_COVERAGE.md](PAGE_COVERAGE.md), beginning Admissions, Imports, Requests and Coordination.
 

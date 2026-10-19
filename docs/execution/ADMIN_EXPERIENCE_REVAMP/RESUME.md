@@ -3,11 +3,11 @@
 ## Latest checkpoint
 
 - Shell/Students commit: `1671c8f`.
-- Active completed slice: Attendance/Timetable presentation correction and direct desktop/mobile inspection.
-- Production build ID: `qCMRrY5t927FdEumilAx7` at `http://127.0.0.1:3400`.
-- Evidence: `docs/evidence/admin-experience-revamp-03-2026-10-19/`.
+- Active completed slice: Communication/Calendar/Assessments presentation correction and direct desktop/mobile inspection.
+- Production build ID: `W9MFAx9O5BmaQ4d0_zuhB` at `http://127.0.0.1:3400`.
+- Evidence: `docs/evidence/admin-experience-revamp-04-2026-10-19/`.
 - No schema or migration change.
-- Next action: inspect and correct Communication/Calendar/Assessments routes, preserving existing owner behavior.
+- Next action: inspect and correct Admissions, Imports, Requests and Coordination routes, preserving existing owner behavior.
 
 Current task: next checkpoint — Staff, School setup and Academics. The shared shell/navigation, connected reference and Students journey checkpoint is verified and ready to commit.
 

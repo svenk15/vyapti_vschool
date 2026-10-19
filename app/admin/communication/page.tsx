@@ -15,8 +15,8 @@ export default async function CommunicationPage(){
  const reviewCount=proposals?.filter(row=>row.status==='IN_REVIEW').length??null;
  const readyCount=proposals?.filter(row=>row.status==='APPROVED').length??null;
  return <main id="main-content" className="container page-space"><PageStack>
-  <CommunicationTabs/>
   <PageHeader title="Communication" description="Keep the school community informed, with a clear next action." actions={proposals!==null?<ButtonLink href="/admin/communication/new"><PortalIcon name="mail"/> Create notice</ButtonLink>:undefined}/>
+  <CommunicationTabs/>
   <Card className="communication-summary-strip" aria-label="Communication summary">
    <div><strong>{publishedCount??'—'}</strong><span>Published notices</span></div>
    <div><strong>{reviewCount??'—'}</strong><span>Awaiting review</span></div>
