@@ -149,3 +149,11 @@ Status: IMPLEMENTATION_UNCHANGED / FOCUSED_CURRENT_STATE_EVIDENCE_COMPLETE / HUM
 The exact Student **Your work** submitted/feedback page was opened and inspected. It contains the immutable accepted receipt, published guidance and submitted response, and it omits the draft editor plus Save draft, Review submission and Submit assignment actions. A fresh connected synthetic assignment, `Connected learning review · 18 Oct 2026`, was then exercised with separate authorized Teacher, Student and Parent accounts through draft save, submission and published feedback. The selected Parent sees the exact assignment and deadline but not the Student response or Teacher feedback. Older immutable `Local habitats field notes` fixtures remain unchanged.
 
 No application, contract, schema or migration changed. The running candidate build was reused and no rebuild was needed. Focused screenshots and persisted scenario identifiers are recorded in [M01–M08 review-gap closure](../../evidence/m01-m08-review-gap-closure-2026-10-18/README.md). Human acceptance and all existing release gates remain pending.
+
+## 19 October 2026 — UX-12 Learning detail presentation
+
+Status: ENGINEERING_VERIFIED / DIRECT_PATTERN_COMPARISON_COMPLETE / HUMAN_REVIEW_PENDING.
+
+Teacher publication, Parent published-assignment and Student assignment details were inspected at 1440×1000 and 390×844 against the approved Learning workflow states and the shared record-detail recipe. The Parent route had touching cards and internal release terminology; the final composition uses the shared 24px stack and concise family-facing read-only wording. Current-child authorization, immutable publication data, Student submission ownership and Parent non-disclosure remain unchanged.
+
+TypeScript, focused lint and the standard 4 GiB build passed; the corrected Parent desktop/mobile captures have zero root overflow. Existing LEA-03/LEA-04 PostgreSQL and browser evidence remains applicable because no owner, persistence, authorization, recovery or transaction code changed. Evidence: [UX-12 Learning details](../../evidence/ux-revamp-12-learning-details-2026-10-19/README.md). Human acceptance, native accessibility, actual-browser zoom, TEN-03 and production release remain pending.

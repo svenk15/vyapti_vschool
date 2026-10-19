@@ -1,0 +1,26 @@
+{
+  "capturedAt": "2026-10-19T05:13:22.814Z",
+  "buildId": "AXMCiGbnvOfm2hphYv8U5",
+  "observations": [
+    {
+      "viewportName": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "copy": "You can review the published assignment here. Submission and editing stay with your child.",
+      "overflow": 0,
+      "height": 1000
+    },
+    {
+      "viewportName": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": "You can review the published assignment here. Submission and editing stay with your child.",
+      "overflow": 0,
+      "height": 959
+    }
+  ]
+}

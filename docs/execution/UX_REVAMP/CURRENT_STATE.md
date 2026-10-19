@@ -15,7 +15,8 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-09 | VERIFIED | DOCUMENTED_FINITE_INVENTORY_AND_RECIPES | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-10 | VERIFIED | DIRECT_DASHBOARD_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-11 | VERIFIED | DIRECT_DIRECTORY_FAMILY_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-12 | IN_PROGRESS | STUDENT_RECORD_REPRESENTATIVE_DIRECTLY_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-12 | VERIFIED | DETAIL_HISTORY_FAMILY_DIRECTLY_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-13 | IN_PROGRESS | REPRESENTATIVE_STAGED_FLOWS_PENDING | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -76,10 +77,12 @@ UX-12 is in progress. The representative `/admin/students/[id]` record no longer
 
 The same committed build was checked on the next affected detail consumers. Submitted Administrator Attendance still matches the exact SA-27 staged composition at desktop/mobile sizes, including immutable history and guarded cancellation access. Parent and Student notice details follow the record-detail recipe with genuine current context and explicit read/acknowledgement boundaries; their PAR-14/STW-27 sources are workflow explorers, so the comparison is labelled a shared-pattern review rather than pixel identity. No defect or shared-style regression was found and no application code changed. See [Attendance detail](../../evidence/ux-revamp-12-attendance-detail-2026-10-19/README.md) and [notice details](../../evidence/ux-revamp-12-notice-details-2026-10-19/README.md).
 
+UX-12 now closes with the implemented M06 Learning detail family. Teacher publication, Parent published-assignment and Student assignment details were inspected at 1440×1000 and 390×844 against their established workflow references and shared detail recipe. The Parent route had one confirmed presentation defect: adjacent cards touched and the read-only message used internal release wording. It now uses the shared 24px stack and concise family-facing copy while preserving the exact current-child projection and submission/feedback non-disclosure. TypeScript, focused lint and the standard 4 GiB build passed with build ID `AXMCiGbnvOfm2hphYv8U5`; explicit corrected Parent captures have zero root overflow. The demo must be started through `pnpm demo:start`, because a bare `pnpm start` omits the synthetic release manifest and correctly fails protected module access closed. See [Learning detail evidence](../../evidence/ux-revamp-12-learning-details-2026-10-19/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Continue UX-12 with the next implemented M01–M08 record-detail/history family from `SCREEN_MAP.md`, reusing the verified Student record recipe without changing owner behavior. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+Continue UX-13 with the finite M01–M08 staged-form, review, confirmation, receipt and recovery states in `SCREEN_MAP.md`. Reuse the existing Student registration, Attendance correction and Learning submission patterns without changing owner behavior. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
