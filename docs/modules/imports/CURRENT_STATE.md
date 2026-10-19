@@ -1,5 +1,11 @@
 # Previewed, resumable student roster import — current state
 
+## 19 October 2026 — UX-11 Imports directory checkpoint
+
+`/admin/imports` now presents the exact approved directory hierarchy over the current signed-cursor branch query. **Import roster** opens the unchanged SA-23 preview flow at `/admin/imports?new=1`; Manage opens the existing guarded SA-24 reconciliation flow. Rows expose only the owner DTO's import reference, created time, row count and durable state. The reference Academic year column and search/filter/sort controls remain absent because the list contract does not expose that metadata or server query/order inputs. Preview, hash/version confirmation, bounded processing, recovery, cancellation and error-report behavior are unchanged.
+
+The exact Administrator `#/imports` reference and corrected application were directly inspected at 1440×1000; the application was also inspected at 390×844 with zero root overflow and computed Inter. Focused Imports Playwright passed 4/4 desktop and 4/4 mobile against real PostgreSQL after all 118 migrations. TypeScript, focused ESLint and the 4 GiB production build passed; build ID `OS-vqeRyk5VWWsKzuHjmj`. Evidence: [UX-11 Imports directory](../../evidence/ux-revamp-11-imports-2026-10-19/README.md). Human review is PENDING.
+
 ## 18 October 2026 — must-have M03 connected checkpoint
 
 The current demo's `/admin/imports` preview composition and its relationship to manual registration, Student placement and separately guarded Parent/Student access were rechecked at desktop/mobile sizes. Focused Students/Imports PostgreSQL suites passed 26/26, including preview non-writes, exact hash/key replay, resumable row processing, safe partial outcomes, cancellation and scoped denial. Evidence: [M03](../../evidence/must-have-m03-2026-10-18/README.md). No import row, schema, migration or credential changed; human review and release gates remain pending.
