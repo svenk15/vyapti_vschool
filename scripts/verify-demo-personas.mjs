@@ -53,8 +53,30 @@ try{
      contextCount=await selector.locator('option').count();
      if(contextCount<(persona.minimumContexts??1))throw new Error(`${persona.name} context fixture is incomplete.`);
     }
+    const shell=await page.evaluate(()=>{
+     const sidebar=document.querySelector('.portal-sidebar'),nav=document.querySelector('.portal-nav-scroll'),footer=document.querySelector('.portal-sidebar-footer');
+     const visibleRows=[...document.querySelectorAll('.portal-nav-group a,.portal-nav-disclosure')].filter(node=>node.getClientRects().length>0).map(node=>node.getBoundingClientRect().height);
+     const footerRect=footer?.getBoundingClientRect();
+     return {rootOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,fontFamily:getComputedStyle(document.body).fontFamily,sidebarVisible:!!sidebar&&sidebar.getClientRects().length>0,navOverflow:nav?getComputedStyle(nav).overflowY:null,minimumVisibleRow:visibleRows.length?Math.min(...visibleRows):null,footerVisible:!!footerRect&&footerRect.height>0&&footerRect.top<innerHeight&&footerRect.bottom<=innerHeight+1};
+    });
+    if(shell.rootOverflow)throw new Error(`${persona.name} has horizontal document overflow.`);
+    if(!shell.fontFamily.toLowerCase().includes('inter'))throw new Error(`${persona.name} is not using Inter.`);
+    if(viewportName==='desktop'){
+     if(!shell.sidebarVisible||shell.navOverflow!=='auto'||(shell.minimumVisibleRow??0)<44||!shell.footerVisible)throw new Error(`${persona.name} desktop navigation geometry is invalid.`);
+    }else{
+     const menu=page.getByRole('button',{name:/^Open(?: Parent| Student)? navigation$/}).first();
+     await menu.click();
+     const dialog=page.locator('.portal-sidebar[role="dialog"]');
+     await dialog.waitFor();
+     await page.waitForTimeout(100);
+     const mobileShell=await page.evaluate(()=>{const footer=document.querySelector('.portal-sidebar[role="dialog"] .portal-sidebar-footer')?.getBoundingClientRect();return {focusInside:!!document.activeElement?.closest('.portal-sidebar[role="dialog"]'),footerVisible:!!footer&&footer.height>0&&footer.top<innerHeight&&footer.bottom<=innerHeight+1};});
+     if(!mobileShell.focusInside||!mobileShell.footerVisible)throw new Error(`${persona.name} mobile navigation focus or footer is invalid: ${JSON.stringify(mobileShell)}`);
+     await page.keyboard.press('Escape');
+     if(!await menu.evaluate(node=>document.activeElement===node))throw new Error(`${persona.name} mobile navigation did not return focus.`);
+     Object.assign(shell,{mobile:mobileShell});
+    }
     if(capture)await page.screenshot({path:`${outputDir}/${persona.name}-${viewportName}.png`,fullPage:true});
-    results.push({persona:persona.name,viewport:viewportName,path:persona.path,contextCount,ok:true});
+    results.push({persona:persona.name,viewport:viewportName,path:persona.path,contextCount,shell,ok:true});
    } finally {await context.close();}
   }
  }
