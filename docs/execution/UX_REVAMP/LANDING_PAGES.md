@@ -58,3 +58,9 @@ The implementation/capture tables above describe the `784c5b9` executable checkp
 ## Correction implementation checkpoint — 19 October 2026
 
 Shared calendar semantics, attention tone, session columns and Administrator spacing are implemented in commit `cd7736a`. The exact old-to-new navigation map and permission-preserving workspace grouping are implemented in commit `95839f5`. The role composition source now implements the already-authorized Teacher Learning workload, Student/Parent notice attention and Principal bounded owner composition described above. Teacher and Principal published-event reads remain unresolved authority decisions documented in [LANDING_PROJECTION_DELTA.md](LANDING_PROJECTION_DELTA.md); their calendars continue to say unsupported. Functional verification, direct visual comparison and human acceptance remain separate, and human acceptance is pending.
+
+## Correction verification checkpoint — 19 October 2026
+
+The supported five-workspace landing contract is engineering-verified at executable source `271917adf5e0f55cb2e5475a85ed95b96637b440`, build `Fv3qWOdG-v7QSU68zLxnF`. Administrator, Teacher, Student, Parent and Principal production pages passed the current-source persona journey at 1440×1000 and 390×844; the shared composition also passed at 900×1000 and across Forest, Amethyst, Porcelain and Linen. Calendar selected, complete-empty and failed/retry states were directly inspected. Parent notice summary disclosure now follows the exact notice-read purpose, and Principal decision descriptions do not expose opaque references.
+
+The current evidence is [the landing completion record](../../evidence/ux-revamp-landing-completion-2026-10-19/README.md). Teacher and Principal Events readers remain precise unresolved authority decisions rather than presentation defects. Browser institution creation remains the independent UX-15 platform-operator dependency. Human acceptance and all production gates remain pending.

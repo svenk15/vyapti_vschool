@@ -124,3 +124,13 @@ Status: IMPLEMENTED_AWAITING_FINAL_VISUAL_EVIDENCE / HUMAN_REVIEW_PENDING.
 - Focused TypeScript and lint checks passed. The changed Learning PostgreSQL case passed 1/1 after 119 migrations, covering awaiting feedback before/during a private draft and zero awaiting after immutable publication. A mistakenly forwarded command started the wider functional suite and exposed an unrelated pre-existing Finance failure; it was stopped and is not claimed as a suite result.
 
 Remaining before this correction batch can be labelled engineering-complete: current-source production build, focused browser interactions and direct 1440×1000 / 390×844 inspection across the required landing/theme states, updated evidence package, and verified demo provenance. Native accessibility, actual-browser 200% zoom, TEN-03, production gates and human acceptance remain pending.
+
+## 19 October 2026 — landing correction verified checkpoint
+
+Status: **SUPPORTED_SCOPE_ENGINEERING_COMPLETE / VISUAL_COMPARISON_COMPLETE / HUMAN_REVIEW_PENDING**.
+
+- Executable source `271917adf5e0f55cb2e5475a85ed95b96637b440`; production build `Fv3qWOdG-v7QSU68zLxnF`; live demo `http://127.0.0.1:3400`.
+- The requested A/B/C commits are `cd7736a`, `95839f5` and `c6c8a8f`. Final permission-sensitive Parent/Principal fixes and evidence are `271917a`.
+- The current-source persona verifier passed 11/11 protected/public states. Focused landing Playwright passed 3/3 desktop and 2/2 mobile with one worker; the desktop set includes 900px breakpoint coverage. Four themes and calendar selected, complete-empty and failed/retry states were directly inspected.
+- Teacher and Principal Events readers remain unresolved authority decisions in `LANDING_PROJECTION_DELTA.md`; their unsupported calendars are truthful supported behavior. UX-15 browser institution creation remains independently partial because an authenticated platform-operator browser principal is not defined.
+- Evidence: [five-workspace correction](../../evidence/ux-revamp-landing-completion-2026-10-19/README.md). Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
