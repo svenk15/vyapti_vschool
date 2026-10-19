@@ -3,7 +3,7 @@ import Image from 'next/image';
 import {useEffect,useRef,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import type {BrandFields,BrandingWorkspace} from '@/shared/contracts/branding-management';
-import type {AppearanceConfiguration,ThemeId} from '@/shared/contracts/branding';
+import {themeIds,themes,type AppearanceConfiguration,type ThemeId} from '@/shared/contracts/branding';
 import {Alert,Badge,BrandSurface,Button,ButtonLink,Card,PageHeader,PageStack,SectionHeader} from './ui/primitives';
 import {SelectField,TextField} from './ui/forms';
 import {BrandExperiencePreview} from './brand-experience-preview';
@@ -34,7 +34,7 @@ export function BrandingWorkspaceScreen({initial,appearance,schoolName,instituti
     {!workspace.profileId&&<TextField label="Public sign-in slug" value={slug} maxLength={80} onChange={e=>setSlug(e.target.value)} hint="Used in the public school sign-in address."/>}
     <div className="form-grid"><TextField label="Institution display name" value={fields.displayName} maxLength={160} onChange={update('displayName')}/><TextField label="Branch name" value={fields.branchLabel} maxLength={160} onChange={update('branchLabel')}/></div>
     <TextField label="Welcome message" value={fields.welcome} maxLength={180} onChange={update('welcome')}/>
-    <div className="form-grid"><SelectField label="Palette" value={fields.palette} onChange={update('palette')}><option value="forest">Forest</option><option value="indigo">Indigo</option><option value="clay">Clay</option></SelectField><TextField label="Locale" value={fields.locale} maxLength={35} onChange={update('locale')}/></div>
+    <div className="form-grid"><SelectField label="Palette" value={fields.palette} onChange={update('palette')}>{fields.palette==='indigo'?<option value="indigo">Legacy Indigo · shown as Amethyst</option>:null}{fields.palette==='clay'?<option value="clay">Legacy Clay · shown as Linen</option>:null}{themeIds.map(theme=><option key={theme} value={theme}>{themes[theme].name}</option>)}</SelectField><TextField label="Locale" value={fields.locale} maxLength={35} onChange={update('locale')}/></div>
     <TextField label="Support email" type="email" value={fields.supportEmail} maxLength={254} onChange={update('supportEmail')}/>
     <TextField label="Change reason" value={reason} maxLength={500} onChange={e=>setReason(e.target.value)} hint="Recorded with the draft or published revision."/>
     <label className="field"><span className="field-label">School logo (PNG, up to 2 MiB)</span><input className="field-input" type="file" accept="image/png" disabled={!workspace.profileId||busy} onChange={e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>2*1024*1024){tell('danger','Logo not selected','Choose a PNG no larger than 2 MiB.');return;}if(logoPreview)URL.revokeObjectURL(logoPreview);setLogoPreview(URL.createObjectURL(file));void act(async()=>{if(!workspace.profileId)throw new Error('Create the sign-in profile first.');const key=crypto.randomUUID(),command={profileId:workspace.profileId,version:workspace.version,key,reason};const r=await fetch('/api/v1/branding/assets',{method:'POST',headers:{'Content-Type':'image/png','X-Branding-Command':JSON.stringify(command),'Idempotency-Key':key},body:await file.arrayBuffer()});const v=await r.json();if(!r.ok)throw new Error(v.message??'Logo upload failed.');set('logoAssetId',v.assetId);await refresh(false);tell('success','Logo attached','The sanitized logo is attached to the private draft.');});}}/></label>

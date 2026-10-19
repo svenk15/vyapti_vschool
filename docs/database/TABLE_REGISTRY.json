@@ -1,5 +1,5 @@
 {
-  "revision": "4.24",
+  "revision": "4.25",
   "prefix": "vs_",
   "tables": [
     {
@@ -685,7 +685,7 @@
       "table": "vs_branding_brand_revision",
       "status": "MIGRATED",
       "design": "docs/modules/branding/DESIGN.md",
-      "fields": "id uuid PK; profile_id uuid; organization_id uuid; school_id uuid nullable; revision int; state varchar(20) DRAFT/PUBLISHED; display_name varchar(160); branch_label varchar(160) nullable; logo_asset_id uuid nullable; palette varchar(20) forest/indigo/clay; welcome varchar(180); support_email varchar(254); locale varchar(35); published_at timestamptz(3) nullable; published_by uuid nullable",
+      "fields": "id uuid PK; profile_id uuid; organization_id uuid; school_id uuid nullable; revision int; state varchar(20) DRAFT/PUBLISHED; display_name varchar(160); branch_label varchar(160) nullable; logo_asset_id uuid nullable; palette varchar(20) forest/amethyst/porcelain/linen plus retained legacy indigo/clay; welcome varchar(180); support_email varchar(254); locale varchar(35); published_at timestamptz(3) nullable; published_by uuid nullable",
       "responsibility": "Private draft or immutable published sign-in identity.",
       "constraints": "UNIQUE(profile_id,revision); one DRAFT per profile; exact null-safe profile/asset owner trigger; published rows cannot update/delete; publisher/time both present only for PUBLISHED",
       "rls": {

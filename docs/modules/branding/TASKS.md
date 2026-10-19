@@ -53,3 +53,7 @@ Acceptance: authorized scoped grant/revoke and replay; target eligibility; unaut
 ### Approved review-composition acceptance overlay
 
 The production entry at `/admin/branding` must match the approved Preview → Review → Confirm composition on desktop and mobile, retain safe values and acknowledgement through Back/Continue, restore keyboard focus, and perform real server preview validation only at confirmation. Existing advanced controls live at `/admin/branding/manage`. Verify that the management publish/public-sign-in journey remains intact after the route split. Do not claim a durable nonpublisher request or wizard draft until its lifecycle contract is accepted; record that reference outcome as an explicit remaining gap. Human visual acceptance remains separate and PENDING.
+
+### UX-15 approved-preset publication overlay
+
+The management editor must offer Forest, Amethyst, Porcelain and Linen for a new Branding draft while retaining readable compatibility for stored legacy Indigo/Clay drafts. A forward constraint migration must preserve all prior immutable revisions. Verify Porcelain private preview, save, publish, sanitized public projection and real school sign-in at desktop/mobile sizes. The live published route must use the existing credentials flow and must not show the preview-only “Authentication is not connected” warning. Institution creation remains the verified local operator command with optional `themeId`; no browser operator workspace may be inferred from this presentation task.
