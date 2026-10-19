@@ -30,16 +30,17 @@ type PortalShellProps={
  topContext?:ReactNode;
  openNavigationLabel?:string;
  closeNavigationLabel?:string;
- bottomNavigation?:(controls:{open:boolean;openNavigation:(opener:HTMLButtonElement)=>void})=>ReactNode;
+ bottomNavigation?:(controls:{open:boolean;openNavigation:(openerId:string)=>void})=>ReactNode;
 };
 
 const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),input:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
 export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,accountHref='/account',contextHref='/admin/context',stagedSignOut=true,stagedSignOutHref='/admin/context?destination=sign-out',children,shellClassName,contentClassName,preferences,theme,navigationId='portal-navigation',sidebarContext,topContext,openNavigationLabel='Open navigation',closeNavigationLabel='Close menu panel',bottomNavigation}:PortalShellProps){
  const pathname=usePathname(),entries=groups.flatMap((group,index)=>group.items.map(item=>({group,groupKey:group.id??`${index}-${group.label}`,item,specificity:portalItemMatchSpecificity(pathname,item)}))),currentEntry=entries.filter(entry=>entry.specificity>=0).sort((left,right)=>right.specificity-left.specificity)[0],currentItem=currentEntry?.item,activeCollapsibleGroup=currentEntry?.group.collapsible===true?currentEntry.groupKey:null;
- const [openOnPath,setOpenOnPath]=useState<string|null>(null),[expandedGroups,setExpandedGroups]=useState<readonly string[]>(()=>activeCollapsibleGroup?[activeCollapsibleGroup]:[]),toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),returnFocusTarget=useRef<HTMLButtonElement|null>(null),open=openOnPath===pathname;
- const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>(returnFocusTarget.current??toggle.current)?.focus());},[]);
- const openNavigation=useCallback((opener:HTMLButtonElement)=>{returnFocusTarget.current=opener;setOpenOnPath(pathname);},[pathname]);
+ const [openOnPath,setOpenOnPath]=useState<string|null>(null),[returnFocusId,setReturnFocusId]=useState<string|null>(null),[expandedGroups,setExpandedGroups]=useState<readonly string[]>(()=>activeCollapsibleGroup?[activeCollapsibleGroup]:[]),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
+ const toggleId=`${navigationId}-toggle`;
+ const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>document.getElementById(returnFocusId??toggleId)?.focus());},[returnFocusId,toggleId]);
+ const openNavigation=useCallback((openerId:string)=>{setReturnFocusId(openerId);setOpenOnPath(pathname);},[pathname]);
  useEffect(()=>{
   if(!open)return;
   const previousOverflow=document.body.style.overflow;
@@ -60,7 +61,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
  const identityLabel=accountDisplayName?.trim()||`${roleLabel} account`,initials=identityLabel.split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();
  return <div className={`portal-shell${shellClassName?` ${shellClassName}`:''}`} data-vs-theme={theme} data-density={preferences?.density} data-reduced-motion={preferences?.reducedMotion}>
   <header className="portal-topbar">
-   <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls={navigationId} aria-expanded={open} onClick={event=>{returnFocusTarget.current=event.currentTarget;open?close(true):setOpenOnPath(pathname);}}><span aria-hidden="true"><PortalIcon name={open?'close':'menu'}/></span><span className="sr-only">{open?closeNavigationLabel:openNavigationLabel}</span></button>
+   <button id={toggleId} type="button" className="portal-menu-toggle" aria-controls={navigationId} aria-expanded={open} onClick={()=>{setReturnFocusId(toggleId);if(open)close(true);else setOpenOnPath(pathname);}}><span aria-hidden="true"><PortalIcon name={open?'close':'menu'}/></span><span className="sr-only">{open?closeNavigationLabel:openNavigationLabel}</span></button>
    <Link className="portal-mobile-brand" href={homeHref}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
    <span className="portal-workspace-label">{currentItem?.label??roleLabel}</span>
    <div className="portal-top-context">{topContext??(home?<BranchSwitcher home={home} contextHref={contextHref}/>:null)}{academicYearLabel&&<span className="portal-top-year" aria-label={`Academic year ${academicYearLabel}`}>{academicYearLabel}</span>}</div>
