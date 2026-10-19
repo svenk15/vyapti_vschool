@@ -22,6 +22,12 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-16 | VERIFIED_SUPPORTED_SCOPE | CURRENT_SOURCE_M01_M08_ROUTE_AND_STATE_REGRESSION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-17 | VERIFIED_SUPPORTED_SCOPE | FIVE_PRODUCTION_LANDINGS_AND_SHARED_CANDIDATE_VERIFIED | PENDING | BLOCKED_BY_RELEASE_GATES |
 
+### Five-workspace landing closure — 19 October 2026
+
+The bounded follow-up is implemented at `e00d23e`. Parent and Student use compact mobile summary rows at 390 and 360 CSS pixels; Teacher prioritizes attendance and today's classes before teaching work; Principal separates decisions from active follow-ups, uses operational copy, formats Finance values as currency and reports latest-notice reach from the authorized publication projection. The design-system candidate now mirrors each role's actual production composition. No schema, grant, route or business-authority change was made.
+
+The exact production build is `yRrZsFYC6d77Bpxhnd2cK` and the current-source persona pass verified 11/11 desktop/mobile protected and public states. Calendar date/range unit tests passed 3/3; focused Finance PostgreSQL passed 1/1; focused landing Playwright passed 3/3 desktop and 2/2 mobile before the final Principal subtitle-only CSS correction, which was then verified in the final current-source persona pass and screenshot. Real failure-then-recovery calendar evidence remains unavailable without a safe transient owner-fault harness. Teacher/Principal Events-reader authority remains unresolved. Evidence: [five-workspace closure](../../evidence/ux-revamp-landing-closure-2026-10-19/README.md). Human acceptance and release gates remain pending.
+
 ## Baseline
 
 - Repository HEAD at start: `a2ed44ca15913d2441188e9ad5f3914d46ce1914` on `work/stu-01-after-per02-wip`.
