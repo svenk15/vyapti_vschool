@@ -14,7 +14,7 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-08 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-09 | VERIFIED | DOCUMENTED_FINITE_INVENTORY_AND_RECIPES | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-10 | VERIFIED | DIRECT_DASHBOARD_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-11 | IN_PROGRESS | STAFF_ACCESS_ATTENDANCE_COMMUNICATION_ACADEMICS_IMPORTS_ASSESSMENTS_AND_COORDINATION_DIRECTORY_FAMILIES_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-11 | IN_PROGRESS | STAFF_ACCESS_ATTENDANCE_COMMUNICATION_ACADEMICS_IMPORTS_ASSESSMENTS_COORDINATION_AND_LEARNING_DIRECTORY_FAMILIES_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -67,10 +67,12 @@ The M07 Administrator Assessments entry now uses the approved module-landing hie
 
 The M08 Coordination queue/detail family has now been inspected as a shared-pattern design extension because the approved pack has no exact production queue screen. The genuine Administrator empty state, populated Principal queue, awaiting-verification detail and resolved setup-review detail were directly reviewed at 1440×1000 and 390×844. Existing source authorization, assignment, independent verification, append-only history and Attendance-owned mutation boundaries remain unchanged. The focused business journey passed 1/1 desktop and 1/1 mobile against real PostgreSQL after 118 migrations. An obsolete mobile selector was updated to the existing dialog role and current `Follow-ups` label; application code and behavior did not change, so the already-passing standard build `JZi2cbc7qsZGc_ob70Zo8` remains current. See [Coordination directory evidence](../../evidence/ux-revamp-11-coordination-directory-2026-10-19/README.md).
 
+The M06 Learning directory family now uses a compact shared assignment-row composition for Teacher and Parent while retaining the already-conforming Student directory. Teacher and Parent rows align real metadata, status and one action on desktop and mobile; Parent displays only the publication/excusal facts exposed by its authorized owner projection. The exact Teacher, Parent and Student references and equivalent application states were directly inspected at 1440×1000 and 390×844 with zero root overflow. The focused publication journey passed 2/2 across desktop and mobile against real PostgreSQL after 118 migrations; type checking, focused lint and the final 4 GiB build passed with build ID `QuaJ3r3T5xBVFjJmQtowX`. Teacher query controls/tabs and Parent Student-work status remain explicit owner-contract gaps rather than page-local simulations. See [Learning directory evidence](../../evidence/ux-revamp-11-learning-directories-2026-10-19/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Continue UX-11 with the next implemented M01–M08 directory family identified by the finite inventory, then migrate remaining matching directory consumers before starting UX-12. Reuse the verified directory/inbox recipes only where owner query and specialized interaction contracts permit them. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+Continue UX-11 with the remaining implemented M01–M08 directory families identified by the finite inventory, then migrate remaining matching directory consumers before starting UX-12. Reuse the verified directory/inbox recipes only where owner query and specialized interaction contracts permit them. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.

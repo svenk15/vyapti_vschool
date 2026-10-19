@@ -1,5 +1,13 @@
 # Learning current state
 
+## UX-11 directory presentation — 19 October 2026
+
+Status: ENGINEERING_VERIFIED_SUPPORTED_SCOPE / DIRECT_COMPARISON_COMPLETE / HUMAN_REVIEW_PENDING
+
+Teacher and Parent assignment directories now use the compact shared production-row recipe while the already-conforming Student directory remains unchanged. The exact approved Teacher, Parent and Student reference states were compared directly with populated application states at 1440×1000 and 390×844. Parent shows only owner-projected publication/excusal state; Teacher search/filter/sort/pagination and extra tabs remain explicit owner-query/released-route gaps. No authorization, owner query, mutation, persistence or migration changed.
+
+Type checking, focused lint and the 4 GiB production build passed with build ID `QuaJ3r3T5xBVFjJmQtowX`. The focused publication journey passed 2/2 desktop/mobile against real PostgreSQL with all 118 migrations applied. Evidence: [UX-11 Learning directories](../../evidence/ux-revamp-11-learning-directories-2026-10-19/README.md).
+
 ## M01–M08 acceptance correction — 18 October 2026
 
 Student assignment guidance now reflects draft, submitted and feedback-available state. The connected Learning seed binds its narrow Parent/Student read purposes to the exact documented accounts and creates a fresh immutable publication audience when an older assignment lacks those bindings; it does not rewrite old assignments or history. Parent Learning and Student home use the shared card stack. Focused Learning Playwright passed 1/1, the guarded connected seed validator passed, and current desktop/mobile states were inspected. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
