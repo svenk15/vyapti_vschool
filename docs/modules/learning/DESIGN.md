@@ -52,6 +52,7 @@ The UI uses the approved Assignment name/Subject search selector, separate Sort 
 Portable `LearningFacade` operations are:
 
 - `teacherWorkspace(identity, organizationId, schoolId)` — current authorized offerings and owned assignments.
+- The Teacher landing extension keeps the same repeatable-read authority boundary and adds aggregate `acceptedSubmissions`, `awaitingFeedback` and `feedbackDrafts` for the current Teacher's bounded, currently assigned authored assignment versions. It uses one submission read plus one feedback read across those version IDs, returns no learner identity or response text, and must not query once per assignment.
 - `createDraft(identity, scope, fields, key)` — serializable guarded create.
 - `updateDraft(identity, scope, assignmentId, expectedRevision, fields, key)` — serializable CAS.
 - `publish(identity, scope, assignmentId, expectedRevision, key)` — serializable guarded immutable publication and audience freeze.

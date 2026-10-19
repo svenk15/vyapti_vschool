@@ -112,3 +112,15 @@ The external review of `vschool_ux_review_b1567b1.zip` supersedes the preceding 
 | Human review | PENDING for this correction batch and for every unchanged workspace not explicitly accepted by the user. |
 
 Next action is the focused shared-component checkpoint, followed by the documented navigation mapping and then eligible role-specific owner compositions. The correction batch does not reopen backend behavior already verified unless the new bounded projection requires it.
+
+## 19 October 2026 — landing correction implementation checkpoint
+
+Status: IMPLEMENTED_AWAITING_FINAL_VISUAL_EVIDENCE / HUMAN_REVIEW_PENDING.
+
+- Shared correction commit `cd7736a` implements explicit calendar loaded ranges and states, branch-timezone timed dates, date-only all-day handling, overlapping multi-day visibility, distinct canceled/closure presentation, semantic attention tones, explicit session subject/class fields and the 24px Administrator summary-to-grid gap.
+- Navigation commit `95839f5` records the exact old-item mapping and applies the approved group hierarchy without changing route guards. Empty extension groups remain present so an authorized late extension is not silently dropped. Mobile Parent/Student shortcuts retain stable canonical meaning and a reachable More action.
+- The role-composition checkpoint adds a bounded Learning-owned Teacher workload, Student/Parent Communication notice attention and Principal composition of existing Decision, Coordination, Learning, Assessment, Communication and Attendance gateways. No generic dashboard store, new authority, schema or migration is introduced.
+- Teacher and Principal published-event readers remain unresolved authority decisions. Their calendars are explicitly unsupported; they are not presented as successful empty data. The exact questions and recommended options are in [LANDING_PROJECTION_DELTA.md](LANDING_PROJECTION_DELTA.md).
+- Focused TypeScript and lint checks passed. The changed Learning PostgreSQL case passed 1/1 after 119 migrations, covering awaiting feedback before/during a private draft and zero awaiting after immutable publication. A mistakenly forwarded command started the wider functional suite and exposed an unrelated pre-existing Finance failure; it was stopped and is not claimed as a suite result.
+
+Remaining before this correction batch can be labelled engineering-complete: current-source production build, focused browser interactions and direct 1440×1000 / 390×844 inspection across the required landing/theme states, updated evidence package, and verified demo provenance. Native accessibility, actual-browser 200% zoom, TEN-03, production gates and human acceptance remain pending.

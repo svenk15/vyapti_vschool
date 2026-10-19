@@ -165,3 +165,11 @@ Status: ENGINEERING_VERIFIED / DIRECT_EXACT_REFERENCE_COMPARISON_COMPLETE / HUMA
 Teacher assignment creation now follows TEA-27's four-stage Task, Submission, Publication review and Confirm composition. The implementation exposes the supported written-response, late-work and immutable receipt rules while leaving unsupported prototype file/in-class choices absent. Existing draft persistence, versioning, exact-key publication, Student submission recovery, Teacher feedback recovery and revoked-access denial remain unchanged.
 
 Focused Learning publication passed 1/1 desktop and 1/1 mobile against real PostgreSQL after 118 migrations. Focused lint, TypeScript and both 4 GiB builds passed; standard build `k8TnjrEVlWq3TyBY6C3mJ`, isolated E2E build `216VbkdMnLvqYNdXRef1Z`. Exact reference/application captures were directly inspected at 1440×1000 and 390×844 with loaded Inter and zero root overflow. Evidence: [UX-13 staged forms](../../evidence/ux-revamp-13-staged-forms-2026-10-19/README.md).
+
+## 19 October 2026 — bounded Teacher landing workload
+
+Status: ENGINEERING_IMPLEMENTED / FOCUSED_POSTGRESQL_VERIFIED / VISUAL_REVIEW_PENDING.
+
+`teacherWorkspace` now returns aggregate accepted-submission, awaiting-feedback and private-feedback-draft counts for the same bounded, currently assigned authored assignment versions already returned by that operation. The repeatable-read query uses one bounded submission read plus one feedback read and returns no learner identity, response text or feedback text. Current Teacher identity, dated assignment, capability and module checks remain the existing authority boundary; the landing projection grants no new action.
+
+The focused real-PostgreSQL case passed 1/1 after 119 migrations. It proves one accepted response is awaiting feedback before and during a private feedback draft, and is no longer awaiting after immutable publication. TypeScript and focused lint passed. No schema or migration changed. The Teacher landing visual and browser evidence remains pending in the current UX correction batch; human acceptance and all production gates remain pending.
