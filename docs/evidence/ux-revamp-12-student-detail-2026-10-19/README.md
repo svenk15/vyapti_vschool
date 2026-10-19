@@ -5,8 +5,8 @@ Date: 19 October 2026 (Asia/Kolkata)
 ## Scope and provenance
 
 - Base source: `3afe266` (`Align Learning directories with presentation recipe`).
-- Corrected source: the focused commit containing this record.
-- Standard production build: `qte7IOUhCcq39_z-v_I7p`, built with `NODE_OPTIONS=--max-old-space-size=4096`.
+- Corrected source: `b01a7a5`.
+- Visual-capture build: `qte7IOUhCcq39_z-v_I7p`; final committed-source rebuild: `W4fweDwPT7U_tJ7747JKm`. Both used `NODE_OPTIONS=--max-old-space-size=4096`; application code was unchanged between them.
 - Application route: `/admin/students/[id]` using the existing fictional M03 Student fixture.
 - Exact approved references: `VSchool_School_Admin_Design/VSchool_School_Admin_Review.html#/student/s1` for the record composition and `#/flow/SA-20` for the identity-correction flow.
 - Viewports: desktop `1440×1000`, mobile `390×844`, device pixel ratio 1. Captures use Playwright viewport emulation, not actual browser zoom.
