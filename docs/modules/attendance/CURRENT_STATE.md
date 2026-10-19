@@ -1,5 +1,9 @@
 # Session attendance and accountable corrections — current state
 
+## UX-12 submitted-register detail regression — 19 October 2026
+
+The current committed build was directly rechecked against exact Administrator SA-27 at 1440×1000 and 390×844. Select record, Record evidence and Confirm remain the visible staged composition; real session data, immutable revision history and guarded cancellation remain reachable without combining unrelated controls. Zero root overflow was observed and no presentation defect or code change was required. Prior functional/security evidence remains applicable because subsequent shared changes do not touch this Attendance composition. [Current-source visual evidence](../../evidence/ux-revamp-12-attendance-detail-2026-10-19/README.md). Human review for this revamp and the existing release gates remain PENDING.
+
 ## M01–M08 acceptance-test maintenance — 18 October 2026
 
 The historical combined Attendance browser spec now follows the current Teacher entry, staged SA-27 correction composition, reset-before-cancel rule and non-disclosing unauthorized audit response. Its focused current-source run passed 1/1. This repairs redundant regression coverage without excluding the spec or weakening assertions; Attendance business behavior and schema are unchanged. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.

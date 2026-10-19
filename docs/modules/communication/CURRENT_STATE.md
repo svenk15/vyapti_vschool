@@ -1,5 +1,9 @@
 # Communication — current state
 
+## UX-12 notice detail regression — 19 October 2026
+
+Parent and Student published-notice details were directly inspected at 1440×1000 and 390×844 on current committed source. Both retain genuine child/self context, immutable version facts, explicit acknowledgement boundaries and safe return navigation with zero root overflow. PAR-14 and STW-27 are workflow explorers rather than exact production detail screens, so this is recorded as a shared-pattern review pending human acceptance. No code or owner contract changed; the UX-11 current-source Communication regression remains applicable. [Evidence](../../evidence/ux-revamp-12-notice-details-2026-10-19/README.md).
+
 ## UX-11 Communication directory composition — 19 October 2026
 
 Administrator Communication now follows the approved module hierarchy with one compact real-data summary, readable publication/proposal tables, and labelled mobile cards. Parent and Student Messages use the same compact directory geometry while retaining their exact authorized child/self context, read state and withdrawal-safe actions. No owner command, audience, scheduling, delivery, publication, acknowledgement or withdrawal rule changed.
