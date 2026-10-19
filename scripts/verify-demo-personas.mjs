@@ -72,15 +72,16 @@ try{
      await page.waitForTimeout(100);
      const mobileShell=await page.evaluate(()=>{const footer=document.querySelector('.portal-sidebar[role="dialog"] .portal-sidebar-footer')?.getBoundingClientRect();return {focusInside:!!document.activeElement?.closest('.portal-sidebar[role="dialog"]'),footerVisible:!!footer&&footer.height>0&&footer.top<innerHeight&&footer.bottom<=innerHeight+1};});
      if(!mobileShell.focusInside||!mobileShell.footerVisible)throw new Error(`${persona.name} mobile navigation focus or footer is invalid: ${JSON.stringify(mobileShell)}`);
+     if(capture)await page.screenshot({path:`${outputDir}/${persona.name}-mobile-navigation.png`,fullPage:true});
      await page.keyboard.press('Escape');
      const menuHandle=await menu.elementHandle();await page.waitForFunction(node=>document.activeElement===node,menuHandle,{timeout:2_000}).catch(()=>{throw new Error(`${persona.name} mobile navigation did not return focus.`);});
      Object.assign(shell,{mobile:mobileShell});
     }
-    const expectedSummaryItems=persona.name==='principal'?4:3;
+    const expectedSummaryItems=persona.name==='administrator'||persona.name==='parent'?3:4;
     if(presentation.summaryItems!==expectedSummaryItems||presentation.technicalCopy)throw new Error(`${persona.name} landing composition is invalid: ${JSON.stringify(presentation)}`);
     if(persona.name==='principal'){
-     const [coverageAction,contextAction,accountAction]=presentation.actionLinks;
-     if(!coverageAction?.href?.match(/^\/leadership\/attendance\?date=\d{4}-\d{2}-\d{2}$/)||contextAction?.href!=='/leadership/context'||accountAction?.href!=='/leadership/account')throw new Error(`Principal quick access is invalid: ${JSON.stringify(presentation.actionLinks)}`);
+     const hrefs=presentation.actionLinks.map(item=>item.href);
+     if(!hrefs.some(href=>href?.match(/^\/leadership\/attendance\?date=\d{4}-\d{2}-\d{2}$/))||!hrefs.includes('/leadership/context')||!hrefs.includes('/leadership/account'))throw new Error(`Principal quick access is invalid: ${JSON.stringify(presentation.actionLinks)}`);
     }
     if(persona.name==='parent'&&presentation.actionLinks.length<3)throw new Error(`Parent dashboard actions are incomplete.`);
     if(['administrator','principal','teacher','parent','student'].includes(persona.name)){
@@ -88,7 +89,13 @@ try{
      if(viewportName==='desktop'&&trackCount<2)throw new Error(`${persona.name} dashboard did not render two desktop columns.`);
      if(viewportName==='mobile'&&trackCount!==1)throw new Error(`${persona.name} dashboard did not stack on mobile.`);
     }
-    if(capture)await page.screenshot({path:`${outputDir}/${persona.name}-${viewportName}.png`,fullPage:true});
+    if(capture){
+     await page.screenshot({path:`${outputDir}/${persona.name}-${viewportName}.png`,fullPage:true});
+     if(viewportName==='desktop'){
+      for(let remaining=20;remaining>0;remaining--){const disclosure=page.locator('.portal-nav-disclosure[aria-expanded="false"]').first();if(!await disclosure.count())break;await disclosure.click();}
+      await page.screenshot({path:`${outputDir}/${persona.name}-desktop-navigation.png`,fullPage:true});
+     }
+    }
     const routeChecks=[],reviewHrefs=[...(persona.reviewRoutes??[]),...(['parent','student'].includes(persona.name)?presentation.actionLinks.map(item=>item.href).filter(Boolean):[])];
     if(viewportName==='desktop'){for(const href of reviewHrefs){const probe=await context.newPage(),response=await probe.goto(new URL(href,baseURL).toString(),{waitUntil:'domcontentloaded'}),pathname=new URL(probe.url()).pathname,heading=(await probe.locator('h1').first().textContent())?.trim()??'',serviceUnavailable=await probe.getByText('SERVICE_UNAVAILABLE',{exact:true}).count()>0;if(!response?.ok()||['/sign-in','/choose-workspace','/family/access-unavailable','/student/access-unavailable'].includes(pathname)||!heading||serviceUnavailable)throw new Error(`${persona.name} review route failed: ${JSON.stringify({href,status:response?.status(),pathname,heading,serviceUnavailable})}`);routeChecks.push({href,status:response.status(),pathname,heading});await probe.close();}}
     results.push({persona:persona.name,viewport:viewportName,path:persona.path,contextCount,shell,presentation,routeChecks,ok:true});

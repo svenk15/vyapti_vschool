@@ -28,7 +28,7 @@ export default async function LeadershipHome(){
   home.capabilities.includes('communication.read_leadership')?communicationGateway.listLeadership(identity,{limit:3}).catch(()=>null):null,
  ]);
  const attention=coverage?.awaiting.items.slice(0,5).map(item=>({id:item.id,title:`${item.sectionName} · ${item.subjectName}`,description:`Due ${time(item.dueAt,coverage.timezone)} · ${item.teacherName??'Teacher assignment unavailable'}`,href:`/leadership/attendance/sessions/${item.id}?date=${coverage.schoolDate}`,actionLabel:'Inspect source',icon:'clock' as const,tone:'warning' as const}))??[];
- const decisionItems=decisions?.items.map(item=>({id:`${item.owner}:${item.itemId}`,title:item.title,description:`${item.typeLabel} · ${item.reference}`,href:`/leadership/decisions/${item.owner}/${item.itemId}`,actionLabel:'Review decision',icon:'attention' as const,tone:'warning' as const}))??[];
+ const decisionItems=decisions?.items.map(item=>({id:`${item.owner}:${item.itemId}`,title:item.title,description:item.typeLabel,href:`/leadership/decisions/${item.owner}/${item.itemId}`,actionLabel:'Review decision',icon:'attention' as const,tone:'warning' as const}))??[];
  const activeFollowUps=followUps?.items.filter(item=>item.status!=='RESOLVED'&&item.status!=='WITHDRAWN')??[];
  const followUpItems=activeFollowUps.slice(0,Math.max(0,3-decisionItems.length)).map(item=>({id:item.id,title:item.kind.replaceAll('_',' ').toLowerCase(),description:`${item.status.replaceAll('_',' ').toLowerCase()}${item.assignee?` · ${item.assignee.displayName}`:''}`,href:`/leadership/coordination/${item.id}`,actionLabel:'Open follow-up',icon:'clock' as const,tone:item.overdue?'danger' as const:'info' as const}));
  const principalAttention=[...decisionItems,...followUpItems];

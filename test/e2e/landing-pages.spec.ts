@@ -22,11 +22,19 @@ test('five landing candidates share responsive production components and four th
   await expect(reference.getByRole('heading',{name:'Quick access'})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  }
- for(const theme of ['forest','amethyst','porcelain','linen']){await page.getByLabel('Preview theme').selectOption(theme);await expect(page.locator('.brand-surface').first()).toHaveAttribute('data-vs-theme',theme);}
+ for(const theme of ['forest','amethyst','porcelain','linen']){await page.getByLabel('Preview theme').selectOption(theme);await expect(page.locator('.brand-surface').first()).toHaveAttribute('data-vs-theme',theme);await reference.screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/themes/${theme}-${testInfo.project.name}.png`});}
+ await page.getByLabel('Preview theme').selectOption('forest');
  await page.getByLabel('Workspace candidate').selectOption('administrator');
  const selected=reference.getByRole('button',{name:/Monday, 19 October 2026, today/});await selected.focus();await expect(selected).toBeFocused();
- await reference.getByRole('button',{name:'Next week'}).click();await reference.getByRole('button',{name:'Previous week'}).click();
- await reference.screenshot({path:`docs/evidence/ux-revamp-17-landings-2026-10-19/candidate-${testInfo.project.name}.png`});
+ await reference.screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/calendar/selected-${testInfo.project.name}.png`});
+ await page.getByLabel('Calendar example').selectOption('empty');await expect(reference.getByText('No published events for this date',{exact:true})).toBeVisible();
+ await reference.screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/calendar/empty-${testInfo.project.name}.png`});
+ await page.getByLabel('Calendar example').selectOption('failed');await expect(reference.getByText('Calendar could not be loaded',{exact:true})).toBeVisible();await expect(reference.getByRole('link',{name:/Retry/})).toBeVisible();
+ await reference.screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/calendar/error-${testInfo.project.name}.png`});
+ await page.getByLabel('Calendar example').selectOption('selected');
+ await expect(reference.getByRole('button',{name:'Previous week'})).toBeDisabled();
+ await expect(reference.getByRole('button',{name:'Next week'})).toBeDisabled();
+ await reference.screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/candidate-${testInfo.project.name}.png`});
 });
 
 test('Administrator landing preserves authorized actions and explicit unavailable projections',async({page},testInfo)=>{
@@ -34,7 +42,21 @@ test('Administrator landing preserves authorized actions and explicit unavailabl
  await expect(page.getByRole('heading',{name:'Your school day, at a glance'})).toBeVisible();
  await expect(page.locator('.landing-summary-item')).toHaveCount(3);
  await expect(page.getByRole('heading',{name:'School Calendar'})).toBeVisible();
- await expect(page.getByText('Calendar unavailable',{exact:true})).toBeVisible();
+ await expect(page.getByText('Calendar could not be loaded',{exact:true})).toBeVisible();
+ await expect(page.getByRole('link',{name:/Retry/})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
- await page.locator('main').screenshot({path:`docs/evidence/ux-revamp-17-landings-2026-10-19/admin-unavailable-${testInfo.project.name}.png`});
+ await page.locator('main').screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/admin-unavailable-${testInfo.project.name}.png`});
+});
+
+test('landing composition stacks without overflow at the intermediate breakpoint',async({page},testInfo)=>{
+ test.skip(testInfo.project.name==='mobile','The mobile project already verifies the compact breakpoint.');
+ await page.setViewportSize({width:900,height:1000});
+ await page.goto('/design-system#landing-references');
+ const reference=page.locator('#landing-references');await reference.scrollIntoViewIfNeeded();
+ for(const workspace of ['administrator','teacher','student','parent','principal']){
+  await page.getByLabel('Workspace candidate').selectOption(workspace);
+  expect(await reference.locator('.landing-grid').evaluate(node=>getComputedStyle(node).gridTemplateColumns.split(' ').length)).toBe(1);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ }
+ await reference.screenshot({path:'docs/evidence/ux-revamp-landing-completion-2026-10-19/candidate-intermediate.png'});
 });
