@@ -31,9 +31,9 @@ The source currently has 203 page routes. Receipt is a supported composition sta
 |---|---|---|---|---|
 | `/admin/students` | `CONFORMING` | Server search attributes, filters, deterministic sort, signed pagination and one Manage action | Exact Administrator Students reference | None for the verified states; human review remains pending |
 | `/admin/teachers` | `CONFORMING_SUPPORTED_SCOPE` | Server name/staff-number search, signed pagination, dedicated Add staff, one Manage dialog preserving category/teaching/binding/end actions | Exact Administrator Staff reference | People has no approved server filter/sort contract; do not add page-local filtering or sorting |
-| `/admin/users` | `PRESENTATION_WORK` | Existing Access directory and guarded grant/change destinations | Staff/access family | Apply the directory recipe without changing invitation, membership or grant authority |
+| `/admin/users` | `CONFORMING_DESIGN_EXTENSION` | Cursor-paginated Access directory, dedicated verified-Employee grant, independent invitation and one guarded Manage dialog | Staff/access family; no exact standalone reference | Exact-reference review remains unavailable; human review is pending |
 
-Direct Staff reference/application evidence is in [UX-11 Staff directory](../../evidence/ux-revamp-11-staff-directory-2026-10-19/README.md). Exact query support controls whether Filters and Sort are rendered; a visual recipe never authorizes client-only sorting of one loaded cursor page.
+Direct Staff reference/application evidence is in [UX-11 Staff directory](../../evidence/ux-revamp-11-staff-directory-2026-10-19/README.md). The Access-owned extension and shared-consumer captures are in [UX-11 Staff access](../../evidence/ux-revamp-11-staff-access-2026-10-19/README.md). Exact query support controls whether Filters and Sort are rendered; a visual recipe never authorizes client-only sorting of one loaded cursor page.
 
 ## Actual routes
 

@@ -14,7 +14,7 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-08 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-09 | VERIFIED | DOCUMENTED_FINITE_INVENTORY_AND_RECIPES | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-10 | VERIFIED | DIRECT_DASHBOARD_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-11 | IN_PROGRESS | STAFF_DIRECTORY_DIRECT_COMPARISON_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-11 | IN_PROGRESS | STAFF_AND_ACCESS_DIRECTORY_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -51,10 +51,12 @@ UX-09 records the finite 203-route presentation inventory and the ten shared pro
 
 UX-11 is in progress. The first Staff-directory slice replaces the duplicated inline creation panel with the approved directory-first composition and the existing dedicated Add staff route. It uses compact server-search rows, one Manage action and a responsive labelled-card layout while preserving category correction, teaching enablement, verified account binding and employment end. The exact Staff reference and application were directly compared at 1440×1000 and 390×844; the first mobile capture exposed constrained row-header text and the final source corrected it. Focused Chromium and Mobile Chromium journeys passed 1/1 each against real PostgreSQL, type checking passed, and the 4 GiB production build passed with build ID `Wxv6cwqzH2nCCzA8xnW_N`. The wider UX-11 family remains open for `/admin/users` and other directory consumers. People currently exposes no approved server filter/sort fields, so no page-local substitute was added. See [Staff directory evidence](../../evidence/ux-revamp-11-staff-directory-2026-10-19/README.md).
 
+The Staff access slice now presents `/admin/users` as a compact cursor-paginated directory with dedicated verified-Employee grant, independent invitation and one per-row Manage dialog. Access-owned authorization, branch scope, delivery recovery, last-administrator protection and mutation endpoints are unchanged. Current-source desktop/mobile inspection found and corrected a shared Avatar/body-row-header styling defect, then recaptured `/admin/teachers` as the affected consumer. Focused real-PostgreSQL directory and IAM invitation/grant/recovery journeys passed; the 4 GiB production build passed with build ID `8ja8iDFjFqxFrusMailL`. The route is accurately labelled a design extension because the approved pack has no exact standalone access-list reference. See [Staff access evidence](../../evidence/ux-revamp-11-staff-access-2026-10-19/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Continue UX-11 with `/admin/users`, the remaining Staff/access directory surface. Reuse the verified directory recipe while preserving Access-owned invitation, membership, grant and branch-scope authority. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+Continue UX-11 with the remaining M01–M08 directory families, beginning with Administrator Attendance session and request queues. Reuse the verified directory/inbox recipes only where owner query and specialized interaction contracts permit them. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.

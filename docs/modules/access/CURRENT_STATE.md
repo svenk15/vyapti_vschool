@@ -2,6 +2,12 @@
 
 Last updated: 2026-10-17. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
+## UX-11 Staff access directory — 19 October 2026
+
+The existing `/admin/users` Access surface is now directory-first. Verified-Employee grant remains a dedicated staged route, independent invitation remains an explicitly labelled dialog, and each membership has one guarded Manage dialog. Cursor pagination, branch scope, live administrator authority, invitation delivery recovery and last-administrator rules are unchanged. No API, business rule, schema or migration changed.
+
+Focused Access directory journeys passed on Chromium desktop and mobile against real PostgreSQL. Focused invitation, verified-Employee grant and failed-delivery resend journeys passed after updating their isolated-mail-sink and async-commit observations. Current-source desktop/mobile captures were directly inspected; the shared Staff table fix was also checked on `/admin/teachers`. The 4 GiB production build passed with build ID `8ja8iDFjFqxFrusMailL`. Evidence: [UX-11 Staff access](../../evidence/ux-revamp-11-staff-access-2026-10-19/README.md). Human review remains PENDING.
+
 ## F07-B exact delegation action — 17 October 2026
 
 D02's fixed synthetic-only allowlist now includes only `timetable.cover.approve` for exact-occurrence cover decisions. The action requires the same active Employee-bound account, live scoped membership, mandatory `leadership.read`, bounded delegation window and fresh source-owner authorization as every D02 use. It grants no Timetable edit, substitute-response or Attendance mutation authority. The forward migration extends only the database CHECK; existing delegations and immutable attribution remain intact. Focused unit, real-PostgreSQL separation/revocation and Principal browser evidence passed in [F07-B](../../evidence/principal-f07-cover-2026-10-17/README.md). Human review and production gates remain PENDING.
