@@ -1,0 +1,163 @@
+{
+  "capturedAt": "2026-10-19T05:16:12.263Z",
+  "source": "8c10388",
+  "buildId": "AXMCiGbnvOfm2hphYv8U5",
+  "observations": [
+    {
+      "name": "student-registration",
+      "viewportName": "desktop",
+      "route": "/admin/students/register",
+      "finalPath": "/admin/students/register",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "h1": "Register a student manually",
+      "overflow": 0,
+      "height": 1000
+    },
+    {
+      "name": "student-registration",
+      "viewportName": "mobile",
+      "route": "/admin/students/register",
+      "finalPath": "/admin/students/register",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "h1": "Register a student manually",
+      "overflow": 0,
+      "height": 1240
+    },
+    {
+      "name": "roster-import",
+      "viewportName": "desktop",
+      "route": "/admin/imports?new=1",
+      "finalPath": "/admin/imports?new=1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "h1": "Preview a roster import",
+      "overflow": 0,
+      "height": 1000
+    },
+    {
+      "name": "roster-import",
+      "viewportName": "mobile",
+      "route": "/admin/imports?new=1",
+      "finalPath": "/admin/imports?new=1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "h1": "Preview a roster import",
+      "overflow": 0,
+      "height": 1229
+    },
+    {
+      "name": "communication-compose",
+      "viewportName": "desktop",
+      "route": "/admin/communication/new",
+      "finalPath": "/admin/communication/new",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "h1": "Prepare a notice proposal",
+      "overflow": 0,
+      "height": 1163
+    },
+    {
+      "name": "communication-compose",
+      "viewportName": "mobile",
+      "route": "/admin/communication/new",
+      "finalPath": "/admin/communication/new",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "h1": "Prepare a notice proposal",
+      "overflow": 0,
+      "height": 1248
+    },
+    {
+      "name": "assessment-planning",
+      "viewportName": "desktop",
+      "route": "/admin/assessments?workflow=planning",
+      "finalPath": "/admin/assessments?workflow=planning",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "h1": "Assessment planning",
+      "overflow": 0,
+      "height": 1470
+    },
+    {
+      "name": "assessment-planning",
+      "viewportName": "mobile",
+      "route": "/admin/assessments?workflow=planning",
+      "finalPath": "/admin/assessments?workflow=planning",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "h1": "Assessment planning",
+      "overflow": 0,
+      "height": 4025
+    },
+    {
+      "name": "learning-create",
+      "viewportName": "desktop",
+      "route": "/teacher/learning/new",
+      "finalPath": "/teacher/learning/new",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "h1": "Create assignment",
+      "overflow": 0,
+      "height": 1000
+    },
+    {
+      "name": "learning-create",
+      "viewportName": "mobile",
+      "route": "/teacher/learning/new",
+      "finalPath": "/teacher/learning/new",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "h1": "Create assignment",
+      "overflow": 0,
+      "height": 969
+    },
+    {
+      "name": "student-work",
+      "viewportName": "desktop",
+      "route": "/student/assignments/331ffd25-1d0f-4c03-a9d1-f6084573a646?student=090a16d2-5bfa-44a4-9e79-c089515adbab&work=1",
+      "finalPath": "/student/assignments/331ffd25-1d0f-4c03-a9d1-f6084573a646?student=090a16d2-5bfa-44a4-9e79-c089515adbab&work=1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "h1": "Your work",
+      "overflow": 0,
+      "height": 1050
+    },
+    {
+      "name": "student-work",
+      "viewportName": "mobile",
+      "route": "/student/assignments/331ffd25-1d0f-4c03-a9d1-f6084573a646?student=090a16d2-5bfa-44a4-9e79-c089515adbab&work=1",
+      "finalPath": "/student/assignments/331ffd25-1d0f-4c03-a9d1-f6084573a646?student=090a16d2-5bfa-44a4-9e79-c089515adbab&work=1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "h1": "Your work",
+      "overflow": 0,
+      "height": 1831
+    }
+  ]
+}

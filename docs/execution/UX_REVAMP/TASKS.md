@@ -16,8 +16,8 @@ Status values separate engineering, visual comparison, human acceptance, and pro
 | UX-10 | Remaining workspace dashboards migrated to the dashboard recipe | UX-09 | Effective-theme desktop/mobile captures; focused navigation, context and state checks | VERIFIED |
 | UX-11 | Searchable directories and filter/sort/Manage surfaces | UX-10 | Representative recipe verification followed by route-family migration | VERIFIED |
 | UX-12 | Record details, histories and return navigation | UX-11 | Representative detail/history states and affected route-family evidence | VERIFIED |
-| UX-13 | Staged forms, confirmation, receipts and recovery | UX-12 | Retained state, validation, stale/unknown/revoked and receipt evidence | IN_PROGRESS |
-| UX-14 | Timetable, Attendance and assessment entry | UX-13 | Specialized desktop/mobile, keyboard and owner-regression evidence | NOT_STARTED |
+| UX-13 | Staged forms, confirmation, receipts and recovery | UX-12 | Retained state, validation, stale/unknown/revoked and receipt evidence | VERIFIED |
+| UX-14 | Timetable, Attendance and assessment entry | UX-13 | Specialized desktop/mobile, keyboard and owner-regression evidence | IN_PROGRESS |
 | UX-15 | Settings, theme selection and public entry gaps | UX-14 | Institution creation, publication compatibility and real sign-in evidence | NOT_STARTED |
 | UX-16 | Integrated M01–M08 presentation regression | UX-09–15 | Five-workspace route/state matrix, focused functional regressions and final 4 GiB build | NOT_STARTED |
 

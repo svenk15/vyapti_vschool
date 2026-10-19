@@ -87,3 +87,11 @@ F10 remains **IN_PROGRESS** because the distinct author/reviewer/publisher lifec
 The owner projection now reports the exact current-publication total and applies its validated bound after the current-version join. Reporting consumes only that port, refuses more than 50 rows without truncation, neutralizes spreadsheet formulas and excludes recipient/account/Student identity, body, contact/family detail, delivery inference and reminder authority. Preview and generation independently recheck Principal Communication read, all Communication dependencies and the operator-designated branch export grant. No schema or migration changed; both local databases retain 67 migrations.
 
 Focused evidence: reporting unit 14/14; real-PostgreSQL Communication/Reporting 1/1, including `total:2` with a one-row owner page, no automatic grant, explicit grant/revocation and private-field exclusion; sequential one-worker Communication journeys 3/3 desktop and 3/3 mobile; Playwright's isolated production build passed. The export captures were directly inspected against immutable LEA-39. See [evidence](../../evidence/principal-lea-39-communication-export-2026-10-16/README.md). Human review and the existing font/native-accessibility/TEN-03/production-provider gates remain pending.
+
+## 19 October 2026 — UX-13 notice-authoring presentation
+
+Status: PRESENTATION_VERIFIED / DIRECT_DESIGN_EXTENSION_INSPECTION_COMPLETE / HUMAN_REVIEW_PENDING.
+
+The staged notice proposal retains exact revision review, independently assigned review, separate publication authority, private scanned attachments and fail-closed file states. User-facing rail and attachment guidance now use school-office language instead of digest, reauthorization and internal ownership terminology. No command, authorization, persistence, scanner or publication behavior changed.
+
+The corrected authoring page was directly inspected at 1440×1000 and 390×844 with loaded Inter and zero root overflow. Focused lint, TypeScript and the standard 4 GiB build passed. Evidence: [UX-13 staged forms](../../evidence/ux-revamp-13-staged-forms-2026-10-19/README.md). Human acceptance and existing native-accessibility, TEN-03, provider and production gates remain pending.

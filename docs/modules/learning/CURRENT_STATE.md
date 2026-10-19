@@ -157,3 +157,11 @@ Status: ENGINEERING_VERIFIED / DIRECT_PATTERN_COMPARISON_COMPLETE / HUMAN_REVIEW
 Teacher publication, Parent published-assignment and Student assignment details were inspected at 1440×1000 and 390×844 against the approved Learning workflow states and the shared record-detail recipe. The Parent route had touching cards and internal release terminology; the final composition uses the shared 24px stack and concise family-facing read-only wording. Current-child authorization, immutable publication data, Student submission ownership and Parent non-disclosure remain unchanged.
 
 TypeScript, focused lint and the standard 4 GiB build passed; the corrected Parent desktop/mobile captures have zero root overflow. Existing LEA-03/LEA-04 PostgreSQL and browser evidence remains applicable because no owner, persistence, authorization, recovery or transaction code changed. Evidence: [UX-12 Learning details](../../evidence/ux-revamp-12-learning-details-2026-10-19/README.md). Human acceptance, native accessibility, actual-browser zoom, TEN-03 and production release remain pending.
+
+## 19 October 2026 — UX-13 staged Learning presentation
+
+Status: ENGINEERING_VERIFIED / DIRECT_EXACT_REFERENCE_COMPARISON_COMPLETE / HUMAN_REVIEW_PENDING.
+
+Teacher assignment creation now follows TEA-27's four-stage Task, Submission, Publication review and Confirm composition. The implementation exposes the supported written-response, late-work and immutable receipt rules while leaving unsupported prototype file/in-class choices absent. Existing draft persistence, versioning, exact-key publication, Student submission recovery, Teacher feedback recovery and revoked-access denial remain unchanged.
+
+Focused Learning publication passed 1/1 desktop and 1/1 mobile against real PostgreSQL after 118 migrations. Focused lint, TypeScript and both 4 GiB builds passed; standard build `k8TnjrEVlWq3TyBY6C3mJ`, isolated E2E build `216VbkdMnLvqYNdXRef1Z`. Exact reference/application captures were directly inspected at 1440×1000 and 390×844 with loaded Inter and zero root overflow. Evidence: [UX-13 staged forms](../../evidence/ux-revamp-13-staged-forms-2026-10-19/README.md).
