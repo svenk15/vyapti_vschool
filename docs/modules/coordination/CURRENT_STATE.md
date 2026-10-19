@@ -1,5 +1,15 @@
 # Coordination current state
 
+## UX-11 queue/detail presentation checkpoint — 19 October 2026
+
+Status: VERIFIED_CURRENT_SOURCE / DESIGN_EXTENSION_DIRECTLY_INSPECTED / HUMAN_REVIEW_PENDING
+
+The genuine Administrator assigned-work empty state, populated Principal queue, missing-register review and resolved session-setup detail were directly inspected at 1440×1000 and 390×844. The approved pack has no exact production Coordination queue, so this is recorded as a shared-pattern design extension rather than an exact visual match. Existing source authorization, assignment, independent verification, append-only history and Attendance-owned command boundaries are unchanged.
+
+The focused current-source Coordination journey passed 1/1 desktop and 1/1 mobile with one worker against `vyapti_vschool_test`; 118 migrations were applied and none were pending. It covered stale recovery, capability revocation/restoration, independent return and closure, exact Attendance cancellation evidence, responsive queue/detail composition and mobile menu focus restoration. The only source change was an obsolete browser assertion updated to the shell's existing open-drawer `dialog` role and current `Follow-ups` label. The already-passing standard build remains `JZi2cbc7qsZGc_ob70Zo8`. Evidence: [UX-11 Coordination directory](../../evidence/ux-revamp-11-coordination-directory-2026-10-19/README.md).
+
+Human visual acceptance, native accessibility, actual-browser 200% zoom, TEN-03 and production readiness remain pending.
+
 ## M01–M08 source-provenance correction — 18 October 2026
 
 The investigated resolved follow-up retained a Scheduled Attendance source. The product display and immutable source evidence were consistent; historical test resolution prose incorrectly called that source submitted. The fixture now describes the scheduled authoritative source, and the focused return/resubmit/verify journey passed 1/1. No Coordination or Attendance state was changed. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
