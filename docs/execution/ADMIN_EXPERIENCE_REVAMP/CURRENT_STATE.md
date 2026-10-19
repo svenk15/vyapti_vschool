@@ -12,6 +12,7 @@
 
 ## Open work
 
-1. Commit the verified shell/Students checkpoint without staging unrelated historical evidence changes.
-2. Continue Staff/School/Academics, Attendance/Timetable, Communication/Calendar/Assessments, then remaining routes in [PAGE_COVERAGE.md](PAGE_COVERAGE.md).
+1. Shell/Students checkpoint committed as `1671c8f`.
+2. Staff/School/Academics directly inspected at desktop/mobile. Staff tabs now sit below the page header, duplicate cross-links were removed, and School details no longer exposes an unsupported draft action. Evidence: `docs/evidence/admin-experience-revamp-02-2026-10-19/`.
+3. Continue Attendance/Timetable, Communication/Calendar/Assessments, then remaining routes in [PAGE_COVERAGE.md](PAGE_COVERAGE.md).
 

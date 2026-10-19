@@ -10,14 +10,14 @@ Status values describe this presentation programme only. `DIRECT VERIFIED` means
 | `/admin/students/register` | SA-18 / Students | staged form + receipt | DIRECT VERIFIED entry at four widths; connected reference covers stages/receipt; production mutation evidence reused | final-only owner command/replay |
 | `/admin/students/enroll`; `/admin/students/[id]/enrollment` | SA-19 / Students | selection + staged form | PENDING | authorized Student and Academics reads |
 | `/admin/students/transfer` | SA-21 / Students | staged form + receipt | prior direct comparison; PENDING current shell | frozen Attendance constraints retained |
-| `/admin/teachers`; `/admin/teachers/create` | SA-11+ / People | directory + staged form | PENDING; shared Staff tabs added | `class.manage` + Staff Core |
-| `/admin/users`; `/admin/users/grant`; `/admin/users/change` | SA-13/14 / Access | directory + staged forms | PENDING; shared Staff tabs added | `user.manage`; independent Access guards |
-| `/admin/teachers/availability` | People availability | operational table/form | PENDING; shared Staff tabs added | recorder availability projection |
-| `/admin/setup`; `/admin/school` | settings | settings/checklist | PENDING | `school.manage` |
+| `/admin/teachers`; `/admin/teachers/create` | SA-11+ / People | directory + staged form | DIRECT VERIFIED directory at desktop/mobile; create flow retains prior owner evidence | `class.manage` + Staff Core |
+| `/admin/users`; `/admin/users/grant`; `/admin/users/change` | SA-13/14 / Access | directory + staged forms | DIRECT VERIFIED directory at desktop/mobile; staged flows retain prior owner evidence | `user.manage`; independent Access guards |
+| `/admin/teachers/availability` | People availability | operational table/form | DIRECT VERIFIED at desktop/mobile | recorder availability projection |
+| `/admin/setup`; `/admin/school` | settings | settings/checklist | DIRECT VERIFIED at desktop/mobile | `school.manage`; unsupported draft action removed |
 | `/admin/modules`; `/admin/modules/manage` | tenancy | settings/staged command | PENDING | institution admin + module configure |
 | `/admin/branding`; `/admin/branding/manage` | branding | settings/preview/publish | PENDING | branding authority; four-theme SSR retained |
 | `/admin/activity`; `/admin/activity/manage` | platform | directory/detail | PENDING | safe allowlisted evidence only |
-| `/admin/academics`; `/admin/classes` | academics | directory/settings | PENDING | class manage/read plus modules |
+| `/admin/academics`; `/admin/classes` | academics | directory/settings | DIRECT VERIFIED at desktop/mobile | class manage/read plus modules; long setup page remains content-driven |
 | `/admin/assessments` | assessments | directory/planning entry | PENDING | exact planning designation retained |
 | `/admin/timetable`; `/admin/timetable/readiness` | TT-01–04 / timetable | settings/grid/review | PENDING | immutable version/publication contracts |
 | `/admin/timetable/cover`; `/admin/timetable/cover/[id]` | TT-05+ / timetable | queue/detail | PENDING | existing cover authority only |

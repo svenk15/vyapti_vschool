@@ -1,6 +1,7 @@
 'use client';
 
 import {useState} from 'react';
+import type {ReactNode} from 'react';
 import {useRouter} from 'next/navigation';
 import type {PeopleWorkspace} from '@/shared/contracts/people';
 import type {AdminHome} from '@/shared/contracts/access';
@@ -15,7 +16,7 @@ const key=()=>crypto.randomUUID();
 function portalLabel(value:'UNLINKED'|'LINKED'|'ACTIVE'){return value==='UNLINKED'?'Not linked':value==='ACTIVE'?'Active':'Linked · inactive';}
 function categoryLabel(value:Employee['category']){return value==='ADMINISTRATION'?'Administration':value==='UNCLASSIFIED'?'Unclassified':value==='SUPPORT'?'Support':'Teaching';}
 
-export function PeopleWorkspaceScreen({initial,home}:{initial:PeopleWorkspace;home:AdminHome}){
+export function PeopleWorkspaceScreen({initial,home,navigation}:{initial:PeopleWorkspace;home:AdminHome;navigation?:ReactNode}){
  const router=useRouter(),[data,setData]=useState(initial),[search,setSearch]=useState(''),[appliedSearch,setAppliedSearch]=useState(''),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState(false),[target,setTarget]=useState(''),[actionMode,setActionMode]=useState<ActionMode>('manage'),[accountId,setAccountId]=useState(''),[reference,setReference]=useState(''),[reason,setReason]=useState(''),[categoryDraft,setCategoryDraft]=useState<'TEACHING'|'ADMINISTRATION'|'SUPPORT'>('TEACHING');
  const targetEmployee=data.employees.find(employee=>employee.employeeId===target)??null;
  async function refresh(term=appliedSearch){const params=new URLSearchParams();if(term)params.set('search',term);const response=await fetch(`/api/v1/employees${params.size?`?${params}`:''}`,{cache:'no-store'}),value=await response.json();if(!response.ok)throw new Error(value.message??'Staff profiles could not be refreshed.');setData(value);setAppliedSearch(term);router.refresh();}
@@ -28,7 +29,8 @@ export function PeopleWorkspaceScreen({initial,home}:{initial:PeopleWorkspace;ho
  const dialogTitle=actionMode==='manage'?(targetEmployee?.person.displayName??'Manage staff'):actionMode==='bind'?'Verify and link account':actionMode==='category'?'Change staff category':'End employment';
  const dialogDescription=actionMode==='manage'?'Choose one permitted action. Employment, portal access and teaching eligibility remain independent.':actionMode==='bind'?'Link only after an out-of-band identity check. Contact email alone is not proof.':actionMode==='category'?'Category is descriptive only and does not change access or teaching eligibility.':`Employment ends today (${data.schoolDate}, school local date) and teaching eligibility is disabled.`;
  return <PageStack className="staff-profiles-page directory-page">
-  <PageHeader title="Staff & access" description={`Find staff records and manage verified access for ${home.schoolName}.`} actions={<div className="button-row"><ButtonLink href="/admin/users" variant="secondary">Staff access</ButtonLink><ButtonLink href="/admin/teachers/create">Add staff</ButtonLink></div>}/>
+  <PageHeader title="Staff profiles" description={`Find staff records and manage verified identity links for ${home.schoolName}.`} actions={<ButtonLink href="/admin/teachers/create">Add staff</ButtonLink>}/>
+  {navigation}
   {message&&<div role={error?'alert':'status'} aria-live="polite" aria-label="Staff profile feedback"><Alert tone={error?'danger':'success'} title={error?'Change not saved':'Saved'}>{message}</Alert></div>}
   <Card className="directory-card staff-directory">
    <div className="directory-heading"><div><h2>Staff in this branch</h2><p className="muted small">Employment, portal access and teaching eligibility are shown as separate current states.</p></div><Badge>{data.employees.length} profile{data.employees.length===1?'':'s'}</Badge></div>

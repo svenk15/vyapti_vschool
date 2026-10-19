@@ -1,5 +1,14 @@
 # Administrator experience revamp — resume
 
+## Latest checkpoint
+
+- Shell/Students commit: `1671c8f`.
+- Active completed slice: Staff/School/Academics presentation correction and direct desktop/mobile inspection.
+- Production build ID: `1sJKuM3xQ6g6rInKOAmLL` at `http://127.0.0.1:3400`.
+- Evidence: `docs/evidence/admin-experience-revamp-02-2026-10-19/`.
+- No schema or migration change.
+- Next action: inspect and correct Attendance/Timetable routes, preserving existing Attendance and timetable owner behavior.
+
 Current task: next checkpoint — Staff, School setup and Academics. The shared shell/navigation, connected reference and Students journey checkpoint is verified and ready to commit.
 
 Starting HEAD: `a4992e03c9084860045938668fca599e70c20984`. Latest previously reviewed application source: `e00d23ee64aeceddd98c523462d23b78b8cc81fd`.
