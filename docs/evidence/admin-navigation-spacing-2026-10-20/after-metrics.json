@@ -1,0 +1,346 @@
+{
+  "capturedAt": "2026-10-19T21:22:42.843Z",
+  "buildId": "iylIRaTKp1v_T3arvMibu",
+  "results": [
+    {
+      "viewportName": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "devicePixelRatio": 1,
+      "collapsed": {
+        "navRowGap": "4px",
+        "groups": [
+          {
+            "label": "Today",
+            "top": 153,
+            "bottom": 197,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "People",
+            "top": 221,
+            "bottom": 265,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Teaching",
+            "top": 269,
+            "bottom": 313,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Attendance",
+            "top": 317,
+            "bottom": 361,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Communication",
+            "top": 365,
+            "bottom": 409,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "My work",
+            "top": 413,
+            "bottom": 457,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Reports",
+            "top": 461,
+            "bottom": 505,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "School administration",
+            "top": 509,
+            "bottom": 553,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Additional services",
+            "top": 557,
+            "bottom": 601,
+            "height": 44,
+            "expanded": false
+          }
+        ],
+        "gaps": [
+          24,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ]
+      },
+      "expanded": {
+        "groups": [
+          {
+            "label": "Today",
+            "top": 153,
+            "bottom": 197,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "People",
+            "top": 221,
+            "bottom": 413,
+            "height": 192,
+            "expanded": true
+          },
+          {
+            "label": "Teaching",
+            "top": 425,
+            "bottom": 469,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Attendance",
+            "top": 473,
+            "bottom": 517,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Communication",
+            "top": 521,
+            "bottom": 565,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "My work",
+            "top": 569,
+            "bottom": 613,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Reports",
+            "top": 617,
+            "bottom": 661,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "School administration",
+            "top": 665,
+            "bottom": 709,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Additional services",
+            "top": 713,
+            "bottom": 757,
+            "height": 44,
+            "expanded": false
+          }
+        ],
+        "gaps": [
+          24,
+          12,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "itemHeights": [
+          44,
+          44,
+          44
+        ]
+      },
+      "activeToday": "page",
+      "rootOverflow": false
+    },
+    {
+      "viewportName": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "devicePixelRatio": 1,
+      "collapsed": {
+        "navRowGap": "4px",
+        "groups": [
+          {
+            "label": "Today",
+            "top": 149,
+            "bottom": 193,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "People",
+            "top": 217,
+            "bottom": 261,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Teaching",
+            "top": 265,
+            "bottom": 309,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Attendance",
+            "top": 313,
+            "bottom": 357,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Communication",
+            "top": 361,
+            "bottom": 405,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "My work",
+            "top": 409,
+            "bottom": 453,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Reports",
+            "top": 457,
+            "bottom": 501,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "School administration",
+            "top": 505,
+            "bottom": 549,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Additional services",
+            "top": 553,
+            "bottom": 597,
+            "height": 44,
+            "expanded": false
+          }
+        ],
+        "gaps": [
+          24,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ]
+      },
+      "expanded": {
+        "groups": [
+          {
+            "label": "Today",
+            "top": 149,
+            "bottom": 193,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "People",
+            "top": 217,
+            "bottom": 409,
+            "height": 192,
+            "expanded": true
+          },
+          {
+            "label": "Teaching",
+            "top": 421,
+            "bottom": 465,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Attendance",
+            "top": 469,
+            "bottom": 513,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Communication",
+            "top": 517,
+            "bottom": 561,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "My work",
+            "top": 565,
+            "bottom": 609,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Reports",
+            "top": 613,
+            "bottom": 657,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "School administration",
+            "top": 661,
+            "bottom": 705,
+            "height": 44,
+            "expanded": false
+          },
+          {
+            "label": "Additional services",
+            "top": 709,
+            "bottom": 753,
+            "height": 44,
+            "expanded": false
+          }
+        ],
+        "gaps": [
+          24,
+          12,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "itemHeights": [
+          44,
+          44,
+          44
+        ]
+      },
+      "activeToday": "page",
+      "rootOverflow": false
+    }
+  ]
+}

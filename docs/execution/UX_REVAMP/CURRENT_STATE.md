@@ -103,6 +103,14 @@ UX-12 now closes with the implemented M06 Learning detail family. Teacher public
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
+## 20 October 2026 — Administrator navigation spacing correction
+
+Status: **ENGINEERING VERIFIED / VISUAL COMPARISON COMPLETE / HUMAN REVIEW PENDING**.
+
+The Administrator shell now uses the approved compact grouped-navigation rhythm without changing destinations or visibility. The prior 24px gap between every collapsed disclosure is 4px, `Today` retains its 24px section separation, expanded groups use a 12px following separation, and every disclosure remains a 44px row. Long desktop labels no longer wrap into 64px rows. The correction is scoped through `AdminPortalFrame`; Teacher, Parent, Student and Principal shells are unchanged.
+
+Focused lint, TypeScript, the 4 GiB production build and the Administrator navigation Playwright case passed at desktop and mobile sizes. Direct 1440×1000 and 390×844 inspection confirmed the spacing, alignment, active state, mobile drawer focus/return, final-group reachability and absence of root overflow. Corrected build: `iylIRaTKp1v_T3arvMibu`; live demo: `http://127.0.0.1:3400`. Evidence: [Administrator navigation spacing](../../evidence/admin-navigation-spacing-2026-10-20/README.md).
+
 ## Next action
 
 The presentation programme has no independently eligible implementation slice left under the current contracts. UX-15 remains partial only because browser institution creation needs an authenticated platform-operator browser principal; the existing trusted local operator command already accepts `themeId`. Do not create a browser-supplied trust assertion to close that gap. The owner-query gaps listed in `LANDING_PAGES.md` require separate backend feature contracts and are not presentation defects. See [FINAL_REPORT.md](FINAL_REPORT.md) for the bounded counts and review route. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.

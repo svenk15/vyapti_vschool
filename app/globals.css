@@ -1158,6 +1158,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .dashboard-session-action{display:inline-flex;min-height:40px;align-items:center;color:var(--vs-primary);font-size:13px;font-weight:600;text-decoration:none}.dashboard-sessions-mobile{display:none}.dashboard-session-row{border-color:var(--vs-border);color:var(--vs-text)}.dashboard-session-row time,.dashboard-session-row span:not(.badge){color:var(--vs-text-muted)}
 .portal-nav-scroll{scrollbar-gutter:stable;padding-bottom:16px}
 
+/* Administrator grouped navigation: compact sibling disclosures while preserving section separation. */
+.administrator-portal-shell .portal-sidebar nav{gap:4px}
+.administrator-portal-shell .portal-nav-group:not(.portal-nav-group-collapsible)+.portal-nav-group{margin-top:20px}
+.administrator-portal-shell .portal-nav-group-expanded+.portal-nav-group{margin-top:8px}
+.administrator-portal-shell .portal-nav-group a,.administrator-portal-shell .portal-nav-disclosure{gap:11px;min-height:44px;padding:10px 12px;border-radius:7px;font-size:13px}
+.administrator-portal-shell .portal-nav-disclosure>span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.administrator-portal-shell .portal-nav-group-collapsible a{min-height:44px;padding:10px 12px;font-size:13px}
+
 .portal-page-content .students-directory-shell,.portal-page-content .branch-edit-shell{max-width:1440px;padding-inline:32px}
 .students-page,.sort-drawer{font:inherit}
 .students-page>.page-heading h1{font-size:28px;font-weight:600;line-height:36px;letter-spacing:-.02em}

@@ -20,13 +20,14 @@ type PortalShellProps={
  contextHref?:string;
  stagedSignOutHref?:string;
  children:ReactNode;
+ shellClassName?:string;
  contentClassName?:string;
  preferences?:{density:'COMFORTABLE'|'COMPACT';reducedMotion:'SYSTEM'|'REDUCE'};
 };
 
 const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),input:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,accountHref='/account',contextHref='/admin/context',stagedSignOutHref='/admin/context?destination=sign-out',children,contentClassName,preferences}:PortalShellProps){
+export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,accountHref='/account',contextHref='/admin/context',stagedSignOutHref='/admin/context?destination=sign-out',children,shellClassName,contentClassName,preferences}:PortalShellProps){
  const pathname=usePathname(),entries=groups.flatMap((group,index)=>group.items.map(item=>({group,groupKey:group.id??`${index}-${group.label}`,item,specificity:portalItemMatchSpecificity(pathname,item)}))),currentEntry=entries.filter(entry=>entry.specificity>=0).sort((left,right)=>right.specificity-left.specificity)[0],currentItem=currentEntry?.item,activeCollapsibleGroup=currentEntry?.group.collapsible===true?currentEntry.groupKey:null;
  const [openOnPath,setOpenOnPath]=useState<string|null>(null),[expandedGroups,setExpandedGroups]=useState<readonly string[]>(()=>activeCollapsibleGroup?[activeCollapsibleGroup]:[]),toggle=useRef<HTMLButtonElement>(null),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
  const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>toggle.current?.focus());},[]);
@@ -48,7 +49,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
   return()=>{document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',onKeyDown);};
  },[close,open]);
  const identityLabel=accountDisplayName?.trim()||`${roleLabel} account`,initials=identityLabel.split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase();
- return <div className="portal-shell" data-density={preferences?.density} data-reduced-motion={preferences?.reducedMotion}>
+ return <div className={`portal-shell${shellClassName?` ${shellClassName}`:''}`} data-density={preferences?.density} data-reduced-motion={preferences?.reducedMotion}>
   <header className="portal-topbar">
    <button ref={toggle} type="button" className="portal-menu-toggle" aria-controls="portal-navigation" aria-expanded={open} onClick={()=>open?close(true):setOpenOnPath(pathname)}><span aria-hidden="true"><PortalIcon name={open?'close':'menu'}/></span><span className="sr-only">{open?'Close navigation':'Open navigation'}</span></button>
    <Link className="portal-mobile-brand" href={homeHref}><span className="portal-brand-mark" aria-hidden="true">v</span><span>VSchool</span></Link>
