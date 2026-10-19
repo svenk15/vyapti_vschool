@@ -49,9 +49,9 @@ export function StudentEnrollmentForm({studentId,studentName,admissionNumber,can
     finally{setBusy(false);}
   }
 
-  if(saved)return <Card className="receipt student-registration-receipt"><div className="success-mark" aria-hidden="true">✓</div><SectionHeader title="Enrollment saved" description="The enrollment and effective placement were committed together."/><dl className="branch-review"><div><dt>Student</dt><dd>{studentName}</dd></div><div><dt>Academic year</dt><dd>{saved.yearCode} · {saved.yearName}</dd></div><div><dt>Class</dt><dd>{saved.placement.gradeName} · {saved.placement.sectionName}</dd></div><div><dt>Included dates</dt><dd>{saved.validFrom} to {priorDay(saved.validTo)}</dd></div></dl><div className="workflow-actions"><ButtonLink href={cancelHref} variant="secondary">Back to students</ButtonLink><ButtonLink href={`/admin/students/${studentId}#enrollment-history`}>Review enrollment history</ButtonLink></div></Card>;
+  if(saved)return <Card className="receipt student-registration-receipt"><div className="success-mark" aria-hidden="true">✓</div><SectionHeader title="Enrollment saved" description="The enrollment and effective placement were committed together."/><dl className="branch-review"><div><dt>Student</dt><dd>{studentName}</dd></div><div><dt>Academic year</dt><dd>{saved.yearCode} · {saved.yearName}</dd></div><div><dt>Class</dt><dd>{saved.placement.gradeName} · {saved.placement.sectionName}</dd></div><div><dt>Included dates</dt><dd>{saved.validFrom} to {priorDay(saved.validTo)}</dd></div></dl><div className="workflow-actions"><ButtonLink href={cancelHref} variant="secondary">Back to students</ButtonLink><ButtonLink href={`/admin/students/${studentId}?section=enrollment#enrollment-history`}>Review enrollment history</ButtonLink></div></Card>;
 
-  if(!years.length)return <Card className="padded settings-panel"><SectionHeader title="Enroll in an academic year" description="There is no open year with an active section available, or this student is already enrolled in every open year."/><ButtonLink href={`/admin/students/${studentId}#enrollment-history`} variant="secondary">Review enrollment history</ButtonLink></Card>;
+  if(!years.length)return <Card className="padded settings-panel"><SectionHeader title="Enroll in an academic year" description="There is no open year with an active section available, or this student is already enrolled in every open year."/><ButtonLink href={`/admin/students/${studentId}?section=enrollment#enrollment-history`} variant="secondary">Review enrollment history</ButtonLink></Card>;
 
   return <section className="student-enrollment-workflow">
     <ol className="workflow-stepper student-enrollment-stepper" aria-label="Student enrollment progress">
@@ -62,7 +62,7 @@ export function StudentEnrollmentForm({studentId,studentName,admissionNumber,can
     </ol>
     <div className="branch-edit-grid student-enrollment-grid">
       <Card className="branch-edit-card student-enrollment-card">
-        {error&&<div role="alert" aria-label="Enrollment feedback"><Alert tone="danger" title={attempt?"Enrollment outcome unknown":"Enrollment not saved"}>{error} <ButtonLink href={errorCode==="ROSTER_IN_USE"?"/admin/attendance/sessions?view=monitor":`/admin/students/${studentId}#enrollment-history`} variant="secondary">{errorCode==="ROSTER_IN_USE"?"Review attendance sessions":"Review enrollment history"}</ButtonLink></Alert></div>}
+        {error&&<div role="alert" aria-label="Enrollment feedback"><Alert tone="danger" title={attempt?"Enrollment outcome unknown":"Enrollment not saved"}>{error} <ButtonLink href={errorCode==="ROSTER_IN_USE"?"/admin/attendance/sessions?view=monitor":`/admin/students/${studentId}?section=enrollment#enrollment-history`} variant="secondary">{errorCode==="ROSTER_IN_USE"?"Review attendance sessions":"Review enrollment history"}</ButtonLink></Alert></div>}
         <div ref={stepPanel}>
           {step===1&&<>
             <SectionHeader title="Enrollment" description="Choose the student and one open academic year."/>

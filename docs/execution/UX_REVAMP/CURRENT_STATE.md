@@ -14,7 +14,8 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-08 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-09 | VERIFIED | DOCUMENTED_FINITE_INVENTORY_AND_RECIPES | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-10 | VERIFIED | DIRECT_DASHBOARD_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
-| UX-11 | IN_PROGRESS | STAFF_ACCESS_ATTENDANCE_COMMUNICATION_ACADEMICS_IMPORTS_ASSESSMENTS_COORDINATION_AND_LEARNING_DIRECTORY_FAMILIES_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-11 | VERIFIED | DIRECT_DIRECTORY_FAMILY_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-12 | IN_PROGRESS | STUDENT_RECORD_REPRESENTATIVE_DIRECTLY_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -69,10 +70,14 @@ The M08 Coordination queue/detail family has now been inspected as a shared-patt
 
 The M06 Learning directory family now uses a compact shared assignment-row composition for Teacher and Parent while retaining the already-conforming Student directory. Teacher and Parent rows align real metadata, status and one action on desktop and mobile; Parent displays only the publication/excusal facts exposed by its authorized owner projection. The exact Teacher, Parent and Student references and equivalent application states were directly inspected at 1440×1000 and 390×844 with zero root overflow. The focused publication journey passed 2/2 across desktop and mobile against real PostgreSQL after 118 migrations; type checking, focused lint and the final 4 GiB build passed with build ID `QuaJ3r3T5xBVFjJmQtowX`. Teacher query controls/tabs and Parent Student-work status remain explicit owner-contract gaps rather than page-local simulations. See [Learning directory evidence](../../evidence/ux-revamp-11-learning-directories-2026-10-19/README.md).
 
+UX-11 is now engineering-verified for the finite M01–M08 directory families recorded in `SCREEN_MAP.md`. Every directory uses only its owner-supported query, pagination and actions; omitted prototype controls remain explicit owner-contract gaps rather than client-side substitutes. Human review remains pending.
+
+UX-12 is in progress. The representative `/admin/students/[id]` record no longer renders every identity, access, enrollment and archive operation in one 3,759px desktop/6,623px mobile page. Its default state now follows the exact approved Student-record composition: real Student identity, supported tabs, a 2:1 current-facts/action layout, one state-specific action rail and a record-history path. Enrollment/history, Family and Student access, and identity/status operations retain their existing owner components in dedicated URL-addressable sections. Exact `#/student/s1` and SA-20 references plus equivalent application states were directly inspected at 1440×1000 and 390×844 with zero root overflow. Focused current-source Playwright passed the directory destinations 2/2, registration and identity flows 4/4, and Parent/Student access regressions 2/2 against real PostgreSQL after 118 migrations. Type checking, focused lint and the 4 GiB production build passed with build ID `qte7IOUhCcq39_z-v_I7p`. No backend, authorization, schema, migration or seed contract changed. Attendance and Documents tabs from the prototype are omitted because this Student record exposes no corresponding authorized projection/route; they are recorded as functional owner gaps rather than fabricated presentation. See [UX-12 Student record evidence](../../evidence/ux-revamp-12-student-detail-2026-10-19/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Continue UX-11 with the remaining implemented M01–M08 directory families identified by the finite inventory, then migrate remaining matching directory consumers before starting UX-12. Reuse the verified directory/inbox recipes only where owner query and specialized interaction contracts permit them. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+Continue UX-12 with the next implemented M01–M08 record-detail/history family from `SCREEN_MAP.md`, reusing the verified Student record recipe without changing owner behavior. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.

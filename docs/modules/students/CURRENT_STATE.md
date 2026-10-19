@@ -1,5 +1,11 @@
 # Students, enrollment and placement history — current state
 
+## UX-12 Student record composition — 19 October 2026
+
+The representative Administrator Student record now opens as a compact approved-detail composition instead of rendering every owner workflow in one page. Overview contains current authorized facts, status, state-appropriate next actions and the enrollment-history path. URL-addressable Enrollment, Family & access, and Identity & status sections retain the existing dated history, Parent/Student access, staged SA-20 correction, admission-date verification and archive owner components. Directory Manage, registration, enrollment and transfer links target the owning section and preserve the validated Students return URL. The prototype's Attendance and Documents tabs are not rendered because this record exposes no matching authorized projection/route; no data or authority was invented.
+
+The exact approved `#/student/s1` record and `#/flow/SA-20` workflow were compared directly with populated application states at 1440×1000 and 390×844. The former all-panels page measured 3,759px desktop and 6,623px mobile; the final Overview measures 1,000px and 1,393px respectively with zero root overflow. Focused current-source Playwright passed 2/2 directory destinations, 4/4 registration/identity journeys and 2/2 Parent/Student access regressions against real PostgreSQL after 118 migrations. TypeScript, focused lint and the 4 GiB production build passed with build ID `qte7IOUhCcq39_z-v_I7p`. No backend, authorization, schema, migration, seed or development-row change occurred. [Evidence](../../evidence/ux-revamp-12-student-detail-2026-10-19/README.md). Human review remains PENDING.
+
 ## M01–M08 acceptance correction — 18 October 2026
 
 SA-18 now presents school-office wording and shows the exact Person ID or admission-number reference field only for the selected existing-record mode. Exact resolution, validation, atomic persistence, replay and scope are unchanged. Focused registration Playwright passed 3/3 and the desktop/mobile states were inspected. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.

@@ -46,6 +46,17 @@ The source currently has 203 page routes. Receipt is a supported composition sta
 
 Direct Staff reference/application evidence is in [UX-11 Staff directory](../../evidence/ux-revamp-11-staff-directory-2026-10-19/README.md). The Access-owned extension and shared-consumer captures are in [UX-11 Staff access](../../evidence/ux-revamp-11-staff-access-2026-10-19/README.md). The Assessments landing comparison is in [UX-11 Assessments directory](../../evidence/ux-revamp-11-assessments-directory-2026-10-19/README.md). Coordination queue/detail inspection is in [UX-11 Coordination directory](../../evidence/ux-revamp-11-coordination-directory-2026-10-19/README.md). Exact Teacher/Parent/Student comparisons are in [UX-11 Learning directories](../../evidence/ux-revamp-11-learning-directories-2026-10-19/README.md). Exact query support controls whether Filters and Sort are rendered; a visual recipe never authorizes client-only sorting of one loaded cursor page.
 
+## UX-12 record-detail overlay
+
+| Route/state | Presentation status | Current sections/actions | Reference relationship | Remaining presentation work |
+|---|---|---|---|---|
+| `/admin/students/[id]` default Overview | `CONFORMING_SUPPORTED_SCOPE` | Current Student facts, status, owner-supported enrollment/move/access actions and enrollment-history path | Exact Administrator `#/student/s1` record detail | Human review remains pending; prototype Attendance and Documents tabs lack a corresponding authorized Student-record projection/route |
+| `/admin/students/[id]?section=enrollment` | `CONFORMING_DESIGN_EXTENSION` | Immutable dated enrollment/placement history plus existing enrollment and transfer entry points | Exact record establishes the tab/history hierarchy; no exact populated production state | Continue to preserve horizontal table comparison in a bounded mobile scroller |
+| `/admin/students/[id]?section=access` | `CONFORMING_DESIGN_EXTENSION` | Existing Parent/guardian and Student portal invitation, purpose and revocation components | Shared record-detail/staged-form recipes | Exact production reference unavailable; human review remains pending |
+| `/admin/students/[id]?section=identity` | `CONFORMING_SUPPORTED_SCOPE` | Existing staged SA-20 name correction, admission-date verification and guarded archive/history actions | Exact Administrator `#/flow/SA-20` workflow | Font/native accessibility and human review remain pending |
+
+The default record and all supported sections were directly inspected at 1440×1000 and 390×844. Directory Manage, registration handoff, enrollment/transfer receipts and access links now target the correct URL-addressable section while retaining validated return paths. Evidence is in [UX-12 Student record](../../evidence/ux-revamp-12-student-detail-2026-10-19/README.md).
+
 ## Actual routes
 
 | Route | Class | Owning page | Theme behavior | Verification scope |
@@ -300,8 +311,8 @@ Dashboard action surfaces are part of these rows: Administrator attention/sessio
 
 | Batch | Current classification | Next representative | Notes |
 |---|---|---|---|
-| Searchable directories | IN_PROGRESS; Students, Staff, Access, Attendance, Communication, Academics, Imports, Assessments, Coordination and Learning directory/queue families have direct current evidence | Next remaining implemented M01–M08 directory family from the finite inventory | URL/query and owner pagination support must be inspected per route |
-| Record detail/history | PRESENTATION_WORK | `/admin/students/[id]` | Preserve current owner tabs/actions and immutable history |
+| Searchable directories | VERIFIED for the finite M01–M08 directory/queue families recorded above | None; later consumers remain governed by their owning workflow task | URL/query and owner pagination support remain route-specific |
+| Record detail/history | IN_PROGRESS; `/admin/students/[id]` representative complete | Next implemented M01–M08 detail/history family | Preserve current owner actions, exact source versions and immutable history |
 | Staged forms/review/receipt | MIXED: several conforming, remaining presentation work | Student registration and Attendance correction are conforming representatives | Missing durable draft contracts remain functional scope, not visual debt |
 | Timetable/Attendance/assessment | MIXED specialized surfaces | Teacher Attendance and published timetable | Never replace specialized interactions with a generic table |
 | Settings/public entry | PRESENTATION_WORK plus explicit backend compatibility tasks | `/admin/school`, `/sign-in/[school]` | Browser institution creation, Porcelain publication and real sign-in evidence remain separate tasks |
