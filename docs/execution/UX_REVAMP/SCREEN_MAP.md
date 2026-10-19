@@ -1,6 +1,16 @@
 # Screen map
 
-Generated from the current working tree on 18 October 2026. This is an implementation inventory, not a route or capability proposal. Route visibility remains server-filtered and every destination retains its independent owner authorization. M01–M08 mappings point to [the accepted journey scope](../MUST_HAVE_RELEASE/JOURNEYS.md); they do not broaden those journeys.
+Generated from the current working tree on 18 October 2026 and extended for the presentation programme on 19 October 2026. This is an implementation inventory, not a route or capability proposal. Route visibility remains server-filtered and every destination retains its independent owner authorization. M01–M08 mappings point to [the accepted journey scope](../MUST_HAVE_RELEASE/JOURNEYS.md); they do not broaden those journeys. The route table establishes the finite set of 203 current page entry points. The batch overlays below add workflow/state/reference/presentation status without replacing that route source of truth.
+
+## Inventory classifications
+
+- `PRESENTATION_WORK`: a working route/state still needs migration or direct visual evidence.
+- `CONFORMING`: its implemented states satisfy the selected production recipe and current evidence.
+- `DEFERRED_FUNCTIONALITY`: no working screen exists because the capability is outside the implemented release; it is not a presentation defect and is not added to the 203-route count.
+- `PRODUCT_CONTRACT_REQUIRED`: the requested state depends on an unresolved owner/authority rule.
+- `VISUAL_SPEC_REQUIRED`: implemented behavior has no exact production reference; the recipe produces a design extension pending human review.
+
+Every route remains engineering-implemented only to the extent recorded by its owning workflow matrix. Route existence does not upgrade a partial workflow. Human acceptance is `PENDING` for every row unless a workflow matrix records explicit user acceptance for that exact state.
 
 ## Shared shell inventory
 
@@ -230,3 +240,29 @@ The source currently has 203 page routes. Receipt is a supported composition sta
 - UX-06 prioritizes Administrator M01–M08 routes; UX-07 covers the corresponding Teacher, Student, Parent/Guardian, and Principal routes.
 - Exact production references are compared directly at 1440×1000 and 390×844. Explorer-only references are labelled shared-pattern reviews. Intermediate layouts are checked at 1024px and 768px.
 - Shared-shell changes require representative regression coverage for each consuming workspace. Deferred/bespoke screens must remain readable in every theme and are recorded as debt rather than silently redesigned.
+
+## Presentation batch overlay
+
+The [production recipes](PAGE_RECIPES.md) define component order and responsive behavior. This overlay is updated one verified route family at a time so the route inventory remains finite and reviewable.
+
+### Workspace dashboards
+
+| Workspace / workflow | Route and entry | Owner | Reference state | Implemented states | Theme/context | Engineering | Visual status | Human | Remaining presentation gap |
+|---|---|---|---|---|---|---|---|---|---|
+| Administrator / shared operational home | `/admin`; authorized role landing and Today navigation | `app/admin/page.tsx` | User-approved Refined Forest composition; exact Administrator landing specification | Populated summaries, attention, sessions, setup readiness; projection unavailable/empty states remain owner-specific | Active authorized branch | VERIFIED | CONFORMING at desktop/mobile/intermediate and four themes | PENDING | Calendar omitted because no authorized event projection exists |
+| Teacher / TEA-05 | `/teacher/today`; Teacher role landing and My teaching day | `components/teacher-sessions.tsx` | Teacher pack `today`, populated and empty | Populated, date change, empty, request failure, scheduled/open/submitted actions | Active authorized branch and school-local date | VERIFIED | CONFORMING specialized dashboard; direct exact comparison retained | PENDING | Native browser zoom and assistive-technology evidence remain release gates |
+| Parent / PAR-07–PAR-08 | `/family?child=…`; Family role landing and child switch | `app/family/page.tsx` | Parent pack family overview for the selected accepted child | Selected child, multiple authorized contexts, sparse fixed-bundle summary, withdrawn-access route | Selected accepted child context | VERIFIED | CORRECTED_TO_RECIPE; exact comparison required for this checkpoint | PENDING | Prototype-only unowned summaries remain intentionally absent |
+| Student / STW-06 | `/student?student=…`; Student role landing and context switch | `app/student/page.tsx` | Student pack day overview | Due work, draft, feedback, next class, no-more-classes, owner-projection unavailable | Selected accepted Student context | VERIFIED_SUPPORTED_SLICE | CORRECTED_TO_RECIPE; exact comparison required for this checkpoint | PENDING | Room/change/request priorities wait for their owner projections |
+| Principal / LEA-01–LEA-07 home slice | `/leadership`; Principal role landing and My day | `app/leadership/page.tsx` | Principal workflow explorer and first-release evidence requirements; no exact production page | Attendance populated/unavailable and acting-delegation notice | Active authorized branch | VERIFIED_SUPPORTED_SLICE | DESIGN_EXTENSION_CORRECTED_TO_RECIPE; direct pattern review required | PENDING | Only currently available owner summaries are shown; no inferred cross-owner metrics |
+
+Dashboard action surfaces are part of these rows: Administrator attention/session links, Teacher date toolbar and session actions, Parent child selector and common actions, Student priority actions/context selector, Principal Attendance and context/account links. Their destinations independently authorize every read or command.
+
+### Remaining recipe queues
+
+| Batch | Current classification | Next representative | Notes |
+|---|---|---|---|
+| Searchable directories | PRESENTATION_WORK except routes with direct current evidence | `/admin/students` remains the conforming reference; next migrate staff/access family | URL/query and owner pagination support must be inspected per route |
+| Record detail/history | PRESENTATION_WORK | `/admin/students/[id]` | Preserve current owner tabs/actions and immutable history |
+| Staged forms/review/receipt | MIXED: several conforming, remaining presentation work | Student registration and Attendance correction are conforming representatives | Missing durable draft contracts remain functional scope, not visual debt |
+| Timetable/Attendance/assessment | MIXED specialized surfaces | Teacher Attendance and published timetable | Never replace specialized interactions with a generic table |
+| Settings/public entry | PRESENTATION_WORK plus explicit backend compatibility tasks | `/admin/school`, `/sign-in/[school]` | Browser institution creation, Porcelain publication and real sign-in evidence remain separate tasks |

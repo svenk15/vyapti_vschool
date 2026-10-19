@@ -1,5 +1,5 @@
 import {redirect} from 'next/navigation';
-import {Alert,Badge,Card,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
+import {Alert,Card,EmptyState,PageHeader,PageStack} from '@/components/ui/primitives';
 import {leadershipGateway} from '@/lib/server/access';
 import {getIdentity} from '@/lib/server/auth';
 import {leadershipAttendanceGateway} from '@/lib/server/attendance';
@@ -14,13 +14,19 @@ export default async function LeadershipHome(){
  if(!home)redirect('/choose-workspace');
  const coverage=home.capabilities.includes('attendance.read_leadership')?await leadershipAttendanceGateway.get(identity).catch(()=>null):null;
  return <main id="main-content" className="container page-space"><PageStack className="leadership-home">
-  <PageHeader eyebrow="Principal workspace" title="My school today" description={`${home.institutionName} · ${home.schoolName} · ${schoolDate(home.timezone)}`}/>
-  <Alert tone="info" title={home.actingDelegation?'Acting Principal access':'Your school view'}>{home.actingDelegation?'Your temporary access includes only the school work assigned to you and ends at the stated time.':'Your dashboard shows the school information and actions currently available to you.'}</Alert>
-  <section className="leadership-day-card" aria-labelledby="leadership-priorities-title"><div><Badge tone="success">Current branch</Badge><h2 id="leadership-priorities-title">Today’s priorities</h2><p>Attendance and other available school work appear here for this branch.</p></div><span className="leadership-day-icon" aria-hidden="true">✓</span></section>
-  <div className="leadership-foundation-grid">
-   <Card className="padded"><h2>Attendance oversight</h2>{coverage?<div className="leadership-coverage-summary"><strong>{coverage.counts.received} of {coverage.counts.due} due registers received</strong><p>{coverage.counts.awaiting?`${coverage.counts.awaiting} awaiting submission`:'No due registers are awaiting submission'}. {coverage.counts.notDue} not due yet.</p><Link className="text-link" href={`/leadership/attendance?date=${coverage.schoolDate}`}>Review attendance coverage <span aria-hidden="true">→</span></Link><span className="small muted">As of {new Date(coverage.asOf).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',timeZone:coverage.timezone})} · Due at scheduled session end</span></div>:<EmptyState icon="calendar" title="Oversight projection unavailable" description="No register count is inferred. Check Attendance availability and try again."/>}</Card>
-   <Card className="padded"><h2>Other school areas</h2><EmptyState icon="document" title="No additional dashboard summaries" description="Use the navigation to open other school areas available to you."/></Card>
-  </div>
-  <p className="small muted">Figures shown here use your current branch and access.</p>
+  <PageHeader eyebrow="Principal workspace" title="My school today" description={`${schoolDate(home.timezone)} · ${home.schoolName}`}/>
+  {home.actingDelegation&&<Alert tone="info" title="Acting Principal access">Your temporary access includes only the school work assigned to you and ends at the stated time.</Alert>}
+  {coverage?<>
+   <Card className="dashboard-summary-strip leadership-summary-strip" aria-label="Attendance coverage summary">
+    <div className="dashboard-summary-item"><div><span>Due registers</span><strong>{coverage.counts.due}</strong><p>Due by session end</p></div></div>
+    <div className="dashboard-summary-item"><div><span>Registers received</span><strong>{coverage.counts.received}</strong><p>Submitted records</p></div></div>
+    <div className="dashboard-summary-item"><div><span>Awaiting submission</span><strong>{coverage.counts.awaiting}</strong><p>{coverage.counts.notDue} not due yet</p></div></div>
+   </Card>
+   <div className="workspace-dashboard-grid leadership-dashboard-grid">
+    <Card className="padded workspace-dashboard-primary"><h2>Attendance oversight</h2><div className="leadership-coverage-summary"><strong>{coverage.counts.received} of {coverage.counts.due} due registers received</strong><p>{coverage.counts.awaiting?`${coverage.counts.awaiting} awaiting submission`:'No due registers are awaiting submission'}.</p><Link className="text-link" href={`/leadership/attendance?date=${coverage.schoolDate}`}>Review attendance coverage <span aria-hidden="true">→</span></Link><span className="small muted">As of {new Date(coverage.asOf).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',timeZone:coverage.timezone})} · {coverage.timezone}</span></div></Card>
+    <Card className="workspace-dashboard-actions"><div className="dashboard-card-title"><h2>Quick access</h2></div><div className="workspace-action-list"><Link href={`/leadership/attendance?date=${coverage.schoolDate}`}><span>Register coverage</span><span aria-hidden="true">→</span></Link><Link href="/leadership/context"><span>School context</span><span aria-hidden="true">→</span></Link><Link href="/leadership/account"><span>My account</span><span aria-hidden="true">→</span></Link></div></Card>
+   </div>
+  </>:<Card className="padded leadership-unavailable-card"><EmptyState icon="calendar" title="Attendance overview unavailable" description="No register count is inferred. Use the authorized navigation to open another available school area or try Attendance again later."/></Card>}
+  <p className="small muted leadership-source-note">Figures shown here use your current branch and access.</p>
  </PageStack></main>;
 }

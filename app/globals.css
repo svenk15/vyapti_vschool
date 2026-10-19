@@ -1202,8 +1202,28 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .family-bottom-nav a,.family-bottom-nav button,.student-bottom-nav a,.student-bottom-nav button{color:var(--vs-text-muted)}
 .family-bottom-nav a[aria-current=page],.student-bottom-nav a[aria-current=page]{color:var(--vs-primary)}
 
+/* Presentation programme: shared workspace-dashboard recipe. */
+.workspace-dashboard{max-width:1440px}
+.workspace-dashboard-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(300px,1fr);gap:24px;align-items:start}
+.workspace-dashboard-primary,.workspace-dashboard-secondary{min-width:0}
+.workspace-dashboard-actions{overflow:hidden}
+.workspace-dashboard-actions .dashboard-card-title{display:grid;gap:4px;border-bottom:1px solid var(--vs-border)}
+.workspace-dashboard-actions .dashboard-card-title p{margin:0;color:var(--vs-text-muted);font-size:12px;line-height:18px}
+.workspace-action-list{display:grid}
+.workspace-action-list>a{display:grid;grid-template-columns:minmax(0,1fr) 18px;align-items:center;gap:16px;min-height:56px;padding:16px 24px;border-bottom:1px solid var(--vs-border);color:var(--vs-text);font-size:14px;font-weight:600;line-height:20px;text-decoration:none}
+.workspace-action-list>a:last-child{border-bottom:0}
+.workspace-action-list>a:hover{background:var(--vs-surface-subtle);color:var(--vs-primary)}
+.leadership-home{max-width:1440px}
+.leadership-summary-strip{margin-bottom:0}
+.leadership-summary-strip .dashboard-summary-item{grid-template-columns:minmax(0,1fr)}
+.leadership-dashboard-grid{grid-template-columns:minmax(0,2fr) minmax(300px,1fr)}
+.leadership-coverage-summary{padding-top:12px}
+.leadership-source-note{margin:0}
+.leadership-unavailable-card{max-width:760px}
+
 @media(max-width:1199px){
  .family-child-context-shell,.student-context-shell{padding-inline:24px}
+ .workspace-dashboard-grid{grid-template-columns:minmax(0,1fr)}
 }
 @media(max-width:1023px){
  .family-portal-shell .portal-topbar,.student-portal-shell .portal-topbar{grid-template-columns:44px minmax(0,1fr) auto}
@@ -1223,4 +1243,5 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .family-bottom-nav,.student-bottom-nav{padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
  .family-bottom-nav a,.family-bottom-nav button,.student-bottom-nav a,.student-bottom-nav button{min-height:48px;font-size:11px;line-height:16px}
  .family-bottom-nav a[aria-current=page],.student-bottom-nav a[aria-current=page]{box-shadow:inset 0 2px var(--vs-primary)}
+ .workspace-action-list>a{min-height:56px;padding:14px 16px}
 }

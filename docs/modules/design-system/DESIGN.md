@@ -32,6 +32,8 @@ See components/ui/primitives.tsx (Button, ButtonLink, Badge, Card, PageHeader, A
 
 Bible §17 is the shared product rule. CSS variables in `app/globals.css` and the browser-safe theme catalogue in `shared/contracts/branding.ts` are the implementation tokens. Spacing uses the approved 4–64px scale; cards use 12px radii; controls use 8px radii and 40px desktop/44px mobile targets; focus uses a visible two-pixel ring. Operational typography is local Inter with the documented system fallback. Validate each text/control pair in each theme. High-contrast/forced-colors must preserve input edges and selected states; preserve browser zoom. Motion respects `prefers-reduced-motion`.
 
+The finite production composition catalogue is maintained in [PAGE_RECIPES.md](../../execution/UX_REVAMP/PAGE_RECIPES.md). It covers dashboards, searchable directories, record details, staged forms, review/confirmation, receipts/history, settings, queues, timetable, Attendance/assessment entry and public sign-in. These recipes compose the primitives in this document; they do not introduce a second component library or alter owner behavior.
+
 All module screens use PageHeader → context/actions → filter/form/content → feedback. List state matrix: initial/loading/empty/no matches/partial error/permission denied/ready. Form: pristine/dirty/validating/submitting/unknown result/conflict/success. Unknown result is never a green success toast. Define keyboard order and focus target on every overlay/error. Table compact preference changes padding, never removes access labels.
 
 ## Specialized upfront contracts

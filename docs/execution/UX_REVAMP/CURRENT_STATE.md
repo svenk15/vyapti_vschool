@@ -12,6 +12,8 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-06 | VERIFIED | ADMIN_LANDING_CORRECTION_DIRECTLY_INSPECTED | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-07 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-08 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-09 | VERIFIED | DOCUMENTED_FINITE_INVENTORY_AND_RECIPES | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-10 | VERIFIED | DIRECT_DASHBOARD_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -44,10 +46,12 @@ UX-08 is implemented at `d57fe8c`. `pnpm demo:seed` now includes one guarded, id
 
 The four themes passed desktop and mobile gallery journeys, appearance settings passed at both viewports, and protected workspace journeys cover Administrator, Teacher, Principal, Parent and Student effective themes and context changes. Direct inspection of all four desktop galleries and representative mobile/settings captures found consistent hierarchy, spacing, controls and bounded table behavior. Theme contrast pairs all exceed 4.5:1. Real-PostgreSQL Access verification passed 11/11 against `vyapti_vschool_test`; the integrated `pnpm check` passed 59 unit files/261 tests plus lint, types, docs, database design, boundaries and backend checks. The standard 4 GiB build passed with build ID `BIXjEBxrscUilW5ZTAgW9`. See [UX-08 evidence](../../evidence/ux-revamp-08-2026-10-18/README.md).
 
+UX-09 records the finite 203-route presentation inventory and the ten shared production recipes without changing route, owner, authorization or workflow status. UX-10 applies the dashboard recipe to the remaining Parent, Student and Principal landing surfaces while retaining the already-conforming Administrator and specialized Teacher dashboards. The final 4 GiB build passed with build ID `ATWQIJNhCYH1x5uX5_Iwg`; the current-source one-worker browser verification passed 11/11 Administrator, Teacher, Principal, Parent, Student and public-recovery desktop/mobile states. It checked computed Inter, root overflow, desktop sidebar rows and independent scroll, mobile drawer focus/return, responsive dashboard tracks, safe contextual links and the absence of former Principal architecture copy. Desktop and mobile captures were directly inspected. The Principal page is accurately labelled a design extension because its source is a workflow explorer rather than an exact production screen. See [UX-10 evidence](../../evidence/ux-revamp-10-dashboards-2026-10-19/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Keep the verified Administrator landing demo stable for human visual review. Separate backlogs remain for Principal, Parent, Teacher and Student page composition; browser institution-creation theme selection; Porcelain published sign-in support; and verification of the branded sign-in capture labelled “Authentication is not connected”. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+Proceed with UX-11: use the already-conforming Administrator Students directory as the searchable-directory reference, then migrate the Staff/access directory family without changing query, pagination, identity or authority contracts. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.

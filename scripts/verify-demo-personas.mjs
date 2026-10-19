@@ -59,6 +59,7 @@ try{
      const footerRect=footer?.getBoundingClientRect();
      return {rootOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,fontFamily:getComputedStyle(document.body).fontFamily,sidebarVisible:!!sidebar&&sidebar.getClientRects().length>0,navOverflow:nav?getComputedStyle(nav).overflowY:null,minimumVisibleRow:visibleRows.length?Math.min(...visibleRows):null,footerVisible:!!footerRect&&footerRect.height>0&&footerRect.top<innerHeight&&footerRect.bottom<=innerHeight+1};
     });
+    const presentation=await page.evaluate(()=>{const grid=document.querySelector('.workspace-dashboard-grid'),summary=document.querySelector('.dashboard-summary-strip'),actions=[...document.querySelectorAll('.workspace-action-list>a')];return {gridColumns:grid?getComputedStyle(grid).gridTemplateColumns:null,summaryItems:summary?.children.length??0,actionLinks:actions.map(node=>({label:node.textContent?.trim().replace(/\s+/g,' ')??'',href:node.getAttribute('href')})),technicalCopy:[...document.querySelectorAll('main')].some(node=>/other school areas|your dashboard shows the school information/i.test(node.textContent??''))};});
     if(shell.rootOverflow)throw new Error(`${persona.name} has horizontal document overflow.`);
     if(!shell.fontFamily.toLowerCase().includes('inter'))throw new Error(`${persona.name} is not using Inter.`);
     if(viewportName==='desktop'){
@@ -75,8 +76,19 @@ try{
      if(!await menu.evaluate(node=>document.activeElement===node))throw new Error(`${persona.name} mobile navigation did not return focus.`);
      Object.assign(shell,{mobile:mobileShell});
     }
+    if(persona.name==='principal'){
+     if(presentation.summaryItems!==3||presentation.technicalCopy)throw new Error(`Principal dashboard composition is invalid: ${JSON.stringify(presentation)}`);
+     const [coverageAction,contextAction,accountAction]=presentation.actionLinks;
+     if(!coverageAction?.href?.match(/^\/leadership\/attendance\?date=\d{4}-\d{2}-\d{2}$/)||contextAction?.href!=='/leadership/context'||accountAction?.href!=='/leadership/account')throw new Error(`Principal quick access is invalid: ${JSON.stringify(presentation.actionLinks)}`);
+    }
+    if(persona.name==='parent'&&presentation.actionLinks.length!==3)throw new Error(`Parent dashboard actions are incomplete.`);
+    if(['principal','parent','student'].includes(persona.name)){
+     const trackCount=presentation.gridColumns?.split(' ').length??0;
+     if(viewportName==='desktop'&&trackCount<2)throw new Error(`${persona.name} dashboard did not render two desktop columns.`);
+     if(viewportName==='mobile'&&trackCount!==1)throw new Error(`${persona.name} dashboard did not stack on mobile.`);
+    }
     if(capture)await page.screenshot({path:`${outputDir}/${persona.name}-${viewportName}.png`,fullPage:true});
-    results.push({persona:persona.name,viewport:viewportName,path:persona.path,contextCount,shell,ok:true});
+    results.push({persona:persona.name,viewport:viewportName,path:persona.path,contextCount,shell,presentation,ok:true});
    } finally {await context.close();}
   }
  }
