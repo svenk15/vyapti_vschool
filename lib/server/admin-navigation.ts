@@ -3,6 +3,7 @@ import type {AdminHome,Identity} from '../../shared/contracts/access';
 import type {ModuleId} from '../../shared/contracts/modules';
 import {moduleGateway} from './tenancy';
 import type {PortalIconName} from '../../components/portal-navigation-group';
+import {adminNavigationSections} from '../../components/workspace-navigation';
 import {memoizeModuleCapability} from './navigation-eligibility';
 
 export type AdminNavigationItem=Readonly<{label:string;href:string;icon:PortalIconName}>;
@@ -31,15 +32,6 @@ const routes:readonly Route[]=[
  {label:'Calendar & events',href:'/admin/events',icon:'calendar',permission:'communication.publish',modules:['communication','academic_core','student_core']},
  {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
-const sections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[];collapsible?:boolean;showLabel?:boolean}>[]=[
- {id:'daily-work',label:'Daily work',icon:'home',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/events','/admin/reports/attendance'],collapsible:false,showLabel:false},
- {id:'teaching-academics',label:'Teaching & academics',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/assessments','/admin/timetable','/admin/timetable/cover']},
- {id:'people-access',label:'People & access',icon:'people',hrefs:['/admin/users','/admin/teachers']},
- {id:'communication-work',label:'Communication & work',icon:'mail',hrefs:['/admin/communication']},
- {id:'services',label:'Services',icon:'activity',hrefs:[]},
- {id:'school-management',label:'School management',icon:'settings',hrefs:['/admin/admissions','/admin/imports','/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
-];
-
 export async function getAdminNavigation(identity:Identity,home:AdminHome):Promise<AdminNavigationGroup[]>{
  const capabilities=new Set(home.capabilities);
  // A user's current membership capabilities are already resolved in `home`.
@@ -55,5 +47,5 @@ export async function getAdminNavigation(identity:Identity,home:AdminHome):Promi
  }));
  const visible=new Set(checks.filter(([,allowed])=>allowed).map(([href])=>href));
  const routeByHref=new Map(routes.map(route=>[route.href,route]));
- return sections.map(section=>({id:section.id,label:section.label,icon:section.icon,collapsible:section.collapsible??true,showLabel:section.showLabel,items:section.hrefs.flatMap(href=>{const route=routeByHref.get(href);return route&&visible.has(href)?[{label:route.label,href:route.href,icon:route.icon}]:[];})})).filter(group=>group.items.length>0);
+ return adminNavigationSections.map(section=>({id:section.id,label:section.label,icon:section.icon,collapsible:section.collapsible??true,showLabel:section.showLabel,items:section.hrefs.flatMap(href=>{const route=routeByHref.get(href);return route&&visible.has(href)?[{label:route.label,href:route.href,icon:route.icon}]:[];})}));
 }

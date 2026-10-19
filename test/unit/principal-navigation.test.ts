@@ -10,7 +10,7 @@ const active=(groups:ReturnType<typeof frame>,pathname:string)=>groups.flatMap(g
 
 describe('Principal navigation catalogue',()=>{
  it('hides empty groups and preserves the small authorized utility set',()=>{
-  expect(labels(frame())).toEqual([['Principal home','My day'],['Utilities','My account']]);
+  expect(labels(frame())).toEqual([['Principal home','My day'],['Account & access','My account']]);
  });
 
  it('groups the fully authorized catalogue and points area entries at the first authorized child',()=>{
@@ -22,8 +22,8 @@ describe('Principal navigation catalogue',()=>{
    ['Communication','Notice coverage','Notice reviews','Family concerns','Meetings'],
    ['My work','My decisions','Follow-ups','Handover'],
    ['Reports & insights','Reports','Decision history','Evidence assistant'],
-   ['Conditional areas','Financial exceptions','Facilities incidents','Restricted support'],
-   ['Utilities','My account'],
+   ['School operations','Financial exceptions','Facilities incidents','Restricted support'],
+   ['Account & access','My account'],
   ]);
   expect(groups.find(group=>group.label==='Teaching & staff')?.items.find(item=>item.label==='Timetable & cover')?.href).toBe('/leadership/timetable');
   expect(groups.find(group=>group.label==='Teaching & staff')?.items.find(item=>item.label==='Assessments')?.href).toBe('/leadership/assessments');

@@ -47,12 +47,12 @@ export function principalNavigationGroups({home,canUseAttendance=false,canUsePup
    ...(canUseHistory?[{label:'Decision history',href:'/leadership/history'}]:[]),
    ...(canUseAssistant?[{label:'Evidence assistant',href:'/leadership/assistant'}]:[]),
   ]},
-  {id:'principal-conditional',label:'Conditional areas',showLabel:false,items:[
+  {id:'principal-operations',label:'School operations',icon:'school',collapsible:true,items:[
    ...(canUseFinance?[{label:'Financial exceptions',href:'/leadership/finance/exceptions',icon:'report' as const}]:[]),
    ...(canUseFacilities?[{label:'Facilities incidents',href:'/leadership/services/incidents',icon:'activity' as const}]:[]),
    ...(canUseSupport?[{label:'Restricted support',href:'/leadership/support',icon:'people' as const}]:[]),
   ]},
-  {id:'principal-utilities',label:'Utilities',items:[...(home.actingDelegation?[{label:'My acting access',href:'/leadership/delegations',icon:'activity' as const}]:[]),{label:'My account',href:'/leadership/account',icon:'account'}]},
+  {id:'principal-utilities',label:'Account & access',collapsible:false,items:[...(home.actingDelegation?[{label:'My acting access',href:'/leadership/delegations',icon:'activity' as const}]:[]),{label:'My account',href:'/leadership/account',icon:'account'}]},
  ];
  return groups.filter(group=>group.items.length>0);
 }
