@@ -14,9 +14,9 @@ Status values describe this presentation programme only. `DIRECT VERIFIED` means
 | `/admin/users`; `/admin/users/grant`; `/admin/users/change` | SA-13/14 / Access | directory + staged forms | DIRECT VERIFIED directory at desktop/mobile; staged flows retain prior owner evidence | `user.manage`; independent Access guards |
 | `/admin/teachers/availability` | People availability | operational table/form | DIRECT VERIFIED at desktop/mobile | recorder availability projection |
 | `/admin/setup`; `/admin/school` | settings | settings/checklist | DIRECT VERIFIED at desktop/mobile | `school.manage`; unsupported draft action removed |
-| `/admin/modules`; `/admin/modules/manage` | tenancy | settings/staged command | PENDING | institution admin + module configure |
-| `/admin/branding`; `/admin/branding/manage` | branding | settings/preview/publish | PENDING | branding authority; four-theme SSR retained |
-| `/admin/activity`; `/admin/activity/manage` | platform | directory/detail | PENDING | safe allowlisted evidence only |
+| `/admin/modules`; `/admin/modules/manage` | tenancy | settings/staged command | DIRECT VERIFIED review/manage at desktop/mobile; unsupported durable-draft action removed | institution admin + module configure |
+| `/admin/branding`; `/admin/branding/manage` | branding | settings/preview/publish | DIRECT VERIFIED review/manage at desktop/mobile; unsupported outer-flow draft action removed while real private draft remains | branding authority; four-theme SSR retained |
+| `/admin/activity`; `/admin/activity/manage` | platform | directory/detail | DIRECT VERIFIED review/manage at desktop/mobile; unsupported durable-draft action removed | safe allowlisted evidence only |
 | `/admin/academics`; `/admin/classes` | academics | directory/settings | DIRECT VERIFIED at desktop/mobile | class manage/read plus modules; long setup page remains content-driven |
 | `/admin/assessments` | assessments | directory/planning entry | DIRECT VERIFIED at desktop/mobile; primary planning action moved into page header | exact planning designation retained |
 | `/admin/timetable`; `/admin/timetable/readiness` | TT-01–04 / timetable | settings/grid/review | DIRECT VERIFIED current shell at desktop/mobile; owner mutation evidence reused | immutable version/publication contracts; functional draft save retained |
@@ -31,11 +31,11 @@ Status values describe this presentation programme only. `DIRECT VERIFIED` means
 | `/admin/imports`; `/admin/imports/manage`; `/admin/imports/operations` | SA-23/24 / Imports | directory/wizard/recovery | DIRECT VERIFIED directory, preview entry, reconciliation and operations at desktop/mobile | preview revision/hash/version preserved; no unsupported draft action |
 | `/admin/requests`; `/admin/requests/new`; `/admin/requests/[id]` | Requests | directory/staged/detail | DIRECT VERIFIED directory/create at desktop/mobile; detail retains prior owner evidence | originator/category authority |
 | `/admin/coordination`; `/admin/coordination/[id]` | Coordination counterparts | queue/detail | DIRECT VERIFIED queue at desktop/mobile; detail retains prior owner evidence | assignment never substitutes source authority |
-| `/admin/services/incidents`; `/admin/services/incidents/new`; `/admin/services/incidents/[id]` | LEA-44 counterpart / Facilities | queue/staged/detail | PENDING | conditional synthetic scope |
-| `/admin/finance/exceptions`; `/admin/finance/exceptions/new`; `/admin/finance/exceptions/[id]` | LEA-43 counterpart / Finance | queue/staged/detail | PENDING | conditional synthetic scope; no payment |
-| `/admin/support` | Support configuration | settings | PENDING | conditional synthetic scope |
-| `/admin/context` | Access/context | context switch | PENDING | validated server context and staged exit |
-| `/institutions` | institution administration | directory/create | PENDING | authorized institution-level destination; separate scope |
+| `/admin/services/incidents`; `/admin/services/incidents/new`; `/admin/services/incidents/[id]` | LEA-44 counterpart / Facilities | queue/staged/detail | DIRECT VERIFIED queue/create at desktop/mobile; detail retains prior owner evidence; desktop/mobile overflow corrected | conditional synthetic scope |
+| `/admin/finance/exceptions`; `/admin/finance/exceptions/new`; `/admin/finance/exceptions/[id]` | LEA-43 counterpart / Finance | queue/staged/detail | DIRECT VERIFIED queue and denied-create state at desktop/mobile; detail retains prior owner evidence | conditional synthetic scope; no payment |
+| `/admin/support` | Support configuration | settings | DIRECT VERIFIED unavailable state at desktop/mobile | conditional synthetic scope; release gate remains closed for seeded Administrator |
+| `/admin/context` | Access/context | context switch | DIRECT VERIFIED at desktop/mobile; unsupported draft action removed | validated server context and staged exit |
+| `/institutions` | institution administration | directory/create | DIRECT VERIFIED at desktop/mobile | authorized institution-level destination; separate scope |
 
 The connected reference `/design-system/admin-reference` is not a business route and never upgrades an owner workflow status.
 

@@ -3,11 +3,11 @@
 ## Latest checkpoint
 
 - Shell/Students commit: `1671c8f`.
-- Active completed slice: Admissions/Imports/My work presentation correction and direct desktop/mobile inspection.
-- Production build ID: `n_SXb_AS31KMa3ZXmY8a_` at `http://127.0.0.1:3400`, started through `pnpm demo:start` with the documented synthetic gates.
-- Evidence: `docs/evidence/admin-experience-revamp-05-2026-10-19/`.
+- Active completed slice: School administration/context/conditional-service presentation correction and direct desktop/mobile inspection.
+- Production build ID: `FnDUkbvFIP6IQWBb04_Ju` at `http://127.0.0.1:3400`, started through `pnpm demo:start` with the documented synthetic gates.
+- Evidence: `docs/evidence/admin-experience-revamp-06-2026-10-19/`.
 - No schema or migration change.
-- Next action: inspect and correct School administration, conditional Additional services, context and institution routes, preserving existing owner behavior.
+- Next action: finish current-shell inspection for Student enrollment/transfer, run the four-theme Administrator check and affected shared-shell smoke checks, then prepare the sanitized review package.
 
 Current task: next checkpoint — Staff, School setup and Academics. The shared shell/navigation, connected reference and Students journey checkpoint is verified and ready to commit.
 
