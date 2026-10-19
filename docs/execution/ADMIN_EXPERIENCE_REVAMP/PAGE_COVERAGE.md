@@ -27,10 +27,10 @@ Status values describe this presentation programme only. `DIRECT VERIFIED` means
 | `/admin/reports/attendance` | reporting | report/export | DIRECT VERIFIED populated report at desktop/mobile | server reauthorization and safe CSV; mobile results use labelled records |
 | `/admin/communication`; `/admin/communication/new`; `/admin/communication/[id]/withdraw`; `/admin/communication/proposals/[id]` | SA communication / Communication | directory/staged/detail | DIRECT VERIFIED directory/compose at desktop/mobile; lifecycle details retain prior owner evidence | publish/review/withdraw owner checks; requests remain under My work |
 | `/admin/events`; `/admin/events/new`; `/admin/events/[id]` | Calendar/events | directory/staged/detail | DIRECT VERIFIED directory/create at desktop/mobile; detail retains prior owner evidence | current Communication/calendar scope |
-| `/admin/admissions` | SA-38 / Admissions | directory/application entry | PENDING | implemented application scope only |
-| `/admin/imports`; `/admin/imports/manage`; `/admin/imports/operations` | SA-23/24 / Imports | directory/wizard/recovery | PENDING | preview revision/hash/version preserved |
-| `/admin/requests`; `/admin/requests/new`; `/admin/requests/[id]` | Requests | directory/staged/detail | PENDING | originator/category authority |
-| `/admin/coordination`; `/admin/coordination/[id]` | Coordination counterparts | queue/detail | PENDING | assignment never substitutes source authority |
+| `/admin/admissions` | SA-38 / Admissions | directory/application entry | DIRECT VERIFIED application entry at desktop/mobile; unsupported durable-draft action removed | implemented application scope only |
+| `/admin/imports`; `/admin/imports/manage`; `/admin/imports/operations` | SA-23/24 / Imports | directory/wizard/recovery | DIRECT VERIFIED directory, preview entry, reconciliation and operations at desktop/mobile | preview revision/hash/version preserved; no unsupported draft action |
+| `/admin/requests`; `/admin/requests/new`; `/admin/requests/[id]` | Requests | directory/staged/detail | DIRECT VERIFIED directory/create at desktop/mobile; detail retains prior owner evidence | originator/category authority |
+| `/admin/coordination`; `/admin/coordination/[id]` | Coordination counterparts | queue/detail | DIRECT VERIFIED queue at desktop/mobile; detail retains prior owner evidence | assignment never substitutes source authority |
 | `/admin/services/incidents`; `/admin/services/incidents/new`; `/admin/services/incidents/[id]` | LEA-44 counterpart / Facilities | queue/staged/detail | PENDING | conditional synthetic scope |
 | `/admin/finance/exceptions`; `/admin/finance/exceptions/new`; `/admin/finance/exceptions/[id]` | LEA-43 counterpart / Finance | queue/staged/detail | PENDING | conditional synthetic scope; no payment |
 | `/admin/support` | Support configuration | settings | PENDING | conditional synthetic scope |
