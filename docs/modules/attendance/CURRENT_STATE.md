@@ -233,3 +233,9 @@ Verification: focused unit 1/1; real-PostgreSQL lifecycle/security 3/3; sequenti
 - No query, mutation, grant, correction, clarification, version, idempotency or protected-text contract changed. The seeded correction queue is truthfully empty; the explanation queue uses the existing four authorized synthetic records.
 - Focused correction-request and explanation Playwright journeys passed 1/1 each in Chromium and Mobile Chromium against real PostgreSQL with 118 migrations. The final 4 GiB build passed with build ID `6JiNwD4KtOD7F-bt8fQlx`. Before/final desktop/mobile captures were directly inspected in `docs/evidence/ux-revamp-11-attendance-queues-2026-10-19/`.
 - These queues have no exact production page reference and are labelled shared-pattern design extensions. Human visual acceptance and all existing release gates remain PENDING.
+
+### UX-14 specialized Teacher register — 19 October 2026
+
+- The submitted Teacher register retains the existing frozen roster, mark, correction, recovery, authorization and immutable-history contracts. Presentation now aligns pupil identity, status and `Flag error` action in a compact desktop row and a readable mobile card; revision history uses the shared padded-card geometry.
+- Focused submitted-register and immutable-history journeys passed sequentially in Chromium and Mobile Chromium against real PostgreSQL with 118 migrations. Standard build `PeGqBjWCEJo4UkqEYdYWG` passed. Desktop/mobile captures were directly inspected in `docs/evidence/ux-revamp-14-specialized-2026-10-19/`.
+- Human visual acceptance, native accessibility, actual browser 200% zoom, TEN-03 and production release remain PENDING.
