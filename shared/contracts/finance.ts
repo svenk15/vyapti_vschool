@@ -2,6 +2,7 @@ export const financeCapabilities=['SUMMARY_READ','EXCEPTION_REQUEST','EXCEPTION_
 export type FinanceCapability=typeof financeCapabilities[number];
 export type FinanceCurrency='INR'|string;
 export type FinanceMoney=Readonly<{currency:FinanceCurrency;minorUnits:string}>;
+export const formatFinanceMoney=(currency:string,minorUnits:string,locale='en-IN')=>new Intl.NumberFormat(locale,{style:'currency',currency}).format(Number(minorUnits)/100);
 export type FinanceActor=Readonly<{accountId:string;displayName:string}>;
 export type FinanceReviewer=FinanceActor&Readonly<{currency:string;approvalLimitMinor:string}>;
 export type FinanceReconciliationState='RECONCILED'|'UNRECONCILED';

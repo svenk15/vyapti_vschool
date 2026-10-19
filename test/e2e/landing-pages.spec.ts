@@ -20,6 +20,17 @@ test('five landing candidates share responsive production components and four th
   await expect(reference.locator('.landing-summary')).toHaveCount(1);
   await expect(reference.getByRole('heading',{name:'School Calendar'})).toBeVisible();
   await expect(reference.getByRole('heading',{name:'Quick access'})).toBeVisible();
+  if(workspace==='teacher'){
+   const headings=await reference.locator('.landing-column').first().locator(':scope > .landing-panel > .landing-panel-header > h2').allTextContents();
+   expect(headings).toEqual(['Up next','Registers to finish','Today’s classes','Teaching work']);
+  }
+  if(workspace==='principal'){
+   await expect(reference.getByRole('heading',{name:'Decisions ready',exact:true})).toBeVisible();
+   await expect(reference.getByRole('heading',{name:'Active follow-ups',exact:true})).toBeVisible();
+   await expect(reference.getByRole('heading',{name:'School-wide signals',exact:true})).toBeVisible();
+   await expect(reference.getByRole('heading',{name:'Today’s classes'})).toHaveCount(0);
+  }
+  if(workspace==='administrator')await expect(reference.getByRole('heading',{name:'Decisions ready'})).toHaveCount(0);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  }
  for(const theme of ['forest','amethyst','porcelain','linen']){await page.getByLabel('Preview theme').selectOption(theme);await expect(page.locator('.brand-surface').first()).toHaveAttribute('data-vs-theme',theme);await reference.screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/themes/${theme}-${testInfo.project.name}.png`});}
@@ -35,6 +46,7 @@ test('five landing candidates share responsive production components and four th
  await expect(reference.getByRole('button',{name:'Previous week'})).toBeDisabled();
  await expect(reference.getByRole('button',{name:'Next week'})).toBeDisabled();
  await reference.screenshot({path:`docs/evidence/ux-revamp-landing-completion-2026-10-19/candidate-${testInfo.project.name}.png`});
+ if(testInfo.project.name==='mobile')for(const workspace of ['student','parent']){await page.setViewportSize({width:360,height:844});await page.getByLabel('Workspace candidate').selectOption(workspace);const summary=reference.locator('.landing-summary');expect(await summary.evaluate(node=>node.getBoundingClientRect().height)).toBeLessThanOrEqual(300);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);}
 });
 
 test('Administrator landing preserves authorized actions and explicit unavailable projections',async({page},testInfo)=>{

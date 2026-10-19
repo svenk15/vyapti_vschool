@@ -1,11 +1,11 @@
 import type {DecisionOwnerAdapter,ValidDecisionListInput} from '../../leadership/contracts/decisions';
-import type {FinanceExceptionDetail,FinanceExceptionSummary} from '../../../../shared/contracts/finance';
+import {formatFinanceMoney,type FinanceExceptionDetail,type FinanceExceptionSummary} from '../../../../shared/contracts/finance';
 import type {DecisionDetail,DecisionResult,DecisionSummary} from '../../../../shared/contracts/decisions';
 import {AccessError} from '../../access/contracts/index';
 import {randomUUID} from 'node:crypto';
 import type {createFinanceUseCases} from '../application/finance';
 type FinanceFacade=ReturnType<typeof createFinanceUseCases>;
-const summary=(item:FinanceExceptionSummary,reconciliation?:FinanceExceptionDetail['reconciliation']):DecisionSummary=>({owner:'FINANCE_EXCEPTION',itemId:item.id,version:item.version,reference:item.reference,typeLabel:'Financial exception',title:`${item.kind==='CONCESSION'?'Concession':'Refund request'} · ${item.currency} ${item.amountMinor} minor units`,description:`Requested by ${item.requester.displayName}`,state:'READY',submittedAt:item.requestedAt,dueAt:null,source:{type:'FINANCE_EXCEPTION',currency:item.currency,amountMinor:item.amountMinor,kind:item.kind,reconciliationState:reconciliation?.state??'UNRECONCILED',cutoffAt:reconciliation?.cutoffAt??item.requestedAt,sourceDigestPrefix:reconciliation?.sourceDigestPrefix??'unavailable',state:'PENDING'},allowedActions:['APPROVE','REJECT']});
+const summary=(item:FinanceExceptionSummary,reconciliation?:FinanceExceptionDetail['reconciliation']):DecisionSummary=>({owner:'FINANCE_EXCEPTION',itemId:item.id,version:item.version,reference:item.reference,typeLabel:'Financial exception',title:`${item.kind==='CONCESSION'?'Concession':'Refund request'} · ${formatFinanceMoney(item.currency,item.amountMinor)}`,description:`Requested by ${item.requester.displayName}`,state:'READY',submittedAt:item.requestedAt,dueAt:null,source:{type:'FINANCE_EXCEPTION',currency:item.currency,amountMinor:item.amountMinor,kind:item.kind,reconciliationState:reconciliation?.state??'UNRECONCILED',cutoffAt:reconciliation?.cutoffAt??item.requestedAt,sourceDigestPrefix:reconciliation?.sourceDigestPrefix??'unavailable',state:'PENDING'},allowedActions:['APPROVE','REJECT']});
 const referenceId=(value:string|null)=>{if(!value)return null;const match=/^FIN-([0-9A-F]{8}-[0-9A-F]{4}-[1-5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12})$/i.exec(value);return match?.[1].toLowerCase()??'00000000-0000-4000-8000-000000000000';};
 export class FinanceExceptionDecisionAdapter implements DecisionOwnerAdapter{
  readonly owner='FINANCE_EXCEPTION' as const;

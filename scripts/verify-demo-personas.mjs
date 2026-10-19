@@ -13,13 +13,13 @@ function privateFixture(path,fields){
 }
 
 const people=privateFixture('artifacts/people-02/private-demo.json',['adminEmail','password','teacherEmail','teacherPassword']);
-const family=privateFixture('artifacts/guardians-01/private-demo.json',['parentEmail','parentPassword']);
+const family=privateFixture('artifacts/communication-01/private-demo.json',['parentEmail','parentPassword']);
 const student=privateFixture('artifacts/students-portal/private-demo.json',['studentEmail','studentPassword']);
 const personas=[
  {name:'administrator',email:people.adminEmail,password:people.password,workspace:'School administration',path:'/admin',reviewRoutes:['/admin/academics','/admin/students','/admin/communication']},
  {name:'principal',email:people.adminEmail,password:people.password,workspace:'Principal leadership',path:'/leadership',reviewRoutes:['/leadership/assessments','/leadership/coordination']},
  {name:'teacher',email:people.teacherEmail,password:people.teacherPassword,workspace:'Teaching',path:'/teacher/today',reviewRoutes:['/teacher/learning','/teacher/assessments']},
- {name:'parent',email:family.parentEmail,password:family.parentPassword,path:'/family',selector:'Switch child',minimumContexts:2},
+ {name:'parent',email:family.parentEmail,password:family.parentPassword,path:'/family',selector:'Switch child',minimumContexts:1},
  {name:'student',email:student.studentEmail,password:student.studentPassword,path:'/student',selector:'Switch school context',minimumContexts:2},
 ];
 const viewports=[['desktop',{width:1440,height:1000}],['mobile',{width:390,height:844}]];
@@ -52,6 +52,11 @@ try{
      await selector.waitFor();
      contextCount=await selector.locator('option').count();
      if(contextCount<(persona.minimumContexts??1))throw new Error(`${persona.name} context fixture is incomplete.`);
+     if(persona.name==='parent'){
+      const values=await selector.locator('option').evaluateAll(options=>options.map(option=>option.value));
+      for(const value of values){await page.getByLabel('Switch child').selectOption(value);await page.waitForLoadState('networkidle');if(await page.getByRole('heading',{name:'School notices'}).count())break;}
+      if(!await page.getByRole('heading',{name:'School notices'}).count())throw new Error('No explicitly authorized Parent notice context is available.');
+     }
     }
     const shell=await page.evaluate(()=>{
      const sidebar=document.querySelector('.portal-sidebar'),nav=document.querySelector('.portal-nav-scroll'),footer=document.querySelector('.portal-sidebar-footer');
@@ -59,7 +64,7 @@ try{
      const footerRect=footer?.getBoundingClientRect();
      return {rootOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth,fontFamily:getComputedStyle(document.body).fontFamily,sidebarVisible:!!sidebar&&sidebar.getClientRects().length>0,navOverflow:nav?getComputedStyle(nav).overflowY:null,minimumVisibleRow:visibleRows.length?Math.min(...visibleRows):null,footerVisible:!!footerRect&&footerRect.height>0&&footerRect.top<innerHeight&&footerRect.bottom<=innerHeight+1};
     });
-    const presentation=await page.evaluate(()=>{const grid=document.querySelector('.landing-grid'),summary=document.querySelector('.landing-summary'),actions=[...document.querySelectorAll('.landing-quick-list>a')],calendar=document.querySelector('.landing-calendar');return {gridColumns:grid?getComputedStyle(grid).gridTemplateColumns:null,summaryItems:summary?.children.length??0,summaryHeight:summary?.getBoundingClientRect().height??null,actionLinks:actions.map(node=>({label:node.textContent?.trim().replace(/\s+/g,' ')??'',href:node.getAttribute('href')})),calendarUnavailable:calendar?.textContent?.includes('Calendar unavailable')??false,technicalCopy:[...document.querySelectorAll('main')].some(node=>/other school areas|your dashboard shows the school information/i.test(node.textContent??''))};});
+    const presentation=await page.evaluate(()=>{const grid=document.querySelector('.landing-grid'),summary=document.querySelector('.landing-summary'),actions=[...document.querySelectorAll('.landing-quick-list>a')],calendar=document.querySelector('.landing-calendar');return {gridColumns:grid?getComputedStyle(grid).gridTemplateColumns:null,summaryItems:summary?.children.length??0,summaryHeight:summary?.getBoundingClientRect().height??null,actionLinks:actions.map(node=>({label:node.textContent?.trim().replace(/\s+/g,' ')??'',href:node.getAttribute('href')})),calendarUnavailable:calendar?.textContent?.includes('Calendar unavailable')??false,technicalCopy:[...document.querySelectorAll('main')].some(node=>/other school areas|your dashboard shows the school information|owner-authorized queue|current owner facts|non-excused due learner-assignment pairs|minor units/i.test(node.textContent??''))};});
     if(shell.rootOverflow)throw new Error(`${persona.name} has horizontal document overflow.`);
     if(!shell.fontFamily.toLowerCase().includes('inter'))throw new Error(`${persona.name} is not using Inter.`);
     if(viewportName==='desktop'){
@@ -77,13 +82,14 @@ try{
      const menuHandle=await menu.elementHandle();await page.waitForFunction(node=>document.activeElement===node,menuHandle,{timeout:2_000}).catch(()=>{throw new Error(`${persona.name} mobile navigation did not return focus.`);});
      Object.assign(shell,{mobile:mobileShell});
     }
-    const expectedSummaryItems=persona.name==='administrator'||persona.name==='parent'?3:4;
+    const expectedSummaryItems=persona.name==='administrator'?3:4;
     if(presentation.summaryItems!==expectedSummaryItems||presentation.technicalCopy)throw new Error(`${persona.name} landing composition is invalid: ${JSON.stringify(presentation)}`);
     if(persona.name==='principal'){
      const hrefs=presentation.actionLinks.map(item=>item.href);
      if(!hrefs.some(href=>href?.match(/^\/leadership\/attendance\?date=\d{4}-\d{2}-\d{2}$/))||!hrefs.includes('/leadership/context')||!hrefs.includes('/leadership/account'))throw new Error(`Principal quick access is invalid: ${JSON.stringify(presentation.actionLinks)}`);
     }
     if(persona.name==='parent'&&presentation.actionLinks.length<3)throw new Error(`Parent dashboard actions are incomplete.`);
+    if(viewportName==='mobile'&&['parent','student'].includes(persona.name)&&(presentation.summaryHeight??Infinity)>300)throw new Error(`${persona.name} mobile summary is not compact: ${presentation.summaryHeight}px.`);
     if(['administrator','principal','teacher','parent','student'].includes(persona.name)){
      const trackCount=presentation.gridColumns?.split(' ').length??0;
      if(viewportName==='desktop'&&trackCount<2)throw new Error(`${persona.name} dashboard did not render two desktop columns.`);
