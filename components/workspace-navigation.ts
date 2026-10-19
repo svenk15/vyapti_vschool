@@ -3,13 +3,15 @@ import type {PortalIconName,PortalNavigationGroupData} from './portal-navigation
 export type WorkspaceNavigationItem=readonly [label:string,href:string,icon:PortalIconName];
 
 export const adminNavigationSections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[];collapsible?:boolean;showLabel?:boolean}>[]=[
- {id:'admin-primary',label:'Daily work',icon:'home',hrefs:['/admin','/admin/attendance/sessions','/admin/students','/admin/reports/attendance'],collapsible:false,showLabel:false},
- {id:'teaching',label:'Teaching',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/assessments','/admin/timetable','/admin/timetable/cover']},
- {id:'staff',label:'Staff',icon:'people',hrefs:['/admin/users','/admin/teachers']},
+ {id:'admin-primary',label:'Today',icon:'home',hrefs:['/admin'],collapsible:false,showLabel:false},
+ {id:'people',label:'People',icon:'people',hrefs:['/admin/students','/admin/teachers','/admin/users','/admin/admissions']},
+ {id:'teaching',label:'Teaching',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/timetable','/admin/assessments','/admin/timetable/cover']},
+ {id:'attendance',label:'Attendance',icon:'attendance',hrefs:['/admin/attendance/sessions']},
  {id:'communication',label:'Communication',icon:'mail',hrefs:['/admin/communication','/admin/events']},
  {id:'my-work',label:'My work',icon:'activity',hrefs:[]},
- {id:'school-settings',label:'School settings',icon:'settings',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/activity']},
- {id:'school-operations',label:'School operations',icon:'school',hrefs:['/admin/admissions','/admin/imports']},
+ {id:'reports',label:'Reports',icon:'report',hrefs:['/admin/reports/attendance']},
+ {id:'school-administration',label:'School administration',icon:'settings',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/imports','/admin/activity']},
+ {id:'additional-services',label:'Additional services',icon:'school',hrefs:[]},
 ];
 
 export const studentNavigationCatalogue:readonly WorkspaceNavigationItem[]=[

@@ -7,9 +7,11 @@ describe('workspace navigation grouping',()=>{
  it('keeps Administrator routes once in the approved presentation groups',()=>{
   const routes=adminNavigationSections.flatMap(group=>group.hrefs);
   expect(new Set(routes).size).toBe(routes.length);
-  expect(adminNavigationSections.find(group=>group.id==='admin-primary')?.hrefs).toEqual(['/admin','/admin/attendance/sessions','/admin/students','/admin/reports/attendance']);
+  expect(adminNavigationSections.find(group=>group.id==='admin-primary')?.hrefs).toEqual(['/admin']);
+  expect(adminNavigationSections.find(group=>group.id==='people')?.hrefs).toEqual(['/admin/students','/admin/teachers','/admin/users','/admin/admissions']);
+  expect(adminNavigationSections.find(group=>group.id==='attendance')?.hrefs).toEqual(['/admin/attendance/sessions']);
   expect(adminNavigationSections.find(group=>group.id==='communication')?.hrefs).toContain('/admin/events');
-  expect(adminNavigationSections.find(group=>group.id==='school-operations')?.hrefs).toEqual(['/admin/admissions','/admin/imports']);
+  expect(adminNavigationSections.find(group=>group.id==='school-administration')?.hrefs).toEqual(['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/imports','/admin/activity']);
  });
 
  it('uses static Teacher groups and preserves every authorized destination',()=>{

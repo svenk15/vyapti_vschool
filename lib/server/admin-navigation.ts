@@ -6,31 +6,31 @@ import type {PortalIconName} from '../../components/portal-navigation-group';
 import {adminNavigationSections} from '../../components/workspace-navigation';
 import {memoizeModuleCapability} from './navigation-eligibility';
 
-export type AdminNavigationItem=Readonly<{label:string;href:string;icon:PortalIconName}>;
+export type AdminNavigationItem=Readonly<{label:string;href:string;icon:PortalIconName;matches?:readonly Readonly<{path:string;exact?:boolean}>[]}>;
 export type AdminNavigationGroup=Readonly<{id:string;label:string;icon:PortalIconName;collapsible:boolean;showLabel?:boolean;items:readonly AdminNavigationItem[]}>;
 type Route={label:string;href:string;icon:PortalIconName;permission:string;modules?:readonly ModuleId[];institutionAdmin?:boolean};
 
 const routes:readonly Route[]=[
  {label:'Today',href:'/admin',icon:'home',permission:'school.manage'},
  {label:'School setup',href:'/admin/setup',icon:'school',permission:'school.manage'},
- {label:'School settings',href:'/admin/school',icon:'school',permission:'school.manage'},
- {label:'Branch module access',href:'/admin/modules',icon:'modules',permission:'module.configure',institutionAdmin:true},
- {label:'Sign-in branding',href:'/admin/branding',icon:'branding',permission:'branding.manage'},
- {label:'Branch activity',href:'/admin/activity',icon:'activity',permission:'school.manage'},
- {label:'Staff & access',href:'/admin/users',icon:'staff',permission:'user.manage'},
+ {label:'School details',href:'/admin/school',icon:'school',permission:'school.manage'},
+ {label:'Modules',href:'/admin/modules',icon:'modules',permission:'module.configure',institutionAdmin:true},
+ {label:'Branding & appearance',href:'/admin/branding',icon:'branding',permission:'branding.manage'},
+ {label:'Activity',href:'/admin/activity',icon:'activity',permission:'school.manage'},
+ {label:'Staff access',href:'/admin/users',icon:'staff',permission:'user.manage'},
  {label:'Staff profiles',href:'/admin/teachers',icon:'people',permission:'class.manage',modules:['staff_core']},
  {label:'Students',href:'/admin/students',icon:'students',permission:'student.read',modules:['student_core']},
  {label:'Admissions',href:'/admin/admissions',icon:'students',permission:'admissions.manage',modules:['admissions','student_core']},
  {label:'Imports',href:'/admin/imports',icon:'import',permission:'student.manage',modules:['student_core','academic_core']},
- {label:'Academics',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
+ {label:'Classes & subjects',href:'/admin/academics',icon:'academics',permission:'class.manage',modules:['academic_core']},
  {label:'Assessments',href:'/admin/assessments',icon:'academics',permission:'school.manage',modules:['assessments','academic_core','student_core']},
  {label:'Timetable',href:'/admin/timetable',icon:'calendar',permission:'timetable.manage',modules:['timetable','academic_core','staff_core']},
  {label:'Cover coordination',href:'/admin/timetable/cover',icon:'people',permission:'timetable.manage',modules:['timetable','academic_core','staff_core','attendance']},
- {label:'Classes and teachers',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
- {label:'Attendance',href:'/admin/attendance/sessions',icon:'attendance',permission:'attendance.read_school',modules:['attendance']},
- {label:'Communication',href:'/admin/communication',icon:'mail',permission:'communication.publish',modules:['communication']},
+ {label:'Teacher assignments',href:'/admin/classes',icon:'classes',permission:'class.read',modules:['academic_core','staff_core']},
+ {label:'Registers',href:'/admin/attendance/sessions',icon:'attendance',permission:'attendance.read_school',modules:['attendance']},
+ {label:'Notices',href:'/admin/communication',icon:'mail',permission:'communication.publish',modules:['communication']},
  {label:'Calendar & events',href:'/admin/events',icon:'calendar',permission:'communication.publish',modules:['communication','academic_core','student_core']},
- {label:'Reports',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
+ {label:'Attendance report',href:'/admin/reports/attendance',icon:'report',permission:'attendance.read_school',modules:['attendance']},
 ];
 export async function getAdminNavigation(identity:Identity,home:AdminHome):Promise<AdminNavigationGroup[]>{
  const capabilities=new Set(home.capabilities);
