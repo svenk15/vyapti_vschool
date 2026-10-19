@@ -25,6 +25,16 @@ Every route remains engineering-implemented only to the extent recorded by its o
 
 The source currently has 203 page routes. Receipt is a supported composition state within owner routes; no standalone route named “receipt” exists, so no route is falsely inventoried as RECEIPT. The page owning the mutation remains responsible for its receipt state.
 
+## UX-11 searchable-directory overlay
+
+| Route | Presentation status | Current query/actions | Reference relationship | Remaining presentation work |
+|---|---|---|---|---|
+| `/admin/students` | `CONFORMING` | Server search attributes, filters, deterministic sort, signed pagination and one Manage action | Exact Administrator Students reference | None for the verified states; human review remains pending |
+| `/admin/teachers` | `CONFORMING_SUPPORTED_SCOPE` | Server name/staff-number search, signed pagination, dedicated Add staff, one Manage dialog preserving category/teaching/binding/end actions | Exact Administrator Staff reference | People has no approved server filter/sort contract; do not add page-local filtering or sorting |
+| `/admin/users` | `PRESENTATION_WORK` | Existing Access directory and guarded grant/change destinations | Staff/access family | Apply the directory recipe without changing invitation, membership or grant authority |
+
+Direct Staff reference/application evidence is in [UX-11 Staff directory](../../evidence/ux-revamp-11-staff-directory-2026-10-19/README.md). Exact query support controls whether Filters and Sort are rendered; a visual recipe never authorizes client-only sorting of one loaded cursor page.
+
 ## Actual routes
 
 | Route | Class | Owning page | Theme behavior | Verification scope |

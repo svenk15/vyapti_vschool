@@ -14,6 +14,7 @@ Updated: 19 October 2026 (Asia/Kolkata)
 | UX-08 | VERIFIED | DIRECT_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-09 | VERIFIED | DOCUMENTED_FINITE_INVENTORY_AND_RECIPES | PENDING | BLOCKED_BY_RELEASE_GATES |
 | UX-10 | VERIFIED | DIRECT_DASHBOARD_INSPECTION_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
+| UX-11 | IN_PROGRESS | STAFF_DIRECTORY_DIRECT_COMPARISON_COMPLETE | PENDING | BLOCKED_BY_RELEASE_GATES |
 
 ## Baseline
 
@@ -48,10 +49,12 @@ The four themes passed desktop and mobile gallery journeys, appearance settings 
 
 UX-09 records the finite 203-route presentation inventory and the ten shared production recipes without changing route, owner, authorization or workflow status. UX-10 applies the dashboard recipe to the remaining Parent, Student and Principal landing surfaces while retaining the already-conforming Administrator and specialized Teacher dashboards. The final 4 GiB build passed with build ID `ATWQIJNhCYH1x5uX5_Iwg`; the current-source one-worker browser verification passed 11/11 Administrator, Teacher, Principal, Parent, Student and public-recovery desktop/mobile states. It checked computed Inter, root overflow, desktop sidebar rows and independent scroll, mobile drawer focus/return, responsive dashboard tracks, safe contextual links and the absence of former Principal architecture copy. Desktop and mobile captures were directly inspected. The Principal page is accurately labelled a design extension because its source is a workflow explorer rather than an exact production screen. See [UX-10 evidence](../../evidence/ux-revamp-10-dashboards-2026-10-19/README.md).
 
+UX-11 is in progress. The first Staff-directory slice replaces the duplicated inline creation panel with the approved directory-first composition and the existing dedicated Add staff route. It uses compact server-search rows, one Manage action and a responsive labelled-card layout while preserving category correction, teaching enablement, verified account binding and employment end. The exact Staff reference and application were directly compared at 1440×1000 and 390×844; the first mobile capture exposed constrained row-header text and the final source corrected it. Focused Chromium and Mobile Chromium journeys passed 1/1 each against real PostgreSQL, type checking passed, and the 4 GiB production build passed with build ID `Wxv6cwqzH2nCCzA8xnW_N`. The wider UX-11 family remains open for `/admin/users` and other directory consumers. People currently exposes no approved server filter/sort fields, so no page-local substitute was added. See [Staff directory evidence](../../evidence/ux-revamp-11-staff-directory-2026-10-19/README.md).
+
 ## Open release gates
 
 Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom evidence, TEN-03 restricted-role/RLS proof, provider/deployment configuration, real-client data authorization, and production release remain pending.
 
 ## Next action
 
-Proceed with UX-11: use the already-conforming Administrator Students directory as the searchable-directory reference, then migrate the Staff/access directory family without changing query, pagination, identity or authority contracts. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.
+Continue UX-11 with `/admin/users`, the remaining Staff/access directory surface. Reuse the verified directory recipe while preserving Access-owned invitation, membership, grant and branch-scope authority. Browser institution-creation theme selection, Porcelain published sign-in support and verification of the branded sign-in capture labelled “Authentication is not connected” remain later UX-15 work. Human visual acceptance, native VoiceOver/NVDA, actual-browser 200% zoom, TEN-03 and production release remain pending.

@@ -7,6 +7,12 @@ Last updated: 2026-10-17. Human review is tracked separately from implementation
 | PER-01 | VERIFIED | PENDING | [Local verification](../../evidence/people-01-local/verification.json), JUnit reports, source `45ca6d6` |
 | PER-02 | VERIFIED | PENDING | [Local verification](../../evidence/people-02-local/verification.json), JUnit reports, tested source `e72125d` |
 
+## UX-11 Staff directory presentation — 19 October 2026
+
+The `/admin/teachers` presentation now follows the approved directory-first Staff composition: Add staff routes to the existing dedicated staged workflow, server-backed search and signed cursor pagination remain intact, rows present actual current category/employment/access/teaching states, and one Manage dialog exposes the existing guarded actions. The duplicated inline creation form was removed from the directory without removing the owner command or route. No People, Access or Academics contract, schema, migration, authorization rule or seed changed.
+
+Focused Chromium and Mobile Chromium journeys passed 1/1 each against real PostgreSQL, including duplicate and validation failures plus category, teaching, verified binding and employment transitions. Type checking and the standard 4 GiB build passed. Exact reference/application desktop and mobile captures were directly inspected; a mobile first-column width defect was corrected before checkpoint. [Evidence](../../evidence/ux-revamp-11-staff-directory-2026-10-19/README.md). Human visual acceptance and existing release gates remain pending.
+
 ## F07-A / LEA-23 safe operational availability — 17 October 2026
 
 Implementation is ENGINEERING_COMPLETE at `e62445d`; human review remains PENDING. The People owner now provides separately designated recorder authority, branch-timezone bounded safe availability intervals, immutable expected-version revisions, exact-payload recovery, a safe Principal projection and a minimal `BUSY`/`FREE`/`UNKNOWN` cross-branch collision port. Private leave, payroll and medical narratives are excluded from the stored command contract and Principal response. Default dates use the selected branch timezone and invalid normalized calendar dates fail validation.
