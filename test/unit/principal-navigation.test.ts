@@ -27,6 +27,7 @@ describe('Principal navigation catalogue',()=>{
   ]);
   expect(groups.find(group=>group.label==='Teaching & staff')?.items.find(item=>item.label==='Timetable & cover')?.href).toBe('/leadership/timetable');
   expect(groups.find(group=>group.label==='Teaching & staff')?.items.find(item=>item.label==='Assessments')?.href).toBe('/leadership/assessments');
+  expect(groups.filter(group=>group.sectionBreakBefore).map(group=>group.label)).toEqual(['Attendance','My work','Reports & insights','School operations','Account & access']);
  });
 
  it('uses the first authorized alternate when an area overview is unavailable',()=>{

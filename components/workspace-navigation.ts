@@ -2,15 +2,15 @@ import type {PortalIconName,PortalNavigationGroupData} from './portal-navigation
 
 export type WorkspaceNavigationItem=readonly [label:string,href:string,icon:PortalIconName];
 
-export const adminNavigationSections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[];collapsible?:boolean;showLabel?:boolean}>[]=[
+export const adminNavigationSections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[];collapsible?:boolean;showLabel?:boolean;sectionBreakBefore?:boolean}>[]=[
  {id:'admin-primary',label:'Today',icon:'home',hrefs:['/admin'],collapsible:false,showLabel:false},
- {id:'people',label:'People',icon:'people',hrefs:['/admin/students','/admin/teachers','/admin/users','/admin/admissions']},
+ {id:'people',label:'People',icon:'people',hrefs:['/admin/students','/admin/teachers','/admin/users','/admin/admissions'],sectionBreakBefore:true},
  {id:'teaching',label:'Teaching',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/timetable','/admin/assessments','/admin/timetable/cover']},
  {id:'attendance',label:'Attendance',icon:'attendance',hrefs:['/admin/attendance/sessions','/admin/attendance/correction-requests','/admin/attendance/explanations']},
  {id:'communication',label:'Communication',icon:'mail',hrefs:['/admin/communication','/admin/events']},
  {id:'my-work',label:'My work',icon:'activity',hrefs:[]},
  {id:'reports',label:'Reports',icon:'report',hrefs:['/admin/reports/attendance']},
- {id:'school-administration',label:'School administration',icon:'settings',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/imports','/admin/activity']},
+ {id:'school-administration',label:'School administration',icon:'settings',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/imports','/admin/activity'],sectionBreakBefore:true},
  {id:'additional-services',label:'Additional services',icon:'school',hrefs:[]},
 ];
 
@@ -39,10 +39,10 @@ export type TeacherNavigationOptions={canUseClasses:boolean;canUseTimetable:bool
 export function teacherNavigationGroups({canUseClasses,canUseTimetable,canUseCover,canUseMeetings,canUseSupport,canUseHistory,canUseLearning,canUseAssessments}:TeacherNavigationOptions):PortalNavigationGroupData[]{
  const groups:PortalNavigationGroupData[]=[
   {id:'teacher-primary',label:'My day',showLabel:false,collapsible:false,items:[{label:'My day',href:'/teacher/today',icon:'home'}]},
-  {id:'teacher-teaching',label:'Teaching',collapsible:false,items:[...(canUseClasses?[{label:'My classes',href:'/teacher/classes',icon:'classes' as const}]:[]),...(canUseTimetable?[{label:'My timetable',href:'/teacher/timetable',icon:'calendar' as const}]:[]),...(canUseHistory?[{label:'Attendance history',href:'/teacher/history',icon:'attendance' as const}]:[])]},
-  {id:'teacher-learning',label:'Learning',collapsible:false,items:[...(canUseLearning?[{label:'Assignments',href:'/teacher/learning',icon:'academics' as const}]:[]),...(canUseAssessments?[{label:'Assessment marks',href:'/teacher/assessments',icon:'report' as const}]:[])]},
-  {id:'teacher-work',label:'My work',collapsible:false,items:[...(canUseCover?[{label:'Cover requests',href:'/teacher/cover',icon:'people' as const}]:[]),...(canUseMeetings?[{label:'Meetings',href:'/teacher/meetings',icon:'calendar' as const}]:[]),...(canUseSupport?[{label:'Specialist support',href:'/teacher/support',icon:'people' as const}]:[])]},
-  {id:'teacher-account',label:'Account',collapsible:false,items:[{label:'My account',href:'/account',icon:'account'}]},
+  {id:'teacher-teaching',label:'Teaching',collapsible:false,sectionBreakBefore:true,items:[...(canUseClasses?[{label:'My classes',href:'/teacher/classes',icon:'classes' as const}]:[]),...(canUseTimetable?[{label:'My timetable',href:'/teacher/timetable',icon:'calendar' as const}]:[]),...(canUseHistory?[{label:'Attendance history',href:'/teacher/history',icon:'attendance' as const}]:[])]},
+  {id:'teacher-learning',label:'Learning',collapsible:false,sectionBreakBefore:true,items:[...(canUseLearning?[{label:'Assignments',href:'/teacher/learning',icon:'academics' as const}]:[]),...(canUseAssessments?[{label:'Assessment marks',href:'/teacher/assessments',icon:'report' as const}]:[])]},
+  {id:'teacher-work',label:'My work',collapsible:false,sectionBreakBefore:true,items:[...(canUseCover?[{label:'Cover requests',href:'/teacher/cover',icon:'people' as const}]:[]),...(canUseMeetings?[{label:'Meetings',href:'/teacher/meetings',icon:'calendar' as const}]:[]),...(canUseSupport?[{label:'Specialist support',href:'/teacher/support',icon:'people' as const}]:[])]},
+  {id:'teacher-account',label:'Account',collapsible:false,sectionBreakBefore:true,items:[{label:'My account',href:'/account',icon:'account'}]},
  ];
  return groups.filter(group=>group.items.length>0);
 }

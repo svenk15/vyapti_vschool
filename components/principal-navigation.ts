@@ -18,7 +18,7 @@ export function principalNavigationGroups({home,canUseAttendance=false,canUsePup
  const timetableHref=canUseTimetable?'/leadership/timetable':'/leadership/cover',learningHref=canUseLearning?'/leadership/learning':'/leadership/learning/evidence',assessmentHref=canUseAssessmentReadiness?'/leadership/assessments':'/leadership/assessments/publications';
  const groups:readonly PortalNavigationGroupData[]=[
   {id:'principal-primary',label:'Principal home',showLabel:false,items:[{label:'My day',href:'/leadership',icon:'home',matches:[route('/leadership',true)]}]},
-  {id:'principal-attendance',label:'Attendance',icon:'attendance',collapsible:true,items:[
+  {id:'principal-attendance',label:'Attendance',icon:'attendance',collapsible:true,sectionBreakBefore:true,items:[
    ...(canUseAttendance?[{label:'Register coverage',href:'/leadership/attendance',matches:[route('/leadership/attendance',true),route('/leadership/attendance/sessions')]}]:[]),
    ...(canUsePupilAttendance?[{label:'Pupil attendance',href:'/leadership/attendance/pupils',matches:[route('/leadership/attendance/pupils')]}]:[]),
    ...(canUseExplanations?[{label:'Explanations',href:'/leadership/attendance/explanations',matches:[route('/leadership/attendance/explanations')]}]:[]),
@@ -37,22 +37,22 @@ export function principalNavigationGroups({home,canUseAttendance=false,canUsePup
    ...(canUseFamilyConcerns?[{label:'Family concerns',href:'/leadership/concerns'}]:[]),
    ...(canUseMeetings?[{label:'Meetings',href:'/leadership/meetings'}]:[]),
   ]},
-  {id:'principal-work',label:'My work',icon:'activity',collapsible:true,items:[
+  {id:'principal-work',label:'My work',icon:'activity',collapsible:true,sectionBreakBefore:true,items:[
    ...(canUseDecisions?[{label:'My decisions',href:'/leadership/decisions',matches:[route('/leadership/decisions')]}]:[]),
    ...(canUseCoordination?[{label:'Follow-ups',href:'/leadership/coordination',matches:[route('/leadership/coordination')]}]:[]),
    ...(canUseHandover?[{label:'Handover',href:'/leadership/handover'}]:[]),
   ]},
-  {id:'principal-reports',label:'Reports & insights',icon:'report',collapsible:true,items:[
+  {id:'principal-reports',label:'Reports & insights',icon:'report',collapsible:true,sectionBreakBefore:true,items:[
    ...(canUseReports?[{label:'Reports',href:'/leadership/reports',matches:[route('/leadership/reports'),route('/leadership/briefs'),route('/leadership/reviews')]}]:[]),
    ...(canUseHistory?[{label:'Decision history',href:'/leadership/history'}]:[]),
    ...(canUseAssistant?[{label:'Evidence assistant',href:'/leadership/assistant'}]:[]),
   ]},
-  {id:'principal-operations',label:'School operations',icon:'school',collapsible:true,items:[
+  {id:'principal-operations',label:'School operations',icon:'school',collapsible:true,sectionBreakBefore:true,items:[
    ...(canUseFinance?[{label:'Financial exceptions',href:'/leadership/finance/exceptions',icon:'report' as const}]:[]),
    ...(canUseFacilities?[{label:'Facilities incidents',href:'/leadership/services/incidents',icon:'activity' as const}]:[]),
    ...(canUseSupport?[{label:'Restricted support',href:'/leadership/support',icon:'people' as const}]:[]),
   ]},
-  {id:'principal-utilities',label:'Account & access',collapsible:false,items:[...(home.actingDelegation?[{label:'My acting access',href:'/leadership/delegations',icon:'activity' as const}]:[]),{label:'My account',href:'/leadership/account',icon:'account'}]},
+  {id:'principal-utilities',label:'Account & access',collapsible:false,sectionBreakBefore:true,items:[...(home.actingDelegation?[{label:'My acting access',href:'/leadership/delegations',icon:'activity' as const}]:[]),{label:'My account',href:'/leadership/account',icon:'account'}]},
  ];
  return groups.filter(group=>group.items.length>0);
 }

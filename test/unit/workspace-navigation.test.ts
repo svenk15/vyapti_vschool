@@ -12,12 +12,14 @@ describe('workspace navigation grouping',()=>{
   expect(adminNavigationSections.find(group=>group.id==='attendance')?.hrefs).toEqual(['/admin/attendance/sessions','/admin/attendance/correction-requests','/admin/attendance/explanations']);
   expect(adminNavigationSections.find(group=>group.id==='communication')?.hrefs).toContain('/admin/events');
   expect(adminNavigationSections.find(group=>group.id==='school-administration')?.hrefs).toEqual(['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/imports','/admin/activity']);
+  expect(adminNavigationSections.filter(group=>group.sectionBreakBefore).map(group=>group.id)).toEqual(['people','school-administration']);
  });
 
  it('uses static Teacher groups and preserves every authorized destination',()=>{
   const groups=teacherNavigationGroups({canUseClasses:true,canUseTimetable:true,canUseCover:true,canUseMeetings:true,canUseSupport:true,canUseHistory:true,canUseLearning:true,canUseAssessments:true});
   expect(groups.map(group=>group.label)).toEqual(['My day','Teaching','Learning','My work','Account']);
   expect(groups.every(group=>group.collapsible===false)).toBe(true);
+  expect(groups.map(group=>group.sectionBreakBefore??false)).toEqual([false,true,true,true,true]);
   expect(groups.flatMap(group=>group.items.map(item=>item.href))).toEqual(['/teacher/today','/teacher/classes','/teacher/timetable','/teacher/history','/teacher/learning','/teacher/assessments','/teacher/cover','/teacher/meetings','/teacher/support','/account']);
  });
 

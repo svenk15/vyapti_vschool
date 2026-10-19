@@ -7,7 +7,7 @@ import {adminNavigationSections} from '../../components/workspace-navigation';
 import {memoizeModuleCapability} from './navigation-eligibility';
 
 export type AdminNavigationItem=Readonly<{label:string;href:string;icon:PortalIconName;matches?:readonly Readonly<{path:string;exact?:boolean}>[]}>;
-export type AdminNavigationGroup=Readonly<{id:string;label:string;icon:PortalIconName;collapsible:boolean;showLabel?:boolean;items:readonly AdminNavigationItem[]}>;
+export type AdminNavigationGroup=Readonly<{id:string;label:string;icon:PortalIconName;collapsible:boolean;showLabel?:boolean;sectionBreakBefore?:boolean;items:readonly AdminNavigationItem[]}>;
 type Route={label:string;href:string;icon:PortalIconName;permission:string;modules?:readonly ModuleId[];institutionAdmin?:boolean};
 
 const routes:readonly Route[]=[
@@ -48,5 +48,5 @@ export async function getAdminNavigation(identity:Identity,home:AdminHome):Promi
  }));
  const visible=new Set(checks.filter(([,allowed])=>allowed).map(([href])=>href));
  const routeByHref=new Map(routes.map(route=>[route.href,route]));
- return adminNavigationSections.map(section=>({id:section.id,label:section.label,icon:section.icon,collapsible:section.collapsible??true,showLabel:section.showLabel,items:section.hrefs.flatMap(href=>{const route=routeByHref.get(href);return route&&visible.has(href)?[{label:route.label,href:route.href,icon:route.icon}]:[];})}));
+ return adminNavigationSections.map(section=>({id:section.id,label:section.label,icon:section.icon,collapsible:section.collapsible??true,showLabel:section.showLabel,sectionBreakBefore:section.sectionBreakBefore,items:section.hrefs.flatMap(href=>{const route=routeByHref.get(href);return route&&visible.has(href)?[{label:route.label,href:route.href,icon:route.icon}]:[];})}));
 }
