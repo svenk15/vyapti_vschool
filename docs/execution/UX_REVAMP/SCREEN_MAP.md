@@ -267,11 +267,19 @@ The [production recipes](PAGE_RECIPES.md) define component order and responsive 
 
 Dashboard action surfaces are part of these rows: Administrator attention/session links, Teacher date toolbar and session actions, Parent child selector and common actions, Student priority actions/context selector, Principal Attendance and context/account links. Their destinations independently authorize every read or command.
 
+### Searchable directories
+
+| Workspace / workflow | Route and entry | Owner | Reference state | Implemented states | Theme/context | Engineering | Visual status | Human | Remaining presentation gap |
+|---|---|---|---|---|---|---|---|---|---|
+| Administrator / Staff profiles | `/admin/teachers`; People & access | `app/admin/teachers/page.tsx`, `components/staff-admin.tsx` | Exact Administrator Staff directory | Populated/empty search, responsive rows, Manage dialog and authorized mutations | Active authorized branch | VERIFIED | CONFORMING_SUPPORTED_SCOPE; exact desktop/mobile comparison | PENDING | Owner exposes name search but no approved server filter/sort query |
+| Administrator / Staff access | `/admin/users`; People & access | `app/admin/users/page.tsx`, `components/membership-admin.tsx` | No standalone exact reference; shared directory/dialog recipe | Cursor directory, grant, independent invitation, per-row Manage, delivery recovery | Active authorized institution/branch | VERIFIED | DESIGN_EXTENSION_DIRECTLY_INSPECTED desktop/mobile | PENDING | Exact reference unavailable |
+| Administrator / Attendance sessions | `/admin/attendance/sessions?view=monitor`; Attendance | `app/admin/attendance/sessions/page.tsx`, `components/attendance-admin-list.tsx` | Exact Administrator `#/attendance` directory | Date/class filtering, populated/empty sessions, state-specific review/correct/cancel links, responsive semantic rows | Active authorized branch and school-local date | VERIFIED | CONFORMING_SUPPORTED_SCOPE; exact desktop/mobile comparison | PENDING | Owner query lacks prototype subject search, sort, summary denominators and pagination; session record lacks Teacher field |
+
 ### Remaining recipe queues
 
 | Batch | Current classification | Next representative | Notes |
 |---|---|---|---|
-| Searchable directories | PRESENTATION_WORK except routes with direct current evidence | `/admin/students` remains the conforming reference; next migrate staff/access family | URL/query and owner pagination support must be inspected per route |
+| Searchable directories | IN_PROGRESS; Students, Staff, Access and Attendance-session families have direct current evidence | Attendance correction/explanation request queues | URL/query and owner pagination support must be inspected per route |
 | Record detail/history | PRESENTATION_WORK | `/admin/students/[id]` | Preserve current owner tabs/actions and immutable history |
 | Staged forms/review/receipt | MIXED: several conforming, remaining presentation work | Student registration and Attendance correction are conforming representatives | Missing durable draft contracts remain functional scope, not visual debt |
 | Timetable/Attendance/assessment | MIXED specialized surfaces | Teacher Attendance and published timetable | Never replace specialized interactions with a generic table |
