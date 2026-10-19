@@ -1,0 +1,113 @@
+{
+  "adminDesktop": {
+    "url": "http://127.0.0.1:3400/admin/communication",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "dpr": 1,
+    "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Communication",
+    "cards": 2,
+    "tables": 2
+  },
+  "adminMobile": {
+    "url": "http://127.0.0.1:3400/admin/communication",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "dpr": 1,
+    "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Communication",
+    "cards": 2,
+    "tables": 2
+  },
+  "parentDesktop": {
+    "url": "http://127.0.0.1:3400/family/notices",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "dpr": 1,
+    "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Messages",
+    "cards": 3,
+    "tables": 0
+  },
+  "parentMobile": {
+    "url": "http://127.0.0.1:3400/family/notices",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "dpr": 1,
+    "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Messages",
+    "cards": 3,
+    "tables": 0
+  },
+  "studentDesktop": {
+    "url": "http://127.0.0.1:3400/student/notices",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "dpr": 1,
+    "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Messages",
+    "cards": 2,
+    "tables": 0
+  },
+  "studentMobile": {
+    "url": "http://127.0.0.1:3400/student/notices",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "dpr": 1,
+    "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Messages",
+    "cards": 2,
+    "tables": 0
+  },
+  "referenceAdmin": {
+    "url": "http://127.0.0.1:3412/VSchool_School_Admin_Design/VSchool_School_Admin_Review.html#/communication",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "dpr": 1,
+    "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Communication"
+  },
+  "referenceParent": {
+    "url": "http://127.0.0.1:3412/VSchool_Parent_Guardian_Design/VSchool_Parent_Guardian_Review.html#/flow/PAR-14",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "dpr": 1,
+    "font": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+    "rootOverflow": 0,
+    "h1": "Read and acknowledge a school notice"
+  },
+  "referenceStudent": {
+    "url": "http://127.0.0.1:3412/VSchool_Student_Design/VSchool_Student_Review.html#/flow/STW-27",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "dpr": 1,
+    "font": "\"VSchool Sans\", Arial, sans-serif",
+    "rootOverflow": 0,
+    "h1": "Read a school notice"
+  }
+}

@@ -1,5 +1,15 @@
 # Communication — current state
 
+## UX-11 Communication directory composition — 19 October 2026
+
+Administrator Communication now follows the approved module hierarchy with one compact real-data summary, readable publication/proposal tables, and labelled mobile cards. Parent and Student Messages use the same compact directory geometry while retaining their exact authorized child/self context, read state and withdrawal-safe actions. No owner command, audience, scheduling, delivery, publication, acknowledgement or withdrawal rule changed.
+
+The exact Administrator `#/communication` reference and application were directly compared at 1440×1000. Parent PAR-14 and Student STW-27 references specify detail journeys rather than production list pages, so their directory compositions are recorded as shared-recipe design extensions instead of exact matches. Desktop/mobile current-source captures have no root overflow and compute Inter. The first corrected capture exposed a filled Create-notice icon and premature mobile action placement; both were corrected and recaptured.
+
+Focused Communication Playwright passed 4/4 in Chromium and 4/4 in Mobile Chromium with one worker against `vyapti_vschool_test`; the database reported all 118 migrations applied. TypeScript and the 4 GiB production build passed; final build ID `KfEHZ2Q-IEshnfRIY_7Dk`. One attempted focused command retained a literal `--`, started the full suite and was stopped after one unrelated passing test; it is not counted as Communication evidence. Evidence: [UX-11 Communication directories](../../evidence/ux-revamp-11-communication-directories-2026-10-19/README.md). Human review remains PENDING.
+
+Remaining approved-reference gaps are owner capabilities, not client simulations: scheduled notices and server-backed subject search/filter/sort are not exposed by the current query contract. Production provider review, TEN-03, native accessibility, actual-browser zoom and human acceptance remain pending.
+
 ## M01–M08 acceptance correction — 18 October 2026
 
 The Administrator notice tables now separate title/revision, audience/recipient count, and publication/read metadata with the shared stacked-cell recipe. Published status uses the same badge structure on desktop and mobile. The current focused Communication journey passed 4/4, and both viewports were directly inspected. No notice lifecycle, audience, authority or persistence contract changed. Evidence: [bounded correction pass](../../evidence/m01-m08-acceptance-corrections-2026-10-18/README.md). Human review remains PENDING.
