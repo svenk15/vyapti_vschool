@@ -129,7 +129,7 @@ Remaining before this correction batch can be labelled engineering-complete: cur
 
 Status: **SUPPORTED_SCOPE_ENGINEERING_COMPLETE / VISUAL_COMPARISON_COMPLETE / HUMAN_REVIEW_PENDING**.
 
-- Executable source `271917adf5e0f55cb2e5475a85ed95b96637b440`; production build `Fv3qWOdG-v7QSU68zLxnF`; live demo `http://127.0.0.1:3400`.
+- Executable source `271917a911c766c853fa561ec173c5dcd00bb855`; production build `Fv3qWOdG-v7QSU68zLxnF`; live demo `http://127.0.0.1:3400`.
 - The requested A/B/C commits are `cd7736a`, `95839f5` and `c6c8a8f`. Final permission-sensitive Parent/Principal fixes and evidence are `271917a`.
 - The current-source persona verifier passed 11/11 protected/public states. Focused landing Playwright passed 3/3 desktop and 2/2 mobile with one worker; the desktop set includes 900px breakpoint coverage. Four themes and calendar selected, complete-empty and failed/retry states were directly inspected.
 - Teacher and Principal Events readers remain unresolved authority decisions in `LANDING_PROJECTION_DELTA.md`; their unsupported calendars are truthful supported behavior. UX-15 browser institution creation remains independently partial because an authenticated platform-operator browser principal is not defined.
