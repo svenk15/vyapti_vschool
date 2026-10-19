@@ -1,4 +1,5 @@
 import {attendanceCorrectionRequestsGateway as gateway} from '@/lib/server/attendance-correction-requests';
+import {AttendanceAdminTabs} from '@/components/attendance-admin-tabs';
 import {getIdentity} from '@/lib/server/auth';
 import {ServerTable} from '@/components/ui/server-table';
 import {Badge, BrandSurface, ButtonLink, Card, EmptyState, PageHeader, PageStack, SectionHeader} from '@/components/ui/primitives';
@@ -17,6 +18,7 @@ export default async function Page() {
             description="Review exact submitted records assigned through your Attendance reviewer grant."
             actions={<ButtonLink href="/admin/attendance/sessions?view=monitor" variant="secondary">Attendance sessions</ButtonLink>}
           />
+          <AttendanceAdminTabs active="corrections" />
           <Card className="directory-card attendance-queue-card">
             <div className="directory-heading">
               <SectionHeader title="Assigned requests" description="A changed source revision requires a fresh request before any correction can be applied." />

@@ -6,7 +6,7 @@ export const adminNavigationSections:readonly Readonly<{id:string;label:string;i
  {id:'admin-primary',label:'Today',icon:'home',hrefs:['/admin'],collapsible:false,showLabel:false},
  {id:'people',label:'People',icon:'people',hrefs:['/admin/students','/admin/teachers','/admin/users','/admin/admissions']},
  {id:'teaching',label:'Teaching',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/timetable','/admin/assessments','/admin/timetable/cover']},
- {id:'attendance',label:'Attendance',icon:'attendance',hrefs:['/admin/attendance/sessions']},
+ {id:'attendance',label:'Attendance',icon:'attendance',hrefs:['/admin/attendance/sessions','/admin/attendance/correction-requests','/admin/attendance/explanations']},
  {id:'communication',label:'Communication',icon:'mail',hrefs:['/admin/communication','/admin/events']},
  {id:'my-work',label:'My work',icon:'activity',hrefs:[]},
  {id:'reports',label:'Reports',icon:'report',hrefs:['/admin/reports/attendance']},

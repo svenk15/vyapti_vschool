@@ -14,5 +14,6 @@
 
 1. Shell/Students checkpoint committed as `1671c8f`.
 2. Staff/School/Academics directly inspected at desktop/mobile. Staff tabs now sit below the page header, duplicate cross-links were removed, and School details no longer exposes an unsupported draft action. Evidence: `docs/evidence/admin-experience-revamp-02-2026-10-19/`.
-3. Continue Attendance/Timetable, Communication/Calendar/Assessments, then remaining routes in [PAGE_COVERAGE.md](PAGE_COVERAGE.md).
+3. Attendance/Timetable directly inspected at desktop/mobile. Authorized Corrections is now reachable, Attendance tabs follow the approved information architecture, unsupported Attendance draft controls were removed, and report/cover tables have labelled mobile records without root overflow. Evidence: `docs/evidence/admin-experience-revamp-03-2026-10-19/`.
+4. Continue Communication/Calendar/Assessments, then remaining routes in [PAGE_COVERAGE.md](PAGE_COVERAGE.md).
 

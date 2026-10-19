@@ -1200,6 +1200,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .student-enrollment-grid{grid-template-columns:minmax(0,1fr)}.student-enrollment-stepper li{font-size:12px;line-height:18px}.student-enrollment-workflow .workflow-actions{margin-top:24px}
 }
 
+@media(max-width:767px){
+ .report-session-table,.timetable-cover-directory .table-scroll{overflow:visible;border:0}
+ .report-session-table .data-table,.report-session-table .data-table tbody,.report-session-table .data-table tr,.timetable-cover-directory .data-table,.timetable-cover-directory .data-table tbody,.timetable-cover-directory .data-table tr{display:block;width:100%;min-width:0;white-space:normal}
+ .report-session-table .data-table caption,.report-session-table .data-table thead,.timetable-cover-directory .data-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+ .report-session-table .data-table tbody tr,.timetable-cover-directory .data-table tbody tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;padding:18px 16px;border-top:1px solid var(--vs-border)}
+ .report-session-table .data-table tbody tr:first-child,.timetable-cover-directory .data-table tbody tr:first-child{border-top:0}
+ .report-session-table .data-table tbody th,.report-session-table .data-table tbody td,.timetable-cover-directory .data-table tbody td{display:block;width:100%;height:auto;min-height:0;padding:0;border:0;text-align:left;overflow-wrap:anywhere}
+ .report-session-table .data-table tbody th,.report-session-table .data-table tbody td:nth-child(2),.timetable-cover-directory .data-table tbody td:nth-child(2){grid-column:1/-1}
+ .report-session-table .data-table tbody th:before,.report-session-table .data-table tbody td:before,.timetable-cover-directory .data-table tbody td:before{content:attr(data-label);display:block;margin-bottom:5px;color:var(--vs-text-muted);font-size:11px;font-weight:600}
+ .report-session-table .data-table tbody th:before{display:none}
+ .report-session-table .data-table tbody td:last-child,.timetable-cover-directory .data-table tbody td:last-child{grid-column:1/-1;padding-top:10px;border-top:1px solid var(--vs-border);text-align:right}
+ .report-session-table .data-table tbody td:last-child:before,.timetable-cover-directory .data-table tbody td:last-child:before{display:none}
+ .report-session-table .data-table tbody td:last-child .btn{width:100%}
+}
+
 /* Connected Administrator reference: real shared controls with deterministic, write-free data. */
 .administrator-reference-page{display:grid;grid-template-columns:240px minmax(0,1fr);grid-template-rows:64px minmax(0,1fr);min-height:100dvh;background:var(--vs-canvas);color:var(--vs-text)}
 .administrator-reference-topbar{grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 32px;border-bottom:1px solid var(--vs-border);background:var(--vs-surface)}

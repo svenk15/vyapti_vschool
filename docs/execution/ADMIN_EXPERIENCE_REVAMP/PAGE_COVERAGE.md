@@ -19,12 +19,12 @@ Status values describe this presentation programme only. `DIRECT VERIFIED` means
 | `/admin/activity`; `/admin/activity/manage` | platform | directory/detail | PENDING | safe allowlisted evidence only |
 | `/admin/academics`; `/admin/classes` | academics | directory/settings | DIRECT VERIFIED at desktop/mobile | class manage/read plus modules; long setup page remains content-driven |
 | `/admin/assessments` | assessments | directory/planning entry | PENDING | exact planning designation retained |
-| `/admin/timetable`; `/admin/timetable/readiness` | TT-01–04 / timetable | settings/grid/review | PENDING | immutable version/publication contracts |
-| `/admin/timetable/cover`; `/admin/timetable/cover/[id]` | TT-05+ / timetable | queue/detail | PENDING | existing cover authority only |
-| `/admin/attendance/sessions`; `/admin/attendance/sessions/[id]` | SA-23–27 / Attendance | directory/detail/staged correction | prior direct evidence; PENDING current shell | frozen roster, cancellation and correction guards |
-| `/admin/attendance/explanations`; `/admin/attendance/explanations/[id]` | LEA-13 counterpart / Attendance | queue/detail | PENDING | named reviewer availability and protected text |
-| `/admin/attendance/correction-requests`; `/admin/attendance/correction-requests/[id]` | LEA-14 counterpart / Attendance | queue/detail | PENDING | contextual until nav availability exists |
-| `/admin/reports/attendance` | reporting | report/export | PENDING | server reauthorization and safe CSV |
+| `/admin/timetable`; `/admin/timetable/readiness` | TT-01–04 / timetable | settings/grid/review | DIRECT VERIFIED current shell at desktop/mobile; owner mutation evidence reused | immutable version/publication contracts; functional draft save retained |
+| `/admin/timetable/cover`; `/admin/timetable/cover/[id]` | TT-05+ / timetable | queue/detail | DIRECT VERIFIED populated queue at desktop/mobile; detail retains prior owner evidence | existing cover authority only; mobile overflow corrected |
+| `/admin/attendance/sessions`; `/admin/attendance/sessions/[id]` | SA-23–27 / Attendance | directory/detail/staged correction | DIRECT VERIFIED populated directory/scheduling entry at desktop/mobile; prior staged detail evidence retained | frozen roster, cancellation and correction guards |
+| `/admin/attendance/explanations`; `/admin/attendance/explanations/[id]` | LEA-13 counterpart / Attendance | queue/detail | DIRECT VERIFIED populated queue at desktop/mobile; detail evidence retained | named reviewer availability and protected text |
+| `/admin/attendance/correction-requests`; `/admin/attendance/correction-requests/[id]` | LEA-14 counterpart / Attendance | queue/detail | DIRECT VERIFIED empty queue at desktop/mobile; detail evidence retained | authorized navigation now uses `attendance.correct` |
+| `/admin/reports/attendance` | reporting | report/export | DIRECT VERIFIED populated report at desktop/mobile | server reauthorization and safe CSV; mobile results use labelled records |
 | `/admin/communication`; `/admin/communication/new`; `/admin/communication/[id]/withdraw`; `/admin/communication/proposals/[id]` | SA communication / Communication | directory/staged/detail | PENDING | publish/review/withdraw owner checks |
 | `/admin/events`; `/admin/events/new`; `/admin/events/[id]` | Calendar/events | directory/staged/detail | PENDING | current Communication/calendar scope |
 | `/admin/admissions` | SA-38 / Admissions | directory/application entry | PENDING | implemented application scope only |
