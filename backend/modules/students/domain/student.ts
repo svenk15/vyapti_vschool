@@ -1,22 +1,42 @@
 import { AccessError, uuidPattern } from "../../access/contracts/index";
 
-export type StudentInput = Readonly<{ firstName: string; lastName: string; admissionNumber: string; admittedOn:string; existingPersonId: string | null }>;
+export type StudentIdentityInput = Readonly<
+  | {kind:"NEW";firstName:string;lastName:string}
+  | {kind:"EXISTING";personId:string}
+>;
+export type LegacyStudentRegistrationInput = Readonly<{firstName:string;lastName:string;existingPersonId:string|null}>;
+export type StudentInput = Readonly<{ identity:StudentIdentityInput; admissionNumber:string; admittedOn:string; legacyReceiptInput:LegacyStudentRegistrationInput|null }>;
 
-function personName(value: unknown, required: boolean): string {
-  if (typeof value !== "string") throw new AccessError("VALIDATION");
+export class StudentRegistrationValidationError extends AccessError {
+  constructor(public readonly field:"identity"|"firstName"|"lastName"|"admissionNumber"|"admittedOn"){super("VALIDATION");}
+}
+
+function personName(value: unknown, required: boolean,field:"firstName"|"lastName"): string {
+  if (typeof value !== "string") throw new StudentRegistrationValidationError(field);
   const normalized = value.normalize("NFC").trim();
-  if ((required && !normalized) || normalized.length > 100 || /[\u0000-\u001f\u007f]/.test(normalized)) throw new AccessError("VALIDATION");
+  if ((required && !normalized) || normalized.length > 100 || /[\u0000-\u001f\u007f]/.test(normalized)) throw new StudentRegistrationValidationError(field);
   return normalized;
 }
 
-export function studentInput(input: { firstName: unknown; lastName?: unknown; admissionNumber: unknown; admittedOn:unknown; existingPersonId?: unknown }): StudentInput {
-  const firstName = personName(input.firstName, true), lastName = personName(input.lastName ?? "", false);
-  if (typeof input.admissionNumber !== "string") throw new AccessError("VALIDATION");
+type CurrentStudentInput={identity:unknown;admissionNumber:unknown;admittedOn:unknown};
+type LegacyStudentInput={firstName:unknown;lastName?:unknown;admissionNumber:unknown;admittedOn:unknown;existingPersonId?:unknown};
+export function studentInput(input: CurrentStudentInput|LegacyStudentInput): StudentInput {
+  let identity:StudentIdentityInput,legacyReceiptInput:LegacyStudentRegistrationInput|null=null;
+  if("identity" in input){
+    if(!input.identity||typeof input.identity!=="object"||Array.isArray(input.identity))throw new StudentRegistrationValidationError("identity");
+    const candidate=input.identity as Record<string,unknown>;
+    if(candidate.kind==="NEW")identity={kind:"NEW",firstName:personName(candidate.firstName,true,"firstName"),lastName:personName(candidate.lastName??"",false,"lastName")};
+    else if(candidate.kind==="EXISTING")identity={kind:"EXISTING",personId:uuidField(candidate.personId,"identity")};
+    else throw new StudentRegistrationValidationError("identity");
+  }else{
+    const firstName=personName(input.firstName,true,"firstName"),lastName=personName(input.lastName??"",false,"lastName"),existingPersonId=input.existingPersonId==null||input.existingPersonId===""?null:uuidField(input.existingPersonId,"identity");
+    identity=existingPersonId?{kind:"EXISTING",personId:existingPersonId}:{kind:"NEW",firstName,lastName};
+    legacyReceiptInput={firstName,lastName,existingPersonId};
+  }
+  if (typeof input.admissionNumber !== "string") throw new StudentRegistrationValidationError("admissionNumber");
   const admissionNumber = input.admissionNumber.normalize("NFC").trim();
-  if (!admissionNumber || admissionNumber.length > 40 || /[\u0000-\u001f\u007f]/.test(admissionNumber)) throw new AccessError("VALIDATION");
-  const existingPersonId = input.existingPersonId == null || input.existingPersonId === "" ? null : input.existingPersonId;
-  if (existingPersonId !== null && (typeof existingPersonId !== "string" || !uuidPattern.test(existingPersonId))) throw new AccessError("VALIDATION");
-  return { firstName, lastName, admissionNumber, admittedOn:civilDate(input.admittedOn), existingPersonId: existingPersonId?.toLowerCase() ?? null };
+  if (!admissionNumber || admissionNumber.length > 40 || /[\u0000-\u001f\u007f]/.test(admissionNumber)) throw new StudentRegistrationValidationError("admissionNumber");
+  return {identity,admissionNumber,admittedOn:civilDateField(input.admittedOn,"admittedOn"),legacyReceiptInput};
 }
 
 export type StudentSearchBy = "combined"|"name"|"admissionNumber";
@@ -66,6 +86,8 @@ function civilDate(value:unknown):string{
   if(date.getUTCFullYear()!==year||date.getUTCMonth()!==month-1||date.getUTCDate()!==day)throw new AccessError("VALIDATION");
   return value;
 }
+function civilDateField(value:unknown,field:"admittedOn"){try{return civilDate(value);}catch{throw new StudentRegistrationValidationError(field);}}
+function uuidField(value:unknown,field:"identity"){if(typeof value!=="string"||!uuidPattern.test(value))throw new StudentRegistrationValidationError(field);return value.toLowerCase();}
 function addCivilDay(value:string):string{
   const [year,month,day]=value.split("-").map(Number),next=new Date(Date.UTC(year,month-1,day+1));
   if(next.getUTCFullYear()>9999)throw new AccessError("VALIDATION");

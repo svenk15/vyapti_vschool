@@ -15,6 +15,7 @@ export const studentsGateway={
   async list(identity:Identity|null,query:{search?:unknown;by?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown;status?:unknown}={}){const current=await scope(identity);return service().list(identity,current.organizationId,current.schoolId,query);},
   async get(identity:Identity|null,studentId:string){const current=await scope(identity);return service().get(identity,current.organizationId,current.schoolId,studentId);},
   async create(identity:Identity|null,input:Parameters<StudentsFacade["create"]>[3]){const current=await scope(identity);return service().create(identity,current.organizationId,current.schoolId,input);},
+  async registrationStatus(identity:Identity|null,key:unknown){const current=await scope(identity);return service().registrationStatus(identity,current.organizationId,current.schoolId,key);},
   async resolveExistingPerson(identity:Identity|null,kind:unknown,value:unknown){const current=await scope(identity);return service().resolveExistingPerson(identity,current.organizationId,current.schoolId,kind,value);},
   async enrollmentOptions(identity:Identity|null,studentId:unknown){const current=await scope(identity);return service().enrollmentOptions(identity,current.organizationId,current.schoolId,studentId);},
   async enroll(identity:Identity|null,input:Parameters<StudentsFacade["enroll"]>[3]){const current=await scope(identity);return service().enroll(identity,current.organizationId,current.schoolId,input);},

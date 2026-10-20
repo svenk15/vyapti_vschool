@@ -32,3 +32,23 @@ export type ExistingPersonChoice = Readonly<{
   eligibleForRegistration: boolean;
   existingStudentId: string | null;
 }>;
+
+export type StudentRegistrationIdentity = Readonly<
+  | { kind:"NEW"; firstName:string; lastName:string }
+  | { kind:"EXISTING"; personId:string }
+>;
+export type StudentRegistrationCommand = Readonly<{
+  identity:StudentRegistrationIdentity;
+  admissionNumber:string;
+  admittedOn:string;
+  key:string;
+}>;
+export type StudentRegistrationStatus = Readonly<
+  | { status:"FOUND"; student:StudentProfile & Readonly<{replayed:true}> }
+  | { status:"UNKNOWN" }
+>;
+export type StudentRegistrationNextActions = Readonly<{
+  canOpenRecord:boolean;
+  canEnroll:boolean;
+  canSetUpParentAccess:boolean;
+}>;

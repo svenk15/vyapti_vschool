@@ -88,6 +88,17 @@ describe("STU-01/STU-02 PostgreSQL student records",()=>{
     await expect(students.resolveExistingPerson(foreignIdentity,primary.organizationId,primary.schoolId,"PERSON_ID",person.id)).rejects.toMatchObject({code:"FORBIDDEN"});
   });
 
+  it("registers an authoritative existing Person with a long display name and protects status recovery",async()=>{
+    const firstName="A".repeat(60),lastName="B".repeat(60),person=await db.person.create({data:{id:randomUUID(),organizationId:primary.organizationId,firstName,lastName,contactEmail:null,version:1,createdAt:new Date()}}),key=randomUUID(),command={identity:{kind:"EXISTING" as const,personId:person.id},admissionNumber:`LONG-${randomUUID().slice(0,8)}`,admittedOn:"2026-04-01",key};
+    const choice=await students.resolveExistingPerson(identity,primary.organizationId,primary.schoolId,"PERSON_ID",person.id);expect(choice.displayName.length).toBeGreaterThan(100);
+    const created=await students.create(identity,primary.organizationId,primary.schoolId,command);expect(created).toMatchObject({personId:person.id,firstName,lastName,displayName:`${firstName} ${lastName}`,replayed:false});
+    expect(await students.create(identity,primary.organizationId,primary.schoolId,command)).toMatchObject({studentId:created.studentId,replayed:true});
+    expect(await students.registrationStatus(identity,primary.organizationId,primary.schoolId,key)).toMatchObject({status:"FOUND",student:{studentId:created.studentId,replayed:true}});
+    expect(await students.registrationStatus(identity,primary.organizationId,primary.schoolId,randomUUID())).toEqual({status:"UNKNOWN"});
+    const membership=await db.schoolMembership.findFirstOrThrow({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,accountId:identity.accountId},select:{id:true,status:true}});await db.schoolMembership.update({where:{id:membership.id},data:{status:"SUSPENDED"}});
+    try{await expect(students.registrationStatus(identity,primary.organizationId,primary.schoolId,key)).rejects.toMatchObject({code:"FORBIDDEN"});}finally{await db.schoolMembership.update({where:{id:membership.id},data:{status:membership.status}});}
+  });
+
   it("corrects an exclusive Student Person once, preserves immutable history and rejects stale, shared and unauthorized changes",async()=>{
     const student=await students.create(identity,primary.organizationId,primary.schoolId,input(`NAME-${randomUUID().slice(0,8)}`,"Mira","Exampel")),key=randomUUID(),command={expectedPersonVersion:student.personVersion,firstName:"Mira",lastName:"Example",reason:"Correct surname spelling",key};
     const corrected=await students.correctName(identity,primary.organizationId,primary.schoolId,student.studentId,command);expect(corrected).toMatchObject({studentId:student.studentId,personVersion:2,replayed:false});

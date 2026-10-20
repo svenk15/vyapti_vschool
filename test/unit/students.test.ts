@@ -4,8 +4,14 @@ import { admissionDateCorrectionInput, archiveInput, enrollmentInput, existingPe
 describe("student registration inputs",()=>{
   it("preserves admission-number zeros and treats a selected Person as an explicit reference",()=>{
     const input=studentInput({firstName:"  Synthetic  ",lastName:" Learner ",admissionNumber:" 0007 ",admittedOn:"2026-04-01",existingPersonId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
-    expect(input).toEqual({firstName:"Synthetic",lastName:"Learner",admissionNumber:"0007",admittedOn:"2026-04-01",existingPersonId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"});
-    expect(studentInput({firstName:"Synthetic",admissionNumber:"0007",admittedOn:"2026-04-01"}).existingPersonId).toBeNull();
+    expect(input).toEqual({identity:{kind:"EXISTING",personId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"},admissionNumber:"0007",admittedOn:"2026-04-01",legacyReceiptInput:{firstName:"Synthetic",lastName:"Learner",existingPersonId:"d7e5b2a2-09c3-4b2b-9b02-c29e01addf12"}});
+    expect(studentInput({firstName:"Synthetic",admissionNumber:"0007",admittedOn:"2026-04-01"}).identity).toEqual({kind:"NEW",firstName:"Synthetic",lastName:""});
+  });
+
+  it("does not pass an existing Person display name through new-name validation",()=>{
+    const personId="d7e5b2a2-09c3-4b2b-9b02-c29e01addf12",input=studentInput({identity:{kind:"EXISTING",personId},admissionNumber:"0009",admittedOn:"2026-04-01"});
+    expect(input).toEqual({identity:{kind:"EXISTING",personId},admissionNumber:"0009",admittedOn:"2026-04-01",legacyReceiptInput:null});
+    expect(()=>studentInput({identity:{kind:"NEW",firstName:"x".repeat(101),lastName:""},admissionNumber:"0009",admittedOn:"2026-04-01"})).toThrow("VALIDATION");
   });
 
   it("rejects malformed identity and bounds exact-Person lookup separately from list search",()=>{

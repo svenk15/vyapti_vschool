@@ -1,14 +1,14 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 import { Prisma, type PrismaClient } from "../../../../generated/prisma/client";
 import type { Identity } from "../../../../shared/contracts/access";
-import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentAdmissionDateResult, StudentArchiveResult, StudentClassSummary, StudentDetail, StudentEnrollmentHistory, StudentNameCorrectionResult, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
+import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentAdmissionDateResult, StudentArchiveResult, StudentClassSummary, StudentDetail, StudentEnrollmentHistory, StudentNameCorrectionResult, StudentProfile, StudentRegistrationStatus, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, capabilitiesFor } from "../../access/contracts/index";
 import type { PersonIdentityPort } from "../../people/contracts/person-identity";
 import type { CommandEvidenceWriter } from "../../platform/contracts/command-evidence";
 import type { ReleaseManifest } from "../../tenancy/contracts/index";
 import type { VerifiedDatabaseContextPort } from "../../tenancy/contracts/index";
 import type { AttendanceStudentImpactPort, StudentRepository } from "../application/students";
-import type { StudentInput } from "../domain/student";
+import {StudentRegistrationValidationError,type StudentInput} from "../domain/student";
 import type { ExistingPersonReference } from "../domain/student";
 import { displayStudentName } from "../domain/student";
 import type { EnlistedRegistrationInput, EnlistedRegistrationResult, StudentRegistrationTransaction } from "../contracts/enlisted-student-registration";
@@ -175,12 +175,12 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
   },{isolationLevel:"Serializable",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
 
   async create(actor:Identity,organizationId:string,schoolId:string,input:StudentInput&{key:string}):Promise<StudentProfile&{replayed:boolean}>{try{return await this.db.$transaction(async tx=>{
-    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true),command="StudentRegistered",hash=inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,...input});
-    if(input.admittedOn>schoolToday(this.now(),guard.timezone))throw new AccessError("VALIDATION");
+    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true),command="StudentRegistered",hash=input.legacyReceiptInput?inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,firstName:input.legacyReceiptInput.firstName,lastName:input.legacyReceiptInput.lastName,admissionNumber:input.admissionNumber,admittedOn:input.admittedOn,existingPersonId:input.legacyReceiptInput.existingPersonId,key:input.key}):inputHash({schemaVersion:2,organizationId,schoolId,actorAccountId:actor.accountId,identity:input.identity,admissionNumber:input.admissionNumber,admittedOn:input.admittedOn,key:input.key});
+    if(input.admittedOn>schoolToday(this.now(),guard.timezone))throw new StudentRegistrationValidationError("admittedOn");
     const prior=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:{organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key}}});
     if(prior){if(prior.inputHash!==hash)throw new AccessError("IDEMPOTENCY_CONFLICT");const id=(prior.response as {studentId?:unknown}).studentId;if(typeof id!=="string")throw new AccessError("UNAVAILABLE");const row=await tx.student.findFirst({where:{id,organizationId,schoolId},include:{person:{select:{firstName:true,lastName:true,version:true}}}});if(!row)throw new AccessError("NOT_FOUND");return {...profile(row),replayed:true};}
     if(await tx.student.findFirst({where:{organizationId,schoolId,admissionNumber:input.admissionNumber},select:{id:true}}))throw new AccessError("CONFLICT");
-    const person=input.existingPersonId?await this.people.findById(tx,organizationId,input.existingPersonId):await this.people.create(tx,{organizationId,firstName:input.firstName,lastName:input.lastName});
+    const person=input.identity.kind==="EXISTING"?await this.people.findById(tx,organizationId,input.identity.personId):await this.people.create(tx,{organizationId,firstName:input.identity.firstName,lastName:input.identity.lastName});
     if(!person)throw new AccessError("NOT_FOUND");
     if(await tx.student.findFirst({where:{organizationId,schoolId,personId:person.id},select:{id:true}}))throw new AccessError("CONFLICT");
     const now=this.now(),id=randomUUID();
@@ -191,6 +191,17 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
     await this.evidence(tx).append({organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key,inputHash:hash,response:{...safeReceipt,resourceId:id},before:{},after:{version:1,status:"ACTIVE"},reason:"Student registration",requestId,occurredAt:occurredAt,resourceType:"Student",module:"students"});
     return {...result,replayed:false};
   },{isolationLevel:"Serializable",timeout:15000,maxWait:10000});}catch(error){return fail(error);}}
+
+  async registrationStatus(actor:Identity,organizationId:string,schoolId:string,key:string):Promise<StudentRegistrationStatus>{try{return await this.db.$transaction(async tx=>{
+    await this.guard(tx,actor,organizationId,schoolId,"student.manage",false);
+    const receipt=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:{organizationId,schoolId,actorAccountId:actor.accountId,command:"StudentRegistered",key}}});
+    if(!receipt)return {status:"UNKNOWN"};
+    const studentId=(receipt.response as {studentId?:unknown}).studentId;
+    if(typeof studentId!=="string")throw new AccessError("UNAVAILABLE");
+    const row=await tx.student.findFirst({where:{id:studentId,organizationId,schoolId},include:{person:{select:{firstName:true,lastName:true,version:true}}}});
+    if(!row)throw new AccessError("NOT_FOUND");
+    return {status:"FOUND",student:{...profile(row),replayed:true}};
+  },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
   async correctName(actor:Identity,organizationId:string,schoolId:string,studentId:string,input:{expectedPersonVersion:number;firstName:unknown;lastName?:unknown;reason:string;key:string}):Promise<StudentNameCorrectionResult>{try{return await this.db.$transaction(async tx=>{
     const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",true),command="StudentPersonNameCorrected",hash=inputHash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,studentId,...input}),scope={organizationId,schoolId,actorAccountId:actor.accountId,command,key:input.key};

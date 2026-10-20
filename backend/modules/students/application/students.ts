@@ -1,5 +1,5 @@
 import type { Identity } from "../../../../shared/contracts/access";
-import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentAdmissionDateResult, StudentArchiveResult, StudentDetail, StudentNameCorrectionResult, StudentProfile, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
+import type { EnrollmentOptions, EnrollmentResult, ExistingPersonChoice, StudentAdmissionDateResult, StudentArchiveResult, StudentDetail, StudentNameCorrectionResult, StudentProfile, StudentRegistrationCommand, StudentRegistrationStatus, StudentTransferResult, StudentWorkspace } from "../../../../shared/contracts/students";
 import { AccessError, uuidPattern } from "../../access/contracts/index";
 import type { EnlistedStudentRegistrationPort } from "../contracts/enlisted-student-registration";
 import type {StudentAttendanceRosterEntry,StudentAttendanceRosterPort} from '../contracts/attendance-roster';
@@ -14,6 +14,7 @@ export interface StudentRepository {
   list(actor: Identity, organizationId: string, schoolId: string, query: StudentListQuery): Promise<StudentWorkspace>;
   get(actor: Identity, organizationId: string, schoolId: string, studentId: string): Promise<StudentDetail>;
   create(actor: Identity, organizationId: string, schoolId: string, input: ReturnType<typeof studentInput> & { key: string }): Promise<StudentProfile & { replayed: boolean }>;
+  registrationStatus(actor:Identity,organizationId:string,schoolId:string,key:string):Promise<StudentRegistrationStatus>;
   resolveExistingPerson(actor: Identity, organizationId: string, schoolId: string, reference: ExistingPersonReference): Promise<ExistingPersonChoice>;
   enrollmentOptions(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<EnrollmentOptions>;
   enroll(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof enrollmentInput>&{key:string}):Promise<EnrollmentResult>;
@@ -39,9 +40,10 @@ export function createStudentUseCases(repository: StudentRepository) {
     get(identity: Identity | null, organizationId: unknown, schoolId: unknown, studentId: unknown) {
       return repository.get(actor(identity), id(organizationId), id(schoolId), id(studentId));
     },
-    create(identity: Identity | null, organizationId: unknown, schoolId: unknown, input: { firstName: unknown; lastName?: unknown; admissionNumber: unknown; admittedOn:unknown; existingPersonId?: unknown; key: unknown }) {
+    create(identity: Identity | null, organizationId: unknown, schoolId: unknown, input: StudentRegistrationCommand|{ firstName: unknown; lastName?: unknown; admissionNumber: unknown; admittedOn:unknown; existingPersonId?: unknown; key: unknown }) {
       return repository.create(actor(identity), id(organizationId), id(schoolId), { ...studentInput(input), key: key(input.key) });
     },
+    registrationStatus(identity:Identity|null,organizationId:unknown,schoolId:unknown,operationKey:unknown){return repository.registrationStatus(actor(identity),id(organizationId),id(schoolId),key(operationKey));},
     resolveExistingPerson(identity: Identity | null, organizationId: unknown, schoolId: unknown, kind: unknown, value: unknown) {
       return repository.resolveExistingPerson(actor(identity), id(organizationId), id(schoolId), existingPersonReference(kind,value));
     },

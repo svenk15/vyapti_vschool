@@ -3,13 +3,17 @@ import { randomUUID } from "node:crypto";
 import { AccessError } from "../../backend/modules/access/contracts";
 import { getIdentity } from "./auth";
 import { studentsGateway } from "./students";
+import {guardiansGateway} from "./guardians";
+import {StudentRegistrationValidationError} from "../../backend/modules/students/domain/student";
+import {GuardianError} from "../../backend/modules/guardians/contracts";
 
 const headers={"Cache-Control":"private, no-store"};
 function errorResponse(error:unknown){
   const code=error instanceof AccessError?error.code:"UNAVAILABLE";
   const status=code==="UNAUTHENTICATED"?401:code==="FORBIDDEN"?403:code==="NOT_FOUND"?404:code==="VALIDATION"||code==="INVALID_CURSOR"?422:code==="UNAVAILABLE"||code==="RELEASE_UNAVAILABLE"?503:409;
   const messages:Record<string,string>={UNAUTHENTICATED:"Sign in to continue.",FORBIDDEN:"Your current school permission does not allow this action.",NOT_FOUND:"The selected student or person is unavailable in this scope.",VALIDATION:"Check the student name, admission number and request details.",INVALID_CURSOR:"Refresh the student list and try again.",UNAVAILABLE:"Student service is temporarily unavailable. Retry the same request.",RELEASE_UNAVAILABLE:"Student registration is not available in this release.",MODULE_NOT_LICENSED:"Student registration is not active for this institution.",MODULE_DISABLED:"Student registration is not active for this branch.",CONFLICT:"That admission number or Person is already registered in this branch.",PERSON_SHARED:"This identity is shared with another school record and needs an identity steward correction.",STALE_VERSION:"School data changed. Refresh and try again.",IDEMPOTENCY_CONFLICT:"This request key was already used for a different registration.",ROSTER_IN_USE:"An open or submitted session in an affected section has a frozen roster. Keep the placement history unchanged.",STUDENT_IN_USE:"This student has a current or future enrollment or placement and cannot be archived."};
-  return Response.json({code,message:messages[code]??"Unable to complete this request.",requestId:randomUUID(),retryable:status===503},{status,headers});
+  const fieldErrors=error instanceof StudentRegistrationValidationError?{[error.field]:messages.VALIDATION}:undefined;
+  return Response.json({code,message:messages[code]??"Unable to complete this request.",requestId:randomUUID(),retryable:status===503,...(fieldErrors?{fieldErrors}:{})},{status,headers});
 }
 function enrollmentErrorResponse(error:unknown){
   const response=errorResponse(error);
@@ -27,6 +31,14 @@ async function body(request:Request){
 export async function listStudents(request:Request){try{const url=new URL(request.url);return Response.json(await studentsGateway.list(await getIdentity(),{search:url.searchParams.get("search")??undefined,by:url.searchParams.get("by")??undefined,sort:url.searchParams.get("sort")??undefined,order:url.searchParams.get("order")??undefined,cursor:url.searchParams.get("cursor")??undefined,limit:url.searchParams.get("limit")??undefined,status:url.searchParams.get("status")??undefined}),{headers});}catch(error){return errorResponse(error);}}
 export async function getStudent(request:Request,studentId:string){try{return Response.json(await studentsGateway.get(await getIdentity(),studentId),{headers});}catch(error){return errorResponse(error);}}
 export async function createStudent(request:Request){try{const input=await body(request),result=await studentsGateway.create(await getIdentity(),input as Parameters<typeof studentsGateway.create>[1]);return Response.json(result,{status:result.replayed?200:201,headers});}catch(error){return errorResponse(error);}}
+export async function getStudentRegistrationStatus(request:Request){try{const url=new URL(request.url);return Response.json(await studentsGateway.registrationStatus(await getIdentity(),url.searchParams.get("key")),{headers});}catch(error){return errorResponse(error);}}
+export async function getStudentRegistrationActions(_request:Request,studentId:string){try{
+  const identity=await getIdentity();await studentsGateway.get(identity,studentId);
+  let canEnroll=false,canSetUpParentAccess=false;
+  try{const options=await studentsGateway.enrollmentOptions(identity,studentId);canEnroll=options.years.some(year=>!options.enrolledYearIds.includes(year.yearId));}catch(error){if(!(error instanceof AccessError)||!["FORBIDDEN","RELEASE_UNAVAILABLE","MODULE_NOT_LICENSED","MODULE_DISABLED","NOT_FOUND","CONFLICT"].includes(error.code))throw error;}
+  try{await guardiansGateway.listForStudent(identity,studentId);canSetUpParentAccess=true;}catch(error){if(!((error instanceof GuardianError||error instanceof AccessError)&&["FORBIDDEN","RELEASE_UNAVAILABLE","MODULE_NOT_LICENSED","MODULE_DISABLED","NOT_FOUND"].includes(error.code)))throw error;}
+  return Response.json({canOpenRecord:true,canEnroll,canSetUpParentAccess},{headers});
+ }catch(error){return errorResponse(error);}}
 export async function selectExistingPeople(request:Request){try{const url=new URL(request.url);return Response.json({item:await studentsGateway.resolveExistingPerson(await getIdentity(),url.searchParams.get("kind"),url.searchParams.get("value"))},{headers});}catch(error){return errorResponse(error);}}
 export async function enrollmentOptions(request:Request){try{const studentId=new URL(request.url).searchParams.get("studentId");return Response.json(await studentsGateway.enrollmentOptions(await getIdentity(),studentId),{headers});}catch(error){return enrollmentErrorResponse(error);}}
 export async function createEnrollment(request:Request){try{const input=await body(request),result=await studentsGateway.enroll(await getIdentity(),input as Parameters<typeof studentsGateway.enroll>[1]);return Response.json(result,{status:result.replayed?200:201,headers});}catch(error){return enrollmentErrorResponse(error);}}

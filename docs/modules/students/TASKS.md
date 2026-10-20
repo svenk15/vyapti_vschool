@@ -6,7 +6,7 @@ Phase 1. Each task is a vertical slice with a running demo. Follow the matching 
 
 **Dependencies:** UXR-00 and UXR-01A. Replace the four presentation stages on `/admin/students/register` with the approved two-group page described in [DESIGN](DESIGN.md#uxr-02-one-page-registration-composition-approved-20-october-2026). Reuse the existing People exact-selection and Students registration contracts. Do not merge enrollment or access commands.
 
-**Acceptance:** new/existing Person registration; authoritative resolved and receipt identity; confirmation invalidation; duplicate admission/Person recovery; invalid/future date; unauthorized/foreign scope denial; exact-payload/key recovery after a lost response; safe value retention; error-summary focus; desktop/mobile/four-theme visual inspection. Update incremental fictional seed data only if the existing fixture cannot demonstrate both modes.
+**Acceptance:** new/existing Person registration, including separately valid names whose combined display exceeds 100 characters; authoritative resolved and receipt identity; confirmation invalidation; duplicate/ineligible/foreign Person denial; inline linked validation with retained values; invalid/future branch-local date; unauthorized and revoked-authority denial; exact-payload/key same-page recovery; reload status lookup for committed and genuinely unresolved operations without automatic replay; capability-aware receipt actions for broad/limited accounts; error-summary focus; desktop/mobile/four-theme visual inspection; enlarged-text/control-growth checks across representative workspace controls. Update incremental fictional seed data only if the existing fixture cannot demonstrate both modes.
 
 ## STW-A01 — Student access setup, activation and own workspace
 
