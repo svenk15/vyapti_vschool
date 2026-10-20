@@ -1,0 +1,64 @@
+{
+  "capturedAt": "2026-10-20T06:58:55.324Z",
+  "browser": "Playwright Chromium",
+  "deviceScaleFactor": 1,
+  "actualBrowserZoom": "not tested",
+  "results": [
+    {
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1000
+      },
+      "geometry": {
+        "rootOverflow": false,
+        "sidebarWidth": 232,
+        "cardWidth": 740,
+        "active": "Students",
+        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+      }
+    },
+    {
+      "viewport": {
+        "name": "intermediate",
+        "width": 900,
+        "height": 900
+      },
+      "geometry": {
+        "rootOverflow": false,
+        "sidebarWidth": 210,
+        "cardWidth": 634,
+        "active": "Students",
+        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+      }
+    },
+    {
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "rootOverflow": false,
+        "sidebarWidth": 260,
+        "cardWidth": 354,
+        "active": "Students",
+        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+      }
+    },
+    {
+      "viewport": {
+        "name": "narrow",
+        "width": 360,
+        "height": 800
+      },
+      "geometry": {
+        "rootOverflow": false,
+        "sidebarWidth": 260,
+        "cardWidth": 324,
+        "active": "Students",
+        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+      }
+    }
+  ]
+}

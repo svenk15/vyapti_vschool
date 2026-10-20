@@ -1,5 +1,9 @@
 # Shared VSchool experience system — current state
 
+## Administrator six-primary navigation proposal — 20 October 2026
+
+The current-source catalogue and owner probes are mapped to six direct primary destinations with URL-backed local navigation and ordered authorized fallbacks. The interactive standalone preview passed sequential Chromium checks at 1440, 900, 390 and 360 CSS pixels, including mobile focus containment, Escape/focus return, independent service-list scrolling and no root overflow. Restricted access profiles are labelled simulations; no production navigation, route, permission, schema or data changed. [Proposal](../../execution/UX_REVAMP/ADMIN_NAVIGATION_SIMPLIFICATION.md); [evidence](../../evidence/admin-navigation-simplification-2026-10-20/README.md). Human approval is PENDING, so production implementation remains NOT_STARTED.
+
 ## UXR-00/01A/01 pilot checkpoint — 20 October 2026
 
 UXR-00, UXR-01A and UXR-01 are engineering-complete; human review is PENDING. The approved Constitution and control-sizing contract are canonical under `docs/ux`. Shared production primitives now provide the approved standard, compact, consequential, icon-only, textarea and semantic-width variants without `!important` or a second component system. The Administrator sidebar retains its server-filtered catalogue and deep links but replaces eight nested operational disclosures with direct links under four static task groups. Staff and Attendance secondary operations remain reachable through their existing local navigation. Server authorization, module availability and optional owner gates are unchanged.

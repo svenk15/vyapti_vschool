@@ -1,6 +1,12 @@
 # UX revamp current state
 
-Updated: 19 October 2026 (Asia/Kolkata)
+Updated: 20 October 2026 (Asia/Kolkata)
+
+## Administrator navigation simplification proposal — 20 October 2026
+
+The current 27-destination Administrator catalogue, live server visibility checks, all 59 `app/admin/**/page.tsx` routes and existing local navigation were reconciled into a review-only proposal with six direct primary destinations: Today, Students, Staff, Attendance, Academics and Communication. Settings, Account and Sign out remain separate utilities; owner-authorized Support, Facilities and Finance remain explicit conditional direct links. Attendance prefers the existing monitoring query, Academics and other areas use ordered authorized fallbacks, and no empty hub or permission is proposed.
+
+The isolated preview reuses the accepted FIRST registration composition and demonstrates Students, Attendance and Academics local navigation plus explicitly simulated limited profiles. Focused Playwright passed 1440×1000, 900×900, 390×844 and 360×800 with no root overflow, mobile focus containment/Escape/return and conditional-service scroll reachability. Screens were directly inspected. Production navigation was not changed and human review remains PENDING. [Proposal](ADMIN_NAVIGATION_SIMPLIFICATION.md); [evidence](../../evidence/admin-navigation-simplification-2026-10-20/README.md).
 
 | Task | Engineering | Visual comparison | Human acceptance | Production |
 |---|---|---|---|---|

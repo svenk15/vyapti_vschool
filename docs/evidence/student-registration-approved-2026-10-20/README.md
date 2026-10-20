@@ -1,6 +1,6 @@
 # Student registration — approved FIRST comparison
 
-Captured 20 October 2026 (Asia/Kolkata). Human visual acceptance remains **PENDING**.
+Captured 20 October 2026 (Asia/Kolkata). The user visually accepted the bounded Student registration page at executable commit `6c4f64a49396c772064049b58fb3bb00f53f23b6` on 20 October 2026. Acceptance covers the inspected registration composition only. Recovery edge cases, native accessibility, other workflows, TEN-03 and production readiness remain **PENDING**.
 
 ## Authority and source
 
