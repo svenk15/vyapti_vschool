@@ -4,6 +4,7 @@ import {TimetableCoverInboxView,TimetableCoverProposal} from '@/components/timet
 import {Alert,PageHeader,PageStack} from '@/components/ui/primitives';
 import {getIdentity} from '@/lib/server/auth';
 import {academicsGateway} from '@/lib/server/academics';
+import {AdminLocalNavigation} from '@/components/admin-local-navigation';
 
 export const dynamic='force-dynamic';
 
@@ -19,5 +20,5 @@ export default async function Page({searchParams}:{searchParams:Promise<{occurre
   else inbox=await academicsGateway.timetableCoverInbox(identity);
  }catch(cause){error=cause;}
  if(error)return <main id="main-content" className="container page-space"><PageHeader title="Cover coordination"/><Alert tone="warning" title="Cover workspace unavailable">{error instanceof AccessError&&error.code==='NOT_FOUND'?'Select a future reconciled timetable occurrence.':'Current permissions or module configuration do not allow this workspace.'}</Alert></main>;
- return <main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow="Timetable operations" title={occurrenceId?'Arrange occurrence cover':'Cover coordination'} description="Coordinate one exact published occurrence without changing the immutable timetable."/>{context?<TimetableCoverProposal context={context}/>:<TimetableCoverInboxView data={inbox!} baseHref="/admin/timetable/cover" canPropose/>}</PageStack></main>;
+ return <main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow="Timetable operations" title={occurrenceId?'Arrange occurrence cover':'Cover coordination'} description="Coordinate one exact published occurrence without changing the immutable timetable."/>{!occurrenceId&&<AdminLocalNavigation label="Academics destinations" area="academics" current="/admin/timetable/cover"/>}{context?<TimetableCoverProposal context={context}/>:<TimetableCoverInboxView data={inbox!} baseHref="/admin/timetable/cover" canPropose/>}</PageStack></main>;
 }

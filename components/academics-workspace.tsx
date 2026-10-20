@@ -6,6 +6,7 @@ import type {AdminHome} from '@/shared/contracts/access';
 import {Alert,Badge,Button,ButtonLink,Card,EmptyState,PageHeader,PageStack,SectionHeader} from './ui/primitives';
 import {Checkbox,SelectField,TextArea,TextField} from './ui/forms';
 import {PortalIcon} from './portal-navigation-group';
+import {AdminLocalNavigation} from './admin-local-navigation';
 
 function addDay(value:string,days:number){const date=new Date(`${value}T00:00:00.000Z`);date.setUTCDate(date.getUTCDate()+days);return date.toISOString().slice(0,10);}
 const key=()=>crypto.randomUUID();
@@ -26,6 +27,7 @@ export function AcademicsWorkspaceScreen({initial,home}:{initial:AcademicsWorksp
  const openYear=data.years.find(year=>year.status==='OPEN'),activeSections=data.sections.filter(section=>section.active),activeSubjects=data.subjects.filter(subject=>subject.active);
  return <PageStack className="academics-page">
   <PageHeader eyebrow={home.institutionName} title="Academics" description="Build the structure that keeps teaching, enrolment and attendance aligned." actions={<ButtonLink href="#academic-year">Academic year</ButtonLink>}/>
+  <AdminLocalNavigation label="Academics destinations" area="academics" current="/admin/academics"/>
   {message&&<div role={error?'alert':'status'} aria-live="polite" aria-label="Academic setup feedback"><Alert tone={error?'danger':'success'} title={error?'Change not saved':'Saved'}>{message}</Alert></div>}
   <Card className="academics-summary-strip" aria-label="Academic structure summary"><div><span className="academics-summary-icon"><PortalIcon name="calendar"/></span><p>Academic year</p><strong>{openYear?.name??'Not open'}</strong><span>{openYear?`${openYear.startsOn} – ${addDay(openYear.endsOn,-1)}`:'Open a reviewed year before teaching begins'}</span></div><div><span className="academics-summary-icon"><PortalIcon name="classes"/></span><p>Classes</p><strong>{activeSections.length}</strong><span>{activeSections.reduce((sum,section)=>sum+section.dependencies.currentOrFuturePlacements,0)} current or future placements</span></div><div><span className="academics-summary-icon"><PortalIcon name="academics"/></span><p>Subjects</p><strong>{activeSubjects.length}</strong><span>{activeSubjects.slice(0,3).map(subject=>subject.name).join(' · ')||'No active subjects'}</span></div></Card>
   <nav className="academics-shortcuts" aria-label="Academic management"><ButtonLink variant="secondary" href="#catalog">Manage classes &amp; subjects <span aria-hidden="true">→</span></ButtonLink><ButtonLink variant="secondary" href="/admin/classes">Offerings &amp; assignments <span aria-hidden="true">→</span></ButtonLink><ButtonLink variant="secondary" href="#academic-calendar">Review a dated change <span aria-hidden="true">→</span></ButtonLink></nav>

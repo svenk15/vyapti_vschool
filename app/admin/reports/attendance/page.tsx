@@ -9,6 +9,7 @@ import {accountGateway} from '@/lib/server/access';
 import {academicsGateway} from '@/lib/server/academics';
 import {reportingGateway} from '@/lib/server/reporting';
 import type {AttendanceReport,AttendanceReportRow} from '@/shared/contracts/reporting';
+import {AdminLocalNavigation} from '@/components/admin-local-navigation';
 
 export const dynamic='force-dynamic';
 const first=(value:string|string[]|undefined)=>Array.isArray(value)?undefined:value;
@@ -26,6 +27,7 @@ export default async function AttendanceReportPage({searchParams}:{searchParams:
  const nextQuery=report?.sessions.nextCursor?new URLSearchParams({fromDate:report.filters.fromDate,toDate:report.filters.toDate,...(report.filters.yearId?{yearId:report.filters.yearId}:{}),...(report.filters.sectionId?{sectionId:report.filters.sectionId}:{}),...(report.filters.subjectId?{subjectId:report.filters.subjectId}:{}),cursor:report.sessions.nextCursor}).toString():null;
  return <BrandSurface><main id="main-content" className="container page-space"><PageStack className="attendance-report-page">
   <PageHeader title="Review and export attendance" description={home?`${home.institutionName} · ${home.schoolName}`:'Choose one authorized branch and reporting period.'}/>
+  <AdminLocalNavigation label="Attendance destinations" area="attendance" current="/admin/reports/attendance"/>
   {Boolean(error)&&<Alert tone="danger" title={failure.title}>{failure.message}</Alert>}
   {!hasScope&&!error&&<><ol className="workflow-stepper report-workflow-stepper" aria-label="Attendance report progress"><li className="active" aria-current="step"><span>1</span>Report scope</li><li><span>2</span>Review export</li><li><span>3</span>Confirm</li></ol><div className="branch-edit-grid report-workflow-grid"><Card className="branch-edit-card report-scope-card"><SectionHeader title="Report scope" description="Start with one authorized branch and an explicit period."/><form action="/admin/reports/attendance" method="get"><div className="report-scope-fields">
    <TextField label="From date" name="fromDate" type="date" required defaultValue={filters.fromDate}/><TextField label="To date" name="toDate" type="date" required defaultValue={filters.toDate}/><SelectField label="View" name="view" required defaultValue=""><option value="" disabled>Choose view</option><option value="session">Session completeness</option></SelectField>
