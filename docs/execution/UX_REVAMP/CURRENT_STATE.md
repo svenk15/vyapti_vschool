@@ -2,6 +2,12 @@
 
 Updated: 20 October 2026 (Asia/Kolkata)
 
+## Administrator navigation and Forest palette closure — 20 October 2026
+
+The accepted Concept 1 geometry and Students composition are preserved, while the unintended literal-mock palette override is removed. Administrator shell colours again derive from the established `--vs-canvas`, `--vs-surface` and `--vs-sidebar-*` semantic theme tokens. Institution/branch theme persistence and inheritance were unchanged. Students, Staff, Attendance, Academics, Communication and Settings now consume the server-derived compact local navigation; registration remains an intentionally focused flow. No migration, grant, seed or business-rule change occurred.
+
+Theme source is `2516efb`; navigation source is `bf0fa93459dd01238bcee5e4737eb210408bfc2a`; the clean executable build is `Tgo8wE8iiaLrT-xPiMiXP`. Focused theme/navigation unit tests passed 28/28, type checking and changed-file lint passed, the 4 GiB production build passed, and the restricted Students journey passed 1/1 in each sequential desktop/mobile project against the dedicated PostgreSQL test database. Authenticated broad-persona inspection covered desktop, 900, 390 and 360 CSS-pixel widths, keyboard focus, mobile drawer focus return, all mapped areas and all four themes. Dedicated authenticated attendance-only, profiles-without-access, no-Timetable, import-only, branch-switch and revoked-navigation fixtures remain browser-evidence gaps; server guards are unchanged and human acceptance remains PENDING. Evidence: [Administrator navigation closure](../../evidence/admin-navigation-closure-2026-10-20/README.md).
+
 ## Accepted Administrator navigation and Students production implementation — 20 October 2026
 
 The owner accepted the refined quiet-navigation preview at `cd168e982b3989bc517b8024f9f327d74f83144f`. Production now composes six server-derived primary Administrator areas with ordered authorized fallbacks, conditional School services and a separate Settings utility. Students, Admissions and Imports share the accepted transparent local-link recipe; Staff reuses the same recipe without conflating profile and access authority. The Students directory now matches the selected Concept 1 composition while preserving its real search, filter, server sort, signed pagination, browser history and eligibility-aware Manage actions. The accepted focused registration composition at `6c4f64a49396c772064049b58fb3bb00f53f23b6` remains intact.

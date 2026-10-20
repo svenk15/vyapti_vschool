@@ -1,5 +1,11 @@
 # Administrator navigation simplification proposal
 
+## Production closure — 20 October 2026
+
+The accepted six-area map and Concept 1 geometry are now implemented. Production uses server-derived destinations for primary and local links across Students, Staff, Attendance, Academics, Communication and Settings; focused registration remains excluded. Conditional services and utilities retain their existing live owner checks. The bounded palette correction restores the established semantic theme tokens without changing persisted appearance choices. Implementation and verification details are recorded in [Administrator navigation closure](../../evidence/admin-navigation-closure-2026-10-20/README.md). Human acceptance remains PENDING.
+
+The proposal language below is retained as design history. Statements that production has not changed or that implementation awaits acceptance describe the earlier proposal state and are superseded by this closure section.
+
 Prepared 20 October 2026 from current source at `f272989b9b3d6acba4f84d98e00c45fb240146a3` and refined through accepted preview checkpoint `cd168e982b3989bc517b8024f9f327d74f83144f`. The owner accepted this direction for production. The bounded Students/Staff implementation is recorded in [current state](CURRENT_STATE.md) and [production evidence](../../evidence/admin-navigation-production-2026-10-20/README.md); no route, permission, database row or workflow contract changed.
 
 Authority: [UX Constitution](../../ux/UX_CONSTITUTION.md), [control sizing](../../ux/CONTROL_SIZING_CONTRACT.md), [FIRST registration reference](../../ux/references/registration-approved/APPROVED_REGISTRATION.html), `components/workspace-navigation.ts`, `lib/server/admin-navigation.ts`, `app/admin/layout.tsx`, `components/portal/portal-shell.tsx`, and the current `app/admin/**/page.tsx` tree.
