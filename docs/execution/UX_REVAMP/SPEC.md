@@ -4,6 +4,8 @@ Status: **APPROVED FOR IMPLEMENTATION**<br>
 Recorded: 18 October 2026 (Asia/Kolkata)<br>
 Human visual acceptance: **PENDING**
 
+Layout-reference approval does not authorize palette changes. Approved semantic theme tokens take precedence over literal mock colours.
+
 This file is the implementation record for the approved presentation and theme specification supplied in the 18 October 2026 user instruction. It does not replace business rules, authorization contracts, workflow LLDs, or production release gates. Persistence and appearance authority remain owned by [Branding](../../modules/branding/DESIGN.md); tenant creation remains owned by [Access](../../modules/access/DESIGN.md); shared presentation remains owned by [Design system](../../modules/design-system/DESIGN.md).
 
 ## Outcomes

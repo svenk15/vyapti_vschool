@@ -1440,29 +1440,29 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 /* Accepted Administrator quiet workspace navigation and directory composition. */
-.administrator-portal-shell{grid-template-columns:218px minmax(0,1fr);grid-template-rows:72px minmax(0,1fr);background:var(--vs-surface)}
-.administrator-portal-shell .portal-sidebar{--portal-nav-surface:var(--vs-surface-subtle);--portal-nav-text:var(--vs-text);--portal-nav-muted:var(--vs-text-muted);width:218px;background:var(--vs-surface-subtle);color:var(--vs-text);border-right:1px solid var(--vs-border)}
+.administrator-portal-shell{grid-template-columns:218px minmax(0,1fr);grid-template-rows:72px minmax(0,1fr);background:var(--vs-canvas)}
+.administrator-portal-shell .portal-sidebar{--portal-nav-surface:var(--vs-sidebar-bg);--portal-nav-text:var(--vs-sidebar-text);--portal-nav-muted:var(--vs-sidebar-muted);width:218px;background:var(--vs-sidebar-bg);color:var(--vs-sidebar-text);border-right:1px solid color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent)}
 .administrator-portal-shell .portal-sidebar-heading{padding:28px 26px 19px}
-.administrator-portal-shell .portal-brand{gap:9px;color:var(--vs-text);font-size:24px;line-height:32px;font-weight:700}
-.administrator-portal-shell .portal-brand-mark{width:32px;height:32px;border:0;border-radius:9px;background:var(--vs-primary);color:var(--vs-on-primary,#fff);font-size:21px}
-.administrator-portal-shell .portal-school-identity{margin:0 26px 12px;padding:0 0 18px;border-color:var(--vs-border)}
-.administrator-portal-shell .portal-school-identity strong{color:var(--vs-text)}.administrator-portal-shell .portal-school-identity span{color:var(--vs-text-muted)}
+.administrator-portal-shell .portal-brand{gap:9px;color:var(--vs-sidebar-text);font-size:24px;line-height:32px;font-weight:700}
+.administrator-portal-shell .portal-brand-mark{width:32px;height:32px;border:1px solid color-mix(in srgb,var(--vs-sidebar-text) 58%,transparent);border-radius:9px;background:transparent;color:var(--vs-sidebar-text);font-size:21px}
+.administrator-portal-shell .portal-school-identity{margin:0 26px 12px;padding:0 0 18px;border-color:color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent)}
+.administrator-portal-shell .portal-school-identity strong{color:var(--vs-sidebar-text)}.administrator-portal-shell .portal-school-identity span{color:var(--vs-sidebar-muted)}
 .administrator-portal-shell .portal-nav-scroll{padding:6px 14px 22px}
 .administrator-portal-shell .portal-sidebar nav,.administrator-portal-shell .portal-nav-group,.administrator-portal-shell .portal-nav-group-items{gap:7px}
-.administrator-portal-shell .portal-nav-group-section-break{margin-top:11px;padding-top:9px;border-top:1px solid var(--vs-border)}
-.administrator-portal-shell .portal-nav-group h2{margin:13px 13px 2px;color:var(--vs-text-muted);font-size:10px;line-height:14px;font-weight:650;letter-spacing:1.2px}
-.administrator-portal-shell .portal-nav-group a{gap:15px;min-height:40px;padding:8px 14px;border-radius:7px;color:var(--vs-text-muted);font-size:13px;line-height:20px;font-weight:450}
-.administrator-portal-shell .portal-nav-group a:hover{background:color-mix(in srgb,var(--vs-selection-bg) 58%,transparent);color:var(--vs-text)}
-.administrator-portal-shell .portal-nav-group a[aria-current=page]{background:var(--vs-selection-bg);color:var(--vs-primary);font-weight:650;box-shadow:none}
+.administrator-portal-shell .portal-nav-group-section-break{margin-top:11px;padding-top:9px;border-top:1px solid color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent)}
+.administrator-portal-shell .portal-nav-group h2{margin:13px 13px 2px;color:var(--vs-sidebar-muted);font-size:10px;line-height:14px;font-weight:650;letter-spacing:1.2px}
+.administrator-portal-shell .portal-nav-group a{gap:15px;min-height:40px;padding:8px 14px;border-radius:7px;color:var(--vs-sidebar-muted);font-size:13px;line-height:20px;font-weight:450}
+.administrator-portal-shell .portal-nav-group a:hover{background:var(--vs-sidebar-hover);color:var(--vs-sidebar-text)}
+.administrator-portal-shell .portal-nav-group a[aria-current=page]{background:var(--vs-sidebar-active);color:var(--vs-sidebar-active-text);font-weight:650;box-shadow:none}
 .administrator-portal-shell .portal-nav-icon,.administrator-portal-shell .portal-nav-icon svg{width:20px;height:20px}
-.administrator-portal-shell .portal-nav-group a:focus-visible,.administrator-portal-shell .portal-brand:focus-visible,.administrator-portal-shell .portal-identity:focus-visible,.administrator-portal-shell .portal-sidebar button:focus-visible{outline-color:var(--vs-focus-ring)}
-.administrator-portal-shell .portal-sidebar-footer{padding:12px 24px 20px;border-color:var(--vs-border);background:var(--vs-surface-subtle)}
+.administrator-portal-shell .portal-nav-group a:focus-visible,.administrator-portal-shell .portal-brand:focus-visible,.administrator-portal-shell .portal-identity:focus-visible,.administrator-portal-shell .portal-sidebar button:focus-visible{outline-color:var(--vs-sidebar-text)}
+.administrator-portal-shell .portal-sidebar-footer{padding:12px 24px 20px;border-color:color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent);background:var(--vs-sidebar-bg)}
 .portal-sidebar-utilities{margin-bottom:12px}.administrator-portal-shell .portal-sidebar-utilities .portal-nav-group a{margin-inline:-10px}
-.administrator-portal-shell .portal-identity{padding:18px 2px 12px;border-top:1px solid var(--vs-border);color:var(--vs-text)}
-.administrator-portal-shell .portal-identity-avatar{width:32px;height:32px;background:var(--vs-selection-bg);color:var(--vs-primary)}
-.administrator-portal-shell .portal-identity strong{font-size:12px}.administrator-portal-shell .portal-identity small{color:var(--vs-text-muted);font-size:11px}
-.administrator-portal-shell .portal-sidebar-signout{padding-top:10px;border-color:var(--vs-border)}
-.administrator-portal-shell .portal-sidebar-signout .btn{margin-inline:-10px;color:var(--vs-text-muted)}
+.administrator-portal-shell .portal-identity{padding:18px 2px 12px;border-top:1px solid color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent);color:var(--vs-sidebar-text)}
+.administrator-portal-shell .portal-identity-avatar{width:32px;height:32px;background:var(--vs-sidebar-active);color:var(--vs-sidebar-active-text)}
+.administrator-portal-shell .portal-identity strong{font-size:12px}.administrator-portal-shell .portal-identity small{color:var(--vs-sidebar-muted);font-size:11px}
+.administrator-portal-shell .portal-sidebar-signout{padding-top:10px;border-color:color-mix(in srgb,var(--vs-sidebar-muted) 32%,transparent)}
+.administrator-portal-shell .portal-sidebar-signout .btn{margin-inline:-10px;color:var(--vs-sidebar-muted)}
 .administrator-portal-shell .portal-topbar{min-height:72px;padding:0 38px;background:var(--vs-surface)}
 .administrator-portal-shell .portal-page-content .container{max-width:1440px;padding-inline:38px}
 .administrator-portal-shell .portal-page-content .page-space{padding-top:39px}
