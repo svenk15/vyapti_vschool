@@ -45,7 +45,7 @@ The four theme gallery captures use the same production controls: [Forest](contr
 - `/api/health` on the restored final demo returned `ready:true`.
 - `git diff --check`: passed on the intended checkpoint files.
 
-`pnpm check:docs` was run after the final documentation update and remains blocked by two unrelated pre-existing working-tree links to absent `docs/evidence/workspace-presentation-route-pass-2026-10-20/README.md` in `docs/execution/WORKSPACE_PRESENTATION_REVAMP/{CURRENT_STATE,PAGE_COVERAGE}.md`. Those unrelated files were preserved and were not staged in this checkpoint.
+`pnpm check:docs` was run after the final documentation update. In the live worktree it remains blocked by two unrelated pre-existing links to absent `docs/evidence/workspace-presentation-route-pass-2026-10-20/README.md` in `docs/execution/WORKSPACE_PRESENTATION_REVAMP/{CURRENT_STATE,PAGE_COVERAGE}.md`; those dirty files were preserved and were not staged. A second check against an isolated archive of this commit reports two older Reporting links to ignored local `artifacts/reporting-{01,02}-local/query-plan.json` files. The UXR documentation introduced no broken link, but the repository-wide documentation gate is not reported as passing.
 
 ## Pending evidence and gates
 
