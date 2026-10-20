@@ -1,0 +1,79 @@
+{
+  "capturedAt": "2026-10-20T04:09:28.708Z",
+  "buildId": "eX9PmBXLqYgJAZ7vagb_A",
+  "browser": "Playwright Chromium",
+  "browserZoom": "Not available; enlarged-control CSS probe is not labelled browser zoom.",
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rootOverflow": false,
+      "cardPadding": "24px",
+      "sectionGap": "16px",
+      "fieldRowGap": "16px",
+      "fieldColumnGap": "20px",
+      "labelGap": "6px",
+      "hintGap": "4px",
+      "inputHeight": 40,
+      "buttonHeight": 40,
+      "lookupTopDifference": 0
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 900
+      },
+      "rootOverflow": false,
+      "cardPadding": "24px",
+      "sectionGap": "16px",
+      "fieldRowGap": "16px",
+      "fieldColumnGap": "20px",
+      "labelGap": "6px",
+      "hintGap": "4px",
+      "inputHeight": 40,
+      "buttonHeight": 40,
+      "lookupTopDifference": 0
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rootOverflow": false,
+      "cardPadding": "16px",
+      "sectionGap": "16px",
+      "fieldRowGap": "16px",
+      "fieldColumnGap": "20px",
+      "labelGap": "6px",
+      "hintGap": "4px",
+      "inputHeight": 44,
+      "buttonHeight": 44,
+      "lookupTopDifference": 78
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "rootOverflow": false,
+      "cardPadding": "16px",
+      "sectionGap": "16px",
+      "fieldRowGap": "16px",
+      "fieldColumnGap": "20px",
+      "labelGap": "6px",
+      "hintGap": "4px",
+      "inputHeight": 44,
+      "buttonHeight": 44,
+      "lookupTopDifference": 78
+    }
+  ],
+  "enlargedControlProbe": {
+    "inputHeight": 60,
+    "inputScrollHeight": 58,
+    "buttonHeight": 58,
+    "buttonScrollHeight": 56,
+    "rootOverflow": false
+  }
+}
