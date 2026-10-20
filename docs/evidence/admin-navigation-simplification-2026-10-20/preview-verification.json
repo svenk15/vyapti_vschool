@@ -1,21 +1,54 @@
 {
-  "capturedAt": "2026-10-20T06:58:55.324Z",
+  "capturedAt": "2026-10-20T09:44:04.547Z",
+  "source": "working-tree preview",
+  "reference": "docs/ux/references/student-concepts/concept-1.svg",
   "browser": "Playwright Chromium",
   "deviceScaleFactor": 1,
-  "actualBrowserZoom": "not tested",
+  "actualBrowserZoom": "not exercised",
   "results": [
     {
       "viewport": {
         "name": "desktop",
         "width": 1440,
-        "height": 1000
+        "height": 920
       },
       "geometry": {
         "rootOverflow": false,
-        "sidebarWidth": 232,
-        "cardWidth": 740,
-        "active": "Students",
-        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 218,
+          "height": 920
+        },
+        "content": {
+          "x": 218,
+          "y": 72,
+          "width": 1222,
+          "height": 678
+        },
+        "title": {
+          "x": 256,
+          "y": 111,
+          "width": 1146,
+          "height": 36
+        },
+        "action": {
+          "x": 1240,
+          "y": 172,
+          "width": 162,
+          "height": 36
+        },
+        "search": {
+          "x": 256,
+          "y": 245,
+          "width": 958,
+          "height": 40
+        },
+        "active": "Directory",
+        "activeHeight": 56,
+        "computedFont": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "fontLoaded": true,
+        "bodyBackground": "rgb(255, 255, 255)"
       }
     },
     {
@@ -26,10 +59,41 @@
       },
       "geometry": {
         "rootOverflow": false,
-        "sidebarWidth": 210,
-        "cardWidth": 634,
-        "active": "Students",
-        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+        "sidebar": {
+          "x": 0,
+          "y": 0,
+          "width": 218,
+          "height": 900
+        },
+        "content": {
+          "x": 218,
+          "y": 72,
+          "width": 682,
+          "height": 731
+        },
+        "title": {
+          "x": 248,
+          "y": 111,
+          "width": 622,
+          "height": 36
+        },
+        "action": {
+          "x": 708,
+          "y": 160,
+          "width": 162,
+          "height": 36
+        },
+        "search": {
+          "x": 248,
+          "y": 293,
+          "width": 434,
+          "height": 40
+        },
+        "active": "Directory",
+        "activeHeight": 56,
+        "computedFont": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "fontLoaded": true,
+        "bodyBackground": "rgb(255, 255, 255)"
       }
     },
     {
@@ -40,10 +104,41 @@
       },
       "geometry": {
         "rootOverflow": false,
-        "sidebarWidth": 260,
-        "cardWidth": 354,
-        "active": "Students",
-        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+        "sidebar": {
+          "x": -270,
+          "y": 0,
+          "width": 270,
+          "height": 844
+        },
+        "content": {
+          "x": 0,
+          "y": 68,
+          "width": 390,
+          "height": 959
+        },
+        "title": {
+          "x": 16,
+          "y": 93,
+          "width": 358,
+          "height": 32
+        },
+        "action": {
+          "x": 16,
+          "y": 189,
+          "width": 358,
+          "height": 44
+        },
+        "search": {
+          "x": 16,
+          "y": 268,
+          "width": 358,
+          "height": 40
+        },
+        "active": "Directory",
+        "activeHeight": 44,
+        "computedFont": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "fontLoaded": true,
+        "bodyBackground": "rgb(255, 255, 255)"
       }
     },
     {
@@ -54,11 +149,68 @@
       },
       "geometry": {
         "rootOverflow": false,
-        "sidebarWidth": 260,
-        "cardWidth": 324,
-        "active": "Students",
-        "computedFont": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+        "sidebar": {
+          "x": -270,
+          "y": 0,
+          "width": 270,
+          "height": 800
+        },
+        "content": {
+          "x": 0,
+          "y": 68,
+          "width": 360,
+          "height": 959
+        },
+        "title": {
+          "x": 16,
+          "y": 93,
+          "width": 328,
+          "height": 32
+        },
+        "action": {
+          "x": 16,
+          "y": 189,
+          "width": 328,
+          "height": 44
+        },
+        "search": {
+          "x": 16,
+          "y": 268,
+          "width": 328,
+          "height": 40
+        },
+        "active": "Directory",
+        "activeHeight": 44,
+        "computedFont": "Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "fontLoaded": true,
+        "bodyBackground": "rgb(255, 255, 255)"
       }
+    }
+  ],
+  "themes": [
+    {
+      "theme": "forest",
+      "ink": "#293c32",
+      "accent": "#235f45",
+      "rootOverflow": false
+    },
+    {
+      "theme": "sunrise",
+      "ink": "#293c32",
+      "accent": "#9b4f24",
+      "rootOverflow": false
+    },
+    {
+      "theme": "indigo",
+      "ink": "#293c32",
+      "accent": "#4856a5",
+      "rootOverflow": false
+    },
+    {
+      "theme": "slate",
+      "ink": "#293c32",
+      "accent": "#445b66",
+      "rootOverflow": false
     }
   ]
 }

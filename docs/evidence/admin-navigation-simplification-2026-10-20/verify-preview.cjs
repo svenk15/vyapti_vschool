@@ -1,47 +1,55 @@
 const {chromium}=require('@playwright/test');
-const {mkdirSync,writeFileSync}=require('node:fs');
+const {writeFileSync}=require('node:fs');
+const path=require('node:path');
+const base='http://127.0.0.1:3415/NAVIGATION_PREVIEW.html';
+const output=__dirname;
+const viewports=[{name:'desktop',width:1440,height:920},{name:'intermediate',width:900,height:900},{name:'mobile',width:390,height:844},{name:'narrow',width:360,height:800}];
+const expect=(condition,message)=>{if(!condition)throw new Error(message)};
+const trim=values=>values.map(value=>value.trim());
+const locationHash=page=>page.evaluate(()=>location.hash);
 
 (async()=>{
- const output='docs/evidence/admin-navigation-simplification-2026-10-20';
- mkdirSync(output,{recursive:true});
  const browser=await chromium.launch({headless:true});
  const results=[];
- for(const viewport of [{name:'desktop',width:1440,height:1000},{name:'intermediate',width:900,height:900},{name:'mobile',width:390,height:844},{name:'narrow',width:360,height:800}]){
-  const context=await browser.newContext({viewport:{width:viewport.width,height:viewport.height},deviceScaleFactor:1});
-  const page=await context.newPage();
-  await page.goto('http://127.0.0.1:3415/NAVIGATION_PREVIEW.html#students');
-  const labels=await page.locator('#primary a').allTextContents();
-  if(JSON.stringify(labels.map(value=>value.trim()))!==JSON.stringify(['Today','Students','Staff','Attendance','Academics','Communication']))throw new Error(`Unexpected broad navigation at ${viewport.name}: ${labels}`);
+ for(const viewport of viewports){
+  const context=await browser.newContext({viewport,deviceScaleFactor:1,reducedMotion:'reduce'});
+  const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(String(error)));
+  await page.goto(`${base}?profile=broad#students/directory`);await page.evaluate(()=>document.fonts.ready);await page.locator('.review-controls').evaluate(node=>node.classList.add('hidden'));
+  expect(errors.length===0,`Page errors at ${viewport.name}: ${errors.join('; ')}`);
+  expect(JSON.stringify(trim(await page.locator('#primary a').allTextContents()))===JSON.stringify(['Today','Students','Staff','Attendance','Academics','Communication']),`Unexpected broad navigation at ${viewport.name}`);
+  expect(JSON.stringify(trim(await page.getByRole('navigation',{name:'Students destinations'}).getByRole('link').allTextContents()))===JSON.stringify(['Directory','Admissions','Imports']),`Unexpected Students destinations at ${viewport.name}`);
+  expect(await page.getByRole('heading',{name:'Students',exact:true}).isVisible(),`Students heading missing at ${viewport.name}`);
+  expect(await page.getByRole('link',{name:'Students',exact:true}).getAttribute('aria-current')==='page',`Students primary state missing at ${viewport.name}`);
+  expect(await page.getByRole('link',{name:'Directory',exact:true}).getAttribute('aria-current')==='page',`Directory secondary state missing at ${viewport.name}`);
+  expect(await page.getByRole('link',{name:'Register student',exact:true}).isVisible(),`Register student missing at ${viewport.name}`);
+  const geometry=await page.evaluate(()=>{const box=selector=>{const rect=document.querySelector(selector)?.getBoundingClientRect();return rect?{x:Math.round(rect.x),y:Math.round(rect.y),width:Math.round(rect.width),height:Math.round(rect.height)}:null};const active=document.querySelector('.secondary-nav [aria-current="page"]');return{rootOverflow:document.documentElement.scrollWidth>innerWidth,sidebar:box('.sidebar'),content:box('.content'),title:box('.page-title'),action:box('.primary-action'),search:box('.search'),active:active?.textContent.trim(),activeHeight:box('.secondary-nav [aria-current="page"]')?.height,computedFont:getComputedStyle(document.body).fontFamily,fontLoaded:document.fonts.check('14px Inter'),bodyBackground:getComputedStyle(document.body).backgroundColor}});
+  expect(!geometry.rootOverflow,`Root overflow at ${viewport.name}`);expect(geometry.fontLoaded,`Bundled Inter did not load at ${viewport.name}`);
+  if(viewport.width>=1200){expect(geometry.sidebar.width===218,`Desktop sidebar ${geometry.sidebar.width}px`);expect(geometry.title.x===256,`Desktop content begins at ${geometry.title.x}px`);expect(geometry.action.height===36,`Desktop action ${geometry.action.height}px`);expect(geometry.search.height===40,`Desktop search ${geometry.search.height}px`)}
+  if(viewport.width<768){expect(geometry.sidebar.width===270,`Mobile drawer ${geometry.sidebar.width}px`);expect(geometry.action.height>=44,`Mobile action ${geometry.action.height}px`);expect(geometry.activeHeight>=44,`Mobile secondary target ${geometry.activeHeight}px`)}
+  await page.screenshot({path:path.join(output,`quiet-students-${viewport.name}.png`)});
   if(viewport.width<768){
-   const opener=page.getByRole('button',{name:'Open navigation'});
-   await opener.click();await page.waitForTimeout(250);
-   await page.screenshot({path:`${output}/preview-${viewport.name}-drawer.png`,fullPage:true});
-   await page.locator('.nav-scroll').evaluate(node=>{node.scrollTop=node.scrollHeight});
-   const lastService=page.getByRole('link',{name:'Restricted support'}),scrollRegion=page.locator('.nav-scroll');
-   const [serviceBox,scrollBox]=await Promise.all([lastService.boundingBox(),scrollRegion.boundingBox()]);
-   if(!serviceBox||!scrollBox||serviceBox.bottom>scrollBox.y+scrollBox.height+1)throw new Error(`Conditional services are not reachable above the footer in ${viewport.name}`);
-   await page.screenshot({path:`${output}/preview-${viewport.name}-drawer-lower.png`,fullPage:true});
-   const last=page.getByRole('button',{name:'Sign out'});await last.focus();await page.keyboard.press('Tab');
-   const trapped=await page.evaluate(()=>document.activeElement?.classList.contains('brand')===true);
-   if(!trapped)throw new Error(`Focus did not wrap in ${viewport.name} drawer`);
-   await page.keyboard.press('Escape');
-   await page.waitForFunction(()=>document.activeElement?.id==='menu');
-  }else await page.screenshot({path:`${output}/preview-${viewport.name}.png`,fullPage:true});
-  const geometry=await page.evaluate(()=>({rootOverflow:document.documentElement.scrollWidth>innerWidth,sidebarWidth:Math.round(document.querySelector('.sidebar').getBoundingClientRect().width),cardWidth:Math.round(document.querySelector('.form-card').getBoundingClientRect().width),active:document.querySelector('#primary a.active')?.textContent.trim(),computedFont:getComputedStyle(document.body).fontFamily}));
-  if(geometry.rootOverflow)throw new Error(`Root overflow at ${viewport.name}`);
-  results.push({viewport,geometry});
-  if(viewport.name==='desktop'){
-   await page.getByLabel('Access profile').selectOption('attendance');
-   const limited=await page.locator('#primary a').allTextContents();
-   if(limited.length!==1||limited[0].trim()!=='Attendance')throw new Error(`Attendance simulation incorrect: ${limited}`);
-   await page.getByLabel('Access profile').selectOption('noTimetable');
-   await page.getByRole('link',{name:'Academics'}).click();
-   const tabs=await page.getByRole('navigation',{name:'Academics views'}).getByRole('button').allTextContents();
-   if(tabs.includes('Timetable'))throw new Error('Timetable remained visible in no-Timetable profile');
-   await page.screenshot({path:`${output}/preview-academics-fallback-desktop.png`,fullPage:true});
+   const opener=page.getByRole('button',{name:'Open navigation'});await opener.click();await page.waitForTimeout(220);expect(await page.getByRole('button',{name:'Close navigation'}).evaluate(node=>document.activeElement===node),'Drawer did not focus close control');expect(Math.round((await page.locator('.sidebar').boundingBox()).x)===0,`Drawer did not finish opening at ${viewport.name}`);
+   const navScroll=page.locator('.nav-scroll'),lastService=page.getByRole('link',{name:'Restricted support'});await navScroll.evaluate(node=>{node.scrollTop=node.scrollHeight});const serviceBox=await lastService.boundingBox(),scrollBox=await navScroll.boundingBox(),drawerState=await page.evaluate(()=>({scrollX,overflow:document.documentElement.scrollWidth>innerWidth}));expect(serviceBox&&scrollBox&&serviceBox.y+serviceBox.height<=scrollBox.y+scrollBox.height+1,`Conditional service inaccessible at ${viewport.name}`);expect(drawerState.scrollX===0&&!drawerState.overflow,`Drawer caused document overflow at ${viewport.name}`);
+   await page.screenshot({path:path.join(output,`quiet-students-${viewport.name}-drawer.png`)});const last=page.getByRole('button',{name:'Sign out'});await last.focus();await page.keyboard.press('Tab');expect(await page.getByRole('link',{name:'vschool.'}).evaluate(node=>document.activeElement===node),`Drawer focus did not wrap at ${viewport.name}`);await page.keyboard.press('Escape');expect(await opener.evaluate(node=>document.activeElement===node),`Drawer focus did not return at ${viewport.name}`);
   }
-  await context.close();
+  results.push({viewport,geometry});await context.close();
  }
- writeFileSync(`${output}/preview-verification.json`,JSON.stringify({capturedAt:new Date().toISOString(),browser:'Playwright Chromium',deviceScaleFactor:1,actualBrowserZoom:'not tested',results},null,2));
- await browser.close();
+ const context=await browser.newContext({viewport:{width:1440,height:920},deviceScaleFactor:1,reducedMotion:'reduce'}),page=await context.newPage();
+ await page.goto(`${base}?profile=broad#students/directory`);await page.evaluate(()=>document.fonts.ready);await page.locator('.review-controls').evaluate(node=>node.classList.add('hidden'));
+ await page.getByRole('link',{name:'Admissions',exact:true}).click();expect(await locationHash(page)==='#students/admissions','Admissions route did not update');expect(await page.getByRole('link',{name:'Admissions',exact:true}).getAttribute('aria-current')==='page','Admissions active state missing');expect(await page.getByRole('link',{name:'Students',exact:true}).getAttribute('aria-current')==='page','Students primary state lost on Admissions');await page.screenshot({path:path.join(output,'quiet-students-admissions-desktop.png')});
+ await page.getByRole('link',{name:'Imports',exact:true}).click();expect(await locationHash(page)==='#students/imports','Imports route did not update');await page.screenshot({path:path.join(output,'quiet-students-imports-desktop.png')});await page.goBack();expect(await locationHash(page)==='#students/admissions','Back did not restore Admissions');await page.goBack();expect(await locationHash(page)==='#students/directory','Back did not restore Directory');
+ await page.getByRole('link',{name:'Register student',exact:true}).click();expect(await page.getByRole('heading',{name:'Register student',exact:true}).isVisible(),'Registration heading missing');expect(await page.locator('.secondary-nav').count()===0,'Registration incorrectly retained local navigation');expect(await page.getByRole('link',{name:'Back to Students'}).isVisible(),'Registration return path missing');await page.getByRole('link',{name:'Back to Students'}).click();
+ await page.getByRole('link',{name:'Staff',exact:true}).click();expect(JSON.stringify(trim(await page.getByRole('navigation',{name:'Staff destinations'}).getByRole('link').allTextContents()))===JSON.stringify(['Profiles','Access','Availability']),'Staff destinations incorrect');await page.screenshot({path:path.join(output,'quiet-staff-desktop.png')});await page.getByRole('link',{name:'Students',exact:true}).click();await page.getByRole('link',{name:'Admissions',exact:true}).focus();await page.screenshot({path:path.join(output,'quiet-students-keyboard-focus-desktop.png')});
+ const cases=[
+  {profile:'noRegistration',hash:'students/directory',assert:async()=>expect(await page.getByRole('link',{name:'Register student',exact:true}).count()===0,'Registration remained visible')},
+  {profile:'directoryOnly',hash:'students/directory',assert:async()=>{expect(await page.locator('.secondary-nav').count()===0,'Single destination switcher remained');expect(await page.getByRole('heading',{name:'Students Directory'}).isVisible(),'Single destination heading missing')}},
+  {profile:'importsOnly',hash:'students/imports',assert:async()=>{expect(await page.locator('.secondary-nav').count()===0,'Import-only switcher remained');expect(await page.getByRole('heading',{name:'Students Imports'}).isVisible(),'Import-only heading missing')}},
+  {profile:'noStudents',hash:'students/directory',assert:async()=>expect(await page.getByRole('link',{name:'Students',exact:true}).count()===0,'Students main item remained')},
+  {profile:'noTimetable',hash:'academics/timetable',assert:async()=>{expect(await page.getByRole('link',{name:'Timetable',exact:true}).count()===0,'Timetable remained visible');expect(await page.getByRole('link',{name:'Classes & subjects'}).getAttribute('aria-current')==='page','Academics fallback incorrect')}},
+  {profile:'attendance',hash:'students/directory',assert:async()=>{expect(JSON.stringify(trim(await page.locator('#primary a').allTextContents()))===JSON.stringify(['Attendance']),'Attendance-only main navigation incorrect');expect(await page.locator('#services .nav-label').count()===0,'Empty service heading remained')}}
+ ];
+ for(const item of cases){await page.goto(`${base}?profile=${item.profile}#${item.hash}`);await page.locator('.review-controls').evaluate(node=>node.classList.add('hidden'));await item.assert();await page.screenshot({path:path.join(output,`quiet-restricted-${item.profile}-desktop.png`)})}
+ const themes=[];await page.goto(`${base}?profile=broad#students/directory`);
+ for(const theme of ['forest','sunrise','indigo','slate']){await page.locator('.review-controls details').evaluate(node=>{node.open=true});await page.locator('#theme').selectOption(theme);const values=await page.evaluate(()=>({theme:document.documentElement.dataset.theme,ink:getComputedStyle(document.documentElement).getPropertyValue('--ink').trim(),accent:getComputedStyle(document.documentElement).getPropertyValue('--forest').trim(),rootOverflow:document.documentElement.scrollWidth>innerWidth}));expect(values.theme===theme&&!values.rootOverflow,`${theme} theme validation failed`);themes.push(values)}
+ await context.close();await browser.close();writeFileSync(path.join(output,'preview-verification.json'),JSON.stringify({capturedAt:new Date().toISOString(),source:'working-tree preview',reference:'docs/ux/references/student-concepts/concept-1.svg',browser:'Playwright Chromium',deviceScaleFactor:1,actualBrowserZoom:'not exercised',results,themes},null,2));console.log(`Verified ${results.length} viewports, ${cases.length} access states, history, focus, mobile drawer and ${themes.length} themes.`);
 })().catch(error=>{console.error(error);process.exitCode=1});

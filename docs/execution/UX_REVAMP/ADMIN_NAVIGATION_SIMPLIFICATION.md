@@ -1,8 +1,24 @@
 # Administrator navigation simplification proposal
 
-Prepared 20 October 2026 from current source at `f272989b9b3d6acba4f84d98e00c45fb240146a3`. This is a review checkpoint. It changes no production route, navigation, permission, database row or workflow.
+Prepared 20 October 2026 from current source at `f272989b9b3d6acba4f84d98e00c45fb240146a3` and refined from preview checkpoint `546b436dd88b9f848a62ee4480b4f627c9d7d83a`. This is a review checkpoint. It changes no production route, navigation, permission, database row or workflow.
 
 Authority: [UX Constitution](../../ux/UX_CONSTITUTION.md), [control sizing](../../ux/CONTROL_SIZING_CONTRACT.md), [FIRST registration reference](../../ux/references/registration-approved/APPROVED_REGISTRATION.html), `components/workspace-navigation.ts`, `lib/server/admin-navigation.ts`, `app/admin/layout.tsx`, `components/portal/portal-shell.tsx`, and the current `app/admin/**/page.tsx` tree.
+
+## Selected preview direction: Concept 1 — Quiet workspace
+
+The owner selected [Concept 1 SVG](../../ux/references/student-concepts/concept-1.svg) and [PNG](../../ux/references/student-concepts/concept-1.png) for the desktop presentation direction. Concepts 2 and 3, the earlier dropdown selector, segmented pill group and contextual-sidebar proposal are rejected. Selection authorizes refinement of this isolated preview only; production navigation and the proposed mobile adaptation remain unaccepted.
+
+Implementation-ready presentation contract:
+
+- Desktop uses the reference geometry: 218px pale sidebar, 72px context header, content beginning 38px inside the workspace, 28/36px Students heading, open white canvas and no enclosing directory card.
+- The Students secondary row uses real links with transparent backgrounds, 13px labels, 36px gaps, a 2px Forest current indicator and `aria-current="page"`. Directory, Admissions and Imports keep Students active in the primary navigation.
+- Directory places its 36px **Register student** action in the secondary row, followed by a 40px search/filter/sort toolbar and an open semantic directory with 67px desktop rows and restrained dividers. Production keeps the existing attribute search, URL state, filters, stable sort, pagination and authorized Manage action.
+- Admissions and Imports retain their own destinations and supported **New application** / **New import** actions. Registration is a separate focused route with **Back to Students** and does not inherit the secondary row.
+- Staff demonstrates the same reusable link pattern with Profiles, Access and Availability while remaining a separate primary area. Other areas retain the mapping below and are not forced into three links.
+- At 900px the primary action moves above the secondary row to protect labels. At 390px and 360px the title remains visible, the secondary links keep 44px targets in a horizontally scrollable row, the action receives its own 44px row, the directory becomes labelled cards and the existing modal sidebar remains independently scrollable. This mobile composition is a proposed extension awaiting review.
+- Permission projection is server-owned. Multiple authorized children render links; one authorized child omits the switcher and names the destination in the heading; zero authorized children omit the primary area. The preview includes explicit simulations for Attendance only, no Timetable, no registration, Directory only, Imports only, no Students and Staff without Access.
+
+Recorded differences from the static reference are intentional and visible: fictional preview records replace its schematic sample only where needed to demonstrate states; current optional School services remain present for the broad simulated profile; the local bundled Inter asset replaces the SVG's Arial authoring label; mobile is a review proposal because Concept 1 defines only 1440×920. No action in the preview calls an owner API.
 
 ## Current catalogue and proposed primary location
 
@@ -118,13 +134,16 @@ Only the broad seeded Administrator can be observed without changing grants. The
 | Conditional service access | School services shows only successful owner probes | Direct owner route; no hub |
 | New school/incomplete setup | Today and Settings when `school.manage`; module areas omitted until activated | Today or Setup; no fabricated empty module links |
 
-## Unresolved implementation decisions and route gaps
+## Remaining review decisions and route gaps
 
 1. The exact ordering of `/admin/coordination` and `/admin/requests` inside Today requires no product rule, but the production Today page must expose both only from their current owner probes.
 2. The proposed Staff and Settings local navigation does not yet exist as a shared component. It is straightforward presentation work using server-filtered URL links.
 3. Attendance must change only the navigation href to `?view=monitor`; the scheduling page remains a contextual **Schedule session** action.
 4. There is no empty grouping page to build. A missing preferred child selects the next live authorized route or omits the primary item.
 5. Support, Facilities and Finance remain synthetic/conditional according to their current owners. Their presence in this proposal does not authorize production enablement.
+6. Owner review is still required for the refined 390px/360px adaptation, including the full-width contextual action and labelled directory cards; the desktop selection does not imply mobile acceptance.
+7. Owner review is still required before applying the 218px quiet sidebar and reusable secondary-navigation component to production. The existing production route catalogue and permission projection remain unchanged until then.
+8. The broad preview retains current authorized School services although the Concept 1 image does not show them. Production must keep each owner-probed destination unless a separate accepted navigation decision relocates it.
 
 ## Bounded production implementation plan
 
