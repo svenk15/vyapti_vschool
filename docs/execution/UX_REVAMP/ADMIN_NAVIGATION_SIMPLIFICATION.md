@@ -1,12 +1,12 @@
 # Administrator navigation simplification proposal
 
-Prepared 20 October 2026 from current source at `f272989b9b3d6acba4f84d98e00c45fb240146a3` and refined from preview checkpoint `546b436dd88b9f848a62ee4480b4f627c9d7d83a`. This is a review checkpoint. It changes no production route, navigation, permission, database row or workflow.
+Prepared 20 October 2026 from current source at `f272989b9b3d6acba4f84d98e00c45fb240146a3` and refined through accepted preview checkpoint `cd168e982b3989bc517b8024f9f327d74f83144f`. The owner accepted this direction for production. The bounded Students/Staff implementation is recorded in [current state](CURRENT_STATE.md) and [production evidence](../../evidence/admin-navigation-production-2026-10-20/README.md); no route, permission, database row or workflow contract changed.
 
 Authority: [UX Constitution](../../ux/UX_CONSTITUTION.md), [control sizing](../../ux/CONTROL_SIZING_CONTRACT.md), [FIRST registration reference](../../ux/references/registration-approved/APPROVED_REGISTRATION.html), `components/workspace-navigation.ts`, `lib/server/admin-navigation.ts`, `app/admin/layout.tsx`, `components/portal/portal-shell.tsx`, and the current `app/admin/**/page.tsx` tree.
 
 ## Selected preview direction: Concept 1 — Quiet workspace
 
-The owner selected [Concept 1 SVG](../../ux/references/student-concepts/concept-1.svg) and [PNG](../../ux/references/student-concepts/concept-1.png) for the desktop presentation direction. Concepts 2 and 3, the earlier dropdown selector, segmented pill group and contextual-sidebar proposal are rejected. Selection authorizes refinement of this isolated preview only; production navigation and the proposed mobile adaptation remain unaccepted.
+The owner selected [Concept 1 SVG](../../ux/references/student-concepts/concept-1.svg) and [PNG](../../ux/references/student-concepts/concept-1.png) for the desktop presentation direction, then accepted the refined preview for production. Concepts 2 and 3, the earlier dropdown selector, segmented pill group and contextual-sidebar proposal remain rejected. Final production human review remains pending.
 
 Implementation-ready presentation contract:
 

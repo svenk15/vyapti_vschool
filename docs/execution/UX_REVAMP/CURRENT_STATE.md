@@ -2,7 +2,13 @@
 
 Updated: 20 October 2026 (Asia/Kolkata)
 
-## Administrator navigation simplification proposal — 20 October 2026
+## Accepted Administrator navigation and Students production implementation — 20 October 2026
+
+The owner accepted the refined quiet-navigation preview at `cd168e982b3989bc517b8024f9f327d74f83144f`. Production now composes six server-derived primary Administrator areas with ordered authorized fallbacks, conditional School services and a separate Settings utility. Students, Admissions and Imports share the accepted transparent local-link recipe; Staff reuses the same recipe without conflating profile and access authority. The Students directory now matches the selected Concept 1 composition while preserving its real search, filter, server sort, signed pagination, browser history and eligibility-aware Manage actions. The accepted focused registration composition at `6c4f64a49396c772064049b58fb3bb00f53f23b6` remains intact.
+
+Focused navigation unit tests passed 7/7; the final 4 GiB build passed; one-worker PostgreSQL-backed desktop and mobile Students journeys passed 1/1 per project. Final reference/application captures were directly inspected at 1440×920, 900px, 390×844 and 360×800 and in all four themes. The final build ID is `5g_23tRWNwYfr3Ras4zXe`. No migration or seed change occurred. Broader page-family adoption of the local-link recipe is recorded as presentation follow-up and is not claimed by this bounded Students checkpoint. Evidence: [accepted navigation production checkpoint](../../evidence/admin-navigation-production-2026-10-20/README.md). Human review remains PENDING; TEN-03, native accessibility and production gates remain unchanged.
+
+## Administrator navigation simplification proposal — 20 October 2026 (superseded by accepted production checkpoint above)
 
 The current 27-destination Administrator catalogue, live server visibility checks, all 59 `app/admin/**/page.tsx` routes and existing local navigation were reconciled into a review-only proposal with six direct primary destinations: Today, Students, Staff, Attendance, Academics and Communication. Settings, Account and Sign out remain separate utilities; owner-authorized Support, Facilities and Finance remain explicit conditional direct links. Attendance prefers the existing monitoring query, Academics and other areas use ordered authorized fallbacks, and no empty hub or permission is proposed.
 
