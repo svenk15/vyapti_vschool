@@ -1,20 +1,9 @@
 import {describe,expect,it} from 'vitest';
-import {adminNavigationSections,familyNavigationCatalogue,familyNavigationRouteGroups,studentNavigationCatalogue,studentNavigationRouteGroups,teacherNavigationGroups} from '../../components/workspace-navigation';
+import {familyNavigationCatalogue,familyNavigationRouteGroups,studentNavigationCatalogue,studentNavigationRouteGroups,teacherNavigationGroups} from '../../components/workspace-navigation';
 
 const labels=(catalogue:readonly (readonly [string,string,unknown])[],routes:Set<string>)=>catalogue.filter(([,href])=>routes.has(href)).map(([label])=>label);
 
 describe('workspace navigation grouping',()=>{
- it('keeps Administrator routes once in the approved presentation groups',()=>{
-  const routes=adminNavigationSections.flatMap(group=>group.hrefs);
-  expect(new Set(routes).size).toBe(routes.length);
-  expect(adminNavigationSections.find(group=>group.id==='admin-primary')?.hrefs).toEqual(['/admin']);
-  expect(adminNavigationSections.find(group=>group.id==='daily-work')?.hrefs).toEqual(['/admin/students','/admin/teachers','/admin/users','/admin/attendance/sessions','/admin/timetable']);
-  expect(adminNavigationSections.find(group=>group.id==='teaching-communication')?.hrefs).toEqual(['/admin/academics','/admin/classes','/admin/assessments','/admin/timetable/cover','/admin/communication','/admin/events']);
-  expect(adminNavigationSections.find(group=>group.id==='school-operations')?.hrefs).toEqual(['/admin/admissions','/admin/imports','/admin/reports/attendance','/admin/activity']);
-  expect(adminNavigationSections.find(group=>group.id==='school-settings')?.hrefs).toEqual(['/admin/setup','/admin/school','/admin/modules','/admin/branding']);
-  expect(adminNavigationSections.slice(1).every(group=>group.collapsible===false&&group.showLabel===true&&group.sectionBreakBefore===true)).toBe(true);
- });
-
  it('uses static Teacher groups and preserves every authorized destination',()=>{
   const groups=teacherNavigationGroups({canUseClasses:true,canUseTimetable:true,canUseCover:true,canUseMeetings:true,canUseSupport:true,canUseHistory:true,canUseLearning:true,canUseAssessments:true});
   expect(groups.map(group=>group.label)).toEqual(['My day','Teaching','Learning','My work','Account']);

@@ -11,6 +11,7 @@ import {PortalIcon,PortalNavigationGroup,portalItemMatchSpecificity,type PortalN
 type PortalShellProps={
  home?:AdminHome;
  groups:readonly PortalNavigationGroupData[];
+ utilityGroups?:readonly PortalNavigationGroupData[];
  homeHref:string;
  navigationLabel:string;
  roleLabel:string;
@@ -35,8 +36,8 @@ type PortalShellProps={
 
 const focusableSelector='a[href],button:not([disabled]),select:not([disabled]),input:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,accountHref='/account',contextHref='/admin/context',stagedSignOut=true,stagedSignOutHref='/admin/context?destination=sign-out',children,shellClassName,contentClassName,preferences,theme,navigationId='portal-navigation',sidebarContext,topContext,openNavigationLabel='Open navigation',closeNavigationLabel='Close menu panel',bottomNavigation}:PortalShellProps){
- const pathname=usePathname(),entries=groups.flatMap((group,index)=>group.items.map(item=>({group,groupKey:group.id??`${index}-${group.label}`,item,specificity:portalItemMatchSpecificity(pathname,item)}))),currentEntry=entries.filter(entry=>entry.specificity>=0).sort((left,right)=>right.specificity-left.specificity)[0],currentItem=currentEntry?.item,activeCollapsibleGroup=currentEntry?.group.collapsible===true?currentEntry.groupKey:null;
+export function PortalShell({home,groups,utilityGroups=[],homeHref,navigationLabel,roleLabel,academicYearLabel,accountDisplayName,accountHref='/account',contextHref='/admin/context',stagedSignOut=true,stagedSignOutHref='/admin/context?destination=sign-out',children,shellClassName,contentClassName,preferences,theme,navigationId='portal-navigation',sidebarContext,topContext,openNavigationLabel='Open navigation',closeNavigationLabel='Close menu panel',bottomNavigation}:PortalShellProps){
+ const pathname=usePathname(),allGroups=[...groups,...utilityGroups],entries=allGroups.flatMap((group,index)=>group.items.map(item=>({group,groupKey:group.id??`${index}-${group.label}`,item,specificity:portalItemMatchSpecificity(pathname,item)}))),currentEntry=entries.filter(entry=>entry.specificity>=0).sort((left,right)=>right.specificity-left.specificity)[0],currentItem=currentEntry?.item,activeCollapsibleGroup=currentEntry?.group.collapsible===true?currentEntry.groupKey:null;
  const [openOnPath,setOpenOnPath]=useState<string|null>(null),[returnFocusId,setReturnFocusId]=useState<string|null>(null),[expandedGroups,setExpandedGroups]=useState<readonly string[]>(()=>activeCollapsibleGroup?[activeCollapsibleGroup]:[]),sidebar=useRef<HTMLElement>(null),firstItem=useRef<HTMLAnchorElement>(null),open=openOnPath===pathname;
  const toggleId=`${navigationId}-toggle`;
  const close=useCallback((returnFocus=false)=>{setOpenOnPath(null);if(returnFocus)requestAnimationFrame(()=>document.getElementById(returnFocusId??toggleId)?.focus());},[returnFocusId,toggleId]);
@@ -75,6 +76,7 @@ export function PortalShell({home,groups,homeHref,navigationLabel,roleLabel,acad
    {sidebarContext??(home?<div className="portal-school-identity"><strong>{home.institutionName}</strong><span>{home.schoolName}</span></div>:null)}
    <div className="portal-nav-scroll"><nav aria-label={navigationLabel}>{groups.filter(group=>group.items.length>0).map((group,index)=>{const groupKey=group.id??`${index}-${group.label}`,isExpanded=expandedGroups.includes(groupKey)||activeCollapsibleGroup===groupKey;return <PortalNavigationGroup key={groupKey} group={group} groupKey={groupKey} activeHref={currentItem?.href??null} onNavigate={key=>{setExpandedGroups(current=>current.includes(key)?current:[...current,key]);close();}} firstItemRef={index===0?firstItem:undefined} expanded={isExpanded} onToggle={key=>setExpandedGroups(current=>{if(key===activeCollapsibleGroup)return current.includes(key)?current:[...current,key];return current.includes(key)?current.filter(value=>value!==key):[...current,key];})}/>;})}</nav></div>
    <footer className="portal-sidebar-footer">
+    {utilityGroups.length?<nav className="portal-sidebar-utilities" aria-label="Workspace utilities">{utilityGroups.map((group,index)=>{const groupKey=group.id??`utility-${index}`;return <PortalNavigationGroup key={groupKey} group={group} groupKey={groupKey} activeHref={currentItem?.href??null} onNavigate={()=>close()}/>;})}</nav>:null}
     <Link className="portal-identity" href={accountHref} aria-label={accountDisplayName?.trim()?`${identityLabel}, ${roleLabel} account`:identityLabel} onClick={()=>close()}>
      <span className="portal-identity-avatar" aria-hidden="true">{initials}</span>
      <span><strong>{identityLabel}</strong><small>{roleLabel}</small></span>

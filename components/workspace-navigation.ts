@@ -2,14 +2,6 @@ import type {PortalIconName,PortalNavigationGroupData} from './portal-navigation
 
 export type WorkspaceNavigationItem=readonly [label:string,href:string,icon:PortalIconName];
 
-export const adminNavigationSections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[];collapsible?:boolean;showLabel?:boolean;sectionBreakBefore?:boolean}>[]=[
- {id:'admin-primary',label:'Today',icon:'home',hrefs:['/admin'],collapsible:false,showLabel:false},
- {id:'daily-work',label:'Daily work',icon:'home',hrefs:['/admin/students','/admin/teachers','/admin/users','/admin/attendance/sessions','/admin/timetable'],collapsible:false,showLabel:true,sectionBreakBefore:true},
- {id:'teaching-communication',label:'Teaching & communication',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/assessments','/admin/timetable/cover','/admin/communication','/admin/events'],collapsible:false,showLabel:true,sectionBreakBefore:true},
- {id:'school-operations',label:'School operations',icon:'activity',hrefs:['/admin/admissions','/admin/imports','/admin/reports/attendance','/admin/activity'],collapsible:false,showLabel:true,sectionBreakBefore:true},
- {id:'school-settings',label:'School settings',icon:'settings',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding'],collapsible:false,showLabel:true,sectionBreakBefore:true},
-];
-
 export const studentNavigationCatalogue:readonly WorkspaceNavigationItem[]=[
  ['My day','/student','home'],['My profile','/student/profile','students'],['My classes','/student/classes','academics'],['My timetable','/student/timetable','calendar'],['School calendar','/student/calendar','calendar'],['Assignments','/student/assignments','academics'],['Results','/student/results','report'],['Attendance','/student/attendance','attendance'],['Notices','/student/notices','mail'],['My account','/student/account','account'],
 ];
