@@ -2,11 +2,11 @@
 import { useId, useState } from "react";
 import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ReactNode } from "react";
 export type FieldWidth="auto"|"numeric"|"date"|"status"|"code"|"person"|"email"|"wide"|"context"|"full";
-type FieldProps={label:string;hint?:string;error?:string;width?:FieldWidth;className?:string};
+type FieldProps={label:string;hint?:string;error?:string;width?:FieldWidth;className?:string;optional?:boolean};
 function fieldClass(width:FieldWidth,className?:string){return `field field-width-${width}${className?` ${className}`:""}`;}
-export function TextField({label,hint,error,id,width="auto",className,...props}:InputHTMLAttributes<HTMLInputElement>&FieldProps) {
+export function TextField({label,hint,error,id,width="auto",className,optional=false,...props}:InputHTMLAttributes<HTMLInputElement>&FieldProps) {
  const unique=useId(),fieldId=id??unique,description=error??hint;
- return <div className={fieldClass(width,className)}><label htmlFor={fieldId}>{label}{props.required&&<span aria-hidden="true"> *</span>}</label><input {...props} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}/>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
+ return <div className={fieldClass(width,className)}><label htmlFor={fieldId}>{label}{props.required&&<span aria-hidden="true"> *</span>}{optional&&<span className="field-optional">Optional</span>}</label><input {...props} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}/>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
 }
 export function SelectField({label,hint,error,id,children,width="auto",className,...props}:SelectHTMLAttributes<HTMLSelectElement>&FieldProps&{children:ReactNode}) {
  const unique=useId(),fieldId=id??unique,description=error??hint;

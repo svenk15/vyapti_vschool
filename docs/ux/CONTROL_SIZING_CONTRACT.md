@@ -19,6 +19,10 @@ This is the canonical sizing and spacing contract. Its provenance is `docs/execu
 
 These are normal-content baselines, never clipping heights. Long labels may wrap and controls may grow. Native select popup geometry remains browser/OS owned.
 
+### Approved route-scoped exception
+
+The exact FIRST Student registration reference at `docs/ux/references/registration-approved/APPROVED_REGISTRATION.html` governs `/admin/students/register`: desktop form and lookup actions are 36px with 13/20 text, while narrow controls remain at least 44px. Its card, field and footer geometry is scoped under `.student-registration-*`; it does not change the shared button baseline on other routes. Controls must still grow for enlarged text and intrinsic content.
+
 ## Purpose widths
 
 - Numeric count or roll number: 120px.
