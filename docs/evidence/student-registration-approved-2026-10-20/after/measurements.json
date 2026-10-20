@@ -1,0 +1,91 @@
+{
+  "capturedAt": "2026-10-20T05:49:01.594Z",
+  "buildId": "flG3xp-fzkE0BlK_tM_xm",
+  "browser": "Playwright Chromium",
+  "browserZoom": "Not available; enlarged-control CSS probe is not labelled browser zoom.",
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "rootOverflow": false,
+      "cardWidth": 740,
+      "bodyPadding": "28px 30px",
+      "fieldRowGap": "20px",
+      "fieldColumnGap": "20px",
+      "labelGap": "7px",
+      "footerPadding": "16px 30px",
+      "footerGap": "8px",
+      "titleFontSize": "28px",
+      "titleLineHeight": "36px",
+      "inputHeight": 40,
+      "buttonHeight": 36,
+      "lookupBottomDifference": 0
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 900
+      },
+      "rootOverflow": false,
+      "cardWidth": 740,
+      "bodyPadding": "28px 30px",
+      "fieldRowGap": "20px",
+      "fieldColumnGap": "20px",
+      "labelGap": "7px",
+      "footerPadding": "16px 30px",
+      "footerGap": "8px",
+      "titleFontSize": "28px",
+      "titleLineHeight": "36px",
+      "inputHeight": 40,
+      "buttonHeight": 36,
+      "lookupBottomDifference": 0
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "rootOverflow": false,
+      "cardWidth": 354,
+      "bodyPadding": "22px 20px",
+      "fieldRowGap": "18px",
+      "fieldColumnGap": "18px",
+      "labelGap": "7px",
+      "footerPadding": "16px 20px",
+      "footerGap": "8px",
+      "titleFontSize": "25px",
+      "titleLineHeight": "32px",
+      "inputHeight": 44,
+      "buttonHeight": 44,
+      "lookupBottomDifference": 54
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "rootOverflow": false,
+      "cardWidth": 324,
+      "bodyPadding": "22px 20px",
+      "fieldRowGap": "18px",
+      "fieldColumnGap": "18px",
+      "labelGap": "7px",
+      "footerPadding": "16px 20px",
+      "footerGap": "8px",
+      "titleFontSize": "25px",
+      "titleLineHeight": "32px",
+      "inputHeight": 44,
+      "buttonHeight": 44,
+      "lookupBottomDifference": 54
+    }
+  ],
+  "enlargedControlProbe": {
+    "inputHeight": 60,
+    "inputScrollHeight": 58,
+    "buttonHeight": 60,
+    "buttonScrollHeight": 58,
+    "rootOverflow": false
+  }
+}

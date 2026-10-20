@@ -1,5 +1,13 @@
 # Students, enrollment and placement history — current state
 
+## Approved FIRST registration composition — 20 October 2026
+
+Application commit `6c4f64a49396c772064049b58fb3bb00f53f23b6` implements the bounded presentation checkpoint from the local self-contained FIRST reference at `docs/ux/references/registration-approved/APPROVED_REGISTRATION.html` (SHA-256 `5b1b6895a780f7fa5a7f6e170d9946e5fd843717c1d73e264106de6f30775f06`). `/admin/students/register` now matches its compact one-page hierarchy, Student/Admission sections, lookup composition, help disclosure, 740px desktop surface and 354px mobile surface. Existing validation, exact identity selection, owner command, authorization, transaction, idempotency and recovery behavior remain unchanged. No schema, migration, seed or navigation change occurred.
+
+Current-source focused evidence passed targeted lint, TypeScript and the 4 GiB production build. The final Playwright checkpoints passed 5/5 desktop presentation journeys and 4/4 mobile recovery/presentation journeys against real PostgreSQL; the broader changed-file runs also passed the existing new/existing registration, validation, lost-response, limited-action and four-theme cases. Direct reference/application states were inspected for new, existing, required/inline errors, saved receipt and unknown recovery at 1440×1000 and 390×844. Computed measurements report zero root overflow and exact target card widths. [Evidence](../../evidence/student-registration-approved-2026-10-20/README.md).
+
+Necessary production deviations remain explicit: an existing Person is displayed from the authoritative combined `displayName` contract rather than parsing a name into prototype fields; recovery shows real `FOUND`/`UNKNOWN` owner status; receipt actions are server-authorized; application shell/context remain authoritative. Actual native browser 200% zoom, VoiceOver and NVDA are unperformed. Human visual acceptance, TEN-03 and production-release gates remain PENDING.
+
 ## UXR-02 bounded registration correction — 20 October 2026
 
 Engineering verification is complete at application commit `73f0e5b6e1e7ce4187116c2aeb80ace0d5efe371`; human review remains PENDING. `/admin/students/register` now sends a discriminated new/existing identity command. Existing-Person registration resolves the selected Person authoritatively and no longer feeds `displayName` through new-name validation. The explicit legacy transport adapter retains the historical schema-v1 receipt hash field order, while current commands use schema v2. New-Person first/last-name limits and exact Person-ID/admission-number selection remain unchanged.
