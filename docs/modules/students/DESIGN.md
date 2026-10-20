@@ -2,6 +2,18 @@
 
 Phase 1 · Design revision 1 · 3 October 2026. Status: STU-01 and STU-02 are locally implemented; STU-03 is in progress; later student workflows remain planned. Review unresolved deployment choices in FND-02 before real-data use.
 
+## UXR-02 one-page registration composition (approved 20 October 2026)
+
+**Existing journey.** The dedicated route uses four presentation stages: identity, school record, identity acknowledgment and final confirmation. The owner command, exact identity resolution and persistence contract remain authoritative.
+
+**Approved replacement.** One focused editable page has `Student details` and `School record` groups. New Person creation is the default. Exact existing Person-ID or current-branch admission-number lookup is revealed only when selected. A resolved existing Person supplies an authoritative read-only display name; editable replacement names are not requested and the receipt uses the server-returned identity. Identity acknowledgment is inline and bound to the current resolved Person, and is cleared whenever mode/reference/resolution changes.
+
+**Authority and data.** The form uses the existing scoped People selection query and Students registration command. It retains admission number, verified branch-entry date, `student.manage`, institution/branch/module checks, uniqueness, transaction, audit and receipt guarantees. Enrollment and Parent access remain separate commands. No fuzzy/name/email identity search is added.
+
+**Command state.** The client retains one exact payload and idempotency key after submission. A transport or retryable service failure is `UNKNOWN`; editing is locked and the exact intent can be retried to recover the owner receipt. Known validation, conflict and authorization failures release the intent while preserving safe editable values. Changing an identity invalidates prior acknowledgment. Success renders the authoritative server-returned Student identity and links to the Student record, enrollment and authorized Parent-access flow.
+
+**Acceptance.** Verify new and existing-Person persistence, authoritative identity display, changed identity invalidation, duplicate admission/Person recovery, invalid/future dates, foreign/unauthorized denial, exact-key lost-response recovery without a second Student, retained values, keyboard/error-summary focus and 1440/900/390/360 presentation. Human acceptance and TEN-03 remain pending.
+
 ## Student portal access foundation — STW-01 to STW-05
 
 **Design-readiness note (14 October 2026).** The approved Student Edition 01 reference, SHA-256 `74dc76af2e3b2000dfeb4b1258d49c6081aa255d6294f9ac6fe10ae59253cc9b`, and the owner-approved access rules define this slice. Student records remain non-login records until a trusted operator grants `student.access.manage` to one active branch Administrator and that Administrator authorizes one exact Student. Public self-registration and Student lookup do not exist. This capability is not inferred from `SCHOOL_ADMIN`, cannot be self-granted or delegated in the portal, and creates no `SchoolMembership`, `RoleGrant` or Guardian purpose.

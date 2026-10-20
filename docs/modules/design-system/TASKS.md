@@ -2,6 +2,18 @@
 
 Read DESIGN.md and the current Bible. These are vertical slices; previews do not prove persistence or authorization.
 
+## UXR-00 — Adopt the UX Constitution
+
+**Status:** approved implementation slice. Maintain one canonical Constitution and control-sizing contract under `docs/ux`, link the Bible and affected module contracts, and retain the review package as provenance. No behavior, permission or schema change is implied by documentation adoption.
+
+## UXR-01A — Normalize shared control geometry
+
+**Dependency:** UXR-00. Implement semantic shared variants for standard, compact-row, consequential, icon-only and short/long textarea controls plus purpose widths. Reconcile conflicting global/route declarations rather than adding `!important` overrides. Verify representative Administrator, Teacher, Principal, Parent and Student consumers at 1440, 900, 390 and 360 CSS pixels, all themes, keyboard focus and actual browser zoom where available. Record computed dimensions and exceptions.
+
+## UXR-01 — Simplify Administrator navigation
+
+**Dependency:** UXR-00. Preserve every currently authorized route and guard while presenting frequent work as direct links under static groups. Preserve combined Staff local navigation. Keep Admissions and Imports discoverable from Students and configuration destinations from School setup/settings. Verify broad and limited personas, disabled modules, deep links, active labels, browser history, mobile focus containment and shared-shell regressions. No route or permission is added.
+
 ## DS-01 — Review and adopt the shared UI foundation
 
 Depends on: FND-01

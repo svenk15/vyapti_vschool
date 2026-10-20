@@ -1,0 +1,30 @@
+{
+  "capturedAt": "2026-10-20T00:16:04.260Z",
+  "buildId": "px4_AGxnlxyewduJf49hp",
+  "results": [
+    {
+      "name": "compact",
+      "viewport": {
+        "width": 900,
+        "height": 900,
+        "dpr": 1
+      },
+      "rootOverflow": false,
+      "cardWidth": 760,
+      "controlHeight": 40,
+      "actionHeight": 44
+    },
+    {
+      "name": "narrow",
+      "viewport": {
+        "width": 360,
+        "height": 800,
+        "dpr": 1
+      },
+      "rootOverflow": false,
+      "cardWidth": 328,
+      "controlHeight": 44,
+      "actionHeight": 44
+    }
+  ]
+}

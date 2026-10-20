@@ -4,14 +4,10 @@ export type WorkspaceNavigationItem=readonly [label:string,href:string,icon:Port
 
 export const adminNavigationSections:readonly Readonly<{id:string;label:string;icon:PortalIconName;hrefs:readonly string[];collapsible?:boolean;showLabel?:boolean;sectionBreakBefore?:boolean}>[]=[
  {id:'admin-primary',label:'Today',icon:'home',hrefs:['/admin'],collapsible:false,showLabel:false},
- {id:'people',label:'People',icon:'people',hrefs:['/admin/students','/admin/teachers','/admin/users','/admin/admissions'],sectionBreakBefore:true},
- {id:'teaching',label:'Teaching',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/timetable','/admin/assessments','/admin/timetable/cover']},
- {id:'attendance',label:'Attendance',icon:'attendance',hrefs:['/admin/attendance/sessions','/admin/attendance/correction-requests','/admin/attendance/explanations']},
- {id:'communication',label:'Communication',icon:'mail',hrefs:['/admin/communication','/admin/events']},
- {id:'my-work',label:'My work',icon:'activity',hrefs:[]},
- {id:'reports',label:'Reports',icon:'report',hrefs:['/admin/reports/attendance']},
- {id:'school-administration',label:'School administration',icon:'settings',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/imports','/admin/activity'],sectionBreakBefore:true},
- {id:'additional-services',label:'Additional services',icon:'school',hrefs:[]},
+ {id:'daily-work',label:'Daily work',icon:'home',hrefs:['/admin/students','/admin/teachers','/admin/users','/admin/attendance/sessions','/admin/timetable'],collapsible:false,showLabel:true,sectionBreakBefore:true},
+ {id:'teaching-communication',label:'Teaching & communication',icon:'academics',hrefs:['/admin/academics','/admin/classes','/admin/assessments','/admin/timetable/cover','/admin/communication','/admin/events'],collapsible:false,showLabel:true,sectionBreakBefore:true},
+ {id:'school-operations',label:'School operations',icon:'activity',hrefs:['/admin/admissions','/admin/imports','/admin/reports/attendance','/admin/activity'],collapsible:false,showLabel:true,sectionBreakBefore:true},
+ {id:'school-settings',label:'School settings',icon:'settings',hrefs:['/admin/setup','/admin/school','/admin/modules','/admin/branding'],collapsible:false,showLabel:true,sectionBreakBefore:true},
 ];
 
 export const studentNavigationCatalogue:readonly WorkspaceNavigationItem[]=[

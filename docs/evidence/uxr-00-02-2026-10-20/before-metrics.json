@@ -1,0 +1,37 @@
+{
+  "capturedAt": "2026-10-20T00:19:04.675Z",
+  "source": "eacfd88548adb896762f190462ac0224e6d3f939",
+  "buildId": "zyx_1poQMhUAnd2SPsI_h",
+  "observations": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "dpr": 1
+      },
+      "rootOverflow": false,
+      "headings": [
+        "Register a student manually",
+        "Student details",
+        "What this changes"
+      ],
+      "disclosures": 8
+    },
+    {
+      "name": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 1
+      },
+      "rootOverflow": false,
+      "headings": [
+        "Register a student manually",
+        "Student details",
+        "What this changes"
+      ],
+      "disclosures": 8
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # Shared VSchool experience system — current state
 
+## UXR-00/01A/01 pilot checkpoint — 20 October 2026
+
+UXR-00, UXR-01A and UXR-01 are engineering-complete; human review is PENDING. The approved Constitution and control-sizing contract are canonical under `docs/ux`. Shared production primitives now provide the approved standard, compact, consequential, icon-only, textarea and semantic-width variants without `!important` or a second component system. The Administrator sidebar retains its server-filtered catalogue and deep links but replaces eight nested operational disclosures with direct links under four static task groups. Staff and Attendance secondary operations remain reachable through their existing local navigation. Server authorization, module availability and optional owner gates are unchanged.
+
+Final build `px4_AGxnlxyewduJf49hp` passed lint, typecheck, backend/boundary checks and the production build. Navigation unit checks passed 3/3. Focused desktop/mobile browser checks passed after two selector-only test corrections; final navigation reruns passed 1/1 per changed viewport and prove disabled-module omission, active state, mobile focus return, independent scrolling and footer clearance. Direct inspection covered 1440, 900, 390 and 360 CSS pixels, all four themes and representative surfaces in Administrator, Teacher, Principal, Parent and Student workspaces. Computed standard controls are 40px desktop/44px narrow, compact actions 36px desktop, consequential and icon actions 44px; the registration form has no root overflow. [Evidence and before/after captures](../../evidence/uxr-00-02-2026-10-20/README.md).
+
+`pnpm check:docs` is blocked only by two unrelated pre-existing links to a missing workspace-presentation evidence README; those dirty files were preserved. Native browser 200% zoom, VoiceOver, NVDA, human acceptance, TEN-03 and production release remain PENDING. No schema, migration, seed or backend owner contract changed.
+
 ## UX-08 integrated presentation checkpoint — 18 October 2026
 
 UX-01–08 are engineering-verified through implementation source `d57fe8c` and standard production build `BIXjEBxrscUilW5ZTAgW9`. All four themes passed desktop/mobile gallery coverage and direct inspection; appearance settings passed at both viewports; current-source Administrator, Teacher, Principal, Parent and Student protected journeys cover server-resolved theme and scope behavior. The Access owner passed 11 real-PostgreSQL tests, the idempotent guarded appearance fixture ran twice without duplicates, and `pnpm check` passed 59 files/261 unit tests plus lint, types, documentation, database design and architecture checks. Evidence: [UX-08](../../evidence/ux-revamp-08-2026-10-18/README.md).

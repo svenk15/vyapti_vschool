@@ -148,6 +148,8 @@ Audit records are append-only with actor, owner, resource, before/after safe dif
 
 Use the VSchool shared design system: readable typography, visible institution/branch context, responsive forms/tables, keyboard focus, semantic labels and status text that does not rely on color. Tokens in globals.css and palettes in backend/modules/branding/domain/theme.ts are the shared baseline. Components under components/ui are mandatory defaults. School branding uses validated token overrides and safe public assets, never arbitrary CSS/HTML/scripts. See §17 and the design-system module for full contracts. Main attendance controls target 44px touch areas and screens fit 360px width without clipped actions.
 
+The approved [UX Constitution](ux/UX_CONSTITUTION.md) and [control sizing contract](ux/CONTROL_SIZING_CONTRACT.md) govern task-oriented navigation, interaction cost, copy, reusable forms/tables/feedback, responsive behavior, accessibility and measured usability. Presentation simplification never removes scope, identity, authorization, domain or transaction guarantees.
+
 Every screen specifies loading, empty, validation, conflict, permission, service-error and success states. Do not render secret fields into the client. Server rendering may call authorized queries directly; HTTP routes call the same use cases. Mutations use POST/PATCH, same-origin verification and runtime schema validation; never state-changing GET.
 
 Command DTO envelope: `{payload, expectedVersion?}` plus `Idempotency-Key` header. Actor, timestamp and scope are server-derived. Responses: 200 replay/update, 201 creation, 400 malformed, 401 unauthenticated, 403 capability denial, 404 foreign/missing resource, 409 stale version/business conflict, 422 invalid fields, 429 rate/size limit where appropriate, 503 temporary dependency failure. Error body `{code,message,fieldErrors?,requestId,retryable}` never contains SQL, credentials or raw stack traces. Do not promise an automatic retry for validation/permission failures.
@@ -336,6 +338,10 @@ The current login preview deliberately submits nothing and stores no credentials
 
 ## 17. VSchool experience system
 
+### UX Constitution
+
+All workspaces and future modules follow [the canonical UX Constitution](ux/UX_CONSTITUTION.md). Short routine forms default to one grouped page. Intermediate steps require an explicit purpose. Read-only navigation and routine reversible actions do not require confirmation screens. Consequential actions retain focused consequence review. Warnings remain conditional on actual unsaved work or an unresolved outcome. Module designs record only workflow-specific contracts and approved exceptions.
+
 ### Design direction
 
 The visual direction is calm, warm and precise: soft off-white surfaces, constrained primary accents, clear typography, thin boundaries and generous whitespace. Refined Forest is the default; Amethyst & Pearl, Porcelain & Ink, and Linen & Bronze are the alternate school identities. Operational screens use the locally bundled Inter font with a documented system fallback. Branding must not repaint semantic danger/warning/success meanings. No claim that a theme medically prevents eye strain; validate comfort with actual users over representative tasks and honor OS/user accessibility preferences.
@@ -370,7 +376,7 @@ Production large-data tables use server filtering/sorting/keyset pagination and 
 
 ### UX acceptance gates
 
-Keyboard-only completion, visible non-obscured focus, 200% zoom and 360px viewport checks, dark/high-contrast user preference strategy, reduced motion, screen-reader labels/status and helpful empty/error states. Native screen-reader testing on macOS VoiceOver and a Windows/NVDA pass are required before production; automated tests alone are insufficient. Dark mode is designed as a future token variant, not claimed implemented by the three brand palettes. No silent password/log data in analytics. Confirm loading placeholders do not replace accessible names. Test long names, localization expansion, RTL before enabling RTL languages, timezone/currency formatting, and interrupted requests.
+Keyboard-only completion, visible non-obscured focus, 200% zoom and 360px viewport checks, dark/high-contrast user preference strategy, reduced motion, screen-reader labels/status and helpful empty/error states. Native screen-reader testing on macOS VoiceOver and a Windows/NVDA pass are required before production; automated tests alone are insufficient. Dark mode is designed as a future token variant, not claimed implemented by the four brand themes. No silent password/log data in analytics. Confirm loading placeholders do not replace accessible names. Test long names, localization expansion, RTL before enabling RTL languages, timezone/currency formatting, and interrupted requests.
 
 ## 18. Full product module blueprint
 

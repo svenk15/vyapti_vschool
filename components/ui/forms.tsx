@@ -1,18 +1,20 @@
 "use client";
 import { useId, useState } from "react";
 import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ReactNode } from "react";
-type FieldProps={label:string;hint?:string;error?:string};
-export function TextField({label,hint,error,id,...props}:InputHTMLAttributes<HTMLInputElement>&FieldProps) {
+export type FieldWidth="auto"|"numeric"|"date"|"status"|"code"|"person"|"email"|"wide"|"context"|"full";
+type FieldProps={label:string;hint?:string;error?:string;width?:FieldWidth;className?:string};
+function fieldClass(width:FieldWidth,className?:string){return `field field-width-${width}${className?` ${className}`:""}`;}
+export function TextField({label,hint,error,id,width="auto",className,...props}:InputHTMLAttributes<HTMLInputElement>&FieldProps) {
  const unique=useId(),fieldId=id??unique,description=error??hint;
- return <div className="field"><label htmlFor={fieldId}>{label}{props.required&&<span aria-hidden="true"> *</span>}</label><input {...props} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}/>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
+ return <div className={fieldClass(width,className)}><label htmlFor={fieldId}>{label}{props.required&&<span aria-hidden="true"> *</span>}</label><input {...props} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}/>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
 }
-export function SelectField({label,hint,error,id,children,...props}:SelectHTMLAttributes<HTMLSelectElement>&FieldProps&{children:ReactNode}) {
+export function SelectField({label,hint,error,id,children,width="auto",className,...props}:SelectHTMLAttributes<HTMLSelectElement>&FieldProps&{children:ReactNode}) {
  const unique=useId(),fieldId=id??unique,description=error??hint;
- return <div className="field"><label htmlFor={fieldId}>{label}</label><select {...props} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}>{children}</select>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
+ return <div className={fieldClass(width,className)}><label htmlFor={fieldId}>{label}</label><select {...props} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}>{children}</select>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
 }
-export function TextArea({label,hint,error,id,...props}:TextareaHTMLAttributes<HTMLTextAreaElement>&FieldProps) {
+export function TextArea({label,hint,error,id,width="wide",className,variant="short",...props}:TextareaHTMLAttributes<HTMLTextAreaElement>&FieldProps&{variant?:"short"|"long"}) {
  const unique=useId(),fieldId=id??unique,description=error??hint;
- return <div className="field"><label htmlFor={fieldId}>{label}</label><textarea {...props} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}/>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
+ return <div className={`${fieldClass(width,className)} field-textarea-${variant}`}><label htmlFor={fieldId}>{label}</label><textarea {...props} rows={props.rows??(variant==="long"?6:3)} id={fieldId} aria-invalid={Boolean(error)||undefined} aria-describedby={description?`${fieldId}-hint`:undefined}/>{description&&<p id={`${fieldId}-hint`} className={error?"field-error":"field-hint"} role={error?"alert":undefined}>{description}</p>}</div>;
 }
 export function Checkbox({label,...props}:InputHTMLAttributes<HTMLInputElement>&{label:string}) {return <label className="check-control"><input {...props} type="checkbox"/><span>{label}</span></label>;}
 export function Switch({label,...props}:InputHTMLAttributes<HTMLInputElement>&{label:string}) {return <label className="switch-control"><span>{label}</span><input {...props} type="checkbox" role="switch"/><span className="switch-track" aria-hidden="true"/></label>;}

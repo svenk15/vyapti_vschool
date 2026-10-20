@@ -2,6 +2,12 @@
 
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
+## UXR-02 — Focus Student registration on one editable page
+
+**Dependencies:** UXR-00 and UXR-01A. Replace the four presentation stages on `/admin/students/register` with the approved two-group page described in [DESIGN](DESIGN.md#uxr-02-one-page-registration-composition-approved-20-october-2026). Reuse the existing People exact-selection and Students registration contracts. Do not merge enrollment or access commands.
+
+**Acceptance:** new/existing Person registration; authoritative resolved and receipt identity; confirmation invalidation; duplicate admission/Person recovery; invalid/future date; unauthorized/foreign scope denial; exact-payload/key recovery after a lost response; safe value retention; error-summary focus; desktop/mobile/four-theme visual inspection. Update incremental fictional seed data only if the existing fixture cannot demonstrate both modes.
+
 ## STW-A01 — Student access setup, activation and own workspace
 
 Depends on: STU-01, STU-02, IAM-03, TEN-02

@@ -1,5 +1,13 @@
 # Students, enrollment and placement history — current state
 
+## UXR-02 focused registration checkpoint — 20 October 2026
+
+UXR-02 is engineering-complete; human review is PENDING. `/admin/students/register` now uses one editable Student details / School record page. New identity is the default; exact Person-ID or branch admission-number selection appears only when chosen. A resolved Person name is authoritative and read-only, its inline confirmation is cleared when the reference changes, and success uses the server-returned Student identity. Admission number and verified branch-entry date remain required. Enrollment and Parent/Student access remain separate next actions.
+
+The existing Students command, scoped People selection, authorization, institution/branch/module checks, locking, transaction, uniqueness, audit, receipt and idempotency behavior were preserved. An unknown response locks edits and retries the exact retained payload/key; focused PostgreSQL-backed Playwright proved committed-response loss recovers one original Student without a duplicate. The final registration rerun passed 1/1 and also covered authoritative existing-Person registration, confirmation invalidation, duplicate admission/Person recovery and foreign-scope denial. The broader focused desktop/mobile batch covered invalid/future date, unauthorized Teacher access, retained failure values and error-summary focus. Final build `px4_AGxnlxyewduJf49hp` passed. No schema, migration or seed change occurred. [Evidence and exact baseline/final comparisons](../../evidence/uxr-00-02-2026-10-20/README.md).
+
+Native browser 200% zoom and assistive-technology checks remain pending. Human acceptance, TEN-03 and production release gates are unchanged.
+
 ## UX-12 Student record composition — 19 October 2026
 
 The representative Administrator Student record now opens as a compact approved-detail composition instead of rendering every owner workflow in one page. Overview contains current authorized facts, status, state-appropriate next actions and the enrollment-history path. URL-addressable Enrollment, Family & access, and Identity & status sections retain the existing dated history, Parent/Student access, staged SA-20 correction, admission-date verification and archive owner components. Directory Manage, registration, enrollment and transfer links target the owning section and preserve the validated Students return URL. The prototype's Attendance and Documents tabs are not rendered because this record exposes no matching authorized projection/route; no data or authority was invented.

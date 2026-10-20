@@ -8,11 +8,11 @@ describe('workspace navigation grouping',()=>{
   const routes=adminNavigationSections.flatMap(group=>group.hrefs);
   expect(new Set(routes).size).toBe(routes.length);
   expect(adminNavigationSections.find(group=>group.id==='admin-primary')?.hrefs).toEqual(['/admin']);
-  expect(adminNavigationSections.find(group=>group.id==='people')?.hrefs).toEqual(['/admin/students','/admin/teachers','/admin/users','/admin/admissions']);
-  expect(adminNavigationSections.find(group=>group.id==='attendance')?.hrefs).toEqual(['/admin/attendance/sessions','/admin/attendance/correction-requests','/admin/attendance/explanations']);
-  expect(adminNavigationSections.find(group=>group.id==='communication')?.hrefs).toContain('/admin/events');
-  expect(adminNavigationSections.find(group=>group.id==='school-administration')?.hrefs).toEqual(['/admin/setup','/admin/school','/admin/modules','/admin/branding','/admin/imports','/admin/activity']);
-  expect(adminNavigationSections.filter(group=>group.sectionBreakBefore).map(group=>group.id)).toEqual(['people','school-administration']);
+  expect(adminNavigationSections.find(group=>group.id==='daily-work')?.hrefs).toEqual(['/admin/students','/admin/teachers','/admin/users','/admin/attendance/sessions','/admin/timetable']);
+  expect(adminNavigationSections.find(group=>group.id==='teaching-communication')?.hrefs).toEqual(['/admin/academics','/admin/classes','/admin/assessments','/admin/timetable/cover','/admin/communication','/admin/events']);
+  expect(adminNavigationSections.find(group=>group.id==='school-operations')?.hrefs).toEqual(['/admin/admissions','/admin/imports','/admin/reports/attendance','/admin/activity']);
+  expect(adminNavigationSections.find(group=>group.id==='school-settings')?.hrefs).toEqual(['/admin/setup','/admin/school','/admin/modules','/admin/branding']);
+  expect(adminNavigationSections.slice(1).every(group=>group.collapsible===false&&group.showLabel===true&&group.sectionBreakBefore===true)).toBe(true);
  });
 
  it('uses static Teacher groups and preserves every authorized destination',()=>{

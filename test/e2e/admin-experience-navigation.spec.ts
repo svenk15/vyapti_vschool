@@ -50,23 +50,18 @@ test('Administrator task navigation preserves groups, current route and mobile f
   await expect(nav.getByRole('link',{name:'Today',exact:true})).toBeFocused();
  }
  await expect(nav.getByRole('link',{name:'Today',exact:true})).toHaveAttribute('aria-current','page');
- await expect(nav.getByRole('button',{name:'People',exact:true})).toHaveAttribute('aria-expanded','false');
- await nav.getByRole('button',{name:'People',exact:true}).click();
- await expect(nav.getByRole('button',{name:'People',exact:true})).toHaveAttribute('aria-expanded','true');
- if(!mobile){
-  await nav.getByRole('button',{name:'Teaching',exact:true}).click();
-  await expect(nav.getByRole('button',{name:'Teaching',exact:true})).toHaveAttribute('aria-expanded','true');
- }
+ for(const label of ['Daily work','Teaching & communication','School operations','School settings'])await expect(nav.getByRole('heading',{name:label,exact:true})).toBeVisible();
+ await expect(nav.getByRole('button',{name:/Daily work|Teaching & communication|School operations|School settings/})).toHaveCount(0);
+ for(const unavailable of ['Attendance','Timetable','Assessments','Admissions'])await expect(nav.getByRole('link',{name:unavailable,exact:true})).toHaveCount(0);
  await nav.getByRole('link',{name:'Students',exact:true}).click();
  await expect(page).toHaveURL(/\/admin\/students/);
  if(mobile) await page.getByRole('button',{name:'Open navigation'}).click();
  await expect(nav.getByRole('link',{name:'Students',exact:true})).toHaveAttribute('aria-current','page');
- await expect(nav.getByRole('button',{name:'People',exact:true})).toHaveAttribute('aria-expanded','true');
- await nav.getByRole('button',{name:'People',exact:true}).click();
- await expect(nav.getByRole('button',{name:'People',exact:true})).toHaveAttribute('aria-expanded','true');
+ await expect(nav.getByRole('link',{name:'School settings',exact:true})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 
  if(mobile){
+  const scroll=page.locator('.portal-nav-scroll');const before=await scroll.evaluate(node=>({clientHeight:node.clientHeight,scrollHeight:node.scrollHeight}));expect(before.scrollHeight).toBeGreaterThan(before.clientHeight);await scroll.evaluate(node=>{node.scrollTop=node.scrollHeight;});await expect(nav.getByRole('link',{name:'Branding & appearance',exact:true})).toBeVisible();const overlap=await page.evaluate(()=>{const link=[...document.querySelectorAll<HTMLAnchorElement>('.portal-nav-scroll a')].find(node=>node.textContent?.includes('Branding & appearance'))!,footer=document.querySelector<HTMLElement>('.portal-sidebar-footer')!;return link.getBoundingClientRect().bottom>footer.getBoundingClientRect().top;});expect(overlap).toBe(false);
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button',{name:'Open navigation'})).toBeFocused();
  }

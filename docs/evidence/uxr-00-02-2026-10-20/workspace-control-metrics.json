@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-10-20T00:24:10.805Z",
+  "buildId": "px4_AGxnlxyewduJf49hp",
+  "results": [
+    {
+      "name": "Administrator",
+      "expectedRoute": "/admin/students/register",
+      "actualRoute": "/admin/students/register",
+      "title": "Register student",
+      "rootOverflow": false,
+      "controlHeight": 40,
+      "buttonHeight": 40,
+      "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+    },
+    {
+      "name": "Teacher",
+      "expectedRoute": "/teacher/readiness",
+      "actualRoute": "/teacher/readiness",
+      "title": "Resolve a missing or changed assignment",
+      "rootOverflow": false,
+      "controlHeight": 40,
+      "buttonHeight": 40,
+      "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+    },
+    {
+      "name": "Principal",
+      "expectedRoute": "/leadership/account",
+      "actualRoute": "/leadership/account",
+      "title": "My account",
+      "rootOverflow": false,
+      "controlHeight": null,
+      "buttonHeight": 40,
+      "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+    },
+    {
+      "name": "Parent",
+      "expectedRoute": "/family/concerns/new",
+      "actualRoute": "/family/concerns/new",
+      "title": "Raise a concern",
+      "rootOverflow": false,
+      "controlHeight": 40,
+      "buttonHeight": 40,
+      "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+    },
+    {
+      "name": "Student",
+      "expectedRoute": "/student/account/sessions",
+      "actualRoute": "/student/account/sessions",
+      "title": "Manage my sessions",
+      "rootOverflow": false,
+      "controlHeight": null,
+      "buttonHeight": 40,
+      "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif"
+    }
+  ]
+}

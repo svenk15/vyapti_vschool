@@ -84,6 +84,16 @@ test("gallery supports all approved themes and negative states at the required v
     await expect(page.getByRole("button", { name: "Unavailable", exact: true })).toBeDisabled();
     await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "true");
     await expect(page.getByLabel("Email address")).toHaveAccessibleDescription(/Enter an email address/);
+    const controls=await page.evaluate(()=>({
+      standard:Math.round(document.querySelector<HTMLElement>('.btn-primary:not(.btn-small):not(.btn-consequence):not(.btn-icon)')!.getBoundingClientRect().height),
+      compact:Math.round(document.querySelector<HTMLElement>('.btn-small')!.getBoundingClientRect().height),
+      consequential:Math.round(document.querySelector<HTMLElement>('.btn-consequence')!.getBoundingClientRect().height),
+      icon:Math.round(document.querySelector<HTMLElement>('.btn-icon')!.getBoundingClientRect().height),
+      input:Math.round(document.querySelector<HTMLInputElement>('.field input:not([type=file])')!.getBoundingClientRect().height),
+      shortText:Math.round(document.querySelector<HTMLTextAreaElement>('.field-textarea-short textarea')!.getBoundingClientRect().height),
+      longText:Math.round(document.querySelector<HTMLTextAreaElement>('.field-textarea-long textarea')!.getBoundingClientRect().height),
+    }));
+    const coarse=test.info().project.name==='mobile';expect(controls.standard).toBe(coarse?44:40);expect(controls.compact).toBe(coarse?44:36);expect(controls.consequential).toBe(44);expect(controls.icon).toBe(44);expect(controls.input).toBe(coarse?44:40);expect(controls.shortText).toBeGreaterThanOrEqual(coarse?84:80);expect(controls.longText).toBeGreaterThanOrEqual(coarse?144:140);
     await page.screenshot({ path: `docs/evidence/ux-revamp-02-2026-10-18/gallery-${palette}-${test.info().project.name}.png`, fullPage: true });
   }
   await page.getByRole("tab", { name: "Empty", exact: true }).focus();
@@ -129,7 +139,7 @@ test("controlled list recipes apply or discard drafts and retain unknown request
   await expect(filterDialog.locator("details")).toHaveAttribute("open", "");
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(filterTrigger).toBeFocused();
-  await expect(page.getByRole("row")).toHaveCount(7);
+  await expect(page.locator("#data").getByRole("row")).toHaveCount(7);
 
   await filterTrigger.click();
   await expect(page.getByRole("checkbox", { name: "Absent", exact: true })).not.toBeChecked();
@@ -137,7 +147,7 @@ test("controlled list recipes apply or discard drafts and retain unknown request
   await page.getByRole("checkbox", { name: "Absent", exact: true }).check();
   await page.getByRole("button", { name: "Apply filters" }).click();
   await expect(page.getByRole("button", { name: "Filters (2)" })).toBeFocused();
-  await expect(page.getByRole("row")).toHaveCount(5);
+  await expect(page.locator("#data").getByRole("row")).toHaveCount(5);
 
   const sortTrigger = page.getByRole("button", { name: "Sort", exact: true });
   await expect(sortTrigger).toHaveAccessibleDescription("Currently sorted by Student A–Z");
@@ -166,7 +176,7 @@ test("controlled list recipes apply or discard drafts and retain unknown request
 test("form examples and disclosure respond to keyboard without losing entered text", async ({ page }) => {
   await page.goto("/design-system");
   await page.getByLabel("Full name").fill("Synthetic Example");
-  await page.getByLabel("Reason for correction").fill("Synthetic correction explanation.");
+  await page.getByLabel("Short reason").fill("Synthetic correction explanation.");
   const checkbox = page.getByRole("checkbox", { name: "I have reviewed the changes" });
   await checkbox.focus();
   await page.keyboard.press("Space");
@@ -191,5 +201,5 @@ test("form examples and disclosure respond to keyboard without losing entered te
   await page.keyboard.press("Enter");
   await expect(page.getByText(/Never silently skip data/)).not.toBeVisible();
   await expect(page.getByLabel("Full name")).toHaveValue("Synthetic Example");
-  await expect(page.getByLabel("Reason for correction")).toHaveValue("Synthetic correction explanation.");
+  await expect(page.getByLabel("Short reason")).toHaveValue("Synthetic correction explanation.");
 });

@@ -2,6 +2,40 @@
 
 Phase 1 · Revision 1 · 3 October 2026. Runtime implementation limits are explicit in CURRENT_STATE.md.
 
+## UXR-00/01A/01 approved UX contract (20 October 2026)
+
+The canonical [UX Constitution](../../ux/UX_CONSTITUTION.md) and [control sizing contract](../../ux/CONTROL_SIZING_CONTRACT.md) govern shared presentation. Existing security, route and module-availability contracts remain unchanged.
+
+**Shared controls.** Production primitives own standard (40px desktop), narrow/coarse (44px), consequential (44px), compact-row (36px desktop), icon-only (44px), and short/long textarea geometry. Purpose widths are semantic and capped by available space. Labels, hints, errors, action rows and section gaps use the canonical spacing contract. Themes change tokens, never geometry. Loading retains the action width; validation can expand without clipping.
+
+**Administrator navigation.** The existing authorized destination catalogue remains the source of truth. Presentation changes from nested operational accordions to direct links under static `Daily work`, `Teaching & communication`, `School operations`, and `School settings` labels. Staff remains one combined entry with Profiles/Access/Availability local navigation. Admissions and Imports remain discoverable from Students, while academic setup, modules, branding and activity remain discoverable from the setup/settings hub. Optional services remain server-filtered. Deep links and per-route authorization are unchanged.
+
+The UXR-01 destination reconciliation preserves every prior entry. `getAdminNavigation` retains its capability and module checks; optional entries retain the live gateway checks in `app/admin/layout.tsx`; every destination continues to enforce its own server authorization.
+
+| Previous presentation | UXR-01 presentation | Route(s) and retained reachability |
+|---|---|---|
+| Direct Today | Direct Today | `/admin` |
+| People → Students | Daily work → Students | `/admin/students`; registration, enrollment, transfer and record actions remain local links |
+| People → Staff profiles / Staff access / Staff availability | Daily work → Staff | Preferred authorized staff route; Profiles, Access and Availability remain in local Staff tabs and active-route matching |
+| People → Admissions | School operations → Admissions | `/admin/admissions` |
+| Teaching → Academic setup | Teaching & communication → Classes & subjects | `/admin/academics` |
+| Teaching → Teacher assignments | Teaching & communication → Teacher assignments | `/admin/classes` |
+| Teaching → Timetable | Daily work → Timetable | `/admin/timetable` |
+| Teaching → Assessments | Teaching & communication → Assessments | `/admin/assessments` |
+| Teaching → Cover coordination | Teaching & communication → Cover coordination | `/admin/timetable/cover` |
+| Attendance → Registers | Daily work → Attendance | `/admin/attendance/sessions`; Corrections and Explanations remain in the Attendance local tabs |
+| Communication → Notices | Teaching & communication → Notices | `/admin/communication` |
+| Communication → Calendar & events | Teaching & communication → Calendar & events | `/admin/events` |
+| My work → Requests / Assigned follow-ups | School operations → Requests / Assigned follow-ups | `/admin/requests`, `/admin/coordination`; live queue/availability gates retained |
+| Reports → Attendance report | School operations → Attendance report | `/admin/reports/attendance` |
+| School administration → School setup / School details / Modules / Branding | School settings → School settings / School details / Modules / Branding & appearance | `/admin/setup`, `/admin/school`, `/admin/modules`, `/admin/branding` |
+| School administration → Imports / Activity | School operations → Imports / Activity | `/admin/imports`, `/admin/activity` |
+| Additional services → Support / Facilities / Finance | School operations → Support procedure / Facilities incidents / Financial exceptions | `/admin/support`, `/admin/services/incidents`, `/admin/finance/exceptions`; each remains conditional on its existing live owner projection |
+
+Groups are static labels rather than disclosure buttons. Empty groups are omitted. Bookmarked deep links remain unchanged and do not depend on the sidebar entry being visible.
+
+**Failures and acceptance.** Mobile navigation retains focus containment, Escape and opener focus restoration. An empty or unavailable group is omitted without granting another destination. Active-route matching stays exact enough that one leaf is current. Verification covers broad and limited Administrator personas, disabled modules, desktop/mobile navigation, five-workspace shared-control consumers, long/error/loading states and all four themes. Human visual and native assistive-technology acceptance remain separate.
+
 ## Purpose and boundaries
 
 The design system owns shared presentation primitives, tokens and interaction contracts. It owns no pupil, institution permission or database business state. Module screens import components/ui and compose them; they cannot introduce a competing button/table/form system. BrandSurface receives a validated public theme identifier; no ad hoc CSS injection. Inter 4.1 is bundled locally under the SIL Open Font License and loaded through `next/font/local`; no browser request is made to a font CDN.
