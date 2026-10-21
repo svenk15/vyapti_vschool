@@ -351,14 +351,14 @@ export function GuardianAccessManagement({
       </article>)}</div>
     }
 
-    <Dialog open={drawer!==null} onClose={requestClose} drawer title={drawer==="add"?"Add guardian":"Manage guardian access"} description={studentContext??studentName} showDescription className="guardian-access-drawer">
+    <Dialog open={drawer!==null} onClose={requestClose} drawer title={drawer==="add"?"Add guardian":"Manage guardian access"} description={studentContext??studentName} showDescription initialFocusSelector={drawer==="add"?"#guardian-full-name":undefined} className="guardian-access-drawer">
       {drawerMessage&&<Alert tone={drawerMessage.tone} title={drawerMessage.title} onDismiss={!locked?()=>setDrawerMessage(null):undefined}>
         <p>{drawerMessage.body}</p>
         {refreshPending&&refreshPending.finish!=="remove"&&<Button size="small" variant="secondary" disabled={busy} onClick={()=>void retryRefresh()}>Refresh current access</Button>}
       </Alert>}
 
       {drawer==="add"&&<div className="guardian-drawer-form">
-        <TextField label="Full name" required autoFocus autoComplete="name" value={displayName} error={fieldErrors.displayName} disabled={locked} onChange={event=>{setDisplayName(event.target.value);setFieldErrors(current=>({...current,displayName:undefined}));}} maxLength={160}/>
+        <TextField id="guardian-full-name" label="Full name" required autoFocus autoComplete="name" value={displayName} error={fieldErrors.displayName} disabled={locked} onChange={event=>{setDisplayName(event.target.value);setFieldErrors(current=>({...current,displayName:undefined}));}} maxLength={160}/>
         <TextField label="Email address" required type="email" autoComplete="email" value={email} error={fieldErrors.email} disabled={locked} onChange={event=>{setEmail(event.target.value);setFieldErrors(current=>({...current,email:undefined}));}} maxLength={254}/>
         <div className="guardian-purpose-summary"><strong>Parent portal access</strong>{["Student summary","Attendance history","Published timetable"].map(label=><span key={label}><span>✓</span>{label}</span>)}</div>
         <Checkbox label="Also allow school notices for this child" checked={noticeRead} disabled={locked} onChange={event=>setNoticeRead(event.target.checked)}/>

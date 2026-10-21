@@ -2,9 +2,9 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Button, EmptyState } from "./primitives";
 
-export function Dialog({open,onClose,title,description,children,drawer=false,showDescription=false,className}:{open:boolean;onClose:()=>void;title:string;description?:string;children:ReactNode;drawer?:boolean;showDescription?:boolean;className?:string}) {
+export function Dialog({open,onClose,title,description,children,drawer=false,showDescription=false,initialFocusSelector,className}:{open:boolean;onClose:()=>void;title:string;description?:string;children:ReactNode;drawer?:boolean;showDescription?:boolean;initialFocusSelector?:string;className?:string}) {
  const ref=useRef<HTMLDialogElement>(null),opener=useRef<HTMLElement|null>(null),id=useId();
-  useEffect(()=>{const node=ref.current;if(!node)return;if(open&&!node.open){opener.current=document.activeElement instanceof HTMLElement?document.activeElement:null;node.showModal();queueMicrotask(()=>node.querySelector<HTMLElement>("[autofocus]")?.focus());}else if(!open&&node.open){node.close();queueMicrotask(()=>opener.current?.focus());}},[open]);
+  useEffect(()=>{const node=ref.current;if(!node)return;if(open&&!node.open){opener.current=document.activeElement instanceof HTMLElement?document.activeElement:null;node.showModal();queueMicrotask(()=>node.querySelector<HTMLElement>(initialFocusSelector??"[autofocus]")?.focus());}else if(!open&&node.open){node.close();queueMicrotask(()=>opener.current?.focus());}},[initialFocusSelector,open]);
  return <dialog ref={ref} className={`${drawer?"dialog drawer":"dialog"}${className?` ${className}`:""}`} aria-labelledby={`${id}-title`} aria-describedby={description?`${id}-description`:undefined} onCancel={event=>{event.preventDefault();onClose();}} onKeyDown={e=>{
   if(e.key!=="Tab")return;
   const node=e.currentTarget;
