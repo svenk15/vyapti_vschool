@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VSchool Staff capability review</title>
+<style>
+:root{color-scheme:light;--ink:#17251f;--muted:#617169;--line:#dce5df;--brand:#176b51;--soft:#eef6f1;--warn:#9a5b00;--warn-bg:#fff4dd;--danger:#9f2d2d;--danger-bg:#ffeded;--defer:#5b6070;--defer-bg:#f1f2f5;font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#f7faf8;color:var(--ink)}button{font:inherit}.shell{min-height:100vh;display:grid;grid-template-columns:248px minmax(0,1fr)}aside{background:#103f32;color:#f7fffb;padding:24px 16px;display:flex;flex-direction:column;gap:22px}aside h1{font-size:22px;margin:0 8px}aside p{color:#c8dcd3;margin:0 8px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:inherit;text-align:left;padding:11px 12px;border-radius:8px;cursor:pointer}.nav button:hover,.nav button:focus-visible,.nav button.active{background:#286553;outline:0}.nav button:focus-visible{box-shadow:0 0 0 3px #b9e4d2}.legend{margin-top:auto;border-top:1px solid #377060;padding:18px 8px 0;font-size:12px;color:#d8e8e1}main{padding:32px;max-width:1240px;width:100%;margin:0 auto}.banner{border:1px solid #d4e4db;background:white;border-radius:12px;padding:16px 18px;margin-bottom:24px}.banner strong{display:block}.banner p{margin:4px 0 0;color:var(--muted)}header{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:22px}h2{font-size:30px;line-height:1.2;margin:0}header p{margin:6px 0 0;color:var(--muted)}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters button{border:1px solid var(--line);background:white;border-radius:999px;padding:8px 12px;cursor:pointer}.filters button[aria-pressed=true]{background:var(--soft);border-color:#89b7a4;color:#0c5a42}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:18px;min-height:176px}.card-head{display:flex;justify-content:space-between;gap:12px;align-items:start}.card h3{margin:0;font-size:17px}.card p{color:var(--muted);margin:10px 0}.meta{font-size:12px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:4px}.tag{white-space:nowrap;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700}.implemented{background:#e4f4eb;color:#17613f}.partial{background:var(--warn-bg);color:var(--warn)}.blocked{background:var(--danger-bg);color:var(--danger)}.deferred{background:var(--defer-bg);color:var(--defer)}.route{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}.proposal{border-left:4px solid #d8a33f}.proposal::after{content:"Proposed documentation composition — no production action";display:block;margin-top:12px;font-size:11px;color:var(--warn);font-weight:650}.hidden{display:none}.foot{margin-top:24px;color:var(--muted);font-size:12px}@media(max-width:760px){.shell{display:block}aside{position:static}.nav{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:20px}.grid{grid-template-columns:1fr}header{align-items:start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div><h1>Staff review</h1><p>Capability map</p></div>
+  <nav class="nav" aria-label="Review sections">
+    <button class="active" data-filter="all">All capabilities</button>
+    <button data-filter="implemented">Implemented</button>
+    <button data-filter="partial">Mandatory gaps</button>
+    <button data-filter="conditional">Conditional</button>
+    <button data-filter="deferred">Deferred</button>
+  </nav>
+  <div class="legend">Review-only proposal. It reads no application data and performs no mutation. Fictional names are illustrative.</div>
+</aside>
+<main>
+  <div class="banner"><strong>Staff records, identity, access and teaching remain distinct.</strong><p>This proposal represents actual routes and owner capabilities. Cards marked “Mandatory gap” are proposals, not working UI.</p></div>
+  <header><div><h2>Staff &amp; access</h2><p>Current capability catalogue and closure gaps</p></div><div class="filters" aria-label="Capability status filters"><button aria-pressed="true" data-filter="all">All</button><button aria-pressed="false" data-filter="implemented">Working</button><button aria-pressed="false" data-filter="partial">Gaps</button></div></header>
+  <section class="grid" aria-live="polite">
+    <article class="card" data-state="partial"><div class="card-head"><h3>Directory</h3><span class="tag partial">PARTIAL</span></div><p>Scoped Staff rows and forward pagination work. Approved attribute search, filters, sort and URL restoration remain.</p><div class="meta"><span class="route">/admin/teachers</span><span>People · listEmployees</span></div></article>
+    <article class="card" data-state="implemented"><div class="card-head"><h3>Add new Staff</h3><span class="tag implemented">IMPLEMENTED</span></div><p>Create one fictional organization Person and branch Employee atomically. This path does not create access.</p><div class="meta"><span class="route">/admin/teachers/create</span><span>People · createEmployee</span></div></article>
+    <article class="card proposal" data-state="partial"><div class="card-head"><h3>Use existing Person</h3><span class="tag blocked">CONTRACT REQUIRED</span></div><p>Select an exact authorized Person ID with reviewed verification. Never match or merge by name/email.</p><div class="meta"><span>No production route</span><span>People owner command missing</span></div></article>
+    <article class="card proposal" data-state="partial"><div class="card-head"><h3>Staff profile</h3><span class="tag partial">MANDATORY GAP</span></div><p>Compose employment, identity, access, Teacher eligibility and dated responsibilities through typed owner projections.</p><div class="meta"><span>Proposed /admin/teachers/[id]</span><span>Current production uses a Manage dialog</span></div></article>
+    <article class="card" data-state="implemented"><div class="card-head"><h3>Grant access</h3><span class="tag implemented">IMPLEMENTED</span></div><p>Exact active Employee, independent verification, fixed branch roles and honest activation path.</p><div class="meta"><span class="route">/admin/users/grant</span><span>Access · grantEmployeeAccess</span></div></article>
+    <article class="card" data-state="partial"><div class="card-head"><h3>Invitation &amp; membership</h3><span class="tag partial">PARTIAL</span></div><p>Grant, accept, suspend and reinstate work. Reasoned resend, Employee-context state and complete recovery presentation remain.</p><div class="meta"><span class="route">/admin/users · /admin/users/change</span><span>Access owner</span></div></article>
+    <article class="card proposal" data-state="partial"><div class="card-head"><h3>Dated teaching eligibility</h3><span class="tag partial">MANDATORY GAP</span></div><p>Current Teacher eligibility is boolean. Approved effective dates and assignment-impact review need an Academics contract.</p><div class="meta"><span>Current action: Enable teaching</span><span>Academics owner</span></div></article>
+    <article class="card" data-state="partial"><div class="card-head"><h3>Teaching assignments</h3><span class="tag partial">PARTIAL</span></div><p>Dated assign/end operations work in Academics. Staff-context responsibility and history views are missing.</p><div class="meta"><span class="route">/admin/classes</span><span>Academics · TeacherAssignment</span></div></article>
+    <article class="card" data-state="conditional implemented"><div class="card-head"><h3>Operational availability</h3><span class="tag implemented">CONDITIONAL · IMPLEMENTED</span></div><p>Explicit recorder authority creates bounded intervals; leadership receives privacy-minimized state.</p><div class="meta"><span class="route">/admin/teachers/availability</span><span>People availability owner</span></div></article>
+    <article class="card" data-state="conditional implemented"><div class="card-head"><h3>Exact-occurrence cover</h3><span class="tag implemented">CONDITIONAL · IMPLEMENTED</span></div><p>Availability, assignment and Attendance state are rechecked before one cover becomes active.</p><div class="meta"><span class="route">/admin/timetable/cover</span><span>Academics cover owner</span></div></article>
+    <article class="card proposal" data-state="partial"><div class="card-head"><h3>Employment lifecycle</h3><span class="tag partial">MANDATORY GAP</span></div><p>End-today works. Future/retroactive changes, reactivation, history and explicit Access coordination require a contract.</p><div class="meta"><span>Current action: End employment today</span><span>People + Access decision</span></div></article>
+    <article class="card" data-state="deferred"><div class="card-head"><h3>Advanced leave</h3><span class="tag deferred">DEFERRED</span></div><p>Leave request/approval policy remains SA-53 phase 6. Operational availability must not impersonate leave approval.</p><div class="meta"><span>No production route</span><span>Future owner/product programme</span></div></article>
+  </section>
+  <p class="foot">Human acceptance, TEN-03, production provider review and native accessibility remain pending.</p>
+</main>
+</div>
+<script>
+const controls=[...document.querySelectorAll('[data-filter]')],cards=[...document.querySelectorAll('[data-state]')];
+function apply(value){cards.forEach(card=>card.classList.toggle('hidden',value!=='all'&&!card.dataset.state.split(' ').includes(value)));controls.forEach(button=>{button.classList.toggle('active',button.dataset.filter===value);if(button.hasAttribute('aria-pressed'))button.setAttribute('aria-pressed',String(button.dataset.filter===value));});}
+controls.forEach(button=>button.addEventListener('click',()=>apply(button.dataset.filter)));
+</script>
+</body>
+</html>
