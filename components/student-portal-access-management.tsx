@@ -1,19 +1,255 @@
 'use client';
+
 import {useRef,useState} from 'react';
 import {TextArea,TextField} from '@/components/ui/forms';
 import {Dialog} from '@/components/ui/interactive';
 import {Alert,Badge,Button,Card,EmptyState,SectionHeader,Stepper} from '@/components/ui/primitives';
 import type {StudentPortalAccessRecord,StudentPortalAuthorizationResult} from '@/shared/contracts/student-portal';
-const labels:Record<StudentPortalAccessRecord['status'],string>={INVITE_SENT:'Setup link sent',DELIVERY_FAILED:'Delivery failed',OPERATOR_REQUIRED:'Operator setup required',ACCESS_ENABLED:'Access enabled',ACCESS_REMOVED:'Access removed'};
+
+const labels:Record<StudentPortalAccessRecord['status'],string>={
+  INVITE_SENT:'Setup link sent',
+  DELIVERY_FAILED:'Delivery failed',
+  OPERATOR_REQUIRED:'Operator setup required',
+  ACCESS_ENABLED:'Access enabled',
+  ACCESS_REMOVED:'Access removed',
+};
 const tone=(status:StudentPortalAccessRecord['status'])=>status==='ACCESS_ENABLED'?'success':status==='DELIVERY_FAILED'?'danger':status==='ACCESS_REMOVED'?'neutral':'warning';
+
 type Failure=Error&{status?:number;retryable?:boolean};
-type Attempt=Readonly<{kind:'authorize';key:string;email:string;confirmed:true;noticeRead:boolean}|{kind:'resend';key:string;accessId:string}|{kind:'purpose';key:string;accessId:string;expectedVersion:number;purpose:'notice'|'calendar'|'learning';enabled:boolean}|{kind:'remove';key:string;accessId:string;expectedVersion:number;reason:string}>;
-async function payload(response:Response){const value=await response.json().catch(()=>({}));if(!response.ok)throw Object.assign(new Error(typeof value.message==='string'?value.message:'Unable to complete this request.'),{status:response.status,retryable:value.retryable}) as Failure;return value;}
+type Message={tone:'success'|'danger'|'warning';title:string;body:string};
+type Attempt=Readonly<
+  |{kind:'authorize';key:string;email:string;confirmed:true;noticeRead:boolean}
+  |{kind:'resend';key:string;accessId:string}
+  |{kind:'purpose';key:string;accessId:string;expectedVersion:number;purpose:'notice'|'calendar'|'learning';enabled:boolean}
+  |{kind:'remove';key:string;accessId:string;expectedVersion:number;reason:string}
+>;
+
+async function payload<T>(response:Response):Promise<T>{
+  const value=await response.json().catch(()=>({}));
+  if(!response.ok)throw Object.assign(
+    new Error(typeof value.message==='string'?value.message:'Unable to complete this request.'),
+    {status:response.status,retryable:value.retryable},
+  ) as Failure;
+  return value as T;
+}
+
 export function StudentPortalAccessManagement({studentId,studentName,initialItems}:{studentId:string;studentName:string;initialItems:readonly StudentPortalAccessRecord[]}){
- const [items,setItems]=useState([...initialItems]),[step,setStep]=useState<0|1>(0),[email,setEmail]=useState(''),[noticeRead,setNoticeRead]=useState(false),[confirmed,setConfirmed]=useState(false),[busy,setBusy]=useState(false),[message,setMessage]=useState<{tone:'success'|'danger'|'warning';title:string;body:string}|null>(null),[attempt,setAttempt]=useState<Attempt|null>(null),[removeItem,setRemoveItem]=useState<StudentPortalAccessRecord|null>(null),[reason,setReason]=useState(''),heading=useRef<HTMLHeadingElement>(null);
- const move=(next:0|1)=>{setStep(next);requestAnimationFrame(()=>heading.current?.focus());},locked=attempt!==null;
- async function refresh(){const data=await payload(await fetch(`/api/v1/students/${studentId}/portal-access`,{cache:'no-store'}));setItems(data.items);}
- async function execute(fresh:Attempt){const exact=attempt??fresh;if(attempt&&attempt.kind!==fresh.kind)return;setAttempt(exact);setBusy(true);setMessage(null);try{let response:Response,result:StudentPortalAuthorizationResult|undefined;if(exact.kind==='authorize'){response=await fetch(`/api/v1/students/${studentId}/portal-access`,{method:'POST',headers:{'content-type':'application/json','idempotency-key':exact.key},body:JSON.stringify(exact)});result=await payload(response) as StudentPortalAuthorizationResult;}else if(exact.kind==='resend'){response=await fetch(`/api/v1/student-access/${exact.accessId}/resend`,{method:'POST',headers:{'content-type':'application/json','idempotency-key':exact.key},body:JSON.stringify({key:exact.key})});result=await payload(response) as StudentPortalAuthorizationResult;}else if(exact.kind==='purpose'){response=await fetch(`/api/v1/student-access/${exact.accessId}`,{method:'PATCH',headers:{'content-type':'application/json','idempotency-key':exact.key},body:JSON.stringify({purpose:exact.purpose,expectedVersion:exact.expectedVersion,enabled:exact.enabled,key:exact.key})});await payload(response);}else{response=await fetch(`/api/v1/student-access/${exact.accessId}`,{method:'DELETE',headers:{'content-type':'application/json','idempotency-key':exact.key},body:JSON.stringify({expectedVersion:exact.expectedVersion,reason:exact.reason,key:exact.key})});await payload(response);}setAttempt(null);await refresh();if(exact.kind==='authorize'){setEmail('');setNoticeRead(false);setConfirmed(false);move(0);setMessage({tone:result?.status==='DELIVERY_FAILED'?'warning':'success',title:result?.status==='DELIVERY_FAILED'?'Access saved; setup link not delivered':'Student access setup created',body:result?.status==='OPERATOR_REQUIRED'?'This institution uses operator-assisted setup. No email was sent.':'The setup is limited to this Student record.'});}else if(exact.kind==='resend')setMessage({tone:result?.status==='DELIVERY_FAILED'?'warning':'success',title:result?.status==='DELIVERY_FAILED'?'Access retained; setup link not delivered':'Setup link sent again',body:'The earlier pending link can no longer be used.'});else if(exact.kind==='purpose')setMessage({tone:'success',title:'Optional access updated',body:'The change applies only to this Student and purpose.'});else{setRemoveItem(null);setReason('');setMessage({tone:'success',title:'Student access removed',body:'The Student record and access history remain unchanged.'});}}catch(cause){const failure=cause as Failure,unknown=failure.status===undefined||failure.status>=500||failure.retryable===true;if(!unknown)setAttempt(null);setMessage({tone:unknown?'warning':'danger',title:unknown?'Access result unknown':'Access not changed',body:unknown?'Retry the unchanged operation. Other changes are blocked until this outcome is known.':failure.message});}finally{setBusy(false);}}
- const purposeLabel=(purpose:'notice'|'calendar'|'learning')=>purpose==='calendar'?'School calendar':purpose==='learning'?'Published learning':'School notices';
- return <Card id="student-portal-access" className="padded settings-panel guardian-access-panel"><SectionHeader title="Student portal access" description="Issue optional self-service access to this Student's own school information."/>{message&&<Alert tone={message.tone} title={message.title} onDismiss={!attempt?()=>setMessage(null):undefined}>{message.body}</Alert>}<div className="guardian-access-grid"><section aria-labelledby="student-access-title" className="guardian-invite-flow"><Stepper steps={['Account details','Review & authorize']} current={step}/><h3 id="student-access-title" ref={heading} tabIndex={-1}>{step===0?'Student account details':'Review and authorize'}</h3>{step===0?<div className="settings-form compact-form"><TextField label="Student email address" type="email" value={email} disabled={locked} onChange={event=>setEmail(event.target.value)} autoComplete="email" maxLength={254} hint="Use an address confirmed for the Student, never a guardian address."/><label className="check-row"><input type="checkbox" checked={noticeRead} disabled={locked} onChange={event=>setNoticeRead(event.target.checked)}/><span>Allow school notices for this Student</span></label><div className="form-actions"><Button disabled={!email.includes('@')||locked} onClick={()=>move(1)}>Review access</Button></div></div>:<><dl className="record-facts guardian-review"><div><dt>Student</dt><dd>{studentName}</dd></div><div><dt>Account address</dt><dd>{email}</dd></div><div><dt>Core access</dt><dd>Own profile, published timetable and own attendance</dd></div><div><dt>School notices</dt><dd>{noticeRead?'Enabled independently':'Not granted'}</dd></div></dl><label className="check-row"><input type="checkbox" checked={confirmed} disabled={locked} onChange={event=>setConfirmed(event.target.checked)}/><span>I confirm this address belongs to the intended Student account.</span></label><div className="form-actions spread"><Button variant="secondary" disabled={busy||locked} onClick={()=>move(0)}>Back</Button><Button loading={busy} disabled={!confirmed} onClick={()=>void execute({kind:'authorize',key:crypto.randomUUID(),email:email.trim(),confirmed:true,noticeRead})}>{attempt?.kind==='authorize'?'Retry unchanged setup':'Authorize access'}</Button></div></>}</section><section aria-labelledby="student-current-access"><h3 id="student-current-access">Portal access history</h3>{items.length===0?<EmptyState title="Student access not enabled" description="This Student remains a school record without a login until access is explicitly authorized." icon="people"/>:<div className="guardian-access-list">{items.map(item=>{const notices=item.purposes.includes('communication.notice.read_self'),calendar=item.purposes.includes('calendar.event.read_self'),learning=item.purposes.includes('learning.assignment.read_self'),removed=item.status==='ACCESS_REMOVED';return <article key={item.accessId} className="guardian-access-row"><div><strong>{item.email}</strong><p className="small muted">{item.studentName}</p></div><Badge tone={tone(item.status)}>{labels[item.status]}</Badge>{removed?<p className="small muted student-access-history-note">Historical access · no actions available</p>:<div className="student-access-purpose-list">{(['notice','calendar','learning'] as const).map(purpose=>{const enabled=purpose==='notice'?notices:purpose==='calendar'?calendar:learning;return <div className="student-access-purpose-row" key={purpose}><span><strong>{purposeLabel(purpose)}</strong><small>{enabled?'Allowed':'Not allowed'}</small></span><Button size="small" variant="secondary" disabled={busy||(locked&&!(attempt?.kind==='purpose'&&attempt.accessId===item.accessId&&attempt.purpose===purpose))} onClick={()=>void execute({kind:'purpose',key:crypto.randomUUID(),accessId:item.accessId,expectedVersion:item.version,purpose,enabled:!enabled})}>{attempt?.kind==='purpose'&&attempt.accessId===item.accessId&&attempt.purpose===purpose?'Retry unchanged change':enabled?'Remove':'Allow'}</Button></div>})}{['INVITE_SENT','DELIVERY_FAILED'].includes(item.status)&&<div className="student-access-purpose-row"><span><strong>Setup link</strong><small>Single-use account activation</small></span><Button size="small" variant="secondary" disabled={busy||(locked&&!(attempt?.kind==='resend'&&attempt.accessId===item.accessId))} onClick={()=>void execute({kind:'resend',key:crypto.randomUUID(),accessId:item.accessId})}>{attempt?.kind==='resend'&&attempt.accessId===item.accessId?'Retry unchanged resend':'Resend'}</Button></div>}<Button size="small" variant="ghost" disabled={busy||locked} onClick={()=>{setRemoveItem(item);setReason('');}}>Remove access</Button></div>}</article>})}</div>}</section></div><Dialog open={removeItem!==null} onClose={()=>{if(!locked)setRemoveItem(null);}} title="Remove Student portal access?" description="The access record remains in history."><TextArea label="Reason" required minLength={3} maxLength={500} value={reason} disabled={locked&&attempt?.kind!=='remove'} onChange={event=>setReason(event.target.value)}/><div className="form-actions"><Button variant="secondary" disabled={busy||locked} onClick={()=>setRemoveItem(null)}>Cancel</Button><Button loading={busy} disabled={reason.trim().length<3||!removeItem} onClick={()=>removeItem&&void execute({kind:'remove',key:crypto.randomUUID(),accessId:removeItem.accessId,expectedVersion:removeItem.version,reason:reason.trim()})}>{attempt?.kind==='remove'?'Retry unchanged removal':'Remove access'}</Button></div></Dialog></Card>;
+  const [items,setItems]=useState([...initialItems]);
+  const [step,setStep]=useState<0|1>(0);
+  const [email,setEmail]=useState('');
+  const [noticeRead,setNoticeRead]=useState(false);
+  const [confirmed,setConfirmed]=useState(false);
+  const [busy,setBusy]=useState(false);
+  const [message,setMessage]=useState<Message|null>(null);
+  const [attempt,setAttempt]=useState<Attempt|null>(null);
+  const [refreshPending,setRefreshPending]=useState(false);
+  const [removeItem,setRemoveItem]=useState<StudentPortalAccessRecord|null>(null);
+  const [reason,setReason]=useState('');
+  const heading=useRef<HTMLHeadingElement>(null);
+
+  const move=(next:0|1)=>{setStep(next);requestAnimationFrame(()=>heading.current?.focus());};
+  const locked=attempt!==null||refreshPending;
+
+  async function readCurrent(){
+    const data=await payload<{items:StudentPortalAccessRecord[]}>(await fetch(`/api/v1/students/${studentId}/portal-access`,{cache:'no-store'}));
+    setItems(data.items);
+  }
+
+  async function refreshOnly(){
+    setBusy(true);
+    try{
+      await readCurrent();
+      setRefreshPending(false);
+      setMessage({tone:'success',title:'Current access refreshed',body:'The latest authorized Student portal state is now shown.'});
+    }catch(cause){
+      const failure=cause as Failure;
+      setRefreshPending(true);
+      setMessage({
+        tone:'warning',
+        title:'Saved; current access still unavailable',
+        body:failure.status===401||failure.status===403
+          ?'The earlier change remains committed, but current authority no longer permits this access list.'
+          :'The earlier change remains committed. Try the read-only refresh again; do not repeat the mutation.',
+      });
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  function successFor(exact:Attempt,result?:StudentPortalAuthorizationResult):Message{
+    if(exact.kind==='authorize')return {
+      tone:result?.status==='DELIVERY_FAILED'?'warning':'success',
+      title:result?.status==='DELIVERY_FAILED'?'Access saved; setup link not delivered':'Student access setup created',
+      body:result?.status==='OPERATOR_REQUIRED'
+        ?'This institution uses operator-assisted setup. No email was sent.'
+        :'The setup is limited to this Student record.',
+    };
+    if(exact.kind==='resend')return {
+      tone:result?.status==='DELIVERY_FAILED'?'warning':'success',
+      title:result?.status==='DELIVERY_FAILED'?'Access retained; setup link not delivered':'Setup link sent again',
+      body:'The earlier pending link can no longer be used.',
+    };
+    if(exact.kind==='purpose')return {tone:'success',title:'Optional access updated',body:'The change applies only to this Student and purpose.'};
+    return {tone:'success',title:'Student access removed',body:'The Student record and access history remain unchanged.'};
+  }
+
+  async function reconcileCommitted(exact:Attempt,success:Message){
+    setAttempt(null);
+    setRefreshPending(true);
+    setMessage(success);
+    if(exact.kind==='authorize'){
+      setEmail('');
+      setNoticeRead(false);
+      setConfirmed(false);
+      move(0);
+    }
+    if(exact.kind==='remove'){
+      setRemoveItem(null);
+      setReason('');
+    }
+    try{
+      await readCurrent();
+      setRefreshPending(false);
+      setMessage(success);
+    }catch(cause){
+      const failure=cause as Failure;
+      setMessage({
+        tone:'warning',
+        title:`${success.title}; refresh needed`,
+        body:`${success.body} ${failure.status===401||failure.status===403
+          ?'Current authority no longer permits the refreshed access list.'
+          :'The latest list could not be loaded. Use the read-only refresh; do not repeat the saved command.'}`,
+      });
+    }
+  }
+
+  async function execute(fresh:Attempt){
+    const exact=attempt??fresh;
+    if(attempt&&attempt.kind!==fresh.kind)return;
+    setAttempt(exact);
+    setBusy(true);
+    setMessage(null);
+    try{
+      let result:StudentPortalAuthorizationResult|undefined;
+      if(exact.kind==='authorize'){
+        result=await payload<StudentPortalAuthorizationResult>(await fetch(`/api/v1/students/${studentId}/portal-access`,{
+          method:'POST',
+          headers:{'content-type':'application/json','idempotency-key':exact.key},
+          body:JSON.stringify(exact),
+        }));
+      }else if(exact.kind==='resend'){
+        result=await payload<StudentPortalAuthorizationResult>(await fetch(`/api/v1/student-access/${exact.accessId}/resend`,{
+          method:'POST',
+          headers:{'content-type':'application/json','idempotency-key':exact.key},
+          body:JSON.stringify({key:exact.key}),
+        }));
+      }else if(exact.kind==='purpose'){
+        await payload(await fetch(`/api/v1/student-access/${exact.accessId}`,{
+          method:'PATCH',
+          headers:{'content-type':'application/json','idempotency-key':exact.key},
+          body:JSON.stringify({purpose:exact.purpose,expectedVersion:exact.expectedVersion,enabled:exact.enabled,key:exact.key}),
+        }));
+      }else{
+        await payload(await fetch(`/api/v1/student-access/${exact.accessId}`,{
+          method:'DELETE',
+          headers:{'content-type':'application/json','idempotency-key':exact.key},
+          body:JSON.stringify({expectedVersion:exact.expectedVersion,reason:exact.reason,key:exact.key}),
+        }));
+      }
+      await reconcileCommitted(exact,successFor(exact,result));
+    }catch(cause){
+      const failure=cause as Failure;
+      const unknown=failure.status===undefined||failure.status>=500||failure.retryable===true;
+      if(!unknown)setAttempt(null);
+      setMessage({
+        tone:unknown?'warning':'danger',
+        title:unknown?'Access result unknown':'Access not changed',
+        body:unknown
+          ?'Retry the unchanged operation. Other changes are blocked until this outcome is known.'
+          :failure.message,
+      });
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  const purposeLabel=(purpose:'notice'|'calendar'|'learning')=>purpose==='calendar'?'School calendar':purpose==='learning'?'Published learning':'School notices';
+
+  return <Card id="student-portal-access" className="padded settings-panel guardian-access-panel">
+    <SectionHeader title="Student portal access" description="Issue optional self-service access to this Student's own school information."/>
+    {message&&<Alert tone={message.tone} title={message.title} onDismiss={!locked?()=>setMessage(null):undefined}>
+      <p>{message.body}</p>
+      {refreshPending&&<Button size="small" variant="secondary" disabled={busy} onClick={()=>void refreshOnly()}>Refresh current access</Button>}
+    </Alert>}
+
+    <div className="guardian-access-grid">
+      <section aria-labelledby="student-access-title" className="guardian-invite-flow">
+        <Stepper steps={['Account details','Review & authorize']} current={step}/>
+        <h3 id="student-access-title" ref={heading} tabIndex={-1}>{step===0?'Student account details':'Review and authorize'}</h3>
+        {step===0
+          ?<div className="settings-form compact-form">
+            <TextField label="Student email address" type="email" value={email} disabled={locked} onChange={event=>setEmail(event.target.value)} autoComplete="email" maxLength={254} hint="Use an address confirmed for the Student, never a guardian address."/>
+            <label className="check-row"><input type="checkbox" checked={noticeRead} disabled={locked} onChange={event=>setNoticeRead(event.target.checked)}/><span>Allow school notices for this Student</span></label>
+            <div className="form-actions"><Button disabled={!email.includes('@')||locked} onClick={()=>move(1)}>Review access</Button></div>
+          </div>
+          :<>
+            <dl className="record-facts guardian-review">
+              <div><dt>Student</dt><dd>{studentName}</dd></div>
+              <div><dt>Account address</dt><dd>{email}</dd></div>
+              <div><dt>Core access</dt><dd>Own profile, published timetable and own attendance</dd></div>
+              <div><dt>School notices</dt><dd>{noticeRead?'Enabled independently':'Not granted'}</dd></div>
+            </dl>
+            <label className="check-row"><input type="checkbox" checked={confirmed} disabled={locked} onChange={event=>setConfirmed(event.target.checked)}/><span>I confirm this address belongs to the intended Student account.</span></label>
+            <div className="form-actions spread">
+              <Button variant="secondary" disabled={busy||locked} onClick={()=>move(0)}>Back</Button>
+              <Button loading={busy} disabled={!confirmed||refreshPending} onClick={()=>void execute({kind:'authorize',key:crypto.randomUUID(),email:email.trim(),confirmed:true,noticeRead})}>{attempt?.kind==='authorize'?'Retry unchanged setup':'Authorize access'}</Button>
+            </div>
+          </>
+        }
+      </section>
+
+      <section aria-labelledby="student-current-access" aria-busy={refreshPending}>
+        <h3 id="student-current-access">Portal access history</h3>
+        {items.length===0
+          ?<EmptyState title="Student access not enabled" description="This Student remains a school record without a login until access is explicitly authorized." icon="people"/>
+          :<div className="guardian-access-list">{items.map(item=>{
+            const notices=item.purposes.includes('communication.notice.read_self');
+            const calendar=item.purposes.includes('calendar.event.read_self');
+            const learning=item.purposes.includes('learning.assignment.read_self');
+            const removed=item.status==='ACCESS_REMOVED';
+            return <article key={item.accessId} className="guardian-access-row">
+              <div><strong>{item.email}</strong><p className="small muted">{item.studentName}</p></div>
+              <Badge tone={tone(item.status)}>{labels[item.status]}</Badge>
+              {removed
+                ?<p className="small muted student-access-history-note">Historical access · no actions available</p>
+                :<div className="student-access-purpose-list">
+                  {(['notice','calendar','learning'] as const).map(purpose=>{
+                    const enabled=purpose==='notice'?notices:purpose==='calendar'?calendar:learning;
+                    const retrying=attempt?.kind==='purpose'&&attempt.accessId===item.accessId&&attempt.purpose===purpose;
+                    return <div className="student-access-purpose-row" key={purpose}>
+                      <span><strong>{purposeLabel(purpose)}</strong><small>{enabled?'Allowed':'Not allowed'}</small></span>
+                      <Button size="small" variant="secondary" disabled={busy||(locked&&!retrying)} onClick={()=>void execute({kind:'purpose',key:crypto.randomUUID(),accessId:item.accessId,expectedVersion:item.version,purpose,enabled:!enabled})}>{retrying?'Retry unchanged change':enabled?'Remove':'Allow'}</Button>
+                    </div>;
+                  })}
+                  {['INVITE_SENT','DELIVERY_FAILED'].includes(item.status)&&<div className="student-access-purpose-row">
+                    <span><strong>Setup link</strong><small>Single-use account activation</small></span>
+                    <Button size="small" variant="secondary" disabled={busy||(locked&&!(attempt?.kind==='resend'&&attempt.accessId===item.accessId))} onClick={()=>void execute({kind:'resend',key:crypto.randomUUID(),accessId:item.accessId})}>{attempt?.kind==='resend'&&attempt.accessId===item.accessId?'Retry unchanged resend':'Resend'}</Button>
+                  </div>}
+                  <Button size="small" variant="ghost" disabled={busy||locked} onClick={()=>{setRemoveItem(item);setReason('');}}>Remove access</Button>
+                </div>
+              }
+            </article>;
+          })}</div>
+        }
+      </section>
+    </div>
+
+    <Dialog open={removeItem!==null} onClose={()=>{if(!locked)setRemoveItem(null);}} title="Remove Student portal access?" description="The access record remains in history.">
+      <TextArea label="Reason" required minLength={3} maxLength={500} value={reason} disabled={locked} onChange={event=>setReason(event.target.value)}/>
+      <div className="form-actions">
+        <Button variant="secondary" disabled={busy||locked} onClick={()=>setRemoveItem(null)}>Cancel</Button>
+        <Button loading={busy} disabled={reason.trim().length<3||!removeItem||refreshPending} onClick={()=>removeItem&&void execute({kind:'remove',key:crypto.randomUUID(),accessId:removeItem.accessId,expectedVersion:removeItem.version,reason:reason.trim()})}>{attempt?.kind==='remove'?'Retry unchanged removal':'Remove access'}</Button>
+      </div>
+    </Dialog>
+  </Card>;
 }
