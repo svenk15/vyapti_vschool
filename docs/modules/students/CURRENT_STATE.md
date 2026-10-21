@@ -1,5 +1,11 @@
 # Students, enrollment and placement history — current state
 
+## Add Guardian visual correction — 22 October 2026
+
+The bounded Add Guardian correction aligns the production drawer with `student-onboarding-approved/refined-onboarding.html#guardian` without changing the Guardians command, authorization, purpose grants, invitation delivery, idempotency or recovery. Desktop/mobile geometry now matches the reference: 470px/full-width drawer, 101px/96px header, 21px title, 12px labels, 40px/44px controls, 6px radii, compact 16px checks and 36px/44px actions. Reference wording is used for the fixed core portal bundle and invitation action.
+
+The optional school-notices grant remains visible because it is implemented and independently authorized; Relationship remains unselected until the administrator chooses it. Directly inspected before/reference/after captures cover 1440×1000 and 390×844 at DPR 1 and visual scale 1. Bundled Inter loaded, root overflow was absent, and initial focus, Escape close and focus return passed. Focused ESLint and the clean 4 GiB production build passed; build ID `b4gzkHnMT0zbXOVU9X1-H`. [Evidence](../../evidence/student-add-guardian-visual-correction-2026-10-22/README.md). Human visual acceptance remains **PENDING**.
+
 ## Add student and Student Profile visual correction — 22 October 2026
 
 The bounded current-source correction aligns the exact `student-onboarding-approved/refined-onboarding.html` Add student and Profile compositions without changing routes, owner commands, authorization, identity resolution, idempotency, recovery, persistence or seeds. The invitation control now measures 12px desktop / 13px mobile with a 16×16 checkbox; Add student actions, field rhythm and radii match the reference metrics. Profile now uses the 884px/10px approved surface, compact 15px section headings and school facts, reference-sized Edit/Add/Manage actions, compact Guardian empty/populated rows and a responsive portal status row.

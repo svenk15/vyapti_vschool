@@ -1552,16 +1552,23 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .student-profile-portal-row strong{font-weight:550}
 .student-profile-portal-row p{margin-top:2px;font-size:11px}
 .student-profile-portal-actions .btn{min-height:36px;padding:5px 0;font-size:12px;font-weight:550}
-.guardian-access-drawer{width:min(470px,100vw)}
-.guardian-access-drawer .drawer-header{align-items:flex-start;min-height:100px;padding:24px 26px 18px}
-.guardian-access-drawer .drawer-header h2{margin:0;font-size:20px;line-height:28px;letter-spacing:-.3px}
+.guardian-access-drawer{width:min(470px,100vw);border-width:0 0 0 1px;border-radius:0}
+.guardian-access-drawer .drawer-header{align-items:flex-start;min-height:101px;padding:27px 28px 22px;background:color-mix(in srgb,var(--vs-surface) 92%,var(--vs-canvas))}
+.guardian-access-drawer .drawer-header h2{margin:0;font-size:21px;font-weight:650;line-height:28px;letter-spacing:-.3px}
+.guardian-access-drawer .drawer-close{width:44px;min-width:44px;min-height:44px;padding:10px;border:0;border-radius:6px;font-size:20px;font-weight:400;line-height:20px}
 .drawer-header-description{margin:4px 0 0;color:var(--vs-text-muted);font-size:12px;line-height:18px}
-.guardian-drawer-form{display:flex;align-items:stretch;flex-direction:column;gap:18px;padding:24px 26px;min-height:100%}
+.guardian-drawer-form{display:flex;align-items:stretch;flex-direction:column;gap:18px;padding:26px 28px 0;min-height:100%}
+.guardian-access-drawer .field>label{margin-bottom:6px;font-size:12px;font-weight:550;line-height:18px}
+.guardian-access-drawer .field input:not([type=checkbox]):not([type=radio]),.guardian-access-drawer .field select{height:40px;min-height:40px;padding:9px 11px;border-color:var(--vs-border);border-radius:6px;font-size:13px;line-height:20px}
 .guardian-access-drawer .field>label>span[aria-hidden=true]{display:none}
-.guardian-purpose-summary{padding:14px 0 0;border-width:1px 0 0;border-radius:0;background:transparent}
-.guardian-purpose-summary span{min-height:30px}
-.guardian-access-drawer .drawer-actions{margin-inline:-26px;padding:18px 26px 0}
-.guardian-access-drawer .drawer-actions .btn{min-height:36px;padding:7px 13px;border-radius:6px;font-size:13px}
+.guardian-purpose-summary{margin-top:6px;padding:22px 0 0;border-width:1px 0 0;border-radius:0;background:transparent;gap:9px}
+.guardian-purpose-summary strong{margin:0;font-size:13px;font-weight:600;line-height:19.5px}
+.guardian-purpose-summary>span{min-height:32px;gap:9px;font-size:12px;line-height:20px}
+.guardian-purpose-summary>span>span{display:inline-grid;width:16px;height:16px;place-items:center;border-radius:2px;background:var(--vs-primary);color:var(--vs-on-primary);font-size:11px;line-height:16px}
+.guardian-drawer-form>.check-control{align-items:center;gap:9px;min-height:32px;font-size:12px;line-height:20px}
+.guardian-drawer-form>.check-control>input{width:16px;height:16px;margin:0}
+.guardian-access-drawer .drawer-actions{align-items:center;margin-inline:-28px;padding:18px 28px;border-top:1px solid var(--vs-border);background:color-mix(in srgb,var(--vs-surface) 92%,var(--vs-canvas))}
+.guardian-access-drawer .drawer-actions .btn{min-height:36px;padding:7px 13px;border-radius:6px;font-size:13px;font-weight:550}
 .guardian-access-drawer .guardian-manage-footer{margin-top:auto;padding-top:18px;border-top:1px solid var(--vs-border)}
 @media(max-width:760px){
  .student-registration-shell{max-width:none!important;padding-top:14px!important;padding-inline:16px!important}
@@ -1609,8 +1616,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .student-profile-portal-actions .btn{min-height:44px;font-size:11px}
  .student-profile-portal-row-active>div:nth-child(2){grid-column:1/-1}
  .student-profile-portal-row-active .student-profile-portal-actions{grid-column:1/-1;justify-content:space-between;width:100%}
- .guardian-access-drawer .drawer-header{min-height:95px;padding:20px}
- .guardian-drawer-form{gap:18px;padding:24px 20px 20px}
- .guardian-access-drawer .drawer-actions{bottom:-20px;margin-inline:-20px;padding:16px 20px 0}
- .guardian-access-drawer .drawer-actions .btn{min-height:44px}
+ .guardian-access-drawer .drawer-header{min-height:96px;padding:22px 20px}
+ .guardian-drawer-form{gap:18px;padding:24px 20px 0}
+ .guardian-access-drawer .field input:not([type=checkbox]):not([type=radio]),.guardian-access-drawer .field select{height:44px;min-height:44px;padding:9px 11px;font-size:16px}
+ .guardian-purpose-summary>span{min-height:44px;font-size:13px}
+ .guardian-drawer-form>.check-control{min-height:44px;font-size:13px}
+ .guardian-access-drawer .drawer-actions{bottom:0;margin-inline:-20px;padding:16px 20px}
+ .guardian-access-drawer .drawer-actions .btn{flex:0 0 auto;height:44px;min-height:44px}
+ .guardian-access-drawer .drawer-actions .btn-primary{flex:1}
 }

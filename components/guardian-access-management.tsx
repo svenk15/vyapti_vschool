@@ -370,11 +370,11 @@ export function GuardianAccessManagement({
           <option value="GUARDIAN">Guardian</option>
         </SelectField>
         <TextField label="Email address" required type="email" autoComplete="email" value={email} error={fieldErrors.email} disabled={locked} onChange={event=>{setEmail(event.target.value);setFieldErrors(current=>({...current,email:undefined}));}} maxLength={254}/>
-        <div className="guardian-purpose-summary"><strong>Parent portal access</strong>{["Student summary","Attendance history","Published timetable"].map(label=><span key={label}><span>✓</span>{label}</span>)}</div>
+        <div className="guardian-purpose-summary"><strong>Portal access</strong>{["Child summary","Attendance","Timetable"].map(label=><span key={label}><span>✓</span>{label}</span>)}</div>
         <Checkbox label="Also allow school notices for this child" checked={noticeRead} disabled={locked} onChange={event=>setNoticeRead(event.target.checked)}/>
         <div className="drawer-actions">
           <Button variant="secondary" disabled={busy} onClick={requestClose}>Cancel</Button>
-          <Button loading={busy} disabled={refreshPending!==null} onClick={()=>void authorize()}>{inviteAttempt?"Retry unchanged invitation":"Add and send invitation"}</Button>
+          <Button loading={busy} disabled={refreshPending!==null} onClick={()=>void authorize()}>{inviteAttempt?"Retry unchanged invitation":"Add & send invitation"}</Button>
         </div>
       </div>}
 
