@@ -3,14 +3,14 @@
 import {useState} from "react";
 import {Checkbox,SelectField,TextArea,TextField} from "@/components/ui/forms";
 import {Dialog} from "@/components/ui/interactive";
-import {Alert,Badge,Button,EmptyState} from "@/components/ui/primitives";
+import {Alert,Badge,Button} from "@/components/ui/primitives";
 import type {GuardianAccessRecord,GuardianAuthorizationResult,GuardianRelationship} from "@/shared/contracts/guardians";
 
 const statusLabel:Record<GuardianAccessRecord["status"],string>={
   INVITE_SENT:"Invitation sent",
   DELIVERY_FAILED:"Delivery failed",
   OPERATOR_REQUIRED:"Operator activation required",
-  ACCESS_ENABLED:"Access enabled",
+  ACCESS_ENABLED:"Portal access enabled",
   ACCESS_REMOVED:"Access removed",
 };
 const purposeLabel:Readonly<Record<string,string>>={
@@ -344,10 +344,10 @@ export function GuardianAccessManagement({
     </Alert>}
 
     {activeItems.length===0
-      ?<EmptyState title="No Parent access yet" description="Invite a verified parent or guardian when the school is ready to grant child-specific access." icon="people"/>
+      ?<p className="guardian-profile-empty">No guardians added.</p>
       :<div className="guardian-profile-list">{activeItems.map(item=><article key={item.accessId} className="guardian-profile-row">
         <span className="student-profile-avatar" aria-hidden="true">{item.displayName.split(/\s+/).map(p=>p[0]).join("").slice(0,2).toUpperCase()}</span>
-        <div><strong>{item.displayName}</strong><p>{item.relationship?`${item.relationship[0]}${item.relationship.slice(1).toLowerCase()} · `:""}{item.email}</p></div>
+        <div><div className="guardian-profile-name"><strong>{item.displayName}</strong>{item.relationship&&<span>{item.relationship[0]}{item.relationship.slice(1).toLowerCase()}</span>}</div><p>{item.email}</p></div>
         <div className="guardian-profile-row-actions">
           <Badge tone={statusTone(item.status)}>{statusLabel[item.status]}</Badge>
           <Button size="small" variant="ghost" disabled={locked} onClick={()=>{setSelected(item);setProfileMessage(null);setDrawerMessage(null);setDrawer("manage");}}>Manage <span aria-hidden="true">→</span></Button>

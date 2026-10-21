@@ -1,5 +1,11 @@
 # Students, enrollment and placement history — current state
 
+## Add student and Student Profile visual correction — 22 October 2026
+
+The bounded current-source correction aligns the exact `student-onboarding-approved/refined-onboarding.html` Add student and Profile compositions without changing routes, owner commands, authorization, identity resolution, idempotency, recovery, persistence or seeds. The invitation control now measures 12px desktop / 13px mobile with a 16×16 checkbox; Add student actions, field rhythm and radii match the reference metrics. Profile now uses the 884px/10px approved surface, compact 15px section headings and school facts, reference-sized Edit/Add/Manage actions, compact Guardian empty/populated rows and a responsive portal status row.
+
+Bundled Inter is loaded in the application. The static reference requests Inter but embeds no font asset, so its rendering remains host-dependent; matching CSS sizes and weights are recorded separately from glyph rasterization. Directly inspected captures cover empty and populated Profile states plus Add student at 1440×1000 and 390×844. The focused signed-in browser probe passed control geometry, root overflow and keyboard focus/return checks at both viewports. TypeScript, focused ESLint and the 4 GiB production build passed; build ID `TPu_DCPKN0rL5J51kEi9B`. Supported production extensions and truthful synthetic-data differences remain documented. [Evidence](../../evidence/student-profile-visual-correction-2026-10-22/README.md). Human visual acceptance remains **PENDING**.
+
 ## Add student field alignment — 22 October 2026
 
 The current Add student composition now exposes the reference Relationship choice and the always-reachable **Placement dates & roll number** disclosure. Selecting a class shows the owner-backed inclusive Effective from/Last day interval and optional roll number; Assign later retains a truthful hint instead of hiding the approved section. The additional Last day field is retained because it is part of the accepted enrollment interval contract. Parent details still create no contact-only record: selecting **Send a parent portal invitation** is required before the Guardians owner command runs.

@@ -1503,15 +1503,55 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .student-registration-page>.page-heading{align-items:center;margin-bottom:22px}
 .student-registration-page>.page-heading .header-actions{align-items:center;margin:0}
 .student-registration-page>.page-heading .student-registration-mode{min-height:36px;padding:5px 0}
-.student-onboarding-section{gap:23px}
+.student-onboarding-card .student-registration-body{padding:4px 30px 0}
+.student-onboarding-section{gap:22px;padding-block:26px}
+.student-onboarding-content .student-registration-fields{gap:18px}
+.student-onboarding-placement-details{margin-top:16px}
+.student-onboarding-placement-details summary{min-height:32px;padding-block:0}
 .student-onboarding-content>.student-registration-school-fields{margin-top:18px}
 .student-onboarding-optional{display:block;margin-top:3px;color:var(--vs-text-muted);font-size:11px;line-height:18px}
 .student-onboarding-card .field>label>span[aria-hidden=true]{display:none}
 .student-registration-page>.student-registration-back{min-height:30px;margin-bottom:12px}
-.student-profile-layout{width:100%;max-width:1080px;margin-inline:auto;padding-inline:44px}
+.student-profile-layout{width:100%;max-width:1080px;margin-inline:auto;padding-inline:44px;line-height:21px}
 .student-profile-layout>*{width:min(100%,884px)}
 .student-profile-layout>.student-registration-back{margin-bottom:15px}
 .student-profile-layout>.student-profile-hero{margin-bottom:24px}
+.student-onboarding-guardian-actions>.check-control{align-items:flex-start;gap:9px;min-height:20px;color:var(--vs-text);font-size:12px;line-height:20px}
+.student-onboarding-guardian-actions>.check-control>input{width:16px;height:16px;margin:2px 0 0}
+.student-onboarding-card .student-registration-footer .btn{gap:8px;padding:7px 13px;font-size:13px;font-weight:550}
+.student-onboarding-card .student-registration-footer .btn-primary{min-width:116px;border-color:var(--vs-primary)}
+.student-profile-composition{border-radius:10px;box-shadow:0 2px 8px color-mix(in srgb,var(--vs-text) 2%,transparent)}
+.student-profile-hero-avatar{border:1px solid var(--vs-border);font-size:18px;font-weight:550}
+.student-profile-title-line .badge{gap:5px;padding:2px 7px;border:0;background:transparent;color:var(--vs-primary);font-size:10px;font-weight:500}
+.student-profile-title-line .badge::before{width:5px;height:5px;border-radius:50%;background:currentColor;content:""}
+.student-profile-hero p{margin-top:5px;font-size:12px;line-height:18px}
+.student-profile-hero>.btn{min-width:125px;min-height:36px;padding:7px 13px;border-color:var(--vs-border);border-radius:6px;font-size:12px;font-weight:550;line-height:18px}
+.student-profile-section,.guardian-profile-section{padding:24px 28px}
+.student-profile-section-heading{align-items:center;gap:14px;margin-bottom:19px;min-height:36px}
+.student-profile-section-heading h2{font-size:15px;font-weight:600;letter-spacing:-.15px}
+.student-profile-section-heading .btn{min-height:34px;padding:6px 11px;border-color:var(--vs-border);border-radius:6px;font-size:12px;font-weight:550;line-height:18px}
+.student-profile-section:first-child .student-profile-section-heading .btn{min-width:0;padding-inline:0;border-color:transparent;background:transparent}
+.student-profile-placement-action>span{display:grid;width:15px;height:15px}
+.student-profile-placement-action svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.guardian-profile-section .student-profile-section-heading .btn{min-width:125px}
+.student-profile-facts{grid-template-columns:1.25fr 1fr .8fr 1.1fr;gap:20px;padding:0 0 3px}
+.student-profile-facts dt{margin-bottom:7px}
+.student-profile-facts dd{margin:0;font-weight:500;line-height:21px}
+.guardian-profile-empty{margin:0;padding:0 0 5px;color:var(--vs-text-muted);font-size:13px;line-height:21px}
+.guardian-profile-row{grid-template-columns:38px minmax(0,1fr) auto;min-height:0;padding:18px 0}
+.student-profile-avatar{width:38px;height:38px;font-weight:550}
+.guardian-profile-name{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.guardian-profile-name span{color:var(--vs-text-muted);font-size:11px}
+.guardian-profile-row p{margin-top:5px}
+.guardian-profile-row-actions{align-items:flex-end;flex-direction:column;gap:3px}
+.guardian-profile-row-actions .badge{padding:0;border:0;background:transparent;color:var(--vs-primary);font-size:11px;font-weight:400}
+.guardian-profile-row-actions .btn{min-height:30px;padding:5px 0;border-radius:6px;font-size:12px;font-weight:550}
+.student-profile-portal-section{padding:20px 28px;background:color-mix(in srgb,var(--vs-surface) 96%,var(--vs-canvas))}
+.student-profile-portal-section .student-profile-portal-row{min-height:42px}
+.student-profile-portal-icon{border-radius:7px;background:var(--vs-surface-subtle)}
+.student-profile-portal-row strong{font-weight:550}
+.student-profile-portal-row p{margin-top:2px;font-size:11px}
+.student-profile-portal-actions .btn{min-height:36px;padding:5px 0;font-size:12px;font-weight:550}
 .guardian-access-drawer{width:min(470px,100vw)}
 .guardian-access-drawer .drawer-header{align-items:flex-start;min-height:100px;padding:24px 26px 18px}
 .guardian-access-drawer .drawer-header h2{margin:0;font-size:20px;line-height:28px;letter-spacing:-.3px}
@@ -1532,15 +1572,43 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .student-registration-page>.page-heading .student-registration-mode{min-height:44px;white-space:nowrap}
  .student-onboarding-card .student-registration-body{padding-inline:18px}
  .student-onboarding-section{gap:16px;padding-block:22px}
+ .student-onboarding-label{display:flex;align-items:center;gap:8px}
  .student-onboarding-label h2{margin-bottom:0}
+ .student-onboarding-optional{margin-top:0}
+ .student-onboarding-content .student-registration-fields{gap:16px}
+ .student-onboarding-card{border-radius:10px}
  .student-onboarding-card .student-registration-footer{padding-inline:18px}
+ .student-onboarding-guardian-actions>.check-control{min-height:20px;font-size:13px}
+ .student-onboarding-card .student-registration-footer .btn-primary{flex:1}
  .student-profile-layout{max-width:none;padding-inline:0}
  .student-profile-layout>*{width:100%}
  .student-profile-layout>.student-registration-back{margin-bottom:18px}
  .student-profile-layout>.student-profile-hero{grid-template-columns:48px minmax(0,1fr) auto;align-items:start;gap:10px;margin-bottom:24px}
  .student-profile-title-line{align-items:flex-start;flex-direction:column;gap:5px}
- .student-profile-hero>.btn{grid-column:3;grid-row:1;align-self:center;justify-self:end;min-height:44px;margin:0;padding-inline:10px;font-size:12px;white-space:nowrap}
+ .student-profile-hero>.btn{grid-column:3;grid-row:1;align-self:center;justify-self:end;min-width:114px;min-height:44px;margin:0;padding:6px 10px;font-size:11px;white-space:nowrap}
  .student-profile-edit{padding-inline:0}
+ .student-profile-hero-avatar{width:46px;height:46px;font-size:16px}
+ .student-profile-title-line h1{font-size:24px;line-height:32px}
+ .student-profile-hero p{margin-top:3px;font-size:11px}
+ .student-profile-composition{border-radius:10px}
+ .student-profile-section,.guardian-profile-section{padding:20px 18px}
+ .student-profile-section-heading{gap:8px;margin-bottom:18px}
+ .student-profile-section-heading h2{font-size:14px}
+ .student-profile-section-heading .btn{min-height:44px;padding:6px 9px;font-size:11px}
+ .guardian-profile-section .student-profile-section-heading .btn{min-width:115px}
+ .student-profile-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 14px}
+ .student-profile-facts dt{margin-bottom:5px}
+ .guardian-profile-row{display:block;padding:18px 0}
+ .guardian-profile-row>div:nth-child(2){margin-left:50px;margin-top:-38px}
+ .guardian-profile-row-actions{align-items:center;flex-direction:row;justify-content:space-between;margin:8px 0 0 50px}
+ .guardian-profile-row-actions .btn{min-height:44px;font-size:12px}
+ .student-profile-portal-section{padding:17px 18px}
+ .student-profile-portal-section .student-profile-portal-icon{display:none}
+ .student-profile-portal-section .student-profile-portal-row{grid-template-columns:minmax(0,1fr) auto;gap:10px;min-height:44px}
+ .student-profile-portal-actions{grid-column:2;justify-content:flex-end;width:auto;margin:0}
+ .student-profile-portal-actions .btn{min-height:44px;font-size:11px}
+ .student-profile-portal-row-active>div:nth-child(2){grid-column:1/-1}
+ .student-profile-portal-row-active .student-profile-portal-actions{grid-column:1/-1;justify-content:space-between;width:100%}
  .guardian-access-drawer .drawer-header{min-height:95px;padding:20px}
  .guardian-drawer-form{gap:18px;padding:24px 20px 20px}
  .guardian-access-drawer .drawer-actions{bottom:-20px;margin-inline:-20px;padding:16px 20px 0}
