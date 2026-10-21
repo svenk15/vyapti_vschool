@@ -8,6 +8,7 @@ Human visual acceptance is **PENDING**. This evidence is limited to the bounded 
 - Verified SHA-256: `4a0c5a72b7e5512bfb9b30647b5fb10f82c9c42b04e746fe6f0cae4799792bbe`
 - Reference states: `#add`, `#profile`, `#guardian`
 - Application routes: `/admin/students/register` and `/admin/students/:id`
+- Application commit: `e9ff84aec8e527d84b1565de7d9038af9dd1c551`
 - Production build ID: `zqojKBm521UKFb4kmitjr`
 - Isolated E2E build ID: `vMgTxM8y_Hoxsil07IOpx`
 - Browser: Playwright Chromium; CSS viewports `1440×1000`, `900×1000`, `390×844` and `360×800`; browser zoom was not changed.
@@ -54,3 +55,9 @@ One longer aggregate identity/search browser case exposed two stale presentation
 - Core Guardian purposes remain read-only owner policy; only existing optional-purpose commands are actionable.
 - The application preserves real school context, production navigation and server-authorized action visibility.
 - Actual native browser 200% zoom, VoiceOver, NVDA, human acceptance, TEN-03 and production message-provider review remain pending.
+
+## Demo
+
+- Entry: `http://127.0.0.1:3400/sign-in`
+- Credentials: ignored private file `artifacts/people-02/private-demo.json` (values are not recorded here).
+- The health endpoint returned the live VSchool response after the production build above was started. The application source is commit `e9ff84aec8e527d84b1565de7d9038af9dd1c551`.
