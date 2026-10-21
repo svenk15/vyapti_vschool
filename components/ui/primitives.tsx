@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, Ref } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, HTMLAttributes, ReactNode, Ref } from "react";
 import { resolveThemeId, type BrandPalette, type ThemeId } from "@/shared/contracts/branding";
 
 export function BrandSurface({palette,children,className=""}:{palette?:BrandPalette|ThemeId;children:ReactNode;className?:string}) {
@@ -8,7 +8,7 @@ export function BrandSurface({palette,children,className=""}:{palette?:BrandPale
 export function Button({variant="primary",size="normal",loading=false,children,className="",disabled,type="button",...props}:ButtonHTMLAttributes<HTMLButtonElement>&{variant?:"primary"|"secondary"|"ghost"|"danger";size?:"normal"|"small"|"consequence"|"icon";loading?:boolean}) {
  return <button type={type} className={`btn btn-${variant} btn-${size} ${className}`} disabled={disabled||loading} aria-busy={loading||undefined} {...props}>{loading&&<span className="spinner" aria-hidden="true"/>}{children}</button>;
 }
-export function ButtonLink({href,children,variant="primary",size="normal"}:{href:string;children:ReactNode;variant?:"primary"|"secondary"|"ghost";size?:"normal"|"small"|"consequence"|"icon"}) {return <Link className={`btn btn-${variant} btn-${size}`} href={href}>{children}</Link>;}
+export function ButtonLink({href,children,variant="primary",size="normal",className="",...props}:AnchorHTMLAttributes<HTMLAnchorElement>&{href:string;children:ReactNode;variant?:"primary"|"secondary"|"ghost";size?:"normal"|"small"|"consequence"|"icon"}) {return <Link className={`btn btn-${variant} btn-${size} ${className}`} href={href} {...props}>{children}</Link>;}
 export function Badge({tone="neutral",children}:{tone?:"neutral"|"success"|"warning"|"danger"|"info";children:ReactNode}) {return <span className={`badge badge-${tone}`}>{children}</span>;}
 export function Card({children,className="",...props}:HTMLAttributes<HTMLElement>) {return <section className={`card ${className}`} {...props}>{children}</section>;}
 export function PageHeader({eyebrow,title,description,actions}:{eyebrow?:string;title:string;description?:string;actions?:ReactNode}) {return <div className="page-heading"><div>{eyebrow&&<p className="eyebrow">{eyebrow}</p>}<h1>{title}</h1>{description&&<p className="muted page-description">{description}</p>}</div>{actions&&<div className="header-actions">{actions}</div>}</div>;}
