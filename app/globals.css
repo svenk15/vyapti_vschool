@@ -1574,6 +1574,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .guardian-drawer-form>.check-control>input{width:16px;height:16px;margin:0}
 .guardian-access-drawer .drawer-actions{align-items:center;margin-inline:-28px;padding:18px 28px;border-top:1px solid var(--vs-border);background:color-mix(in srgb,var(--vs-surface) 92%,var(--vs-canvas))}
 .guardian-access-drawer .drawer-actions .btn{min-height:36px;padding:7px 13px;border-radius:6px;font-size:13px;font-weight:550}
+.guardian-access-drawer .drawer-actions .btn-secondary{border-color:var(--vs-border)}
 .guardian-access-drawer .guardian-manage-footer{margin-top:auto;padding-top:18px;border-top:1px solid var(--vs-border)}
 @media(max-width:760px){
  .student-registration-shell{max-width:none!important;padding-top:14px!important;padding-inline:16px!important}

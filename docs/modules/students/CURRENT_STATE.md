@@ -1,5 +1,9 @@
 # Students, enrollment and placement history — current state
 
+## Add Guardian faded Cancel outline — 22 October 2026
+
+The Add/Manage Guardian drawer's **Cancel** action now uses the approved faded theme border instead of the darker global secondary-button outline. The override is limited to the drawer footer; action behavior, focus treatment and Guardian owner contracts are unchanged. Direct 1440×1000 and 390×844 comparison shows the reference at `rgb(220, 230, 223)` and the Forest application token at `rgb(220, 229, 223)`, both one pixel, with no root overflow. Production build `eaTYX_SdjC1o4zXAODBOZ` passed. [Evidence](../../evidence/student-guardian-cancel-border-2026-10-22/README.md). Human visual acceptance remains **PENDING**.
+
 ## Muted Student form control content — 22 October 2026
 
 The Administrator **Add student** form and **Add guardian** drawer now use the existing Forest muted-text token for entered text, example placeholders and selected dropdown values. Labels, validation feedback, focus treatment, actions and all owner behavior remain unchanged. Directly inspected 1440×1000 and 390×844 captures report `rgb(86, 102, 93)` for input/select content and placeholders, with no root overflow. The clean 4 GiB production build passed with build ID `88erOe5CGCEm8eHcFYacz`. [Evidence](../../evidence/student-muted-control-content-2026-10-22/README.md). Human visual acceptance remains **PENDING**.

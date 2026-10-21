@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-10-21T19:53:44.078Z",
+  "buildId": "eaTYX_SdjC1o4zXAODBOZ",
+  "states": {
+    "desktop": {
+      "reference": {
+        "borderColor": "rgb(220, 230, 223)",
+        "borderWidth": "1px",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(37, 60, 50)"
+      },
+      "application": {
+        "borderColor": "rgb(220, 229, 223)",
+        "borderWidth": "1px",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(31, 48, 40)"
+      },
+      "devicePixelRatio": 1,
+      "visualScale": 1,
+      "rootOverflow": false
+    },
+    "mobile": {
+      "reference": {
+        "borderColor": "rgb(220, 230, 223)",
+        "borderWidth": "1px",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(37, 60, 50)"
+      },
+      "application": {
+        "borderColor": "rgb(220, 229, 223)",
+        "borderWidth": "1px",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(31, 48, 40)"
+      },
+      "devicePixelRatio": 1,
+      "visualScale": 1,
+      "rootOverflow": false
+    }
+  }
+}
