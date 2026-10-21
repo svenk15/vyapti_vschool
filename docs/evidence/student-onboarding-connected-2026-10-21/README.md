@@ -6,6 +6,7 @@ Human visual acceptance is **PENDING**. This checkpoint verifies the bounded Adm
 
 - Application commit: `4d50c7098f4b383f2fe6e0191a009fbbe70c7a9d`
 - Verified E2E build ID: `RbHP6gqz9aguAB0phigaJ`
+- Current local demo build ID: `U-xx4H6mfm5PNsPfkcgpN` from documentation checkpoint `642d305253c04d6a765e5e091ff5bae2b53b071a`; application code is unchanged from `4d50c7098f4b383f2fe6e0191a009fbbe70c7a9d`.
 - Approved reference source: `refined-onboarding.html` at Sites source commit `ee0006258f5217b04d22f1561551d4516842428b`
 - Reference HTML SHA-256: `4a0c5a72b7e5512bfb9b30647b5fb10f82c9c42b04e746fe6f0cae4799792bbe`
 - Browser: Playwright Chromium; CSS viewports `1440×1000` and `390×844`; browser zoom was not changed.
@@ -39,6 +40,13 @@ The portable `createStudentOnboardingUseCases` runs registration → optional pl
 The connected journey submits registration, placement and Guardian setup, deliberately loses the committed HTTP response, retries the exact unchanged command, and verifies one Student, one Enrollment, one Placement and one Guardian access. It then checks the profile, unsaved drawer values through Keep editing, accessible discard/removal dialogs, focus return and root overflow.
 
 An accidental broader functional invocation completed 270 tests and exposed one unrelated existing Finance expectation (`RECONCILED` versus `UNRECONCILED`). It is not reported as a green broad suite and was not changed for this slice.
+
+## Local demo
+
+- Entry: `http://127.0.0.1:3400/sign-in`; Student onboarding: `http://127.0.0.1:3400/admin/students/register` after authentication.
+- Private fictional administrator credentials: ignored file `artifacts/people-02/private-demo.json`; no credential value is recorded here.
+- The health endpoint returned `ready:true`, and a local Playwright smoke signed in through the real form and rendered the `Add student` composition at a `1440×1000` CSS viewport with device-pixel ratio 1.
+- `pnpm demo:seed` remained non-destructive and refreshed the existing People, Students and Attendance fixtures, but the aggregate command stopped at the pre-existing Principal Attendance comparison gate (`PRINCIPAL_COMPARISON_REQUIRED`). This partial aggregate seed run is not reported as passed; the existing onboarding demo credentials and records were preserved.
 
 ## Direct visual comparison
 

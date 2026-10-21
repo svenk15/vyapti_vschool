@@ -6,6 +6,8 @@ Implementation is **ENGINEERING_VERIFIED** on the current working source; human 
 
 Focused evidence covers a lost committed response followed by exact replay, one persisted Student/Enrollment/Placement/Guardian access, scoped server options, profile rendering, unsaved-drawer recovery, removal confirmation, focus return, mobile full-width presentation and all four themes. Unit orchestration, real-PostgreSQL Students registration, TypeScript, targeted lint, backend/boundary checks, production build and sequential one-worker desktop/mobile Playwright passed. An accidental broader functional run had one unrelated existing Finance reconciliation expectation failure; the targeted Students suite passed. No schema or migration changed. See [connected onboarding evidence](../../evidence/student-onboarding-connected-2026-10-21/README.md).
 
+The current demo serves build `U-xx4H6mfm5PNsPfkcgpN` at `http://127.0.0.1:3400`; a real-form authenticated smoke opened `/admin/students/register`. The guarded aggregate demo seed preserved the onboarding fixtures but stopped at the independent Principal Attendance comparison gate, so that aggregate command is recorded as incomplete rather than passed.
+
 The exact reference includes a relationship field and a contact-only state that the Guardians owner does not store. The application does not fabricate either and grants only the fixed server-owned core purposes plus the existing optional notices purpose. Actual browser 200% zoom, VoiceOver, NVDA, human acceptance, TEN-03 and production messaging/provider review remain pending.
 
 ## Approved FIRST registration composition — 20 October 2026
