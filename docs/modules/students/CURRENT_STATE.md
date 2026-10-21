@@ -1,5 +1,11 @@
 # Students, enrollment and placement history — current state
 
+## Exact onboarding/Profile fidelity correction — 21 October 2026
+
+Application source `d6c61772484ddf2df828a3917b12d7083ff6cf96`, production build `OG1vfxhJLCRLA_ScBTEZR`, completes the bounded presentation correction against the exact approved `student-onboarding-approved/refined-onboarding.html` states. Add student, Profile, Add guardian and Manage guardian access were directly inspected at 1440×1000 and 390×844 with matching state, DPR 1 and visual scale 1. Centering, widths, control/button sizes, section rhythm, action placement, drawer width/density, visible Student context, initial focus and focus return are corrected. Root overflow is absent. Existing identity resolution, enrollment, Guardians ownership, authorization, idempotency and recovery are unchanged; no schema, migration, seed or backend contract changed.
+
+The current Guardians contract still has no relationship column, contact-only aggregate or edit-contact command. Those mock behaviors remain explicit contract gaps rather than fabricated inputs; the production Manage drawer continues to show the fixed core bundle plus authorized optional purpose grants. Focused TypeScript, ESLint, diff checks and the 4 GiB production build passed, and current-build comparison scripts captured 28 registration states plus 14 Profile/Guardian observations. See [exact comparison evidence](../../evidence/student-onboarding-fidelity-2026-10-21/README.md). Human visual acceptance, native accessibility/zoom, TEN-03 and production release gates remain PENDING.
+
 ## Administrator → Students UX closure — 21 October 2026
 
 Implementation is **ENGINEERING_VERIFIED** at application commit `8b91f12410aa6590a0a2f7060de5117afa54f12d`; human visual review is **PENDING**. The bounded closure preserves the existing Students, People, Academics and Guardians owner commands while completing the connected presentation: one-page new/existing registration, the approved compact Profile, a focused correction drawer, fixed-Student two-stage enrollment and transfer, read-only history, compact Guardian access and two-stage Student portal setup/management. Unknown outcomes retain the exact owner payload and key; stale enrollment/transfer/correction state requires a fresh review; no page or drawer writes another owner's tables.
