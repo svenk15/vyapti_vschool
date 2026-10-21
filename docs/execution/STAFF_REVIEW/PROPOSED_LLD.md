@@ -18,11 +18,29 @@ Status: proposed technical design. Existing rules are cited; PD-STF-01–04 in `
 
 ### Contract
 
-`StaffDirectoryQuery = { by: 'name'|'employeeCode'; q: string; categories: StaffCategory[]; employment: ('ACTIVE'|'ENDED')[]; teaching: ('NOT_ENABLED'|'ENABLED'|'DISABLED')[]; access: ('UNLINKED'|'LINKED'|'ACTIVE')[]; sort: 'name'|'employeeCode'|'employment'|'teaching'|'access'; order: 'asc'|'desc'; after?: string; before?: string; limit: 1..100 }`.
+`StaffDirectoryQuery = { by: 'name'|'employeeCode'; q: string; categories: StaffCategory[]; employment: ('ACTIVE'|'ENDED'|'UNKNOWN')[]; teaching: ('NOT_ENABLED'|'ENABLED'|'DISABLED'|'UNKNOWN')[]; access: ('NO_ACCOUNT'|'INVITATION_PENDING'|'ACTIVE'|'SUSPENDED'|'REVOKED'|'UNKNOWN')[]; sort: 'name'|'employeeCode'|'employment'|'teaching'|'access'; order: 'asc'|'desc'; after?: string; before?: string; limit: 1..100 }`.
 
-Repository returns `{ items, nextCursor, previousCursor, total?: number }`. Cursors are HMAC-signed and bind organization, branch, actor authorization version, normalized query, direction and final sort tuple. Sorting always ends with Employee `id`. Name/code search remains a Staff directory query and never becomes Person identity resolution.
+Repository returns `{ items, nextCursor, previousCursor, total?: number }`. Cursors are HMAC-signed and bind organization, branch, actor authorization version, the complete normalized query, direction, People configuration version, Academics projection revision, Access projection revision and the final sort tuple. Any query, permission or owner-projection revision change invalidates the cursor and restarts at the first page with `STALE_DIRECTORY_CURSOR`. Sorting always ends with normalized Staff code and Employee `id`; these tie-breakers remain ascending even when the selected primary order is descending. Name/code search remains a Staff directory query and never becomes Person identity resolution.
 
-Reads `vs_people_employee`, `vs_people_person`, current `vs_academics_teacher`, verified Access binding/membership facts through typed projection ports. It does not read Access/Academics private tables in People infrastructure.
+### Full-result query semantics
+
+People-native name, Staff code, category and employment predicates execute in the scoped People query. Teaching and Access values are not inferred from People rows and are never hydrated after People pagination. Academics and Access must each publish a versioned, scope-keyed **read contract** for this directory:
+
+- Academics publishes one current Staff-directory fact per Employee: `ENABLED`, `NOT_ENABLED`, `DISABLED` or `UNKNOWN`, plus an owner projection revision.
+- Access publishes one current Staff-directory fact per exact Employee/Person binding: `NO_ACCOUNT`, `INVITATION_PENDING`, `ACTIVE`, `SUSPENDED`, `REVOKED` or `UNKNOWN`, plus an owner projection revision.
+- The contracts may be implemented as owner-controlled database views or another reviewed database-side projection. They are not private-table access and do not confer mutation authority.
+
+The composed `StaffDirectoryQueryPort` joins the scoped People base with those published read contracts, applies **all** search predicates, filters and the primary ordering in the database, and only then applies the signed keyset cursor and `limit + 1`. The count, when requested, uses the identical predicate over the full authorized result set. Browser code and a People page result may not filter, sort or count an already-paginated page.
+
+The current Academics and Access contracts expose per-record display facts but no database-side selection/order contract. Therefore production Teaching/Access filter and sort controls remain an **engineering design gap** until those published projections and revision semantics are implemented. The local prototype demonstrates the interaction over its complete four-record fictional set; it is not evidence that the current production query supports those controls.
+
+### Null, unknown and deterministic order
+
+- A proven absence of an exact Account binding maps to `NO_ACCOUNT`; a missing, stale, conflicting or unauthorized Access projection maps to `UNKNOWN`, never `NO_ACCOUNT`.
+- No Teacher row maps to `NOT_ENABLED` only when Academics can authoritatively establish that absence. An unavailable or stale projection maps to `UNKNOWN`.
+- `Any` includes unknown values. Selecting a concrete value excludes `UNKNOWN`; an explicit Unknown filter may be exposed only if product copy is approved.
+- Ascending state ranks are employment `ACTIVE, ENDED, UNKNOWN`; teaching `ENABLED, NOT_ENABLED, DISABLED, UNKNOWN`; and access `ACTIVE, INVITATION_PENDING, SUSPENDED, REVOKED, NO_ACCOUNT, UNKNOWN`. Descending reverses only the primary rank.
+- Name sorts by NFC-normalized, case-folded display name; Staff code sorts by NFC-normalized, case-folded code. Both end with normalized Staff code and Employee ID.
 
 ## 3. Existing-Person Employee slice STF-02
 
@@ -99,14 +117,18 @@ Current `endEmployment(employeeId, expectedVersion, effectiveDate=today, reason,
 
 ### Proposed orchestration after PD-STF-03
 
-`EndStaffEmploymentPlan` reads current People/Academics/Access impacts with versions. Final confirmation contains the exact plan hash and separate owner keys. The application coordinator:
+`EndStaffEmploymentPlan` reads current People/Academics/Access impacts with versions. Final confirmation contains the exact plan hash and separate owner keys. After PD-STF-03 approval, a **People-owned employment-end intent** records the plan hash, target Employee, initiating actor, `accessCommandKey`, `employmentCommandKey`, safe owner receipt references and step state. It is not a generic Coordination case and grants no authority. The application coordinator:
 
 1. reauthorizes and re-previews;
 2. performs the Access suspension if required and authorized;
 3. performs People end-employment with its own key;
-4. stores a coordination result containing owner receipt references and state `COMPLETE|PENDING_RECONCILIATION|BLOCKED`.
+4. updates the People intent with owner receipt references and state `NOT_STARTED|ACCESS_COMMITTED|EMPLOYMENT_UNKNOWN|COMPLETE|BLOCKED`.
 
-If a shared enlisted transaction is not technically available, do not label the operation atomic. A lost response recovers each owner outcome by its original key, then continues only the missing safe step. Compensation never reactivates a membership or rewrites employment automatically. Last-admin and assignment blocks are terminal until the underlying supported condition changes.
+If a shared enlisted transaction is not technically available, do not label the operation atomic. A lost response recovers each owner outcome by its original owner key, then continues only the missing safe step. Compensation never reactivates a membership or rewrites employment automatically. Last-admin and assignment blocks are terminal until the underlying supported condition changes. Any currently authorized administrator with both approved capabilities may resume the People intent; receipt disclosure is reauthorized first. An actor without Access authority cannot initiate the combined operation. The full state/action contract is in `EMPLOYMENT_END_FAILURE_CONTRACT.md`.
+
+### Proposed persistence after PD-STF-03
+
+`vs_people_employment_end_intent`: scope IDs, Employee ID, expected Employee version, plan hash, Access membership ID/version, initiating actor, Access command key, People command key, safe Access receipt reference, safe People receipt reference, state, last safe failure code, created/updated timestamps. Unique active intent per scoped Employee; unique scoped owner keys. Restricted receipt bodies stay with their owners.
 
 ## 8. Rejoining STF-08
 

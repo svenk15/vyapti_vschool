@@ -4,22 +4,22 @@ All dimensions are CSS pixels and follow `docs/ux/UX_CONSTITUTION.md` and `docs/
 
 ## Shared shell
 
-- **Desktop:** 252px sidebar, 64px top bar, content maximum 1320px, 28px top page padding. Staff is the current direct destination; local tabs are Profiles, Access and conditional Availability.
+- **Desktop:** accepted 240px Administrator sidebar, 64px top bar, content maximum 1440px, 32px page padding. Staff is the current direct destination; local tabs are Profiles, Access and conditional Availability.
 - **Mobile:** off-canvas navigation no wider than `calc(100vw - 32px)`; 44px open/close targets; background inert in production; focus returns to the menu trigger.
-- **Typography:** Inter stack used by the portal; navigation uses the current portal navigation stack. If bundled Inter is unavailable in the standalone file, system fallback is disclosed in the preview footer.
+- **Typography:** the prototype bundles the same licensed `InterVariable.woff2` and SIL OFL text used by the application. Browser inspection must record the resolved face; fallback remains a defect rather than an accepted visual substitution.
 - **Controls:** 40px desktop, 44px mobile/coarse pointer. Consequential final actions are at least 44px.
 
 ## Directory `/admin/teachers`
 
 Width: full workspace. Heading 28–34px with Add staff at right. Toolbar spans the card; attribute selector prefers 168px, text input flexes, Filters/Sort remain content width. Table header 44px; rows at least 64px. Mobile rows become labelled cards.
 
-States: populated; empty branch; no results with Clear filters; loading skeleton; read failure with Retry GET; filter drawer; sort drawer. Name/code Enter applies. Query, filters, sort and page survive Profile return.
+States: populated; empty branch; no results with Clear filters; loading skeleton; read failure with Try again; filter drawer; sort drawer. Name/code Enter applies. Query, filters, sort and page survive Profile return. Filter and sort drawers keep draft values separate; Cancel and Escape leave applied state unchanged.
 
 ## Add staff `/admin/teachers/create`
 
 Width: 760px maximum. One page, two-column form at desktop and one column below 768px. New/Existing modes are explicit radio choices. Existing mode is exact-ID resolve only. Optional teaching/access follow-up is progressively disclosed and cannot silently mutate those owners.
 
-States: empty; inline validation; duplicate Employee; exact candidate resolved; explicit confirmation; submitting; unknown outcome; committed save with failed refresh; receipt/success. Unknown retains key and blocks a new create. Confirmed save recovery performs GET only.
+States: empty; inline validation; duplicate Staff profile; exact candidate resolved; explicit confirmation; submitting; unknown outcome; committed save with failed refresh; receipt/success. Unknown retains the original request and blocks a new create. Confirmed save recovery performs a read only.
 
 ## Profile `/admin/teachers/[employeeId]`
 
@@ -31,7 +31,7 @@ States: active teaching Staff; active non-teaching Staff; ended employment; no a
 
 Width: 480px desktop, full-width mobile. Person and Employee are separate sections. Each has its own expected version, reason and Save. Saving one section never clears the other section’s unsaved safe values.
 
-States: clean; dirty; validation; saving; saved; stale current-versus-attempted review; unknown exact-key recovery; confirmed-save/read-refresh failure; denial. Close/Cancel/Escape use the same guard and focus return.
+States: clean; dirty; validation; saving; saved; stale current-versus-attempted review; unknown original-request recovery; confirmed-save/read-refresh failure; rejection. Close/Cancel/Escape use the same guard and focus return. Saving a section updates the visible fictional profile and its history while retaining the other section's draft.
 
 ## Teaching eligibility and responsibilities
 

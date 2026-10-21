@@ -23,6 +23,18 @@
 - Workflow contracts: the same pack’s `docs/modules/staff/DESIGN.md` and `TASKS.md`.
 - Production geometry: `docs/ux/UX_CONSTITUTION.md` and `docs/ux/CONTROL_SIZING_CONTRACT.md`.
 
+## Exact reused presentation baseline
+
+| Pattern | Accepted local reference | Production source reused | Prototype treatment |
+|---|---|---|---|
+| Administrator shell and navigation | `docs/execution/UX_REVAMP/ADMIN_NAVIGATION_SIMPLIFICATION.md`; accepted Concept 1 at `docs/ux/references/student-concepts/concept-1.svg` | `components/portal/portal-shell.tsx`, `components/admin-portal-frame.tsx`, `app/globals.css` `.portal-*` rules | 240px desktop sidebar, 64px top bar, 44px navigation targets and existing mobile drawer geometry; no new navigation model |
+| Staff local navigation | Accepted transparent Concept 1 local-link recipe recorded in `ADMIN_NAVIGATION_SIMPLIFICATION.md` | `components/admin-local-navigation.tsx`, `components/admin-staff-navigation.tsx` | Profiles, Access and conditional Availability use the same underlined text-link treatment |
+| Staff directory | `implementation-spec/administrator/screens/module-staff.md` and `VSchool_School_Admin_Review.html#/staff` | `components/people-workspace.tsx`; `.staff-directory*` in `app/globals.css` | Open responsive table/card directory with one Profile action; reviewer-only filter/sort simulation does not assert production query support |
+| Theme tokens | `docs/execution/UX_REVAMP/TOKENS.md` | `app/globals.css` `--vs-*` semantic variables | Forest, Amethyst, Porcelain and Linen values are copied exactly into the isolated prototype; geometry is constant |
+| Typography | `docs/execution/UX_REVAMP/TOKENS.md` Typography | `app/layout.tsx`, `app/fonts/InterVariable.woff2`, `app/fonts/LICENSE.txt` | Same font asset and SIL OFL are bundled at `prototype/assets/`; expected SHA-256 values are recorded below |
+
+Bundled font SHA-256: `693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3`. Bundled license SHA-256: `262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a`. The remaining verification question is the actual resolved browser face; a system fallback is not accepted as exact typography.
+
 ## Existing production evidence used by the audit
 
 | Evidence | Coverage | Limitation |

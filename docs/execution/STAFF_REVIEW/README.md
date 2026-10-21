@@ -13,13 +13,14 @@ This package is a design/execution checkpoint. It changes no production route, c
 - [Mandatory-flow audit](MANDATORY_FLOW_AUDIT.md) — release classification, implementation matrix, totals, owner evidence and exact gaps.
 - [Closure plan](IMPLEMENTATION_PLAN.md) — prioritized vertical slices, cross-owner dependencies, decisions and verification scope.
 - [Interactive capability proposal](STAFF_PROPOSAL.html) — a self-contained review aid that labels implemented, mandatory-gap, conditional and deferred capabilities. Its controls only switch documentation views; they do not simulate successful business mutations.
-- [Product-decision register](DECISION_REGISTER.md) — settled rules and four precise recommendations that still require approval.
+- [Product-decision register](DECISION_REGISTER.md) — settled rules, three precise recommendations that still require approval, and the explicitly deferred rejoin decision.
 - [Journey/reference map](JOURNEY_AND_REFERENCE_MAP.md) and [screen-state inventory](SCREEN_STATE_INVENTORY.md) — current/proposed navigation, compositions and responsive states.
 - [CTA contracts](CTA_CONTRACTS.md) — action-by-action authority, command, recovery and focus behavior.
 - [Proposed LLD](PROPOSED_LLD.md), [tasks](TASKS.md) and [acceptance](ACCEPTANCE.md) — owner boundaries, persistence proposals and dependency-ordered slices.
 - [Source/screenshot inventory](SOURCE_AND_SCREENSHOT_INVENTORY.md) — inspected production files, approved authority and prior evidence provenance.
-- [Interactive Staff workflow prototype](prototype/STAFF_WORKFLOWS.html) — self-contained fictional review prototype with real interactions and explicit prototype-only labels.
-- [Prototype inspection evidence](PROTOTYPE_EVIDENCE.md) — 19 browser captures and focused interaction results.
+- [Interactive Staff workflow prototype](prototype/STAFF_WORKFLOWS.html) — fictional review prototype with real local interactions, bundled approved Inter assets and explicit prototype-only labels. Its implementation is split between the HTML and `prototype/STAFF_WORKFLOWS.js`; it still has no authentication or persistence.
+- [Employment-ending failure contract](EMPLOYMENT_END_FAILURE_CONTRACT.md) — exact cross-owner states, recovery authority, original keys/receipts and prohibited compensation.
+- [Prototype inspection evidence](PROTOTYPE_EVIDENCE.md) and [issue-to-evidence map](ISSUE_TO_EVIDENCE.md) — 22 corrected browser captures and 29 focused interaction checks.
 
 ## Authority and evidence
 
@@ -38,4 +39,4 @@ The existing five SA matrix rows therefore remain useful workflow summaries, but
 
 The independently ready technical slices are STF-01 directory query state, STF-04 People/Access recovery, STF-03A profile composition, STF-05 dated Teacher eligibility and STF-06 reasoned invitation review. Existing-Person linkage, broad correction fields, employment/access completion and rejoin remain behind PD-STF-01–04 respectively.
 
-The recommended first slice is STF-01, followed by STF-04A, because neither creates new identity or lifecycle authority. Human acceptance remains PENDING.
+The recommended first production slice is STF-01A, limited to People-owned directory fields. Teaching and Access filters/sorts remain behind the versioned owner-projection design described in `PROPOSED_LLD.md`; no page-local filtering or sorting is an acceptable substitute. Human acceptance remains PENDING.

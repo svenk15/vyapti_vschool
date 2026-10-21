@@ -15,12 +15,12 @@
 
 ## Journey-specific cases
 
-- **Directory:** name/code semantics, filter combinations, deterministic duplicate-name ordering, tampered/query-mismatched cursors, Back/Forward and branch switch clearing.
+- **Directory:** name/code semantics; full-authorized-set filter combinations; deterministic duplicate-name/state ordering; null/unknown handling; tampered, query-mismatched and owner-revision-stale cursors; Back/Forward and branch switch clearing. A page-local Teaching/Access sort cannot pass.
 - **Existing Person:** exact ID only, bounded DTO, attester required, same-branch Employee conflict, cross-organization denial, concurrent creation leaves one Employee.
 - **Profile/corrections:** active/ended/non-teaching/no-account; separate Person/Employee versions; code uniqueness; contact correction does not change login; unsafe date change blocks without rewriting history.
 - **Eligibility:** valid bounds, no overlap, every assignment contained, frozen/session impact, concurrent change, Access role independence.
 - **Access:** email/hybrid/operator paths, pending/failed/expired/consumed/revoked, reasoned resend replaces old token, last-admin, immediate next-request denial, provider result remains honest.
-- **End employment:** branch date today, assignment impact, Access disposition, no false complete, replay/reconcile partial steps, global/other-branch/family/student access preserved.
+- **End employment:** every row in `EMPLOYMENT_END_FAILURE_CONTRACT.md`; branch date today; assignment impact; Access disposition; no false complete; exact owner-key recovery; revoked recovery denial; no automatic Access compensation; global/other-branch/family/student access preserved.
 - **Rejoin:** immutable prior episode, non-overlap, no automatic membership/invite/eligibility/assignment restoration.
 
 ## Interaction/visual cases

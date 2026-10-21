@@ -26,6 +26,8 @@ This register separates existing approved rules from recommended rules that stil
 
 **Consequences.** Prevents broad organization Person browsing and makes the linkage accountable. It requires one new restricted evidence table and an attester-grant port; ordinary School administrators without the grant can create a new Person but cannot reuse an existing one.
 
+**Precise approval needed.** Approve the new organization-scoped `person.identity_attest` capability as an explicit grant, the bounded candidate fields above, and People retention of the immutable restricted linkage-evidence row. Approval must state that `class.manage` or the School Administrator role alone does not confer attestation.
+
 **Blocked workflows/tasks.** SA-13-E / STF-02 production implementation and exact existing-Person mode in Add staff.
 
 ### PD-STF-02 — Mutable Staff facts and correction authority
@@ -38,6 +40,8 @@ This register separates existing approved rules from recommended rules that stil
 
 **Consequences.** Produces honest owner histories and avoids cross-owner side effects. A combined drawer may retain drafts across sections, but each Save executes only the selected owner command. Shared Person corrections can affect another branch’s display, so they require organization-level attestation rather than branch-only authority.
 
+**Precise approval needed.** Approve the exact mutable field lists, the organization-scoped `person.correct` grant for shared Person facts, the branch-scoped `staff.manage` grant for Employee facts, mandatory bounded reasons, immutable owner-specific revision visibility, and the rule that dated employment start becomes non-correctable after dependent evidence exists.
+
 **Blocked workflows/tasks.** STF-PRO-02 / STF-03 Person corrections, Employee corrections beyond category, and start-date correction.
 
 ### PD-STF-03 — Employment end and Access disposition
@@ -46,9 +50,11 @@ This register separates existing approved rules from recommended rules that stil
 
 **Relevant contract.** Current People `endEmployment` ends today, disables Teacher eligibility and checks assignment impact. Access membership has independent last-admin/version/role guards. No existing contract authorizes People to mutate Access tables.
 
-**Recommendation.** Initial release supports branch-local **end today** only. Confirmation shows employment, assignment/Teacher impact and current Access state. When access is active, successful completion requires a separately authorized Access suspension in the same reviewed orchestration. If the actor lacks `user.manage`, create no partial success: route to an authorized Access administrator or produce a recoverable pending coordination item. Last-admin protection always wins. Never report offboarding complete while relevant branch access remains active.
+**Recommendation.** Initial release supports branch-local **end today** only. Confirmation shows employment, assignment/Teacher impact and current Access state. The initiating actor must currently hold both `staff.manage` and `user.manage`; otherwise the action is unavailable and the screen directs the operator to an institution administrator with both grants. No Coordination item is created. The reviewed flow creates a People-owned employment-end intent with separate Access and People command keys, suspends the relevant branch membership first, then ends employment. Any currently authorized administrator with both grants may resume that exact intent using its stored owner keys. Last-admin protection always wins. Never report offboarding complete while relevant branch access remains active, and never restore access automatically as compensation.
 
-**Consequences.** The safest implementation is an application orchestration with explicit People and Access owner commands, durable step receipts and reconciliation; it must not claim atomicity unless both owners participate in one real enlisted transaction. Global account, other branches, and independent Parent/Student relationships remain intact.
+**Consequences.** A partial state can legitimately contain suspended branch access while employment remains active or unresolved. The People-owned intent makes this visible and resumable without inventing general Coordination authority. The flow is not described as atomic. Global account, other branches, and independent Parent/Student relationships remain intact.
+
+**Precise approval needed.** Approve dual authority to initiate/resume, Access-first sequencing, the People-owned intent fields/states in `PROPOSED_LLD.md`, the no-compensation rule, and the exact administrator-facing states in `EMPLOYMENT_END_FAILURE_CONTRACT.md`.
 
 **Blocked workflows/tasks.** STF-EMP-01 / STF-07 complete end-employment experience and offboarding completion wording.
 
@@ -63,6 +69,8 @@ This register separates existing approved rules from recommended rules that stil
 **Consequences.** Requires a forward migration, a populated backfill from current Employee dates, interval constraints, profile projection changes and owner concurrency tests. It is a higher-cost first-release enhancement; ending employment remains usable without it.
 
 **Blocked workflows/tasks.** STF-EMP-02 / STF-08 rejoin flow and complete employment history. No current mandatory active-employment operation depends on it.
+
+**Release position.** Deferred. PD-STF-04 does not block the mandatory first-release directory, add, profile, correction, teaching, access or end-today journey.
 
 ## Explicit exclusions
 
