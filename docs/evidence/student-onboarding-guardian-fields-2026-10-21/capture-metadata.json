@@ -1,0 +1,169 @@
+{
+  "capturedAt": "2026-10-21T17:59:53.808Z",
+  "applicationSource": "ecc3ba290da98c96db27355cf59c6a8fa482e86d",
+  "buildId": "fhA5_7X3k6pPhzl_sswVE",
+  "baseURL": "http://127.0.0.1:3400",
+  "reference": "file:///Users/venky/Documents/codebase/vyapti_vschool/docs/ux/references/student-onboarding-approved/refined-onboarding.html",
+  "notes": [
+    "No Student or Guardian mutation was issued. The validation capture stops before a network command.",
+    "The approved source contains populated demo values; the application follows the user clarification by rendering empty controls with gray examples."
+  ],
+  "observations": [
+    {
+      "viewportName": "desktop",
+      "state": "empty",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "rootOverflow": false,
+      "guardianHeadingVisible": true,
+      "guardianNameVisible": true,
+      "guardianEmailVisible": true,
+      "placeholders": {
+        "firstName": "e.g. Mira",
+        "guardianName": "e.g. Priya Shah",
+        "guardianEmail": "e.g. priya.shah@example.com"
+      },
+      "firstInput": {
+        "height": "40px",
+        "borderWidth": "1px",
+        "borderColor": "rgb(220, 229, 223)",
+        "borderRadius": "6px",
+        "placeholderColor": "color(srgb 0.589098 0.628 0.606118)"
+      }
+    },
+    {
+      "viewportName": "desktop",
+      "state": "guardian-requires-invitation",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "rootOverflow": false,
+      "guardianHeadingVisible": true,
+      "guardianNameVisible": true,
+      "guardianEmailVisible": true,
+      "placeholders": {
+        "firstName": "e.g. Mira",
+        "guardianName": "e.g. Priya Shah",
+        "guardianEmail": "e.g. priya.shah@example.com"
+      },
+      "firstInput": {
+        "height": "40px",
+        "borderWidth": "1px",
+        "borderColor": "rgb(220, 229, 223)",
+        "borderRadius": "6px",
+        "placeholderColor": "color(srgb 0.589098 0.628 0.606118)"
+      }
+    },
+    {
+      "viewportName": "desktop",
+      "state": "invitation-selected",
+      "cssViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "rootOverflow": false,
+      "guardianHeadingVisible": true,
+      "guardianNameVisible": true,
+      "guardianEmailVisible": true,
+      "placeholders": {
+        "firstName": "e.g. Mira",
+        "guardianName": "e.g. Priya Shah",
+        "guardianEmail": "e.g. priya.shah@example.com"
+      },
+      "firstInput": {
+        "height": "40px",
+        "borderWidth": "1px",
+        "borderColor": "rgb(220, 229, 223)",
+        "borderRadius": "6px",
+        "placeholderColor": "color(srgb 0.589098 0.628 0.606118)"
+      }
+    },
+    {
+      "viewportName": "mobile",
+      "state": "empty",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "rootOverflow": false,
+      "guardianHeadingVisible": true,
+      "guardianNameVisible": true,
+      "guardianEmailVisible": true,
+      "placeholders": {
+        "firstName": "e.g. Mira",
+        "guardianName": "e.g. Priya Shah",
+        "guardianEmail": "e.g. priya.shah@example.com"
+      },
+      "firstInput": {
+        "height": "44px",
+        "borderWidth": "1px",
+        "borderColor": "rgb(220, 229, 223)",
+        "borderRadius": "6px",
+        "placeholderColor": "color(srgb 0.589098 0.628 0.606118)"
+      }
+    },
+    {
+      "viewportName": "mobile",
+      "state": "guardian-requires-invitation",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "rootOverflow": false,
+      "guardianHeadingVisible": true,
+      "guardianNameVisible": true,
+      "guardianEmailVisible": true,
+      "placeholders": {
+        "firstName": "e.g. Mira",
+        "guardianName": "e.g. Priya Shah",
+        "guardianEmail": "e.g. priya.shah@example.com"
+      },
+      "firstInput": {
+        "height": "44px",
+        "borderWidth": "1px",
+        "borderColor": "rgb(220, 229, 223)",
+        "borderRadius": "6px",
+        "placeholderColor": "color(srgb 0.589098 0.628 0.606118)"
+      }
+    },
+    {
+      "viewportName": "mobile",
+      "state": "invitation-selected",
+      "cssViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "rootOverflow": false,
+      "guardianHeadingVisible": true,
+      "guardianNameVisible": true,
+      "guardianEmailVisible": true,
+      "placeholders": {
+        "firstName": "e.g. Mira",
+        "guardianName": "e.g. Priya Shah",
+        "guardianEmail": "e.g. priya.shah@example.com"
+      },
+      "firstInput": {
+        "height": "44px",
+        "borderWidth": "1px",
+        "borderColor": "rgb(220, 229, 223)",
+        "borderRadius": "6px",
+        "placeholderColor": "color(srgb 0.589098 0.628 0.606118)"
+      }
+    }
+  ]
+}

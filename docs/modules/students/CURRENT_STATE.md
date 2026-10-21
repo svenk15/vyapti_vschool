@@ -1,5 +1,11 @@
 # Students, enrollment and placement history — current state
 
+## Add student Parent / Guardian visibility and controls — 21 October 2026
+
+Application source `ecc3ba290da98c96db27355cf59c6a8fa482e86d`, production build `fhA5_7X3k6pPhzl_sswVE`, makes the optional Parent / Guardian fields visible in the initial Add student composition, uses gray example placeholders and replaces the former dark control outline with the theme's light one-pixel border. Guardian details still require the explicit invitation action, so the UI does not create or imply an unsupported contact-only record. Accounts without Guardians authority see a truthful unavailable explanation instead of an authorized control. Relationship remains absent because the owner has no relationship field or lifecycle.
+
+Focused TypeScript, ESLint, changed-file whitespace checks and the 4 GiB production build passed. Direct no-write Playwright inspection at 1440×1000 and 390×844 confirms visible Guardian fields, 40/44px controls, a 1px `rgb(220, 229, 223)` Forest border, gray examples, no root overflow and the invitation-required validation state. The focused E2E harness stopped before browser launch because the Prisma test-database schema engine could not start; no assertion or development mutation ran. See [current-build evidence](../../evidence/student-onboarding-guardian-fields-2026-10-21/README.md). Human visual acceptance remains PENDING.
+
 ## Exact onboarding/Profile fidelity correction — 21 October 2026
 
 Application source `d6c61772484ddf2df828a3917b12d7083ff6cf96`, production build `OG1vfxhJLCRLA_ScBTEZR`, completes the bounded presentation correction against the exact approved `student-onboarding-approved/refined-onboarding.html` states. Add student, Profile, Add guardian and Manage guardian access were directly inspected at 1440×1000 and 390×844 with matching state, DPR 1 and visual scale 1. Centering, widths, control/button sizes, section rhythm, action placement, drawer width/density, visible Student context, initial focus and focus return are corrected. Root overflow is absent. Existing identity resolution, enrollment, Guardians ownership, authorization, idempotency and recovery are unchanged; no schema, migration, seed or backend contract changed.
