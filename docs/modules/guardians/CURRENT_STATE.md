@@ -1,5 +1,11 @@
 # Guardians — current state
 
+## Connected Student onboarding/profile checkpoint — 21 October 2026
+
+The current working source reuses FAM-01 for optional Guardian setup during Student onboarding and for the contextual profile drawer. Manager availability is resolved server-side before rendering. The drawer supports real invitation, resend, optional-purpose and removal operations, preserves exact-key retry after an unknown invitation response, distinguishes committed mutation from refresh failure, and uses accessible unsaved-change/removal dialogs with focus return. Focused current-source desktop/mobile browser evidence passed against real PostgreSQL; human review remains **PENDING**. [Evidence](../../evidence/student-onboarding-connected-2026-10-21/README.md).
+
+No Guardian schema or owner semantics changed. The approved mock's relationship field and contact-only mode remain unavailable because this owner stores neither; no relationship or access result is fabricated. Production email/provider review, native accessibility and TEN-03 remain pending.
+
 Last updated: 16 October 2026.
 
 FAM-01 through FAM-04 are **ENGINEERING_VERIFIED** at implementation commit `41e2469`. FAM-05 is **ENGINEERING_VERIFIED** at `7d52491`. FAM-06 is engineering-verified with COM-01. FAM-07 is engineering-verified with ATT-05 for fictional local/test data. Human review is **PENDING**.

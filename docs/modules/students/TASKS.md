@@ -2,6 +2,12 @@
 
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
+## Connected onboarding/profile presentation — 21 October 2026
+
+**Dependencies:** implemented STU-01/STU-02 and FAM-01 owner commands. Compose the approved Add Student page, current Student profile and contextual Guardian drawer without changing owner transactions or identity rules.
+
+**Acceptance:** server-authorized academic choices; exact new/existing Person registration; optional placement and Guardian invitation; no dependent operation after registration failure; retained Student/Enrollment evidence after later failure; exact owner-key replay after a lost response; no duplicate Student, placement or Guardian access; truthful post-reload recovery limits; current profile facts and access statuses; accessible drawer close/removal confirmation/focus return; delivery and refresh failures remain distinct; desktop/mobile and all-theme visual inspection against source checkpoint `ee0006258f5217b04d22f1561551d4516842428b`. Relationship and contact-only storage remain excluded because the current Guardians owner has no such contract. Human review remains separate.
+
 ## UXR-02 — Focus Student registration on one editable page
 
 **Dependencies:** UXR-00 and UXR-01A. Replace the four presentation stages on `/admin/students/register` with the approved two-group page described in [DESIGN](DESIGN.md#uxr-02-one-page-registration-composition-approved-20-october-2026) and the exact local FIRST reference in `docs/ux/references/registration-approved/`. Reuse the existing People exact-selection and Students registration contracts. Do not merge enrollment or access commands.

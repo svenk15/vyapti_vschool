@@ -2,6 +2,12 @@
 
 Last reconciled: 14 October 2026. This live LLD implements the owner-approved simplified Parent/Guardian foundation and supersedes the five-state relationship proposal recorded at `20cdd8b`.
 
+## Connected Student onboarding presentation — 21 October 2026
+
+The approved Student onboarding page and profile drawer reuse `authorizeChild`, `listChildAccess`, resend, optional-purpose and removal commands through the existing Guardians facade. A portable Students-owned orchestration may call `authorizeChild` only after authoritative Student registration and optional placement complete; Guardians still rechecks the current designated manager, exact child/school binding and permitted purposes and commits its own authorization/invitation/evidence transaction. Registration and placement are never rolled back for Guardian or post-commit delivery failure. Same-key retry replays the Guardians receipt, and successful mutation remains successful when a later UI refresh fails.
+
+The visual reference contains a relationship selector and implies that a contact may exist without portal access. The current owner has neither a relationship column nor contact-only aggregate. Relationship remains descriptive and non-authoritative in this design, and the application omits both unsupported controls rather than creating a grant as a substitute for contact storage. Core Parent read purposes remain fixed and server-owned; only already-designed optional purposes are mutable.
+
 ## Scope and invariants
 
 Guardians owns a school's explicit authorization for one adult contact to read one Student's approved family bundle. Access continues to own global accounts, password/session policy and token hashing; People owns Person identity; Students, Attendance and Academics remain the sources of child, roster and timetable data.

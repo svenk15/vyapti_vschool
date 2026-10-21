@@ -1,5 +1,13 @@
 # Students, enrollment and placement history — current state
 
+## Connected onboarding/profile checkpoint — 21 October 2026
+
+Implementation is **ENGINEERING_VERIFIED** on the current working source; human visual review is **PENDING**. `/admin/students/register` now composes registration, optional placement and optional Guardian invitation through a portable application use case. Each operation keeps its existing owner authorization, transaction and idempotency key. Later-stage failure retains completed receipts, an unknown response retries the exact command, and no successful Student is deleted. `/admin/students/:id` now uses the approved compact identity, School record, Parents & guardians and Student portal composition; the Guardian flow opens in an accessible contextual drawer.
+
+Focused evidence covers a lost committed response followed by exact replay, one persisted Student/Enrollment/Placement/Guardian access, scoped server options, profile rendering, unsaved-drawer recovery, removal confirmation, focus return, mobile full-width presentation and all four themes. Unit orchestration, real-PostgreSQL Students registration, TypeScript, targeted lint, backend/boundary checks, production build and sequential one-worker desktop/mobile Playwright passed. An accidental broader functional run had one unrelated existing Finance reconciliation expectation failure; the targeted Students suite passed. No schema or migration changed. See [connected onboarding evidence](../../evidence/student-onboarding-connected-2026-10-21/README.md).
+
+The exact reference includes a relationship field and a contact-only state that the Guardians owner does not store. The application does not fabricate either and grants only the fixed server-owned core purposes plus the existing optional notices purpose. Actual browser 200% zoom, VoiceOver, NVDA, human acceptance, TEN-03 and production messaging/provider review remain pending.
+
 ## Approved FIRST registration composition — 20 October 2026
 
 Application commit `6c4f64a49396c772064049b58fb3bb00f53f23b6` implements the bounded presentation checkpoint from the local self-contained FIRST reference at `docs/ux/references/registration-approved/APPROVED_REGISTRATION.html` (SHA-256 `5b1b6895a780f7fa5a7f6e170d9946e5fd843717c1d73e264106de6f30775f06`). `/admin/students/register` now matches its compact one-page hierarchy, Student/Admission sections, lookup composition, help disclosure, 740px desktop surface and 354px mobile surface. Existing validation, exact identity selection, owner command, authorization, transaction, idempotency and recovery behavior remain unchanged. No schema, migration, seed or navigation change occurred.
