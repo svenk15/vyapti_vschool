@@ -1,10 +1,10 @@
 "use client";
 
 import {useState} from "react";
-import {Checkbox,TextArea,TextField} from "@/components/ui/forms";
+import {Checkbox,SelectField,TextArea,TextField} from "@/components/ui/forms";
 import {Dialog} from "@/components/ui/interactive";
 import {Alert,Badge,Button,EmptyState} from "@/components/ui/primitives";
-import type {GuardianAccessRecord,GuardianAuthorizationResult} from "@/shared/contracts/guardians";
+import type {GuardianAccessRecord,GuardianAuthorizationResult,GuardianRelationship} from "@/shared/contracts/guardians";
 
 const statusLabel:Record<GuardianAccessRecord["status"],string>={
   INVITE_SENT:"Invitation sent",
@@ -27,7 +27,7 @@ const statusTone=(status:GuardianAccessRecord["status"])=>status==="ACCESS_ENABL
 
 type Message={tone:"success"|"danger"|"warning";title:string;body:string};
 type Failure=Error&{retryable?:boolean;status?:number};
-type InviteAttempt=Readonly<{kind:"invite";displayName:string;email:string;noticeRead:boolean;confirmed:true;key:string}>;
+type InviteAttempt=Readonly<{kind:"invite";displayName:string;relationship:GuardianRelationship;email:string;noticeRead:boolean;confirmed:true;key:string}>;
 type ManageAttempt=Readonly<
   |{kind:"resend";accessId:string;key:string}
   |{kind:"purpose";accessId:string;expectedVersion:number;purpose:"explanation"|"calendar"|"learning";enabled:boolean;key:string}
@@ -61,13 +61,14 @@ export function GuardianAccessManagement({
   const [drawer,setDrawer]=useState<"add"|"manage"|null>(null);
   const [selected,setSelected]=useState<GuardianAccessRecord|null>(null);
   const [displayName,setDisplayName]=useState("");
+  const [relationship,setRelationship]=useState<GuardianRelationship|"">("");
   const [email,setEmail]=useState("");
   const [noticeRead,setNoticeRead]=useState(false);
   const [busy,setBusy]=useState(false);
   const [profileMessage,setProfileMessage]=useState<Message|null>(null);
   const [drawerMessage,setDrawerMessage]=useState<Message|null>(null);
   const [removeMessage,setRemoveMessage]=useState<Message|null>(null);
-  const [fieldErrors,setFieldErrors]=useState<{displayName?:string;email?:string}>({});
+  const [fieldErrors,setFieldErrors]=useState<{displayName?:string;relationship?:string;email?:string}>({});
   const [inviteAttempt,setInviteAttempt]=useState<InviteAttempt|null>(null);
   const [manageAttempt,setManageAttempt]=useState<ManageAttempt|null>(null);
   const [refreshPending,setRefreshPending]=useState<RefreshPending|null>(null);
@@ -83,10 +84,11 @@ export function GuardianAccessManagement({
   const activeItems=items.filter(item=>item.status!=="ACCESS_REMOVED");
   const unresolved=inviteAttempt!==null||manageAttempt!==null;
   const locked=unresolved||refreshPending!==null;
-  const dirty=Boolean(displayName||email||noticeRead);
+  const dirty=Boolean(displayName||relationship||email||noticeRead);
 
   function resetAdd(){
     setDisplayName("");
+    setRelationship("");
     setEmail("");
     setNoticeRead(false);
     setFieldErrors({});
@@ -208,10 +210,11 @@ export function GuardianAccessManagement({
   async function authorize(){
     const errors={
       displayName:displayName.trim().length<2?"Enter the guardian’s full name.":undefined,
+      relationship:relationship?undefined:"Choose the relationship to the student.",
       email:!/^\S+@\S+\.\S+$/.test(email.trim())?"Enter a valid email address.":undefined,
     };
     setFieldErrors(errors);
-    if(errors.displayName||errors.email){
+    if(errors.displayName||errors.relationship||errors.email){
       setDrawerMessage({tone:"danger",title:"Check the guardian details",body:"Correct the highlighted fields before sending an invitation."});
       return;
     }
@@ -219,6 +222,7 @@ export function GuardianAccessManagement({
     const exact=inviteAttempt??{
       kind:"invite" as const,
       displayName:displayName.trim(),
+      relationship:relationship as GuardianRelationship,
       email:email.trim(),
       noticeRead,
       confirmed:true as const,
@@ -343,7 +347,7 @@ export function GuardianAccessManagement({
       ?<EmptyState title="No Parent access yet" description="Invite a verified parent or guardian when the school is ready to grant child-specific access." icon="people"/>
       :<div className="guardian-profile-list">{activeItems.map(item=><article key={item.accessId} className="guardian-profile-row">
         <span className="student-profile-avatar" aria-hidden="true">{item.displayName.split(/\s+/).map(p=>p[0]).join("").slice(0,2).toUpperCase()}</span>
-        <div><strong>{item.displayName}</strong><p>{item.email}</p></div>
+        <div><strong>{item.displayName}</strong><p>{item.relationship?`${item.relationship[0]}${item.relationship.slice(1).toLowerCase()} · `:""}{item.email}</p></div>
         <div className="guardian-profile-row-actions">
           <Badge tone={statusTone(item.status)}>{statusLabel[item.status]}</Badge>
           <Button size="small" variant="ghost" disabled={locked} onClick={()=>{setSelected(item);setProfileMessage(null);setDrawerMessage(null);setDrawer("manage");}}>Manage <span aria-hidden="true">→</span></Button>
@@ -359,6 +363,12 @@ export function GuardianAccessManagement({
 
       {drawer==="add"&&<div className="guardian-drawer-form">
         <TextField id="guardian-full-name" label="Full name" required autoFocus autoComplete="name" value={displayName} error={fieldErrors.displayName} disabled={locked} onChange={event=>{setDisplayName(event.target.value);setFieldErrors(current=>({...current,displayName:undefined}));}} maxLength={160}/>
+        <SelectField id="guardian-relationship" label="Relationship" required value={relationship} error={fieldErrors.relationship} disabled={locked} onChange={event=>{setRelationship(event.target.value as GuardianRelationship|"");setFieldErrors(current=>({...current,relationship:undefined}));}}>
+          <option value="">Select relationship</option>
+          <option value="MOTHER">Mother</option>
+          <option value="FATHER">Father</option>
+          <option value="GUARDIAN">Guardian</option>
+        </SelectField>
         <TextField label="Email address" required type="email" autoComplete="email" value={email} error={fieldErrors.email} disabled={locked} onChange={event=>{setEmail(event.target.value);setFieldErrors(current=>({...current,email:undefined}));}} maxLength={254}/>
         <div className="guardian-purpose-summary"><strong>Parent portal access</strong>{["Student summary","Attendance history","Published timetable"].map(label=><span key={label}><span>✓</span>{label}</span>)}</div>
         <Checkbox label="Also allow school notices for this child" checked={noticeRead} disabled={locked} onChange={event=>setNoticeRead(event.target.checked)}/>
@@ -371,6 +381,7 @@ export function GuardianAccessManagement({
       {drawer==="manage"&&selected&&<div className="guardian-drawer-form">
         <dl className="guardian-drawer-facts">
           <div><dt>Name</dt><dd>{selected.displayName}</dd></div>
+          <div><dt>Relationship</dt><dd>{selected.relationship?selected.relationship[0]+selected.relationship.slice(1).toLowerCase():"Not recorded"}</dd></div>
           <div><dt>Email</dt><dd>{selected.email}</dd></div>
           <div><dt>Status</dt><dd><Badge tone={statusTone(selected.status)}>{statusLabel[selected.status]}</Badge></dd></div>
         </dl>

@@ -389,6 +389,7 @@ model GuardianChildAccess {
  schoolId String @map("school_id") @db.Uuid
  studentId String @map("student_id") @db.Uuid
  displayName String @map("display_name") @db.VarChar(160)
+ relationship String? @db.VarChar(20)
  normalizedEmail String @map("normalized_email") @db.VarChar(254)
  accountId String? @map("account_id") @db.Uuid
  personId String? @map("person_id") @db.Uuid

@@ -1,10 +1,16 @@
 # Guardians — current state
 
+## Student onboarding relationship checkpoint — 22 October 2026
+
+The exact Add student reference requires a descriptive Relationship choice. The canonical Guardians owner now accepts and persists `MOTHER`, `FATHER`, or `GUARDIAN` on the exact child-access record. The value is descriptive only: it grants no purpose, selects no identity and does not authorize contact-only storage. Existing rows remain `null`; no relationship was inferred or backfilled. New Administrator invitation forms require a choice, while older callers may omit it and retain the legacy replay-hash shape so unresolved historical commands remain recoverable.
+
+Forward migration `20261022110000_guardian_relationship` is applied to the designated development database. The production build `U3PCwpgFZl_6ep0MNOa7t` passed TypeScript and compilation; focused policy/onboarding unit tests passed 4/4, and backend, boundary and database-design checks passed. The focused Guardians PostgreSQL test could not start because the guarded test database's Prisma schema engine returned `Schema engine error` before Vitest; it is not claimed as passed. Desktop/mobile current-build captures confirm the Relationship field and the reference typography/control metrics. [Evidence](../../evidence/student-onboarding-field-alignment-2026-10-22/README.md). Human review remains **PENDING**.
+
 ## Connected Student onboarding/profile checkpoint — 21 October 2026
 
 The current working source reuses FAM-01 for optional Guardian setup during Student onboarding and for the contextual profile drawer. Manager availability is resolved server-side before rendering. The drawer supports real invitation, resend, optional-purpose and removal operations, preserves exact-key retry after an unknown invitation response, distinguishes committed mutation from refresh failure, and uses accessible unsaved-change/removal dialogs with focus return. Focused current-source desktop/mobile browser evidence passed against real PostgreSQL; human review remains **PENDING**. [Evidence](../../evidence/student-onboarding-connected-2026-10-21/README.md).
 
-No Guardian schema or owner semantics changed. The approved mock's relationship field and contact-only mode remain unavailable because this owner stores neither; no relationship or access result is fabricated. Production email/provider review, native accessibility and TEN-03 remain pending.
+This historical 21 October checkpoint preceded the relationship extension above. Contact-only mode remains unavailable because the owner still has no contact-only aggregate; no contact or access result is fabricated. Production email/provider review, native accessibility and TEN-03 remain pending.
 
 Last updated: 16 October 2026.
 

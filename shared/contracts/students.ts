@@ -63,6 +63,7 @@ export type StudentOnboardingPlacementCommand = Readonly<{
 }>;
 export type StudentOnboardingGuardianCommand = Readonly<{
   displayName:string;
+  relationship:import("./guardians").GuardianRelationship;
   email:string;
   noticeRead:boolean;
   confirmed:true;

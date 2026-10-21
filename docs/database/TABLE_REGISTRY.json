@@ -1433,9 +1433,9 @@
       "table": "vs_guardians_child_access",
       "status": "MIGRATED",
       "design": "docs/modules/guardians/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; display_name varchar(160); normalized_email varchar(254); account_id/person_id nullable; authorized_by_account_id uuid; authorized_at timestamptz(3); access_from date; accepted_at/revoked_at/revoked_by_account_id/revocation_reason nullable; version int; created_at timestamptz(3)",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; student_id uuid; display_name varchar(160); relationship varchar(20) nullable; normalized_email varchar(254); account_id/person_id nullable; authorized_by_account_id uuid; authorized_at timestamptz(3); access_from date; accepted_at/revoked_at/revoked_by_account_id/revocation_reason nullable; version int; created_at timestamptz(3)",
       "responsibility": "One explicit school authorization and accepted account binding for the fixed read-only Parent bundle for one Student.",
-      "constraints": "Scoped Student/Person and global account/actor FKs; coherent acceptance/revocation evidence; partial unique non-revoked child/email; scope/student and account indexes",
+      "constraints": "Scoped Student/Person and global account/actor FKs; relationship is null or MOTHER/FATHER/GUARDIAN and is descriptive only; coherent acceptance/revocation evidence; partial unique non-revoked child/email; scope/student and account indexes",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [
