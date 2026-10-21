@@ -1511,6 +1511,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .student-onboarding-content>.student-registration-school-fields{margin-top:18px}
 .student-onboarding-optional{display:block;margin-top:3px;color:var(--vs-text-muted);font-size:11px;line-height:18px}
 .student-onboarding-card .field>label>span[aria-hidden=true]{display:none}
+.student-onboarding-card .field input:not([type=checkbox]):not([type=radio]),.student-onboarding-card .field select{color:var(--vs-text-muted);-webkit-text-fill-color:var(--vs-text-muted)}
+.student-onboarding-card .field input::placeholder{color:var(--vs-text-muted);opacity:1}
+.student-onboarding-card .field select option{color:var(--vs-text-muted)}
 .student-registration-page>.student-registration-back{min-height:30px;margin-bottom:12px}
 .student-profile-layout{width:100%;max-width:1080px;margin-inline:auto;padding-inline:44px;line-height:21px}
 .student-profile-layout>*{width:min(100%,884px)}
@@ -1559,7 +1562,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .drawer-header-description{margin:4px 0 0;color:var(--vs-text-muted);font-size:12px;line-height:18px}
 .guardian-drawer-form{display:flex;align-items:stretch;flex-direction:column;gap:18px;padding:26px 28px 0;min-height:100%}
 .guardian-access-drawer .field>label{margin-bottom:6px;font-size:12px;font-weight:550;line-height:18px}
-.guardian-access-drawer .field input:not([type=checkbox]):not([type=radio]),.guardian-access-drawer .field select{height:40px;min-height:40px;padding:9px 11px;border-color:var(--vs-border);border-radius:6px;font-size:13px;line-height:20px}
+.guardian-access-drawer .field input:not([type=checkbox]):not([type=radio]),.guardian-access-drawer .field select{height:40px;min-height:40px;padding:9px 11px;border-color:var(--vs-border);border-radius:6px;color:var(--vs-text-muted);-webkit-text-fill-color:var(--vs-text-muted);font-size:13px;line-height:20px}
+.guardian-access-drawer .field input::placeholder{color:var(--vs-text-muted);opacity:1}
+.guardian-access-drawer .field select option{color:var(--vs-text-muted)}
 .guardian-access-drawer .field>label>span[aria-hidden=true]{display:none}
 .guardian-purpose-summary{margin-top:6px;padding:22px 0 0;border-width:1px 0 0;border-radius:0;background:transparent;gap:9px}
 .guardian-purpose-summary strong{margin:0;font-size:13px;font-weight:600;line-height:19.5px}

@@ -1,5 +1,9 @@
 # Students, enrollment and placement history — current state
 
+## Muted Student form control content — 22 October 2026
+
+The Administrator **Add student** form and **Add guardian** drawer now use the existing Forest muted-text token for entered text, example placeholders and selected dropdown values. Labels, validation feedback, focus treatment, actions and all owner behavior remain unchanged. Directly inspected 1440×1000 and 390×844 captures report `rgb(86, 102, 93)` for input/select content and placeholders, with no root overflow. The clean 4 GiB production build passed with build ID `88erOe5CGCEm8eHcFYacz`. [Evidence](../../evidence/student-muted-control-content-2026-10-22/README.md). Human visual acceptance remains **PENDING**.
+
 ## Add Guardian visual correction — 22 October 2026
 
 The bounded Add Guardian correction aligns the production drawer with `student-onboarding-approved/refined-onboarding.html#guardian` without changing the Guardians command, authorization, purpose grants, invitation delivery, idempotency or recovery. Desktop/mobile geometry now matches the reference: 470px/full-width drawer, 101px/96px header, 21px title, 12px labels, 40px/44px controls, 6px radii, compact 16px checks and 36px/44px actions. Reference wording is used for the fixed core portal bundle and invitation action.

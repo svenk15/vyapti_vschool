@@ -1,0 +1,46 @@
+{
+  "capturedAt": "2026-10-21T19:47:20.871Z",
+  "buildId": "88erOe5CGCEm8eHcFYacz",
+  "states": {
+    "desktop": {
+      "registration": {
+        "inputColor": "rgb(86, 102, 93)",
+        "inputFillColor": "rgb(86, 102, 93)",
+        "selectColor": "rgb(86, 102, 93)",
+        "selectFillColor": "rgb(86, 102, 93)",
+        "placeholderColor": "rgb(86, 102, 93)",
+        "rootOverflow": false
+      },
+      "guardian": {
+        "inputColor": "rgb(86, 102, 93)",
+        "inputFillColor": "rgb(86, 102, 93)",
+        "selectColor": "rgb(86, 102, 93)",
+        "selectFillColor": "rgb(86, 102, 93)",
+        "placeholderColor": "rgb(86, 102, 93)",
+        "rootOverflow": false
+      },
+      "devicePixelRatio": 1,
+      "visualScale": 1
+    },
+    "mobile": {
+      "registration": {
+        "inputColor": "rgb(86, 102, 93)",
+        "inputFillColor": "rgb(86, 102, 93)",
+        "selectColor": "rgb(86, 102, 93)",
+        "selectFillColor": "rgb(86, 102, 93)",
+        "placeholderColor": "rgb(86, 102, 93)",
+        "rootOverflow": false
+      },
+      "guardian": {
+        "inputColor": "rgb(86, 102, 93)",
+        "inputFillColor": "rgb(86, 102, 93)",
+        "selectColor": "rgb(86, 102, 93)",
+        "selectFillColor": "rgb(86, 102, 93)",
+        "placeholderColor": "rgb(86, 102, 93)",
+        "rootOverflow": false
+      },
+      "devicePixelRatio": 1,
+      "visualScale": 1
+    }
+  }
+}
