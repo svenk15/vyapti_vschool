@@ -2,18 +2,20 @@
 
 ## Provenance
 
-- Starting checkpoint: `22de3c71fee68c5d78b080ce4d4989e6f5729221`.
-- Executable application source: `8b91f12410aa6590a0a2f7060de5117afa54f12d`.
+- Starting correction checkpoint: `e84991b3b468f2a55b8a4e5dbce0a53061b63908`.
+- Corrected application source: `8fe84b686a18bc6c43c9d3e80fab9abae47b2806`.
 - Exact approved reference: `docs/ux/references/student-onboarding-approved/refined-onboarding.html`.
 - Reference SHA-256: `4a0c5a72b7e5512bfb9b30647b5fb10f82c9c42b04e746fe6f0cae4799792bbe`.
-- Production build ID: `P356gTOrgzzFVi7OZu0lg`.
-- Isolated E2E build ID: `184LsNqkE4rXuojNE4hch`.
+- Production build ID: `WafBOKUaV-hyLbfLdwYXg`.
+- Isolated E2E build: regenerated from the corrected working source before the focused browser runs.
 - Schema/migrations: unchanged by this slice; guarded PostgreSQL verification used the existing 119-migration schema with no pending migration.
 - Human review: **PENDING**.
 
 ## Outcome
 
 The bounded closure covers the connected Administrator Students journeys without changing owner contracts or database state. Registration retains one connected page and one final Student mutation. The Profile uses the approved identity, School record, guardian and single portal-strip hierarchy. Student correction is a focused drawer with independent reasoned owner commands. Initial enrollment and section transfer each use two meaningful stages with final-only writes. Guardian and portal management are compact, state-specific and retain the exact command key after an unknown response.
+
+The correction pass also separates a confirmed access mutation from its follow-up read, preserves both independent Student correction drafts, completes reviewed stale retries with refreshed owner versions, and keeps Guardian recovery feedback and immutable retry state inside the active overlay. See [CORRECTION_ACCEPTANCE.md](CORRECTION_ACCEPTANCE.md) for C01–C07 and the independent review.
 
 | Surface | Before | After |
 |---|---|---|
@@ -36,10 +38,9 @@ The direct-reference captures and application captures were visually inspected f
 
 ## Verification
 
-- Focused unit verification: 3 files, 12 tests passed.
-- Focused real-PostgreSQL verification: Students registration, Guardians and Student portal; 3 files, 26 tests passed.
-- Focused current clean-build Playwright: 12/12 passed sequentially with one worker across desktop/mobile. Covered registration modes and navigation, correction drawer/stale state, enrollment, transfer, portal lifecycle/recovery and persisted portal states.
-- A follow-up portal-state run passed 2/2 after aligning the assertion with the deliberately simplified Profile strip.
+- Earlier unchanged unit and owner evidence remains applicable as recorded below.
+- Correction-pass real PostgreSQL: Students correction 4 passed, Guardians 4 passed and Student portal 3 passed with unrelated cases explicitly skipped by focused filters.
+- Correction-pass current-source Playwright ran sequentially with one worker: correction + Guardian recovery 2/2 desktop and 2/2 mobile; portal committed-save/read-failure 1/1 desktop and 1/1 mobile; connected onboarding/Profile/Guardian 1/1 desktop and 1/1 mobile.
 - `pnpm check:db-design`: passed, 204 table contracts.
 - `pnpm check:boundaries`: passed.
 - `pnpm check:backend`: passed.
