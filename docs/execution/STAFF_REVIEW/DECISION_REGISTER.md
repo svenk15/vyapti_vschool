@@ -1,0 +1,71 @@
+# Staff product-decision register
+
+Status date: 22 October 2026 (Asia/Kolkata)
+
+This register separates existing approved rules from recommended rules that still require product approval. The prototype demonstrates recommendations without granting production authority.
+
+## Settled rules reused without reopening
+
+| Rule | Authority | Consequence |
+|---|---|---|
+| Existing-Person reuse is an explicit selection of one organization-local Person ID; name, email and fuzzy similarity never merge identities. | `docs/VSchool_Bible.md` §5 and approved Staff SA-13 invariant | Candidate reads and writes remain organization scoped and transactional. |
+| Staff access is anchored to an exact active Employee and separately verified Account/Person relationship. | Access DESIGN; SA-COMP-13 evidence | Creating an Employee does not create access. Contact email is not login authority. |
+| Teacher eligibility is date bounded and must review assignment impact. | Approved SA-16 Staff contract | An Access role does not establish teaching eligibility. |
+| Invitation resend records a bounded administrator reason, replaces the token and reports delivery honestly. | Approved SA-15 contract and current Access resend lifecycle | Resend cannot revive an old token or claim delivery before provider confirmation. |
+| Availability and exact-occurrence cover retain their existing explicit grants and owner checks. | F07-A/F07-B evidence | They are conditional handoffs, not general Staff authority. |
+
+## Decisions still required
+
+### PD-STF-01 — Existing-Person attestation and restricted evidence
+
+**Exact question.** Which actor may attest that a selected organization Person is the same human being as the new branch Employee, which minimum fields may they see, and what restricted evidence must be retained?
+
+**Relevant contract.** The Bible already forbids fuzzy/email/name matching and requires an exact selected Person ID rechecked inside the write transaction. `AccountPersonBinding` evidence is Access-owned and cannot be repurposed as a People linkage decision.
+
+**Recommendation.** Require `class.manage` plus a separately configured organization identity-attester grant. Candidate lookup accepts an exact Person ID only and returns display name, masked contact reference when present, and an organization-issued non-sensitive verification reference. Final confirmation requires the Employee facts, a bounded reason and verification reference. People stores a restricted immutable linkage-evidence row containing identifiers, attester, purpose, reason, verification reference and timestamp; ordinary directory/profile DTOs expose only an evidence reference and outcome.
+
+**Consequences.** Prevents broad organization Person browsing and makes the linkage accountable. It requires one new restricted evidence table and an attester-grant port; ordinary School administrators without the grant can create a new Person but cannot reuse an existing one.
+
+**Blocked workflows/tasks.** SA-13-E / STF-02 production implementation and exact existing-Person mode in Add staff.
+
+### PD-STF-02 — Mutable Staff facts and correction authority
+
+**Exact question.** Which Person and Employee facts may be corrected, by whom, with what reason/history, and what constraints apply after dated teaching or Attendance history exists?
+
+**Relevant contract.** People owns Person and Employee; Access owns login identity; Academics owns Teacher/assignments. Current `updateCategory` changes only descriptive Employee category. Person name revision history exists, but it is not yet a general Staff correction authority.
+
+**Recommendation.** Allow an explicitly granted Staff-record manager to correct Person legal/preferred display name and contact email, and Employee staff code/category, using separate expected versions and commands. Require a bounded reason. Retain immutable owner-specific revisions; prior staff codes remain historical and are not reusable in the same branch. Contact email never changes the Access login. Initial employment start may be corrected only before any assignment, timetable, Attendance or employment-end evidence; otherwise require a separately designed historical correction case.
+
+**Consequences.** Produces honest owner histories and avoids cross-owner side effects. A combined drawer may retain drafts across sections, but each Save executes only the selected owner command. Shared Person corrections can affect another branch’s display, so they require organization-level attestation rather than branch-only authority.
+
+**Blocked workflows/tasks.** STF-PRO-02 / STF-03 Person corrections, Employee corrections beyond category, and start-date correction.
+
+### PD-STF-03 — Employment end and Access disposition
+
+**Exact question.** Must first-release end-employment completion suspend active branch access, and what happens when the actor can end employment but lacks Access authority?
+
+**Relevant contract.** Current People `endEmployment` ends today, disables Teacher eligibility and checks assignment impact. Access membership has independent last-admin/version/role guards. No existing contract authorizes People to mutate Access tables.
+
+**Recommendation.** Initial release supports branch-local **end today** only. Confirmation shows employment, assignment/Teacher impact and current Access state. When access is active, successful completion requires a separately authorized Access suspension in the same reviewed orchestration. If the actor lacks `user.manage`, create no partial success: route to an authorized Access administrator or produce a recoverable pending coordination item. Last-admin protection always wins. Never report offboarding complete while relevant branch access remains active.
+
+**Consequences.** The safest implementation is an application orchestration with explicit People and Access owner commands, durable step receipts and reconciliation; it must not claim atomicity unless both owners participate in one real enlisted transaction. Global account, other branches, and independent Parent/Student relationships remain intact.
+
+**Blocked workflows/tasks.** STF-EMP-01 / STF-07 complete end-employment experience and offboarding completion wording.
+
+### PD-STF-04 — Rejoining and employment episodes
+
+**Exact question.** How is a previously ended Employee represented when the same Person returns to the same branch?
+
+**Relevant contract.** The current Employee table has one `employedFrom/employedTo/status` interval and a unique branch/Person relationship. Clearing `employedTo` would rewrite history; creating another Person violates identity rules.
+
+**Recommendation.** Preserve the Person and branch Employee identity, add immutable employment episodes with non-overlapping half-open intervals, and create a new active episode through an expected-version command. Rejoin never restores branch membership, roles, invitations, Teacher eligibility or assignments; each is reviewed and re-established independently.
+
+**Consequences.** Requires a forward migration, a populated backfill from current Employee dates, interval constraints, profile projection changes and owner concurrency tests. It is a higher-cost first-release enhancement; ending employment remains usable without it.
+
+**Blocked workflows/tasks.** STF-EMP-02 / STF-08 rejoin flow and complete employment history. No current mandatory active-employment operation depends on it.
+
+## Explicit exclusions
+
+- Mistaken Person-link correction, Person merge and identity split are out of this package.
+- Leave approval, payroll, recruitment and appraisal remain advanced People Operations work.
+- No retained-access exception is proposed for an ended Employee. Such a lifecycle would need explicit purpose, authority, duration and review rules.
