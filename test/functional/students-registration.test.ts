@@ -141,6 +141,7 @@ describe("STU-01/STU-02 PostgreSQL student records",()=>{
   });
 
   it("enrolls once per open year, preserves roll text and reads joined year/section history",async()=>{
+    const registrationOptions=await students.registrationOptions(identity,primary.organizationId,primary.schoolId);expect(registrationOptions.enrolledYearIds).toEqual([]);expect(registrationOptions.years.some(year=>year.yearId===yearId&&year.sections.some(section=>section.sectionId===sectionId))).toBe(true);
     const student=await students.create(identity,primary.organizationId,primary.schoolId,input(`ENR-${randomUUID().slice(0,8)}`)),options=await students.enrollmentOptions(identity,primary.organizationId,primary.schoolId,student.studentId);
     expect(options.years.some(year=>year.yearId===yearId&&year.sections.some(section=>section.sectionId===sectionId))).toBe(true);
     const command={studentId:student.studentId,yearId,sectionId,startsOn:"2026-10-04",lastDay:"2026-10-31",rollNumber:"0007",key:randomUUID()},created=await students.enroll(identity,primary.organizationId,primary.schoolId,command),replayed=await students.enroll(identity,primary.organizationId,primary.schoolId,command);

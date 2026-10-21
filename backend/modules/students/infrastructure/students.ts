@@ -127,6 +127,12 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
     return {personId:person.id,displayName:displayStudentName(person.firstName,person.lastName),source:reference.kind,eligibleForRegistration:existingStudentId===null,existingStudentId};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
+  async registrationOptions(actor:Identity,organizationId:string,schoolId:string):Promise<EnrollmentOptions>{try{return await this.db.$transaction(async tx=>{
+    const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",false,["student_core","academic_core"]);
+    const years=await tx.academicYear.findMany({where:{organizationId,schoolId,status:"OPEN"},orderBy:{startsOn:"desc"},include:{sections:{where:{organizationId,schoolId,active:true},orderBy:[{grade:{sortOrder:"asc"}},{code:"asc"}],include:{grade:{select:{name:true}}}}}});
+    return {today:schoolToday(this.now(),guard.timezone),enrolledYearIds:[],years:years.filter(year=>year.sections.length>0).map(year=>({yearId:year.id,code:year.code,name:year.name,startsOn:civilDate(year.startsOn),endsOn:civilDate(year.endsOn),sections:year.sections.map(section=>({sectionId:section.id,code:section.code,name:section.name,gradeName:section.grade.name}))}))};
+  },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
+
   async enrollmentOptions(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<EnrollmentOptions>{try{return await this.db.$transaction(async tx=>{
     const guard=await this.guard(tx,actor,organizationId,schoolId,"student.manage",false,["student_core","academic_core"]),student=await tx.student.findFirst({where:{id:studentId,organizationId,schoolId},select:{id:true,status:true,enrollments:{select:{yearId:true}}}});if(!student)throw new AccessError("NOT_FOUND");if(student.status!=="ACTIVE")throw new AccessError("CONFLICT");
     const years=await tx.academicYear.findMany({where:{organizationId,schoolId,status:"OPEN"},orderBy:{startsOn:"desc"},include:{sections:{where:{organizationId,schoolId,active:true},orderBy:[{grade:{sortOrder:"asc"}},{code:"asc"}],include:{grade:{select:{name:true}}}}}});

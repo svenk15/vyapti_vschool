@@ -17,6 +17,7 @@ export const studentsGateway={
   async create(identity:Identity|null,input:Parameters<StudentsFacade["create"]>[3]){const current=await scope(identity);return service().create(identity,current.organizationId,current.schoolId,input);},
   async registrationStatus(identity:Identity|null,key:unknown){const current=await scope(identity);return service().registrationStatus(identity,current.organizationId,current.schoolId,key);},
   async resolveExistingPerson(identity:Identity|null,kind:unknown,value:unknown){const current=await scope(identity);return service().resolveExistingPerson(identity,current.organizationId,current.schoolId,kind,value);},
+  async registrationOptions(identity:Identity|null){const current=await scope(identity);return service().registrationOptions(identity,current.organizationId,current.schoolId);},
   async enrollmentOptions(identity:Identity|null,studentId:unknown){const current=await scope(identity);return service().enrollmentOptions(identity,current.organizationId,current.schoolId,studentId);},
   async enroll(identity:Identity|null,input:Parameters<StudentsFacade["enroll"]>[3]){const current=await scope(identity);return service().enroll(identity,current.organizationId,current.schoolId,input);},
   async transfer(identity:Identity|null,enrollmentId:string,input:Parameters<StudentsFacade["transfer"]>[4]){const current=await scope(identity);return service().transfer(identity,current.organizationId,current.schoolId,enrollmentId,input);},

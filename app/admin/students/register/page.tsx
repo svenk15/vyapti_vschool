@@ -6,6 +6,8 @@ import {Alert,BrandSurface,PageHeader,PageStack} from "@/components/ui/primitive
 import {accountGateway} from "@/lib/server/access";
 import {getIdentity} from "@/lib/server/auth";
 import {studentsGateway} from "@/lib/server/students";
+import {guardiansGateway} from "@/lib/server/guardians";
+import type {EnrollmentOptions} from "@/shared/contracts/students";
 
 export const dynamic="force-dynamic";
 function safeReturn(value:string|undefined){if(!value)return "/admin/students";try{const url=new URL(value,"http://vschool.local");return url.pathname==="/admin/students"?`${url.pathname}${url.search}`:"/admin/students";}catch{return "/admin/students";}}
@@ -16,5 +18,8 @@ export default async function RegisterStudentPage({searchParams}:{searchParams:P
   const query=await searchParams,returnTo=safeReturn(Array.isArray(query.returnTo)?undefined:query.returnTo),identity=await getIdentity();let home:Awaited<ReturnType<typeof accountGateway.getHome>>|null=null,error:unknown;
   try{[home]=await Promise.all([accountGateway.getHome(identity),studentsGateway.list(identity,{limit:1})]);}catch(cause){error=cause;if(cause instanceof AccessError&&cause.code==="UNAUTHENTICATED")redirect("/sign-in");}
   if(!home)return <BrandSurface><main id="main-content" className="container page-space branch-edit-shell"><PageHeader title="Register a student manually"/><Alert tone="danger" title={error instanceof AccessError&&error.code==="FORBIDDEN"?"Registration access denied":"Registration unavailable"}>Current branch, module and student-management permission are checked on the server.</Alert></main></BrandSurface>;
-  return <BrandSurface><main id="main-content" className="container page-space branch-edit-shell student-registration-shell"><PageStack className="branch-edit-page student-registration-page"><Link className="student-registration-back" href={returnTo}><BackIcon/> Students</Link><PageHeader title="Register student"/><StudentRegistrationWorkflow returnTo={returnTo} schoolToday={schoolToday(home.timezone)} schoolTimezone={home.timezone} pendingOperationKey={pendingKey(query.pendingRegistration)}/></PageStack></main></BrandSurface>;
+  let options:EnrollmentOptions|null=null,guardianInviteAvailable=false;
+  try{options=await studentsGateway.registrationOptions(identity);}catch{/* Registration remains available; placement can be completed later. */}
+  try{guardianInviteAvailable=await guardiansGateway.canManage(identity);}catch{/* Family access remains a separately guarded optional step. */}
+  return <BrandSurface><main id="main-content" className="container page-space branch-edit-shell student-registration-shell"><PageStack className="branch-edit-page student-registration-page"><Link className="student-registration-back" href={returnTo}><BackIcon/> Students</Link><PageHeader title="Add student"/><StudentRegistrationWorkflow returnTo={returnTo} schoolToday={schoolToday(home.timezone)} schoolTimezone={home.timezone} pendingOperationKey={pendingKey(query.pendingRegistration)} options={options} guardianInviteAvailable={guardianInviteAvailable}/></PageStack></main></BrandSurface>;
 }

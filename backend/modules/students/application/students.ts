@@ -16,6 +16,7 @@ export interface StudentRepository {
   create(actor: Identity, organizationId: string, schoolId: string, input: ReturnType<typeof studentInput> & { key: string }): Promise<StudentProfile & { replayed: boolean }>;
   registrationStatus(actor:Identity,organizationId:string,schoolId:string,key:string):Promise<StudentRegistrationStatus>;
   resolveExistingPerson(actor: Identity, organizationId: string, schoolId: string, reference: ExistingPersonReference): Promise<ExistingPersonChoice>;
+  registrationOptions(actor:Identity,organizationId:string,schoolId:string):Promise<EnrollmentOptions>;
   enrollmentOptions(actor:Identity,organizationId:string,schoolId:string,studentId:string):Promise<EnrollmentOptions>;
   enroll(actor:Identity,organizationId:string,schoolId:string,input:ReturnType<typeof enrollmentInput>&{key:string}):Promise<EnrollmentResult>;
   transfer(actor:Identity,organizationId:string,schoolId:string,enrollmentId:string,input:ReturnType<typeof transferInput>&{key:string}):Promise<StudentTransferResult>;
@@ -47,6 +48,7 @@ export function createStudentUseCases(repository: StudentRepository) {
     resolveExistingPerson(identity: Identity | null, organizationId: unknown, schoolId: unknown, kind: unknown, value: unknown) {
       return repository.resolveExistingPerson(actor(identity), id(organizationId), id(schoolId), existingPersonReference(kind,value));
     },
+    registrationOptions(identity:Identity|null,organizationId:unknown,schoolId:unknown){return repository.registrationOptions(actor(identity),id(organizationId),id(schoolId));},
     enrollmentOptions(identity:Identity|null,organizationId:unknown,schoolId:unknown,studentId:unknown){return repository.enrollmentOptions(actor(identity),id(organizationId),id(schoolId),id(studentId));},
     enroll(identity:Identity|null,organizationId:unknown,schoolId:unknown,input:{studentId:unknown;yearId:unknown;sectionId:unknown;startsOn:unknown;lastDay:unknown;rollNumber?:unknown;key:unknown}){return repository.enroll(actor(identity),id(organizationId),id(schoolId),{...enrollmentInput(input),key:key(input.key)});},
     transfer(identity:Identity|null,organizationId:unknown,schoolId:unknown,enrollmentId:unknown,input:{expectedVersion:unknown;toSectionId:unknown;effectiveDate:unknown;rollNumber?:unknown;reason:unknown;key:unknown}){return repository.transfer(actor(identity),id(organizationId),id(schoolId),id(enrollmentId),{...transferInput(input),key:key(input.key)});},

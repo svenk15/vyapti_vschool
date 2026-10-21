@@ -52,3 +52,34 @@ export type StudentRegistrationNextActions = Readonly<{
   canEnroll:boolean;
   canSetUpParentAccess:boolean;
 }>;
+
+export type StudentOnboardingPlacementCommand = Readonly<{
+  yearId:string;
+  sectionId:string;
+  startsOn:string;
+  lastDay:string;
+  rollNumber:string;
+  key:string;
+}>;
+export type StudentOnboardingGuardianCommand = Readonly<{
+  displayName:string;
+  email:string;
+  noticeRead:boolean;
+  confirmed:true;
+  key:string;
+}>;
+export type StudentOnboardingCommand = Readonly<{
+  registration:StudentRegistrationCommand;
+  placement:StudentOnboardingPlacementCommand|null;
+  guardian:StudentOnboardingGuardianCommand|null;
+}>;
+export type StudentOnboardingResult = Readonly<{
+  student:StudentProfile&Readonly<{replayed:boolean}>;
+  enrollment:EnrollmentResult|null;
+  guardian:import("./guardians").GuardianAuthorizationResult|null;
+}>;
+export type StudentOnboardingStage="REGISTRATION"|"PLACEMENT"|"GUARDIAN";
+export type StudentOnboardingPartial = Readonly<{
+  student:(StudentProfile&Readonly<{replayed:boolean}>)|null;
+  enrollment:EnrollmentResult|null;
+}>;

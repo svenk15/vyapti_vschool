@@ -70,4 +70,5 @@ export class PrismaFamilyAccessRepository implements FamilyAccessRepository{
    },{isolationLevel:'RepeatableRead'});
   }catch(error){return fail(error);}
  }
+ async canManage(actor:Identity,input:{organizationId:string;schoolId:string}):Promise<boolean>{try{return await this.db.$transaction(async tx=>{await this.manager(tx,actor,input);return true;},{isolationLevel:'RepeatableRead'});}catch(error){return fail(error);}}
 }

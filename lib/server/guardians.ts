@@ -15,6 +15,7 @@ function required(identity:Identity|null):Identity{if(!identity)throw new Guardi
 async function adminScope(identity:Identity|null){const actor=required(identity),home=await accountGateway.getHome(actor);return {actor,...home.scope};}
 
 export const guardiansGateway={
+ async canManage(identity:Identity|null){const {actor,organizationId,schoolId}=await adminScope(identity);return service().canManage(actor,{organizationId,schoolId});},
  async listForStudent(identity:Identity|null,studentId:string){const {actor,organizationId,schoolId}=await adminScope(identity);return service().listForStudent(actor,{organizationId,schoolId,studentId});},
  async authorize(identity:Identity|null,studentId:string,input:Omit<Parameters<FamilyAccessFacade['authorize']>[1],'organizationId'|'schoolId'|'studentId'>){const {actor,organizationId,schoolId}=await adminScope(identity);return service().authorize(actor,{organizationId,schoolId,studentId,...input});},
  async resend(identity:Identity|null,accessId:string,input:Omit<Parameters<FamilyAccessFacade['resend']>[1],'organizationId'|'schoolId'|'accessId'>){const {actor,organizationId,schoolId}=await adminScope(identity);return service().resend(actor,{organizationId,schoolId,accessId,...input});},
