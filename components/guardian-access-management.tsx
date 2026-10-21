@@ -99,10 +99,34 @@ export function GuardianAccessManagement({
     };
   }
 
+  function committedRefreshMessage(pending:RefreshPending,denied=false):Message{
+    return {
+      tone:"warning",
+      title:`${pending.success.title}; current access unavailable`,
+      body:denied
+        ?`${pending.success.body} Current authority no longer permits this access list.`
+        :`${pending.success.body} The latest list could not be loaded. Use the read-only refresh; do not repeat the saved command.`,
+    };
+  }
+
+  function closeCommittedResult(){
+    if(!refreshPending)return;
+    setProfileMessage(committedRefreshMessage(refreshPending));
+    if(refreshPending.finish==="invite")resetAdd();
+    setRemoveOpen(false);
+    setDrawer(null);
+    setDrawerMessage(null);
+    setRemoveMessage(null);
+  }
+
   function requestClose(){
-    if(locked){
+    if(unresolved){
       if(removeOpen)setRemoveMessage(unresolvedMessage());
       else setDrawerMessage(unresolvedMessage());
+      return;
+    }
+    if(refreshPending){
+      closeCommittedResult();
       return;
     }
     if(drawer==="add"&&dirty){
@@ -132,17 +156,20 @@ export function GuardianAccessManagement({
       setRemoveMessage(null);
       setProfileMessage(pending.success);
     }else{
-      setDrawerMessage(pending.success);
+      if(drawer===null)setProfileMessage(pending.success);
+      else setDrawerMessage(pending.success);
     }
+  }
+
+  function showRefreshMessage(pending:RefreshPending,message:Message){
+    if(pending.finish==="remove"&&removeOpen)setRemoveMessage(message);
+    else if(drawer!==null)setDrawerMessage(message);
+    else setProfileMessage(message);
   }
 
   async function reconcileCommitted(pending:RefreshPending){
     setRefreshPending(pending);
-    const refreshFailure:Message={
-      tone:"warning",
-      title:`${pending.success.title}; refresh needed`,
-      body:`${pending.success.body} The latest list could not be loaded. Use the read-only refresh; do not repeat the saved command.`,
-    };
+    const refreshFailure=committedRefreshMessage(pending);
     if(pending.finish==="remove")setRemoveMessage(refreshFailure);
     else setDrawerMessage(refreshFailure);
     try{
@@ -151,15 +178,7 @@ export function GuardianAccessManagement({
     }catch(cause){
       const failure=cause as Failure;
       const denied=failure.status===401||failure.status===403;
-      const message:Message={
-        tone:"warning",
-        title:`${pending.success.title}; current access unavailable`,
-        body:denied
-          ?`${pending.success.body} Current authority no longer permits this access list.`
-          :refreshFailure.body,
-      };
-      if(pending.finish==="remove")setRemoveMessage(message);
-      else setDrawerMessage(message);
+      showRefreshMessage(pending,committedRefreshMessage(pending,denied));
     }
   }
 
@@ -178,8 +197,7 @@ export function GuardianAccessManagement({
           ?"The earlier change remains committed, but current authority no longer permits this access list."
           :"The earlier change remains committed. Try this read-only refresh again; do not repeat the mutation.",
       };
-      if(refreshPending.finish==="remove")setRemoveMessage(message);
-      else setDrawerMessage(message);
+      showRefreshMessage(refreshPending,message);
     }finally{
       setBusy(false);
     }
@@ -314,7 +332,10 @@ export function GuardianAccessManagement({
       </Button>
     </div>
 
-    {profileMessage&&<Alert tone={profileMessage.tone} title={profileMessage.title} onDismiss={()=>setProfileMessage(null)}>{profileMessage.body}</Alert>}
+    {profileMessage&&<Alert tone={profileMessage.tone} title={profileMessage.title} onDismiss={!refreshPending?()=>setProfileMessage(null):undefined}>
+      <p>{profileMessage.body}</p>
+      {refreshPending&&drawer===null&&<Button size="small" variant="secondary" disabled={busy} onClick={()=>void retryRefresh()}>Refresh current access</Button>}
+    </Alert>}
 
     {activeItems.length===0
       ?<EmptyState title="No Parent access yet" description="Invite a verified parent or guardian when the school is ready to grant child-specific access." icon="people"/>
@@ -378,14 +399,14 @@ export function GuardianAccessManagement({
       </div>
     </Dialog>
 
-    <Dialog open={removeOpen} onClose={()=>{if(!locked)setRemoveOpen(false);}} title="Remove Parent access?" description="This revokes current access for this student and preserves the access history.">
+    <Dialog open={removeOpen} onClose={()=>{if(unresolved)setRemoveMessage(unresolvedMessage());else if(refreshPending)closeCommittedResult();else setRemoveOpen(false);}} title="Remove Parent access?" description="This revokes current access for this student and preserves the access history.">
       {removeMessage&&<Alert tone={removeMessage.tone} title={removeMessage.title}>
         <p>{removeMessage.body}</p>
         {refreshPending?.finish==="remove"&&<Button size="small" variant="secondary" disabled={busy} onClick={()=>void retryRefresh()}>Refresh current access</Button>}
       </Alert>}
       <TextArea label="Reason" required value={reason} disabled={locked} onChange={event=>setReason(event.target.value)} maxLength={500}/>
       <div className="form-actions">
-        <Button variant="secondary" disabled={busy||locked} onClick={()=>setRemoveOpen(false)}>Cancel</Button>
+        <Button variant="secondary" disabled={busy||unresolved} onClick={()=>{if(refreshPending)closeCommittedResult();else setRemoveOpen(false);}}>Cancel</Button>
         <Button loading={busy} disabled={reason.trim().length<3||!selected||refreshPending!==null} onClick={()=>selected&&void manage({kind:"remove",accessId:selected.accessId,expectedVersion:selected.version,reason:reason.trim(),key:crypto.randomUUID()})}>{manageAttempt?.kind==="remove"?"Retry unchanged removal":"Remove access"}</Button>
       </div>
     </Dialog>
