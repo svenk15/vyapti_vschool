@@ -1,5 +1,11 @@
 # People and staff identity — current state
 
+## Administrator Staff C01–C09 correction — 23 October 2026
+
+Application source `6266c38c` completes the bounded correction against frozen Staff Site commit `fc33c8b991134ade6d02e27fbe467ef67d86b085`. Directory header/navigation/toolbars, table alignment and responsive density, Manage, Profile and Add Staff now follow the approved Staff composition. People confirmed-save/failed-refresh is distinct from UNKNOWN; the completed mutation cannot be resubmitted and recovery reads only. Signed cursor history, query reset and loaded-range wording no longer treat a page count as an authoritative total.
+
+People PostgreSQL verification passed 14/14, the full Staff browser file passed 6/6 on desktop and 6/6 on mobile, and the final focused directory/pagination regression passed 2/2 per viewport. The clean 4 GiB production build passed with build ID `AeoqXwEgSTp5_voNlOn4w`. Direct current-source captures and measurements cover all four required viewports and themes. [C01–C09 evidence](../../evidence/staff-c01-c09-correction-2026-10-22/README.md). No schema, migration, seed, owner permission or domain rule changed. PD-STF-01–03, human acceptance, TEN-03 and native accessibility remain pending.
+
 ## Approved Staff handoff composition — 22 October 2026
 
 Application source `ba43e6089ec8f44048013075a41749b27b04d745` implements the frozen Administrator Staff reference at Site commit `fc33c8b991134ade6d02e27fbe467ef67d86b085`. Profiles and Access use the approved local navigation; the People directory uses Name/Profile versus Manage semantics and 25/50/100 server-side cursor pagination; Add staff uses the compact one-page composition while preserving the structured People command; Profile uses the approved Personal, Employment, Teaching assignments, Staff portal and history order; and Access uses the approved account-state columns and hierarchy. No owner command, authorization rule, schema, migration or seed changed.

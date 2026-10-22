@@ -1,5 +1,11 @@
 # School scope, authentication and permissions — current state
 
+## Administrator Staff invitation recovery correction — 23 October 2026
+
+Application source `6266c38c` retains a confirmed resend result independently from a failed subsequent read. Close, Escape and drawer reopen preserve the saved state, superseded invitation data cannot expose another resend, and `Refresh saved view` issues GET only. UNKNOWN continues to retain the exact owner operation for authorized status recovery. Preparing, sent and failed delivery outcomes remain distinct, and every protected read/action continues to recheck current `user.manage`, tenant and target authority.
+
+The current E2E case observes exactly `POST, GET, GET` for confirmed resend/read failure/recovery and one replacement mutation; the full Staff browser file passed 6/6 on desktop and 6/6 on mobile. Access directory and recovery captures are part of [C01–C09 evidence](../../evidence/staff-c01-c09-correction-2026-10-22/README.md). Access pagination remains forward-only under its current owner contract. No schema, migration, grant or provider configuration changed; PD-STF-01–03, production delivery, human acceptance, TEN-03 and native accessibility remain pending.
+
 ## STF-06 Employee invitation review and reasoned resend — 22 October 2026
 
 Staff Profile now composes an independently authorized Access projection for the exact Employee-bound account and shows pending, sent, failed, expired, consumed and revoked invitation states without exposing tokens. Failed or expired invitations support a bounded, reasoned replacement. Access rechecks live administrator authority, trust mode, exact Employee binding, pending membership version and roles before revoking the old token and creating one replacement. Exact replay reuses the original result without another delivery, changed input conflicts, and revoked authority cannot disclose the protected receipt.
