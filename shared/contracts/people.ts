@@ -14,6 +14,8 @@ export type PeopleCommandStatus = Readonly<{state:'UNKNOWN'}> | Readonly<{state:
 export type StaffDirectorySearchBy = 'name' | 'employeeCode';
 export type StaffDirectoryCategory = EmployeeProfile['category'] | 'ANY';
 export type StaffDirectoryEmployment = EmployeeProfile['employment']['status'] | 'ANY';
+export type StaffDirectoryCategories = readonly Exclude<StaffDirectoryCategory,'ANY'>[];
+export type StaffDirectoryEmployments = readonly Exclude<StaffDirectoryEmployment,'ANY'>[];
 export type StaffDirectorySort = 'name' | 'employeeCode' | 'employment';
 export type StaffDirectoryOrder = 'asc' | 'desc';
 export type StaffDirectoryQuery = Readonly<{
@@ -21,6 +23,8 @@ export type StaffDirectoryQuery = Readonly<{
  by: StaffDirectorySearchBy;
  category: StaffDirectoryCategory;
  employment: StaffDirectoryEmployment;
+ categories: StaffDirectoryCategories;
+ employments: StaffDirectoryEmployments;
  sort: StaffDirectorySort;
  order: StaffDirectoryOrder;
  cursor: string | null;

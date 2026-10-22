@@ -1,5 +1,13 @@
 # People and staff identity — current state
 
+## Administrator Staff full-fidelity checkpoint — 23 October 2026
+
+The current working-tree candidate based on `c28f80d59b4db85deadb9045c9de44a7765d68bd` aligns every independently authorized Administrator Staff state with the frozen Staff reference: Profiles directory, Filter and Sort drawers, Manage dialog, Profile, assignments and portal drawers, Add Staff, Access directory, independent invitation and the two-step access-management drawer. People-owned category/employment filtering and name/code/employment ordering run across the complete authorized result before cursor pagination. URL state, Back/Forward, exact recovery, live authorization and owner boundaries remain intact.
+
+Focused People unit 4/4 and PostgreSQL 14/14 checks passed; backend and boundary checks passed; focused directory/pagination browser checks passed 2/2 and the changed Access lifecycle passed 1/1 with one Chromium worker. The 4 GiB production build passed with build ID `aYyd35WOsz-nLsnM8Mcgu`. Direct reference/application captures cover 1440×1000 and 390×844, with additional 900×1000, 360×800 and four-theme evidence. [Full-fidelity evidence](../../evidence/staff-full-fidelity-2026-10-23/README.md).
+
+No schema, migration, seed, permission or domain transaction changed. STF-01B and PD-STF-01–03 remain outside the implemented scope. Human visual acceptance, native accessibility, TEN-03 and production readiness remain PENDING.
+
 ## Administrator Staff C01–C09 correction — 23 October 2026
 
 Application source `6266c38c` completes the bounded correction against frozen Staff Site commit `fc33c8b991134ade6d02e27fbe467ef67d86b085`. Directory header/navigation/toolbars, table alignment and responsive density, Manage, Profile and Add Staff now follow the approved Staff composition. People confirmed-save/failed-refresh is distinct from UNKNOWN; the completed mutation cannot be resubmitted and recovery reads only. Signed cursor history, query reset and loaded-range wording no longer treat a page count as an authoritative total.

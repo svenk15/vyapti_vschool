@@ -7,7 +7,7 @@ const people=createPeopleServices({databaseUrl:process.env.DATABASE_URL??''});
 async function scope(identity:Identity|null){const home=await accountGateway.getHome(identity);return home.scope;}
 export const peopleGateway={
  async currentAccountDisplayName(identity:Identity|null){const current=await scope(identity);return people.currentAccountDisplayName(identity,current.organizationId,current.schoolId);},
- async workspace(identity:Identity|null,query:{search?:unknown;by?:unknown;category?:unknown;employment?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}={}){const current=await scope(identity);return people.workspace(identity,current.organizationId,current.schoolId,query);},
+ async workspace(identity:Identity|null,query:{search?:unknown;by?:unknown;category?:unknown;employment?:unknown;categories?:unknown;employments?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}={}){const current=await scope(identity);return people.workspace(identity,current.organizationId,current.schoolId,query);},
  async staffProfile(identity:Identity|null,employeeId:string){const current=await scope(identity);return people.staffProfile(identity,current.organizationId,current.schoolId,employeeId);},
  async commandStatus(identity:Identity|null,command:unknown,key:unknown){const current=await scope(identity);return people.commandStatus(identity,current.organizationId,current.schoolId,command,key);},
  async createEmployee(identity:Identity|null,input:Parameters<PeopleFacade['createEmployee']>[3]){const current=await scope(identity);return people.createEmployee(identity,current.organizationId,current.schoolId,input);},

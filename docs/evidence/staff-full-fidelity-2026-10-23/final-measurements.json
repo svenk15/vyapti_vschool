@@ -1,0 +1,413 @@
+{
+  "capturedAt": "2026-10-22T20:08:16.361Z",
+  "buildId": "aYyd35WOsz-nLsnM8Mcgu",
+  "zoom": "Playwright default 100%",
+  "viewports": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "dpr": 1,
+      "reference": {
+        "toolbar": {
+          "x": 256,
+          "y": 245,
+          "width": 1146,
+          "height": 40,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "8px",
+          "borderRadius": "0px"
+        },
+        "filterButton": {
+          "x": 1207.5,
+          "y": 245,
+          "width": 100.109375,
+          "height": 40,
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "20px",
+          "padding": "9px 16px",
+          "gap": "8px",
+          "borderRadius": "6px"
+        },
+        "table": {
+          "x": 256,
+          "y": 299,
+          "width": 1146,
+          "height": 1722.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "manageDialog": {
+          "x": 530,
+          "y": 343.25,
+          "width": 380,
+          "height": 313.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "12px"
+        },
+        "manageIdentity": {
+          "x": 531,
+          "y": 421.25,
+          "width": 378,
+          "height": 74.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "17px 22px 15px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "manageAction": {
+          "x": 539,
+          "y": 503.75,
+          "width": 362,
+          "height": 48,
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "19.5px",
+          "padding": "12px 14px",
+          "gap": "11px",
+          "borderRadius": "6px"
+        },
+        "profileSection": {
+          "x": 334,
+          "y": 256,
+          "width": 882,
+          "height": 151.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "24px 28px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "profileFacts": {
+          "x": 362,
+          "y": 335,
+          "width": 826,
+          "height": 47.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px 0px 3px",
+          "gap": "20px",
+          "borderRadius": "0px"
+        }
+      },
+      "application": {
+        "toolbar": {
+          "x": 256,
+          "y": 245,
+          "width": 1146,
+          "height": 40,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "0px",
+          "gap": "8px",
+          "borderRadius": "0px"
+        },
+        "filterButton": {
+          "x": 1210,
+          "y": 245,
+          "width": 100,
+          "height": 40,
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "20px",
+          "padding": "9px 16px",
+          "gap": "8px",
+          "borderRadius": "6px"
+        },
+        "table": {
+          "x": 256,
+          "y": 299,
+          "width": 1146,
+          "height": 718.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "manageDialog": {
+          "x": 530,
+          "y": 343,
+          "width": 380,
+          "height": 314,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "12px"
+        },
+        "manageIdentity": {
+          "x": 531,
+          "y": 422,
+          "width": 378,
+          "height": 74,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "15px 22px",
+          "gap": "12px",
+          "borderRadius": "0px"
+        },
+        "manageAction": {
+          "x": 539,
+          "y": 504,
+          "width": 362,
+          "height": 48,
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "19.5px",
+          "padding": "12px 14px",
+          "gap": "11px",
+          "borderRadius": "6px"
+        },
+        "profileSection": {
+          "x": 334,
+          "y": 245,
+          "width": 882,
+          "height": 154,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "24px 28px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "profileFacts": {
+          "x": 362,
+          "y": 324,
+          "width": 826,
+          "height": 50,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "0px",
+          "gap": "20px",
+          "borderRadius": "0px"
+        }
+      }
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "reference": {
+        "toolbar": {
+          "x": 16,
+          "y": 268,
+          "width": 358,
+          "height": 94,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "8px",
+          "borderRadius": "0px"
+        },
+        "filterButton": {
+          "x": 16,
+          "y": 322,
+          "width": 175,
+          "height": 40,
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "20px",
+          "padding": "9px 16px",
+          "gap": "8px",
+          "borderRadius": "6px"
+        },
+        "table": {
+          "x": 16,
+          "y": 376,
+          "width": 358,
+          "height": 7159.765625,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "manageDialog": {
+          "x": 16,
+          "y": 265.25,
+          "width": 358,
+          "height": 313.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "12px"
+        },
+        "manageIdentity": {
+          "x": 17,
+          "y": 343.25,
+          "width": 356,
+          "height": 74.5,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "17px 22px 15px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "manageAction": {
+          "x": 25,
+          "y": 425.75,
+          "width": 340,
+          "height": 48,
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "19.5px",
+          "padding": "12px 14px",
+          "gap": "11px",
+          "borderRadius": "6px"
+        },
+        "profileSection": {
+          "x": 17,
+          "y": 144.5,
+          "width": 356,
+          "height": 210,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "20px 18px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "profileFacts": {
+          "x": 35,
+          "y": 226.5,
+          "width": 320,
+          "height": 107,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px 0px 3px",
+          "gap": "19px 14px",
+          "borderRadius": "0px"
+        }
+      },
+      "application": {
+        "toolbar": {
+          "x": 16,
+          "y": 268,
+          "width": 358,
+          "height": 94,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "0px",
+          "gap": "8px",
+          "borderRadius": "0px"
+        },
+        "filterButton": {
+          "x": 16,
+          "y": 322,
+          "width": 175,
+          "height": 40,
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "20px",
+          "padding": "9px 16px",
+          "gap": "8px",
+          "borderRadius": "6px"
+        },
+        "table": {
+          "x": 16,
+          "y": 376,
+          "width": 358,
+          "height": 2860,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "manageDialog": {
+          "x": 17,
+          "y": 265,
+          "width": 356,
+          "height": 314,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "0px",
+          "gap": "normal",
+          "borderRadius": "12px"
+        },
+        "manageIdentity": {
+          "x": 18,
+          "y": 344,
+          "width": 354,
+          "height": 74,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "padding": "15px 22px",
+          "gap": "12px",
+          "borderRadius": "0px"
+        },
+        "manageAction": {
+          "x": 26,
+          "y": 426,
+          "width": 338,
+          "height": 48,
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "19.5px",
+          "padding": "12px 14px",
+          "gap": "11px",
+          "borderRadius": "6px"
+        },
+        "profileSection": {
+          "x": 17,
+          "y": 252,
+          "width": 356,
+          "height": 215,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "20px 18px",
+          "gap": "normal",
+          "borderRadius": "0px"
+        },
+        "profileFacts": {
+          "x": 35,
+          "y": 327,
+          "width": 320,
+          "height": 119,
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "padding": "0px",
+          "gap": "19px 14px",
+          "borderRadius": "0px"
+        }
+      }
+    }
+  }
+}
