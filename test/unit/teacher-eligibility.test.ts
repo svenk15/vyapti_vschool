@@ -1,0 +1,10 @@
+import {describe,expect,it,vi} from 'vitest';
+import {randomUUID} from 'node:crypto';
+import {createTeacherEligibilityUseCases,type TeacherEligibilityRepository} from '../../backend/modules/academics/application/teacher-eligibility';
+
+const actor={accountId:randomUUID(),tokenVersion:1},organizationId=randomUUID(),schoolId=randomUUID(),employeeId=randomUUID();
+function repository():TeacherEligibilityRepository{return {preview:vi.fn(async(_actor,_organization,_school,employee,input)=>({employeeId:employee,teacherId:null,expectedTeacherVersion:input.expectedTeacherVersion,validFrom:input.validFrom,validTo:input.validTo,ready:true,blockingAssignments:[],reviewDigest:'a'.repeat(64)})),set:vi.fn(async(_actor,_organization,_school,employee,input)=>({employeeId:employee,teacherId:randomUUID(),teacherVersion:1,period:{id:randomUUID(),version:1,validFrom:input.validFrom,validTo:input.validTo,reason:input.reason,recordedAt:new Date().toISOString(),current:true},replayed:false}))};}
+describe('STF-05 dated Teacher eligibility input',()=>{
+ it('accepts a first half-open interval with expected version zero',async()=>{const repo=repository(),useCases=createTeacherEligibilityUseCases(repo),preview=await useCases.preview(actor,organizationId,schoolId,employeeId,{expectedTeacherVersion:0,validFrom:'2026-04-01',validTo:null});expect(preview).toMatchObject({expectedTeacherVersion:0,validFrom:'2026-04-01',validTo:null});expect(repo.preview).toHaveBeenCalledOnce();});
+ it('rejects invalid or closed-backwards ranges and unreviewed digests',()=>{const useCases=createTeacherEligibilityUseCases(repository()),base={expectedTeacherVersion:1,validFrom:'2026-04-01',validTo:'2026-04-01',reason:'Valid reason for change',reviewDigest:'a'.repeat(64),key:randomUUID()};expect(()=>useCases.set(actor,organizationId,schoolId,employeeId,base)).toThrowError(expect.objectContaining({code:'VALIDATION'}));expect(()=>useCases.set(actor,organizationId,schoolId,employeeId,{...base,validTo:'2026-05-01',reviewDigest:'not-reviewed'})).toThrowError(expect.objectContaining({code:'VALIDATION'}));});
+});

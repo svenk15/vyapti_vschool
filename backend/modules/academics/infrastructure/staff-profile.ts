@@ -23,10 +23,11 @@ export class PrismaStaffAcademicsProfile implements StaffAcademicsProfilePort{
   if(!this.manifest.academic_core)throw new AccessError('RELEASE_UNAVAILABLE');
   if(!entitlement||entitlement.state!=='ACTIVE'||entitlement.startsAt>at||(entitlement.endsAt!==null&&entitlement.endsAt<=at))throw new AccessError('MODULE_NOT_LICENSED');
   if(!activation||activation.state!=='ACTIVE')throw new AccessError('MODULE_DISABLED');
-  const teacher=await tx.teacher.findFirst({where:{organizationId:input.organizationId,schoolId:input.schoolId,employeeId:input.employeeId},include:{assignments:{orderBy:[{validFrom:'desc'},{id:'desc'}],take:101,include:{offering:{include:{subject:{select:{name:true}},section:{select:{name:true}}}}}}}});
-  if(!teacher)return {teacherId:null,eligibility:'NOT_ENABLED',assignments:[]};
-  if(teacher.assignments.length>100)throw new AccessError('UNAVAILABLE');
+  const teacher=await tx.teacher.findFirst({where:{organizationId:input.organizationId,schoolId:input.schoolId,employeeId:input.employeeId},include:{eligibilityPeriods:{orderBy:{version:'desc'},take:21},assignments:{orderBy:[{validFrom:'desc'},{id:'desc'}],take:101,include:{offering:{include:{subject:{select:{name:true}},section:{select:{name:true}}}}}}}});
+  if(!teacher)return {teacherId:null,teacherVersion:0,eligibility:'NOT_ENABLED',eligibilityPeriod:null,eligibilityHistory:[],assignments:[]};
+  if(teacher.assignments.length>100||teacher.eligibilityPeriods.length>20)throw new AccessError('UNAVAILABLE');
   const today=new Intl.DateTimeFormat('en-CA',{timeZone:school.timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(at),day=new Date(`${today}T00:00:00Z`);
-  return {teacherId:teacher.id,eligibility:teacher.active?'ENABLED':'DISABLED',assignments:teacher.assignments.map(item=>({assignmentId:item.id,subjectName:item.offering.subject.name,sectionName:item.offering.section.name,validFrom:civil(item.validFrom),validTo:civil(item.validTo),current:item.validFrom<=day&&item.validTo>day}))};
+  const periods=teacher.eligibilityPeriods.map(item=>({id:item.id,version:item.version,validFrom:civil(item.validFrom),validTo:item.validTo?civil(item.validTo):null,reason:item.reason,recordedAt:item.recordedAt.toISOString(),current:item.supersededAt===null})),current=periods.find(item=>item.current)??null;
+  return {teacherId:teacher.id,teacherVersion:teacher.version,eligibility:teacher.active?'ENABLED':'DISABLED',eligibilityPeriod:current,eligibilityHistory:periods,assignments:teacher.assignments.map(item=>({assignmentId:item.id,subjectName:item.offering.subject.name,sectionName:item.offering.section.name,validFrom:civil(item.validFrom),validTo:civil(item.validTo),current:item.validFrom<=day&&item.validTo>day}))};
  },{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});}catch(error){if(error instanceof AccessError)throw error;throw new AccessError('UNAVAILABLE');}}
 }

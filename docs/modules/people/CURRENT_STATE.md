@@ -119,3 +119,7 @@ SA-13 is implementation-VERIFIED with human review PENDING. Employee creation re
 ### SA-13 direct reference composition — 11 October 2026
 
 SA-13 remains functionally VERIFIED and human review PENDING. `/admin/teachers/create` now composes the existing scoped People command as the approved three-stage Staff details → Employment → Confirm workflow, with a persisted receipt and links into Staff profiles and SA-14. The existing directory creation surface remains available. No People contract, table or migration changed. The combined Staff/access desktop and mobile journey creates the real Employee and continues through identity-bound access, activation and membership changes. Screenshots were inspected against the exact SA-13 reference. Evidence: [Administrator Staff/access checkpoint](../../evidence/admin-staff-access-2026-10-11/README.md).
+
+### STF-05 Staff Profile handoff — 22 October 2026
+
+The authorized Staff Profile now exposes the dated teaching-eligibility handoff without moving eligibility policy into People. People supplies scoped Employee facts through a typed port; Academics owns eligibility revisions and assignment impact, and Attendance owns frozen-session impact. The Profile projection includes the current period and immutable revision history. Focused current-source evidence is in `docs/evidence/staff-stf-05-2026-10-22/`; engineering verification is complete and human review remains PENDING.

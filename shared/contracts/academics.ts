@@ -16,3 +16,7 @@ export type AcademicYearTransition=Readonly<{yearId:string;version:number;status
 export type AcademicCatalogType='grade'|'subject'|'section';
 export type AcademicCatalogRetirement=Readonly<{id:string;type:AcademicCatalogType;version:number;active:false;retiredSections:number;retiredOfferings:number;replayed:boolean}>;
 export type CourseOfferingRecord=Readonly<{id:string;version:number;code:string;active:boolean;yearId:string;section:{id:string;code:string;name:string;gradeName:string};subject:{id:string;code:string;name:string};assignment:{id:string;teacherId:string;teacherName:string;validFrom:string;validTo:string;version:number}|null}>;
+export type TeacherEligibilityPeriod=Readonly<{id:string;version:number;validFrom:string;validTo:string|null;reason:string;recordedAt:string;current:boolean}>;
+export type TeacherEligibilityImpact=Readonly<{assignmentId:string;subjectName:string;sectionName:string;validFrom:string;validTo:string;frozenAttendance:boolean}>;
+export type TeacherEligibilityPreview=Readonly<{employeeId:string;teacherId:string|null;expectedTeacherVersion:number;validFrom:string;validTo:string|null;ready:boolean;blockingAssignments:readonly TeacherEligibilityImpact[];reviewDigest:string}>;
+export type TeacherEligibilityResult=Readonly<{employeeId:string;teacherId:string;teacherVersion:number;period:TeacherEligibilityPeriod;replayed:boolean}>;

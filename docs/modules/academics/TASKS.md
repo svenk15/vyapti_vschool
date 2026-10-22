@@ -1,5 +1,11 @@
 # Academic setup and teaching context — execution tasks
 
+## STF-05 — Manage dated teaching eligibility
+
+Depends on STF-03A Staff Profile and the accepted Staff review contract. Implement Academics-owned half-open eligibility revisions, People Employee facts through a typed port and Attendance frozen-session impact through a typed port. Preserve Access role independence and the existing compatibility projection.
+
+Acceptance: create/change/end preview and confirmation; employment containment; every assignment contained; named blocking assignment and frozen-session impact; expected-version and reviewed-digest concurrency; exact replay; current authorization before receipt disclosure; one current revision and immutable history; populated forward migration; PostgreSQL overlap/concurrency/rollback/scope tests; Profile entry and desktop/mobile browser evidence. Human review remains PENDING.
+
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
 ## SA-COMP-02 — Review dependencies and retire academic catalog records

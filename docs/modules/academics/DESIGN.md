@@ -1,5 +1,19 @@
 # Academic setup and teaching context — design
 
+## STF-05 dated teaching eligibility delta — 22 October 2026
+
+Academics owns Teacher eligibility. `setTeacherEligibility(actor, organizationId, schoolId, employeeId, input)` accepts one inclusive `validFrom`, an optional exclusive `validTo`, a bounded reason, expected Teacher version (`0` only when no Teacher exists), the exact preview digest and an idempotency key. `previewTeacherEligibility` performs the same current-state checks without writing. Both operations require live account, organization, branch, membership, `class.manage`, trusted `academic_core` release, entitlement and activation. Access roles never grant or imply eligibility.
+
+Academics reads the exact active branch Employee and employment interval through `TeacherEligibilityEmployeeFactsPort`; People remains owner of those facts. The requested eligibility interval must be contained by employment. Academics reads its current/future TeacherAssignments and returns every assignment not contained by the proposed half-open interval. `TeacherEligibilityAttendanceImpactPort` marks which blocking assignments have OPEN or SUBMITTED Attendance sessions; Attendance remains owner and no session, roster or history is changed. A nonempty blocking set makes the preview non-confirmable.
+
+The preview digest commits to scope, Employee/Teacher identity and versions, the current eligibility revision, proposed bounds and ordered assignment impact. The final command recomputes that digest inside the account → Organization → School serializable guard. A mismatch is `STALE_VERSION`. The write supersedes only the prior revision's applicability marker, appends a new immutable `vs_academics_teacher_eligibility_period` revision, updates the compatibility `Teacher.active`/version projection, and atomically appends existing audit/outbox/receipt evidence. Exact replay is disclosed only after current authorization; a changed payload/key conflicts. One unsuperseded revision per Teacher is enforced. Migration revisions use verified Employee employment dates, identify `MIGRATION` as their source and leave actor null rather than fabricating an administrator.
+
+`TeacherAssignment` creation now requires full containment in the unsuperseded eligibility interval in addition to employment containment. Existing boolean `Teacher.active` remains a compatibility projection while consumers move to the dated interval. Profile composition reads up to 20 revisions and at most 100 assignments; exceeding either safe bound is unavailable rather than silently truncated.
+
+| Physical table (model) | Columns | Purpose | Constraints and indexes |
+| --- | --- | --- | --- |
+| `vs_academics_teacher_eligibility_period` (TeacherEligibilityPeriod) | id uuid PK; organization_id uuid; school_id uuid; teacher_id uuid; valid_from date; valid_to date nullable; version int; reason varchar(500); recorded_by_account_id uuid nullable for migration only; recorded_at timestamptz(3); source MIGRATION/ADMIN; superseded_at timestamptz(3) nullable | Append-only dated Teacher eligibility revisions; exactly one unsuperseded revision per Teacher. Existing Teacher.active is a compatibility projection. | UNIQUE(scope,id); UNIQUE(scope,teacher_id,version); partial UNIQUE current Teacher revision; scoped Teacher FK; actor FK; half-open date, version, reason, source/actor checks; immutable except one current-to-superseded transition |
+
 Phase 1 · Design revision 3 · 5 October 2026. ACA-01 and ACA-02 are implementation-verified; ACA-03 is in progress. CourseOffering and TeacherAssignment are installed by forward migration `20261005001900_academic_offerings`. Review unresolved deployment choices in FND-02 before real-data use.
 
 ## TT-00 timetable readiness reconciliation — 11 October 2026

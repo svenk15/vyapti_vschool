@@ -1,5 +1,5 @@
 {
-  "revision": "4.25",
+  "revision": "4.26",
   "prefix": "vs_",
   "tables": [
     {
@@ -200,6 +200,27 @@
       "fields": "id uuid PK; organization_id uuid; school_id uuid; employee_id uuid; active boolean; version int",
       "responsibility": "Academic teacher profile, not a login identity; PER-02 owns its eligibility mutations.",
       "constraints": "UNIQUE(scope,employee_id); UNIQUE(scope,id); scoped Employee FK",
+      "rls": {
+        "classification": "BRANCH",
+        "scopeColumns": [
+          "organization_id",
+          "school_id"
+        ],
+        "intendedPolicy": "Require both verified tenant keys and current active membership; WITH CHECK binds both keys on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "academics",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "TeacherEligibilityPeriod",
+      "owner": "academics",
+      "table": "vs_academics_teacher_eligibility_period",
+      "status": "MIGRATED",
+      "design": "docs/modules/academics/DESIGN.md",
+      "fields": "id uuid PK; organization_id uuid; school_id uuid; teacher_id uuid; valid_from date; valid_to date nullable; version int; reason varchar(500); recorded_by_account_id uuid nullable for migration only; recorded_at timestamptz(3); source MIGRATION/ADMIN; superseded_at timestamptz(3) nullable",
+      "responsibility": "Append-only dated Teacher eligibility revisions; exactly one unsuperseded revision per Teacher. Existing Teacher.active is a compatibility projection.",
+      "constraints": "UNIQUE(scope,id); UNIQUE(scope,teacher_id,version); partial UNIQUE current Teacher revision; scoped Teacher FK; actor FK; half-open date, version, reason, source/actor checks; immutable except one current-to-superseded transition",
       "rls": {
         "classification": "BRANCH",
         "scopeColumns": [

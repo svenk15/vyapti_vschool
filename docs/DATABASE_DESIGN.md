@@ -53,6 +53,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | Section | `vs_academics_section` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Subject | `vs_academics_subject` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | Teacher | `vs_academics_teacher` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
+| TeacherEligibilityPeriod | `vs_academics_teacher_eligibility_period` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | TeacherAssignment | `vs_academics_teacher_assignment` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | AcademicDayPattern | `vs_academics_day_pattern` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |
 | AcademicDayPeriod | `vs_academics_day_period` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |

@@ -36,7 +36,10 @@ export type PeopleWorkspace = Readonly<{
 }>;
 export type StaffProfileAcademics = Readonly<{
  teacherId: string | null;
+ teacherVersion: number;
  eligibility: 'NOT_ENABLED' | 'ENABLED' | 'DISABLED';
+ eligibilityPeriod: import('./academics').TeacherEligibilityPeriod | null;
+ eligibilityHistory: readonly import('./academics').TeacherEligibilityPeriod[];
  assignments: readonly Readonly<{assignmentId:string;subjectName:string;sectionName:string;validFrom:string;validTo:string;current:boolean}>[];
 }>;
 export type StaffProfileAccess = Readonly<{

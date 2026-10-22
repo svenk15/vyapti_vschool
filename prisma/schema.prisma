@@ -675,11 +675,32 @@ model Teacher {
  version Int
  employee Employee @relation(fields:[organizationId,schoolId,employeeId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_employee_fkey")
  assignments TeacherAssignment[]
+ eligibilityPeriods TeacherEligibilityPeriod[]
  proposedCovers TimetableCover[] @relation("TimetableCoverSubstitute")
  @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_scope_id_key")
  @@unique([organizationId,schoolId,employeeId],map:"vs_academics_teacher_employee_key")
  @@index([organizationId,schoolId,active,employeeId],map:"vs_academics_teacher_eligibility_idx")
  @@map("vs_academics_teacher")
+}
+
+model TeacherEligibilityPeriod {
+ id String @id(map:"vs_academics_teacher_eligibility_period_pkey") @db.Uuid
+ organizationId String @map("organization_id") @db.Uuid
+ schoolId String @map("school_id") @db.Uuid
+ teacherId String @map("teacher_id") @db.Uuid
+ validFrom DateTime @map("valid_from") @db.Date
+ validTo DateTime? @map("valid_to") @db.Date
+ version Int
+ reason String @db.VarChar(500)
+ recordedByAccountId String? @map("recorded_by_account_id") @db.Uuid
+ recordedAt DateTime @map("recorded_at") @db.Timestamptz(3)
+ source String @db.VarChar(20)
+ supersededAt DateTime? @map("superseded_at") @db.Timestamptz(3)
+ teacher Teacher @relation(fields:[organizationId,schoolId,teacherId],references:[organizationId,schoolId,id],onDelete:Restrict,onUpdate:Restrict,map:"vs_academics_teacher_eligibility_period_teacher_fkey")
+ @@unique([organizationId,schoolId,id],map:"vs_academics_teacher_eligibility_period_scope_id_key")
+ @@unique([organizationId,schoolId,teacherId,version],map:"vs_academics_teacher_eligibility_period_version_key")
+ @@index([organizationId,schoolId,teacherId,supersededAt],map:"vs_academics_teacher_eligibility_period_current_idx")
+ @@map("vs_academics_teacher_eligibility_period")
 }
 
 model Student {
