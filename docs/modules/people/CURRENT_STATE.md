@@ -123,3 +123,9 @@ SA-13 remains functionally VERIFIED and human review PENDING. `/admin/teachers/c
 ### STF-05 Staff Profile handoff — 22 October 2026
 
 The authorized Staff Profile now exposes the dated teaching-eligibility handoff without moving eligibility policy into People. People supplies scoped Employee facts through a typed port; Academics owns eligibility revisions and assignment impact, and Attendance owns frozen-session impact. The Profile projection includes the current period and immutable revision history. Focused current-source evidence is in `docs/evidence/staff-stf-05-2026-10-22/`; engineering verification is complete and human review remains PENDING.
+
+## Administrator Staff production correction — 22 October 2026
+
+The bounded STF-01A/STF-03A/STF-04A/B/STF-05/STF-06 presentation correction is checkpointed at application source `223d62332401f972e7407f0dc977e7e990a1446c`, normal build `bPsKDL8Z3tqD1DUJBNreD`. Directory state now carries through Add Staff → receipt → Profile → Back, Profile is the primary row destination, Teaching and Access remain separate display facts, Profile panels are content-sized, and the dated-eligibility Reason/action geometry matches the frozen production reference. No owner command, schema, migration or authorization rule changed.
+
+Focused People PostgreSQL passed 14/14 and focused Staff Chromium passed 5/5. The assignment-impact rejection, exact replay, restricted authority and Profile GET-only recovery are covered. Current-build desktop/mobile, 900/360 and four-theme evidence was visually inspected. See [production correction evidence](../../evidence/staff-production-correction-2026-10-22/README.md). PD-STF-01–03, STF-01B and rejoining remain outside this batch. Human acceptance and release gates remain PENDING.
