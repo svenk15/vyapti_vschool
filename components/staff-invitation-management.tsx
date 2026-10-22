@@ -7,6 +7,7 @@ import {Dialog} from '@/components/ui/interactive';
 type Attempt={key:string;invitationId:string;reason:string};
 type Result={invitationId:string;deliveryStatus:'PENDING_DELIVERY'|'SENT'|'FAILED';deliveryFailedAt?:string;deliveryFailureReason?:string;replayed:boolean};
 const label={PENDING_DELIVERY:'Preparing delivery',SENT:'Invitation sent',FAILED:'Delivery failed',EXPIRED:'Expired',CONSUMED:'Accepted',REVOKED:'Revoked'} as const;
+const roleLabel={SCHOOL_ADMIN:'School administrator',TEACHER:'Teacher',PRINCIPAL:'Principal'} as const;
 const tone=(state:NonNullable<StaffProfileAccess['invitation']>['state'])=>state==='SENT'||state==='CONSUMED'?'success':state==='FAILED'||state==='EXPIRED'?'warning':'neutral';
 async function payload<T>(response:Response):Promise<T>{const value=await response.json().catch(()=>({}));if(!response.ok)throw new Error(typeof value.message==='string'?value.message:'Unable to complete the change.');return value as T;}
 
@@ -22,7 +23,7 @@ export function StaffInvitationManagement({employeeId,initial}:{employeeId:strin
  return <div className="staff-invitation-management">
   {message&&<Alert tone="success" title="Invitation updated" onDismiss={()=>setMessage('')}>{message}</Alert>}
   {savedRefresh&&<Alert tone="warning" title="Invitation saved; current status unavailable">The replacement was confirmed. Refreshing checks the current state and will not send another invitation.<span className="alert-actions"><Button size="small" variant="secondary" loading={busy} onClick={()=>void refresh()}>Refresh saved view</Button></span></Alert>}
-  <div className="staff-access-summary"><strong>{access.state==='NO_ACCOUNT'?'No account':access.email??'Linked account'}</strong><p className="muted small">Contact email and sign-in access are managed separately.</p>{access.roles.length>0&&<p className="small">{access.roles.map(role=>role.replaceAll('_',' ').toLowerCase()).join(' · ')}</p>}</div>
+  <div className="staff-access-summary"><strong>{access.state==='NO_ACCOUNT'?'No account':access.email??'Linked account'}</strong><p className="muted small">Contact email and sign-in access are managed separately.</p>{access.roles.length>0&&<p className="small">{access.roles.map(role=>roleLabel[role]).join(' · ')}</p>}</div>
   {invitation&&<div className="staff-invitation-state"><div><span className="small muted">Invitation</span><p><Badge tone={tone(invitation.state)}>{label[invitation.state]}</Badge></p><p className="small muted">Expires {new Date(invitation.expiresAt).toLocaleString()}</p>{invitation.deliveryFailureReason&&<p className="small">{invitation.deliveryFailureReason}</p>}</div>{canResend&&<Button size="small" variant="secondary" onClick={()=>{setReason('');setError('');setUnknown(false);setAttempt(null);setOpen(true);}}>Review resend</Button>}</div>}
   <Dialog title="Resend staff invitation" description="Review the current failed or expired invitation before creating a replacement." open={open} onClose={close}>
    {error&&<Alert tone="danger" title={unknown?'Outcome not confirmed':'Invitation not resent'}>{error}{unknown&&attempt&&<span className="alert-actions"><Button size="small" variant="secondary" loading={busy} onClick={()=>void submit(attempt)}>Retry unchanged resend</Button></span>}</Alert>}
