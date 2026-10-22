@@ -1672,12 +1672,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .staff-directory-table .data-table{table-layout:auto;white-space:normal;font-size:13px;line-height:22px}
 .staff-directory-table .data-table thead th{height:46px;padding:11px 14px;border-block:1px solid var(--vs-border);background:transparent;color:var(--vs-text-muted);font-size:12px;font-weight:600;letter-spacing:0;text-transform:none}
 .staff-directory-table .data-table thead th:first-child{padding-left:56px}
-.staff-directory-table .data-table tbody th,.staff-directory-table .data-table tbody td{height:67px;padding:12px 14px;border-bottom:1px solid var(--vs-border);background:transparent;text-align:left;vertical-align:middle}
+.staff-directory-table .data-table tbody th,.staff-directory-table .data-table tbody td{height:67px;padding:10px 14px;border-bottom:1px solid var(--vs-border);background:transparent;text-align:left;vertical-align:middle}
 .staff-directory-table .data-table tbody th{font-size:13px;font-weight:400}
 .staff-directory-table .data-table tr:hover th,.staff-directory-table .data-table tr:hover td{background:var(--vs-surface-subtle)}
 .staff-directory-table .data-table th:last-child,.staff-directory-table .data-table td:last-child{width:110px;padding-left:7px;text-align:left}
 .staff-directory-table .person-cell{gap:10px}.staff-directory-table .avatar{width:30px;height:30px;font-size:10px}
 .staff-directory-table .person-cell strong{font-size:14px;font-weight:600;line-height:22px}.staff-directory-table .person-cell .small{margin-top:0;font-size:11px;line-height:22px}.staff-mobile-category{display:none}
+.staff-directory-table .staff-row-actions{justify-content:flex-start}
 .staff-row-action{justify-content:flex-start;gap:6px;min-height:32px;padding:5px 0;color:var(--vs-primary);font-size:12px}.staff-row-action svg{width:14px;height:14px}
 .staff-pagination{display:flex;align-items:center;justify-content:space-between;min-height:52px;margin-top:0;color:var(--vs-text-muted);font-size:11px}
 .staff-pagination>div{display:flex;align-items:center;gap:4px}.staff-pagination select{height:32px;border:1px solid var(--vs-border);border-radius:6px;background:var(--vs-surface);color:var(--vs-text)}
