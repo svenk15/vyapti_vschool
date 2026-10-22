@@ -44,10 +44,11 @@ export type StaffProfileAcademics = Readonly<{
 }>;
 export type StaffProfileAccess = Readonly<{
  state: 'NO_ACCOUNT' | 'PENDING' | 'ACTIVE' | 'SUSPENDED' | 'REVOKED' | 'LINKED';
+ email: string | null;
  membershipId: string | null;
  membershipVersion: number | null;
  roles: readonly ('SCHOOL_ADMIN'|'TEACHER'|'PRINCIPAL')[];
- invitation: Readonly<{id:string;state:'PENDING_DELIVERY'|'SENT'|'FAILED'|'EXPIRED'|'CONSUMED'|'REVOKED';expiresAt:string}> | null;
+ invitation: Readonly<{id:string;state:'PENDING_DELIVERY'|'SENT'|'FAILED'|'EXPIRED'|'CONSUMED'|'REVOKED';expiresAt:string;deliveryFailedAt:string|null;deliveryFailureReason:string|null}> | null;
 }>;
 export type StaffProfileProjection<T> = Readonly<{status:'AVAILABLE';value:T}> | Readonly<{status:'UNAVAILABLE'}>;
 export type StaffProfile = Readonly<{

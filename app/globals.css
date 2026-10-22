@@ -1634,3 +1634,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .guardian-access-drawer .drawer-actions .btn{flex:0 0 auto;height:44px;min-height:44px}
  .guardian-access-drawer .drawer-actions .btn-primary{flex:1}
 }
+
+.staff-invitation-management{display:grid;gap:var(--space-3)}
+.staff-access-summary>p{margin:var(--space-1) 0 0}
+.staff-invitation-state{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--border)}
+.staff-invitation-state p{margin:var(--space-1) 0 0}
+@media(max-width:520px){.staff-invitation-state{align-items:stretch;flex-direction:column}.staff-invitation-state .btn{align-self:flex-start}}

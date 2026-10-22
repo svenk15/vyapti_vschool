@@ -16,6 +16,10 @@ Presentation overlay on IAM-01 and TEN-01. Successful sign-in must route through
 
 Presentation overlay on IAM-03/IAM-04. Implement the approved request-help, verified-channel acknowledgement and confirmation stages at the public recovery entry. Password reset invokes the existing generic issue endpoint only on final confirmation. Invited-account help must remain generic and must not fabricate, resend or expose an activation; actual invitation/operator activation continues through its verified owner channel. Preserve in-flow values, token lifecycle, account-wide trust evaluation, secret clearing and replay/session revocation. Verify both choices, known/unknown parity, Back retention, no activation-help token write, reset consumption and desktop/mobile reference comparison. No schema or migration is authorized.
 
+## STF-06 — Employee-context invitation review and reasoned resend
+
+Implement the approved Staff Profile projection and bounded resend command from the STF-06 design section. Preserve Access token replacement, provider-result CAS, exact replay and public wrong-account behavior. Verify all review-only lifecycle states, failed/expired replacement, one delivery across exact replay, changed-input conflict, current-authority denial, confirmed-save/failed-refresh GET recovery, responsive reference comparison and no token disclosure. No schema migration is required.
+
 Phase 1. Each task is a vertical slice with a running demo. Follow the matching named flow in DESIGN.md and shared agent runbook. No task completion is claimed by this document.
 
 ## IAM-01 — Provision a school and sign in as its administrator

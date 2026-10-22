@@ -1,8 +1,14 @@
 # School scope, authentication and permissions — current state
 
+## STF-06 Employee invitation review and reasoned resend — 22 October 2026
+
+Staff Profile now composes an independently authorized Access projection for the exact Employee-bound account and shows pending, sent, failed, expired, consumed and revoked invitation states without exposing tokens. Failed or expired invitations support a bounded, reasoned replacement. Access rechecks live administrator authority, trust mode, exact Employee binding, pending membership version and roles before revoking the old token and creating one replacement. Exact replay reuses the original result without another delivery, changed input conflicts, and revoked authority cannot disclose the protected receipt.
+
+The browser keeps an unknown resend's exact key and payload. Confirmed-save/failed-refresh is distinct and recovers through GET only. Focused unit, real-PostgreSQL and desktop/mobile browser checks passed; responsive and four-theme captures were inspected in [STF-06 evidence](../../evidence/staff-stf-06-2026-10-22/README.md). No schema or migration changed. Delivery evidence uses only the deterministic synthetic mail sink; production-provider review, native accessibility, font portability, TEN-03 and human review remain PENDING.
+
 ## STF-04B Staff access recovery — 22 October 2026
 
-CreateMembership and UpdateMembership now use a bounded Access-owned status query and retain their exact in-memory request for UNKNOWN recovery. Live account/token, active branch administrator scope and the target membership are rechecked before an Access receipt is disclosed. Confirmed-save/failed-refresh is distinct and performs a read-only refresh. See [the combined STF-04 evidence](../../evidence/staff-stf-04ab-2026-10-22/README.md). Invitation resend remains STF-06; human review and release gates remain PENDING.
+CreateMembership and UpdateMembership now use a bounded Access-owned status query and retain their exact in-memory request for UNKNOWN recovery. Live account/token, active branch administrator scope and the target membership are rechecked before an Access receipt is disclosed. Confirmed-save/failed-refresh is distinct and performs a read-only refresh. See [the combined STF-04 evidence](../../evidence/staff-stf-04ab-2026-10-22/README.md). Human review and release gates remain PENDING.
 
 Last updated: 2026-10-17. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
