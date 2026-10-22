@@ -31,6 +31,7 @@ export type PeopleWorkspace = Readonly<{
  nextCursor: string | null;
  previousCursor: string | null;
  total: number;
+ page: number;
  schoolDate: string;
  query: Omit<StaffDirectoryQuery,'cursor'|'limit'>;
 }>;

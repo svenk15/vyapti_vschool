@@ -5,7 +5,7 @@ import type { RoleCode } from "@/shared/contracts/access";
 import type { CampusDto,SchoolSettings,StaffMember,StaffPage } from "@/shared/contracts/access-management";
 import type {EmployeeProfile} from "@/shared/contracts/people";
 import { TextField,SelectField,TextArea,Checkbox } from "./ui/forms";
-import { Alert,Avatar,Badge,Button,ButtonLink,Card,EmptyState,PageHeader,PageStack,SectionHeader,Skeleton } from "./ui/primitives";
+import { Alert,Avatar,Badge,Button,Card,EmptyState,PageHeader,PageStack,SectionHeader,Skeleton } from "./ui/primitives";
 import { DataTable,Dialog } from "./ui/interactive";
 import { ServerTable } from "./ui/server-table";
 import {AdminLocalNavigation} from "./admin-local-navigation";
@@ -49,12 +49,12 @@ export function StaffManagement({initial,schoolId,targetMembershipId=null,naviga
  function openManage(member:StaffMember){command.startNew();setSelected(member);setEditRoles(member.roles);setAction("SET_ROLES");setReason("");}
  if(command.denied)return <Alert tone="danger" title="Staff access unavailable">Sign in again or contact your administrator.</Alert>;
  return <PageStack className="staff-access-page directory-page">
-  <PageHeader title="Staff access" actions={<ButtonLink href="/admin/users/grant">Grant access</ButtonLink>}/>
+  <PageHeader title="Staff access"/>
   {navigation}
   <div className="staff-access-utility"><Button variant="ghost" onClick={()=>{setInviteMessage("");setIndependentOpen(true);}}>Independent invitation <span aria-hidden="true">→</span></Button></div>
   {!selected&&!independentOpen&&command.notice}
   {error&&<Alert tone="danger" title="Staff list unavailable">{error}</Alert>}
-  {page.failedInvitations.length>0&&<Card className="padded settings-panel access-failures"><SectionHeader title="Invitation delivery failures" description="Retry an invitation after the local delivery issue is resolved."/>{page.failedInvitations.map(failure=><div className="delivery-failure-row" key={failure.invitationId}><div><strong>{failure.email}</strong><p className="small muted">Failed {new Date(failure.deliveryFailedAt).toLocaleString()} · {failure.deliveryFailureReason}</p></div><Button variant="secondary" size="small" disabled={inviteBusy||disabled} onClick={()=>void inviteStaff(failure.email,failure.roles)}>Resend invitation</Button></div>)}</Card>}
+  {page.failedInvitations.length>0&&<details className="access-failures-compact"><summary><span>Invitation delivery needs attention</span><Badge tone="warning">{page.failedInvitations.length}</Badge></summary><p className="small muted">Retry after the delivery issue is resolved.</p>{page.failedInvitations.map(failure=><div className="delivery-failure-row" key={failure.invitationId}><div><strong>{failure.email}</strong><p className="small muted">Failed {new Date(failure.deliveryFailedAt).toLocaleString()} · {failure.deliveryFailureReason}</p></div><Button variant="secondary" size="small" disabled={inviteBusy||disabled} onClick={()=>void inviteStaff(failure.email,failure.roles)}>Resend invitation</Button></div>)}</details>}
   <section className="directory-open staff-directory access-directory" aria-label="Staff access directory">
    {loading?<Skeleton label="Loading school staff"/>:page.items.length?<ServerTable<StaffMember> caption="Current school staff access" rows={page.items} rowKey={member=>member.resourceId} className="staff-directory-table access-directory-table" columns={[
     {key:"account",label:"Account",rowHeader:true,render:member=><div className="person-cell"><Avatar name={member.email}/><div><strong>{member.email}</strong><span className="small muted">Account: {member.accountStatus.toLowerCase()}</span></div></div>},
