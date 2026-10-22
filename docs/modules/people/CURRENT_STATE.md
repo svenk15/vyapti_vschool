@@ -7,6 +7,14 @@ Last updated: 2026-10-17. Human review is tracked separately from implementation
 | PER-01 | VERIFIED | PENDING | [Local verification](../../evidence/people-01-local/verification.json), JUnit reports, source `45ca6d6` |
 | PER-02 | VERIFIED | PENDING | [Local verification](../../evidence/people-02-local/verification.json), JUnit reports, tested source `e72125d` |
 
+## STF-03A authorized Staff Profile — 22 October 2026
+
+The dedicated `/admin/teachers/{employeeId}` destination now reads an exact same-branch Employee through the guarded People facade and composes browser-safe Academics and Access projections through typed owner ports. Academics rechecks `class.manage`, release, entitlement and activation before returning eligibility/assignments. Access rechecks `user.manage` before returning binding, membership roles and safe invitation lifecycle. People does not read either owner's private tables, does not expose tokens or verification evidence, and performs a final live guard/resource check after composition. Missing owner authority/module support renders an explicit unavailable panel without inferring owner facts.
+
+The current Profile matches the frozen content-width hero, Employment, Teaching, Access, operations and history composition on inspected 1440×1000 and 390×844 captures. Active linked, active no-account and ended states were exercised. People PostgreSQL passed 12/12, focused desktop and mobile Playwright passed 2/2 per viewport, and the 4 GiB production build passed with build ID `31F-Og17Ps0lWxswztc6d`. A stale generated E2E webpack cache was isolated after visual inspection exposed missing CSS; only screenshots from the confirmed current stylesheet are retained as acceptance evidence. [STF-03A evidence](../../evidence/staff-stf-03a-2026-10-22/README.md).
+
+PD-STF-02 correction controls remain absent. Dated eligibility remains STF-05, invitation operations remain STF-06 and employment-end composition remains separately gated. Human visual acceptance is PENDING; TEN-03, font portability and native accessibility gates remain unchanged.
+
 ## STF-01A People-native Staff directory — 22 October 2026
 
 The production `/admin/teachers` query now applies name or Employee-code search, People-owned category/employment filters and name/code/employment ordering to the complete authorized branch result before pagination. Signed bidirectional cursors bind actor token version, branch configuration version and the full normalized query; query or authority changes invalidate them. Search/filter/sort/cursor state is URL-backed and browser Back/Forward reloads the protected server result. Teaching and Access filters/sorts remain the explicit STF-01B owner-projection dependency.

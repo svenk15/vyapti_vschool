@@ -2,7 +2,7 @@
 
 import {useState} from 'react';
 import type {ReactNode} from 'react';
-import {usePathname,useRouter} from 'next/navigation';
+import {usePathname,useRouter,useSearchParams} from 'next/navigation';
 import type {PeopleWorkspace,StaffDirectoryCategory,StaffDirectoryEmployment,StaffDirectoryOrder,StaffDirectorySearchBy,StaffDirectorySort} from '@/shared/contracts/people';
 import {Alert,Avatar,Badge,Button,ButtonLink,EmptyState,PageHeader,PageStack} from './ui/primitives';
 import {Dialog} from './ui/interactive';
@@ -17,7 +17,7 @@ function portalLabel(value:'UNLINKED'|'LINKED'|'ACTIVE'){return value==='UNLINKE
 function categoryLabel(value:Employee['category']){return value==='ADMINISTRATION'?'Administration':value==='UNCLASSIFIED'?'Unclassified':value==='SUPPORT'?'Support':'Teaching';}
 
 export function PeopleWorkspaceScreen({initial,navigation}:{initial:PeopleWorkspace;navigation?:ReactNode}){
- const router=useRouter(),pathname=usePathname(),[data,setData]=useState(initial),[draft,setDraft]=useState<DirectoryDraft>({...initial.query}),[drawer,setDrawer]=useState<'filters'|'sort'|null>(null),[drawerDraft,setDrawerDraft]=useState<DirectoryDraft>({...initial.query}),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState(false),[target,setTarget]=useState(''),[actionMode,setActionMode]=useState<ActionMode>('manage'),[accountId,setAccountId]=useState(''),[reference,setReference]=useState(''),[reason,setReason]=useState(''),[categoryDraft,setCategoryDraft]=useState<'TEACHING'|'ADMINISTRATION'|'SUPPORT'>('TEACHING');
+ const router=useRouter(),pathname=usePathname(),searchParams=useSearchParams(),[data,setData]=useState(initial),[draft,setDraft]=useState<DirectoryDraft>({...initial.query}),[drawer,setDrawer]=useState<'filters'|'sort'|null>(null),[drawerDraft,setDrawerDraft]=useState<DirectoryDraft>({...initial.query}),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState(false),[target,setTarget]=useState(''),[actionMode,setActionMode]=useState<ActionMode>('manage'),[accountId,setAccountId]=useState(''),[reference,setReference]=useState(''),[reason,setReason]=useState(''),[categoryDraft,setCategoryDraft]=useState<'TEACHING'|'ADMINISTRATION'|'SUPPORT'>('TEACHING');
  const targetEmployee=data.employees.find(employee=>employee.employeeId===target)??null;
  function queryParams(query:DirectoryDraft,cursor?:string|null){const params=new URLSearchParams();if(query.search)params.set('q',query.search);if(query.by!=='name')params.set('by',query.by);if(query.category!=='ANY')params.set('category',query.category);if(query.employment!=='ANY')params.set('employment',query.employment);if(query.sort!=='name')params.set('sort',query.sort);if(query.order!=='asc')params.set('order',query.order);if(cursor)params.set('cursor',cursor);return params;}
  function navigate(query:DirectoryDraft,cursor?:string|null,replace=false){const params=queryParams(query,cursor),href=`${pathname}${params.size?`?${params}`:''}`;if(replace)router.replace(href);else router.push(href);}
@@ -45,7 +45,7 @@ export function PeopleWorkspaceScreen({initial,navigation}:{initial:PeopleWorksp
     {key:'category',label:'Category',render:employee=>categoryLabel(employee.category)},
     {key:'employment',label:'Employment',render:employee=><Badge tone={employee.employment.status==='ACTIVE'?'success':'neutral'}>{employee.employment.status==='ACTIVE'?'Active':'Ended'}</Badge>},
     {key:'access',label:'Access & teaching',render:employee=><div className="staff-state-cell"><span>{portalLabel(employee.portalAccess)}</span><span className="small muted">Teaching: {employee.teachingEligibility==='ENABLED'?'enabled':'not enabled'}</span></div>},
-    {key:'actions',label:'Actions',render:employee=><Button className="staff-row-action" size="small" variant="ghost" disabled={busy} onClick={()=>openManage(employee)} aria-label={`Manage ${employee.person.displayName}`}>Manage</Button>}
+    {key:'actions',label:'Actions',render:employee=><div className="staff-row-actions"><ButtonLink href={`/admin/teachers/${employee.employeeId}?returnTo=${encodeURIComponent(`${pathname}${searchParams.size?`?${searchParams}`:''}`)}`} size="small" variant="ghost">Profile</ButtonLink><Button className="staff-row-action" size="small" variant="ghost" disabled={busy} onClick={()=>openManage(employee)} aria-label={`Manage ${employee.person.displayName}`}>Manage</Button></div>}
    ]}/>}
    <nav className="pagination" aria-label="Staff directory pagination"><span className="small muted">Showing {data.employees.length} of {data.total} staff profiles</span><div><Button size="small" variant="secondary" disabled={!data.previousCursor} onClick={()=>data.previousCursor&&navigate(data.query,data.previousCursor)}>Previous</Button><Button size="small" variant="secondary" disabled={!data.nextCursor} onClick={()=>data.nextCursor&&navigate(data.query,data.nextCursor)}>Next</Button></div></nav>
   </section>

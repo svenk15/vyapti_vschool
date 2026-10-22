@@ -74,6 +74,14 @@ describe('PER-01 PostgreSQL employee profiles',()=>{
 });
 
 describe('PER-02 PostgreSQL cross-owner staff lifecycle',()=>{
+ it('composes an authorized Staff Profile through scoped People, Academics and Access reads',async()=>{
+  const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('STF03-PROFILE','Profile','Teacher'));
+  const initial=await people.staffProfile(identity,primary.organizationId,primary.schoolId,employee.employeeId);expect(initial).toMatchObject({employee:{employeeId:employee.employeeId,staffNumber:'STF03-PROFILE'},person:{displayName:'Profile Teacher'},academics:{status:'AVAILABLE',value:{teacherId:null,eligibility:'NOT_ENABLED'}},access:{status:'AVAILABLE',value:{state:'NO_ACCOUNT'}}});expect(initial.history).toContainEqual(expect.objectContaining({kind:'EMPLOYMENT_STARTED'}));
+  await people.enableTeacher(identity,primary.organizationId,primary.schoolId,employee.employeeId,{expectedVersion:employee.version,key:randomUUID()});const target=await activeStaffFixture(db,primary,['TEACHER']);await db.userAccount.update({where:{id:target.accountId},data:{emailVerifiedAt:new Date()}});await people.bindAccount(identity,primary.organizationId,primary.schoolId,employee.employeeId,{accountId:target.accountId,verificationReference:'synthetic-profile-check',reason:'Synthetic Staff Profile fixture',key:randomUUID()});
+  const composed=await people.staffProfile(identity,primary.organizationId,primary.schoolId,employee.employeeId);expect(composed.academics).toMatchObject({status:'AVAILABLE',value:{teacherId:expect.any(String),eligibility:'ENABLED'}});expect(composed.access).toMatchObject({status:'AVAILABLE',value:{state:'ACTIVE',membershipId:target.membershipId,roles:['TEACHER']}});
+  await expect(people.staffProfile(identity,foreign.organizationId,foreign.schoolId,employee.employeeId)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await db.userAccount.update({where:{id:primary.accountId},data:{tokenVersion:2}});await expect(people.staffProfile(identity,primary.organizationId,primary.schoolId,employee.employeeId)).rejects.toMatchObject({code:'UNAUTHENTICATED'});await db.userAccount.update({where:{id:primary.accountId},data:{tokenVersion:1}});
+ });
  it('enables a scoped teacher, binds only a verified same-branch teacher account, and ends employment atomically',async()=>{
   const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,input('PER02-STAFF','Teacher','Synthetic'));
   const enabled=await people.enableTeacher(identity,primary.organizationId,primary.schoolId,employee.employeeId,{expectedVersion:employee.version,key:randomUUID()});expect(enabled).toMatchObject({teachingEligibility:'ENABLED',teacherId:expect.any(String)});expect(await db.teacher.count({where:{organizationId:primary.organizationId,schoolId:primary.schoolId,employeeId:employee.employeeId,active:true}})).toBe(1);

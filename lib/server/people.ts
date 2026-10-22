@@ -8,6 +8,7 @@ async function scope(identity:Identity|null){const home=await accountGateway.get
 export const peopleGateway={
  async currentAccountDisplayName(identity:Identity|null){const current=await scope(identity);return people.currentAccountDisplayName(identity,current.organizationId,current.schoolId);},
  async workspace(identity:Identity|null,query:{search?:unknown;by?:unknown;category?:unknown;employment?:unknown;sort?:unknown;order?:unknown;cursor?:unknown;limit?:unknown}={}){const current=await scope(identity);return people.workspace(identity,current.organizationId,current.schoolId,query);},
+ async staffProfile(identity:Identity|null,employeeId:string){const current=await scope(identity);return people.staffProfile(identity,current.organizationId,current.schoolId,employeeId);},
  async createEmployee(identity:Identity|null,input:Parameters<PeopleFacade['createEmployee']>[3]){const current=await scope(identity);return people.createEmployee(identity,current.organizationId,current.schoolId,input);},
  async enableTeacher(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['enableTeacher']>[4]){const current=await scope(identity);return people.enableTeacher(identity,current.organizationId,current.schoolId,employeeId,input);},
  async bindAccount(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['bindAccount']>[4]){const current=await scope(identity);return people.bindAccount(identity,current.organizationId,current.schoolId,employeeId,input);},

@@ -1,7 +1,7 @@
 import {createHash,createHmac,randomUUID,timingSafeEqual} from 'node:crypto';
 import {Prisma,type PrismaClient} from '../../../../generated/prisma/client';
 import type {Identity} from '../../../../shared/contracts/access';
-import type {EmployeeProfile,PeopleWorkspace,StaffDirectoryQuery} from '../../../../shared/contracts/people';
+import type {EmployeeProfile,PeopleWorkspace,StaffDirectoryQuery,StaffProfile,StaffProfileProjection} from '../../../../shared/contracts/people';
 import type {PeopleRepository} from '../application/employees';
 import type {EmployeeInput} from '../domain/employee';
 import {displayName} from '../domain/employee';
@@ -12,6 +12,8 @@ import type {VerifiedPersonBindingPort} from '../../access/contracts/person-bind
 import type {TeacherProfilePort} from '../../academics/contracts/teacher-profile';
 import type {ReleaseManifest} from '../../tenancy/contracts/index';
 import type {VerifiedDatabaseContextPort} from '../../tenancy/contracts/verified-database-context';
+import type {StaffAcademicsProfilePort} from '../../academics/contracts/staff-profile';
+import type {StaffAccessProfilePort} from '../../access/contracts/staff-profile';
 
 type Guard={configurationVersion:number;timezone:string};
 const NO_RELEASE:ReleaseManifest={student_core:false,academic_core:false,staff_core:false,attendance:false,fees:false,admissions:false,assessments:false,family:false,communication:false,timetable:false,homework:false,transport:false,hr:false,library:false,inventory:false,health:false,analytics:false,ai:false};
@@ -39,7 +41,7 @@ function dto(row:{id:string;version:number;staffNumber:string;category:string;em
  return {employeeId:row.id,version:row.version,staffNumber:row.staffNumber,category:row.category as StoredStaffCategory,person:{id:row.person.id,displayName:displayName(row.person.firstName,row.person.lastName)},employment:{from:dateText(row.employedFrom),to:row.employedTo?dateText(row.employedTo):null,status:row.status as 'ACTIVE'|'ENDED'},portalAccess,teachingEligibility:!row.teacher?'NOT_ENABLED':row.teacher.active?'ENABLED':'DISABLED',teacherId:row.teacher?.id??null};
 }
 export class PrismaPeopleRepository implements PeopleRepository{
- constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret='',private readonly bindings?:VerifiedPersonBindingPort,private readonly teachers?:TeacherProfilePort,private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly databaseContext?:VerifiedDatabaseContextPort){}
+ constructor(private readonly db:PrismaClient,private readonly evidence:(tx:Prisma.TransactionClient)=>InstitutionEvidenceWriter,private readonly now:()=>Date=()=>new Date(),private readonly cursorSecret='',private readonly bindings?:VerifiedPersonBindingPort,private readonly teachers?:TeacherProfilePort,private readonly manifest:ReleaseManifest=NO_RELEASE,private readonly databaseContext?:VerifiedDatabaseContextPort,private readonly staffAcademics?:StaffAcademicsProfilePort,private readonly staffAccess?:StaffAccessProfilePort){}
  private async guard(tx:Prisma.TransactionClient,actor:Identity,organizationId:string,schoolId:string,lock:boolean,additionalAccountIds:string[]=[]):Promise<Guard>{
   if(!this.databaseContext)throw new AccessError('UNAVAILABLE');
   await this.databaseContext.establish(tx,{accountId:actor.accountId,tokenVersion:actor.tokenVersion,organizationId,branchId:schoolId});
@@ -75,6 +77,14 @@ export class PrismaPeopleRepository implements PeopleRepository{
   const countPredicates=predicates.slice(0,last?predicates.length-1:predicates.length),countRows=await tx.$queryRaw<{count:bigint}[]>(Prisma.sql`SELECT count(*)::bigint AS count FROM vs_people_employee e JOIN vs_people_person p ON p.organization_id=e.organization_id AND p.id=e.person_id WHERE ${Prisma.join(countPredicates,' AND ')}`),normalizedQuery={search:query.search,by:query.by,category:query.category,employment:query.employment,sort:query.sort,order:query.order};
   return {employees:items.map(dto),nextCursor,previousCursor,total:Number(countRows[0]?.count??0),schoolDate:new Intl.DateTimeFormat('en-CA',{timeZone:guard.timezone,year:'numeric',month:'2-digit',day:'2-digit'}).format(this.now()),query:normalizedQuery};
  },{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
+ async staffProfile(actor:Identity,organizationId:string,schoolId:string,employeeId:string):Promise<StaffProfile>{try{
+  const base=await this.db.$transaction(async tx=>{await this.guard(tx,actor,organizationId,schoolId,false);const row=await tx.employee.findFirst({where:{organizationId,schoolId,id:employeeId},select:{id:true,version:true,staffNumber:true,category:true,employedFrom:true,employedTo:true,status:true,person:{select:{id:true,version:true,firstName:true,lastName:true,contactEmail:true,nameRevisions:{where:{schoolId},orderBy:{version:'desc'},take:20,select:{occurredAt:true}}}}}});if(!row)throw new AccessError('NOT_FOUND');return row;},{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});
+  const projection=async<T>(work:(()=>Promise<T>)|undefined):Promise<StaffProfileProjection<T>>=>{if(!work)return {status:'UNAVAILABLE'};try{return {status:'AVAILABLE',value:await work()};}catch(error){if(error instanceof AccessError&&(error.code==='UNAUTHENTICATED'||error.code==='NOT_FOUND'))throw error;return {status:'UNAVAILABLE'};}};
+  const [academics,access]=await Promise.all([projection(this.staffAcademics?()=>this.staffAcademics!.read(actor,{organizationId,schoolId,employeeId}):undefined),projection(this.staffAccess?()=>this.staffAccess!.read(actor,{organizationId,schoolId,personId:base.person.id}):undefined)]);
+  await this.db.$transaction(async tx=>{await this.guard(tx,actor,organizationId,schoolId,false);if(!await tx.employee.findFirst({where:{organizationId,schoolId,id:employeeId},select:{id:true}}))throw new AccessError('NOT_FOUND');},{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});
+  const history=[{kind:'EMPLOYMENT_STARTED' as const,label:'Employment started',occurredOn:dateText(base.employedFrom)},...(base.employedTo?[{kind:'EMPLOYMENT_ENDED' as const,label:'Employment ended',occurredOn:dateText(base.employedTo)}]:[]),...base.person.nameRevisions.map(item=>({kind:'NAME_CORRECTED' as const,label:'Name corrected',occurredOn:dateText(item.occurredAt)}))].sort((a,b)=>b.occurredOn.localeCompare(a.occurredOn));
+  return {employee:{employeeId:base.id,version:base.version,staffNumber:base.staffNumber,category:base.category as StoredStaffCategory,employment:{from:dateText(base.employedFrom),to:base.employedTo?dateText(base.employedTo):null,status:base.status as 'ACTIVE'|'ENDED'}},person:{id:base.person.id,version:base.person.version,displayName:displayName(base.person.firstName,base.person.lastName),contactEmail:base.person.contactEmail},history,academics,access};
+ }catch(error){return fail(error);}}
  async createEmployee(actor:Identity,organizationId:string,schoolId:string,input:EmployeeInput&{key:string}):Promise<EmployeeProfile&{replayed:boolean}>{try{return await this.db.$transaction(async tx=>{
   const guard=await this.guard(tx,actor,organizationId,schoolId,true),command='EmployeeCreated',inputHash=hash({schemaVersion:1,organizationId,schoolId,actorAccountId:actor.accountId,...input}),prior=await tx.tenantCommandReceipt.findUnique({where:{organizationId_actorAccountId_command_key:{organizationId,actorAccountId:actor.accountId,command,key:input.key}}});
   if(prior){if(prior.inputHash!==inputHash)throw new AccessError('IDEMPOTENCY_CONFLICT');return {...prior.response as EmployeeProfile,replayed:true};}

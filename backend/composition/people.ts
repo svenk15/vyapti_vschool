@@ -11,9 +11,11 @@ import {createPeopleAvailabilityUseCases} from '../modules/people/application/av
 import {PrismaPeopleAvailabilityRepository} from '../modules/people/infrastructure/availability';
 import {PrismaDelegatedAuthority} from '../modules/access/infrastructure/delegated-authority';
 import {PrismaEmployeeAccessVerification} from '../modules/people/infrastructure/employee-access';
+import {PrismaStaffAcademicsProfile} from '../modules/academics/infrastructure/staff-profile';
+import {PrismaStaffAccessProfile} from '../modules/access/infrastructure/staff-profile';
 export function createPeopleServices(config:{databaseUrl:string;cursorSecret?:string;now?:()=>Date;releasedModules?:readonly ModuleId[]}){
  const db=new PrismaClient({adapter:new PrismaPg({connectionString:config.databaseUrl,connectionTimeoutMillis:5000,max:5}),log:[]});
  const manifest=capabilityReleaseManifest(config.releasedModules??releasedModuleIds(process.env.VSCHOOL_RELEASED_MODULES));
  const context=new PrismaVerifiedDatabaseContext(),delegated=new PrismaDelegatedAuthority(context,new PrismaEmployeeAccessVerification());
- return {...createPeopleUseCases(new PrismaPeopleRepository(db,tx=>new PrismaInstitutionEvidence(tx),config.now,config.cursorSecret??process.env.NEXTAUTH_SECRET??'',new PrismaVerifiedPersonBinding(),new PrismaTeacherProfile(),manifest,context)),...createPeopleAvailabilityUseCases(new PrismaPeopleAvailabilityRepository(db,manifest,context,delegated,tx=>new PrismaInstitutionEvidence(tx),config.now)),disconnect:()=>db.$disconnect()};
+ return {...createPeopleUseCases(new PrismaPeopleRepository(db,tx=>new PrismaInstitutionEvidence(tx),config.now,config.cursorSecret??process.env.NEXTAUTH_SECRET??'',new PrismaVerifiedPersonBinding(),new PrismaTeacherProfile(),manifest,context,new PrismaStaffAcademicsProfile(db,manifest,context,config.now),new PrismaStaffAccessProfile(db,context,config.now))),...createPeopleAvailabilityUseCases(new PrismaPeopleAvailabilityRepository(db,manifest,context,delegated,tx=>new PrismaInstitutionEvidence(tx),config.now)),disconnect:()=>db.$disconnect()};
 }

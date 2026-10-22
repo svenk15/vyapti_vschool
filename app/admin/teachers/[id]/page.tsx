@@ -1,0 +1,29 @@
+import Link from 'next/link';
+import {notFound,redirect} from 'next/navigation';
+import {AccessError} from '@/backend/modules/access/contracts';
+import {Alert,Avatar,Badge,BrandSurface,ButtonLink,Card,PageStack,SectionHeader} from '@/components/ui/primitives';
+import {getIdentity} from '@/lib/server/auth';
+import {peopleGateway} from '@/lib/server/people';
+
+export const dynamic='force-dynamic';
+const category=(value:string)=>value==='ADMINISTRATION'?'Administration':value==='SUPPORT'?'Support':value==='UNCLASSIFIED'?'Unclassified':'Teaching';
+const date=(value:string|null)=>value?new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${value}T12:00:00Z`)):'Current';
+function safeReturn(value:string|undefined){if(!value)return '/admin/teachers';try{const url=new URL(value,'http://vschool.local');if(url.pathname!=='/admin/teachers')return '/admin/teachers';const output=new URLSearchParams();for(const key of ['q','by','category','employment','sort','order','cursor']){const item=url.searchParams.get(key);if(item)output.set(key,item.slice(0,2048));}return `/admin/teachers${output.size?`?${output}`:''}`;}catch{return '/admin/teachers';}}
+
+export default async function StaffProfilePage({params,searchParams}:{params:Promise<{id:string}>;searchParams:Promise<{returnTo?:string|string[]}>}){
+ const identity=await getIdentity(),{id}=await params,query=await searchParams,returnTo=safeReturn(Array.isArray(query.returnTo)?undefined:query.returnTo);let profile:Awaited<ReturnType<typeof peopleGateway.staffProfile>>;
+ try{profile=await peopleGateway.staffProfile(identity,id);}catch(error){if(error instanceof AccessError&&error.code==='UNAUTHENTICATED')redirect('/sign-in');if(error instanceof AccessError&&(error.code==='NOT_FOUND'||error.code==='FORBIDDEN'))notFound();return <BrandSurface><main id="main-content" className="container page-space"><Alert tone="danger" title="Staff profile unavailable">Refresh the Staff directory and try again. No access or teaching state has been inferred.</Alert></main></BrandSurface>;}
+ const active=profile.employee.employment.status==='ACTIVE',academics=profile.academics.status==='AVAILABLE'?profile.academics.value:null,access=profile.access.status==='AVAILABLE'?profile.access.value:null,currentAssignments=academics?.assignments.filter(item=>item.current)??[];
+ return <BrandSurface><main id="main-content" className="container page-space"><PageStack className="staff-profile-page">
+  <Link className="staff-profile-back" href={returnTo}>← Back to Staff</Link>
+  <Card className="staff-profile-hero"><div className="staff-profile-identity"><Avatar name={profile.person.displayName}/><div><h1>{profile.person.displayName}</h1><p>{profile.employee.staffNumber} · {category(profile.employee.category)}</p></div></div><Badge tone={active?'success':'neutral'}>{active?'Active':'Ended'}</Badge></Card>
+  <div className="staff-profile-grid"><div className="staff-profile-main">
+   <Card><SectionHeader title="Employment"/><dl className="staff-profile-facts"><div><dt>Employee code</dt><dd>{profile.employee.staffNumber}</dd></div><div><dt>Category</dt><dd>{category(profile.employee.category)}</dd></div><div><dt>Employed from</dt><dd>{date(profile.employee.employment.from)}</dd></div><div><dt>Employed to</dt><dd>{date(profile.employee.employment.to)}</dd></div><div><dt>Contact email</dt><dd>{profile.person.contactEmail??'Not recorded'}</dd></div></dl></Card>
+   <Card><SectionHeader title="Teaching & responsibilities" actions={academics?.teacherId?<ButtonLink href="/admin/classes" variant="ghost" size="small">Review assignments</ButtonLink>:undefined}/>{profile.academics.status==='UNAVAILABLE'?<Alert tone="info" title="Teaching information unavailable">Academic access is not available for this branch or your current authority.</Alert>:<div className="staff-profile-list"><div><strong>{academics!.eligibility==='ENABLED'?'Eligible to teach':academics!.eligibility==='DISABLED'?'Teaching disabled':'Not enabled for teaching'}</strong><span className="muted small">Teaching access and portal roles remain separate.</span></div>{currentAssignments.map(item=><div key={item.assignmentId}><strong>{item.subjectName} · {item.sectionName}</strong><span className="muted small">Current dated assignment · until {date(item.validTo)}</span></div>)}{academics!.teacherId&&currentAssignments.length===0&&<p className="muted">No current teaching assignments.</p>}</div>}</Card>
+   <Card><SectionHeader title="Recent history"/>{profile.history.length?<div className="staff-profile-list">{profile.history.map((item,index)=><div key={`${item.kind}-${item.occurredOn}-${index}`}><strong>{item.label}</strong><span className="muted small">{date(item.occurredOn)}</span></div>)}</div>:<p className="padded muted">No recorded People history.</p>}</Card>
+  </div><aside className="staff-profile-aside">
+   <Card><SectionHeader title="Access" actions={profile.access.status==='AVAILABLE'?<ButtonLink href="/admin/users" variant="ghost" size="small">Manage</ButtonLink>:undefined}/>{profile.access.status==='UNAVAILABLE'?<div className="padded"><p className="muted">Access information is unavailable to your current authority.</p></div>:<div className="padded"><strong>{access!.state==='NO_ACCOUNT'?'No account':access!.state.replaceAll('_',' ').toLowerCase()}</strong><p className="muted small">Contact email and sign-in access are managed separately.</p>{access!.roles.length>0&&<p className="small">{access!.roles.map(role=>role.replaceAll('_',' ').toLowerCase()).join(' · ')}</p>}</div>}</Card>
+   <Card><SectionHeader title="Staff operations"/><div className="staff-profile-operation-grid"><ButtonLink href="/admin/teachers/availability" variant="secondary">Availability</ButtonLink><ButtonLink href="/admin/timetable/cover" variant="secondary">Cover</ButtonLink></div></Card>
+  </aside></div>
+ </PageStack></main></BrandSurface>;
+}

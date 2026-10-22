@@ -44,6 +44,10 @@ Start and verify the server, give the user the URL and this script, record human
 
 Status: implementation checkpoint prepared 22 October 2026; human review remains PENDING. The bounded production slice adds URL-backed name/Employee-code search, People category and employment filters, supported deterministic sort, query-bound signed next/previous cursors and Back/Forward restoration. Teaching and Access directory selection remain STF-01B and are not exposed as working controls.
 
+### STF-03A — Authorized Staff Profile
+
+Depends on: STF-01A and existing People, Academics and Access protected reads. Implement a dedicated Employee-context Profile using the typed owner projections in DESIGN. Verify authorized active/non-teaching/ended/no-account states, cross-branch and revoked denial, unavailable foreign panels, safe directory return state and desktop/mobile reference composition. Do not expose PD-STF-02 correction controls or claim STF-05/STF-06 commands from this read slice. Human review remains PENDING.
+
 ## SA-COMP-04 — People-owned student name correction
 
 Depends on: STU-01
