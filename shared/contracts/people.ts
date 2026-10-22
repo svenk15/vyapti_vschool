@@ -9,6 +9,8 @@ export type EmployeeProfile = Readonly<{
  teachingEligibility: 'NOT_ENABLED' | 'ENABLED' | 'DISABLED';
  teacherId: string | null;
 }>;
+export type PeopleStaffCommand = 'EmployeeCreated' | 'TeacherEligibilityEnabled' | 'PersonAccountBound' | 'EmployeeEnded' | 'EmployeeCategoryChanged';
+export type PeopleCommandStatus = Readonly<{state:'UNKNOWN'}> | Readonly<{state:'FOUND';result:EmployeeProfile & {replayed?:boolean}}>;
 export type StaffDirectorySearchBy = 'name' | 'employeeCode';
 export type StaffDirectoryCategory = EmployeeProfile['category'] | 'ANY';
 export type StaffDirectoryEmployment = EmployeeProfile['employment']['status'] | 'ANY';

@@ -1,5 +1,11 @@
 # People and staff identity — current state
 
+## STF-04A/B Staff command recovery — 22 October 2026
+
+People Staff creation/management and Access membership management now retain one immutable owner command key and payload after a lost response. Their separate owner status routes return only `FOUND` or `UNKNOWN` after live administrator, scope and target checks; revoked authority blocks receipt disclosure. While UNKNOWN, another owner save is disabled. A confirmed commit followed by failed refresh is labelled saved and offers a GET-only refresh, without mutation replay. The unapproved PD-STF-02 correction surface remains absent.
+
+Focused verification passed: People unit 4/4, Access unit 5/5, People PostgreSQL 13/13, Access PostgreSQL 9/9, backend compilation, boundaries, and the recovery browser journeys on desktop and mobile with one worker. One initial functional wrapper invocation included a literal separator and began the broad suite; it was stopped after an unrelated Finance failure, then the two intended files passed with corrected arguments. The first mobile browser attempt found local PostgreSQL unavailable; the existing service was restarted without reset and the unchanged case then passed. Evidence: [STF-04A/B](../../evidence/staff-stf-04ab-2026-10-22/README.md). Human review remains PENDING; no schema or migration changed.
+
 Last updated: 2026-10-17. Human review is tracked separately from implementation evidence. No imported completion or active execution timer.
 
 | Task | Implementation | Human review | Evidence |

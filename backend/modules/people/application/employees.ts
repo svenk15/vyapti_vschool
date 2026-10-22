@@ -1,5 +1,5 @@
 import type {Identity} from '../../../../shared/contracts/access';
-import type {EmployeeProfile,PeopleWorkspace,StaffDirectoryQuery,StaffProfile} from '../../../../shared/contracts/people';
+import type {EmployeeProfile,PeopleCommandStatus,PeopleStaffCommand,PeopleWorkspace,StaffDirectoryQuery,StaffProfile} from '../../../../shared/contracts/people';
 import {AccessError,uuidPattern} from '../../access/contracts/index';
 import {employeeInput,staffCategory,type EmployeeInput,type StaffCategory} from '../domain/employee';
 
@@ -7,6 +7,7 @@ export interface PeopleRepository {
  currentAccountDisplayName(actor:Identity,organizationId:string,schoolId:string):Promise<string|null>;
  listEmployees(actor:Identity,organizationId:string,schoolId:string,query:StaffDirectoryQuery):Promise<PeopleWorkspace>;
  staffProfile(actor:Identity,organizationId:string,schoolId:string,employeeId:string):Promise<StaffProfile>;
+ commandStatus(actor:Identity,organizationId:string,schoolId:string,command:PeopleStaffCommand,key:string):Promise<PeopleCommandStatus>;
  createEmployee(actor:Identity,organizationId:string,schoolId:string,input:EmployeeInput&{key:string}):Promise<EmployeeProfile&{replayed:boolean}>;
  enableTeacher(actor:Identity,organizationId:string,schoolId:string,employeeId:string,input:{expectedVersion:number;key:string}):Promise<EmployeeProfile&{replayed:boolean}>;
  bindAccount(actor:Identity,organizationId:string,schoolId:string,employeeId:string,input:{accountId:string;verificationReference:string;reason:string;key:string}):Promise<EmployeeProfile&{replayed:boolean}>;
@@ -26,6 +27,7 @@ export function createPeopleUseCases(repository:PeopleRepository){return {
  currentAccountDisplayName(identity:Identity|null,organization:unknown,school:unknown){const s=scope(identity,organization,school);return repository.currentAccountDisplayName(s.actor,s.organizationId,s.schoolId);},
  workspace(identity:Identity|null,organization:unknown,school:unknown,query:DirectoryQueryInput={}){const s=scope(identity,organization,school);return repository.listEmployees(s.actor,s.organizationId,s.schoolId,listQuery(query));},
  staffProfile(identity:Identity|null,organization:unknown,school:unknown,employee:unknown){const s=scope(identity,organization,school);return repository.staffProfile(s.actor,s.organizationId,s.schoolId,identifier(employee));},
+ commandStatus(identity:Identity|null,organization:unknown,school:unknown,command:unknown,key:unknown){const s=scope(identity,organization,school),allowed:readonly PeopleStaffCommand[]=['EmployeeCreated','TeacherEligibilityEnabled','PersonAccountBound','EmployeeEnded','EmployeeCategoryChanged'];if(typeof command!=='string'||!allowed.includes(command as PeopleStaffCommand))throw new AccessError('VALIDATION');return repository.commandStatus(s.actor,s.organizationId,s.schoolId,command as PeopleStaffCommand,identifier(key));},
  createEmployee(identity:Identity|null,organization:unknown,school:unknown,input:{firstName:unknown;lastName?:unknown;contactEmail?:unknown;staffNumber:unknown;category:unknown;employedFrom:unknown;key:unknown}){const s=scope(identity,organization,school),normalized=employeeInput(input),key=identifier(input.key);return repository.createEmployee(s.actor,s.organizationId,s.schoolId,{...normalized,key});},
  enableTeacher(identity:Identity|null,organization:unknown,school:unknown,employee:unknown,input:{expectedVersion:unknown;key:unknown}){const s=scope(identity,organization,school);return repository.enableTeacher(s.actor,s.organizationId,s.schoolId,identifier(employee),{expectedVersion:version(input.expectedVersion),key:identifier(input.key)});},
  bindAccount(identity:Identity|null,organization:unknown,school:unknown,employee:unknown,input:{accountId:unknown;verificationReference:unknown;reason:unknown;key:unknown}){const s=scope(identity,organization,school);if(typeof input.verificationReference!=='string')throw new AccessError('VALIDATION');const verificationReference=input.verificationReference.normalize('NFC').trim();if(verificationReference.length<3||verificationReference.length>80||/[\u0000-\u001f\u007f]/.test(verificationReference))throw new AccessError('VALIDATION');return repository.bindAccount(s.actor,s.organizationId,s.schoolId,identifier(employee),{accountId:identifier(input.accountId),verificationReference,reason:reason(input.reason),key:identifier(input.key)});},

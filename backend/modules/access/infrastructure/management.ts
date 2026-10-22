@@ -1,7 +1,7 @@
 import { createHash,createHmac,randomUUID,timingSafeEqual } from "node:crypto";
 import type { Prisma,PrismaClient } from "../../../../generated/prisma/client";
 import type { Identity } from "../../../../shared/contracts/access";
-import type { ManagementCommand,ManagementResult,MemberStatus,StaffMember,FailedStaffInvite } from "../../../../shared/contracts/access-management";
+import type { ManagementCommand,ManagementResult,MemberStatus,StaffAccessCommand,StaffAccessCommandStatus,StaffMember,FailedStaffInvite } from "../../../../shared/contracts/access-management";
 import type { ManagementRepository } from "../application/management";
 import { AccessError,uuidPattern } from "../domain/policy";
 import { guardLastAdmin,nextMembershipStatus } from "../domain/management";
@@ -29,6 +29,14 @@ export class PrismaManagementRepository implements ManagementRepository {
   const failedInvitations:FailedStaffInvite[]=failures.flatMap(invite=>invite.deliveryFailedAt&&invite.deliveryFailureReason?[{invitationId:invite.id,accountId:invite.accountId,email:invite.account.normalizedEmail,roles:invite.proposedRoles as ("SCHOOL_ADMIN"|"TEACHER")[],deliveryFailedAt:invite.deliveryFailedAt.toISOString(),deliveryFailureReason:invite.deliveryFailureReason}]:[]);
   const payload=Buffer.from(JSON.stringify({binding,after:items.at(-1)?.accountId})).toString("base64url");return {trustMode:organization.trustMode as "OPERATOR_CLI"|"HYBRID"|"EMAIL",items,failedInvitations,nextCursor:rows.length>50?payload+"."+this.sign(payload):null};
  },{isolationLevel:"RepeatableRead"});}catch(error){return this.fail(error);}}
+ async status(identity:Identity,command:StaffAccessCommand,key:string,schoolId?:string):Promise<StaffAccessCommandStatus>{try{return await this.db.$transaction(async tx=>{
+  const scope=await this.scope(tx,identity,schoolId),receipt=await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:{...scope,actorAccountId:identity.accountId,command,key}},select:{response:true}});
+  if(!receipt)return {state:'UNKNOWN'};
+  const result=receipt.response as ManagementResult;if(!result||typeof result.resourceId!=='string')throw new AccessError('UNAVAILABLE');
+  const target=await tx.schoolMembership.findFirst({where:{...scope,id:result.resourceId},select:{id:true}});if(!target)throw new AccessError('NOT_FOUND');
+  await this.scope(tx,identity,scope.schoolId);
+  return {state:'FOUND',result};
+ },{isolationLevel:'RepeatableRead'});}catch(error){return this.fail(error);}}
  async execute(identity:Identity,command:ManagementCommand,key:string,schoolId?:string):Promise<ManagementResult>{
   for(let attempt=0;attempt<3;attempt++)try{
    const scope=await this.scope(this.db,identity,schoolId);

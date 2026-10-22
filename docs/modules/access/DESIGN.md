@@ -12,6 +12,12 @@ Organization is the contractual tenant. Tenancy owns trust-mode configuration on
 
 ## Module decisions
 
+### STF-04B — Staff access command recovery
+
+Access exposes a bounded status query only for `CreateMembership` and `UpdateMembership`. It is not a generic receipt API. The lookup derives the active branch from trusted Access context, rechecks the live account/token, active school-administrator membership and scope, reads the exact Access receipt by organization, school, actor, command and key, verifies the returned membership is still in that branch, and rechecks authority before returning `FOUND`. Missing evidence remains `UNKNOWN`; revoked authority prevents disclosure.
+
+The Administrator UI retains the original immutable key and payload while the outcome is unknown, disables additional Access saves, and offers owner status plus exact replay. Once a write is confirmed, any failed list refresh is shown as saved and recovery performs GET only. This slice does not change invitation delivery, token lifecycle, roles, membership transitions or STF-06 reasoned resend semantics.
+
 IAM-ADR-001: credentials via NextAuth adapter behind Identity ports; first task installs a compatible pinned next-auth/bcryptjs version and proves cookie/CSRF behavior. Starter intentionally has no empty authentication stub that grants access.
 
 IAM-ADR-002: operator-assisted, identity-verified staff activation for the pilot. Online activation accepts a token pasted into a form POST; token alone is never permission to choose a different Person. Alternative public self-registration rejected. Delivering a token outside the synthetic local demo requires the school's approved secure identity-verification procedure. A production pilot cannot proceed until that procedure and recovery are rehearsed.

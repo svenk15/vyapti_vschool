@@ -32,5 +32,6 @@ export const adminGateway = {
  getSettings:async(identity:Identity|null,schoolId?:string)=>access.getSettings(identity,schoolId??await selectedSchoolId(identity)),
  listMembers:async(identity:Identity|null,schoolId?:string,cursor?:string)=>access.listMembers(identity,schoolId??await selectedSchoolId(identity),cursor),
  command:async(...args:Parameters<ManagementFacade['command']>)=>{args[4]??=await selectedSchoolId(args[0]);return access.command(...args);},
+ status:async(...args:Parameters<ManagementFacade['status']>)=>{args[3]??=await selectedSchoolId(args[0]);return access.status(...args);},
  getHome:async(identity:Identity|null,schoolId?:string)=>access.getAdminHome(identity,schoolId??await selectedSchoolId(identity)),
 };

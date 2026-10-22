@@ -214,3 +214,13 @@ Human acceptance and production enablement remain PENDING.
 - [x] Add repeat-safe synthetic seed, real PostgreSQL lifecycle/security tests and desktop/mobile LEA-03 comparison evidence.
 
 Human acceptance, school production approver/action configuration, TEN-03, native accessibility and font portability remain PENDING.
+
+# STF-04B — Access recovery for Staff membership changes
+
+- [x] Add a bounded Access status contract for CreateMembership and UpdateMembership only.
+- [x] Recheck live administrator authority, branch scope and current target membership before receipt disclosure.
+- [x] Preserve exact key/payload replay and UNKNOWN as unresolved.
+- [x] Separate confirmed-save/failed-refresh from unknown mutation outcome; retry only GET after confirmation.
+- [x] Verify PostgreSQL authorization/revocation and desktop/mobile lost-response journeys.
+
+Reasoned invitation resend remains STF-06. Human acceptance, native accessibility, font portability and TEN-03 remain PENDING.

@@ -4,6 +4,7 @@ import { adminGateway,accountGateway } from "./access";
 import { getIdentity } from "./auth";
 import { AccessError } from "../../backend/modules/access/contracts";
 import type { ManagementCommand } from "../../shared/contracts/access-management";
+import type {StaffAccessCommand} from '../../shared/contracts/access-management';
 const headers={"Cache-Control":"private, no-store"};
 export function managementError(error:unknown,requestId=randomUUID()){
  const code=error instanceof AccessError?error.code:"UNAVAILABLE",status=code==="UNAUTHENTICATED"?401:code==="FORBIDDEN"?403:code==="NOT_FOUND"?404:code==="VALIDATION"?422:code==="INVALID_CURSOR"?400:code==="UNAVAILABLE"?503:409;
@@ -22,4 +23,5 @@ export async function mutation(request:Request,kind:ManagementCommand["kind"],ta
  }catch(error){return managementError(error);}
 }
 export async function staffList(request:Request){try{const url=new URL(request.url);return Response.json(await adminGateway.listMembers(await getIdentity(),url.searchParams.get("schoolId")??undefined,url.searchParams.get("cursor")??undefined),{headers});}catch(error){return managementError(error);}}
+export async function staffCommandStatus(request:Request,command:string,key:string){try{if(command!=="CreateMembership"&&command!=="UpdateMembership")throw new AccessError('VALIDATION');const url=new URL(request.url);return Response.json(await adminGateway.status(await getIdentity(),command as StaffAccessCommand,key,url.searchParams.get('schoolId')??undefined),{headers});}catch(error){return managementError(error);}}
 export async function self(request:Request){try{return Response.json(await accountGateway.getHome(await getIdentity(),new URL(request.url).searchParams.get("schoolId")??undefined),{headers});}catch(error){return managementError(error);}}

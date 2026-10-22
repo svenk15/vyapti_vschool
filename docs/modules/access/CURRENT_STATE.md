@@ -1,5 +1,9 @@
 # School scope, authentication and permissions — current state
 
+## STF-04B Staff access recovery — 22 October 2026
+
+CreateMembership and UpdateMembership now use a bounded Access-owned status query and retain their exact in-memory request for UNKNOWN recovery. Live account/token, active branch administrator scope and the target membership are rechecked before an Access receipt is disclosed. Confirmed-save/failed-refresh is distinct and performs a read-only refresh. See [the combined STF-04 evidence](../../evidence/staff-stf-04ab-2026-10-22/README.md). Invitation resend remains STF-06; human review and release gates remain PENDING.
+
 Last updated: 2026-10-17. IAM-01 locally verified and accepted; IAM-02 locally verified and accepted; IAM-03 locally verified and accepted for the reviewed demo source. No imported task completion or active execution timer.
 
 ## UX-11 Staff access directory — 19 October 2026

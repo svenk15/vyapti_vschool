@@ -31,6 +31,13 @@ it("creates pending staff, campuses and duplicate-safe retries without hashes in
  await service.command(identity,"UpdateMembership",{payload:{action:"SET_ROLES",roles:["SCHOOL_ADMIN"],reason:"Synthetic pending administrator"},expectedVersion:1},randomUUID(),ids.schoolId,member.resourceId);await expect(service.command(identity,"UpdateMembership",{payload:{action:"REVOKE",reason:"Pending administrator cannot replace active"},expectedVersion:1},randomUUID(),ids.schoolId,ids.membershipId)).rejects.toThrow("LAST_ADMIN");
  expect(JSON.stringify(await db.auditEntry.findMany({where:{schoolId:ids.schoolId}}))).not.toContain(email);
 });
+it("recovers only Access-owned Staff command receipts after current administrator authorization is rechecked",async()=>{
+ const {identity,ids}=await setup(),key=randomUUID(),body={payload:{email:`recover-${randomUUID()}@vschool.example`,roles:["TEACHER"] as const}},created=await service.command(identity,"CreateMembership",body,key,ids.schoolId);
+ await expect(service.status(identity,'CreateMembership',key,ids.schoolId)).resolves.toMatchObject({state:'FOUND',result:{resourceId:created.resourceId}});
+ await expect(service.status(identity,'CreateMembership',randomUUID(),ids.schoolId)).resolves.toEqual({state:'UNKNOWN'});
+ await db.schoolMembership.update({where:{id:ids.membershipId},data:{status:'SUSPENDED',version:{increment:1}}});
+ await expect(service.status(identity,'CreateMembership',key,ids.schoolId)).rejects.toMatchObject({code:'NOT_FOUND'});
+});
 it("two concurrent self-revocations leave exactly one active administrator",async()=>{
  const {identity,ids}=await setup(),second=await activeStaffFixture(db,ids,["SCHOOL_ADMIN"]);
  const results=await Promise.allSettled([[identity,ids.membershipId],[second.identity,second.membershipId]].map(async([actor,id])=>service.command(actor as typeof identity,"UpdateMembership",{payload:{action:"REVOKE",reason:"Synthetic race verification"},expectedVersion:1},randomUUID(),ids.schoolId,id as string)));

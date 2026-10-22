@@ -48,6 +48,10 @@ Status: implementation checkpoint prepared 22 October 2026; human review remains
 
 Depends on: STF-01A and existing People, Academics and Access protected reads. Implement a dedicated Employee-context Profile using the typed owner projections in DESIGN. Verify authorized active/non-teaching/ended/no-account states, cross-branch and revoked denial, unavailable foreign panels, safe directory return state and desktop/mobile reference composition. Do not expose PD-STF-02 correction controls or claim STF-05/STF-06 commands from this read slice. Human review remains PENDING.
 
+### STF-04A — People recovery
+
+Status: implementation checkpoint prepared 22 October 2026; human review remains PENDING. New Staff and existing People management keep the exact command key/payload across a lost response, disclose only an owner-scoped receipt after current authorization, leave missing evidence UNKNOWN, disable another save while unresolved, and use GET-only recovery after a confirmed commit whose refresh failed. PD-STF-02 correction operations remain excluded.
+
 ## SA-COMP-04 — People-owned student name correction
 
 Depends on: STU-01

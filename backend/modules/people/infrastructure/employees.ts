@@ -1,7 +1,7 @@
 import {createHash,createHmac,randomUUID,timingSafeEqual} from 'node:crypto';
 import {Prisma,type PrismaClient} from '../../../../generated/prisma/client';
 import type {Identity} from '../../../../shared/contracts/access';
-import type {EmployeeProfile,PeopleWorkspace,StaffDirectoryQuery,StaffProfile,StaffProfileProjection} from '../../../../shared/contracts/people';
+import type {EmployeeProfile,PeopleCommandStatus,PeopleStaffCommand,PeopleWorkspace,StaffDirectoryQuery,StaffProfile,StaffProfileProjection} from '../../../../shared/contracts/people';
 import type {PeopleRepository} from '../application/employees';
 import type {EmployeeInput} from '../domain/employee';
 import {displayName} from '../domain/employee';
@@ -61,6 +61,22 @@ export class PrismaPeopleRepository implements PeopleRepository{
   if(!account||account.status!=='ACTIVE'||account.tokenVersion!==actor.tokenVersion)throw new AccessError('UNAUTHENTICATED');if(!organization||!school)throw new AccessError('NOT_FOUND');if(!membership)throw new AccessError('FORBIDDEN');
   const employee=await tx.employee.findFirst({where:{organizationId,schoolId,status:'ACTIVE',person:{accountBinding:{accountId:actor.accountId,organizationId}}},select:{person:{select:{firstName:true,lastName:true}}}});
   return employee?displayName(employee.person.firstName,employee.person.lastName):null;
+ },{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
+ async commandStatus(actor:Identity,organizationId:string,schoolId:string,command:PeopleStaffCommand,key:string):Promise<PeopleCommandStatus>{try{return await this.db.$transaction(async tx=>{
+  await this.guard(tx,actor,organizationId,schoolId,false);
+  if(command==='PersonAccountBound'){
+   const membership=await tx.schoolMembership.findFirst({where:{accountId:actor.accountId,organizationId,schoolId,status:'ACTIVE'},select:{grants:{select:{code:true}}}});
+   if(!membership||!capabilitiesFor(membership.grants.map(grant=>grant.code as 'SCHOOL_ADMIN'|'TEACHER')).includes('user.manage'))throw new AccessError('FORBIDDEN');
+  }
+  const receipt=command==='EmployeeCreated'
+   ?await tx.tenantCommandReceipt.findUnique({where:{organizationId_actorAccountId_command_key:{organizationId,actorAccountId:actor.accountId,command,key}},select:{response:true}})
+   :await tx.commandReceipt.findUnique({where:{organizationId_schoolId_actorAccountId_command_key:{organizationId,schoolId,actorAccountId:actor.accountId,command,key}},select:{response:true}});
+  if(!receipt)return {state:'UNKNOWN'};
+  const result=receipt.response as EmployeeProfile&{replayed?:boolean};
+  if(!result||typeof result.employeeId!=='string')throw new AccessError('UNAVAILABLE');
+  const current=await tx.employee.findFirst({where:{id:result.employeeId,organizationId,schoolId},select:{id:true}});if(!current)throw new AccessError('NOT_FOUND');
+  await this.guard(tx,actor,organizationId,schoolId,false);
+  return {state:'FOUND',result};
  },{isolationLevel:'RepeatableRead',timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
  async listEmployees(actor:Identity,organizationId:string,schoolId:string,query:StaffDirectoryQuery):Promise<PeopleWorkspace>{try{return await this.db.$transaction(async tx=>{
   if(this.cursorSecret.length<32)throw new AccessError('UNAVAILABLE');

@@ -16,6 +16,12 @@ PER-ADR-001: stable person identity and separate school profiles. Creating simil
 
 PER-ADR-002: organization-wide or shared-profile Person corrections are restricted identity-steward maintenance in Phase 1. SA-COMP-04 permits a narrower school-administrator correction only when the selected Person is referenced by exactly one Student in the institution and by no Employee. The Students owner proves the exact current-branch Student selection and institution-wide Student exclusivity under the Person lock; People proves no Employee reference and owns the name transition/history. Shared identities fail closed with `PERSON_SHARED`. This exception cannot rename another branch's pupil or a staff/account-bound identity.
 
+### STF-04A — Staff command recovery
+
+People exposes an owner-specific status query only for `EmployeeCreated`, `TeacherEligibilityEnabled`, `PersonAccountBound`, `EmployeeEnded` and `EmployeeCategoryChanged`. The browser retains one immutable command key and payload while an outcome is unknown. Status returns only `UNKNOWN` or the exact `FOUND` People result; it never interprets absence as failure. The repository establishes verified database context, rechecks the current administrator membership and `class.manage` (plus `user.manage` for account binding), reads only the applicable People/Platform receipt, verifies that its Employee still belongs to the exact branch, then reauthorizes before disclosure. Revoked authority denies even a committed receipt.
+
+Confirmed mutation and failed refresh is a distinct presentation state. Its recovery issues only the protected GET and never repeats the mutation. A genuinely unknown mutation disables further People saves until status or exact-payload replay resolves it. This contract does not authorize PD-STF-02 Person/Employee corrections or durable browser drafts.
+
 ## Physical data contract
 
 PER-01 installs Person, Employee and the Access-owned AccountPersonBinding table; binding rows remain empty until PER-02. PER-02 installs the Academics-owned Teacher eligibility table. Later People tables remain planned. `scope` below means `(organizationId,schoolId)`. All business roots have version >=1. All scoped references require composite FK targets with matching unique keys, even when abbreviated in the table. Creation times use server clock; IDs server generated. Required unless nullable is stated. Enum labels are constrained enums/CHECKs, not unchecked strings. Do not silently implement a weaker constraint because Prisma syntax cannot express it; use reviewed migration SQL.

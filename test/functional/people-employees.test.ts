@@ -43,6 +43,15 @@ describe('PER-01 PostgreSQL employee profiles',()=>{
   await expect(people.workspace(identity,foreign.organizationId,foreign.schoolId)).rejects.toMatchObject({code:'FORBIDDEN'});
  });
 
+ it('recovers only owner-scoped Staff command receipts after current authorization is rechecked',async()=>{
+  const intent=input(`RECOVER-${randomUUID().slice(0,8)}`,'Recovery','Staff'),created=await people.createEmployee(identity,primary.organizationId,primary.schoolId,intent);
+  await expect(people.commandStatus(identity,primary.organizationId,primary.schoolId,'EmployeeCreated',intent.key)).resolves.toMatchObject({state:'FOUND',result:{employeeId:created.employeeId}});
+  await expect(people.commandStatus(identity,primary.organizationId,primary.schoolId,'EmployeeCreated',randomUUID())).resolves.toEqual({state:'UNKNOWN'});
+  await db.schoolMembership.update({where:{id:primary.membershipId},data:{status:'SUSPENDED',version:{increment:1}}});
+  await expect(people.commandStatus(identity,primary.organizationId,primary.schoolId,'EmployeeCreated',intent.key)).rejects.toMatchObject({code:'FORBIDDEN'});
+  await db.schoolMembership.update({where:{id:primary.membershipId},data:{status:'ACTIVE',version:{increment:1}}});
+ });
+
  it('requires an approved category, preserves legacy UNCLASSIFIED, and changes category without authority side effects',async()=>{
   const employee=await people.createEmployee(identity,primary.organizationId,primary.schoolId,{...input('CATEGORY-01','Category','Teacher'),category:'TEACHING'});
   const enabled=await people.enableTeacher(identity,primary.organizationId,primary.schoolId,employee.employeeId,{expectedVersion:employee.version,key:randomUUID()});
