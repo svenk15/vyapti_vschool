@@ -1733,7 +1733,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
  .staff-directory-table .data-table tbody th:first-child{grid-column:1/-1;grid-row:1}.staff-directory-table .data-table tbody td:nth-child(2),.staff-directory-table .data-table tbody td:nth-child(3){display:none}
  .staff-directory-table .staff-mobile-category{display:inline}.staff-directory-table .avatar{width:30px;height:30px}.staff-directory-table .person-cell{line-height:22px}.staff-directory-table .person-cell strong{font-size:14px;line-height:22px}.staff-directory-table .person-cell .small{font-size:11px;line-height:22px}
  .staff-directory-table .data-table tbody td:nth-child(4){grid-column:1;grid-row:3}.staff-directory-table .data-table tbody td:nth-child(5){grid-column:2;grid-row:3}
- .staff-directory-table .data-table tbody td:last-child{grid-row:5;width:110px;padding-top:10px;text-align:left}
+ .staff-directory-table .data-table tbody td:last-child{grid-row:5;width:110px;padding:10px 0 0;text-align:left}
  .staff-directory-table .staff-row-action{min-height:44px}
  .staff-pagination{align-items:flex-start;flex-direction:column;padding-top:12px}
  .staff-record-identity{padding:0 0 20px;gap:12px;flex-wrap:wrap}.staff-record-identity .avatar{width:46px;height:46px;font-size:14px}.staff-record-identity h1{font-size:25px;line-height:32px}.staff-record-identity>div{max-width:calc(100% - 58px)}
