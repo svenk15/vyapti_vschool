@@ -9,6 +9,7 @@ The Staff Profile reads one exact Employee-context Access projection. Failed and
 - Owner: Access. People composes the independently authorized projection.
 - Persistence: existing AccessInvite, AuthSecurityEvent and scoped CommandReceipt tables. No schema or migration changed.
 - Provider: the deterministic local synthetic mail sink only. No real message was sent and production-provider review remains a release gate.
+- Seed: `pnpm demo:seed` preserves existing records and adds one fictional `Morgan Invite Review` Employee whose allowlisted `@mail-fail.vschool.example` invitation provides the failed-delivery review state.
 - Frozen presentation authority: Staff reference commit `ad78b1c95102ed33ecaa938f9a4b29e2c854d0e7`, executable prototype SHA-256 `67ca61b0204bac68c7bc7602e02b3c638305b448d377e79be4bbff9cce474a01`.
 
 ## Verification
@@ -18,6 +19,7 @@ The Staff Profile reads one exact Employee-context Access projection. Failed and
 - Focused Chromium and mobile Staff invitation journeys — 1/1 passed per viewport with one worker. They prove a committed response-loss retry with the original key, no duplicate replacement, and confirmed-save/failed-refresh recovery issuing `POST, GET, GET` only.
 - `pnpm exec tsc --noEmit` and changed-file ESLint — passed.
 - The E2E production build completed with `VSCHOOL_E2E=1` and a 4 GiB Node heap.
+- `node --import tsx scripts/demo-people.ts` — passed twice against the existing development database, preserving credentials and the failed-invitation fixture. The aggregate `pnpm demo:seed` reached and completed this People step, then stopped at the unrelated pre-existing `LDR-02` `PRINCIPAL_COMPARISON_REQUIRED` gate; earlier successful seed data was preserved.
 
 ## Presentation evidence
 

@@ -20,6 +20,8 @@ type Demo = ProvisionInput & ProvisionResult & {
   categoryProfileKey?: string; categoryEmployeeId?: string;
   schoolProfileKey?: string;
   employeeAccessEmail?: string; employeeAccessVerificationReference?: string; employeeAccessKey?: string;
+  invitationReviewProfileKey?: string; invitationReviewEmployeeId?: string;
+  invitationReviewEmail?: string; invitationReviewAccessKey?: string;
 };
 function save(value: Demo) {
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -127,8 +129,16 @@ async function main() {
       const support = await people.createEmployee(admin!, demo.organizationId, demo.schoolId, { firstName: 'Robin', lastName: 'Support', contactEmail: null, staffNumber: 'DEMO-SUPPORT-01', category: 'SUPPORT', employedFrom: '2026-04-01', key: demo.categoryProfileKey! });
       demo = { ...demo, categoryEmployeeId: support.employeeId }; save(demo);
     }
+    if (!demo.invitationReviewProfileKey) { demo = { ...demo, invitationReviewProfileKey: randomUUID() }; save(demo); }
+    if (!demo.invitationReviewEmployeeId) {
+      const reviewer = await people.createEmployee(admin!, demo.organizationId, demo.schoolId, { firstName: 'Morgan', lastName: 'Invite Review', contactEmail: null, staffNumber: 'DEMO-INVITE-REVIEW', category: 'TEACHING', employedFrom: '2026-04-01', key: demo.invitationReviewProfileKey! });
+      demo = { ...demo, invitationReviewEmployeeId: reviewer.employeeId }; save(demo);
+    }
     if (!demo.employeeAccessEmail || !demo.employeeAccessVerificationReference || !demo.employeeAccessKey) {
       demo = { ...demo, employeeAccessEmail: `support-access-${demo.organizationId.slice(0,8)}@vschool.example`, employeeAccessVerificationReference: 'DEMO-SA14-VERIFY', employeeAccessKey: randomUUID() }; save(demo);
+    }
+    if (!demo.invitationReviewEmail || !demo.invitationReviewAccessKey) {
+      demo = { ...demo, invitationReviewEmail: `invite-review-${demo.organizationId.slice(0,8)}@mail-fail.vschool.example`, invitationReviewAccessKey: randomUUID() }; save(demo);
     }
     // The accepted identity-binding contract requires a verified active
     // Teacher membership. The school administrator is intentionally not
@@ -138,8 +148,10 @@ async function main() {
   try {
     const currentAdmin = await pendingAccess.authenticate(demo.adminEmail, demo.password); if (!currentAdmin || !demo.categoryEmployeeId) throw new Error('SYNTHETIC_ADMIN_UNAVAILABLE');
     await pendingAccess.grantEmployeeAccess({ employeeId: demo.categoryEmployeeId, email: demo.employeeAccessEmail!, verificationReference: demo.employeeAccessVerificationReference!, confirmed: true, organizationId: demo.organizationId, schoolId: demo.schoolId, roles: ['TEACHER'], inviterAccountId: currentAdmin.accountId, inviterTokenVersion: currentAdmin.tokenVersion, requestId: randomUUID(), key: demo.employeeAccessKey! });
+    if (!demo.invitationReviewEmployeeId) throw new Error('SYNTHETIC_INVITATION_REVIEW_EMPLOYEE_REQUIRED');
+    await pendingAccess.grantEmployeeAccess({ employeeId: demo.invitationReviewEmployeeId, email: demo.invitationReviewEmail!, verificationReference: 'DEMO-STF06-VERIFY', confirmed: true, organizationId: demo.organizationId, schoolId: demo.schoolId, roles: ['TEACHER'], inviterAccountId: currentAdmin.accountId, inviterTokenVersion: currentAdmin.tokenVersion, requestId: randomUUID(), key: demo.invitationReviewAccessKey! });
   } finally { await pendingAccess.disconnect(); }
-  console.log(`Prepared an isolated synthetic People school, categorized staff profiles and an active verified teacher account. Private credentials: ${path}`);
+  console.log(`Prepared an isolated synthetic People school, categorized staff profiles, a failed invitation review state and an active verified teacher account. Private credentials: ${path}`);
 }
 main().catch(error => {
   const code = error instanceof Error && /^[A-Z_]+$/.test(error.message) ? error.message : 'LOCAL_DEMO_ERROR';
