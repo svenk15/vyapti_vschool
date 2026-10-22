@@ -11,8 +11,10 @@ describe('employee profile rules',()=>{
  });
  it('bounds employee search pagination and preserves an opaque cursor',async()=>{
   const listEmployees=vi.fn(async()=>({employees:[],nextCursor:null})),repository={listEmployees,createEmployee:vi.fn()} as unknown as PeopleRepository,service=createPeopleUseCases(repository),identity={accountId:'00000000-0000-4000-8000-000000000001',tokenVersion:1},organization='00000000-0000-4000-8000-000000000002',school='00000000-0000-4000-8000-000000000003';
-  await service.workspace(identity,organization,school,{search:' Ada ',limit:'25',cursor:'signed-token'});expect(listEmployees).toHaveBeenCalledWith(identity,organization,school,{search:'Ada',limit:25,cursor:'signed-token'});
+  await service.workspace(identity,organization,school,{search:' Ada ',by:'employeeCode',category:'SUPPORT',employment:'ACTIVE',sort:'employment',order:'desc',limit:'25',cursor:'signed-token'});expect(listEmployees).toHaveBeenCalledWith(identity,organization,school,{search:'Ada',by:'employeeCode',category:'SUPPORT',employment:'ACTIVE',sort:'employment',order:'desc',limit:25,cursor:'signed-token'});
+  await service.workspace(identity,organization,school);expect(listEmployees).toHaveBeenLastCalledWith(identity,organization,school,{search:'',by:'name',category:'ANY',employment:'ANY',sort:'name',order:'asc',limit:50,cursor:null});
   expect(()=>service.workspace(identity,organization,school,{limit:101})).toThrow('VALIDATION');expect(()=>service.workspace(identity,organization,school,{cursor:'x'.repeat(2049)})).toThrow('INVALID_CURSOR');
+  expect(()=>service.workspace(identity,organization,school,{sort:'teaching'})).toThrow('VALIDATION');expect(()=>service.workspace(identity,organization,school,{category:'OTHER'})).toThrow('VALIDATION');
  });
  it('validates category corrections before invoking persistence',async()=>{
   const updateCategory=vi.fn(async()=>({category:'SUPPORT'})),repository={updateCategory} as unknown as PeopleRepository,service=createPeopleUseCases(repository),identity={accountId:'00000000-0000-4000-8000-000000000001',tokenVersion:1},organization='00000000-0000-4000-8000-000000000002',school='00000000-0000-4000-8000-000000000003',employee='00000000-0000-4000-8000-000000000004',key='00000000-0000-4000-8000-000000000005';

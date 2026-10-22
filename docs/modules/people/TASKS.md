@@ -40,6 +40,10 @@ Create a synthetic staff profile; see Not linked to account; create a second sam
 
 Start and verify the server, give the user the URL and this script, record human review as PENDING, then request review. Mark VERIFIED only with passing automated evidence and a stable demo. Preserve feedback and exact build identity; failed feedback takes priority over dependent tasks.
 
+### STF-01A — People-native Staff directory query
+
+Status: implementation checkpoint prepared 22 October 2026; human review remains PENDING. The bounded production slice adds URL-backed name/Employee-code search, People category and employment filters, supported deterministic sort, query-bound signed next/previous cursors and Back/Forward restoration. Teaching and Access directory selection remain STF-01B and are not exposed as working controls.
+
 ## SA-COMP-04 — People-owned student name correction
 
 Depends on: STU-01
