@@ -40,6 +40,8 @@
   ],
   "exclude": [
     "node_modules",
-    "docs/execution/VSchool_Execution_Pack/engineering/source-reference"
+    "docs/execution/VSchool_Execution_Pack/engineering/source-reference",
+    "artifacts/vschool-admin-students-visual-reference-f194f3e/source",
+    "docs/execution/STAFF_REVIEW/references/approved-20261022/source"
   ]
 }

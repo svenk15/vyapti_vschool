@@ -1,0 +1,23 @@
+{
+  "reference_commit": "fc33c8b991134ade6d02e27fbe467ef67d86b085",
+  "approved_on": "2026-10-22",
+  "files": {
+    "EXECUTION_PROMPT.md": "9d998f0eb613fbf45bc34f4d2f725473412ee64eed0965adf22fe67519ad0684",
+    "START_HERE.md": "5f248e1b44500e33aebf1359aeca651c4d9759ae6fc2fa12fb0c35796352a0d6",
+    "mock/access-coverage.html": "0e2fac8f2130e594bf6e249edd2bbfd40591bf2f734b3c490796ed20c98d1473",
+    "mock/access.js": "00755da61c4eed3a98dbca7c250f1dc8a57da4874b15b5b0bdeebc1fc0aba47e",
+    "mock/app.js": "893fbdcf333c77c372e07062864d37152da4315c06fd55c988bf747633f2a81f",
+    "mock/assets/InterVariable.woff2": "693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3",
+    "mock/assets/LICENSE.txt": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a",
+    "mock/handoff.html": "bef7d29bd99260668637242dafc31f5e83b8815c3085df8bdb7a598fc26ae606",
+    "mock/index.html": "bbc97d7293e59138c8b7340c8591b66282fb905936be658871109cccfdb5b017",
+    "mock/pagination-review.html": "c229a2d46287dc181697719b5b5816ec08b0352bd2a1ff4ecaf7e1538bc558b0",
+    "mock/pagination.js": "30c722f972c3c8af752cee56359abe746e50464426ddd43cd5e0532f2f902e85",
+    "mock/style.css": "32d12fb6557714bab97f9bf6608d589ab907daca6e2f733a6959172753ce0c02",
+    "supporting/CODEX_HANDOFF.md": "f0be44bfcf9611d6e0a241fe5ab1d92b1ec8d11fc6903db6e625ee354c1fcf18",
+    "supporting/DESIGN_CONTRACT.md": "5288689c137a560b7e2d2a69992d893a12d154db0da9edc64fa2e47c95af80f5",
+    "supporting/INTERACTION_MATRIX.md": "48516a1aaac3c616b3005d1d368e55b4ae7afe89fb6e30ef2ca07018119c5673",
+    "supporting/README.md": "075eb8f6128e78e0703dab0b9abd84d785805273bb320d4f53ea8fa66ad876a8",
+    "supporting/STAFF_ACCESS_COVERAGE.md": "11d01dd564d6f58961029035c19f680fb9a539e2cc77a5acd50221812031b294"
+  }
+}
