@@ -17,15 +17,15 @@
 
 - **Directory:** name/code semantics; full-authorized-set filter combinations; deterministic duplicate-name/state ordering; null/unknown handling; tampered, query-mismatched and owner-revision-stale cursors; Back/Forward and branch switch clearing. A page-local Teaching/Access sort cannot pass.
 - **Existing Person:** exact ID only, bounded DTO, attester required, same-branch Employee conflict, cross-organization denial, concurrent creation leaves one Employee.
-- **Profile/corrections:** active/ended/non-teaching/no-account; separate Person/Employee versions; code uniqueness; contact correction does not change login; unsafe date change blocks without rewriting history.
+- **Profile/corrections:** active/ended/non-teaching/no-account; separate Person/Employee versions; code uniqueness; contact correction does not change login; unsafe date change blocks without rewriting history. For both Person and Employee operations, freeze only the submitted section's payload/version/key, recover that exact operation, retain the other section's draft, append one history entry across repeated recovery, show current and attempted stale facts separately, and use GET only after a confirmed save whose refresh failed.
 - **Eligibility:** valid bounds, no overlap, every assignment contained, frozen/session impact, concurrent change, Access role independence.
 - **Access:** email/hybrid/operator paths, pending/failed/expired/consumed/revoked, reasoned resend replaces old token, last-admin, immediate next-request denial, provider result remains honest.
-- **End employment:** every row in `EMPLOYMENT_END_FAILURE_CONTRACT.md`; branch date today; assignment impact; Access disposition; no false complete; exact owner-key recovery; revoked recovery denial; no automatic Access compensation; global/other-branch/family/student access preserved.
+- **End employment:** every row in `EMPLOYMENT_END_FAILURE_CONTRACT.md`; branch-local date captured once and retained across midnight; assignment and last-admin blocks before mutation; Access-unknown recovery uses its original key and prevents People from starting; Access-confirmed/People-rejected and People-unknown remain resumable; no relevant membership means no Access key or receipt; no false complete; revoked recovery denial; no automatic Access compensation; global/other-branch/family/student access preserved.
 - **Rejoin:** immutable prior episode, non-overlap, no automatic membership/invite/eligibility/assignment restoration.
 
 ## Interaction/visual cases
 
-- Inspect matching states at 1440×1000, 900px width, 390×844 and 360px width.
+- Inspect matching states at 1440×1000, 900×1000, 390×844 and 360×800.
 - Inspect directory, profile and correction drawer in Forest, Amethyst, Linen and Porcelain with identical geometry.
 - Tab order follows visible order; Enter applies search; drawer/dialog Escape obeys the guarded-close contract; focus returns to the invoker.
 - Mobile navigation and drawers remain scrollable above safe areas; no root horizontal overflow.

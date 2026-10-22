@@ -2,45 +2,59 @@
 
 Prototype source: `prototype/STAFF_WORKFLOWS.html`
 
-Corrected inspection time: 22 October 2026, 02:25 IST (`2026-10-21T20:55:25.404Z`)
+Current inspection: 22 October 2026 (Asia/Kolkata); exact UTC timestamp is recorded in `prototype/evidence-operation-recovery/inspection.json`.
 
-The prototype is a self-contained local review artifact with fictional in-memory data. It has no authentication, persistence or external service. These results verify the artifact’s interaction and presentation only; they are not production application evidence.
+The prototype is a self-contained review artifact with fictional in-memory data. It has no authentication, durable persistence or external service. These results verify prototype interaction and presentation only; they are not production application evidence.
 
-## Browser inspection
+## Current browser inspection
 
-- Runtime: repository-installed Playwright Chromium, headless, device scale factor 1.
-- Captures: 22 current corrected captures.
-- Required widths inspected: 1440×1000, 900×1000 and 390×844.
+- Runtime: repository-installed Playwright Chromium, headless, one worker, device scale factor 1.
+- Result: **36 focused checks passed; 27 current viewport captures; zero recorded page errors**.
+- Required viewports: 1440×1000, 900×1000, 390×844 and 360×800.
 - Themes: Forest, Amethyst, Linen and Porcelain on Directory, Profile and correction drawer at 900×1000.
-- Computed body font: `Inter, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, sans-serif`; `document.fonts.check()` returned true and the font set was `loaded`. The prototype embeds `assets/InterVariable.woff2`, copied byte-for-byte from `app/fonts/InterVariable.woff2`, with the repository license in `assets/LICENSE.txt`.
-- Root overflow: none reachable in the final captures. The 900px directory switches to labelled Staff cards; wide table content is not clipped.
-- Console/page errors: none.
+- Computed body font: `Inter, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, sans-serif`; `document.fonts.check('14px Inter')` returned true and the font set was `loaded`. The prototype embeds `assets/InterVariable.woff2`, copied byte-for-byte from `app/fonts/InterVariable.woff2`, with the repository license in `assets/LICENSE.txt`.
+- Every recorded capture reports no root horizontal overflow.
 
-## Focused interaction checks
+Machine-readable measurements, capture provenance and exact check names are in `prototype/evidence-operation-recovery/inspection.json`.
 
-All 29 focused checks passed. Coverage includes: Filter Apply over the complete fictional set; Sort Apply and deterministic order; Cancel/Escape retaining applied filters and sort; Escape focus return; Enter search; Profile → Back query retention; committed edits reflected in both the visible profile and history while unsaved Employee entries remain; distinct rejected, stale, unknown and saved-but-refresh-failed states; original-outcome recovery; all five employment-ending states; mobile menu Escape and focus return.
+## Interaction coverage
 
-Machine-readable measurements and the exact check names are in `prototype/evidence-corrected/inspection.json`.
+The focused run exercises:
 
-## Capture index
+1. complete-fictional-set Filter and deterministic Sort Apply;
+2. Cancel/Escape preserving applied filters/sort and restoring focus;
+3. search and Profile → Back state retention;
+4. visible fictional save plus one history entry;
+5. exact Person and exact Employee unknown-outcome recovery using the frozen submitted section/key;
+6. editing the other section while one operation is unresolved;
+7. repeated recovery without a duplicate history entry;
+8. stale email and code states with current and attempted facts kept separately;
+9. confirmed save plus failed refresh, Close/Escape/reopen, then GET-only refresh recovery;
+10. known assignment blocking before mutation;
+11. Access outcome unknown preventing the People step;
+12. Access confirmed exposing only the still-missing employment step;
+13. eligible completion, revoked recovery and no-membership completion with no Access operation;
+14. open directory presentation, content-sized Profile side panels, mobile layouts and four-theme geometry.
 
-- Desktop interactions: `directory-filtered-desktop-1440x1000.png`, `directory-sorted-desktop-1440x1000.png`, `profile-saved-history-desktop-1440x1000.png`, and `correction-{rejected,stale,unknown,refresh-failed}-desktop-1440x1000.png`.
-- Mobile interactions: `directory-mobile-390x844.png`, `correction-refresh-failed-mobile-390x844.png`, and `employment-unknown-mobile-390x844.png`.
-- Theme comparison: `directory-{theme}-900x1000.png`, `profile-{theme}-900x1000.png`, `correction-{theme}-900x1000.png` for `forest`, `amethyst`, `linen`, and `porcelain`.
+## Current capture index
 
-All paths above are relative to `prototype/evidence-corrected/`. The earlier `prototype/evidence/` directory is retained as historical evidence and is not the corrected acceptance set.
+All paths are relative to `prototype/evidence-operation-recovery/`.
 
-## Visual findings resolved during inspection
+- Directory/presentation: `directory-open-desktop-1440x1000.png`, `directory-open-intermediate-900x1000.png`, `profile-content-sized-desktop-1440x1000.png`.
+- Correction recovery: `correction-personal-recovered-desktop-1440x1000.png`, `correction-stale-person-desktop-1440x1000.png`, `correction-stale-intermediate-900x1000.png`, `correction-stale-mobile-390x844.png`, `correction-stale-mobile-360x800.png`, `correction-refresh-recovered-desktop-1440x1000.png`.
+- Employment ending: `employment-access-unknown-desktop-1440x1000.png`, `employment-access-unknown-mobile-390x844.png`, `employment-assignment-blocked-desktop-1440x1000.png`, `employment-complete-profile-desktop-1440x1000.png`, `employment-no-membership-desktop-1440x1000.png`.
+- Theme comparison: `directory-{theme}-900x1000.png`, `profile-{theme}-900x1000.png`, and `correction-{theme}-900x1000.png` for `forest`, `amethyst`, `linen`, and `porcelain`.
 
-- Applied query state and drawer draft state are now separate; Cancel and Escape cannot silently apply draft values.
-- Search, filters and sort survive Profile → Back.
-- Fictional saves now update the record and history; the corrected Profile is re-rendered before recovery content is shown.
-- Failure simulations now render distinct page/drawer states with appropriate actions instead of a generic success message.
-- Mobile navigation and dialogs return focus to stable openers.
+The older `prototype/evidence/` and `prototype/evidence-corrected/` directories are historical. They remain for provenance and are not the current acceptance set.
+
+## Direct visual inspection
+
+The current desktop directory, desktop Profile, stale correction at desktop and 360px, Access-unknown mobile state, and completed Profile were opened and inspected after capture. The directory uses an open table composition, Profile side panels size to their content, recovery copy names the affected school-office operation, and the responsive comparison layout remains readable. The explicit reviewer-simulation label remains visible.
 
 ## Limits
 
-- Native VoiceOver/NVDA and actual 200% browser zoom were not performed for this documentation prototype.
-- The profile, correction, recovery and employment-impact states are proposed production extensions where the approved HTML has no exact complete reference. The scenario selector labels them as reviewer simulations.
-- Teaching and Access filtering/sorting remains a production engineering gap until those owners expose versioned full-result projections. The prototype deliberately demonstrates the proposed experience only.
+- Native VoiceOver/NVDA and actual 200% browser zoom were not performed.
+- The profile, correction, recovery and employment-ending states are proposed design extensions where the approved HTML has no exact complete reference. The reviewer selector labels simulation states explicitly.
+- Teaching and Access filtering/sorting remains a production engineering gap until those owners expose versioned full-result projections.
+- PD-STF-01, PD-STF-02 and PD-STF-03 remain unapproved. PD-STF-04 remains deferred.
 - Human visual acceptance remains PENDING.

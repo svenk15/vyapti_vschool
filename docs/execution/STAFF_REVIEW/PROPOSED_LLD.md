@@ -95,6 +95,12 @@ Each foreign port reauthorizes its owner facts. People cannot infer authority fr
 
 Contact email is descriptive People data and never changes `UserAccount.normalizedEmail`. Staff code uniqueness remains `(organization_id, school_id, staff_number)`. Unsafe initial-date changes fail with an impact result; they do not rewrite assignments, Timetable, Attendance or receipts.
 
+### Correction intent and recovery
+
+Selecting Save creates an immutable browser/application operation snapshot for exactly one owner section: target ID, normalized submitted fields, bounded reason, owner expected version and original request key. The other section remains an independent mutable draft. While that operation is `UNKNOWN`, the same section cannot be submitted again; closing and reopening presentation retains the unresolved snapshot. Status/replay resolves that snapshot rather than current form values. Exact repeated recovery returns the original result and does not append a second revision.
+
+A stale response retains three distinct values: latest owner values/version, attempted submitted values and any unrelated-section draft. The UI compares every changed field and requires explicit review before a new operation with the latest expected version and a new key. `UNKNOWN` never becomes stale merely because a later read differs. `COMMITTED_REFRESH_FAILED` is confirmed success: Close/Escape preserves it and recovery performs an authorized read only.
+
 ### Proposed persistence
 
 Extend the existing `vs_people_person_name_revision` only if its invariant can represent all approved Person patches; otherwise add `vs_people_person_revision` with versioned, redacted structured changes. Add `vs_people_employee_revision` for code/category/date changes. Do not migrate until PD-STF-02 fixes the field/evidence contract. Previous codes remain reserved through a scoped historical uniqueness strategy if approved.
@@ -117,18 +123,20 @@ Current `endEmployment(employeeId, expectedVersion, effectiveDate=today, reason,
 
 ### Proposed orchestration after PD-STF-03
 
-`EndStaffEmploymentPlan` reads current People/Academics/Access impacts with versions. Final confirmation contains the exact plan hash and separate owner keys. After PD-STF-03 approval, a **People-owned employment-end intent** records the plan hash, target Employee, initiating actor, `accessCommandKey`, `employmentCommandKey`, safe owner receipt references and step state. It is not a generic Coordination case and grants no authority. The application coordinator:
+`EndStaffEmploymentPlan` reads current People/Academics/Access impacts with versions. Final confirmation contains the exact plan hash, reviewed branch-local effective date and separate owner keys. After PD-STF-03 approval, a **People-owned employment-end intent** records the plan hash, target Employee, initiating actor, `accessCommandKey`, `employmentCommandKey`, safe owner receipt references and step state. It is not a generic Coordination case and grants no authority. The application coordinator:
 
 1. reauthorizes and re-previews;
-2. performs the Access suspension if required and authorized;
+2. performs the Access suspension if required and authorized, resolving any unknown Access result before proceeding;
 3. performs People end-employment with its own key;
-4. updates the People intent with owner receipt references and state `NOT_STARTED|ACCESS_COMMITTED|EMPLOYMENT_UNKNOWN|COMPLETE|BLOCKED`.
+4. updates the People intent with owner receipt references and state `NOT_STARTED|ACCESS_UNKNOWN|ACCESS_COMMITTED|EMPLOYMENT_UNKNOWN|COMPLETE|BLOCKED|RECOVERY_DENIED`.
 
-If a shared enlisted transaction is not technically available, do not label the operation atomic. A lost response recovers each owner outcome by its original owner key, then continues only the missing safe step. Compensation never reactivates a membership or rewrites employment automatically. Last-admin and assignment blocks are terminal until the underlying supported condition changes. Any currently authorized administrator with both approved capabilities may resume the People intent; receipt disclosure is reauthorized first. An actor without Access authority cannot initiate the combined operation. The full state/action contract is in `EMPLOYMENT_END_FAILURE_CONTRACT.md`.
+If a shared enlisted transaction is not technically available, do not label the operation atomic. A lost response recovers each owner outcome by its original owner key, then continues only the missing safe step. People never starts while Access is `UNKNOWN`. Compensation never reactivates a membership or rewrites employment automatically. Last-admin and known assignment blocks stop before mutation; a new blocker discovered after Access commits becomes an explicit partial state. Any currently authorized administrator with the capabilities required by the stored Access disposition may resume the People intent; receipt disclosure is reauthorized first. An actor without Access authority cannot initiate the combined operation when a membership suspension is required.
+
+An authoritative `NO_RELEVANT_ACTIVE_MEMBERSHIP` result records Access as `NOT_REQUIRED` and creates no Access key or receipt. The completion text describes only the People result. The reviewed effective date remains part of the People payload/key across recovery. Crossing branch-local midnight never changes it silently: resolve unknown outcomes first, then create a fresh reviewed People operation/key if the date must change. The full state/action contract is in `EMPLOYMENT_END_FAILURE_CONTRACT.md`.
 
 ### Proposed persistence after PD-STF-03
 
-`vs_people_employment_end_intent`: scope IDs, Employee ID, expected Employee version, plan hash, Access membership ID/version, initiating actor, Access command key, People command key, safe Access receipt reference, safe People receipt reference, state, last safe failure code, created/updated timestamps. Unique active intent per scoped Employee; unique scoped owner keys. Restricted receipt bodies stay with their owners.
+`vs_people_employment_end_intent`: scope IDs, Employee ID, expected Employee version, reviewed branch-local effective date, plan hash, nullable Access membership ID/version, `access_disposition` (`REQUIRED|NOT_REQUIRED`), initiating actor, nullable Access command key, People command key, safe nullable Access receipt reference, safe People receipt reference, state, last safe failure code, created/updated timestamps. Unique active intent per scoped Employee; unique non-null scoped owner keys. Restricted receipt bodies stay with their owners.
 
 ## 8. Rejoining STF-08
 

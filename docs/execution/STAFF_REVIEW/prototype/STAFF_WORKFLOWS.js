@@ -9,6 +9,8 @@ const people = [
     access: "Active",
     initials: "AM",
     contactEmail: "avery.morgan@example.test",
+    personVersion: 7,
+    employeeVersion: 11,
     history: [{ at: "18 October 2026", text: "Teaching eligibility reviewed" }],
   },
   {
@@ -21,6 +23,8 @@ const people = [
     access: "Pending invite",
     initials: "JL",
     contactEmail: "jordan.lee@example.test",
+    personVersion: 4,
+    employeeVersion: 8,
     history: [{ at: "20 October 2026", text: "Portal invitation prepared" }],
   },
   {
@@ -33,6 +37,8 @@ const people = [
     access: "No account",
     initials: "SK",
     contactEmail: "samira.khan@example.test",
+    personVersion: 3,
+    employeeVersion: 5,
     history: [{ at: "12 October 2026", text: "Staff profile added" }],
   },
   {
@@ -45,6 +51,8 @@ const people = [
     access: "Suspended",
     initials: "TM",
     contactEmail: "theo.martin@example.test",
+    personVersion: 6,
+    employeeVersion: 14,
     history: [{ at: "18 October 2026", text: "Employment ended and branch access suspended" }],
   },
 ];
@@ -59,6 +67,11 @@ const state = {
   profileId: people[0].id,
   correctionDraft: null,
   correctionOutcome: null,
+  pendingCorrection: null,
+  staleCorrection: null,
+  appliedCorrectionKeys: new Set(),
+  operationSequence: 0,
+  employmentEndIntent: null,
   profileNotice: null,
   teachingOutcome: null,
   accessNotice: null,
@@ -87,6 +100,10 @@ const todayLabel = "22 October 2026";
 
 function addHistory(person, text) {
   person.history.unshift({ at: todayLabel, text });
+}
+
+function addHistoryOnce(person, text) {
+  if (!person.history.some((entry) => entry.text === text && entry.at === todayLabel)) addHistory(person, text);
 }
 
 function setScenario(value) {
@@ -195,12 +212,12 @@ function directory() {
     }
   }
   return `${tabs("profiles")}
-    <div class="page-head"><div><h1>Staff</h1><p>Find Staff profiles, review responsibilities and manage the details you are allowed to change.</p></div><div class="actions"><button class="btn primary" onclick="go('add')">Add staff</button></div></div>
-    <section class="card"><form class="toolbar" onsubmit="applySearch(event)">
+    <div class="page-head"><div><h1>Staff</h1></div><div class="actions"><button class="btn primary" onclick="go('add')">Add staff</button></div></div>
+    <div class="directory-open"><form class="toolbar" onsubmit="applySearch(event)">
       <div class="control"><label for="by">Search attribute</label><select id="by" name="by"><option value="name"${selected(state.by, "name")}>Name</option><option value="employeeCode"${selected(state.by, "employeeCode")}>Employee code</option></select></div>
       <div class="control"><label for="q">Search staff</label><input id="q" name="q" value="${esc(state.query)}" placeholder="${state.by === "employeeCode" ? "e.g. EMP-1001" : "e.g. Avery Morgan"}"></div>
       <button class="btn secondary" type="button" onclick="drawer('filters')">Filters</button><button class="btn secondary" type="button" onclick="drawer('sort')">Sort</button>
-    </form>${appliedSummary()}${body}</section>`;
+    </form>${appliedSummary()}${body}</div>`;
 }
 
 function applySearch(event) {
@@ -313,12 +330,13 @@ function profile() {
   if (state.scenario === "no-account") state.profileId = people[2].id;
   const person = currentProfile();
   const ended = person.employment === "Ended";
+  const showAssignment = !ended && !["end-eligible", "end-none", "end-no-membership", "end-no-membership-complete", "end-access-outcome-unknown", "end-access-confirmed", "end-employment-outcome-unknown", "end-complete", "end-revoked", "last-admin"].includes(state.scenario);
   return `${tabs("profiles")}<button class="btn ghost" onclick="go('directory')">← Back to Staff</button>
     <section class="card profile-head"><div class="profile-name"><span class="avatar">${person.initials}</span><div><h1>${esc(person.name)}</h1><p>${esc(person.code)} · ${esc(person.category)}</p></div></div><div class="actions"><span class="badge ${ended ? "" : "good"}">${person.employment}</span><button id="correct-details-trigger" class="btn secondary" onclick="drawer('correct')">Correct details</button></div></section>
     ${noticeMarkup(state.profileNotice)}
     <div class="profile-grid" style="margin-top:24px"><div class="stack"><section class="card"><div class="panel-head"><h2>Employment</h2>${!ended ? `<button id="end-employment-trigger" class="btn ghost compact" onclick="modal('end')">End employment</button>` : ""}</div><dl class="facts"><div><dt>Employee code</dt><dd>${esc(person.code)}</dd></div><div><dt>Category</dt><dd>${esc(person.category)}</dd></div><div><dt>Employed from</dt><dd>5 June 2024</dd></div><div><dt>Employed to</dt><dd>${ended ? "22 October 2026" : "Current"}</dd></div></dl></section>
-      <section class="card"><div class="panel-head"><h2>Teaching & responsibilities</h2><button class="btn ghost compact" onclick="go('teaching')">Review eligibility</button></div><div class="rows"><div class="row"><div><h3>${esc(person.teaching)}</h3><p>${person.teaching.includes("Eligible") ? "5 June 2024 – no end date" : "No current teaching eligibility"}</p></div><span class="badge ${person.teaching.includes("Eligible") ? "good" : ""}">${person.teaching.includes("Eligible") ? "Current" : "Inactive"}</span></div><div class="row"><div><h3>Mathematics · Grade 8A</h3><p>Current dated assignment</p></div><button class="btn ghost compact" onclick="go('teaching')">View</button></div></div></section>${historyPanel(person)}</div>
-      <aside class="stack"><section class="card"><div class="panel-head"><h2>Access</h2><button class="btn ghost compact" onclick="go('access')">Manage</button></div><div class="rows"><div class="row"><div><h3>${state.scenario === "no-account" ? "No sign-in account" : esc(person.access)}</h3><p>${state.scenario === "no-account" ? "Set this up only when the Staff member needs portal access." : "Contact email and sign-in address are managed separately."}</p></div><span class="badge ${person.access === "Active" ? "good" : person.access === "Pending invite" ? "warn" : ""}">${esc(person.access)}</span></div></div></section>
+      <section class="card"><div class="panel-head"><h2>Teaching & responsibilities</h2><button class="btn ghost compact" onclick="go('teaching')">Review eligibility</button></div><div class="rows"><div class="row"><div><h3>${esc(person.teaching)}</h3><p>${person.teaching.includes("Eligible") ? "5 June 2024 – no end date" : "No current teaching eligibility"}</p></div></div>${showAssignment ? `<div class="row"><div><h3>Mathematics · Grade 8A</h3><p>Current dated assignment</p></div><button class="btn ghost compact" onclick="go('teaching')">View</button></div>` : `<div class="row"><div><h3>No current or future assignments</h3><p>Existing class and Attendance history remains unchanged.</p></div></div>`}</div></section>${historyPanel(person)}</div>
+      <aside class="stack compact-side"><section class="card"><div class="panel-head"><h2>Access</h2><button class="btn ghost compact" onclick="go('access')">Manage</button></div><div class="rows"><div class="row"><div><h3>${state.scenario === "no-account" || state.scenario === "end-no-membership" ? "No sign-in account" : esc(person.access)}</h3><p>${state.scenario === "no-account" || state.scenario === "end-no-membership" ? "No active branch membership needs to be changed." : "Contact email and sign-in address are managed separately."}</p></div></div></div></section>
       <section class="card"><div class="panel-head"><h2>Staff operations</h2></div><div class="handoff" style="padding:16px"><a href="#availability" onclick="go('availability')"><strong>Availability</strong><small>Record operational availability</small></a><a href="#cover" onclick="go('cover')"><strong>Cover</strong><small>Review a specific class period</small></a></div></section></aside></div>`;
 }
 
@@ -411,65 +429,129 @@ function correctionDraft() {
   return state.correctionDraft;
 }
 
+function correctionValues(section, draft = correctionDraft()) {
+  return section === "person"
+    ? { firstName: draft.firstName, contactEmail: draft.contactEmail, reason: draft.personReason }
+    : { code: draft.code, category: draft.category, reason: draft.employeeReason };
+}
+
+function currentCorrectionValues(section, person = currentProfile()) {
+  return section === "person"
+    ? { firstName: person.name.split(" ")[0], contactEmail: person.contactEmail }
+    : { code: person.code, category: person.category };
+}
+
+function captureCorrectionOperation(section) {
+  const person = currentProfile();
+  state.operationSequence += 1;
+  return Object.freeze({
+    section,
+    targetId: person.id,
+    submitted: Object.freeze({ ...correctionValues(section) }),
+    expectedVersion: section === "person" ? person.personVersion : person.employeeVersion,
+    requestKey: `review-${section}-${person.id}-${state.operationSequence}`,
+  });
+}
+
+function comparisonMarkup(review) {
+  if (!review) return "";
+  const labels = review.operation.section === "person"
+    ? { firstName: "First name", contactEmail: "Contact email" }
+    : { code: "Employee code", category: "Category" };
+  const rows = Object.keys(labels).map((field) => `<div class="comparison-row"><span>${labels[field]}</span><div><small>Current</small><strong>${esc(review.current[field])}</strong></div><div><small>Your change</small><strong>${esc(review.operation.submitted[field])}</strong></div></div>`).join("");
+  return `<div class="comparison" aria-label="Current and attempted values">${rows}</div>`;
+}
+
 function correctionOutcomeMarkup() {
   const outcome = state.correctionOutcome;
   if (!outcome) return "";
   const actions = {
     rejected: `<button class="btn secondary compact" onclick="reviewRejectedCorrection()">Review fields</button>`,
-    stale: `<button class="btn secondary compact" onclick="reviewStaleCorrection()">Use latest details</button>`,
+    stale: `<button class="btn secondary compact" onclick="reviewStaleCorrection()">Review these values</button>`,
     unknown: `<button class="btn secondary compact" onclick="recoverCorrection('unknown')">Check saved result</button>`,
     refreshFailed: `<button class="btn secondary compact" onclick="recoverCorrection('refresh')">Refresh details</button>`,
   };
-  return `<div class="alert ${outcome.tone}"><strong>${esc(outcome.title)}</strong>${esc(outcome.text)}${actions[outcome.kind] ?? ""}</div>`;
+  const comparison = outcome.kind === "stale" || outcome.kind === "staleReviewed" ? comparisonMarkup(state.staleCorrection) : "";
+  return `<div class="alert ${outcome.tone}"><strong>${esc(outcome.title)}</strong><p>${esc(outcome.text)}</p>${comparison}<div class="feedback-actions">${actions[outcome.kind] ?? ""}</div></div>`;
 }
 
 function correctionDrawer() {
   const draft = correctionDraft();
+  const unresolvedSection = state.pendingCorrection?.status === "unknown" ? state.pendingCorrection.operation.section : null;
   return `<div class="drawer-head"><div><h2>Correct Staff details</h2><p class="muted">Save personal and employment details separately.</p></div><button class="icon-btn" onclick="closeOverlay()" aria-label="Close corrections">×</button></div>${correctionOutcomeMarkup()}
-    <section class="stack"><h3>Personal details</h3><div class="control"><label>First name</label><input id="person-first" value="${esc(draft.firstName)}" oninput="state.correctionDraft.firstName=this.value"></div><div class="control"><label>Contact email</label><input id="person-email" value="${esc(draft.contactEmail)}" oninput="state.correctionDraft.contactEmail=this.value"><small>This contact detail does not change the sign-in address.</small></div><div class="control"><label>Correction reason</label><textarea oninput="state.correctionDraft.personReason=this.value">${esc(draft.personReason)}</textarea></div><button class="btn primary" onclick="saveSection('person')">Save personal details</button></section>
-    <section class="section stack"><h3>Employment details</h3><div class="control"><label>Employee code</label><input id="employee-code" value="${esc(draft.code)}" oninput="state.correctionDraft.code=this.value"></div><div class="control"><label>Category</label><select id="employee-category" onchange="state.correctionDraft.category=this.value"><option${selected(draft.category, "Teaching")}>Teaching</option><option${selected(draft.category, "Administration")}>Administration</option><option${selected(draft.category, "Support")}>Support</option></select></div><div class="control"><label>Correction reason</label><textarea oninput="state.correctionDraft.employeeReason=this.value">${esc(draft.employeeReason)}</textarea></div><button class="btn primary" onclick="saveSection('employee')">Save employment details</button></section>`;
+    <section class="stack"><h3>Personal details</h3><div class="control"><label>First name</label><input id="person-first" value="${esc(draft.firstName)}" oninput="state.correctionDraft.firstName=this.value"></div><div class="control"><label>Contact email</label><input id="person-email" value="${esc(draft.contactEmail)}" oninput="state.correctionDraft.contactEmail=this.value"><small>This contact detail does not change the sign-in address.</small></div><div class="control"><label>Correction reason</label><textarea id="person-reason" oninput="state.correctionDraft.personReason=this.value">${esc(draft.personReason)}</textarea></div><button id="save-person" class="btn primary" onclick="saveSection('person')"${unresolvedSection === "person" ? " disabled" : ""}>${unresolvedSection === "person" ? "Checking personal details" : "Save personal details"}</button></section>
+    <section class="section stack"><h3>Employment details</h3><div class="control"><label>Employee code</label><input id="employee-code" value="${esc(draft.code)}" oninput="state.correctionDraft.code=this.value"></div><div class="control"><label>Category</label><select id="employee-category" onchange="state.correctionDraft.category=this.value"><option${selected(draft.category, "Teaching")}>Teaching</option><option${selected(draft.category, "Administration")}>Administration</option><option${selected(draft.category, "Support")}>Support</option></select></div><div class="control"><label>Correction reason</label><textarea id="employee-reason" oninput="state.correctionDraft.employeeReason=this.value">${esc(draft.employeeReason)}</textarea></div><button id="save-employee" class="btn primary" onclick="saveSection('employee')"${unresolvedSection === "employee" ? " disabled" : ""}>${unresolvedSection === "employee" ? "Checking employment details" : "Save employment details"}</button></section>`;
 }
 
 function saveSection(section) {
-  const draft = correctionDraft();
+  if (state.pendingCorrection?.status === "unknown" && state.pendingCorrection.operation.section === section) {
+    state.correctionOutcome = { kind: "unknown", tone: "warn", title: "We are still checking this change", text: "Check the original change before making another one." };
+    reopenDrawer("correct");
+    return;
+  }
+  const operation = captureCorrectionOperation(section);
   if (state.scenario === "rejected") {
+    state.pendingCorrection = null;
     state.correctionOutcome = { kind: "rejected", tone: "bad", title: "Change not saved", text: "The reason or new value needs attention. Your entries are still here." };
     reopenDrawer("correct");
     return;
   }
   if (state.scenario === "stale") {
-    state.correctionOutcome = { kind: "stale", tone: "warn", title: "Review the latest details", text: `Another authorized change was saved first. Compare the latest record with your attempted ${section === "person" ? "personal" : "employment"} change.` };
+    const person = currentProfile();
+    if (section === "person") person.personVersion += 1;
+    else person.employeeVersion += 1;
+    state.pendingCorrection = null;
+    state.staleCorrection = {
+      operation,
+      current: Object.freeze({ ...currentCorrectionValues(section, person) }),
+      latestVersion: section === "person" ? person.personVersion : person.employeeVersion,
+      reviewed: false,
+    };
+    state.correctionOutcome = { kind: "stale", tone: "warn", title: "Review the latest details", text: `Another authorized change was saved first. Compare the current record with your ${section === "person" ? "personal" : "employment"} change.` };
     reopenDrawer("correct");
     return;
   }
   if (state.scenario === "unknown") {
+    state.pendingCorrection = { operation, status: "unknown", applied: false };
     state.correctionOutcome = { kind: "unknown", tone: "warn", title: "We are still checking this change", text: "Do not submit it again. Check the original request." };
     reopenDrawer("correct");
     return;
   }
-  applyCorrection(section);
+  applyCorrectionOperation(operation);
   if (state.scenario === "refresh-failed") {
+    state.pendingCorrection = { operation, status: "refreshFailed", applied: true };
     state.correctionOutcome = { kind: "refreshFailed", tone: "good", title: "Details saved", text: "The latest profile could not be loaded. The confirmed save is retained." };
   } else {
+    state.pendingCorrection = null;
     state.correctionOutcome = { kind: "saved", tone: "good", title: "Details saved", text: `The ${section === "person" ? "personal" : "employment"} details and history are updated. Your other unsaved entries remain.` };
   }
   reopenDrawer("correct");
 }
 
-function applyCorrection(section) {
-  const person = currentProfile();
+function applyCorrectionOperation(operation) {
+  if (state.appliedCorrectionKeys.has(operation.requestKey)) return false;
+  const person = people.find((entry) => entry.id === operation.targetId);
+  if (!person) return false;
   const draft = correctionDraft();
-  if (section === "person") {
+  if (operation.section === "person") {
     const surname = person.name.split(" ").slice(1).join(" ");
-    person.name = `${draft.firstName || person.name.split(" ")[0]} ${surname}`.trim();
-    person.contactEmail = draft.contactEmail;
+    person.name = `${operation.submitted.firstName || person.name.split(" ")[0]} ${surname}`.trim();
+    person.contactEmail = operation.submitted.contactEmail;
     person.initials = person.name.split(" ").map((part) => part[0]).slice(0, 2).join("");
+    person.personVersion += 1;
     addHistory(person, "Personal details corrected");
+    draft.firstName = operation.submitted.firstName;
+    draft.contactEmail = operation.submitted.contactEmail;
   } else {
-    person.code = draft.code;
-    person.category = draft.category;
+    person.code = operation.submitted.code;
+    person.category = operation.submitted.category;
+    person.employeeVersion += 1;
     addHistory(person, "Employment details corrected");
+    draft.code = operation.submitted.code;
+    draft.category = operation.submitted.category;
   }
+  state.appliedCorrectionKeys.add(operation.requestKey);
+  return true;
 }
 
 function reviewRejectedCorrection() {
@@ -479,18 +561,24 @@ function reviewRejectedCorrection() {
 }
 
 function reviewStaleCorrection() {
-  const draft = correctionDraft();
-  const person = currentProfile();
-  draft.contactEmail = person.contactEmail;
+  if (!state.staleCorrection) return;
+  state.staleCorrection.reviewed = true;
   setScenario("active");
-  state.correctionOutcome = { kind: "review", tone: "warn", title: "Latest details loaded", text: "Your attempted change is still present. Review it before saving a fresh change." };
+  state.correctionOutcome = { kind: "staleReviewed", tone: "warn", title: "Latest details reviewed", text: "Your change is still in the form. Revise it or save it as a new change." };
   reopenDrawer("correct");
 }
 
 function recoverCorrection(kind) {
-  if (kind === "unknown") applyCorrection("person");
+  const pending = state.pendingCorrection;
+  if (!pending) return;
+  if (kind === "unknown" && pending.status === "unknown") {
+    applyCorrectionOperation(pending.operation);
+    pending.status = "committed";
+    pending.applied = true;
+  }
+  if (kind === "refresh" && pending.status === "refreshFailed") pending.status = "committed";
   setScenario("active");
-  state.correctionOutcome = { kind: "saved", tone: "good", title: kind === "unknown" ? "Saved change found" : "Current details loaded", text: kind === "unknown" ? "The original change was found and history is updated. No duplicate change was made." : "The profile now shows the confirmed saved details." };
+  state.correctionOutcome = { kind: "saved", tone: "good", title: kind === "unknown" ? "Saved change found" : "Current details loaded", text: kind === "unknown" ? "The original change was found. No duplicate change was made." : "The profile now shows the confirmed saved details." };
   reopenDrawer("correct");
 }
 
@@ -558,13 +646,45 @@ function reopenDrawer(kind) {
 }
 
 const endStates = {
-  "end-none": { tone: "warn", title: "No changes made", text: "Review the impact before ending employment and suspending branch access.", action: "begin" },
-  "end-access-rejected": { tone: "bad", title: "Branch access suspended; employment still active", text: "The employment change was rejected because a current assignment still needs attention.", action: "review" },
-  "end-access-unknown": { tone: "warn", title: "Branch access suspended; employment result still being checked", text: "Do not start another employment change. Check the original request.", action: "recover" },
-  "end-complete": { tone: "good", title: "Employment ended and branch access suspended", text: "Other branches and account relationships were not changed.", action: "close" },
-  "end-revoked": { tone: "bad", title: "You no longer have access to recover this change", text: "Another currently authorized administrator must continue from the Staff profile.", action: "close" },
-  "last-admin": { tone: "bad", title: "Branch access cannot be suspended", text: "Another active School administrator must be established before this change can continue.", action: "close" },
+  "end-none": { tone: "warn", title: "No changes made", text: "No Staff or branch-access change has started.", action: "close", assignment: false },
+  "end-assignment-blocked": { tone: "bad", title: "Resolve the current assignment first", text: "Mathematics · Grade 8A is still current. No employment or access change has started.", action: "review", assignment: true },
+  "end-eligible": { tone: "warn", title: "Ready for final review", text: "No current or future assignment blocks this change.", action: "begin", assignment: false },
+  "end-access-outcome-unknown": { tone: "warn", title: "Branch-access result still being checked", text: "Employment ending has not started. Check the original access change first.", action: "recoverAccess", assignment: false },
+  "end-access-confirmed": { tone: "warn", title: "Branch access suspended; employment still active", text: "Continue only the remaining employment step after reviewing the current facts.", action: "continueEmployment", assignment: false },
+  "end-employment-rejected": { tone: "bad", title: "Branch access suspended; employment still active", text: "A changed assignment now blocks employment ending. Review it before resuming this intent.", action: "review", assignment: true },
+  "end-employment-outcome-unknown": { tone: "warn", title: "Branch access suspended; employment result still being checked", text: "Do not start another employment change. Check the original request.", action: "recoverEmployment", assignment: false },
+  "end-complete": { tone: "good", title: "Employment ended and branch access suspended", text: "Other branches and unrelated account relationships were not changed.", action: "close", assignment: false },
+  "end-no-membership": { tone: "warn", title: "No branch access change is needed", text: "There is no relevant active branch membership. Only employment will be ended.", action: "beginNoMembership", assignment: false },
+  "end-no-membership-complete": { tone: "good", title: "Employment ended", text: "There was no active branch membership to suspend, so no access change was made.", action: "close", assignment: false },
+  "end-revoked": { tone: "bad", title: "You no longer have access to recover this change", text: "Another currently authorized administrator must continue the same reviewed intent.", action: "close", assignment: false },
+  "last-admin": { tone: "bad", title: "Branch access cannot be suspended", text: "Another active School administrator must be established before this change can start.", action: "close", assignment: false },
 };
+
+function ensureEmploymentIntent({ noMembership = false, accessStatus = "NOT_STARTED", employmentStatus = "NOT_STARTED" } = {}) {
+  if (state.employmentEndIntent) return state.employmentEndIntent;
+  state.operationSequence += 1;
+  state.employmentEndIntent = {
+    targetId: currentProfile().id,
+    effectiveDate: "2026-10-22",
+    access: noMembership ? "NOT_REQUIRED" : accessStatus,
+    employment: employmentStatus,
+    accessRequestKey: noMembership ? null : `review-access-${currentProfile().id}-${state.operationSequence}`,
+    employmentRequestKey: `review-employment-${currentProfile().id}-${state.operationSequence}`,
+    accessApplied: accessStatus === "COMMITTED",
+    employmentApplied: employmentStatus === "COMMITTED",
+  };
+  return state.employmentEndIntent;
+}
+
+function employmentActionMarkup(action) {
+  if (action === "begin") return `<button class="btn danger" onclick="startEmploymentEnd()">Suspend access and continue</button>`;
+  if (action === "beginNoMembership") return `<button class="btn danger" onclick="startEmploymentEnd(true)">End employment</button>`;
+  if (action === "review") return `<button class="btn primary" onclick="closeOverlay();go('teaching')">Review assignment</button>`;
+  if (action === "recoverAccess") return `<button class="btn primary" onclick="recoverAccessSuspension()">Check branch-access result</button>`;
+  if (action === "continueEmployment") return `<button class="btn danger" onclick="continueEmploymentEnd()">End employment</button>`;
+  if (action === "recoverEmployment") return `<button class="btn primary" onclick="recoverEmploymentEnd()">Check employment result</button>`;
+  return "";
+}
 
 function modal(kind) {
   if (kind !== "end") return;
@@ -572,36 +692,75 @@ function modal(kind) {
   if (!endStates[state.scenario]) setScenario("end-none");
   const person = currentProfile();
   const endState = endStates[state.scenario];
-  const action = endState.action === "begin" ? `<button class="btn danger" onclick="completeEmploymentEnd()">End employment and suspend access</button>`
-    : endState.action === "review" ? `<button class="btn primary" onclick="closeOverlay();go('teaching')">Review assignment</button>`
-      : endState.action === "recover" ? `<button class="btn primary" onclick="recoverEmploymentEnd()">Check employment result</button>`
-        : "";
-  overlay.innerHTML = `<div class="backdrop"></div><section class="modal" role="dialog" aria-modal="true" aria-labelledby="end-title"><div class="drawer-head"><div><h2 id="end-title">End employment today?</h2><p class="muted">Review teaching responsibilities and branch access before continuing.</p></div><button class="icon-btn" onclick="closeOverlay()" aria-label="Close">×</button></div><ul class="review-list"><li><span>Staff</span><strong>${esc(person.name)} · ${esc(person.code)}</strong></li><li><span>Effective date</span><strong>22 October 2026 · branch local</strong></li><li><span>Teaching</span><strong>Current eligibility will end</strong></li><li><span>Current assignment</span><strong>Mathematics · Grade 8A</strong></li><li><span>Branch access</span><strong>${state.scenario === "end-none" ? "Will be suspended" : esc(person.access)}</strong></li></ul><div class="alert ${endState.tone}"><strong>${endState.title}</strong>${endState.text}</div>${state.scenario === "end-none" ? `<div class="control"><label>Reason</label><textarea>Employment ended following the confirmed school-office process.</textarea></div>` : ""}<div class="form-actions"><button class="btn secondary" onclick="closeOverlay()">${endState.action === "close" ? "Close" : "Cancel"}</button>${action}</div></section>`;
+  const accessText = state.scenario === "end-no-membership" || state.scenario === "end-no-membership-complete"
+    ? "No active branch membership"
+    : ["end-access-confirmed", "end-employment-rejected", "end-employment-outcome-unknown", "end-complete", "end-revoked"].includes(state.scenario)
+      ? "Suspended"
+      : state.scenario === "end-access-outcome-unknown" ? "Result unknown" : "Will be reviewed";
+  const assignmentText = endState.assignment ? "Mathematics · Grade 8A · current" : "No current or future assignment";
+  overlay.innerHTML = `<div class="backdrop"></div><section class="modal" role="dialog" aria-modal="true" aria-labelledby="end-title"><div class="drawer-head"><div><h2 id="end-title">End employment today?</h2><p class="muted">Review teaching responsibilities and branch access before continuing.</p></div><button class="icon-btn" onclick="closeOverlay()" aria-label="Close employment review">×</button></div><ul class="review-list"><li><span>Staff</span><strong>${esc(person.name)} · ${esc(person.code)}</strong></li><li><span>Effective date</span><strong>22 October 2026 · branch local</strong></li><li><span>Teaching</span><strong>Current eligibility will end</strong></li><li><span>Assignment review</span><strong>${assignmentText}</strong></li><li><span>Branch access</span><strong>${accessText}</strong></li></ul><div class="alert ${endState.tone}"><strong>${endState.title}</strong><p>${endState.text}</p></div>${["end-eligible", "end-no-membership"].includes(state.scenario) ? `<div class="control"><label>Reason</label><textarea>Employment ended following the confirmed school-office process.</textarea></div>` : ""}<div class="form-actions recovery-row"><button class="btn secondary" onclick="closeOverlay()">${endState.action === "close" ? "Close" : "Cancel"}</button>${employmentActionMarkup(endState.action)}</div></section>`;
   overlay.querySelector(".modal button")?.focus();
 }
 
-function applyEmploymentEnd() {
-  const person = currentProfile();
+function applyAccessSuspension(intent) {
+  if (intent.accessApplied || intent.access === "NOT_REQUIRED") return false;
+  const person = people.find((entry) => entry.id === intent.targetId);
   person.access = "Suspended";
-  person.employment = "Ended";
-  person.teaching = "Disabled";
-  if (!person.history.some((entry) => entry.text === "Employment ended and branch access suspended" && entry.at === todayLabel)) addHistory(person, "Employment ended and branch access suspended");
+  intent.access = "COMMITTED";
+  intent.accessApplied = true;
+  addHistoryOnce(person, "Branch access suspended");
+  return true;
 }
 
-function completeEmploymentEnd() {
-  applyEmploymentEnd();
-  setScenario("end-complete");
+function applyEmploymentEnd(intent) {
+  if (intent.employmentApplied) return false;
+  const person = people.find((entry) => entry.id === intent.targetId);
+  person.employment = "Ended";
+  person.teaching = "Disabled";
+  intent.employment = "COMMITTED";
+  intent.employmentApplied = true;
+  const text = intent.access === "NOT_REQUIRED" ? "Employment ended; no branch access change was needed" : "Employment ended and branch access suspended";
+  addHistoryOnce(person, text);
+  return true;
+}
+
+function rerenderEmploymentModal(nextScenario) {
+  setScenario(nextScenario);
   render();
   state.returnFocus = document.querySelector("main");
   modal("end");
+}
+
+function startEmploymentEnd(noMembership = false) {
+  const intent = ensureEmploymentIntent({ noMembership });
+  if (noMembership) {
+    applyEmploymentEnd(intent);
+    rerenderEmploymentModal("end-no-membership-complete");
+    return;
+  }
+  applyAccessSuspension(intent);
+  rerenderEmploymentModal("end-access-confirmed");
+}
+
+function recoverAccessSuspension() {
+  const intent = ensureEmploymentIntent({ accessStatus: "UNKNOWN" });
+  if (intent.access !== "UNKNOWN" && intent.access !== "COMMITTED") return;
+  applyAccessSuspension(intent);
+  rerenderEmploymentModal("end-access-confirmed");
+}
+
+function continueEmploymentEnd() {
+  const intent = ensureEmploymentIntent({ accessStatus: "COMMITTED" });
+  if (intent.access !== "COMMITTED") return;
+  applyEmploymentEnd(intent);
+  rerenderEmploymentModal("end-complete");
 }
 
 function recoverEmploymentEnd() {
-  applyEmploymentEnd();
-  setScenario("end-complete");
-  render();
-  state.returnFocus = document.querySelector("main");
-  modal("end");
+  const intent = ensureEmploymentIntent({ accessStatus: "COMMITTED", employmentStatus: "UNKNOWN" });
+  if (intent.access !== "COMMITTED") return;
+  applyEmploymentEnd(intent);
+  rerenderEmploymentModal("end-complete");
 }
 
 function guardClose(event) {
@@ -636,10 +795,21 @@ document.querySelector("#theme").addEventListener("change", (event) => {
   document.documentElement.dataset.theme = event.target.value;
 });
 
+function resetEmploymentDemoPerson() {
+  const person = people[0];
+  person.employment = "Active";
+  person.teaching = "Eligible to teach";
+  person.access = "Active";
+  person.history = person.history.filter((entry) => !["Branch access suspended", "Employment ended and branch access suspended", "Employment ended; no branch access change was needed"].includes(entry.text));
+  state.profileId = person.id;
+  state.employmentEndIntent = null;
+}
+
 scenarioSelect.addEventListener("change", (event) => {
   state.scenario = event.target.value;
   state.profileNotice = null;
   state.correctionOutcome = null;
+  state.staleCorrection = null;
   if (["active", "ended", "no-account"].includes(state.scenario)) {
     state.screen = "profile";
     render();
@@ -651,10 +821,20 @@ scenarioSelect.addEventListener("change", (event) => {
     state.screen = "access";
     render();
   } else if (state.scenario.startsWith("end-") || state.scenario === "last-admin") {
+    resetEmploymentDemoPerson();
     state.screen = "profile";
     const person = currentProfile();
-    if (["end-access-rejected", "end-access-unknown", "end-revoked"].includes(state.scenario)) person.access = "Suspended";
-    if (state.scenario === "end-complete") applyEmploymentEnd();
+    if (state.scenario === "end-no-membership") {
+      person.access = "No account";
+      ensureEmploymentIntent({ noMembership: true });
+    } else if (state.scenario === "end-access-outcome-unknown") {
+      ensureEmploymentIntent({ accessStatus: "UNKNOWN" });
+    } else if (["end-access-confirmed", "end-employment-rejected", "end-employment-outcome-unknown", "end-complete", "end-revoked"].includes(state.scenario)) {
+      person.access = "Suspended";
+      const employmentStatus = state.scenario === "end-employment-outcome-unknown" ? "UNKNOWN" : "NOT_STARTED";
+      const intent = ensureEmploymentIntent({ accessStatus: "COMMITTED", employmentStatus });
+      if (state.scenario === "end-complete") applyEmploymentEnd(intent);
+    }
     render();
     setTimeout(() => modal("end"));
   } else if (state.scenario === "duplicate") {

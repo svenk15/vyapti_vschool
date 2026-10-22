@@ -31,7 +31,7 @@ States: active teaching Staff; active non-teaching Staff; ended employment; no a
 
 Width: 480px desktop, full-width mobile. Person and Employee are separate sections. Each has its own expected version, reason and Save. Saving one section never clears the other section’s unsaved safe values.
 
-States: clean; dirty; validation; saving; saved; stale current-versus-attempted review; unknown original-request recovery; confirmed-save/read-refresh failure; rejection. Close/Cancel/Escape use the same guard and focus return. Saving a section updates the visible fictional profile and its history while retaining the other section's draft.
+States: clean; dirty; validation; saving; saved; stale current-versus-attempted review; unknown exact-section recovery; confirmed-save/read-refresh failure; rejection. Unknown freezes only the submitted section's payload, expected version and original key; the other section's draft remains editable. Repeated FOUND recovery adds one history entry. Stale recovery displays current and attempted facts and requires a new reviewed intent. Close/Cancel/Escape use the same guard and focus return. Confirmed-save/read-refresh recovery performs a read only.
 
 ## Teaching eligibility and responsibilities
 
@@ -49,7 +49,7 @@ States: no account; operator handoff; invitation pending/failure/expired/consume
 
 End today only. Review shows date, Teacher eligibility, affected assignments, current Access and the required Access disposition. Final success is withheld while relevant access is unresolved. It never removes global account or other branch/family/student relationships.
 
-States: eligible; assignment block; last-admin/access block; processing; step-partial/reconciliation; success; unknown. The prototype’s suspension recommendation is awaiting PD-STF-03.
+States: eligible; known assignment block before mutation; last-admin/access block before mutation; Access outcome unknown; Access confirmed with People still missing; People rejected; People outcome unknown; complete; no relevant membership (`NOT_REQUIRED` Access step); and recovery authority revoked. The branch-local effective date is captured once and does not roll when recovery crosses midnight. The prototype’s suspension recommendation is awaiting PD-STF-03.
 
 ## Responsive/theme inspection matrix
 

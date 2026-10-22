@@ -41,15 +41,15 @@ Focused verification: query validation, deterministic pagination under duplicate
 
 Introduce a small presentation state shared by the Staff screens, while continuing to use each owner's existing receipt/CAS contract:
 
-- `UNKNOWN`: retain the exact payload/key and offer only the owner's safe replay/status operation.
+- `UNKNOWN`: retain the exact owner section, target, submitted values, expected version and request key; disable another submission of that operation and offer only that owner's safe replay/status operation. The other section's local draft remains independent.
 - `COMMITTED_REFRESH_FAILED`: retain confirmed saved feedback; retry GET only; never suggest resubmitting.
-- `STALE_REVIEW_REQUIRED`: fetch current authorized state, show attempted versus current safe fields, and require an explicit fresh-key/fresh-version retry.
+- `STALE_REVIEW_REQUIRED`: fetch current authorized state, keep current and attempted safe fields separately, and require explicit review before a fresh-key/fresh-version intent.
 - `PARTIAL_DELIVERY`: show the committed membership/grant separately from the sanitized provider outcome.
 - `DENIED`: clear protected inputs and return to an authorized context.
 
 Apply first to new Staff creation and People Manage, then Access directory membership/resend. Do not introduce a universal receipt store or let UI state establish authority.
 
-Focused verification: lost response with exact replay/no duplicate, commit then failed refresh/GET-only recovery, revoked authority before replay, stale version, close/Escape/focus return and preserved safe input.
+Focused verification: lost Person and Employee responses recover the exact frozen operation once, the other section's draft survives, repeated recovery adds no duplicate history, commit then failed refresh uses GET only, stale review preserves current and attempted values, and Close/Escape/focus behavior cannot downgrade a confirmed result.
 
 ## Priority 2 — narrow owner designs required
 
@@ -92,15 +92,9 @@ Reuse Access invitation storage and resend semantics. Add the administrator-supp
 
 ### STF-07 — Employment lifecycle
 
-Current `endEmployment` is safe but deliberately narrow. A consolidated product decision is required for:
+Current `endEmployment` is safe but deliberately narrow. PD-STF-03 recommends branch-local end-today with a People-owned intent and separate owner keys. Known assignment and last-administrator blockers stop before mutation. When a relevant membership exists, Access suspension is confirmed first; an unknown Access result is recovered with its original key before People may start. Confirmed Access plus rejected/unknown People remains a truthful partial state and is never compensated by silently restoring access. When no relevant membership exists, Access is `NOT_REQUIRED` and no Access key or receipt is fabricated. The reviewed effective date is captured once and is not silently changed if recovery crosses midnight.
 
-- statuses beyond ACTIVE/ENDED;
-- future/retroactive effective dates;
-- reactivation versus a new employment interval;
-- assignment and open/frozen Attendance impact;
-- required coordination with still-active Access membership.
-
-Recommendation: preserve separation of employment and Access, but require an explicit impact review with a separate authorized Access action. Do not silently revoke, retain or reactivate portal access based solely on employment state.
+This recommendation does not authorize implementation. PD-STF-03 must approve the dual-authority rule, no-membership exception, People intent, sequencing, captured-date and no-compensation rules. Rejoining/new employment episodes remain separately deferred under PD-STF-04.
 
 ## Cross-owner dependencies
 
