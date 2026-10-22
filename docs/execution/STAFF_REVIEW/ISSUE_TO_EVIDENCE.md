@@ -6,8 +6,8 @@ This matrix covers the local fictional review prototype. It is design evidence, 
 
 | Issue | Changed source or contract | Focused verification | Current screenshot | Remaining limit |
 | --- | --- | --- | --- | --- |
-| Unknown correction could recover the wrong section or mutable draft | `prototype/STAFF_WORKFLOWS.js`; `CTA_CONTRACTS.md`; `PROPOSED_LLD.md` | Person and Employee operations each freeze their submitted section, expected version and original key; recovery applies that exact operation | `correction-personal-recovered-desktop-1440x1000.png` | PD-STF-02 and owner commands remain unapproved/unimplemented |
-| Editing the other section could corrupt an unresolved operation | Same sources | Other section remains editable; exact unresolved section is disabled; recovery preserves the other draft | `correction-personal-recovered-desktop-1440x1000.png` | Prototype interaction evidence only |
+| Single pending slot could be replaced by saving the other section | `prototype/STAFF_WORKFLOWS.js`; `CTA_CONTRACTS.md`; `PROPOSED_LLD.md` | In both directions, either unknown operation disables both Save actions; direct cross-section handler attempts leave the original key/payload unchanged | `correction-personal-pending-cross-save-desktop-1440x1000.png`; `correction-employment-pending-cross-save-desktop-1440x1000.png` | PD-STF-02 and owner commands remain unapproved/unimplemented |
+| Editing the other section could lose drafts or mix owner effects | Same sources | Both drafts survive Close/reopen; exact recovery applies its owner fields; the next owner save updates only its fields; history contains one entry per operation | `correction-personal-then-employment-desktop-1440x1000.png`; `correction-employment-then-personal-desktop-1440x1000.png` | Prototype interaction evidence only |
 | Repeated FOUND recovery could duplicate history | `prototype/STAFF_WORKFLOWS.js`; `ACCEPTANCE.md` | Repeated recovery produces one matching history entry | `correction-refresh-recovered-desktop-1440x1000.png` | Production must enforce this through the owner receipt, not browser memory |
 | Stale feedback did not preserve both current and attempted facts | `prototype/STAFF_WORKFLOWS.js`; `CTA_CONTRACTS.md` | Stale email and staff-code cases keep separate current/attempted values and require explicit fresh review | `correction-stale-person-desktop-1440x1000.png`; `correction-stale-mobile-360x800.png` | Final mutable fields/authority await PD-STF-02 |
 | Confirmed save plus failed refresh was presented as unresolved | `prototype/STAFF_WORKFLOWS.js`; recovery invariant in `CTA_CONTRACTS.md` | Close/Escape/reopen keeps “saved”; recovery performs read only and issues no second mutation | `correction-refresh-recovered-desktop-1440x1000.png` | Production GET-only recovery adapter is STF-04 work |
@@ -21,7 +21,7 @@ This matrix covers the local fictional review prototype. It is design evidence, 
 
 ## Focused result
 
-`prototype/evidence-operation-recovery/inspection.json` records **36 passed checks, 27 viewport captures and no page errors**. The prior evidence directories are historical and are excluded from the current acceptance set.
+`prototype/evidence-operation-recovery/inspection.json` records **45 passed checks, 30 viewport captures and no page errors**. The prior evidence directories are historical and are excluded from the current acceptance set.
 
 ## Decision boundary
 

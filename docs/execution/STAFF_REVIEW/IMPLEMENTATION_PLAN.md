@@ -41,7 +41,7 @@ Focused verification: query validation, deterministic pagination under duplicate
 
 Introduce a small presentation state shared by the Staff screens, while continuing to use each owner's existing receipt/CAS contract:
 
-- `UNKNOWN`: retain the exact owner section, target, submitted values, expected version and request key; disable another submission of that operation and offer only that owner's safe replay/status operation. The other section's local draft remains independent.
+- `UNKNOWN`: retain the exact owner section, target, submitted values, expected version and request key; disable both Save actions while either operation is unresolved, keep both drafts editable, and offer only that owner's safe replay/status operation. Resolution re-enables Save for a distinct next operation.
 - `COMMITTED_REFRESH_FAILED`: retain confirmed saved feedback; retry GET only; never suggest resubmitting.
 - `STALE_REVIEW_REQUIRED`: fetch current authorized state, keep current and attempted safe fields separately, and require explicit review before a fresh-key/fresh-version intent.
 - `PARTIAL_DELIVERY`: show the committed membership/grant separately from the sanitized provider outcome.
@@ -49,7 +49,7 @@ Introduce a small presentation state shared by the Staff screens, while continui
 
 Apply first to new Staff creation and People Manage, then Access directory membership/resend. Do not introduce a universal receipt store or let UI state establish authority.
 
-Focused verification: lost Person and Employee responses recover the exact frozen operation once, the other section's draft survives, repeated recovery adds no duplicate history, commit then failed refresh uses GET only, stale review preserves current and attempted values, and Close/Escape/focus behavior cannot downgrade a confirmed result.
+Focused verification: in both directions, a lost Person/Employee response freezes the original key/payload, editing and attempting the other section cannot replace it, Close/reopen retains both drafts, exact recovery applies once, and the other owner save then succeeds independently. Repeated recovery adds no duplicate history; commit then failed refresh uses GET only; stale review preserves current and attempted values; Close/Escape/focus behavior cannot downgrade a confirmed result.
 
 ## Priority 2 — narrow owner designs required
 

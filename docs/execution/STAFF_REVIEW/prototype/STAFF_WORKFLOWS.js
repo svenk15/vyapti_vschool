@@ -478,14 +478,15 @@ function correctionOutcomeMarkup() {
 function correctionDrawer() {
   const draft = correctionDraft();
   const unresolvedSection = state.pendingCorrection?.status === "unknown" ? state.pendingCorrection.operation.section : null;
+  const saveDisabled = unresolvedSection !== null;
   return `<div class="drawer-head"><div><h2>Correct Staff details</h2><p class="muted">Save personal and employment details separately.</p></div><button class="icon-btn" onclick="closeOverlay()" aria-label="Close corrections">×</button></div>${correctionOutcomeMarkup()}
-    <section class="stack"><h3>Personal details</h3><div class="control"><label>First name</label><input id="person-first" value="${esc(draft.firstName)}" oninput="state.correctionDraft.firstName=this.value"></div><div class="control"><label>Contact email</label><input id="person-email" value="${esc(draft.contactEmail)}" oninput="state.correctionDraft.contactEmail=this.value"><small>This contact detail does not change the sign-in address.</small></div><div class="control"><label>Correction reason</label><textarea id="person-reason" oninput="state.correctionDraft.personReason=this.value">${esc(draft.personReason)}</textarea></div><button id="save-person" class="btn primary" onclick="saveSection('person')"${unresolvedSection === "person" ? " disabled" : ""}>${unresolvedSection === "person" ? "Checking personal details" : "Save personal details"}</button></section>
-    <section class="section stack"><h3>Employment details</h3><div class="control"><label>Employee code</label><input id="employee-code" value="${esc(draft.code)}" oninput="state.correctionDraft.code=this.value"></div><div class="control"><label>Category</label><select id="employee-category" onchange="state.correctionDraft.category=this.value"><option${selected(draft.category, "Teaching")}>Teaching</option><option${selected(draft.category, "Administration")}>Administration</option><option${selected(draft.category, "Support")}>Support</option></select></div><div class="control"><label>Correction reason</label><textarea id="employee-reason" oninput="state.correctionDraft.employeeReason=this.value">${esc(draft.employeeReason)}</textarea></div><button id="save-employee" class="btn primary" onclick="saveSection('employee')"${unresolvedSection === "employee" ? " disabled" : ""}>${unresolvedSection === "employee" ? "Checking employment details" : "Save employment details"}</button></section>`;
+    <section class="stack"><h3>Personal details</h3><div class="control"><label>First name</label><input id="person-first" value="${esc(draft.firstName)}" oninput="state.correctionDraft.firstName=this.value"></div><div class="control"><label>Contact email</label><input id="person-email" value="${esc(draft.contactEmail)}" oninput="state.correctionDraft.contactEmail=this.value"><small>This contact detail does not change the sign-in address.</small></div><div class="control"><label>Correction reason</label><textarea id="person-reason" oninput="state.correctionDraft.personReason=this.value">${esc(draft.personReason)}</textarea></div><button id="save-person" class="btn primary" onclick="saveSection('person')"${saveDisabled ? " disabled" : ""}>${unresolvedSection === "person" ? "Checking personal details" : "Save personal details"}</button></section>
+    <section class="section stack"><h3>Employment details</h3><div class="control"><label>Employee code</label><input id="employee-code" value="${esc(draft.code)}" oninput="state.correctionDraft.code=this.value"></div><div class="control"><label>Category</label><select id="employee-category" onchange="state.correctionDraft.category=this.value"><option${selected(draft.category, "Teaching")}>Teaching</option><option${selected(draft.category, "Administration")}>Administration</option><option${selected(draft.category, "Support")}>Support</option></select></div><div class="control"><label>Correction reason</label><textarea id="employee-reason" oninput="state.correctionDraft.employeeReason=this.value">${esc(draft.employeeReason)}</textarea></div><button id="save-employee" class="btn primary" onclick="saveSection('employee')"${saveDisabled ? " disabled" : ""}>${unresolvedSection === "employee" ? "Checking employment details" : "Save employment details"}</button></section>`;
 }
 
 function saveSection(section) {
-  if (state.pendingCorrection?.status === "unknown" && state.pendingCorrection.operation.section === section) {
-    state.correctionOutcome = { kind: "unknown", tone: "warn", title: "We are still checking this change", text: "Check the original change before making another one." };
+  if (state.pendingCorrection?.status === "unknown") {
+    state.correctionOutcome = { kind: "unknown", tone: "warn", title: "We are still checking this change", text: "Check the pending change before saving another." };
     reopenDrawer("correct");
     return;
   }
@@ -513,7 +514,7 @@ function saveSection(section) {
   }
   if (state.scenario === "unknown") {
     state.pendingCorrection = { operation, status: "unknown", applied: false };
-    state.correctionOutcome = { kind: "unknown", tone: "warn", title: "We are still checking this change", text: "Do not submit it again. Check the original request." };
+    state.correctionOutcome = { kind: "unknown", tone: "warn", title: "We are still checking this change", text: "Check the pending change before saving another." };
     reopenDrawer("correct");
     return;
   }

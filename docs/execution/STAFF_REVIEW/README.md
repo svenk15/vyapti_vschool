@@ -20,7 +20,8 @@ This package is a design/execution checkpoint. It changes no production route, c
 - [Source/screenshot inventory](SOURCE_AND_SCREENSHOT_INVENTORY.md) — inspected production files, approved authority and prior evidence provenance.
 - [Interactive Staff workflow prototype](prototype/STAFF_WORKFLOWS.html) — fictional review prototype with real local interactions, bundled approved Inter assets and explicit prototype-only labels. Its implementation is split between the HTML and `prototype/STAFF_WORKFLOWS.js`; it still has no authentication or persistence.
 - [Employment-ending failure contract](EMPLOYMENT_END_FAILURE_CONTRACT.md) — exact cross-owner states, recovery authority, original keys/receipts and prohibited compensation.
-- [Prototype inspection evidence](PROTOTYPE_EVIDENCE.md) and [issue-to-evidence map](ISSUE_TO_EVIDENCE.md) — 27 current browser captures and 36 focused interaction checks, including exact owner-operation recovery and the expanded employment-ending state model.
+- [Prototype inspection evidence](PROTOTYPE_EVIDENCE.md) and [issue-to-evidence map](ISSUE_TO_EVIDENCE.md) — 30 current browser captures and 45 focused interaction checks, including bidirectional cross-section recovery and the expanded employment-ending state model.
+- [Frozen reference](REFERENCE_FREEZE.md) and [implementation handoff](IMPLEMENTATION_HANDOFF.md) — content hashes, immutable review boundary and the approved-rule production sequence.
 
 ## Authority and evidence
 

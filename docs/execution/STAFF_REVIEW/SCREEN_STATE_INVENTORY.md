@@ -31,7 +31,7 @@ States: active teaching Staff; active non-teaching Staff; ended employment; no a
 
 Width: 480px desktop, full-width mobile. Person and Employee are separate sections. Each has its own expected version, reason and Save. Saving one section never clears the other section’s unsaved safe values.
 
-States: clean; dirty; validation; saving; saved; stale current-versus-attempted review; unknown exact-section recovery; confirmed-save/read-refresh failure; rejection. Unknown freezes only the submitted section's payload, expected version and original key; the other section's draft remains editable. Repeated FOUND recovery adds one history entry. Stale recovery displays current and attempted facts and requires a new reviewed intent. Close/Cancel/Escape use the same guard and focus return. Confirmed-save/read-refresh recovery performs a read only.
+States: clean; dirty; validation; saving; saved; stale current-versus-attempted review; unknown exact-section recovery; confirmed-save/read-refresh failure; rejection. Unknown freezes only the submitted section's payload, expected version and original key. Both drafts remain editable, but both Save actions are disabled until the pending result is resolved. Close/reopen retains the pending operation and both drafts. Repeated FOUND recovery adds one history entry; resolution re-enables Save so the other section can start its own operation. Stale recovery displays current and attempted facts and requires a new reviewed intent. Close/Cancel/Escape use the same guard and focus return. Confirmed-save/read-refresh recovery performs a read only and remains distinct from unknown.
 
 ## Teaching eligibility and responsibilities
 
