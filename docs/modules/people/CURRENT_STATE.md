@@ -1,5 +1,11 @@
 # People and staff identity — current state
 
+## Approved Staff handoff composition — 22 October 2026
+
+Application source `ba43e6089ec8f44048013075a41749b27b04d745` implements the frozen Administrator Staff reference at Site commit `fc33c8b991134ade6d02e27fbe467ef67d86b085`. Profiles and Access use the approved local navigation; the People directory uses Name/Profile versus Manage semantics and 25/50/100 server-side cursor pagination; Add staff uses the compact one-page composition while preserving the structured People command; Profile uses the approved Personal, Employment, Teaching assignments, Staff portal and history order; and Access uses the approved account-state columns and hierarchy. No owner command, authorization rule, schema, migration or seed changed.
+
+Focused Staff browser verification passed all five journeys on desktop and mobile after one test-only locator correction. Changed-file ESLint, TypeScript and the clean 4 GiB production build passed; build ID `RE-cPsN_n2Nv1qhGEL37U`. Direct reference/application captures at 1440×1000 and 390×844, plus 900×1000, 360×800 and four-theme application checks, were inspected. [Evidence and deviations](../../evidence/staff-approved-handoff-2026-10-22/README.md). STF-01B and PD-STF-01–03 remain explicitly incomplete; human acceptance, TEN-03 and native accessibility remain PENDING.
+
 ## STF-04A/B Staff command recovery — 22 October 2026
 
 People Staff creation/management and Access membership management now retain one immutable owner command key and payload after a lost response. Their separate owner status routes return only `FOUND` or `UNKNOWN` after live administrator, scope and target checks; revoked authority blocks receipt disclosure. While UNKNOWN, another owner save is disabled. A confirmed commit followed by failed refresh is labelled saved and offers a GET-only refresh, without mutation replay. The unapproved PD-STF-02 correction surface remains absent.
