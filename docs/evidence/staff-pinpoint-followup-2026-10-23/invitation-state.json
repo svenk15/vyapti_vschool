@@ -1,0 +1,21 @@
+{
+  "buildId": "DQXxoABx6nZGUPkMteQke",
+  "states": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "applicationTitle": "Staff access",
+      "referenceTitle": "Staff access"
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "applicationTitle": "Staff access",
+      "referenceTitle": "Staff access"
+    }
+  }
+}

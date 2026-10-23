@@ -8,8 +8,9 @@ import {Dialog} from '@/components/ui/interactive';
 
 export function StaffPortalManagement({employeeId,access}:{employeeId:string;access:StaffProfileAccess}){
  const [open,setOpen]=useState(false);
+ const trigger=access.state==='NO_ACCOUNT'?'Set up access':access.state==='PENDING'?'View invitation':'View access';
  return <>
-  <Button variant="ghost" size="small" onClick={()=>setOpen(true)}>{access.state==='NO_ACCOUNT'?'Set up access':'View access'} <span aria-hidden="true">→</span></Button>
+  <Button variant="ghost" size="small" onClick={()=>setOpen(true)}>{trigger} <span aria-hidden="true">→</span></Button>
   <Dialog drawer className="staff-reference-drawer staff-portal-drawer" title="Staff access" description="Review this staff member’s current account and invitation state." open={open} onClose={()=>setOpen(false)}>
    <StaffInvitationManagement employeeId={employeeId} initial={access}/>
   </Dialog>
