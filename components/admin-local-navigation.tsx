@@ -17,8 +17,9 @@ export function AdminLocalNavigation({label,current,items,area,action}:{label:st
  const destinations=useAdminNavigationDestinations(),order=area?areaOrder[area]??[]:[];
  const resolved=items??destinations.filter(item=>item.area===area).map(item=>({label:item.label,href:item.href})).sort((left,right)=>order.indexOf(left.href)-order.indexOf(right.href));
  if(resolved.length<2&&!action)return null;
+ const single=resolved[0];
  return <div className="admin-local-navigation-row">
-  {resolved.length>1?<nav className="workspace-tabs admin-local-navigation" aria-label={label}>{resolved.map(item=><Link key={item.href} href={item.href} aria-current={item.href===current?'page':undefined}>{item.label}</Link>)}</nav>:<span className="admin-local-destination">{resolved[0]?.label}</span>}
+  {resolved.length>1?<nav className="workspace-tabs admin-local-navigation" aria-label={label}>{resolved.map(item=><Link key={item.href} href={item.href} aria-current={item.href===current?'page':undefined}>{item.label}</Link>)}</nav>:single&&single.href!==current?<Link className="admin-local-destination admin-local-return" href={single.href}>← Back to {single.label}</Link>:<span className="admin-local-destination">{single?.label}</span>}
   {action?<div className="admin-local-action">{action}</div>:null}
  </div>;
 }
