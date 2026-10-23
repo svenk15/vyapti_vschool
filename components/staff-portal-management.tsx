@@ -11,8 +11,10 @@ import {Dialog} from '@/components/ui/interactive';
 const roleLabel={SCHOOL_ADMIN:'School administrator',TEACHER:'Teacher',PRINCIPAL:'Principal'} as const;
 type AccessAction='SET_ROLES'|'SUSPEND'|'REINSTATE'|'REVOKE';
 
-export function StaffPortalManagement({employeeId,employeeName,staffNumber,schoolId,access}:{employeeId:string;employeeName:string;staffNumber:string;schoolId:string;access:StaffProfileAccess}){
- const [open,setOpen]=useState(false),[current,setCurrent]=useState(access),[step,setStep]=useState<'summary'|'change'>('summary'),[action,setAction]=useState<AccessAction>('SET_ROLES'),[roles,setRoles]=useState([...access.roles]),[reason,setReason]=useState('');
+export function StaffPortalManagement({employeeId,employeeName,staffNumber,schoolId,access,open:controlledOpen,onOpenChange,hideTrigger=false}:{employeeId:string;employeeName:string;staffNumber:string;schoolId:string;access:StaffProfileAccess;open?:boolean;onOpenChange?:(open:boolean)=>void;hideTrigger?:boolean}){
+ const [internalOpen,setInternalOpen]=useState(false),[current,setCurrent]=useState(access),[step,setStep]=useState<'summary'|'change'>('summary'),[action,setAction]=useState<AccessAction>('SET_ROLES'),[roles,setRoles]=useState([...access.roles]),[reason,setReason]=useState('');
+ const open=controlledOpen??internalOpen;
+ function changeOpen(next:boolean){if(controlledOpen===undefined)setInternalOpen(next);onOpenChange?.(next);}
  async function refresh(){const response=await fetch(`/api/v1/employees/${employeeId}/invitation`,{cache:'no-store'});if(!response.ok)throw new Error('Current staff access could not be loaded.');setCurrent(await response.json());}
  const command=useCommand(refresh,intent=>`/api/v1/memberships/status/${intent.command}/${intent.key}?schoolId=${encodeURIComponent(schoolId)}`),disabled=command.busy||command.uncertain||command.denied;
  const trigger=current.state==='NO_ACCOUNT'?'Set up access':current.state==='PENDING'?'View invitation':'View access';
@@ -20,11 +22,11 @@ export function StaffPortalManagement({employeeId,employeeName,staffNumber,schoo
  const actionTitle=action==='SET_ROLES'?'Change roles':action==='SUSPEND'?'Suspend access':action==='REINSTATE'?'Reinstate access':'Revoke access';
  const unchangedRoles=[...roles].sort().join('|')===[...current.roles].sort().join('|');
  function begin(next:AccessAction){command.startNew();setAction(next);setRoles([...current.roles]);setReason('');setStep('change');}
- function close(){if(command.uncertain)return;setOpen(false);setStep('summary');setReason('');}
+ function close(){if(command.uncertain)return;changeOpen(false);setStep('summary');setReason('');}
  function toggle(role:'SCHOOL_ADMIN'|'TEACHER',checked:boolean){setRoles(checked?[...new Set([...roles,role])]:roles.filter(item=>item!==role));}
  async function save(){if(!current.membershipId||current.membershipVersion===null)return;const selectedRoles=action==='SET_ROLES'?roles:undefined,saved=await command.run({url:`/api/v1/memberships/${current.membershipId}?schoolId=${encodeURIComponent(schoolId)}`,method:'PATCH',command:'UpdateMembership',body:{payload:{action,...(selectedRoles?{roles:selectedRoles}:{}),reason},expectedVersion:current.membershipVersion}});if(saved){setStep('summary');setReason('');}}
  return <>
-  <Button variant="ghost" size="small" onClick={()=>{setCurrent(access);setStep('summary');setOpen(true);}}>{trigger} <span aria-hidden="true">→</span></Button>
+  {!hideTrigger&&<Button variant="ghost" size="small" onClick={()=>{setCurrent(access);setStep('summary');changeOpen(true);}}>{trigger} <span aria-hidden="true">→</span></Button>}
   <Dialog drawer className="staff-reference-drawer staff-portal-drawer" title={step==='summary'?'Staff access':actionTitle} description="Review this staff member’s current account and invitation state." open={open} onClose={close}>
    {step==='summary'?<div className="staff-access-summary staff-profile-access-summary">
     <div className="staff-access-person"><Avatar name={employeeName}/><div><strong>{employeeName}</strong><span>{staffNumber}</span></div></div>

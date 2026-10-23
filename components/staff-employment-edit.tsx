@@ -11,13 +11,15 @@ type Category='TEACHING'|'ADMINISTRATION'|'SUPPORT'|'UNCLASSIFIED';
 type Attempt=Readonly<{key:string;body:Readonly<{expectedVersion:number;category:Exclude<Category,'UNCLASSIFIED'>;reason:string}>}>;
 const EditIcon=()=> <svg className="staff-section-action-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m16 3 5 5-12 12-6 1 1-6zM14 5l5 5"/></svg>;
 
-export function StaffEmploymentEdit({employeeId,employeeName,employeeCode,joiningDate,version,category}:{employeeId:string;employeeName:string;employeeCode:string;joiningDate:string;version:number;category:Category}){
- const router=useRouter(),attempt=useRef<Attempt|null>(null),{pending,setPending}=useStaffCorrection(),[open,setOpen]=useState(false),[selected,setSelected]=useState<Exclude<Category,'UNCLASSIFIED'>>(category==='UNCLASSIFIED'?'SUPPORT':category),[reason,setReason]=useState(''),[busy,setBusy]=useState(false),[unknown,setUnknown]=useState(false),[saved,setSaved]=useState(false),[error,setError]=useState('');
+export function StaffEmploymentEdit({employeeId,employeeName,employeeCode,joiningDate,version,category,open:controlledOpen,onOpenChange,hideTrigger=false}:{employeeId:string;employeeName:string;employeeCode:string;joiningDate:string;version:number;category:Category;open?:boolean;onOpenChange?:(open:boolean)=>void;hideTrigger?:boolean}){
+ const router=useRouter(),attempt=useRef<Attempt|null>(null),{pending,setPending}=useStaffCorrection(),[internalOpen,setInternalOpen]=useState(false),[selected,setSelected]=useState<Exclude<Category,'UNCLASSIFIED'>>(category==='UNCLASSIFIED'?'SUPPORT':category),[reason,setReason]=useState(''),[busy,setBusy]=useState(false),[unknown,setUnknown]=useState(false),[saved,setSaved]=useState(false),[error,setError]=useState('');
+ const open=controlledOpen??internalOpen;
+ function changeOpen(next:boolean){if(controlledOpen===undefined)setInternalOpen(next);onOpenChange?.(next);}
  const unchanged=category!=='UNCLASSIFIED'&&selected===category;
- function close(){setOpen(false);if(!unknown&&!pending){setSaved(false);setError('');setReason('');attempt.current=null;}}
+ function close(){changeOpen(false);if(!unknown&&!pending){setSaved(false);setError('');setReason('');attempt.current=null;}}
  async function save(){const current=attempt.current??{key:crypto.randomUUID(),body:{expectedVersion:version,category:selected,reason:reason.trim()}};attempt.current=current;setBusy(true);setError('');try{const response=await fetch(`/api/v1/employees/${employeeId}/category`,{method:'PATCH',headers:{'Content-Type':'application/json','Idempotency-Key':current.key},body:JSON.stringify({...current.body,key:current.key}),signal:AbortSignal.timeout(10000)}),result=await response.json();if(!response.ok){if(response.status<500){attempt.current=null;setUnknown(false);setPending(null);}setError(result.message??'Employment details could not be saved.');return;}attempt.current=null;setUnknown(false);setPending(null);setSaved(true);router.refresh();}catch{setUnknown(true);setPending('employment');setError('Save outcome is unknown. Check the pending change before saving another.');}finally{setBusy(false);}}
  return <>
-  <Button className="staff-section-action" variant="ghost" size="small" aria-label="Edit employment details" onClick={()=>setOpen(true)}><EditIcon/>Edit</Button>
+  {!hideTrigger&&<Button className="staff-section-action" variant="ghost" size="small" aria-label="Edit employment details" onClick={()=>changeOpen(true)}><EditIcon/>Edit</Button>}
   <Dialog drawer className="staff-reference-drawer staff-employment-drawer" open={open} onClose={close} title="Edit employment details">
    <div className="staff-employment-edit-form">
     <div className="staff-drawer-person"><Avatar name={employeeName}/><div className="staff-drawer-person-copy"><div className="staff-drawer-person-name">{employeeName}</div><div className="staff-drawer-person-number">{employeeCode}</div></div></div>
