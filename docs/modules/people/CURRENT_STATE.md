@@ -1,5 +1,11 @@
 # People and staff identity — current state
 
+## Staff Profile assignment action simplification — 23 October 2026
+
+The Profile-level **Review eligibility** action, which is absent from the frozen Staff reference, has been removed from Teaching assignments. **View assignments** now uses the approved 12px/550 typography, 15px icon and 36px desktop/44px mobile target in the reference's single-row header. The guarded eligibility compatibility route and all Academics owner rules remain intact.
+
+The focused compatibility-route browser test passed 1/1 with one worker, current-build desktop/mobile measurement passed, and the clean 4 GiB production build passed with build ID `zgZmqrWP0cWKYHiSueDde`. [Evidence](../../evidence/staff-assignments-action-2026-10-23/README.md). Human visual acceptance remains PENDING.
+
 ## Staff edit-drawer alignment — 23 October 2026
 
 Staff Profile Personal and Employment drawers now follow the frozen Staff reference's typography, spacing, fields, thin outlines and action hierarchy at 1440×1000 and 390×844. A broad profile-section descendant selector had unintentionally applied the small inline `Edit` treatment to the dialog's Close, Save and X controls; it now targets only the direct section action. The shared drawer close control uses the approved SVG X and 44px target. Personal fields remain read-only because their correction contract is still unapproved; Employment category correction retains its existing guarded owner command and recovery semantics.

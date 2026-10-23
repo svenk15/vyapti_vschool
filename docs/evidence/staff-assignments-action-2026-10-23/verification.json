@@ -1,0 +1,43 @@
+{
+  "verifiedAt": "2026-10-23T15:26:10.347Z",
+  "results": [
+    {
+      "label": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "metrics": {
+        "width": 130.109375,
+        "height": 36,
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "lineHeight": "18px",
+        "icon": {
+          "width": 15,
+          "height": 15
+        },
+        "overflow": 0
+      }
+    },
+    {
+      "label": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "metrics": {
+        "width": 130.109375,
+        "height": 44,
+        "fontSize": "12px",
+        "fontWeight": "550",
+        "lineHeight": "18px",
+        "icon": {
+          "width": 15,
+          "height": 15
+        },
+        "overflow": 0
+      }
+    }
+  ]
+}
