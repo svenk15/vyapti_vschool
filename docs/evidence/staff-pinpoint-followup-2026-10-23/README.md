@@ -7,6 +7,7 @@ Human visual acceptance remains **PENDING**.
 - Implementation checkpoints: `d008c582b27264991742b206ab36cb1e944e3185` and `5e89fd59b4bfe1a7c61e300a4345be6d1711abe8`
 - Production build ID: `wcBTqLXJ3Sk4fQixRsRl9`
 - Demo: `http://127.0.0.1:3400`
+- Required start command: `pnpm demo:start`. Plain `pnpm start` omits the synthetic demo modes and released-module list, so authorized Academics/navigation projections can appear unavailable even though the build is healthy.
 - Application routes: `/admin/teachers` and `/admin/teachers/[employeeId]`
 - Frozen reference: `docs/execution/STAFF_REVIEW/references/approved-20261022/mock/index.html`
 - Frozen reference SHA-256: `bbc97d7293e59138c8b7340c8591b66282fb905936be658871109cccfdb5b017`
