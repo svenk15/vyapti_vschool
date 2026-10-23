@@ -1,0 +1,28 @@
+{
+  "capturedAt": "2026-10-23T06:11:34.393Z",
+  "sourceHead": "1664ec7ad3a2eba2f2d8b4a676e380d0ec754b94",
+  "viewportDesktop": {
+    "width": 1440,
+    "height": 1000
+  },
+  "viewportMobile": {
+    "width": 390,
+    "height": 844
+  },
+  "deviceScaleFactor": 1,
+  "browserZoom": "100% (default Playwright context)",
+  "files": [
+    "access-desktop-1440x1000.png",
+    "change-roles-desktop-1440x1000.png",
+    "change-roles-principal-chromium.png",
+    "eligibility-inline-desktop-1440x1000.png",
+    "eligibility-inline-mobile-390x844.png",
+    "employment-edit-desktop-1440x1000.png",
+    "manage-desktop-1440x1000.png",
+    "profile-desktop-1440x1000.png"
+  ],
+  "productionBuildId": "J3vMCFl4lT0S6BW1tO3A5",
+  "e2eBuildId": "yTvOqpC1W7LlHOAmaIEMU",
+  "demoUrl": "http://127.0.0.1:3400",
+  "mobileCaptureMode": "viewport (not full page)"
+}

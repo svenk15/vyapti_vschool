@@ -1,5 +1,13 @@
 # People and staff identity — current state
 
+## Staff Profile consistency and in-context management — 23 October 2026
+
+Staff Manage and Sort now reuse the Student directory glyphs and interaction hierarchy. Staff Profile exposes the already-approved Employee-category correction as an in-context Employment drawer with mandatory reason, optimistic version and exact-key recovery. Dated teaching eligibility now opens as an in-context Profile drawer while preserving the Academics preview, assignment-impact acknowledgement, stale protection and final owner save. The compatibility eligibility route remains available for existing deep links.
+
+Change roles now shows every assigned branch role. `PRINCIPAL` is checked and locked because the existing membership command does not authorize changing it; `SCHOOL_ADMIN` and `TEACHER` remain editable. The implementation explanation was removed, Reason is visibly required, and identity content is aligned consistently across Staff drawers. Personal correction and additional Employment fields remain blocked by unapproved PD-STF-02 rather than being represented as working controls.
+
+Changed-file lint and TypeScript passed. Clean 4 GiB production and E2E builds passed (`J3vMCFl4lT0S6BW1tO3A5`, `yTvOqpC1W7LlHOAmaIEMU`). Focused Chromium checks passed for the mixed-role lifecycle, Employment category correction, dated eligibility exact replay and invitation recovery. [Evidence](../../evidence/staff-consistency-2026-10-23/README.md). Human visual acceptance remains PENDING.
+
 ## Staff direct role save and checkbox consistency — 23 October 2026
 
 Following explicit user approval, Staff Profile **Change roles** now saves directly from the role-and-reason form; the redundant review screen has been removed. The resulting request still uses the Access owner's guarded `UpdateMembership` command with `SET_ROLES`, selected roles, required reason, expected version, command key and existing recovery behavior. Staff role checkboxes now use the same compact visual recipe as Student onboarding: 16×16 controls, 9px gap and 20px row height, with matching 12px desktop and 13px mobile label text.
