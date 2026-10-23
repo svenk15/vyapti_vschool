@@ -4,13 +4,13 @@ import type {ReactNode} from "react";
 import type { RoleCode } from "@/shared/contracts/access";
 import type { CampusDto,SchoolSettings,StaffMember,StaffPage } from "@/shared/contracts/access-management";
 import type {EmployeeProfile} from "@/shared/contracts/people";
-import { TextField,SelectField,TextArea,Checkbox } from "./ui/forms";
+import { TextField,TextArea,Checkbox } from "./ui/forms";
 import { Alert,Avatar,Badge,Button,Card,EmptyState,PageHeader,PageStack,SectionHeader,Skeleton } from "./ui/primitives";
 import { DataTable,Dialog } from "./ui/interactive";
 import { ServerTable } from "./ui/server-table";
 import {AdminLocalNavigation} from "./admin-local-navigation";
 type Intent={url:string;method:string;body:unknown;key:string;command?:'CreateMembership'|'UpdateMembership'};
-function useCommand(refresh:()=>Promise<void>,statusUrl?:(intent:Intent)=>string,retainCompleted=false){
+export function useCommand(refresh:()=>Promise<void>,statusUrl?:(intent:Intent)=>string,retainCompleted=false){
  const intent=useRef<Intent|null>(null),feedback=useRef<HTMLDivElement>(null);
  const [busy,setBusy]=useState(false),[phase,setPhase]=useState<'idle'|'unknown'|'refresh'>('idle'),[message,setMessage]=useState(""),[errorCode,setErrorCode]=useState(""),[success,setSuccess]=useState(false),[completed,setCompleted]=useState(false),[denied,setDenied]=useState(false);
  async function refreshCommitted(){setBusy(true);try{await refresh();setPhase('idle');setSuccess(true);setMessage('Changes saved.');}catch{setPhase('refresh');setSuccess(true);setMessage('Changes were saved, but the latest view could not be loaded.');}finally{setBusy(false);requestAnimationFrame(()=>feedback.current?.focus());}}
