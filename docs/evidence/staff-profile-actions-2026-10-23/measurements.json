@@ -1,0 +1,115 @@
+{
+  "capturedAt": "2026-10-23T07:07:01.267Z",
+  "cssViewportDeviceScale": 1,
+  "browserZoom": "100%",
+  "records": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "suffix": "desktop",
+      "rootOverflow": false,
+      "actions": [
+        {
+          "text": "View assignments",
+          "button": {
+            "x": 922.828125,
+            "y": 565,
+            "width": 127.9375,
+            "height": 32
+          },
+          "icon": {
+            "x": 923.828125,
+            "y": 574,
+            "width": 14,
+            "height": 14
+          },
+          "iconComputed": {
+            "width": "14px",
+            "height": "14px",
+            "display": "block",
+            "flex": "0 0 14px",
+            "outerHTML": "<svg class=\"staff-section-action-icon\" aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M4 5h16v14H4zM8 9h8M8 13h8M8 17h5\"></path></svg>"
+          }
+        },
+        {
+          "text": "Review eligibility",
+          "button": {
+            "x": 1068.765625,
+            "y": 565,
+            "width": 119.234375,
+            "height": 32
+          },
+          "icon": {
+            "x": 1069.765625,
+            "y": 574,
+            "width": 14,
+            "height": 14
+          },
+          "iconComputed": {
+            "width": "14px",
+            "height": "14px",
+            "display": "block",
+            "flex": "0 0 14px",
+            "outerHTML": "<svg class=\"staff-section-action-icon\" aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M4 5h16v16H4zM8 3v4M16 3v4M4 10h16m-11 5 2 2 4-5\"></path></svg>"
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "suffix": "mobile",
+      "rootOverflow": false,
+      "actions": [
+        {
+          "text": "View assignments",
+          "button": {
+            "x": 35,
+            "y": 690.5,
+            "width": 127.9375,
+            "height": 32
+          },
+          "icon": {
+            "x": 36,
+            "y": 699.5,
+            "width": 14,
+            "height": 14
+          },
+          "iconComputed": {
+            "width": "14px",
+            "height": "14px",
+            "display": "block",
+            "flex": "0 0 14px",
+            "outerHTML": "<svg class=\"staff-section-action-icon\" aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M4 5h16v14H4zM8 9h8M8 13h8M8 17h5\"></path></svg>"
+          }
+        },
+        {
+          "text": "Review eligibility",
+          "button": {
+            "x": 174.9375,
+            "y": 690.5,
+            "width": 119.234375,
+            "height": 32
+          },
+          "icon": {
+            "x": 175.9375,
+            "y": 699.5,
+            "width": 14,
+            "height": 14
+          },
+          "iconComputed": {
+            "width": "14px",
+            "height": "14px",
+            "display": "block",
+            "flex": "0 0 14px",
+            "outerHTML": "<svg class=\"staff-section-action-icon\" aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M4 5h16v16H4zM8 3v4M16 3v4M4 10h16m-11 5 2 2 4-5\"></path></svg>"
+          }
+        }
+      ]
+    }
+  ]
+}
