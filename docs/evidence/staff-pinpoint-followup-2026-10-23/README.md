@@ -4,8 +4,8 @@ Human visual acceptance remains **PENDING**.
 
 ## Candidate and reference
 
-- Implementation checkpoints: `d008c582b27264991742b206ab36cb1e944e3185` plus the current focused follow-up
-- Production build ID: `a8-67194pJaxsARHLe-eU`
+- Implementation checkpoints: `d008c582b27264991742b206ab36cb1e944e3185` and `5e89fd59b4bfe1a7c61e300a4345be6d1711abe8`
+- Production build ID: `wcBTqLXJ3Sk4fQixRsRl9`
 - Demo: `http://127.0.0.1:3400`
 - Application routes: `/admin/teachers` and `/admin/teachers/[employeeId]`
 - Frozen reference: `docs/execution/STAFF_REVIEW/references/approved-20261022/mock/index.html`
@@ -34,7 +34,7 @@ The frozen Profile shows Personal and Employment Edit actions. They remain absen
 ## Verification
 
 - `pnpm exec eslint components/access-management.tsx components/staff-invitation-management.tsx components/staff-portal-management.tsx 'app/admin/teachers/[id]/page.tsx'` — passed after removing one unused import.
-- `env NODE_OPTIONS=--max-old-space-size=4096 pnpm build` — passed; build `a8-67194pJaxsARHLe-eU`.
+- `env NODE_OPTIONS=--max-old-space-size=4096 pnpm build` — passed from implementation commit `5e89fd59b4bfe1a7c61e300a4345be6d1711abe8`; build `wcBTqLXJ3Sk4fQixRsRl9`.
 - Focused local Playwright comparison — passed at 1440×1000 and 390×844 for Filter, Sort, Profile, assignment, access summary, role-edit and role-review states, including Escape closure and no root overflow.
 - Focused pending-invitation comparison — passed; application and reference both render the `Staff access` drawer title at both viewports.
 - Direct screenshot inspection — completed for the paired captures. The remaining Edit-control difference is the explicit `PD-STF-02` contract boundary above.
