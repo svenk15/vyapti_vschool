@@ -9,7 +9,7 @@ export type EmployeeProfile = Readonly<{
  teachingEligibility: 'NOT_ENABLED' | 'ENABLED' | 'DISABLED';
  teacherId: string | null;
 }>;
-export type PeopleStaffCommand = 'EmployeeCreated' | 'TeacherEligibilityEnabled' | 'PersonAccountBound' | 'EmployeeEnded' | 'EmployeeCategoryChanged';
+export type PeopleStaffCommand = 'EmployeeCreated' | 'TeacherEligibilityEnabled' | 'PersonAccountBound' | 'EmployeeEnded' | 'EmployeeCategoryChanged' | 'StaffPersonCorrected';
 export type PeopleCommandStatus = Readonly<{state:'UNKNOWN'}> | Readonly<{state:'FOUND';result:EmployeeProfile & {replayed?:boolean}}>;
 export type StaffDirectorySearchBy = 'name' | 'employeeCode';
 export type StaffDirectoryCategory = EmployeeProfile['category'] | 'ANY';
@@ -58,8 +58,9 @@ export type StaffProfileAccess = Readonly<{
 export type StaffProfileProjection<T> = Readonly<{status:'AVAILABLE';value:T}> | Readonly<{status:'UNAVAILABLE'}>;
 export type StaffProfile = Readonly<{
  employee: Readonly<{employeeId:string;version:number;staffNumber:string;category:EmployeeProfile['category'];employment:EmployeeProfile['employment']}>;
- person: Readonly<{id:string;version:number;displayName:string;contactEmail:string|null}>;
- history: readonly Readonly<{kind:'EMPLOYMENT_STARTED'|'EMPLOYMENT_ENDED'|'NAME_CORRECTED';label:string;occurredOn:string}>[];
+ person: Readonly<{id:string;version:number;firstName:string;lastName:string;displayName:string;contactEmail:string|null}>;
+ history: readonly Readonly<{kind:'EMPLOYMENT_STARTED'|'EMPLOYMENT_ENDED'|'NAME_CORRECTED'|'PERSON_CORRECTED';label:string;occurredOn:string}>[];
+ permissions: Readonly<{correctPerson:boolean}>;
  academics: StaffProfileProjection<StaffProfileAcademics>;
  access: StaffProfileProjection<StaffProfileAccess>;
 }>;

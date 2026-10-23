@@ -4,6 +4,7 @@ export const STAFF_CATEGORIES=['TEACHING','ADMINISTRATION','SUPPORT'] as const;
 export type StaffCategory=(typeof STAFF_CATEGORIES)[number];
 export type StoredStaffCategory=StaffCategory|'UNCLASSIFIED';
 export type EmployeeInput={firstName:string;lastName:string;contactEmail:string|null;staffNumber:string;category:StaffCategory;employedFrom:string};
+export type StaffPersonCorrection={firstName:string;lastName:string;contactEmail:string|null};
 function humanName(value:unknown,required:boolean,max:number):string{
  if(typeof value!=='string')throw new AccessError('VALIDATION');const normalized=value.normalize('NFC').trim();
  if((required&&normalized.length===0)||normalized.length>max||/[\u0000-\u001f\u007f]/.test(normalized))throw new AccessError('VALIDATION');return normalized;
@@ -21,5 +22,10 @@ export function employeeInput(raw:{firstName:unknown;lastName?:unknown;contactEm
  const firstName=humanName(raw.firstName,true,100),lastName=humanName(raw.lastName??'',false,100),staffNumber=humanName(raw.staffNumber,true,40),category=staffCategory(raw.category),employedFrom=civilDate(raw.employedFrom);
  let contactEmail:string|null=null;if(raw.contactEmail!=null&&raw.contactEmail!==''){if(typeof raw.contactEmail!=='string')throw new AccessError('VALIDATION');contactEmail=raw.contactEmail.normalize('NFC').trim();if(contactEmail.length<3||contactEmail.length>254||/[\u0000-\u0020\u007f]/.test(contactEmail)||!/^[^@]+@[^@]+\.[^@]+$/.test(contactEmail))throw new AccessError('VALIDATION');}
  return {firstName,lastName,contactEmail,staffNumber,category,employedFrom};
+}
+export function staffPersonCorrection(raw:{firstName:unknown;lastName?:unknown;contactEmail?:unknown}):StaffPersonCorrection{
+ const firstName=humanName(raw.firstName,true,100),lastName=humanName(raw.lastName??'',false,100);
+ let contactEmail:string|null=null;if(raw.contactEmail!=null&&raw.contactEmail!==''){if(typeof raw.contactEmail!=='string')throw new AccessError('VALIDATION');contactEmail=raw.contactEmail.normalize('NFC').trim().toLowerCase();if(contactEmail.length<3||contactEmail.length>254||/[\u0000-\u0020\u007f]/.test(contactEmail)||!/^[^@]+@[^@]+\.[^@]+$/.test(contactEmail))throw new AccessError('VALIDATION');}
+ return {firstName,lastName,contactEmail};
 }
 export function displayName(firstName:string,lastName:string):string{return `${firstName} ${lastName}`.trim();}

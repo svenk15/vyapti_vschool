@@ -574,6 +574,8 @@ model PersonNameRevision {
  previousLastName String @map("previous_last_name") @db.VarChar(100)
  correctedFirstName String @map("corrected_first_name") @db.VarChar(100)
  correctedLastName String @map("corrected_last_name") @db.VarChar(100)
+ previousContactEmail String? @map("previous_contact_email") @db.VarChar(254)
+ correctedContactEmail String? @map("corrected_contact_email") @db.VarChar(254)
  reason String @db.VarChar(500)
  actorAccountId String @map("actor_account_id") @db.Uuid
  schoolId String @map("school_id") @db.Uuid
@@ -584,6 +586,21 @@ model PersonNameRevision {
  @@unique([organizationId,personId,version],map:"vs_people_person_name_revision_version_key")
  @@index([organizationId,personId,version(sort: Desc)],map:"vs_people_person_name_revision_history_idx")
  @@map("vs_people_person_name_revision")
+}
+
+model PeopleStaffRecordGrant {
+  id                  String    @id(map: "vs_people_staff_record_grant_pkey") @db.Uuid
+  organizationId      String    @map("organization_id") @db.Uuid
+  accountId           String    @map("account_id") @db.Uuid
+  capability          String    @db.VarChar(40)
+  grantedByOperatorId String    @map("granted_by_operator_id") @db.Uuid
+  grantedAt           DateTime  @map("granted_at") @db.Timestamptz(3)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(3)
+  version             Int
+
+  @@unique([organizationId, accountId, capability], map: "vs_people_staff_record_grant_scope_key")
+  @@index([organizationId, accountId, capability, revokedAt], map: "vs_people_staff_record_grant_active_idx")
+  @@map("vs_people_staff_record_grant")
 }
 
 model Employee {

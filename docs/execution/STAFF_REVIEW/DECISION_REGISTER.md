@@ -32,6 +32,8 @@ This register separates existing approved rules from recommended rules that stil
 
 ### PD-STF-02 — Mutable Staff facts and correction authority
 
+**Status.** Approved by the user on 23 October 2026 for implementation exactly as recommended below. This approval does not extend to PD-STF-01, PD-STF-03 or PD-STF-04.
+
 **Exact question.** Which Person and Employee facts may be corrected, by whom, with what reason/history, and what constraints apply after dated teaching or Attendance history exists?
 
 **Relevant contract.** People owns Person and Employee; Access owns login identity; Academics owns Teacher/assignments. Current `updateCategory` changes only descriptive Employee category. Person name revision history exists, but it is not yet a general Staff correction authority.

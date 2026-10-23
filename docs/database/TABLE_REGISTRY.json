@@ -873,8 +873,8 @@
       "table": "vs_people_person_name_revision",
       "status": "MIGRATED",
       "design": "docs/modules/people/DESIGN.md",
-      "fields": "id uuid PK; organization_id uuid; person_id uuid; version int; previous_first_name varchar(100); previous_last_name varchar(100); corrected_first_name varchar(100); corrected_last_name varchar(100); reason varchar(500); actor_account_id uuid; school_id uuid; occurred_at timestamptz(3)",
-      "responsibility": "Append-only People-owned identity correction history. Names and reason stay in this owned storage and are excluded from receipts/outbox/audit diffs.",
+      "fields": "id uuid PK; organization_id uuid; person_id uuid; version int; previous_first_name varchar(100); previous_last_name varchar(100); corrected_first_name varchar(100); corrected_last_name varchar(100); previous_contact_email varchar(254) nullable; corrected_contact_email varchar(254) nullable; reason varchar(500); actor_account_id uuid; school_id uuid; occurred_at timestamptz(3)",
+      "responsibility": "Append-only People-owned Staff/Student identity correction history. Names, descriptive contact values and reason stay in this owned storage and are excluded from receipts/outbox/audit diffs.",
       "constraints": "FK(organization_id,person_id)\u2192Person; FK actor account; scoped School context FK; UNIQUE(organization_id,person_id,version); index(organization_id,person_id,version desc); CHECK version>=2, bounded names/reason; append-only trigger",
       "rls": {
         "classification": "INSTITUTION",
@@ -2885,6 +2885,26 @@
         "intendedPolicy": "Require verified tenant keys plus current live Access authority; WITH CHECK binds both branch keys on inserts/updates.",
         "enforcement": "PATH_A_DEFERRED_TEN_03",
         "owner": "access",
+        "closureGate": "TEN-03"
+      }
+    },
+    {
+      "model": "PeopleStaffRecordGrant",
+      "table": "vs_people_staff_record_grant",
+      "fields": "id uuid PK; organization_id uuid; account_id uuid; capability PERSON_CORRECT; granted_by_operator_id uuid; granted_at timestamptz(3); revoked_at timestamptz(3) nullable; version int",
+      "responsibility": "Explicit organization-scoped authority for People-owned Staff Person corrections; branch roles alone are insufficient.",
+      "constraints": "Organization and Account FKs; UNIQUE(organization_id,account_id,capability); closed capability vocabulary; positive version; active lookup index",
+      "owner": "people",
+      "status": "MIGRATED",
+      "design": "docs/modules/people/DESIGN.md",
+      "rls": {
+        "classification": "INSTITUTION",
+        "scopeColumns": [
+          "organization_id"
+        ],
+        "intendedPolicy": "Require verified organization context plus current explicit PERSON_CORRECT authority; WITH CHECK binds organization_id on inserts/updates.",
+        "enforcement": "PATH_A_DEFERRED_TEN_03",
+        "owner": "people",
         "closureGate": "TEN-03"
       }
     },

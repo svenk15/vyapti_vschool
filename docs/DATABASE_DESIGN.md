@@ -127,6 +127,7 @@ Each link below opens the module LLD containing its complete fields, storage pur
 | SourceStudentMap | `vs_imports_source_student_map` | imports | MIGRATED | [imports LLD](modules/imports/DESIGN.md) |
 | Employee | `vs_people_employee` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | PeopleAvailabilityRecorderGrant | `vs_people_availability_recorder_grant` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
+| PeopleStaffRecordGrant | `vs_people_staff_record_grant` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | PeopleAvailabilityInterval | `vs_people_availability_interval` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | PeopleAvailabilityRevision | `vs_people_availability_revision` | people | MIGRATED | [people LLD](modules/people/DESIGN.md) |
 | TimetableCover | `vs_academics_timetable_cover` | academics | MIGRATED | [academics LLD](modules/academics/DESIGN.md) |

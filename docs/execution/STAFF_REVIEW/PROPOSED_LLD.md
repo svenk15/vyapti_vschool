@@ -88,7 +88,7 @@ People profile facade composes:
 
 Each foreign port reauthorizes its owner facts. People cannot infer authority from receiving the projection.
 
-### Proposed commands after PD-STF-02
+### Approved commands after PD-STF-02
 
 - `CorrectStaffPerson(personId, expectedVersion, allowedPatch, reason, key)`.
 - `CorrectEmployeeDetails(employeeId, expectedVersion, allowedPatch, reason, key)`.
@@ -101,9 +101,11 @@ Selecting Save creates an immutable browser/application operation snapshot for e
 
 A stale response retains three distinct values: latest owner values/version, attempted submitted values and any unrelated-section draft. The UI compares every changed field and requires explicit review before a new operation with the latest expected version and a new key. `UNKNOWN` never becomes stale merely because a later read differs. `COMMITTED_REFRESH_FAILED` is confirmed success: Close/Escape preserves it and recovery performs an authorized read only.
 
-### Proposed persistence
+### Approved persistence
 
-Extend the existing `vs_people_person_name_revision` only if its invariant can represent all approved Person patches; otherwise add `vs_people_person_revision` with versioned, redacted structured changes. Add `vs_people_employee_revision` for code/category/date changes. Do not migrate until PD-STF-02 fixes the field/evidence contract. Previous codes remain reserved through a scoped historical uniqueness strategy if approved.
+For the first implemented Person slice, extend `vs_people_person_name_revision` with nullable previous/corrected contact-email columns. Every Staff Person correction writes one immutable revision containing the complete previous and corrected name/contact snapshot, a bounded reason, actor, school, version and timestamp. The ordinary Profile exposes only a safe activity label; raw revision details remain People-owned. An organization-scoped `vs_people_staff_record_grant` with capability `PERSON_CORRECT` is required in addition to the actor's live branch membership and `class.manage`. Contact email remains descriptive and never changes Access login identity.
+
+Employee code and employment-start correction remain separate follow-up work. Category correction continues through the existing Employee command. Previous-code reservation and dependent-evidence rules must be implemented before those additional Employee fields become editable.
 
 ## 5. Dated Teacher eligibility STF-05
 

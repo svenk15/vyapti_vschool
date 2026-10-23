@@ -15,6 +15,7 @@ export const peopleGateway={
  async bindAccount(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['bindAccount']>[4]){const current=await scope(identity);return people.bindAccount(identity,current.organizationId,current.schoolId,employeeId,input);},
  async endEmployment(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['endEmployment']>[4]){const current=await scope(identity);return people.endEmployment(identity,current.organizationId,current.schoolId,employeeId,input);},
  async updateCategory(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['updateCategory']>[4]){const current=await scope(identity);return people.updateCategory(identity,current.organizationId,current.schoolId,employeeId,input);},
+ async correctStaffPerson(identity:Identity|null,employeeId:string,input:Parameters<PeopleFacade['correctStaffPerson']>[4]){const current=await scope(identity);return people.correctStaffPerson(identity,current.organizationId,current.schoolId,employeeId,input);},
 };
 
 export const peopleAvailabilityGateway={

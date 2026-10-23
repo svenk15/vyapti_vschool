@@ -8,6 +8,8 @@ import { createTenancyServices } from '../backend/composition/tenancy';
 import { DevelopmentMailSink } from '../backend/modules/access/infrastructure/development-mail-sink';
 import { localAccessConfig } from './access-local-config';
 import type { ProvisionInput, ProvisionResult } from '../shared/contracts/access';
+import {PrismaClient} from '../generated/prisma/client';
+import {PrismaPg} from '@prisma/adapter-pg';
 
 config({ path: '.env.local', quiet: true }); config({ quiet: true });
 const dir = 'artifacts/people-02';
@@ -58,6 +60,7 @@ function invitationToken(email: string): string | null {
 }
 async function main() {
   const local = localAccessConfig();
+  const db=new PrismaClient({adapter:new PrismaPg({connectionString:local.databaseUrl}),log:[]});
   let demo = load();
   const sink = new DevelopmentMailSink('http://127.0.0.1:3400', join(process.cwd(), 'artifacts/mail-sink'), true);
   const access = createAccessServices({ ...local, emailSender: sink });
@@ -112,6 +115,7 @@ async function main() {
     }
   } finally { await tenancy.disconnect(); }
 
+  await db.peopleStaffRecordGrant.upsert({where:{organizationId_accountId_capability:{organizationId:demo.organizationId,accountId:demo.accountId,capability:'PERSON_CORRECT'}},create:{id:randomUUID(),organizationId:demo.organizationId,accountId:demo.accountId,capability:'PERSON_CORRECT',grantedByOperatorId:local.operator.operatorId,grantedAt:new Date(),version:1},update:{revokedAt:null,version:{increment:1}}});
   const people = createPeopleServices({ databaseUrl: local.databaseUrl, releasedModules: ['academic_core'] });
   try {
     if (!demo.employeeIds) {
@@ -151,7 +155,8 @@ async function main() {
     if (!demo.invitationReviewEmployeeId) throw new Error('SYNTHETIC_INVITATION_REVIEW_EMPLOYEE_REQUIRED');
     await pendingAccess.grantEmployeeAccess({ employeeId: demo.invitationReviewEmployeeId, email: demo.invitationReviewEmail!, verificationReference: 'DEMO-STF06-VERIFY', confirmed: true, organizationId: demo.organizationId, schoolId: demo.schoolId, roles: ['TEACHER'], inviterAccountId: currentAdmin.accountId, inviterTokenVersion: currentAdmin.tokenVersion, requestId: randomUUID(), key: demo.invitationReviewAccessKey! });
   } finally { await pendingAccess.disconnect(); }
-  console.log(`Prepared an isolated synthetic People school, categorized staff profiles, a failed invitation review state and an active verified teacher account. Private credentials: ${path}`);
+  await db.$disconnect();
+  console.log(`Prepared an isolated synthetic People school, categorized staff profiles, explicit Staff-record correction authority, a failed invitation review state and an active verified teacher account. Private credentials: ${path}`);
 }
 main().catch(error => {
   const code = error instanceof Error && /^[A-Z_]+$/.test(error.message) ? error.message : 'LOCAL_DEMO_ERROR';
