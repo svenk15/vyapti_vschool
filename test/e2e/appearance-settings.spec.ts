@@ -49,7 +49,7 @@ test('authorized appearance settings preview, cancel, save, inherit, and surface
   await expect(page.locator('.appearance-preview-surface')).toHaveAttribute('data-vs-theme','forest');
 
   await settings.getByRole('radio',{name:/Amethyst & Pearl/}).check();
-  await settings.getByRole('button',{name:'Save changes'}).click();
+  await settings.getByRole('button',{name:'Save',exact:true}).click();
   await expect(settings.getByText('Theme updated.')).toBeVisible();
   await page.reload();
   await expect(page.locator('.brand-surface').first()).toHaveAttribute('data-vs-theme','amethyst');
@@ -59,11 +59,11 @@ test('authorized appearance settings preview, cancel, save, inherit, and surface
   const current=await access.getAppearanceConfiguration(identity,scope.organizationId,scope.schoolId);
   await access.updateBranchTheme(identity,scope.organizationId,scope.schoolId,{themeId:'linen',expectedVersion:current.version,key:randomUUID(),reason:'Synthetic concurrent appearance change'});
   await settings.getByRole('radio',{name:/Porcelain & Ink/}).check();
-  await settings.getByRole('button',{name:'Save changes'}).click();
+  await settings.getByRole('button',{name:'Save',exact:true}).click();
   await expect(settings.getByText('Appearance changed')).toBeVisible();
   await expect(settings.getByText(/Current: Linen & Bronze\. Attempted: Porcelain & Ink\./)).toBeVisible();
   await expect(settings.getByRole('radio',{name:/Porcelain & Ink/})).toBeChecked();
-  await settings.getByRole('button',{name:'Save changes'}).click();
+  await settings.getByRole('button',{name:'Save',exact:true}).click();
   await expect(settings.getByText('Theme updated.')).toBeVisible();
 
   await page.goto('/institutions');
@@ -72,7 +72,7 @@ test('authorized appearance settings preview, cancel, save, inherit, and surface
   await institution.getByRole('radio',{name:/Amethyst & Pearl/}).check();
   await institution.getByRole('button',{name:'Preview theme'}).click();
   await expect(page.locator('.appearance-preview-surface')).toHaveAttribute('data-vs-theme','amethyst');
-  await institution.getByRole('button',{name:'Save changes'}).click();
+  await institution.getByRole('button',{name:'Save',exact:true}).click();
   await expect(institution.getByText('Theme updated.')).toBeVisible();
   await expect(page.getByText('Use institution theme').last()).toBeVisible();
   await expect(page.getByText('Currently Amethyst & Pearl')).toBeVisible();

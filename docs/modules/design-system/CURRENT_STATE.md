@@ -177,3 +177,7 @@ Focused unit coverage verifies the full and restricted catalogues, empty-group s
 ## 18 October 2026 — UX-04 shared theme picker
 
 The verified `ThemePicker` uses one radio group, full-card labels, a selection checkmark and border, and noninteractive semantic miniature previews for all four approved themes. It renders as two columns on desktop and one on mobile with the specified 16px card padding/gap, 96px preview and 12px radius. `AppearanceSettings` owns only form/feedback state and calls a typed same-origin endpoint; it provides local preview, exit/cancel, save, exact-key retry and stale current-versus-attempted feedback. Desktop/mobile captures were directly inspected and the focused browser journey proves keyboard focus/selection and no root overflow. Evidence: [UX-04](../../evidence/ux-revamp-04-2026-10-18/README.md). Human review and native accessibility remain PENDING.
+
+## 23 October 2026 — Primary save-label consistency
+
+Initial primary actions that previously read **Save changes** now use the concise **Save** label in Appearance settings, branch information and Staff Change roles. State-specific recovery labels remain explicit. Focused Chromium journeys passed for all three consumers, alongside focused lint, TypeScript and the production build. Evidence: [save-label consistency](../../evidence/save-label-consistency-2026-10-23/README.md). No API, domain, authorization, persistence or migration contract changed; human review remains PENDING.

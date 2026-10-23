@@ -43,7 +43,7 @@ export function StaffPortalManagement({employeeId,employeeName,staffNumber,schoo
     {action!=='SET_ROLES'&&<dl className="staff-access-action-facts"><div><dt>Sign-in email</dt><dd>{current.email}</dd></div><div><dt>Current state</dt><dd>{branchState}</dd></div></dl>}
     {action==='SET_ROLES'&&<fieldset><legend>Branch roles</legend>{roles.includes('PRINCIPAL')&&<Checkbox label="Principal" checked disabled/>}<Checkbox label="School administrator" checked={roles.includes('SCHOOL_ADMIN')} disabled={disabled} onChange={event=>toggle('SCHOOL_ADMIN',event.target.checked)}/><Checkbox label="Teacher" checked={roles.includes('TEACHER')} disabled={disabled} onChange={event=>toggle('TEACHER',event.target.checked)}/></fieldset>}
     <TextArea label="Reason" required maxLength={500} value={reason} disabled={disabled} onChange={event=>setReason(event.target.value)}/>
-    <div className="drawer-actions"><Button type="button" variant="secondary" disabled={command.busy||command.uncertain} onClick={()=>setStep('summary')}>Back</Button><Button type="submit" loading={command.busy} disabled={disabled||(action==='SET_ROLES'&&(!roles.length||unchangedRoles))||!reason.trim()}>{action==='SET_ROLES'?'Save changes':actionTitle}</Button></div>
+    <div className="drawer-actions"><Button type="button" variant="secondary" disabled={command.busy||command.uncertain} onClick={()=>setStep('summary')}>Back</Button><Button type="submit" loading={command.busy} disabled={disabled||(action==='SET_ROLES'&&(!roles.length||unchangedRoles))||!reason.trim()}>{action==='SET_ROLES'?'Save':actionTitle}</Button></div>
    </form>}
   </Dialog>
  </>;
