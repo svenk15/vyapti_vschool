@@ -10,7 +10,7 @@ const EditIcon=()=> <svg className="staff-section-action-icon" aria-hidden="true
 export function StaffPersonalEdit({displayName,employeeCode,contactEmail}:{displayName:string;employeeCode:string;contactEmail:string|null}){
  const [open,setOpen]=useState(false);
  return <>
-  <Button className="staff-section-action" variant="ghost" size="small" onClick={()=>setOpen(true)}><EditIcon/>Edit</Button>
+  <Button className="staff-section-action" variant="ghost" size="small" aria-label="Edit personal details" onClick={()=>setOpen(true)}><EditIcon/>Edit</Button>
   <Dialog drawer className="staff-reference-drawer staff-personal-drawer" open={open} onClose={()=>setOpen(false)} title="Edit personal details">
    <div className="staff-personal-edit-form">
     <div className="staff-drawer-person"><Avatar name={displayName}/><div className="staff-drawer-person-copy"><div className="staff-drawer-person-name">{displayName}</div><div className="staff-drawer-person-number">{employeeCode}</div></div></div>

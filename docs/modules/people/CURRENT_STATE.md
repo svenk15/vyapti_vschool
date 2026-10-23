@@ -1,5 +1,11 @@
 # People and staff identity — current state
 
+## Staff edit-drawer alignment — 23 October 2026
+
+Staff Profile Personal and Employment drawers now follow the frozen Staff reference's typography, spacing, fields, thin outlines and action hierarchy at 1440×1000 and 390×844. A broad profile-section descendant selector had unintentionally applied the small inline `Edit` treatment to the dialog's Close, Save and X controls; it now targets only the direct section action. The shared drawer close control uses the approved SVG X and 44px target. Personal fields remain read-only because their correction contract is still unapproved; Employment category correction retains its existing guarded owner command and recovery semantics.
+
+Focused local Chromium verification passed for both viewports, including Escape/focus restoration, reason validation, Save enablement, dimensions and horizontal overflow. The clean 4 GiB production build passed with build ID `2mm4blVhnrEk9ll_MFHio`. [Evidence](../../evidence/staff-edit-drawer-alignment-2026-10-23/README.md). Human visual acceptance remains PENDING.
+
 ## Staff Profile consistency and in-context management — 23 October 2026
 
 Staff Manage and Sort now reuse the Student directory glyphs and interaction hierarchy. Staff Profile exposes the already-approved Employee-category correction as an in-context Employment drawer with mandatory reason, optimistic version and exact-key recovery. Dated teaching eligibility now opens as an in-context Profile drawer while preserving the Academics preview, assignment-impact acknowledgement, stale protection and final owner save. The compatibility eligibility route remains available for existing deep links.

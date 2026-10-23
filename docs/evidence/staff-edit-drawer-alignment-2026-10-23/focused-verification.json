@@ -1,0 +1,244 @@
+{
+  "verifiedAt": "2026-10-23T08:23:40.101Z",
+  "applicationUrl": "http://127.0.0.1:3400",
+  "results": [
+    {
+      "label": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "personal": {
+        "dialog": {
+          "width": 470,
+          "height": 1000,
+          "fontSize": "14px",
+          "borderRadius": "0px",
+          "borderWidth": "0px 0px 0px 1px",
+          "padding": "0px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "close": {
+          "width": 44,
+          "height": 44,
+          "fontSize": "14px",
+          "borderRadius": "6px",
+          "borderWidth": "0px",
+          "padding": "10px",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "field": {
+          "width": 413,
+          "height": 40,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "9px 11px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "secondary": {
+          "width": 63.515625,
+          "height": 36,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "7px 13px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "overflow": 0
+      },
+      "employment": {
+        "dialog": {
+          "width": 470,
+          "height": 1000,
+          "fontSize": "14px",
+          "borderRadius": "0px",
+          "borderWidth": "0px 0px 0px 1px",
+          "padding": "0px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "close": {
+          "width": 44,
+          "height": 44,
+          "fontSize": "14px",
+          "borderRadius": "6px",
+          "borderWidth": "0px",
+          "padding": "10px",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "field": {
+          "width": 413,
+          "height": 40,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "9px 11px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "secondary": {
+          "width": 71.40625,
+          "height": 36,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "7px 13px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "primary": {
+          "width": 58.625,
+          "height": 36,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "7px 13px",
+          "background": "rgb(36, 107, 83)",
+          "color": "rgb(255, 255, 255)",
+          "opacity": "1"
+        },
+        "primaryState": {
+          "disabled": false,
+          "matchesDisabled": false,
+          "className": "btn btn-primary btn-normal ",
+          "primaryVariable": "#246b53"
+        },
+        "overflow": 0
+      },
+      "passed": true
+    },
+    {
+      "label": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "personal": {
+        "dialog": {
+          "width": 390,
+          "height": 844,
+          "fontSize": "14px",
+          "borderRadius": "0px",
+          "borderWidth": "0px 0px 0px 1px",
+          "padding": "0px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "close": {
+          "width": 44,
+          "height": 44,
+          "fontSize": "14px",
+          "borderRadius": "6px",
+          "borderWidth": "0px",
+          "padding": "10px",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "field": {
+          "width": 349,
+          "height": 44,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "9px 11px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "secondary": {
+          "width": 63.515625,
+          "height": 44,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "7px 13px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "overflow": 0
+      },
+      "employment": {
+        "dialog": {
+          "width": 390,
+          "height": 844,
+          "fontSize": "14px",
+          "borderRadius": "0px",
+          "borderWidth": "0px 0px 0px 1px",
+          "padding": "0px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "close": {
+          "width": 44,
+          "height": 44,
+          "fontSize": "14px",
+          "borderRadius": "6px",
+          "borderWidth": "0px",
+          "padding": "10px",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "field": {
+          "width": 349,
+          "height": 44,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "9px 11px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "secondary": {
+          "width": 71.40625,
+          "height": 44,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "7px 13px",
+          "background": "rgb(255, 255, 255)",
+          "color": "rgb(31, 48, 40)",
+          "opacity": "1"
+        },
+        "primary": {
+          "width": 268.59375,
+          "height": 44,
+          "fontSize": "13px",
+          "borderRadius": "6px",
+          "borderWidth": "1px",
+          "padding": "7px 13px",
+          "background": "rgb(36, 107, 83)",
+          "color": "rgb(255, 255, 255)",
+          "opacity": "1"
+        },
+        "primaryState": {
+          "disabled": false,
+          "matchesDisabled": false,
+          "className": "btn btn-primary btn-normal ",
+          "primaryVariable": "#246b53"
+        },
+        "overflow": 0
+      },
+      "passed": true
+    }
+  ]
+}
