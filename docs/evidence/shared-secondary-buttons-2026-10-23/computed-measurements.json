@@ -1,0 +1,167 @@
+{
+  "buildId": "b_4Tj9HkOne4Z_S4lor5g",
+  "viewports": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "devicePixelRatio": 1,
+      "staffClose": {
+        "borderColor": "rgb(220, 229, 223)",
+        "borderWidth": "1px",
+        "borderRadius": "8px",
+        "height": 36,
+        "semanticBorder": "rgb(220, 229, 223)"
+      },
+      "sharedButtons": [
+        {
+          "label": "Open confirmation",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 40,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Filters",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 40,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Sort",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 40,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Check status",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 40,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Review setup",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 40,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Refresh",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 40,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Keep current state",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 0,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Cancel",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 0,
+          "semanticBorder": "rgb(220, 229, 223)"
+        }
+      ],
+      "rootOverflow": false
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "devicePixelRatio": 1,
+      "staffClose": {
+        "borderColor": "rgb(220, 229, 223)",
+        "borderWidth": "1px",
+        "borderRadius": "8px",
+        "height": 44,
+        "semanticBorder": "rgb(220, 229, 223)"
+      },
+      "sharedButtons": [
+        {
+          "label": "Open confirmation",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 44,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Filters",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 44,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Sort",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 44,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Check status",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 44,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Review setup",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 44,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Refresh",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 44,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Keep current state",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 0,
+          "semanticBorder": "rgb(220, 229, 223)"
+        },
+        {
+          "label": "Cancel",
+          "borderColor": "rgb(220, 229, 223)",
+          "borderWidth": "1px",
+          "borderRadius": "8px",
+          "height": 0,
+          "semanticBorder": "rgb(220, 229, 223)"
+        }
+      ],
+      "rootOverflow": false
+    }
+  }
+}

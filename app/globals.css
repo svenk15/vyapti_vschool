@@ -1079,7 +1079,7 @@ h3{font-size:16px;font-weight:600;line-height:24px;margin-bottom:8px}
 .card{background:var(--vs-surface);border:1px solid var(--vs-border);border-radius:12px;box-shadow:none}.padded{padding:24px}
 .btn{min-height:40px;padding:9px 16px;gap:8px;border-radius:8px;font-size:14px;font-weight:600;line-height:20px}.btn-small{min-height:36px;padding:7px 12px}.btn-consequence{min-height:44px;padding:11px 16px}.btn-icon{width:44px;height:44px;min-height:44px;padding:0}.btn[aria-busy=true]{min-width:var(--button-loading-width,auto)}
 .btn-primary{background:var(--vs-primary);color:var(--vs-on-primary)}.btn-primary:hover{background:var(--vs-primary-hover);filter:none}.btn-primary:active{background:var(--vs-primary-pressed)}
-.btn-secondary{background:var(--vs-surface);color:var(--vs-text);border-color:var(--vs-text-muted)}.btn-secondary:hover,.btn-ghost:hover{background:var(--vs-surface-subtle)}.btn-ghost{color:var(--vs-primary)}
+.btn-secondary{background:var(--vs-surface);color:var(--vs-text);border-color:var(--vs-border)}.btn-secondary:hover,.btn-ghost:hover{background:var(--vs-surface-subtle)}.btn-ghost{color:var(--vs-primary)}
 .btn:disabled{background:var(--vs-surface-subtle);color:var(--vs-text-muted);border-color:var(--vs-border);opacity:1}
 .badge{border-radius:6px;padding:3px 8px;font-size:12px;font-weight:500;line-height:18px;background:var(--neutral-bg);color:var(--neutral-text);border-color:var(--neutral-border)}
 .badge-success{background:var(--success-bg);color:var(--success-text);border-color:var(--success-border)}.badge-warning{background:var(--warning-bg);color:var(--warning-text);border-color:var(--warning-border)}
