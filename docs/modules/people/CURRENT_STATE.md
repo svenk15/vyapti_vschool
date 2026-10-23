@@ -1,5 +1,11 @@
 # People and staff identity — current state
 
+## Staff direct role save and checkbox consistency — 23 October 2026
+
+Following explicit user approval, Staff Profile **Change roles** now saves directly from the role-and-reason form; the redundant review screen has been removed. The resulting request still uses the Access owner's guarded `UpdateMembership` command with `SET_ROLES`, selected roles, required reason, expected version, command key and existing recovery behavior. Staff role checkboxes now use the same compact visual recipe as Student onboarding: 16×16 controls, 9px gap and 20px row height, with matching 12px desktop and 13px mobile label text.
+
+Changed-file ESLint, TypeScript and a clean 4 GiB production build passed. Build ID: `kdWrEI9bH4dskYZyjX2V9`. Focused Playwright verification at 1440×1000 and 390×844 confirmed direct Save, exact computed checkbox parity, keyboard focus and no root overflow; the intercepted verification request was not persisted. See [direct role save evidence](../../evidence/staff-direct-role-save-2026-10-23/README.md). Human visual acceptance remains PENDING.
+
 ## Staff access action-drawer alignment — 23 October 2026
 
 The Staff Profile **View access** drawer was exercised through Change roles, role review, Suspend access and Revoke access at 1440×1000 and 390×844 against the frozen 22 October Staff reference. A broad identity-text selector had overridden the avatar's grid centring, and viewport-derived form heights stretched short action compositions. The avatar initials and identity copy are now centred, forms and footers are content-driven, mobile Back/primary proportions match the reference, and Suspend/Reinstate/Revoke show the authorized sign-in email and current state already available from the Access projection. Summary-row arrows were measured and were already centred within 0.5 CSS px.

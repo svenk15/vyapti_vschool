@@ -1,0 +1,75 @@
+{
+  "buildId": "kdWrEI9bH4dskYZyjX2V9",
+  "viewports": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "studentMetrics": {
+        "width": "16px",
+        "height": "16px",
+        "margin": "2px 0px 0px",
+        "fontSize": "12px",
+        "lineHeight": "20px",
+        "minHeight": "20px",
+        "gap": "9px"
+      },
+      "staffMetrics": {
+        "width": "16px",
+        "height": "16px",
+        "margin": "2px 0px 0px",
+        "fontSize": "12px",
+        "lineHeight": "20px",
+        "minHeight": "20px",
+        "gap": "9px"
+      },
+      "checkboxFocused": true,
+      "rootOverflow": false,
+      "reviewCount": 0,
+      "saveVisible": true,
+      "requestCount": 1,
+      "requestBody": {
+        "payload": {
+          "action": "SET_ROLES",
+          "roles": [
+            "PRINCIPAL",
+            "TEACHER"
+          ],
+          "reason": "Focused direct-save verification"
+        },
+        "expectedVersion": 4
+      }
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "studentMetrics": {
+        "width": "16px",
+        "height": "16px",
+        "margin": "2px 0px 0px",
+        "fontSize": "13px",
+        "lineHeight": "20px",
+        "minHeight": "20px",
+        "gap": "9px"
+      },
+      "staffMetrics": {
+        "width": "16px",
+        "height": "16px",
+        "margin": "2px 0px 0px",
+        "fontSize": "13px",
+        "lineHeight": "20px",
+        "minHeight": "20px",
+        "gap": "9px"
+      },
+      "checkboxFocused": true,
+      "rootOverflow": false,
+      "reviewCount": 0,
+      "saveVisible": true,
+      "requestCount": 0,
+      "requestBody": null
+    }
+  }
+}
