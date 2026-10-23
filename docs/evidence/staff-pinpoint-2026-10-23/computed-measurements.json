@@ -1,0 +1,268 @@
+{
+  "measuredBuildId": "HmWFmTRnxMhwrYzNmY3nI",
+  "environment": {
+    "browser": "Chromium",
+    "devicePixelRatio": 1,
+    "browserZoom": 1,
+    "computedBodyFont": "Inter with generated Inter fallback and system fallbacks"
+  },
+  "desktop": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "filter": {
+      "reference": {
+        "drawer": [
+          470,
+          1000
+        ],
+        "header": [
+          469,
+          94
+        ],
+        "body": [
+          469,
+          373
+        ],
+        "footer": [
+          469,
+          73
+        ],
+        "cancel": [
+          71.40625,
+          36
+        ],
+        "apply": [
+          64.5,
+          36
+        ]
+      },
+      "application": {
+        "drawer": [
+          470,
+          1000
+        ],
+        "header": [
+          469,
+          94
+        ],
+        "body": [
+          469,
+          373
+        ],
+        "footer": [
+          469,
+          73
+        ],
+        "cancel": [
+          71.40625,
+          36
+        ],
+        "apply": [
+          64.5,
+          36
+        ]
+      }
+    },
+    "sort": {
+      "reference": {
+        "drawer": [
+          470,
+          1000
+        ],
+        "header": [
+          469,
+          94
+        ],
+        "body": [
+          469,
+          358
+        ],
+        "option": [
+          413,
+          35
+        ],
+        "footer": [
+          469,
+          73
+        ],
+        "cancel": [
+          71.40625,
+          36
+        ],
+        "apply": [
+          64.5,
+          36
+        ]
+      },
+      "application": {
+        "drawer": [
+          470,
+          1000
+        ],
+        "header": [
+          469,
+          94
+        ],
+        "body": [
+          469,
+          358
+        ],
+        "option": [
+          413,
+          35
+        ],
+        "footer": [
+          469,
+          73
+        ],
+        "cancel": [
+          71.40625,
+          36
+        ],
+        "apply": [
+          64.5,
+          36
+        ]
+      }
+    },
+    "profile": {
+      "referenceRecordWidth": 884,
+      "applicationRecordWidth": 884,
+      "applicationRootOverflowX": false
+    }
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "filter": {
+      "reference": {
+        "drawer": [
+          390,
+          844
+        ],
+        "header": [
+          389,
+          89
+        ],
+        "body": [
+          389,
+          369
+        ],
+        "footer": [
+          389,
+          77
+        ],
+        "cancel": [
+          71.40625,
+          44
+        ],
+        "apply": [
+          268.59375,
+          44
+        ]
+      },
+      "application": {
+        "drawer": [
+          390,
+          844
+        ],
+        "header": [
+          389,
+          89
+        ],
+        "body": [
+          389,
+          369
+        ],
+        "footer": [
+          389,
+          77
+        ],
+        "cancel": [
+          71.40625,
+          44
+        ],
+        "apply": [
+          268.59375,
+          44
+        ]
+      }
+    },
+    "sort": {
+      "reference": {
+        "drawer": [
+          390,
+          844
+        ],
+        "header": [
+          389,
+          89
+        ],
+        "body": [
+          389,
+          354
+        ],
+        "option": [
+          349,
+          35
+        ],
+        "footer": [
+          389,
+          77
+        ],
+        "cancel": [
+          71.40625,
+          44
+        ],
+        "apply": [
+          268.59375,
+          44
+        ]
+      },
+      "application": {
+        "drawer": [
+          390,
+          844
+        ],
+        "header": [
+          389,
+          89
+        ],
+        "body": [
+          389,
+          354
+        ],
+        "option": [
+          349,
+          35
+        ],
+        "footer": [
+          389,
+          77
+        ],
+        "cancel": [
+          71.40625,
+          44
+        ],
+        "apply": [
+          268.59375,
+          44
+        ]
+      }
+    },
+    "profile": {
+      "referenceRecordWidth": 358,
+      "applicationRecordWidth": 358,
+      "applicationRootOverflowX": false
+    }
+  },
+  "notes": [
+    "Dimensions are CSS pixels.",
+    "Reference and application were rendered at matching viewports, DPR 1 and browser zoom 1.",
+    "The authorized application shell is retained; Profile record geometry is compared independently of the standalone reference shell."
+  ]
+}

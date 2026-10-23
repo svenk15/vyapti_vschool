@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-10-23T02:55:01.757Z",
+  "reference": "file:///Users/venky/Documents/codebase/vyapti_vschool/docs/execution/STAFF_REVIEW/references/approved-20261022/mock/index.html",
+  "application": "http://127.0.0.1:3400",
+  "buildId": "HmWFmTRnxMhwrYzNmY3nI",
+  "states": {
+    "desktop": {
+      "profileUrl": "http://127.0.0.1:3400/admin/teachers/4787b062-4178-4e7f-abf4-fe53c8484012?returnTo=%2Fadmin%2Fteachers",
+      "computed": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "devicePixelRatio": 1,
+        "zoom": 1,
+        "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "rootOverflowX": false,
+        "profile": {
+          "width": 884
+        }
+      }
+    },
+    "mobile": {
+      "profileUrl": "http://127.0.0.1:3400/admin/teachers/4787b062-4178-4e7f-abf4-fe53c8484012?returnTo=%2Fadmin%2Fteachers",
+      "computed": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "devicePixelRatio": 1,
+        "zoom": 1,
+        "font": "inter, \"inter Fallback\", ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif, Inter, ui-sans-serif, system-ui, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+        "rootOverflowX": false,
+        "profile": {
+          "width": 358
+        }
+      }
+    }
+  }
+}
