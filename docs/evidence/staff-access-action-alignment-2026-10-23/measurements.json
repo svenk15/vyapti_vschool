@@ -1,0 +1,513 @@
+{
+  "buildId": "5JUBIQ9N3yPp3sb1kJnKb",
+  "viewports": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "application": {
+        "summaryActions": [
+          {
+            "label": "Change roles→",
+            "rowCenterY": 621,
+            "iconCenterY": 620.5,
+            "delta": -0.5
+          },
+          {
+            "label": "Suspend access→",
+            "rowCenterY": 665,
+            "iconCenterY": 664.5,
+            "delta": -0.5
+          },
+          {
+            "label": "Revoke access→",
+            "rowCenterY": 709,
+            "iconCenterY": 709,
+            "delta": 0
+          }
+        ],
+        "states": {
+          "change": {
+            "identity": {
+              "row": {
+                "x": 996,
+                "y": 119,
+                "width": 419,
+                "height": 57,
+                "centerY": 147.5
+              },
+              "avatar": {
+                "x": 996,
+                "y": 119,
+                "width": 36,
+                "height": 36,
+                "centerY": 137
+              },
+              "copy": {
+                "x": 1044,
+                "y": 119,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 137
+              }
+            }
+          },
+          "review": {
+            "identity": {
+              "row": {
+                "x": 996,
+                "y": 119,
+                "width": 419,
+                "height": 57,
+                "centerY": 147.5
+              },
+              "avatar": {
+                "x": 996,
+                "y": 119,
+                "width": 36,
+                "height": 36,
+                "centerY": 137
+              },
+              "copy": {
+                "x": 1044,
+                "y": 119,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 137
+              }
+            }
+          },
+          "suspend": {
+            "identity": {
+              "row": {
+                "x": 996,
+                "y": 119,
+                "width": 419,
+                "height": 57,
+                "centerY": 147.5
+              },
+              "avatar": {
+                "x": 996,
+                "y": 119,
+                "width": 36,
+                "height": 36,
+                "centerY": 137
+              },
+              "copy": {
+                "x": 1044,
+                "y": 119,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 137
+              }
+            }
+          },
+          "revoke": {
+            "identity": {
+              "row": {
+                "x": 996,
+                "y": 119,
+                "width": 419,
+                "height": 57,
+                "centerY": 147.5
+              },
+              "avatar": {
+                "x": 996,
+                "y": 119,
+                "width": 36,
+                "height": 36,
+                "centerY": 137
+              },
+              "copy": {
+                "x": 1044,
+                "y": 119,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 137
+              }
+            }
+          }
+        }
+      },
+      "reference": {
+        "summaryActions": [
+          {
+            "label": "Change roles",
+            "rowCenterY": 560.5,
+            "iconCenterY": 560.5,
+            "delta": 0
+          },
+          {
+            "label": "Suspend access",
+            "rowCenterY": 604.5,
+            "iconCenterY": 604.5,
+            "delta": 0
+          },
+          {
+            "label": "Revoke access",
+            "rowCenterY": 648.5,
+            "iconCenterY": 648.5,
+            "delta": 0
+          }
+        ],
+        "states": {
+          "change": {
+            "identity": {
+              "row": {
+                "x": 999,
+                "y": 120,
+                "width": 413,
+                "height": 57,
+                "centerY": 148.5
+              },
+              "avatar": {
+                "x": 999,
+                "y": 120,
+                "width": 36,
+                "height": 36,
+                "centerY": 138
+              },
+              "copy": {
+                "x": 1047,
+                "y": 120,
+                "width": 81.5,
+                "height": 36,
+                "centerY": 138
+              }
+            }
+          },
+          "review": {
+            "identity": {
+              "row": {
+                "x": 999,
+                "y": 120,
+                "width": 413,
+                "height": 57,
+                "centerY": 148.5
+              },
+              "avatar": {
+                "x": 999,
+                "y": 120,
+                "width": 36,
+                "height": 36,
+                "centerY": 138
+              },
+              "copy": {
+                "x": 1047,
+                "y": 120,
+                "width": 81.5,
+                "height": 36,
+                "centerY": 138
+              }
+            }
+          },
+          "suspend": {
+            "identity": {
+              "row": {
+                "x": 999,
+                "y": 120,
+                "width": 413,
+                "height": 57,
+                "centerY": 148.5
+              },
+              "avatar": {
+                "x": 999,
+                "y": 120,
+                "width": 36,
+                "height": 36,
+                "centerY": 138
+              },
+              "copy": {
+                "x": 1047,
+                "y": 120,
+                "width": 81.5,
+                "height": 36,
+                "centerY": 138
+              }
+            }
+          },
+          "revoke": {
+            "identity": {
+              "row": {
+                "x": 999,
+                "y": 120,
+                "width": 413,
+                "height": 57,
+                "centerY": 148.5
+              },
+              "avatar": {
+                "x": 999,
+                "y": 120,
+                "width": 36,
+                "height": 36,
+                "centerY": 138
+              },
+              "copy": {
+                "x": 1047,
+                "y": 120,
+                "width": 81.5,
+                "height": 36,
+                "centerY": 138
+              }
+            }
+          }
+        }
+      }
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "application": {
+        "summaryActions": [
+          {
+            "label": "Change roles→",
+            "rowCenterY": 615,
+            "iconCenterY": 614.5,
+            "delta": -0.5
+          },
+          {
+            "label": "Suspend access→",
+            "rowCenterY": 659,
+            "iconCenterY": 658.5,
+            "delta": -0.5
+          },
+          {
+            "label": "Revoke access→",
+            "rowCenterY": 703,
+            "iconCenterY": 703,
+            "delta": 0
+          }
+        ],
+        "states": {
+          "change": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 57,
+                "centerY": 141.5
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113,
+                "width": 36,
+                "height": 36,
+                "centerY": 131
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 131
+              }
+            }
+          },
+          "review": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 57,
+                "centerY": 141.5
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113,
+                "width": 36,
+                "height": 36,
+                "centerY": 131
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 131
+              }
+            }
+          },
+          "suspend": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 57,
+                "centerY": 141.5
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113,
+                "width": 36,
+                "height": 36,
+                "centerY": 131
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 131
+              }
+            }
+          },
+          "revoke": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 57,
+                "centerY": 141.5
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113,
+                "width": 36,
+                "height": 36,
+                "centerY": 131
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 94.953125,
+                "height": 36,
+                "centerY": 131
+              }
+            }
+          }
+        }
+      },
+      "reference": {
+        "summaryActions": [
+          {
+            "label": "Change roles",
+            "rowCenterY": 551,
+            "iconCenterY": 551,
+            "delta": 0
+          },
+          {
+            "label": "Suspend access",
+            "rowCenterY": 595,
+            "iconCenterY": 595,
+            "delta": 0
+          },
+          {
+            "label": "Revoke access",
+            "rowCenterY": 639,
+            "iconCenterY": 639,
+            "delta": 0
+          }
+        ],
+        "states": {
+          "change": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 58.5,
+                "centerY": 142.25
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113.75,
+                "width": 36,
+                "height": 36,
+                "centerY": 131.75
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 88.28125,
+                "height": 37.5,
+                "centerY": 131.75
+              }
+            }
+          },
+          "review": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 58.5,
+                "centerY": 142.25
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113.75,
+                "width": 36,
+                "height": 36,
+                "centerY": 131.75
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 88.28125,
+                "height": 37.5,
+                "centerY": 131.75
+              }
+            }
+          },
+          "suspend": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 58.5,
+                "centerY": 142.25
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113.75,
+                "width": 36,
+                "height": 36,
+                "centerY": 131.75
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 88.28125,
+                "height": 37.5,
+                "centerY": 131.75
+              }
+            }
+          },
+          "revoke": {
+            "identity": {
+              "row": {
+                "x": 21,
+                "y": 113,
+                "width": 349,
+                "height": 58.5,
+                "centerY": 142.25
+              },
+              "avatar": {
+                "x": 21,
+                "y": 113.75,
+                "width": 36,
+                "height": 36,
+                "centerY": 131.75
+              },
+              "copy": {
+                "x": 69,
+                "y": 113,
+                "width": 88.28125,
+                "height": 37.5,
+                "centerY": 131.75
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

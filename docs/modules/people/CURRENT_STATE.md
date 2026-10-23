@@ -1,5 +1,11 @@
 # People and staff identity — current state
 
+## Staff access action-drawer alignment — 23 October 2026
+
+The Staff Profile **View access** drawer was exercised through Change roles, role review, Suspend access and Revoke access at 1440×1000 and 390×844 against the frozen 22 October Staff reference. A broad identity-text selector had overridden the avatar's grid centring, and viewport-derived form heights stretched short action compositions. The avatar initials and identity copy are now centred, forms and footers are content-driven, mobile Back/primary proportions match the reference, and Suspend/Reinstate/Revoke show the authorized sign-in email and current state already available from the Access projection. Summary-row arrows were measured and were already centred within 0.5 CSS px.
+
+Focused interactive comparison passed for every listed CTA without submitting a mutation; changed-file ESLint, diff validation and the clean 4 GiB production build passed. Build ID: `5JUBIQ9N3yPp3sb1kJnKb`. No owner command, authorization, recovery, schema, migration or fixture changed. See [action alignment evidence](../../evidence/staff-access-action-alignment-2026-10-23/README.md). Human visual acceptance remains PENDING.
+
 ## Administrator Staff full-fidelity checkpoint — 23 October 2026
 
 The current working-tree candidate based on `c28f80d59b4db85deadb9045c9de44a7765d68bd` aligns every independently authorized Administrator Staff state with the frozen Staff reference: Profiles directory, Filter and Sort drawers, Manage dialog, Profile, assignments and portal drawers, Add Staff, Access directory, independent invitation and the two-step access-management drawer. People-owned category/employment filtering and name/code/employment ordering run across the complete authorized result before cursor pagination. URL state, Back/Forward, exact recovery, live authorization and owner boundaries remain intact.
