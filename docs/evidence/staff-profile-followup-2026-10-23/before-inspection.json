@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-10-23T16:16:18.073Z",
+  "profiles": [
+    {
+      "id": "4787b062-4178-4e7f-abf4-fe53c8484012",
+      "heading": "Avery Example",
+      "viewAssignments": true
+    },
+    {
+      "id": "c2e16f98-8628-4d44-a3f5-2c10bae075a9",
+      "heading": "Jordan Example",
+      "viewAssignments": false
+    },
+    {
+      "id": "4aeb868a-0d2f-4733-8bcc-faa80c27d396",
+      "heading": "Robin Support",
+      "viewAssignments": false
+    },
+    {
+      "id": "7baafdc7-284e-44e7-884a-9f9a298716d5",
+      "heading": "Morgan Invite Review",
+      "viewAssignments": false
+    }
+  ],
+  "geometry": {
+    "input": {
+      "top": 229,
+      "bottom": 269
+    },
+    "label": {
+      "top": 205,
+      "bottom": 223
+    },
+    "gap": 6,
+    "outline": "rgb(36, 107, 83) solid 2px",
+    "outlineOffset": "2px"
+  }
+}
