@@ -1,8 +1,12 @@
 # Session attendance and accountable corrections — current state
 
-## Attendance presentation candidate — 24 October 2026
+## Attendance presentation correction — 24 October 2026
 
-Source changes are prepared against the corrected 26b569cd export. Registers, Reports, scheduling and register-detail presentation are implemented but **not engineering-verified**: authenticated visual and real PostgreSQL checks remain pending. Pending Requests consolidation is implemented; completed history and review-drawer parity remain open. See [candidate evidence](../../evidence/attendance-implementation-2026-10-24/README.md). Existing verified milestones below are unchanged.
+Application commit `49c2542161478522d895d1ee7357016adb10d49b` completes the bounded AC-01–AC-08 correction against the unchanged `approved-c.html` reference. Registers, Requests, Reports, register detail, compact records, calendars and all Attendance drawers now use the approved responsive composition; the correction and correction-request context blocks were directly inspected. The production build is `RscvfUEa7EzLAioXBK7Dx`.
+
+Focused TypeScript and changed-file lint passed. Existing focused unit coverage passed 33/33; real-PostgreSQL Attendance coverage passed 17/17. The final production build passed with the established 4 GiB heap. Sequential one-worker connected journeys passed for desktop and mobile scheduling/submission/correction recovery/cancellation, and for desktop and mobile correction-request routing/final-only application. Test PostgreSQL retained 123 applied migrations with none pending. Reference/application captures and bilateral CSS measurements cover 1440×1000, 900×1000, 390×844 and 360×800, with representative four-theme evidence. See [AC-01–AC-08 evidence](../../evidence/attendance-ux-correction-2026-10-24/README.md).
+
+The 900px reference keeps its own sidebar while the current shared shell intentionally uses the compact header at that breakpoint; this shared-shell difference was measured and was not changed in an Attendance-only slice. Content-dependent rows remain taller where the production contract displays Teacher/admission identifiers. Native accessibility, TEN-03, human acceptance and production readiness remain **PENDING**. Existing verified milestones below are unchanged.
 
 
 ## UX-12 submitted-register detail regression — 19 October 2026

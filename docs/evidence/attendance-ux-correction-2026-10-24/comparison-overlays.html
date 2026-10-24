@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Attendance AC-01–AC-08 comparisons</title>
+  <style>
+    body{font:14px/1.5 system-ui,sans-serif;margin:24px;color:#1d3028;background:#f5f7f5}h1,h2{margin:0 0 16px}.set{margin:0 0 32px}.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.frame{background:white;border:1px solid #ccd8d0;border-radius:8px;padding:10px;overflow:auto}.frame strong{display:block;margin-bottom:8px}.frame img{display:block;max-width:100%;height:auto}.overlay{position:relative;display:inline-block}.overlay img+img{position:absolute;inset:0;opacity:.5;mix-blend-mode:difference}@media(max-width:800px){.pair{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <h1>Administrator Attendance — matched comparisons</h1>
+  <p>Reference and application captures use identical CSS viewports, device scale 1 and equivalent synthetic states. The overlay is an inspection aid; content-dependent text and authorized data are expected to differ.</p>
+  <div id="comparisons"></div>
+  <script>
+    const cases=[
+      ['Registers · desktop','reference-registers-desktop.png','application-registers-desktop.png'],
+      ['Registers · 390px','reference-registers-mobile.png','application-registers-mobile.png'],
+      ['Registers · 360px','reference-registers-narrow.png','application-registers-narrow.png'],
+      ['Requests · 390px','reference-requests-mobile.png','application-requests-mobile.png'],
+      ['Reports · 360px','reference-reports-narrow.png','application-reports-narrow.png'],
+      ['Schedule · 390px','reference-schedule-mobile.png','application-schedule-mobile.png'],
+      ['Correction · 390px','reference-correction-mobile.png','application-correction-mobile.png'],
+      ['Cancellation · 390px','reference-cancellation-mobile.png','application-cancellation-mobile.png'],
+      ['Missing registers · 390px','reference-missing-registers-mobile.png','application-missing-registers-mobile.png'],
+      ['Correction-request review · 390px','reference-correction-request-review-mobile.png','application-correction-request-review-mobile.png']
+    ];
+    document.querySelector('#comparisons').innerHTML=cases.map(([title,reference,application])=>`<section class="set"><h2>${title}</h2><div class="pair"><div class="frame"><strong>Reference</strong><img src="${reference}" alt="${title} reference"></div><div class="frame"><strong>Application</strong><img src="${application}" alt="${title} application"></div></div><div class="frame" style="margin-top:16px"><strong>Difference overlay</strong><span class="overlay"><img src="${reference}" alt=""><img src="${application}" alt=""></span></div></section>`).join('');
+  </script>
+</body>
+</html>
