@@ -434,6 +434,7 @@ body{font-family:var(--font-ui)}
 .record-manage-link.unavailable{color:var(--vs-text-muted,var(--muted));cursor:not-allowed}
 .record-manage-link.unavailable:hover{background:transparent}
 .record-manage-link>svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--vs-primary,var(--primary));stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;color:var(--vs-primary,var(--primary))}
+.record-manage-link>.staff-record-manage-icon{width:16px;height:16px;margin-inline:2px}
 .record-manage-link>strong,.record-manage-link>span>strong{font-size:14px;font-weight:600;line-height:22px}
 .record-manage-link>span:last-child{display:grid;gap:2px}
 .record-manage-link small{color:var(--vs-text-muted,var(--muted))}
