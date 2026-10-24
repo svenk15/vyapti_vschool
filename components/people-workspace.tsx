@@ -20,7 +20,7 @@ const portalLabel=(value:'UNLINKED'|'LINKED'|'ACTIVE')=>value==='UNLINKED'?'Not 
 const categoryLabel=(value:Employee['category'])=>value==='ADMINISTRATION'?'Administration':value==='UNCLASSIFIED'?'Unclassified':value==='SUPPORT'?'Support':'Teaching';
 const Icon=({name,className}:{name:'search'|'filter'|'sort'|'manage'|'edit'|'shield'|'arrow';className?:string})=>{
  const paths={search:<><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></>,filter:<><path d="M4 6h16M7 12h10M10 18h4"/></>,sort:<><path d="M8 4v16M5 7l3-3 3 3M16 20V4m-3 13 3 3 3-3"/></>,manage:<><path d="M4 7h10M18 7h2M4 12h3M11 12h9M4 17h8M16 17h4"/><circle cx="16" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="14" cy="17" r="2"/></>,edit:<><path d="m16 3 5 5-12 12-6 1 1-6z"/><path d="m14 5 5 5"/></>,shield:<><path d="M12 3 4.5 6v5.4c0 4.6 3.1 7.8 7.5 9.6 4.4-1.8 7.5-5 7.5-9.6V6L12 3Z"/><path d="m9 12 2 2 4-4"/></>,arrow:<path d="m9 5 7 7-7 7"/>};
- return <svg className={className} aria-hidden="true" viewBox="0 0 24 24">{paths[name]}</svg>;
+ return <svg className={className} aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
 };
 
 const date=(value:string|null)=>value?new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${value}T12:00:00Z`)):'Current';

@@ -21,7 +21,10 @@ This correction keeps the shared dialog geometry, colors, typography, row spacin
 - Focused Playwright, Chromium: 1/1 passed with one worker.
 - Focused Playwright, Mobile: 1/1 passed with one worker.
 - Focused ESLint and `pnpm exec tsc --noEmit`: passed.
-- Production build: passed, build ID `9oK8hoB4lo30pAmpSFWZZ`.
+- A stale incremental production build omitted the new `record-manage` rules even though the isolated E2E build contained them. That mismatch produced unstyled action rows and browser-default oversized SVGs. The affected build was discarded and rebuilt from a clean `.next` directory.
+- Clean production build: passed, build ID `Q6i1nsfZ_dfgjhnsrJlJM`.
+- The live stylesheet response was checked directly: it contains the complete `record-manage` recipe and the 16px Staff glyph override.
+- Staff SVG markup also carries explicit 16px dimensions, no fill, and stroke attributes, preventing browser-default black 300×150 SVG rendering if presentation CSS is temporarily unavailable.
 - `chromium-chooser.png` and `mobile-chooser.png` were visually inspected after the correction. Direct Personal, Employment, and portal-access transitions remain captured alongside them.
 
 No API, permission, persistence, fixture, or migration changed. Human visual acceptance remains PENDING.
