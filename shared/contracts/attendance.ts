@@ -1,8 +1,8 @@
 export type AttendanceStatus='PRESENT'|'ABSENT'|'LATE'|'EXCUSED';
-export type AttendanceRosterItem=Readonly<{studentId:string;displayName:string;rollNumber:string|null}>;
+export type AttendanceRosterItem=Readonly<{studentId:string;displayName:string;rollNumber:string|null;admissionNumber?:string|null}>;
 export type AttendanceMarkEntry=Readonly<{studentId:string;status:AttendanceStatus;lateMinutes?:number}>;
 export type AttendanceCounts=Readonly<{present:number;absent:number;late:number;excused:number}>;
-export type AttendanceSessionRecord=Readonly<{id:string;version:number;status:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';schoolDate:string;startsAt:string;endsAt:string;offering:{id:string;subjectName:string;sectionName:string};rosterRevision?:string|null;roster?:readonly AttendanceRosterItem[];records?:readonly AttendanceMarkEntry[];recordRevisions?:Readonly<Record<string,number>>;submittedAt?:string|null;cancelledAt?:string|null;counts?:AttendanceCounts}>;
+export type AttendanceSessionRecord=Readonly<{id:string;version:number;status:'SCHEDULED'|'OPEN'|'SUBMITTED'|'CANCELLED';schoolDate:string;startsAt:string;endsAt:string;offering:{id:string;subjectName:string;sectionName:string};teacherName?:string|null;rosterRevision?:string|null;roster?:readonly AttendanceRosterItem[];records?:readonly AttendanceMarkEntry[];recordRevisions?:Readonly<Record<string,number>>;submittedAt?:string|null;cancelledAt?:string|null;counts?:AttendanceCounts}>;
 export type AttendanceOpenResult=Readonly<{sessionId:string;version:number;status:'OPEN';rosterRevision:string;roster:readonly AttendanceRosterItem[];replayed:boolean}>;
 export type AttendanceSubmitResult=Readonly<{sessionId:string;version:number;status:'SUBMITTED';revision:number;submittedAt:string;counts:AttendanceCounts;replayed:boolean}>;
 export type AttendanceCorrectionValue=Readonly<{status:AttendanceStatus;lateMinutes?:number}>;

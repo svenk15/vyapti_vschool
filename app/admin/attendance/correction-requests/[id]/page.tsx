@@ -1,2 +1,6 @@
-import Link from 'next/link';import {AttendanceCorrectionReview} from '@/components/attendance-correction-request';import {PageHeader,PageStack} from '@/components/ui/primitives';import {attendanceCorrectionRequestsGateway as gateway} from '@/lib/server/attendance-correction-requests';import {getIdentity} from '@/lib/server/auth';
-export const dynamic='force-dynamic';export default async function Page({params}:{params:Promise<{id:string}>}){const item=await gateway.getReview(await getIdentity(),(await params).id);return <main id="main-content" className="container page-space"><PageStack><PageHeader eyebrow="Attendance correction" title="Review the exact submitted record" description="The source revision and current revision must still match."/><AttendanceCorrectionReview item={item}/><Link href="/admin/attendance/correction-requests">← Back to assigned requests</Link></PageStack></main>}
+import {PageHeader,PageStack} from '@/components/ui/primitives';
+import {AttendanceReviewPage} from '@/components/attendance/review-page';
+import {attendanceCorrectionRequestsGateway} from '@/lib/server/attendance-correction-requests';
+import {getIdentity} from '@/lib/server/auth';
+export const dynamic='force-dynamic';
+export default async function Page({params}:{params:Promise<{id:string}>}){const item=await attendanceCorrectionRequestsGateway.getReview(await getIdentity(),(await params).id);return <main id="main-content" className="container page-space"><PageStack><PageHeader title="Review correction"/><AttendanceReviewPage item={{kind:'correction',value:item}}/></PageStack></main>;}

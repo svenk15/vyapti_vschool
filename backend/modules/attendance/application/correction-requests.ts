@@ -1,7 +1,10 @@
+import type {AttendanceReviewQuery,AttendanceReviewPage} from '../../../../shared/contracts/attendance-review';
+import {reviewQuery} from './review-query';
 import type {Identity,OperatorPrincipal} from '../../../../shared/contracts/access';
 import type {AttendanceCorrectionGrantPurpose,AttendanceCorrectionRequestItem,AttendanceCorrectionRequestResult} from '../../../../shared/contracts/attendance-correction-requests';
 import {AttendanceCorrectionRequestError,attendanceStatus,lateMinutes,narrative,positiveVersion,requesterKind,requiredUuid} from '../domain/correction-requests';
 export interface AttendanceCorrectionRequestRepository{
+ reviewPage(actor:Identity,input:{organizationId:string;schoolId:string;query:AttendanceReviewQuery}):Promise<AttendanceReviewPage<AttendanceCorrectionRequestItem>>;
  routingAvailable(actor:Identity,input:{organizationId:string;schoolId:string}):Promise<boolean>;
  grant(operator:OperatorPrincipal,input:{organizationId:string;schoolId:string;accountId:string;purpose:AttendanceCorrectionGrantPurpose}):Promise<{grantId:string;version:number}>;
  submit(actor:Identity,input:{kind:'GUARDIAN'|'STUDENT'|'TEACHER';studentId:string;sessionId:string;sourceRevision:number;status:ReturnType<typeof attendanceStatus>;lateMinutes:number|null;reason:string;key:string;requestId:string}):Promise<AttendanceCorrectionRequestResult>;
@@ -16,6 +19,7 @@ export interface AttendanceCorrectionRequestRepository{
  decide(actor:Identity,input:{organizationId:string;schoolId:string;id:string;expectedVersion:number;decision:'APPLY'|'DECLINE';note:string;key:string;correctionKey:string;requestId:string}):Promise<AttendanceCorrectionRequestResult>;
 }
 export function createAttendanceCorrectionRequestUseCases(repository:AttendanceCorrectionRequestRepository){return {
+ reviewPage:(actor:Identity,organizationId:unknown,schoolId:unknown,query:Partial<AttendanceReviewQuery>={})=>repository.reviewPage(actor,{organizationId:requiredUuid(organizationId),schoolId:requiredUuid(schoolId),query:reviewQuery(query)}),
  routingAvailable:(actor:Identity,organizationId:unknown,schoolId:unknown)=>repository.routingAvailable(actor,{organizationId:requiredUuid(organizationId),schoolId:requiredUuid(schoolId)}),
  grant:(operator:OperatorPrincipal,input:{organizationId:unknown;schoolId:unknown;accountId:unknown;purpose:AttendanceCorrectionGrantPurpose})=>repository.grant(operator,{organizationId:requiredUuid(input.organizationId),schoolId:requiredUuid(input.schoolId),accountId:requiredUuid(input.accountId),purpose:input.purpose}),
  submit:(actor:Identity,input:{kind:unknown;studentId:unknown;sessionId:unknown;sourceRevision:unknown;status:unknown;lateMinutes?:unknown;reason:unknown;key:unknown;requestId:unknown})=>{const status=attendanceStatus(input.status);return repository.submit(actor,{kind:requesterKind(input.kind),studentId:requiredUuid(input.studentId),sessionId:requiredUuid(input.sessionId),sourceRevision:positiveVersion(input.sourceRevision),status,lateMinutes:lateMinutes(status,input.lateMinutes),reason:narrative(input.reason),key:requiredUuid(input.key),requestId:requiredUuid(input.requestId)});},

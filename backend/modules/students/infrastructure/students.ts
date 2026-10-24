@@ -139,6 +139,11 @@ export class PrismaStudentRepository implements StudentRepository,StudentAttenda
     return {today:schoolToday(this.now(),guard.timezone),enrolledYearIds:student.enrollments.map(enrollment=>enrollment.yearId),years:years.filter(year=>year.sections.length>0).map(year=>({yearId:year.id,code:year.code,name:year.name,startsOn:civilDate(year.startsOn),endsOn:civilDate(year.endsOn),sections:year.sections.map(section=>({sectionId:section.id,code:section.code,name:section.name,gradeName:section.grade.name}))}))};
   },{isolationLevel:"RepeatableRead",timeout:10000,maxWait:10000});}catch(error){return fail(error);}}
 
+  async identifiersForFrozenRoster(transaction:object,actor:Identity,organizationId:string,schoolId:string,studentIds:readonly string[]):Promise<readonly {studentId:string;admissionNumber:string}[]>{
+    if(!transaction||typeof transaction!=='object'||studentIds.length>200)throw new AccessError('VALIDATION');const tx=transaction as Prisma.TransactionClient;
+    await this.guard(tx,actor,organizationId,schoolId,'student.read',false,['student_core','academic_core']);
+    const rows=await tx.student.findMany({where:{organizationId,schoolId,id:{in:[...new Set(studentIds)]}},select:{id:true,admissionNumber:true}});return rows.map(row=>({studentId:row.id,admissionNumber:row.admissionNumber}));
+  }
   async listForSession(transaction:object,actor:Identity,organizationId:string,schoolId:string,sectionId:string,schoolDate:string):Promise<readonly StudentAttendanceRosterEntry[]>{
     if(!transaction||typeof transaction!=='object')throw new AccessError('UNAVAILABLE');const tx=transaction as Prisma.TransactionClient;
     try{

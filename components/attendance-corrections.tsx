@@ -15,7 +15,7 @@ type SecondaryPanel='history'|'cancel'|null;
 const labels:Record<AttendanceStatus,string>={PRESENT:'Present',ABSENT:'Absent',LATE:'Late',EXCUSED:'Excused'};
 const shown=(entry:AttendanceMarkEntry|undefined)=>entry?`${labels[entry.status]}${entry.status==='LATE'?` (${entry.lateMinutes} min)`:''}`:'—';
 
-function historyLines(changes:Readonly<Record<string,unknown>>,names:ReadonlyMap<string,string>){
+export function historyLines(changes:Readonly<Record<string,unknown>>,names:ReadonlyMap<string,string>){
  if(typeof changes.fromStatus==='string'&&changes.toStatus==='CANCELLED')return [`Session: ${changes.fromStatus} → Canceled`];
  const rows=Array.isArray(changes.changes)?changes.changes:Array.isArray(changes.entries)?changes.entries:[];
  return rows.flatMap((item,index)=>{
@@ -43,10 +43,10 @@ function Progress({stage}:{stage:Stage}){
  return <ol className="workflow-stepper attendance-correction-stepper" aria-label="Attendance correction progress">{steps.map((label,index)=><li key={label} className={stage===index?'active':stage>index?'complete':''} aria-current={stage===index?'step':undefined}><span>{stage>index?'✓':index+1}</span>{label}</li>)}</ol>;
 }
 
-export function AttendanceCorrections({initial,initialHistory,sessionLabel,returnTo='/admin/attendance/sessions?view=monitor'}:{initial:AttendanceSessionRecord;initialHistory:AttendanceHistory;sessionLabel:string;returnTo?:string}){
+export function AttendanceCorrections({initial,initialHistory,sessionLabel,returnTo='/admin/attendance/sessions?view=monitor',initialStudentId='',compact=false,onDirty,onLocked,onSaved}:{initial:AttendanceSessionRecord;initialHistory:AttendanceHistory;sessionLabel:string;returnTo?:string;initialStudentId?:string;compact?:boolean;onDirty?:(dirty:boolean)=>void;onLocked?:(locked:boolean)=>void;onSaved?:(result:AttendanceCorrectionResult)=>void}){
  const router=useRouter(),roster=initial.roster??[],names=new Map(roster.map(student=>[student.studentId,student.displayName])),stageHeading=useRef<HTMLDivElement>(null);
  const [records,setRecords]=useState<readonly AttendanceMarkEntry[]>(initial.records??[]),[history,setHistory]=useState(initialHistory),[version,setVersion]=useState(initial.version);
- const [stage,setStage]=useState<Stage>(0),[selectedStudentId,setSelectedStudentId]=useState(''),[selectedSessionId,setSelectedSessionId]=useState(''),[selectedStatus,setSelectedStatus]=useState<AttendanceStatus|''>(''),[lateMinutes,setLateMinutes]=useState('1'),[reason,setReason]=useState(''),[reviewed,setReviewed]=useState(false),[errors,setErrors]=useState<Record<string,string>>({});
+ const [stage,setStage]=useState<Stage>(0),[selectedStudentId,setSelectedStudentId]=useState(initialStudentId),[selectedSessionId,setSelectedSessionId]=useState(compact?initial.id:''),[selectedStatus,setSelectedStatus]=useState<AttendanceStatus|''>(''),[lateMinutes,setLateMinutes]=useState('1'),[reason,setReason]=useState(''),[reviewed,setReviewed]=useState(false),[errors,setErrors]=useState<Record<string,string>>({});
  const [correctionState,setCorrectionState]=useState<CommandState>('editable'),[correctionMessage,setCorrectionMessage]=useState(''),[retainedCorrection,setRetainedCorrection]=useState<CorrectionPayload|null>(null),[staleAttempt,setStaleAttempt]=useState<CorrectionPayload|null>(null),[staleRefreshError,setStaleRefreshError]=useState('');
  const [confirmedChange,setConfirmedChange]=useState<{from:AttendanceMarkEntry;to:AttendanceMarkEntry}|null>(null);
  const [historyError,setHistoryError]=useState(''),[historyBusy,setHistoryBusy]=useState(false),[panel,setPanel]=useState<SecondaryPanel>(null);
@@ -54,11 +54,12 @@ export function AttendanceCorrections({initial,initialHistory,sessionLabel,retur
  const current=new Map(records.map(entry=>[entry.studentId,entry])),before=current.get(selectedStudentId),parsedLate=Number(lateMinutes);
  const changed:AttendanceMarkEntry[]=before&&selectedStatus&&(before.status!==selectedStatus||(selectedStatus==='LATE'&&before.lateMinutes!==parsedLate))?[{studentId:selectedStudentId,status:selectedStatus,...(selectedStatus==='LATE'?{lateMinutes:parsedLate}:{})}]:[];
  const correctionLocked=correctionState==='submitting'||correctionState==='unknown'||correctionState==='stale'||cancelState==='submitting'||cancelState==='unknown';
- const hasCorrectionDraft=Boolean(selectedStudentId||selectedSessionId||selectedStatus||reason.trim());
+ const hasCorrectionDraft=Boolean(selectedStatus||reason.trim());
  const cancelLocked=cancelState==='submitting'||cancelState==='unknown'||correctionState==='submitting'||correctionState==='unknown'||correctionState==='stale'||hasCorrectionDraft;
  const cancelActionLocked=cancelState==='submitting'||correctionState==='submitting'||correctionState==='unknown'||correctionState==='stale'||hasCorrectionDraft;
 
  useEffect(()=>{stageHeading.current?.focus();},[stage]);
+ useEffect(()=>{onDirty?.(hasCorrectionDraft&&correctionState!=='success');onLocked?.(correctionLocked);},[hasCorrectionDraft,correctionState,correctionLocked,onDirty,onLocked]);
 
  function chooseStudent(studentId:string){setSelectedStudentId(studentId);setSelectedStatus('');setLateMinutes('1');setReviewed(false);setErrors({});}
  function chooseStatus(status:AttendanceStatus|''){setSelectedStatus(status);setReviewed(false);setErrors({});if(correctionState==='rejected'||correctionState==='success'){setCorrectionState('editable');setCorrectionMessage('');}}
@@ -75,7 +76,7 @@ export function AttendanceCorrections({initial,initialHistory,sessionLabel,retur
   setErrors(next);return Object.keys(next).length===0;
  }
  function continueFrom(currentStage:0|1){if(!validate(currentStage))return;setStage((currentStage+1) as Stage);}
- function resetCorrection(){setStage(0);setSelectedStudentId('');setSelectedSessionId('');setSelectedStatus('');setLateMinutes('1');setReason('');setReviewed(false);setErrors({});setRetainedCorrection(null);setStaleAttempt(null);setConfirmedChange(null);setCorrectionState('editable');setCorrectionMessage('');}
+ function resetCorrection(){setStage(0);setSelectedStudentId('');setSelectedSessionId(compact?initial.id:'');setSelectedStatus('');setLateMinutes('1');setReason('');setReviewed(false);setErrors({});setRetainedCorrection(null);setStaleAttempt(null);setConfirmedChange(null);setCorrectionState('editable');setCorrectionMessage('');}
  async function refreshHistory(){setHistoryBusy(true);try{setHistory(await responseJson<AttendanceHistory>(await fetch(`/api/v1/sessions/${initial.id}/history`,{cache:'no-store'})));setHistoryError('');return true;}catch{setHistoryError('The correction is saved, but its latest history could not be loaded. Retry this read without repeating the correction.');return false;}finally{setHistoryBusy(false);}}
  async function loadAuthoritative(payload:CorrectionPayload){
   setStaleRefreshError('');
@@ -97,7 +98,7 @@ export function AttendanceCorrections({initial,initialHistory,sessionLabel,retur
    const nextRecords=records.map(record=>{const update=saved.changes.find(change=>change.studentId===record.studentId);return update?{studentId:record.studentId,...update.to}:record;});
    const savedChange=saved.changes[0];
    if(savedChange)setConfirmedChange({from:{studentId:savedChange.studentId,...savedChange.from},to:{studentId:savedChange.studentId,...savedChange.to}});
-   setVersion(saved.version);setRecords(nextRecords);setRetainedCorrection(null);setStaleAttempt(null);setCorrectionState('success');setCorrectionMessage(`Correction ${saved.revision} saved. ${saved.changes.length} record${saved.changes.length===1?'':'s'} updated.`);router.refresh();await refreshHistory();
+   setVersion(saved.version);setRecords(nextRecords);setRetainedCorrection(null);setStaleAttempt(null);setCorrectionState('success');onSaved?.(saved);setCorrectionMessage(`Correction ${saved.revision} saved. ${saved.changes.length} record${saved.changes.length===1?'':'s'} updated.`);router.refresh();await refreshHistory();
   }catch(value){
    if(isApiFailure(value)&&value.code==='STALE_VERSION'){setCorrectionState('stale');setCorrectionMessage(value.message);setStaleAttempt(payload);setRetainedCorrection(null);await loadAuthoritative(payload);}
    else if(!isApiFailure(value)||value.status===503||value.retryable){setCorrectionState('unknown');setCorrectionMessage('The result is unknown. Retry the exact retained correction; its values and request key will not change.');}
@@ -115,7 +116,7 @@ export function AttendanceCorrections({initial,initialHistory,sessionLabel,retur
 
  const selectedStudent=roster.find(student=>student.studentId===selectedStudentId);
  return <>
-  <Progress stage={stage}/>
+  <div className={compact?"att-compact-correction":""}><Progress stage={stage}/>
   <div className="branch-edit-grid attendance-correction-grid">
    <Card className="branch-edit-card attendance-correction-card">
     {correctionState==='editable'&&correctionMessage&&<Alert tone="info" title="Review current values">{correctionMessage}</Alert>}
@@ -125,7 +126,7 @@ export function AttendanceCorrections({initial,initialHistory,sessionLabel,retur
    </Card>
    <aside className="branch-edit-aside"><Card className="padded"><h2>What this changes</h2><p>A new correction revision appears with actor, reason and time.</p><div className="section-divider"/><h3>Before you continue</h3><p>Only submitted attendance is correctable; the server compares the expected revision in the same authorized transaction.</p></Card><Card className="padded"><h3>Something changed?</h3><p>Another editor’s correction shows a conflict and comparison; an unknown result reuses the same request receipt.</p><div className="section-divider"/><div className="attendance-related-actions"><Button variant="ghost" size="small" onClick={()=>setPanel(panel==='history'?null:'history')}>{panel==='history'?'Hide revision history':'View revision history'}</Button><Button variant="ghost" size="small" disabled={cancelLocked} onClick={()=>setPanel(panel==='cancel'?null:'cancel')}>{panel==='cancel'?'Hide cancellation':'Cancel this session'}</Button>{hasCorrectionDraft&&<Button variant="ghost" size="small" onClick={resetCorrection}>Reset correction</Button>}</div>{cancelLocked&&<p className="small muted">Finish or reset the correction flow before cancellation.</p>}</Card></aside>
   </div>
-  {panel==='history'&&<HistoryCard history={history} names={names} error={historyError} busy={historyBusy} onRefresh={()=>void refreshHistory()} onClose={()=>setPanel(null)}/>}
+  </div>{panel==='history'&&<HistoryCard history={history} names={names} error={historyError} busy={historyBusy} onRefresh={()=>void refreshHistory()} onClose={()=>setPanel(null)}/>}
   {panel==='cancel'&&<Card id="attendance-cancel" className="padded settings-panel attendance-cancel-card"><SectionHeader title="Cancel session" description="Cancellation is destructive. It retains the roster, submitted records and history and cannot be undone." actions={<Button variant="ghost" size="small" onClick={()=>setPanel(null)}>Close cancellation</Button>}/>{cancelState==='unknown'&&<Alert tone="warning" title="Cancellation outcome unknown">{cancelMessage}</Alert>}{cancelState==='stale'&&<Alert tone="warning" title="Session changed before cancellation">{cancelMessage}</Alert>}{cancelState==='rejected'&&<Alert tone="danger" title="Cancellation rejected">{cancelMessage}</Alert>}<div className="settings-form"><TextArea label="Cancellation reason" value={cancelReason} minLength={5} maxLength={500} rows={3} disabled={cancelLocked} onChange={event=>setCancelReason(event.target.value)} hint={hasCorrectionDraft?'Reset the correction draft before canceling this session.':'5–500 characters. The reason is retained in attendance history.'}/><div className="form-actions"><Button variant="danger" loading={cancelState==='submitting'} disabled={cancelActionLocked||(!retainedCancel&&cancelReason.trim().length<5)} onClick={()=>void cancelSession()}>{cancelState==='unknown'?'Retry cancellation':'Cancel session'}</Button></div></div></Card>}
  </>;
 }

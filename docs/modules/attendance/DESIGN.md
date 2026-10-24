@@ -533,3 +533,22 @@ Follow [the backend extraction contract](../../BACKEND_EXTRACTION.md). Server mo
 ## IAM-02 owner read seam
 
 `ScheduledSessionQuery` remains the Attendance-owned impact seam for academic calendar, assignment and student-history operations. Access no longer queries Attendance when editing school settings because the Phase 1 branch timezone is immutable after creation; the Access guard rejects every changed timezone value before any write. Attendance scheduling continues to use the stored branch timezone and its existing School guard.
+
+## Administrator Attendance presentation — 24 October 2026
+
+The approved Registers view consumes the complete authorized school-day projection. Search (Class, Subject, Teacher), status selection, stable sort (id tie-break), and 25/50/100 page slicing operate over that complete day, never over a truncated API page. Query state is URL-backed; changing date/search/filter/sort/size resets the page. This is bounded by one day, not a new cross-date directory API. The existing server authorization remains mandatory on every navigation/read. Summary counts use the selected day/class before text/status filters and a server-provided as-of instant. Due means startsAt <= asOf and non-cancelled, matching Reporting; missing is not absence. Teacher labels use the existing effective-occurrence Teacher port for timetable sources and dated assignment for manual sources. Submitted mark counts are aggregated only; pupil identities are not added to the directory projection.
+
+Requests combines independently authorized explanation and correction queues for presentation; a denied owner contributes no rows and no grants. Unavailable owners are reported explicitly, not presented as empty. Detail and mutation flows stay with their existing owner. No new mutation, permission, schema, or lifecycle is introduced.
+
+### Approved Attendance mock completion — review directory and roster identity (24 October 2026)
+
+The new All requests directory exposes only records already readable by the existing assigned-reviewer detail operation. It does not grant a branch-wide history permission. Both page queries recheck current module/identity/reviewer authority; explanation pages additionally require the original current accepted Guardian access/purpose and exclude self-review. Pending remains the default. All includes terminal records under the same predicates. Queries accept validated nonnegative offset and 1–100 limit, return bounded items plus total, and use stable creation-time/ID order within each owner queue. The combined All-types directory places explanations then corrections and paginates across the two totals. Protected reason text is fetched only when opening the currently authorized detail drawer. Scope comes from the current server context, never client claims.
+
+The drawer uses existing review/clarification/decide commands, exact expected versions and retained immutable payload/key. Unknown outcomes disable editing and permit exact replay only. Confirmed receipt and subsequent GET failure are separate. Stale evidence requires a new review after an authorized GET; revocation clears protected detail. No automatic mark change occurs for explanations.
+
+Admin roster admission numbers are a current, minimal Students-owned identifier projection over the already-authorized frozen Student IDs. It retains the Students read guard and exact branch scope and does not amend the frozen names, roster membership, or revisions. Teacher projections remain unchanged. No migration is needed.
+
+
+### Attendance presentation gap closure — 2026-10-24
+
+Reviewer explanation reads may include the current scoped Attendance mark and revision after existing reviewer and Guardian-purpose authorization. Parent reads are unchanged; missing evidence is not inferred.

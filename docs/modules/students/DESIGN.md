@@ -397,3 +397,7 @@ sequenceDiagram
 ```
 
 **Failure and verification contract.** Validation covers missing/malformed/future dates and bounded reasons. PostgreSQL evidence covers verified creation, nullable legacy preservation, manual population/correction, exact replay, changed/stale/cross-scope rejection, coherent database constraints, import persistence and rollback. Enrollment and Attendance row counts must remain unchanged by correction. Browser evidence covers required registration input, verified detail, reasoned correction, refresh persistence, keyboard-visible controls and desktop/mobile layout. Migration `20261010014000_student_admission_date` is forward-only and performs no backfill. Human visual/accessibility review and TEN-03 restricted-role enforcement remain separate pending gates.
+
+### Attendance frozen-roster identifier projection — 24 October 2026
+
+`StudentAttendanceRosterPort.identifiersForFrozenRoster` accepts the existing transaction, verified actor, exact organization/branch and up to 200 frozen Student IDs. Students checks current `student.read`, Student/Academics module authority, and scopes the lookup before returning only Student ID and admission number. Attendance uses this read for school-admin detail presentation; it does not mutate or replace frozen roster identity, enrollment or history. Teacher projections do not gain this field. No grant or schema change.

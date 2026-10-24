@@ -1,5 +1,10 @@
 # Session attendance and accountable corrections — current state
 
+## Attendance presentation candidate — 24 October 2026
+
+Source changes are prepared against the corrected 26b569cd export. Registers, Reports, scheduling and register-detail presentation are implemented but **not engineering-verified**: authenticated visual and real PostgreSQL checks remain pending. Pending Requests consolidation is implemented; completed history and review-drawer parity remain open. See [candidate evidence](../../evidence/attendance-implementation-2026-10-24/README.md). Existing verified milestones below are unchanged.
+
+
 ## UX-12 submitted-register detail regression — 19 October 2026
 
 The current committed build was directly rechecked against exact Administrator SA-27 at 1440×1000 and 390×844. Select record, Record evidence and Confirm remain the visible staged composition; real session data, immutable revision history and guarded cancellation remain reachable without combining unrelated controls. Zero root overflow was observed and no presentation defect or code change was required. Prior functional/security evidence remains applicable because subsequent shared changes do not touch this Attendance composition. [Current-source visual evidence](../../evidence/ux-revamp-12-attendance-detail-2026-10-19/README.md). Human review for this revamp and the existing release gates remain PENDING.
@@ -239,3 +244,7 @@ Verification: focused unit 1/1; real-PostgreSQL lifecycle/security 3/3; sequenti
 - The submitted Teacher register retains the existing frozen roster, mark, correction, recovery, authorization and immutable-history contracts. Presentation now aligns pupil identity, status and `Flag error` action in a compact desktop row and a readable mobile card; revision history uses the shared padded-card geometry.
 - Focused submitted-register and immutable-history journeys passed sequentially in Chromium and Mobile Chromium against real PostgreSQL with 118 migrations. Standard build `PeGqBjWCEJo4UkqEYdYWG` passed. Desktop/mobile captures were directly inspected in `docs/evidence/ux-revamp-14-specialized-2026-10-19/`.
 - Human visual acceptance, native accessibility, actual browser 200% zoom, TEN-03 and production release remain PENDING.
+
+### Administrator Attendance reference implementation — 24 October 2026
+
+Source implementation now includes Registers/Requests/Reports, compact calendars, full class coverage, bounded assigned request history and in-place reviews, scheduling, admission-number roster reads, two-stage corrections and reviewed cancellation. Exact pending commands survive drawer closure; saved results remain separate from read refresh failures. Architecture, type/lint, 296 unit tests and 206-table design checks passed. Real PostgreSQL/browser/visual acceptance is not available in this execution environment and must not be marked passed. See [current implementation record](../../evidence/attendance-implementation-2026-10-24/README.md).

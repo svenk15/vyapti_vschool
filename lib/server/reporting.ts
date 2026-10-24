@@ -8,6 +8,7 @@ import {reportingRuntimeConfiguration} from './reporting-runtime-configuration';
 const reporting=createReportingServices(reportingRuntimeConfiguration());
 export const reportingGateway={
  overview:async(identity:Identity|null,input:AttendanceReportInput)=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.overview(identity,scope.organizationId,scope.schoolId,input);},
+ exportCoverage:async(identity:Identity|null,input:AttendanceReportInput,query:{q?:string;states?:readonly string[];sort?:string;order?:string})=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.exportCoverage(identity,scope.organizationId,scope.schoolId,input,query);},
  exportAttendance:async(identity:Identity|null,input:AttendanceReportInput)=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.exportAttendance(identity,scope.organizationId,scope.schoolId,input);},
  schoolAdminOverview:async(identity:Identity|null)=>{const scope=(await accountGateway.getHome(identity)).scope;return reporting.schoolAdminOverview(identity,scope.organizationId,scope.schoolId);},
  leadershipExportAvailability:async(identity:Identity|null)=>{const scope=(await leadershipGateway.getHome(identity)).scope;return reporting.availability(identity,scope.organizationId,scope.schoolId);},
